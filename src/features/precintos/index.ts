@@ -1,0 +1,10 @@
+export { PrecintosPage } from './pages/PrecintosPage';
+export { PrecintoTable } from './components/PrecintoTable';
+export { PrecintoFilters } from './components/PrecintoFilters';
+export { PrecintoStatusBadge } from './components/PrecintoStatusBadge';
+export { PrecintoDetailModal } from './components/PrecintoDetailModal';
+export { BatteryIndicator } from './components/BatteryIndicator';
+export { SignalIndicator } from './components/SignalIndicator';
+export { ErrorBoundary } from './components/ErrorBoundary';
+export * from './types';
+export { precintosService } from './services/precintos.service';

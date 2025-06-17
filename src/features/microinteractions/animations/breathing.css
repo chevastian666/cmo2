@@ -1,0 +1,136 @@
+/* Breathing animations for seals/precintos */
+
+@keyframes breathe-normal {
+  0%, 100% {
+    transform: scale(0.95);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes breathe-alert {
+  0%, 100% {
+    transform: scale(0.93);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes breathe-critical {
+  0%, 100% {
+    transform: scale(0.9);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes glow-pulse-normal {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.2),
+                0 0 10px rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.4),
+                0 0 20px rgba(34, 197, 94, 0.2),
+                0 0 30px rgba(34, 197, 94, 0.1);
+  }
+}
+
+@keyframes glow-pulse-alert {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.2),
+                0 0 10px rgba(251, 191, 36, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5),
+                0 0 30px rgba(251, 191, 36, 0.3),
+                0 0 45px rgba(251, 191, 36, 0.1);
+  }
+}
+
+@keyframes glow-pulse-critical {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.3),
+                0 0 10px rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                0 0 40px rgba(239, 68, 68, 0.4),
+                0 0 60px rgba(239, 68, 68, 0.2);
+  }
+}
+
+/* Breathing classes */
+.breathing-normal {
+  animation: breathe-normal 3s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+.breathing-alert {
+  animation: breathe-alert 2s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+.breathing-critical {
+  animation: breathe-critical 1.5s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+/* Glow effects */
+.glow-normal {
+  animation: glow-pulse-normal 3s ease-in-out infinite;
+}
+
+.glow-alert {
+  animation: glow-pulse-alert 2s ease-in-out infinite;
+}
+
+.glow-critical {
+  animation: glow-pulse-critical 1.5s ease-in-out infinite;
+}
+
+/* Combined breathing + glow */
+.seal-breathing-normal {
+  @apply breathing-normal glow-normal;
+}
+
+.seal-breathing-alert {
+  @apply breathing-alert glow-alert;
+}
+
+.seal-breathing-critical {
+  @apply breathing-critical glow-critical;
+}
+
+/* Performance optimization for low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  .breathing-normal,
+  .breathing-alert,
+  .breathing-critical,
+  .glow-normal,
+  .glow-alert,
+  .glow-critical {
+    animation: none;
+  }
+}
+
+/* Hover states with smooth transitions */
+.seal-breathing-normal:hover,
+.seal-breathing-alert:hover,
+.seal-breathing-critical:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+  transition: transform 0.3s ease-out;
+}

@@ -1,0 +1,33 @@
+{
+  "name": "websocket-differential-compression",
+  "version": "1.0.0",
+  "description": "WebSocket Differential Compression System for Customs Electronic Seal Monitoring",
+  "type": "module",
+  "main": "server/WebSocketServer.js",
+  "scripts": {
+    "start": "node server/WebSocketServer.js",
+    "test": "node tests/compression.test.js",
+    "simulate": "node tests/simulation.js",
+    "dev": "nodemon tests/simulation.js"
+  },
+  "keywords": [
+    "websocket",
+    "compression",
+    "differential",
+    "brotli",
+    "monitoring",
+    "real-time"
+  ],
+  "author": "CMO Development Team",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "ws": "^8.16.0",
+    "redis": "^4.6.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

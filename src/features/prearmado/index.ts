@@ -1,0 +1,1 @@
+export { PrearmadoPage } from './pages/PrearmadoPage';

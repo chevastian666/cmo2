@@ -1,0 +1,1 @@
+export { ZonasDescansoPage } from './pages/ZonasDescansoPage';
