@@ -43,6 +43,11 @@ const AnalyticsTest = lazy(() => import('./features/analytics/components/Analyti
 const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'));
 const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'));
 const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'));
+const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'));
+const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'));
+const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'));
+const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'));
+const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -51,6 +56,7 @@ import { notificationService } from './services/shared/notification.service';
 import { sharedWebSocketService } from './services/shared/sharedWebSocket.service';
 import { SHARED_CONFIG } from './config/shared.config';
 import { Toaster } from '@/components/ui/toaster';
+import TreemapDirect from './features/analytics/components/TreemapDirect';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -204,6 +210,10 @@ function App() {
                   } />
                   <Route path="/analytics-test" element={<AnalyticsTest />} />
                   <Route path="/sankey-test" element={<SankeyMinimal />} />
+                  <Route path="/treemaps" element={<TreemapFixed />} />
+                  <Route path="/treemaps-static" element={<TreemapStatic />} />
+                  <Route path="/treemaps-simple" element={<TreemapDashboardSimple />} />
+                  <Route path="/treemap-test" element={<TreemapTest />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
