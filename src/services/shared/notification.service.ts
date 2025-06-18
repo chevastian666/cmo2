@@ -4,6 +4,7 @@
  */
 
 import { SHARED_CONFIG } from '../../config/shared.config';
+import { toast } from '@/hooks/use-toast';
 
 export interface Notification {
   id: string;
@@ -77,6 +78,7 @@ class NotificationService {
     };
 
     this.addNotification(notification);
+    this.showToastNotification(notification);
     this.showSystemNotification(notification);
     this.playSound(type);
 
@@ -281,6 +283,25 @@ class NotificationService {
         console.error('Error in notification listener:', error);
       }
     });
+  }
+
+  private showToastNotification(notification: Notification): void {
+    // Map notification types to toast variants
+    const variant = notification.type === 'error' || notification.type === 'alert' ? 'destructive' : 'default';
+    
+    // Show toast with action if provided
+    const toastOptions: any = {
+      title: notification.title,
+      description: notification.message,
+      variant,
+      duration: notification.type === 'alert' || notification.type === 'error' ? 10000 : 5000
+    };
+
+    // The shadcn/ui toast expects action to be a React element, not an object
+    // For now, we'll just show the toast without the action button
+    // TODO: Implement proper action handling with React components
+    
+    toast(toastOptions);
   }
 
   private showSystemNotification(notification: Notification): void {

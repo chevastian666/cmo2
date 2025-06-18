@@ -46,6 +46,7 @@ import { CongestionPanel } from '../../prediccion';
 import { CountdownTimer } from './CountdownTimer';
 import { TransitoDetailModal } from './TransitoDetailModal';
 import { MapWidget } from './MapWidget';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { 
   staggerContainer, 
   staggerItem,
@@ -238,6 +239,79 @@ const MetricsWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => 
   );
 };
 
+// Transit Row Component
+const TransitoRowV2: React.FC<{
+  transito: TransitoTorreControl;
+  index: number;
+  onSelect: (transito: TransitoTorreControl) => void;
+}> = ({ transito, index, onSelect }) => {
+  const getSemaforoColor = (estado: EstadoSemaforo) => {
+    switch (estado) {
+      case 'verde': return 'bg-green-500';
+      case 'amarillo': return 'bg-yellow-500';
+      case 'rojo': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  return (
+    <motion.tr
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ delay: index * 0.05 }}
+      className="hover:bg-gray-800/50 transition-colors cursor-pointer"
+      onClick={() => onSelect(transito)}
+    >
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center gap-2">
+          <motion.div
+            className={cn("w-3 h-3 rounded-full", getSemaforoColor(transito.semaforo))}
+            animate={transito.semaforo === 'rojo' ? { scale: [1, 1.2, 1] } : {}}
+            transition={{ duration: 1, repeat: Infinity }}
+          />
+          <span className="text-sm font-medium capitalize">{transito.semaforo}</span>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div>
+          <p className="text-sm font-medium text-white">{transito.dua}</p>
+          <p className="text-xs text-gray-400">{transito.precinto}</p>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div>
+          <p className="text-sm text-white">{transito.origen} → {transito.destino}</p>
+          <Progress value={transito.progreso} className="w-24 h-2 mt-1" />
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <CountdownTimer targetTime={new Date(transito.eta)} />
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div>
+          <p className="text-sm text-white">{transito.ubicacionActual ? 'En ruta' : 'Sin señal'}</p>
+          <p className="text-xs text-gray-400">{transito.ultimaActualizacion}</p>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center gap-2">
+          <AnimatedButton
+            size="sm"
+            variant="ghost"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(transito);
+            }}
+          >
+            Ver detalles
+          </AnimatedButton>
+        </div>
+      </td>
+    </motion.tr>
+  );
+};
+
 // Main Component
 export const TorreControlV2: React.FC = () => {
   const [transitos, setTransitos] = useState<TransitoTorreControl[]>([]);
@@ -332,17 +406,76 @@ export const TorreControlV2: React.FC = () => {
     setLayouts(newLayouts);
   };
 
-  const widgets = [
-    { id: 'semaforo', component: <SemaforoWidget data={filteredTransitos} /> },
-    { id: 'live-feed', component: <LiveFeedWidget data={filteredTransitos} /> },
-    { id: 'metrics', component: <MetricsWidget data={filteredTransitos} /> },
-    { id: 'map', component: <MapWidget data={filteredTransitos} /> },
-    { id: 'congestion', component: showCongestionPanel && <CongestionPanel transitos={filteredTransitos} /> }
-  ].filter(w => w.component);
+  // Create widgets array - ensure all have valid components
+  const widgets = React.useMemo(() => {
+    const widgetList = [
+      { 
+        id: 'semaforo', 
+        component: (
+          <ErrorBoundary>
+            <SemaforoWidget data={filteredTransitos || []} />
+          </ErrorBoundary>
+        ) 
+      },
+      { 
+        id: 'live-feed', 
+        component: (
+          <ErrorBoundary>
+            <LiveFeedWidget data={filteredTransitos || []} />
+          </ErrorBoundary>
+        ) 
+      },
+      { 
+        id: 'metrics', 
+        component: (
+          <ErrorBoundary>
+            <MetricsWidget data={filteredTransitos || []} />
+          </ErrorBoundary>
+        ) 
+      },
+      { 
+        id: 'map', 
+        component: (
+          <ErrorBoundary>
+            <MapWidget data={filteredTransitos || []} />
+          </ErrorBoundary>
+        ) 
+      }
+    ];
+
+    // Only add congestion panel if enabled
+    if (showCongestionPanel) {
+      widgetList.push({
+        id: 'congestion',
+        component: (
+          <ErrorBoundary>
+            <CongestionPanel transitos={filteredTransitos || []} />
+          </ErrorBoundary>
+        )
+      });
+    }
+
+    return widgetList;
+  }, [filteredTransitos, showCongestionPanel]);
+
+  // Add debug info - only in development
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('TorreControlV2 state:', { 
+        transitosCount: transitos.length, 
+        filteredCount: filteredTransitos.length,
+        loading,
+        selectedView,
+        hasLayouts: !!layouts,
+        widgetsCount: widgets.length
+      });
+    }
+  }, [transitos, filteredTransitos, loading, selectedView, layouts, widgets]);
 
   return (
-    <PageTransition>
-      <div className="space-y-6">
+    <ErrorBoundary>
+      <PageTransition>
+        <div className="space-y-6">
         <AnimatedHeader
           title="Torre de Control"
           subtitle="Monitoreo en tiempo real de tránsitos y operaciones"
@@ -502,6 +635,7 @@ export const TorreControlV2: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ResponsiveGridLayout
+                  key="torre-control-grid"
                   className="layout"
                   layouts={layouts || defaultLayouts}
                   onLayoutChange={handleLayoutChange}
@@ -512,9 +646,15 @@ export const TorreControlV2: React.FC = () => {
                   isResizable={isEditMode}
                   margin={[16, 16]}
                   containerPadding={[0, 0]}
+                  useCSSTransforms={true}
+                  preventCollision={false}
                 >
                   {widgets.map(widget => (
-                    <div key={widget.id} className="bg-gray-900 rounded-lg border border-gray-700 p-4 overflow-hidden">
+                    <div 
+                      key={widget.id} 
+                      className="bg-gray-900 rounded-lg border border-gray-700 p-4 overflow-hidden"
+                      style={{ minHeight: widget.id === 'map' ? '300px' : 'auto' }}
+                    >
                       {widget.component}
                     </div>
                   ))}
@@ -604,6 +744,7 @@ export const TorreControlV2: React.FC = () => {
         )}
       </div>
     </PageTransition>
+    </ErrorBoundary>
   );
 };
 
@@ -645,98 +786,5 @@ const KPICard: React.FC<{
   </AnimatedCard>
 );
 
-// Table Row Component
-const TransitoRowV2: React.FC<{
-  transito: TransitoTorreControl;
-  index: number;
-  onSelect: (transito: TransitoTorreControl) => void;
-}> = ({ transito, index, onSelect }) => {
-  const getSemaforoColor = (estado: EstadoSemaforo) => {
-    switch (estado) {
-      case 'verde': return 'bg-green-500';
-      case 'amarillo': return 'bg-yellow-500';
-      case 'rojo': return 'bg-red-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  return (
-    <motion.tr
-      variants={fadeInUp}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      custom={index}
-      className="border-b border-gray-700 hover:bg-gray-800/50 transition-all cursor-pointer"
-      onClick={() => onSelect(transito)}
-      whileHover={{ x: 5 }}
-    >
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center gap-3">
-          <motion.div 
-            className={cn("w-3 h-3 rounded-full", getSemaforoColor(transito.estadoSemaforo))}
-            animate={transito.semaforo === 'rojo' ? {
-              scale: [1, 1.2, 1],
-              opacity: [1, 0.7, 1]
-            } : {}}
-            transition={{ duration: 1, repeat: Infinity }}
-          />
-          <AnimatedBadge 
-            variant={transito.semaforo === 'rojo' ? 'danger' : 'secondary'}
-            pulse={transito.semaforo === 'rojo'}
-          >
-            {transito.estado}
-          </AnimatedBadge>
-        </div>
-      </td>
-      
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div>
-          <p className="font-medium text-white">{transito.dua}</p>
-          <p className="text-sm text-gray-400">{transito.precinto}</p>
-        </div>
-      </td>
-      
-      <td className="px-6 py-4">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-gray-400" />
-          <span className="text-sm">{transito.origen} → {transito.destino}</span>
-        </div>
-        {transito.progreso && (
-          <Progress value={transito.progreso} className="mt-1 h-2" />
-        )}
-      </td>
-      
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div>
-          <CountdownTimer targetTime={transito.eta} />
-          <p className="text-xs text-gray-500 mt-1">
-            ETA: {new Date(transito.eta).toLocaleTimeString()}
-          </p>
-        </div>
-      </td>
-      
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-gray-400" />
-          <span className="text-sm">{transito.ubicacionActual ? `${transito.ubicacionActual.lat.toFixed(4)}, ${transito.ubicacionActual.lng.toFixed(4)}` : 'En ruta'}</span>
-        </div>
-      </td>
-      
-      <td className="px-6 py-4 whitespace-nowrap">
-        <AnimatedButton
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(transito);
-          }}
-        >
-          <Eye className="h-4 w-4" />
-        </AnimatedButton>
-      </td>
-    </motion.tr>
-  );
-};
 
 export default TorreControlV2;

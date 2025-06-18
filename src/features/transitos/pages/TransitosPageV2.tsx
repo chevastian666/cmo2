@@ -34,6 +34,7 @@ import { exportToExcel } from '@/utils/export';
 import { TransitDetailModalEnhanced } from '../components/TransitoDetailModalEnhanced';
 import { EditTransitoModalV2 } from '../components/EditTransitoModalV2';
 import { fadeInUp, staggerChildren } from '@/components/animations/AnimationPresets';
+import { TableSkeleton, StatsGridSkeleton } from '@/components/ui/SkeletonLoaders';
 
 // KPI Card Component con animaciones
 const KPICard: React.FC<{
@@ -369,40 +370,44 @@ const TransitosPageV2: React.FC = () => {
 
         {/* KPIs */}
         <AnimatedSection delay={0.1}>
-          <AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KPICard
-              title="En Curso"
-              value={kpis.enCurso}
-              icon={<Truck className="h-5 w-5" />}
-              color="bg-blue-500/10 text-blue-400"
-              subtitle={`${kpis.avgProgress}% promedio`}
-              trend={15}
-            />
-            <KPICard
-              title="Completados"
-              value={kpis.completados}
-              icon={<CheckCircle2 className="h-5 w-5" />}
-              color="bg-green-500/10 text-green-400"
-              subtitle={`${kpis.onTimeRate}% a tiempo`}
-              trend={8}
-            />
-            <KPICard
-              title="Pendientes"
-              value={kpis.pendientes}
-              icon={<Clock className="h-5 w-5" />}
-              color="bg-yellow-500/10 text-yellow-400"
-              subtitle="Por iniciar"
-              trend={-3}
-            />
-            <KPICard
-              title="Con Alertas"
-              value={kpis.conAlertas}
-              icon={<AlertTriangle className="h-5 w-5" />}
-              color="bg-red-500/10 text-red-400"
-              subtitle="Requieren atención"
-              trend={-12}
-            />
-          </AnimatedGrid>
+          {loading ? (
+            <StatsGridSkeleton items={4} />
+          ) : (
+            <AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <KPICard
+                title="En Curso"
+                value={kpis.enCurso}
+                icon={<Truck className="h-5 w-5" />}
+                color="bg-blue-500/10 text-blue-400"
+                subtitle={`${kpis.avgProgress}% promedio`}
+                trend={15}
+              />
+              <KPICard
+                title="Completados"
+                value={kpis.completados}
+                icon={<CheckCircle2 className="h-5 w-5" />}
+                color="bg-green-500/10 text-green-400"
+                subtitle={`${kpis.onTimeRate}% a tiempo`}
+                trend={8}
+              />
+              <KPICard
+                title="Pendientes"
+                value={kpis.pendientes}
+                icon={<Clock className="h-5 w-5" />}
+                color="bg-yellow-500/10 text-yellow-400"
+                subtitle="Por iniciar"
+                trend={-3}
+              />
+              <KPICard
+                title="Con Alertas"
+                value={kpis.conAlertas}
+                icon={<AlertTriangle className="h-5 w-5" />}
+                color="bg-red-500/10 text-red-400"
+                subtitle="Requieren atención"
+                trend={-12}
+              />
+            </AnimatedGrid>
+          )}
         </AnimatedSection>
 
         {/* Stats adicionales */}
@@ -544,12 +549,8 @@ const TransitosPageV2: React.FC = () => {
                   <tbody className="divide-y divide-gray-700">
                     {loading ? (
                       <tr>
-                        <td colSpan={6} className="px-6 py-8">
-                          <div className="space-y-3">
-                            {[1, 2, 3, 4, 5].map(i => (
-                              <AnimatedSkeleton key={i} className="h-16 w-full" />
-                            ))}
-                          </div>
+                        <td colSpan={6} className="p-0">
+                          <TableSkeleton rows={5} columns={6} />
                         </td>
                       </tr>
                     ) : filteredTransitos.length === 0 ? (
