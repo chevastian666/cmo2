@@ -38,6 +38,11 @@ const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.
 const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'));
 const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'));
 const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'));
+const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'));
+const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'));
+const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'));
+const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'));
+const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -192,6 +197,13 @@ function App() {
                   <Route path="/animations" element={<AnimationsDemo />} />
                   <Route path="/dashboard-interactive" element={<InteractiveDashboard />} />
                   <Route path="/dashboard-test" element={<DashboardTest />} />
+                  <Route path="/analytics" element={
+                    <AnalyticsErrorBoundary>
+                      <InteractiveSankeyDashboard />
+                    </AnalyticsErrorBoundary>
+                  } />
+                  <Route path="/analytics-test" element={<AnalyticsTest />} />
+                  <Route path="/sankey-test" element={<SankeyMinimal />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
