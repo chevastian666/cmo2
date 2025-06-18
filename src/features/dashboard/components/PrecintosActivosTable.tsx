@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
 import { Link2, Battery, MapPin, AlertTriangle, ChevronUp, ChevronDown, Network, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { cn } from '../../../utils/utils';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { PrecintoCommandsModal } from './PrecintoCommandsModal';
 import { TransitoDetailModal } from './TransitoDetailModal';
 import type { PrecintoActivo as PrecintoActivoType } from '../../../types/monitoring';
@@ -282,17 +283,19 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
                     <div className="text-lg font-bold text-white">
                       {precinto.nqr}
                     </div>
-                    <button
+                    <Button
+                      size="icon"
+                      variant="default"
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedPrecinto(precinto as PrecintoActivoType);
                         setShowCommandsModal(true);
                       }}
-                      className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all hover:scale-110"
+                      className="h-8 w-8"
                       title="Enviar comandos al precinto"
                     >
                       <Network className="h-4 w-4" />
-                    </button>
+                    </Button>
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -338,16 +341,18 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-center gap-2">
                     {precinto.transitoId && (
-                      <button
+                      <Button
+                        size="icon"
+                        variant="secondary"
                         onClick={() => {
                           setSelectedTransitoId(precinto.transitoId!);
                           setShowTransitoModal(true);
                         }}
-                        className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-all hover:scale-110"
+                        className="h-8 w-8"
                         title="Ver detalles del tránsito"
                       >
                         <Eye className="h-4 w-4" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </td>

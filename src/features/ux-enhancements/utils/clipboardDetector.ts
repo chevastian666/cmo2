@@ -88,7 +88,7 @@ export function detectClipboardContent(content: string): DetectionResult {
       type: 'reporte',
       confidence: 0.8,
       extractedData: {
-        number: numberMatch?>[1],
+        number: numberMatch?.[1],
         date: dateMatch?.[1],
         operator: operatorMatch?.[1]
       }

@@ -17,6 +17,7 @@ import { useAuth, useUserInfo } from '../../../hooks/useAuth';
 import { useConnectionStatus } from '../../../hooks/useSharedState';
 import { PanelSwitcher } from '../../../components/PanelSwitcher';
 import { MicrointeractionsSettings } from '../../microinteractions';
+import { BreadcrumbNav } from '@/components/ui/BreadcrumbNav';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -163,6 +164,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
         {/* Page content */}
         <main className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
+            <BreadcrumbNav />
             {children}
           </div>
         </main>

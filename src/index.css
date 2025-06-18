@@ -3,8 +3,56 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Dark theme as default - matching CMO's gray-900 background */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 95%;
+    
+    /* Card colors - matching gray-800 */
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 95%;
+    
+    /* Popover colors */
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 95%;
+    
+    /* Primary colors - blue theme */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+    
+    /* Secondary colors - gray */
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
+    
+    /* Muted colors - matching gray-700 */
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 65%;
+    
+    /* Accent colors */
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 98%;
+    
+    /* Destructive colors - red */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Border - matching gray-700 */
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+    --ring: 217 91% 60%;
+    
+    /* Chart colors to match existing theme */
+    --chart-1: 217 91% 60%; /* blue */
+    --chart-2: 142 76% 36%; /* green */
+    --chart-3: 45 93% 47%; /* yellow */
+    --chart-4: 0 84% 60%; /* red */
+    --chart-5: 280 85% 65%; /* purple */
+    
+    --radius: 0.5rem;
+  }
+  
   body {
-    @apply bg-gray-900 text-gray-100;
+    @apply bg-background text-foreground;
   }
 }
 
@@ -74,5 +122,16 @@
 
   .slider::-moz-range-thumb:active {
     @apply scale-125;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

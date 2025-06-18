@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Shield, Loader, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const LoginPage: React.FC = () => {
   const { login, isLoading, error } = useAuth();
@@ -46,18 +50,16 @@ export const LoginPage: React.FC = () => {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {displayError && (
-            <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 flex items-start space-x-3">
-              <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-base text-red-400">{displayError}</p>
-            </div>
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{displayError}</AlertDescription>
+            </Alert>
           )}
 
           <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-base font-medium text-gray-300">
-                Correo Electrónico
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="email">Correo Electrónico</Label>
+              <Input
                 id="email"
                 name="email"
                 type="email"
@@ -65,16 +67,13 @@ export const LoginPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-gray-800 border border-gray-700 placeholder-gray-500 text-base text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="usuario@blocktracker.uy"
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-base font-medium text-gray-300">
-                Contraseña
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
                 id="password"
                 name="password"
                 type="password"
@@ -82,27 +81,27 @@ export const LoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-gray-800 border border-gray-700 placeholder-gray-500 text-base text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="••••••••"
               />
             </div>
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full"
+              size="default"
             >
               {isLoading ? (
                 <>
-                  <Loader className="h-5 w-5 animate-spin mr-2" />
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
                   Iniciando sesión...
                 </>
               ) : (
                 'Iniciar Sesión'
               )}
-            </button>
+            </Button>
           </div>
 
           <div className="text-center">

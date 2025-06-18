@@ -1,6 +1,16 @@
 import React from 'react';
 import { X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import type { Precinto } from '../../../types';
 
 interface TransitoFormData {
@@ -34,70 +44,51 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
   precinto,
   transito
 }) => {
-  if (!isOpen || !precinto) return null;
+  if (!precinto) return null;
 
   const hasWarnings = precinto.bateria < 20 || 
                       (Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 ||
                       precinto.eslinga.estado === 'violada';
 
   return (
-    <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div className="fixed inset-0 z-50 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen p-4">
-          <div className="bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <div className="flex items-center space-x-3">
-                <Package className="h-6 w-6 text-blue-500" />
-                <h2 className="text-xl font-semibold text-white">
-                  Confirmar Armado de Precinto
-                </h2>
-              </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5 text-gray-400" />
-              </button>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <div className="flex items-center space-x-3">
+            <Package className="h-6 w-6 text-blue-500" />
+            <div>
+              <DialogTitle>Confirmar Armado de Precinto</DialogTitle>
+              <DialogDescription>
+                Revise la información antes de confirmar el armado
+              </DialogDescription>
             </div>
+          </div>
+        </DialogHeader>
 
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
-              {/* Warnings */}
-              {hasWarnings && (
-                <div className="mb-6 p-4 bg-yellow-900/20 border border-yellow-800 rounded-lg">
-                  <div className="flex items-start space-x-3">
-                    <AlertTriangle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-yellow-400 mb-2">
-                        Advertencias del Precinto
-                      </p>
-                      <ul className="space-y-1 text-sm text-yellow-300">
-                        {precinto.bateria < 20 && (
-                          <li>• Batería baja: {precinto.bateria}%</li>
-                        )}
-                        {(Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 && (
-                          <li>• Sin reportar hace más de 1 hora</li>
-                        )}
-                        {precinto.eslinga.estado === 'violada' && (
-                          <li>• Eslinga en estado violado</li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
+        <div className="space-y-6">
+          {/* Warnings */}
+          {hasWarnings && (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Advertencias del Precinto</AlertTitle>
+              <AlertDescription>
+                <ul className="space-y-1 text-sm mt-2">
+                  {precinto.bateria < 20 && (
+                    <li>• Batería baja: {precinto.bateria}%</li>
+                  )}
+                  {(Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 && (
+                    <li>• Sin reportar hace más de 1 hora</li>
+                  )}
+                  {precinto.eslinga.estado === 'violada' && (
+                    <li>• Eslinga en estado violado</li>
+                  )}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
 
-              {/* Precinto Info */}
-              <div className="space-y-6">
-                <div>
+          {/* Precinto Info */}
+          <div>
                   <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">
                     Información del Precinto
                   </h3>
@@ -207,41 +198,30 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
                     <span className="text-white ml-2">
                       precintocommand --activate --nqr={precinto.codigo} --matricula={transito.matricula || 'NONE'}
                     </span>
-                  </div>
-                </div>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between p-6 border-t border-gray-700">
-              <p className="text-sm text-gray-400">
-                ¿Está seguro de que desea armar este precinto?
-              </p>
-              <div className="flex space-x-3">
-                <button
-                  onClick={onClose}
-                  className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={onConfirm}
-                  className={cn(
-                    "px-6 py-2 rounded-lg font-medium transition-colors",
-                    "flex items-center space-x-2",
-                    hasWarnings
-                      ? "bg-yellow-600 hover:bg-yellow-700 text-white"
-                      : "bg-blue-600 hover:bg-blue-700 text-white"
-                  )}
-                >
-                  <CheckCircle className="h-5 w-5" />
-                  <span>Confirmar Armado</span>
-                </button>
-              </div>
-            </div>
           </div>
+
         </div>
-      </div>
-    </>
+
+        <DialogFooter>
+          <p className="text-sm text-muted-foreground mr-auto">
+            ¿Está seguro de que desea armar este precinto?
+          </p>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant={hasWarnings ? "destructive" : "default"}
+            onClick={onConfirm}
+          >
+            <CheckCircle className="mr-2 h-4 w-4" />
+            Confirmar Armado
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

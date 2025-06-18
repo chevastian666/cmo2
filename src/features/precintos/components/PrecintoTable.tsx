@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import { ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { PrecintoStatusBadge } from './PrecintoStatusBadge';
 import { BatteryIndicator } from './BatteryIndicator';
 import { SignalIndicator } from './SignalIndicator';
@@ -181,44 +182,53 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <button
+                    <Button
+                      size="icon"
+                      variant="ghost"
                       onClick={() => onViewDetail(precinto)}
-                      className="p-1 hover:bg-gray-600 rounded transition-colors"
                       title="Ver detalle"
+                      aria-label={`Ver detalle del precinto ${precinto.codigo}`}
                     >
-                      <Eye className="h-4 w-4 text-gray-400" />
-                    </button>
+                      <Eye className="h-4 w-4" />
+                    </Button>
                     {precinto.gps && (
-                      <button
+                      <Button
+                        size="icon"
+                        variant="ghost"
                         onClick={() => onViewMap(precinto)}
-                        className="p-1 hover:bg-gray-600 rounded transition-colors"
                         title="Ver en mapa"
+                        aria-label={`Ver ubicación del precinto ${precinto.codigo} en el mapa`}
                       >
                         <MapPin className="h-4 w-4 text-blue-400" />
-                      </button>
+                      </Button>
                     )}
-                    <button
+                    <Button
+                      size="icon"
+                      variant="ghost"
                       onClick={() => onSendCommand(precinto)}
-                      className="p-1 hover:bg-gray-600 rounded transition-colors"
                       title="Enviar comando"
+                      aria-label={`Enviar comando al precinto ${precinto.codigo}`}
                     >
-                      <Send className="h-4 w-4 text-gray-400" />
-                    </button>
-                    <button
+                      <Send className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
                       onClick={() => onViewHistory(precinto)}
-                      className="p-1 hover:bg-gray-600 rounded transition-colors"
                       title="Ver historial"
+                      aria-label={`Ver historial del precinto ${precinto.codigo}`}
                     >
-                      <History className="h-4 w-4 text-gray-400" />
-                    </button>
+                      <History className="h-4 w-4" />
+                    </Button>
                     {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (
-                      <button
+                      <Button
+                        size="icon"
+                        variant="ghost"
                         onClick={() => onMarkAsBroken(precinto)}
-                        className="p-1 hover:bg-gray-600 rounded transition-colors"
                         title="Marcar como roto"
                       >
                         <XCircle className="h-4 w-4 text-orange-400" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </td>
@@ -230,17 +240,18 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
 
       {/* Pagination */}
       <div className="px-4 py-3 border-t border-gray-700 flex items-center justify-between">
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-muted-foreground">
           Mostrando {((currentPage - 1) * itemsPerPage) + 1} a {Math.min(currentPage * itemsPerPage, precintos.length)} de {precintos.length} precintos
         </div>
         <div className="flex gap-2">
-          <button
+          <Button
+            size="sm"
+            variant="secondary"
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 bg-gray-700 text-white rounded text-sm hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
-          </button>
+          </Button>
           <div className="flex gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1)
               .filter(page => 
@@ -251,29 +262,26 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
               .map((page, index, array) => (
                 <Fragment key={page}>
                   {index > 0 && array[index - 1] !== page - 1 && (
-                    <span className="px-2 py-1 text-gray-500">...</span>
+                    <span className="px-2 py-1 text-muted-foreground">...</span>
                   )}
-                  <button
+                  <Button
+                    size="sm"
+                    variant={page === currentPage ? "default" : "secondary"}
                     onClick={() => setCurrentPage(page)}
-                    className={cn(
-                      "px-3 py-1 rounded text-sm",
-                      page === currentPage
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-700 text-white hover:bg-gray-600"
-                    )}
                   >
                     {page}
-                  </button>
+                  </Button>
                 </Fragment>
               ))}
           </div>
-          <button
+          <Button
+            size="sm"
+            variant="secondary"
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-gray-700 text-white rounded text-sm hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Siguiente
-          </button>
+          </Button>
         </div>
       </div>
     </div>

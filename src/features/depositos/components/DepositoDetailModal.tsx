@@ -1,7 +1,17 @@
 import React from 'react';
 import { X, MapPin, Phone, Clock, Building2, Package, Activity, ExternalLink } from 'lucide-react';
 import type { Deposito } from '../types';
-import { cn } from '../../../utils/utils';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 
 interface DepositoDetailModalProps {
   deposito: Deposito;
@@ -16,8 +26,6 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
   onClose,
   onEdit
 }) => {
-  if (!isOpen) return null;
-
   const getCapacidadColor = (capacidad: number) => {
     if (capacidad >= 80) return 'text-red-400';
     if (capacidad >= 60) return 'text-yellow-400';
@@ -31,35 +39,19 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
   };
 
   return (
-    <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={onClose}
-      />
-      
-      {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          {/* Header */}
-          <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-6 w-6 text-blue-500" />
-              <div>
-                <h2 className="text-xl font-semibold text-white">{deposito.nombre}</h2>
-                <p className="text-sm text-gray-400">Código: {deposito.codigo}</p>
-              </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <div className="flex items-center gap-3">
+            <Building2 className="h-6 w-6 text-blue-500" />
+            <div>
+              <DialogTitle>{deposito.nombre}</DialogTitle>
+              <DialogDescription>Código: {deposito.codigo}</DialogDescription>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-            >
-              <X className="h-5 w-5 text-gray-400" />
-            </button>
           </div>
+        </DialogHeader>
 
-          {/* Content */}
-          <div className="p-6 space-y-6">
+        <div className="space-y-6">
             {/* General Info */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -86,14 +78,9 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
               )}
               <div>
                 <p className="text-sm text-gray-400 mb-1">Estado</p>
-                <span className={cn(
-                  "inline-flex px-2 py-1 text-xs font-medium rounded-full",
-                  deposito.estado === 'activo'
-                    ? "bg-green-500/20 text-green-400"
-                    : "bg-red-500/20 text-red-400"
-                )}>
+                <Badge variant={deposito.estado === 'activo' ? 'outline' : 'destructive'}>
                   {deposito.estado === 'activo' ? 'Activo' : 'Inactivo'}
-                </span>
+                </Badge>
               </div>
             </div>
 
@@ -191,25 +178,22 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Footer */}
-          <div className="sticky bottom-0 bg-gray-800 border-t border-gray-700 p-6 flex justify-end gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
-            >
-              Cerrar
-            </button>
-            <button
-              onClick={onEdit}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
-            >
-              Editar
-            </button>
-          </div>
         </div>
-      </div>
-    </>
+
+        <DialogFooter>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cerrar
+          </Button>
+          <Button
+            onClick={onEdit}
+          >
+            Editar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

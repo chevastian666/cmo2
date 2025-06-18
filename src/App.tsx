@@ -31,6 +31,7 @@ const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage')
 const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })));
 const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })));
 const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })));
+const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -38,6 +39,7 @@ import { useWebSocket } from './hooks/useWebSocket';
 import { notificationService } from './services/shared/notification.service';
 import { sharedWebSocketService } from './services/shared/sharedWebSocket.service';
 import { SHARED_CONFIG } from './config/shared.config';
+import { Toaster } from '@/components/ui/toaster';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -179,12 +181,14 @@ function App() {
                       <RolesPage />
                     </ProtectedRoute>
                   } />
+                  <Route path="/demo" element={<ShadcnDemo />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
             </LayoutOptimized>
           } />
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </QueryClientProvider>
   );

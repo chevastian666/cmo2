@@ -53,6 +53,52 @@ npm run lint
 npm run typecheck
 ```
 
+## UI Component Library - shadcn/ui
+
+### Installation Status
+shadcn/ui has been successfully integrated with the following configuration:
+- Style: New York
+- Base color: Neutral (customized to match dark theme)
+- CSS Variables: Enabled
+- Components path: `@/components/ui`
+
+### Available Components
+Core components installed:
+- **Button** - Multiple variants (default, secondary, destructive, outline, ghost, link)
+- **Input** - Form inputs with consistent styling
+- **Select** - Dropdown selectors with search
+- **Dialog** - Accessible modals
+- **Card** - Content containers with header/footer
+- **Badge** - Status indicators
+- **Tabs** - Tab navigation
+- **Alert** - Notification messages
+- **Form** - React Hook Form integration
+- **Label**, **Textarea**, **Checkbox**, **Radio Group**, **Switch**
+
+### Migration Examples
+Three components have been migrated as examples:
+1. **AlertaDetalleModalV2** - Modal using Dialog component
+2. **AlertsTableV2** - Table with shadcn/ui Buttons and Badges
+3. **ArmFormV2** - Form with react-hook-form and shadcn/ui components
+
+### Theme Configuration
+The dark theme has been configured in `src/index.css` to match the existing CMO design:
+- Background: gray-900 equivalent
+- Cards: gray-800 equivalent
+- Borders: gray-700 equivalent
+- Primary: Blue theme
+- Destructive: Red for errors/warnings
+
+### Usage
+Import components from `@/components/ui`:
+```tsx
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+```
+
+### Demo
+View the component showcase at `/demo` route.
+
 ## Key Features Implemented
 - Server-side pagination for large datasets
 - Response caching with TTL
