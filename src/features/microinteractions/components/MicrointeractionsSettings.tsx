@@ -204,7 +204,7 @@ export const MicrointeractionsSettings: React.FC = () => {
         </>
       )}
 
-      <style jsx>{`
+      <style>{`
         .toggle-checkbox {
           width: 40px;
           height: 20px;

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { motion, AnimatePresence, MotionProps } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   fadeVariants, 
   scaleVariants, 
@@ -23,9 +23,10 @@ import { tokenClasses } from '../../styles/useDesignTokens';
 // COMPONENTES BASE ANIMADOS
 // ==========================================
 
-interface AnimatedDivProps extends MotionProps {
+interface AnimatedDivProps {
   children: React.ReactNode;
   className?: string;
+  [key: string]: any; // Allow all motion props
 }
 
 // Div con fade animation

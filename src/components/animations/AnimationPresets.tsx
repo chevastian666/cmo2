@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { Variants, Transition } from 'framer-motion';
+// No importamos tipos para evitar problemas con el bundler
 
 // ==========================================
 // TRANSICIONES
@@ -63,7 +63,7 @@ export const transitions = {
 // ==========================================
 
 // Fade In/Out
-export const fadeVariants: Variants = {
+export const fadeVariants = {
   hidden: { 
     opacity: 0 
   },
@@ -78,7 +78,7 @@ export const fadeVariants: Variants = {
 };
 
 // Scale + Fade
-export const scaleVariants: Variants = {
+export const scaleVariants = {
   hidden: { 
     opacity: 0, 
     scale: 0.8 
@@ -96,7 +96,7 @@ export const scaleVariants: Variants = {
 };
 
 // Slide desde arriba
-export const slideDownVariants: Variants = {
+export const slideDownVariants = {
   hidden: { 
     opacity: 0, 
     y: -20 
@@ -114,7 +114,7 @@ export const slideDownVariants: Variants = {
 };
 
 // Slide desde abajo
-export const slideUpVariants: Variants = {
+export const slideUpVariants = {
   hidden: { 
     opacity: 0, 
     y: 20 
@@ -132,7 +132,7 @@ export const slideUpVariants: Variants = {
 };
 
 // Slide desde la izquierda
-export const slideLeftVariants: Variants = {
+export const slideLeftVariants = {
   hidden: { 
     opacity: 0, 
     x: -20 
@@ -150,7 +150,7 @@ export const slideLeftVariants: Variants = {
 };
 
 // Slide desde la derecha
-export const slideRightVariants: Variants = {
+export const slideRightVariants = {
   hidden: { 
     opacity: 0, 
     x: 20 
@@ -168,7 +168,7 @@ export const slideRightVariants: Variants = {
 };
 
 // Rotación + Scale
-export const rotateScaleVariants: Variants = {
+export const rotateScaleVariants = {
   hidden: { 
     opacity: 0, 
     scale: 0.8, 
@@ -189,7 +189,7 @@ export const rotateScaleVariants: Variants = {
 };
 
 // Stagger para listas
-export const staggerContainer: Variants = {
+export const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -200,7 +200,7 @@ export const staggerContainer: Variants = {
   }
 };
 
-export const staggerItem: Variants = {
+export const staggerItem = {
   hidden: { 
     opacity: 0, 
     y: 20 
@@ -217,7 +217,7 @@ export const staggerItem: Variants = {
 // ==========================================
 
 // Pulse para elementos activos
-export const pulseVariants: Variants = {
+export const pulseVariants = {
   initial: {
     scale: 1
   },
@@ -232,7 +232,7 @@ export const pulseVariants: Variants = {
 };
 
 // Shake para errores
-export const shakeVariants: Variants = {
+export const shakeVariants = {
   initial: { x: 0 },
   shake: {
     x: [-10, 10, -10, 10, 0],
@@ -244,7 +244,7 @@ export const shakeVariants: Variants = {
 };
 
 // Glow para elementos importantes
-export const glowVariants: Variants = {
+export const glowVariants = {
   initial: {
     boxShadow: "0 0 0 0 rgba(59, 130, 246, 0)"
   },
@@ -267,7 +267,7 @@ export const glowVariants: Variants = {
 // ==========================================
 
 // Animación para alertas críticas
-export const alertCriticalVariants: Variants = {
+export const alertCriticalVariants = {
   initial: {
     scale: 1,
     opacity: 1
@@ -284,7 +284,7 @@ export const alertCriticalVariants: Variants = {
 };
 
 // Animación para tránsitos en movimiento
-export const transitMovingVariants: Variants = {
+export const transitMovingVariants = {
   initial: {
     x: 0
   },
@@ -299,7 +299,7 @@ export const transitMovingVariants: Variants = {
 };
 
 // Animación para precintos activos
-export const precintoActiveVariants: Variants = {
+export const precintoActiveVariants = {
   initial: {
     opacity: 0.8
   },
@@ -351,7 +351,7 @@ export const hoverLiftVariants = {
 // ==========================================
 
 // Función para crear variantes de delay personalizadas
-export const createDelayedVariants = (delay: number): Variants => ({
+export const createDelayedVariants = (delay: number) => ({
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -364,7 +364,7 @@ export const createDelayedVariants = (delay: number): Variants => ({
 });
 
 // Función para crear stagger personalizado
-export const createStaggerVariants = (staggerDelay: number = 0.1): Variants => ({
+export const createStaggerVariants = (staggerDelay: number = 0.1) => ({
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -376,7 +376,7 @@ export const createStaggerVariants = (staggerDelay: number = 0.1): Variants => (
 });
 
 // Preset para modales
-export const modalVariants: Variants = {
+export const modalVariants = {
   hidden: {
     opacity: 0,
     scale: 0.95,
@@ -397,7 +397,7 @@ export const modalVariants: Variants = {
 };
 
 // Preset para overlays
-export const overlayVariants: Variants = {
+export const overlayVariants = {
   hidden: { opacity: 0 },
   visible: { 
     opacity: 1,
@@ -410,7 +410,7 @@ export const overlayVariants: Variants = {
 };
 
 // Preset para notificaciones
-export const notificationVariants: Variants = {
+export const notificationVariants = {
   hidden: {
     opacity: 0,
     y: 50,
