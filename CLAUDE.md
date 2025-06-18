@@ -50,7 +50,7 @@ VITE_USE_REAL_API=true npm run dev
 ## Linting and Type Checking Commands
 ```bash
 npm run lint
-npm run typecheck
+npx tsc --noEmit  # TypeScript check (no typecheck script defined)
 ```
 
 ## UI Component Library - shadcn/ui
@@ -114,5 +114,86 @@ All services fall back to mock data when:
 3. No data is returned from API
 
 This ensures the application remains functional during development and testing.
+
+## State Management with Zustand - Enhanced Implementation
+
+The project uses Zustand for global state management with the following enhancements:
+
+### New Middleware and Helpers
+1. **Logger Middleware** (`src/store/middleware/logger.ts`)
+   - Custom logging with colors, diff, and performance metrics
+   - Configurable action filtering and state transformation
+   - Collapsed groups for cleaner console output
+
+2. **Immer Integration**
+   - Write mutations naturally with automatic immutability
+   - No more spread operators for nested updates
+   - Example: `state.items.push(item)` instead of `{ ...state, items: [...state.items, item] }`
+
+3. **Error Handling System** (`src/store/middleware/errorHandling.ts`)
+   - Standardized `LoadingState` type with idle/loading/success/error states
+   - `executeAsyncAction` helper for consistent error handling
+   - Automatic notifications on errors
+
+4. **Persist Helpers** (`src/store/middleware/persistHelpers.ts`)
+   - Simplified persistence configuration
+   - Cross-tab synchronization support
+   - Import/export utilities for state backup
+
+5. **Store Factory** (`src/store/createStore.ts`)
+   - `createStore()` function with all best practices built-in
+   - Automatic middleware composition
+   - TypeScript-first design
+
+### Example Usage
+```typescript
+import { createStore } from '@/store/createStore';
+import { executeAsyncAction } from '@/store/middleware/errorHandling';
+
+export const useMyStore = createStore(
+  (set, get) => ({
+    // State
+    items: [],
+    loadingState: { status: 'idle' },
+    
+    // Actions with immer mutations
+    addItem: (item) => set(state => { 
+      state.items.push(item);  // Direct mutation thanks to immer!
+    }),
+    
+    // Async actions with error handling
+    fetchItems: async () => {
+      await executeAsyncAction(
+        async () => {
+          const items = await api.getItems();
+          set(state => { state.items = items; });
+          return items;
+        },
+        (loadingState) => set({ loadingState }),
+        { errorMessage: 'Failed to load items' }
+      );
+    }
+  }),
+  {
+    name: 'my-store',
+    enableImmer: true,
+    enableLogger: true,
+    persist: { 
+      partialize: (state) => ({ items: state.items }) 
+    }
+  }
+);
+```
+
+### Migration Guide
+See `src/store/examples/enhancedPrecintosStore.ts` for a complete example of migrating an existing store to use all new features.
+
+### Documentation
+Complete guide available in `ZUSTAND_BEST_PRACTICES.md` covering:
+- Patterns and conventions
+- Performance optimization
+- Debugging techniques
+- Testing strategies
+- Migration from existing stores
 
 By Cheva
