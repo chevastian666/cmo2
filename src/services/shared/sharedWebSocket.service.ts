@@ -1,4 +1,5 @@
 import { SHARED_CONFIG } from '../../config/shared.config';
+import { jwtService } from '../jwt.service';
 
 type EventCallback = (data: any) => void;
 type ConnectionCallback = (status: 'connected' | 'disconnected' | 'reconnecting') => void;
@@ -150,7 +151,7 @@ export class SharedWebSocketService {
   }
 
   private authenticate(): void {
-    const token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+    const token = jwtService.getAccessToken();
     if (token) {
       this.send('auth', { token });
     }

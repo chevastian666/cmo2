@@ -1,7 +1,14 @@
+/**
+ * Enhanced Auth Service with JWT Implementation
+ * By Cheva
+ */
+
 import { sharedApiService } from './sharedApi.service';
 import { sharedStateService } from './sharedState.service';
 import { SHARED_CONFIG, hasRole } from '../../config/shared.config';
+import { jwtService } from '../jwt.service';
 import type { Usuario } from '../../types';
+import type { LoginResponse, TokenPair } from '../../types/jwt';
 
 interface AuthState {
   user: Usuario | null;
@@ -16,6 +23,7 @@ class AuthService {
   private listeners = new Set<AuthListener>();
   private authCheckInterval: NodeJS.Timeout | null = null;
   private tokenRefreshInterval: NodeJS.Timeout | null = null;
+  private refreshPromise: Promise<void> | null = null;
 
   // Initialize auth service
   async initialize(): Promise<void> {
@@ -26,8 +34,8 @@ class AuthService {
 
   // Check current authentication status
   async checkAuth(): Promise<boolean> {
-    const token = this.getToken();
-    if (!token) {
+    const token = jwtService.getAccessToken();
+    if (!token || jwtService.isTokenExpired(token)) {
       this.notifyListeners({
         user: null,
         isAuthenticated: false,
@@ -38,25 +46,39 @@ class AuthService {
     }
 
     try {
-      const user = await sharedApiService.getCurrentUser();
-      if (user) {
-        this.notifyListeners({
-          user,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null
-        });
-        return true;
+      // Get user from token
+      const userFromToken = jwtService.getUserFromToken(token);
+      if (userFromToken) {
+        // Optionally verify with server
+        const user = await sharedApiService.getCurrentUser();
+        if (user) {
+          this.notifyListeners({
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null
+          });
+          return true;
+        }
       }
     } catch (error) {
       console.error('Auth check failed:', error);
+      
+      // Try to refresh token if it's expired
+      if (jwtService.shouldRefreshToken()) {
+        const refreshed = await this.refreshTokens();
+        if (refreshed) {
+          return this.checkAuth(); // Retry after refresh
+        }
+      }
+      
       this.clearAuth();
     }
 
     return false;
   }
 
-  // Login
+  // Login with JWT
   async login(email: string, password: string): Promise<Usuario> {
     this.notifyListeners({
       user: null,
@@ -66,10 +88,16 @@ class AuthService {
     });
 
     try {
-      const response = await sharedApiService.login(email, password);
+      const response = await sharedApiService.login(email, password) as LoginResponse;
+      
+      // Save JWT tokens
+      jwtService.saveTokens(response.tokens);
+      
+      // Save user data
+      localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(response.user));
       
       this.notifyListeners({
-        user: response.user,
+        user: response.user as Usuario,
         isAuthenticated: true,
         isLoading: false,
         error: null
@@ -78,9 +106,9 @@ class AuthService {
       // Initialize shared state after login
       await sharedStateService.initialize();
 
-      return response.user;
+      return response.user as Usuario;
     } catch (error: any) {
-      const errorMessage = error.message || 'Login failed';
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
       this.notifyListeners({
         user: null,
         isAuthenticated: false,
@@ -94,6 +122,7 @@ class AuthService {
   // Logout
   async logout(): Promise<void> {
     try {
+      // Notify server about logout
       await sharedStateService.logout();
     } catch (error) {
       console.error('Logout error:', error);
@@ -103,8 +132,59 @@ class AuthService {
     }
   }
 
+  // Refresh JWT tokens
+  async refreshTokens(): Promise<boolean> {
+    // Prevent multiple simultaneous refresh requests
+    if (this.refreshPromise) {
+      await this.refreshPromise;
+      return true;
+    }
+
+    const refreshToken = jwtService.getRefreshToken();
+    if (!refreshToken) {
+      return false;
+    }
+
+    this.refreshPromise = (async () => {
+      try {
+        const response = await sharedApiService.refreshToken();
+        if (response.accessToken) {
+          // Update only access token
+          const currentRefresh = jwtService.getRefreshToken();
+          jwtService.saveTokens({
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken || currentRefresh || ''
+          });
+          
+          // Update user data if provided
+          if (response.user) {
+            localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(response.user));
+          }
+          
+          return true;
+        }
+      } catch (error) {
+        console.error('Token refresh failed:', error);
+        return false;
+      } finally {
+        this.refreshPromise = null;
+      }
+      return false;
+    })();
+
+    const result = await this.refreshPromise;
+    return result;
+  }
+
   // Get current user
   getCurrentUser(): Usuario | null {
+    // First try to get from token
+    const tokenUser = jwtService.getUserFromToken();
+    if (tokenUser) {
+      return tokenUser as Usuario;
+    }
+    
+    // Fallback to localStorage
     const stored = localStorage.getItem(SHARED_CONFIG.AUTH_USER_KEY);
     if (stored) {
       try {
@@ -118,16 +198,22 @@ class AuthService {
 
   // Get auth token
   getToken(): string | null {
-    return localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+    return jwtService.getAccessToken();
+  }
+
+  // Get auth headers for API requests
+  getAuthHeaders(): Record<string, string> {
+    return jwtService.getAuthHeader() as Record<string, string>;
   }
 
   // Check if user has required role(s)
   hasRole(requiredRoles: string | string[]): boolean {
-    const user = this.getCurrentUser();
-    if (!user) return false;
-    
-    const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
-    return hasRole(user.rol, roles);
+    return jwtService.hasRole(requiredRoles);
+  }
+
+  // Check if user has specific permission
+  hasPermission(permission: string): boolean {
+    return jwtService.hasPermission(permission);
   }
 
   // Check if user has access to CMO panel
@@ -157,7 +243,7 @@ class AuthService {
     const user = this.getCurrentUser();
     listener({
       user,
-      isAuthenticated: !!user,
+      isAuthenticated: !!user && !jwtService.isTokenExpired(),
       isLoading: false,
       error: null
     });
@@ -177,7 +263,7 @@ class AuthService {
   }
 
   private clearAuth(): void {
-    localStorage.removeItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+    jwtService.clearTokens();
     localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY);
     
     this.notifyListeners({
@@ -189,19 +275,16 @@ class AuthService {
   }
 
   private startTokenRefresh(): void {
-    // Refresh token every 30 minutes
+    // Check token expiry every minute
     this.tokenRefreshInterval = setInterval(async () => {
-      try {
-        await sharedApiService.refreshToken();
-      } catch (error) {
-        console.error('Token refresh failed:', error);
-        // If refresh fails, check auth status
-        const isValid = await this.checkAuth();
-        if (!isValid) {
-          this.logout();
+      if (jwtService.shouldRefreshToken()) {
+        const refreshed = await this.refreshTokens();
+        if (!refreshed) {
+          // If refresh fails, logout
+          await this.logout();
         }
       }
-    }, 30 * 60 * 1000); // 30 minutes
+    }, 60 * 1000); // 1 minute
   }
 
   private startAuthCheck(): void {
@@ -228,7 +311,7 @@ class AuthService {
 
   // Utility methods
   isAuthenticated(): boolean {
-    return !!this.getToken() && !!this.getCurrentUser();
+    return !!jwtService.getAccessToken() && !jwtService.isTokenExpired();
   }
 
   getUserName(): string {
@@ -248,20 +331,34 @@ class AuthService {
 
   // Session management
   async extendSession(): Promise<void> {
-    if (this.isAuthenticated()) {
-      await sharedApiService.refreshToken();
+    if (this.isAuthenticated() && jwtService.shouldRefreshToken()) {
+      await this.refreshTokens();
     }
   }
 
   getSessionExpiry(): Date | null {
-    // This would typically decode the JWT token to get expiry
-    // For now, return null
-    return null;
+    const timeUntilExpiry = jwtService.getTimeUntilExpiry();
+    if (timeUntilExpiry === null) return null;
+    
+    return new Date(Date.now() + timeUntilExpiry);
   }
 
   isSessionExpired(): boolean {
-    const expiry = this.getSessionExpiry();
-    return expiry ? new Date() > expiry : false;
+    return jwtService.isTokenExpired();
+  }
+
+  getTimeUntilExpiry(): string {
+    const ms = jwtService.getTimeUntilExpiry();
+    if (ms === null) return 'Session expired';
+    
+    const minutes = Math.floor(ms / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+    return 'Less than a minute';
   }
 }
 

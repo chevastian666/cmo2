@@ -1,4 +1,5 @@
-import { SHARED_CONFIG, getAuthHeaders, formatApiEndpoint } from '../../config/shared.config';
+import { SHARED_CONFIG, formatApiEndpoint } from '../../config/shared.config';
+import { jwtService } from '../jwt.service';
 import type { 
   Precinto, 
   TransitoPendiente, 
@@ -6,6 +7,7 @@ import type {
   EstadisticasMonitoreo,
   Usuario 
 } from '../../types';
+import type { LoginResponse, RefreshTokenResponse } from '../../types/jwt';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -80,7 +82,7 @@ class SharedApiService {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        ...getAuthHeaders(),
+        ...jwtService.getAuthHeader(),
         ...options.headers
       },
       body: data && method !== 'GET' ? JSON.stringify(data) : undefined
@@ -114,6 +116,33 @@ class SharedApiService {
         const response = await fetch(url, requestOptions);
         
         if (!response.ok) {
+          // Handle 401 Unauthorized for token refresh
+          if (response.status === 401 && endpoint !== '/auth/refresh') {
+            // Try to refresh token
+            const refreshToken = jwtService.getRefreshToken();
+            if (refreshToken) {
+              try {
+                await this.refreshToken();
+                // Retry the original request with new token
+                const retryOptions = {
+                  ...requestOptions,
+                  headers: {
+                    ...requestOptions.headers,
+                    ...jwtService.getAuthHeader()
+                  }
+                };
+                const retryResponse = await fetch(url, retryOptions);
+                if (retryResponse.ok) {
+                  const retryData: ApiResponse<T> = await retryResponse.json();
+                  return retryData.data || retryData as T;
+                }
+              } catch (refreshError) {
+                // Refresh failed, continue with original error
+                console.error('Token refresh failed:', refreshError);
+              }
+            }
+          }
+          
           const error = await response.json().catch(() => ({ message: 'Request failed' }));
           throw new Error(error.message || `HTTP ${response.status}`);
         }
@@ -169,7 +198,7 @@ class SharedApiService {
   }
 
   // Authentication endpoints
-  async login(email: string, password: string): Promise<{ token: string; user: Usuario }> {
+  async login(email: string, password: string): Promise<LoginResponse> {
     // Mock authentication for development
     if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
       // Simulate API delay
@@ -206,51 +235,49 @@ class SharedApiService {
       const user = mockUsers[email];
       
       if (user && password === 'password123') {
-        const token = `mock-token-${Date.now()}`;
+        // Generate mock JWT tokens
+        const mockResponse: LoginResponse = {
+          user: {
+            id: user.id,
+            email: user.email,
+            nombre: user.nombre,
+            rol: user.rol
+          },
+          tokens: {
+            accessToken: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(JSON.stringify({
+              id: user.id,
+              email: user.email,
+              nombre: user.nombre,
+              rol: user.rol,
+              iat: Math.floor(Date.now() / 1000),
+              exp: Math.floor(Date.now() / 1000) + 3600 // 1 hour
+            }))}.mock-signature`,
+            refreshToken: `refresh-${Date.now()}`
+          }
+        };
         
-        // Store auth data
-        localStorage.setItem(SHARED_CONFIG.AUTH_TOKEN_KEY, token);
-        localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(user));
-        
-        return { token, user };
+        return mockResponse;
       } else {
         throw new Error('Credenciales inválidas');
       }
     }
     
-    try {
-      const response = await this.request<{ token: string; user: Usuario }>('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password })
-      }, false);
-
-      // Store auth data
-      localStorage.setItem(SHARED_CONFIG.AUTH_TOKEN_KEY, response.token);
-      localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(response.user));
-
-      return response;
-    } catch (error) {
-      // If API fails in development, try mock login
-      if (SHARED_CONFIG.IS_DEVELOPMENT) {
-        return this.login(email, password);
-      }
-      throw error;
-    }
+    return this.request<LoginResponse>('POST', '/auth/login', { email, password }, {}, false);
   }
 
   async logout(): Promise<void> {
     if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
       // Mock logout
-      localStorage.removeItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+      jwtService.clearTokens();
       localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY);
       this.clearCache();
       return;
     }
     
     try {
-      await this.request('/auth/logout', { method: 'POST' }, false);
+      await this.request('POST', '/auth/logout', null, {}, false);
     } finally {
-      localStorage.removeItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+      jwtService.clearTokens();
       localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY);
       this.clearCache();
     }
@@ -272,7 +299,7 @@ class SharedApiService {
     }
 
     try {
-      const user = await this.request<Usuario>('/auth/me');
+      const user = await this.request<Usuario>('GET', '/auth/me');
       localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(user));
       return user;
     } catch {
@@ -429,7 +456,9 @@ class SharedApiService {
     const response = await fetch(
       formatApiEndpoint(`/export/${type}?${params}`),
       {
-        headers: getAuthHeaders()
+        headers: {
+          ...jwtService.getAuthHeader()
+        }
       }
     );
 
@@ -523,11 +552,31 @@ class SharedApiService {
     this.clearCache();
   }
 
-  refreshToken(): Promise<void> {
-    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
-      return Promise.resolve();
+  async refreshToken(): Promise<RefreshTokenResponse> {
+    const refreshToken = jwtService.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
     }
-    return this.request('/auth/refresh', { method: 'POST' }, false);
+
+    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
+      // Mock token refresh
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const userData = jwtService.getUserFromToken();
+      if (!userData) {
+        throw new Error('Invalid token');
+      }
+      
+      return {
+        accessToken: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(JSON.stringify({
+          ...userData,
+          iat: Math.floor(Date.now() / 1000),
+          exp: Math.floor(Date.now() / 1000) + 3600 // 1 hour
+        }))}.mock-signature-refreshed`
+      };
+    }
+    
+    return this.request<RefreshTokenResponse>('POST', '/auth/refresh', { refreshToken }, {}, false);
   }
 }
 
