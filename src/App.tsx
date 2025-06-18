@@ -29,6 +29,7 @@ const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m
 const LibroNovedades = lazy(() => import('./features/novedades').then(m => ({ default: m.LibroNovedades })));
 const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })));
 const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })));
+const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })));
 const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })));
 const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })));
 const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })));
@@ -184,6 +185,7 @@ function App() {
                   } />
                   <Route path="/demo" element={<ShadcnDemo />} />
                   <Route path="/design-tokens" element={<DesignTokensDemo />} />
+                  <Route path="/animations" element={<AnimationsDemo />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
