@@ -196,4 +196,46 @@ Complete guide available in `ZUSTAND_BEST_PRACTICES.md` covering:
 - Testing strategies
 - Migration from existing stores
 
+## Interactive Dashboard
+
+A fully customizable dashboard with drag-and-drop widgets has been implemented.
+
+### Features
+1. **Draggable & Resizable Widgets**
+   - react-grid-layout integration
+   - Responsive breakpoints (lg/md/sm/xs/xxs)
+   - Smooth animations with Framer Motion
+
+2. **Available Widgets**
+   - KPI Cards (4 types)
+   - Charts (line/bar/area/pie)
+   - Real-time Map
+   - Recent Alerts
+   - Activity Feed
+   - Statistics Grid
+   - Active Transits
+   - Precinto Status
+
+3. **Edit Mode**
+   - Lock/Unlock toggle
+   - Save layout to localStorage
+   - Reset to defaults option
+   - Visual feedback for drag/resize
+
+4. **Persistence**
+   - Layouts saved per breakpoint
+   - Widget settings preserved
+   - Cross-tab synchronization
+
+### Usage
+Access at `/dashboard-interactive` route. Click the lock icon to enter edit mode, then drag and resize widgets as needed. Changes are automatically persisted.
+
+### Files
+- `src/components/dashboard/DashboardGrid.tsx` - Main grid component
+- `src/components/dashboard/widgets/` - Individual widget components
+- `src/store/dashboardStore.ts` - Layout persistence
+- `src/features/dashboard/InteractiveDashboard.tsx` - Main page
+
+See INTERACTIVE_DASHBOARD_GUIDE.md for complete documentation.
+
 By Cheva

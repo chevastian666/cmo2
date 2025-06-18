@@ -4,9 +4,10 @@ export interface Transito {
   precinto: string;
   viaje?: string;
   mov?: number;
-  estado: 'en_viaje' | 'desprecintado' | 'con_alerta';
+  estado: 'EN_TRANSITO' | 'COMPLETADO' | 'PENDIENTE' | 'ALERTA' | 'en_viaje' | 'desprecintado' | 'con_alerta';
   fechaSalida: string;
   eta?: string;
+  fechaLlegada?: string;
   tiempoRestante?: number; // en minutos
   encargado: string;
   origen: string;
@@ -19,10 +20,11 @@ export interface Transito {
     lat: number;
     lng: number;
   };
-  progreso: number; // 0-100
+  progreso?: number; // 0-100
   alertas?: string[];
   observaciones?: string;
   tipoCarga?: string;
+  valorCarga?: number;
   // Referencias a las bases de datos
   vehiculo?: {
     matricula: string;

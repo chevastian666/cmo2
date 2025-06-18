@@ -7,7 +7,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout, LayoutOptimized } from './features/common';
+import { LayoutOptimized } from './features/common';
 import { Dashboard } from './features/dashboard/components/Dashboard';
 import { LoginPage } from './features/auth/LoginPage';
 import { LoadingOverlay } from './components/ui/LoadingState';
@@ -15,16 +15,18 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Lazy load heavy components
 const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })));
+const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'));
 const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })));
 const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })));
-const TransitosPage = lazy(() => import('./features/transitos').then(m => ({ default: m.TransitosPage })));
+const TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'));
 const PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })));
 const ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })));
-const AlertasPage = lazy(() => import('./features/alertas').then(m => ({ default: m.AlertasPage })));
+const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'));
 const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })));
 const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })));
 const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })));
 const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })));
+const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'));
 const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })));
 const LibroNovedades = lazy(() => import('./features/novedades').then(m => ({ default: m.LibroNovedades })));
 const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })));
@@ -34,6 +36,8 @@ const CamionerosPage = lazy(() => import('./features/camioneros/pages/Camioneros
 const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })));
 const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })));
 const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'));
+const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'));
+const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -160,20 +164,20 @@ function App() {
               <Suspense fallback={<LoadingOverlay />}>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
-                  <Route path="/armado" element={<ArmadoPage />} />
+                  <Route path="/armado" element={<ArmadoPageV2 />} />
                   <Route path="/armado/waiting/:transitId" element={<ArmadoWaitingPage />} />
                   <Route path="/prearmado" element={<PrearmadoPage />} />
-                  <Route path="/transitos" element={<TransitosPage />} />
+                  <Route path="/transitos" element={<TransitosPageV2 />} />
                   <Route path="/precintos" element={
                     <ErrorBoundary componentName="PrecintosPage">
                       <PrecintosPage />
                     </ErrorBoundary>
                   } />
-                  <Route path="/alertas" element={<AlertasPage />} />
+                  <Route path="/alertas" element={<AlertasPageV2 />} />
                   <Route path="/despachantes" element={<DespachantesPage />} />
                   <Route path="/depositos" element={<DepositosPage />} />
                   <Route path="/zonas-descanso" element={<ZonasDescansoPage />} />
-                  <Route path="/torre-control" element={<TorreControl />} />
+                  <Route path="/torre-control" element={<TorreControlV2 />} />
                   <Route path="/documentacion" element={<CentroDocumentacion />} />
                   <Route path="/novedades" element={<LibroNovedades />} />
                   <Route path="/camiones" element={<CamionesPage />} />
@@ -186,6 +190,8 @@ function App() {
                   <Route path="/demo" element={<ShadcnDemo />} />
                   <Route path="/design-tokens" element={<DesignTokensDemo />} />
                   <Route path="/animations" element={<AnimationsDemo />} />
+                  <Route path="/dashboard-interactive" element={<InteractiveDashboard />} />
+                  <Route path="/dashboard-test" element={<DashboardTest />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>

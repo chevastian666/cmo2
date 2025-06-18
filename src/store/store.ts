@@ -1,5 +1,12 @@
+/**
+ * Enhanced Zustand Store Configuration
+ * Includes: Immer, DevTools, Persist, Logger middleware
+ * By Cheva
+ */
+
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 import { 
   createPrecintosSlice,
   createTransitosSlice,
@@ -13,65 +20,136 @@ import type {
   SystemStatusStore 
 } from './types';
 
-// Store individual para Precintos
+// Custom logger middleware for development
+const logger = (config: any) => (set: any, get: any, api: any) =>
+  config(
+    (...args: any[]) => {
+      if (import.meta.env.DEV) {
+        console.log('  applying', args);
+      }
+      set(...args);
+      if (import.meta.env.DEV) {
+        console.log('  new state', get());
+      }
+    },
+    get,
+    api
+  );
+
+// Store individual para Precintos con middleware mejorado
 export const usePrecintosStore = create<PrecintosStore>()(
   devtools(
-    persist(
-      createPrecintosSlice,
-      {
-        name: 'precintos-storage',
-        partialize: (state) => ({ 
-          precintos: state.precintos,
-          precintosActivos: state.precintosActivos 
-        }),
-      }
+    subscribeWithSelector(
+      persist(
+        immer(
+          logger(createPrecintosSlice)
+        ),
+        {
+          name: 'precintos-storage',
+          partialize: (state) => ({ 
+            precintos: state.precintos,
+            precintosActivos: state.precintosActivos,
+            filters: state.filters
+          }),
+          version: 1,
+          migrate: (persistedState: any, version: number) => {
+            if (version === 0) {
+              // Migration logic if needed
+            }
+            return persistedState;
+          }
+        }
+      )
     ),
-    { name: 'PrecintosStore' }
+    { 
+      name: 'PrecintosStore',
+      trace: true 
+    }
   )
 );
 
 // Store individual para Tránsitos
 export const useTransitosStore = create<TransitosStore>()(
   devtools(
-    persist(
-      createTransitosSlice,
-      {
-        name: 'transitos-storage',
-        partialize: (state) => ({ 
-          transitos: state.transitos,
-          transitosPendientes: state.transitosPendientes 
-        }),
-      }
+    subscribeWithSelector(
+      persist(
+        immer(createTransitosSlice),
+        {
+          name: 'transitos-storage',
+          partialize: (state) => ({ 
+            transitos: state.transitos,
+            transitosPendientes: state.transitosPendientes,
+            filters: state.filters
+          }),
+          version: 1
+        }
+      )
     ),
-    { name: 'TransitosStore' }
+    { 
+      name: 'TransitosStore',
+      trace: true 
+    }
   )
 );
 
 // Store individual para Alertas
 export const useAlertasStore = create<AlertasStore>()(
   devtools(
-    persist(
-      createAlertasSlice,
-      {
-        name: 'alertas-storage',
-        partialize: (state) => ({ 
-          alertas: state.alertas,
-          alertasActivas: state.alertasActivas,
-          filter: state.filter 
-        }),
-      }
+    subscribeWithSelector(
+      persist(
+        immer(createAlertasSlice),
+        {
+          name: 'alertas-storage',
+          partialize: (state) => ({ 
+            alertas: state.alertas,
+            alertasActivas: state.alertasActivas,
+            filter: state.filter 
+          }),
+          version: 1
+        }
+      )
     ),
-    { name: 'AlertasStore' }
+    { 
+      name: 'AlertasStore',
+      trace: true 
+    }
   )
 );
 
-// Store individual para System Status
+// Store individual para System Status (sin persistencia)
 export const useSystemStatusStore = create<SystemStatusStore>()(
   devtools(
-    createSystemStatusSlice,
-    { name: 'SystemStatusStore' }
+    subscribeWithSelector(
+      immer(createSystemStatusSlice)
+    ),
+    { 
+      name: 'SystemStatusStore',
+      trace: true 
+    }
   )
 );
+
+// Store selectors for optimization
+export const storeSelectors = {
+  // Precintos selectors
+  usePrecintosActivos: () => usePrecintosStore((state) => state.precintosActivos),
+  usePrecintosStats: () => usePrecintosStore((state) => state.precintosStats),
+  useFilteredPrecintos: () => usePrecintosStore((state) => state.filteredPrecintos),
+  
+  // Transitos selectors
+  useTransitosEnCurso: () => useTransitosStore((state) => state.transitosEnCurso),
+  useTransitosStats: () => useTransitosStore((state) => state.transitosStats),
+  useFilteredTransitos: () => useTransitosStore((state) => state.filteredTransitos),
+  
+  // Alertas selectors
+  useAlertasCriticas: () => useAlertasStore((state) => state.alertasCriticas),
+  useAlertasStats: () => useAlertasStore((state) => state.alertasStats),
+  useFilteredAlertas: () => useAlertasStore((state) => state.filteredAlertas),
+  
+  // System selectors
+  useSystemHealth: () => useSystemStatusStore((state) => state.systemHealth),
+  useIsSystemOverloaded: () => useSystemStatusStore((state) => state.isSystemOverloaded),
+};
 
 // Función helper para inicializar todos los stores
 export const initializeStores = async () => {
@@ -84,56 +162,68 @@ export const initializeStores = async () => {
   ]);
 };
 
+// Setup WebSocket subscriptions for real-time updates
+export const setupRealtimeUpdates = () => {
+  // WebSocket connection would go here
+  // For now, we'll use polling as a fallback
+  
+  const wsSupported = 'WebSocket' in window;
+  if (!wsSupported) {
+    console.warn('WebSocket not supported, falling back to polling');
+    return setupAutoRefresh();
+  }
+  
+  // In production, establish WebSocket connection here
+  // ws.on('precinto:update', (data) => usePrecintosStore.getState().updatePrecinto(data.id, data));
+  // ws.on('alerta:new', (data) => useAlertasStore.getState().addAlerta(data));
+  // etc.
+  
+  // For now, use polling
+  return setupAutoRefresh();
+};
+
 // Auto-refresh functions (fallback when WebSocket is not available)
 export const setupAutoRefresh = () => {
-  // Only use polling as fallback if WebSocket connection fails
-  const checkConnection = () => {
-    const wsConnected = window.localStorage.getItem('ws-connected') === 'true';
-    if (!wsConnected) {
-      console.log('WebSocket not connected, using polling fallback');
-      return true;
-    }
-    return false;
-  };
+  const intervals: NodeJS.Timeout[] = [];
 
-  let intervals: NodeJS.Timeout[] = [];
+  // Only refresh if page is visible
+  const shouldRefresh = () => document.visibilityState === 'visible';
 
-  const startPolling = () => {
-    if (!checkConnection()) return;
+  // Refresh precintos every 10 seconds
+  intervals.push(
+    setInterval(() => {
+      if (shouldRefresh()) {
+        usePrecintosStore.getState().fetchPrecintosActivos();
+      }
+    }, 10000)
+  );
 
-    intervals = [
-      // Refresh precintos every 10 seconds
-      setInterval(() => {
-        if (checkConnection()) {
-          usePrecintosStore.getState().fetchPrecintosActivos();
-        }
-      }, 10000),
+  // Refresh transitos every 30 seconds
+  intervals.push(
+    setInterval(() => {
+      if (shouldRefresh()) {
+        useTransitosStore.getState().fetchTransitosPendientes();
+      }
+    }, 30000)
+  );
 
-      // Refresh transitos every 30 seconds
-      setInterval(() => {
-        if (checkConnection()) {
-          useTransitosStore.getState().fetchTransitosPendientes();
-        }
-      }, 30000),
+  // Refresh alertas every 10 seconds
+  intervals.push(
+    setInterval(() => {
+      if (shouldRefresh()) {
+        useAlertasStore.getState().fetchAlertasActivas();
+      }
+    }, 10000)
+  );
 
-      // Refresh alertas every 10 seconds
-      setInterval(() => {
-        if (checkConnection()) {
-          useAlertasStore.getState().fetchAlertasActivas();
-        }
-      }, 10000),
-
-      // Refresh system status every 5 seconds
-      setInterval(() => {
-        if (checkConnection()) {
-          useSystemStatusStore.getState().fetchEstadisticas();
-        }
-      }, 5000)
-    ];
-  };
-
-  // Start polling initially
-  startPolling();
+  // Refresh system status every 5 seconds
+  intervals.push(
+    setInterval(() => {
+      if (shouldRefresh()) {
+        useSystemStatusStore.getState().fetchEstadisticas();
+      }
+    }, 5000)
+  );
 
   // Return cleanup function
   return () => {
@@ -141,17 +231,39 @@ export const setupAutoRefresh = () => {
   };
 };
 
-// Subscriptions for cross-store updates
-useAlertasStore.subscribe((state) => {
+// Export dashboard store
+export { useDashboardStore } from './dashboardStore';
+
+// Cross-store subscriptions for reactive updates
+const setupStoreSubscriptions = () => {
   // Update system status when alerts count changes
-  const count = state.alertasActivas.length;
-  const currentStats = useSystemStatusStore.getState().estadisticas;
-  if (currentStats) {
-    useSystemStatusStore.getState().updateSystemStatus({
-      estadisticas: {
-        ...currentStats,
-        alertasActivas: count,
+  useAlertasStore.subscribe(
+    (state) => state.alertasActivas.length,
+    (count) => {
+      const currentStats = useSystemStatusStore.getState().estadisticas;
+      if (currentStats) {
+        useSystemStatusStore.getState().updateSystemStatus({
+          estadisticas: {
+            ...currentStats,
+            alertasActivas: count,
+          }
+        });
       }
-    });
-  }
-});
+    }
+  );
+
+  // Update alerts when precinto status changes to critical
+  usePrecintosStore.subscribe(
+    (state) => state.precintosActivos,
+    (precintos) => {
+      const criticosNuevos = precintos.filter(p => p.estado === 3);
+      // In a real app, this would create new alerts
+      console.log('Precintos críticos:', criticosNuevos.length);
+    }
+  );
+};
+
+// Initialize subscriptions on app start
+if (typeof window !== 'undefined') {
+  setupStoreSubscriptions();
+}

@@ -42,14 +42,27 @@ class ASMRSoundService {
   private async loadSounds() {
     if (!this.audioContext) return;
 
+    // Skip loading sounds for now since files don't exist
+    // This prevents console errors while maintaining the structure
+    if (process.env.NODE_ENV === 'development') {
+      console.info('Sound files not yet available - audio disabled');
+      return;
+    }
+
     for (const [name, path] of Object.entries(this.soundPaths)) {
       try {
         const response = await fetch(path);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
         this.sounds.set(name, audioBuffer);
       } catch (error) {
-        console.warn(`Failed to load sound ${name}:`, error);
+        // Silently fail in production, only log in development
+        if (process.env.NODE_ENV === 'development') {
+          console.debug(`Sound ${name} not available`);
+        }
       }
     }
   }

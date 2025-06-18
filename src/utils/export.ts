@@ -64,3 +64,10 @@ export const exportToJSON = (data: any[], filename: string) => {
   // Clean up
   URL.revokeObjectURL(url);
 };
+
+// Excel export using CSV format (Excel can open CSV files)
+export const exportToExcel = (data: any[], filename: string) => {
+  // For now, we'll use CSV format which Excel can open
+  // In a production app, you might want to use a library like xlsx
+  exportToCSV(data, filename);
+};

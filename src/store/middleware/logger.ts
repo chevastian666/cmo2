@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { StateCreator, StoreMutatorIdentifier } from 'zustand';
+import type { StateCreator, StoreMutatorIdentifier } from './types';
 
 export interface LoggerConfig {
   name?: string;

@@ -3,10 +3,12 @@
  * By Cheva
  */
 
-import { create, StateCreator } from 'zustand';
-import { devtools, persist, subscribeWithSelector, immer } from 'zustand/middleware';
-import { logger, LoggerConfig } from './middleware/logger';
-import { createPersistConfig, PersistOptions } from './middleware/persistHelpers';
+import { create } from 'zustand';
+import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+import { logger, type LoggerConfig } from './middleware/logger';
+import { createPersistConfig, type PersistOptions } from './middleware/persistHelpers';
+import type { StateCreator } from './middleware/types';
 
 export interface CreateStoreOptions<T> {
   name: string;

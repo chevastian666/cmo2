@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
-import { StateCreator } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { StateCreator, StateStorage } from './types';
 
 export interface PersistOptions<T> {
   name: string;

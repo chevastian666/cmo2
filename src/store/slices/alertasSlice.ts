@@ -1,3 +1,9 @@
+/**
+ * Alertas Store Slice with Enhanced Zustand Patterns
+ * Includes: Immer integration, computed properties, batch operations
+ * By Cheva
+ */
+
 import type { StateCreator } from 'zustand';
 import type { AlertasStore } from '../types';
 import type { AlertaExtendida, ComentarioAlerta, AsignacionAlerta, ResolucionAlerta, HistorialAlerta } from '../../types';
@@ -13,27 +19,128 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   loading: false,
   error: null,
   lastUpdate: null,
-  filter: {},
+  filter: {
+    search: ''
+  },
 
-  // Actions
-  setAlertas: (alertas) => set({ alertas, lastUpdate: Date.now() }),
+  // Computed Properties (getters)
+  get filteredAlertas() {
+    const { alertas, filter } = get();
+    let filtered = [...alertas];
+
+    if (filter.search) {
+      const searchLower = filter.search.toLowerCase();
+      filtered = filtered.filter(a => 
+        a.tipo.toLowerCase().includes(searchLower) ||
+        a.descripcion?.toLowerCase().includes(searchLower) ||
+        a.dua?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (filter.tipo) {
+      filtered = filtered.filter(a => a.tipo === filter.tipo);
+    }
+
+    if (filter.severidad) {
+      filtered = filtered.filter(a => a.severidad === filter.severidad);
+    }
+
+    if (filter.atendida !== undefined) {
+      filtered = filtered.filter(a => a.atendida === filter.atendida);
+    }
+
+    if (filter.estado) {
+      switch (filter.estado) {
+        case 'activas':
+          filtered = filtered.filter(a => !a.atendida);
+          break;
+        case 'asignadas':
+          const asignadas = Array.from(get().alertasExtendidas.values())
+            .filter(ext => ext.asignacion)
+            .map(ext => ext.id);
+          filtered = filtered.filter(a => asignadas.includes(a.id));
+          break;
+        case 'resueltas':
+          const resueltas = Array.from(get().alertasExtendidas.values())
+            .filter(ext => ext.resolucion)
+            .map(ext => ext.id);
+          filtered = filtered.filter(a => resueltas.includes(a.id));
+          break;
+      }
+    }
+
+    return filtered;
+  },
+
+  get alertasStats() {
+    const { alertas, alertasExtendidas } = get();
+    const extendedMap = new Map(alertasExtendidas);
+    
+    return {
+      total: alertas.length,
+      criticas: alertas.filter(a => a.severidad === 'critica').length,
+      altas: alertas.filter(a => a.severidad === 'alta').length,
+      medias: alertas.filter(a => a.severidad === 'media').length,
+      bajas: alertas.filter(a => a.severidad === 'baja').length,
+      sinAtender: alertas.filter(a => !a.atendida).length,
+      asignadas: Array.from(extendedMap.values()).filter(ext => ext.asignacion).length,
+      resueltas: Array.from(extendedMap.values()).filter(ext => ext.resolucion).length
+    };
+  },
+
+  get alertasCriticas() {
+    const { alertasActivas } = get();
+    return alertasActivas.filter(a => a.severidad === 'critica');
+  },
+
+  get alertasPorTipo() {
+    const { alertas } = get();
+    const tipoMap = new Map<string, typeof alertas>();
+    
+    alertas.forEach(alerta => {
+      const tipo = alerta.tipo;
+      if (!tipoMap.has(tipo)) {
+        tipoMap.set(tipo, []);
+      }
+      tipoMap.get(tipo)!.push(alerta);
+    });
+    
+    return tipoMap;
+  },
+
+  // Actions with Immer patterns
+  setAlertas: (alertas) => set((state) => {
+    state.alertas = alertas;
+    state.lastUpdate = Date.now();
+    state.error = null;
+  }),
   
-  setAlertasActivas: (alertasActivas) => set({ alertasActivas, lastUpdate: Date.now() }),
+  setAlertasActivas: (alertasActivas) => set((state) => {
+    state.alertasActivas = alertasActivas;
+    state.lastUpdate = Date.now();
+    state.error = null;
+  }),
   
-  addAlerta: (alerta) => set((state) => ({
-    alertas: [...state.alertas, alerta],
-    alertasActivas: alerta.atendida ? state.alertasActivas : [...state.alertasActivas, alerta],
-  })),
+  addAlerta: (alerta) => set((state) => {
+    state.alertas.push(alerta);
+    if (!alerta.atendida) {
+      state.alertasActivas.push(alerta);
+    }
+    state.lastUpdate = Date.now();
+  }),
   
-  updateAlerta: (id, data) => set((state) => ({
-    alertas: state.alertas.map(a => a.id === id ? { ...a, ...data } : a),
-    alertasActivas: state.alertasActivas.map(a => a.id === id ? { ...a, ...data } : a),
-  })),
+  updateAlerta: (id, data) => set((state) => {
+    const updateItem = (item: any) => item.id === id ? { ...item, ...data } : item;
+    state.alertas = state.alertas.map(updateItem);
+    state.alertasActivas = state.alertasActivas.map(updateItem);
+    state.lastUpdate = Date.now();
+  }),
   
-  removeAlerta: (id) => set((state) => ({
-    alertas: state.alertas.filter(a => a.id !== id),
-    alertasActivas: state.alertasActivas.filter(a => a.id !== id),
-  })),
+  removeAlerta: (id) => set((state) => {
+    state.alertas = state.alertas.filter(a => a.id !== id);
+    state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
+    state.lastUpdate = Date.now();
+  }),
   
   atenderAlerta: async (id) => {
     const { setError, updateAlerta, alertasActivas } = get();
@@ -43,16 +150,26 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       await alertasService.atender(id);
       updateAlerta(id, { atendida: true });
       // Remove from active alerts
-      set({ alertasActivas: alertasActivas.filter(a => a.id !== id) });
+      set((state) => {
+        state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
+      });
     } catch (error) {
       // En desarrollo, simular atención
       updateAlerta(id, { atendida: true });
-      set({ alertasActivas: alertasActivas.filter(a => a.id !== id) });
+      set((state) => {
+        state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
+      });
       console.warn('Simulating alert attention:', error);
     }
   },
   
-  setFilter: (filter) => set({ filter }),
+  setFilter: (filter) => set((state) => {
+    state.filter = { ...state.filter, ...filter };
+  }),
+
+  clearFilter: () => set((state) => {
+    state.filter = { search: '' };
+  }),
   
   setLoading: (loading) => set({ loading }),
   
@@ -66,11 +183,13 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
     try {
       const data = await alertasService.getAll(filter);
       setAlertas(data);
+      return data;
     } catch (error) {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas();
       setAlertas(mockData);
       console.warn('Using mock data for alertas:', error);
+      return mockData;
     } finally {
       setLoading(false);
     }
@@ -84,15 +203,64 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
     try {
       const data = await alertasService.getActivas();
       setAlertasActivas(data);
+      return data;
     } catch (error) {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas().filter(a => !a.atendida);
       setAlertasActivas(mockData);
       console.warn('Using mock data for alertas activas:', error);
+      return mockData;
     } finally {
       setLoading(false);
     }
   },
+
+  // Batch operations
+  batchUpdateAlertas: (updates) => set((state) => {
+    updates.forEach(({ id, data }) => {
+      const index = state.alertas.findIndex(a => a.id === id);
+      if (index !== -1) {
+        state.alertas[index] = { ...state.alertas[index], ...data };
+      }
+      
+      const activeIndex = state.alertasActivas.findIndex(a => a.id === id);
+      if (activeIndex !== -1) {
+        state.alertasActivas[activeIndex] = { ...state.alertasActivas[activeIndex], ...data };
+      }
+    });
+    state.lastUpdate = Date.now();
+  }),
+
+  batchAtenderAlertas: async (ids) => {
+    const { batchUpdateAlertas, setAlertasActivas, alertasActivas } = get();
+    
+    try {
+      // In production, this would be a batch API call
+      await Promise.all(ids.map(id => alertasService.atender(id)));
+      
+      // Update all alerts as attended
+      batchUpdateAlertas(ids.map(id => ({ id, data: { atendida: true } })));
+      
+      // Remove from active alerts
+      setAlertasActivas(alertasActivas.filter(a => !ids.includes(a.id)));
+    } catch (error) {
+      console.error('Error batch attending alerts:', error);
+      // Still update in development
+      batchUpdateAlertas(ids.map(id => ({ id, data: { atendida: true } })));
+      setAlertasActivas(alertasActivas.filter(a => !ids.includes(a.id)));
+    }
+  },
+
+  // Reset store
+  reset: () => set((state) => {
+    state.alertas = [];
+    state.alertasActivas = [];
+    state.alertasExtendidas = new Map();
+    state.loading = false;
+    state.error = null;
+    state.lastUpdate = null;
+    state.filter = { search: '' };
+  }),
 
   // Extended alert management
   fetchAlertaExtendida: async (id: string): Promise<AlertaExtendida | null> => {

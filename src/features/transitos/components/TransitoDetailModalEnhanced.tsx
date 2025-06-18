@@ -44,12 +44,6 @@ import { cn } from '../../../utils/utils';
 import { TransitStatus } from './TransitStatus';
 import type { Transito } from '../types';
 
-declare global {
-  interface Window {
-    google: any;
-    initTransitoDetailMap: () => void;
-  }
-}
 
 interface TransitDetailModalProps {
   isOpen: boolean;
@@ -62,9 +56,6 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
   onClose,
   transito
 }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
   const [mapError, setMapError] = useState(false);
   const [showFullImage, setShowFullImage] = useState(false);
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
@@ -81,12 +72,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEsc);
-      // Initialize map when modal opens
-      if (transito.ubicacionActual && window.google) {
-        initializeMap();
-      } else if (transito.ubicacionActual && !window.google) {
-        loadGoogleMapsScript();
-      }
+      // Map initialization removed - using placeholder
       
       // Set initial timeline position based on progress
       setTimelinePosition(transito.progreso || 0);
@@ -97,142 +83,10 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
     }
   }, [isOpen, onClose, transito]);
 
-  const loadGoogleMapsScript = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}&callback=initTransitoDetailMap`;
-    script.async = true;
-    script.defer = true;
-    script.onerror = () => setMapError(true);
-    
-    (window as any).initTransitoDetailMap = initializeMap;
-    document.head.appendChild(script);
-  };
 
-  const initializeMap = () => {
-    if (!mapRef.current || !window.google || !transito.ubicacionActual) return;
 
-    try {
-      const mapOptions = {
-        center: { lat: transito.ubicacionActual.lat, lng: transito.ubicacionActual.lng },
-        zoom: 14,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-        zoomControl: true,
-        styles: [
-          {
-            "elementType": "geometry",
-            "stylers": [{ "color": "#1a1a1a" }]
-          },
-          {
-            "elementType": "labels.text.stroke",
-            "stylers": [{ "color": "#1a1a1a" }]
-          },
-          {
-            "elementType": "labels.text.fill",
-            "stylers": [{ "color": "#8a8a8a" }]
-          },
-          {
-            "featureType": "road",
-            "elementType": "geometry",
-            "stylers": [{ "color": "#2a2a2a" }]
-          },
-          {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{ "color": "#0a0a0a" }]
-          }
-        ]
-      };
 
-      mapInstanceRef.current = new window.google.maps.Map(mapRef.current, mapOptions);
 
-      // Add marker for current location
-      markerRef.current = new window.google.maps.Marker({
-        position: { lat: transito.ubicacionActual.lat, lng: transito.ubicacionActual.lng },
-        map: mapInstanceRef.current,
-        title: `Tránsito ${transito.dua}`,
-        animation: window.google.maps.Animation.DROP,
-        icon: {
-          path: window.google.maps.SymbolPath.CIRCLE,
-          scale: 12,
-          fillColor: transito.estado === 'completado' ? '#10B981' : 
-                     transito.estado === 'en_viaje' ? '#3B82F6' : '#EF4444',
-          fillOpacity: 1,
-          strokeColor: '#FFFFFF',
-          strokeWeight: 3,
-        }
-      });
-
-      // Draw route path (simulated)
-      drawRoutePath();
-    } catch (error) {
-      console.error('Error initializing map:', error);
-      setMapError(true);
-    }
-  };
-
-  const drawRoutePath = () => {
-    if (!mapInstanceRef.current || !window.google || !transito.ubicacionActual) return;
-
-    // Simulate a route path (in real app, this would come from actual route data)
-    const routeCoordinates = generateRouteCoordinates(
-      { lat: -34.9011, lng: -56.1645 }, // Example origin (Montevideo)
-      transito.ubicacionActual,
-      transito.progreso || 0
-    );
-
-    // Draw the completed portion of the route
-    const completedPath = new window.google.maps.Polyline({
-      path: routeCoordinates.slice(0, Math.floor(routeCoordinates.length * (timelinePosition / 100))),
-      geodesic: true,
-      strokeColor: '#10B981',
-      strokeOpacity: 1.0,
-      strokeWeight: 4,
-      map: mapInstanceRef.current
-    });
-
-    // Draw the remaining portion of the route
-    const remainingPath = new window.google.maps.Polyline({
-      path: routeCoordinates.slice(Math.floor(routeCoordinates.length * (timelinePosition / 100))),
-      geodesic: true,
-      strokeColor: '#6B7280',
-      strokeOpacity: 0.6,
-      strokeWeight: 4,
-      map: mapInstanceRef.current
-    });
-  };
-
-  const generateRouteCoordinates = (origin: {lat: number, lng: number}, current: {lat: number, lng: number}, progress: number) => {
-    // Generate a curved path between origin and destination
-    const points = [];
-    const numPoints = 20;
-    
-    for (let i = 0; i <= numPoints; i++) {
-      const t = i / numPoints;
-      const lat = origin.lat + (current.lat - origin.lat) * t + (Math.sin(t * Math.PI) * 0.1);
-      const lng = origin.lng + (current.lng - origin.lng) * t;
-      points.push({ lat, lng });
-    }
-    
-    return points;
-  };
-
-  const updateMarkerPosition = (position: number) => {
-    if (!markerRef.current || !mapInstanceRef.current || !transito.ubicacionActual) return;
-
-    // Calculate position along the route based on timeline position
-    const origin = { lat: -34.9011, lng: -56.1645 }; // Example origin
-    const lat = origin.lat + (transito.ubicacionActual.lat - origin.lat) * (position / 100);
-    const lng = origin.lng + (transito.ubicacionActual.lng - origin.lng) * (position / 100);
-    
-    const newPosition = new window.google.maps.LatLng(lat, lng);
-    markerRef.current.setPosition(newPosition);
-    mapInstanceRef.current.panTo(newPosition);
-
-    // Update the route drawing
-    drawRoutePath();
-  };
 
   const handleTimelineChange = (value: number) => {
     setTimelinePosition(value);
@@ -244,9 +98,6 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
     const currentDuration = (totalDuration * value) / 100;
     const currentTime = new Date(new Date(transito.fechaSalida).getTime() + currentDuration);
     setSelectedTime(currentTime);
-    
-    // Update marker position
-    updateMarkerPosition(value);
   };
 
   const togglePlayTimeline = () => {
@@ -638,32 +489,25 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
                         </div>
                       </div>
                       
-                      {/* Map Container */}
+                      {/* Map Container - Placeholder */}
                       <div className="relative rounded-lg overflow-hidden border border-gray-700">
-                        {!mapError ? (
-                          <div 
-                            ref={mapRef} 
-                            className="w-full h-[400px] bg-gray-900"
-                          >
-                            {/* Loading placeholder */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-                                <p className="text-sm text-gray-400">Cargando mapa...</p>
-                              </div>
+                        <div className="w-full h-[400px] bg-gray-900 flex items-center justify-center">
+                          <div className="text-center space-y-4">
+                            <MapPin className="h-16 w-16 text-gray-600 mx-auto" />
+                            <div>
+                              <p className="text-lg font-semibold text-gray-300">Mapa no disponible</p>
+                              <p className="text-sm text-gray-500 mt-1">
+                                Vista de mapa temporalmente deshabilitada
+                              </p>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="w-full h-[400px] bg-gray-900 flex items-center justify-center">
-                            <div className="text-center">
-                              <MapPin className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                              <p className="text-gray-400">No se pudo cargar el mapa</p>
-                              <p className="text-sm text-gray-500 mt-2">
-                                Ubicación: {transito.ubicacionActual.lat.toFixed(4)}, {transito.ubicacionActual.lng.toFixed(4)}
+                            <div className="mt-4 p-4 bg-gray-800 rounded-lg">
+                              <p className="text-sm font-medium text-gray-300 mb-1">Ubicación actual</p>
+                              <p className="text-xs text-gray-400 font-mono">
+                                {transito.ubicacionActual.lat.toFixed(6)}, {transito.ubicacionActual.lng.toFixed(6)}
                               </p>
                             </div>
                           </div>
-                        )}
+                        </div>
                         
                         {/* Timeline Controls */}
                         <div className="absolute bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-sm p-4 border-t border-gray-700">

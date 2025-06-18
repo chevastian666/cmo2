@@ -429,6 +429,22 @@ export const notificationVariants = {
   }
 };
 
+// ==========================================
+// ALIAS COMUNES
+// ==========================================
+
+// Alias para fadeInUp (slide desde abajo)
+export const fadeInUp = slideUpVariants;
+
+// Alias para staggerChildren
+export const staggerChildren = staggerContainer;
+
+// Alias para scaleIn
+export const scaleIn = scaleVariants;
+
+// Alias para slideInRight
+export const slideInRight = slideRightVariants;
+
 export default {
   transitions,
   fadeVariants,
@@ -452,5 +468,10 @@ export default {
   overlayVariants,
   notificationVariants,
   createDelayedVariants,
-  createStaggerVariants
+  createStaggerVariants,
+  // Aliases
+  fadeInUp,
+  staggerChildren,
+  scaleIn,
+  slideInRight
 };
