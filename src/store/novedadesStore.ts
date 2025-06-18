@@ -115,9 +115,9 @@ interface NovedadesState {
   error: string | null;
   
   // Actions
-  fetchNovedades: (filtros?: any) => Promise<void>;
-  crearNovedad: (data: any) => Promise<void>;
-  editarNovedad: (id: string, data: any) => Promise<void>;
+  fetchNovedades: (filtros?: unknown) => Promise<void>;
+  crearNovedad: (data: unknown) => Promise<void>;
+  editarNovedad: (id: string, data: unknown) => Promise<void>;
   marcarResuelta: (id: string, comentario?: string) => Promise<void>;
   agregarSeguimiento: (id: string, comentario: string) => Promise<void>;
   calcularEstadisticas: () => void;
@@ -154,7 +154,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
       
       set({ novedades: novedadesFiltradas, loading: false });
       get().calcularEstadisticas();
-    } catch (error) {
+    } catch (_error) {
       set({ error: 'Error al cargar novedades', loading: false });
     }
   },
@@ -177,17 +177,17 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
         }
       };
 
-      const { novedades } = get();
+      const {_novedades} = get();
       set({ novedades: [nuevaNovedad, ...novedades] });
       get().calcularEstadisticas();
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al crear novedad');
     }
   },
 
   editarNovedad: async (id, data) => {
     try {
-      const { novedades } = get();
+      const {_novedades} = get();
       set({
         novedades: novedades.map(n => 
           n.id === id 
@@ -203,14 +203,14 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
             : n
         )
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al editar novedad');
     }
   },
 
   marcarResuelta: async (id, comentario) => {
     try {
-      const { novedades } = get();
+      const {_novedades} = get();
       set({
         novedades: novedades.map(n => 
           n.id === id 
@@ -230,14 +230,14 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
         )
       });
       get().calcularEstadisticas();
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al marcar como resuelta');
     }
   },
 
   agregarSeguimiento: async (id, comentario) => {
     try {
-      const { novedades } = get();
+      const {_novedades} = get();
       const nuevoSeguimiento = {
         id: Date.now().toString(),
         fecha: new Date(),
@@ -259,13 +259,13 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
             : n
         )
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al agregar seguimiento');
     }
   },
 
   calcularEstadisticas: () => {
-    const { novedades } = get();
+    const {_novedades} = get();
     const hoy = new Date();
     const novedadesHoy = novedades.filter(n => 
       n.fecha.toDateString() === hoy.toDateString()

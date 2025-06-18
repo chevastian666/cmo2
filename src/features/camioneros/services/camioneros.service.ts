@@ -211,7 +211,7 @@ class CamionerosService {
 
   async createCamionero(data: Omit<Camionero, 'id' | 'fechaRegistro' | 'fechaActualizacion'>): Promise<Camionero> {
     const camionero: Camionero = {
-      ...data,
+      ..._data,
       id: Date.now().toString(),
       fechaRegistro: new Date(),
       fechaActualizacion: new Date()
@@ -227,7 +227,7 @@ class CamionerosService {
 
     const updated = {
       ...camionero,
-      ...data,
+      ..._data,
       documento: camionero.documento, // No permitir cambiar el documento
       fechaActualizacion: new Date()
     };

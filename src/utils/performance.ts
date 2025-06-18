@@ -8,7 +8,7 @@ interface PerformanceMetrics {
   renderTime: number;
   componentName: string;
   timestamp: number;
-  props?: Record<string, any>;
+  props?: Record<string, unknown>;
 }
 
 class PerformanceMonitor {
@@ -19,13 +19,13 @@ class PerformanceMonitor {
   /**
    * Measure component render time
    */
-  measureRender<T extends React.ComponentType<any>>(
+  measureRender<T extends React.ComponentType<unknown>>(
     Component: T,
     componentName: string
   ): T {
     if (!this.enabled) return Component;
 
-    const MeasuredComponent = (props: any) => {
+    const MeasuredComponent = (_props: unknown) => {
       const startTime = performance.now();
       
       React.useEffect(() => {
@@ -107,7 +107,7 @@ export const performanceMonitor = new PerformanceMonitor();
 /**
  * Debounce function for performance optimization
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -125,7 +125,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle function for performance optimization
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => any>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -179,7 +179,7 @@ export function deferWork(callback: () => void): void {
 /**
  * Memoize expensive computations
  */
-export function memoize<T extends (...args: any[]) => any>(
+export function memoize<T extends (...args: unknown[]) => any>(
   fn: T,
   getKey?: (...args: Parameters<T>) => string
 ): T {

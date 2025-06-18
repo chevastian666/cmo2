@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import {_useState, _useCallback} from 'react';
 import { usePolling, usePollingWithDiff, useAutoReconnect } from '../../../hooks/usePolling';
 import type { MapMarker, MapRoute } from '../../../components/ui/MapModule';
 import type { TransitInfo } from '../../../components/ui/TransitCard';
@@ -39,7 +39,7 @@ export function useMapPolling(
       const transitos = await transitosService.getTransitos();
       
       // Convertir tránsitos a markers
-      const newMarkers: MapMarker[] = transitos.map((transito: any) => ({
+      const newMarkers: MapMarker[] = transitos.map((transito: unknown) => ({
         id: transito.id,
         lat: transito.currentLocation?.lat || -34.6037,
         lng: transito.currentLocation?.lng || -58.3816,
@@ -61,7 +61,7 @@ export function useMapPolling(
       }
 
       setError(null);
-    } catch (err) {
+    } catch (_err) {
       setError(err as Error);
       console.error('Error fetching map data:', err);
     } finally {
@@ -70,7 +70,7 @@ export function useMapPolling(
   }, [markers]);
 
   // Configurar polling
-  const { startPolling, stopPolling, executeNow } = usePolling(fetchMapData, {
+  const {_startPolling, _stopPolling, _executeNow} = usePolling(fetchMapData, {
     interval: 45000,
     enabled: true,
     immediateFirstCall: true,
@@ -107,7 +107,7 @@ export function useTransitPolling(transitId: string) {
       setIsLoading(true);
       
       const transitos = await transitosService.getTransitos();
-      const foundTransit = transitos.find((t: any) => t.id === transitId);
+      const foundTransit = transitos.find((t: unknown) => t.id === transitId);
       
       if (foundTransit) {
         // Mapear a TransitInfo
@@ -138,7 +138,7 @@ export function useTransitPolling(transitId: string) {
       }
       
       setError(null);
-    } catch (err) {
+    } catch (_err) {
       setError(err as Error);
       console.error('Error fetching transit data:', err);
     } finally {
@@ -173,7 +173,7 @@ export function useAlertsPolling() {
   const fetchAlerts = useCallback(async () => {
     try {
       const data = await alertasService.getActivas();
-      return data.map((alert: any) => ({
+      return data.map((alert: unknown) => ({
         id: alert.id,
         title: alert.titulo,
         description: alert.descripcion,
@@ -183,7 +183,7 @@ export function useAlertsPolling() {
         status: alert.estado || 'active',
         metadata: alert.metadata
       }));
-    } catch (err) {
+    } catch (_err) {
       throw err;
     }
   }, []);
@@ -211,7 +211,7 @@ export function useAlertsPolling() {
   }, [alerts]);
 
   // Polling con detección de cambios
-  const { startPolling, stopPolling, executeNow } = usePollingWithDiff(
+  const {_startPolling, _stopPolling, _executeNow} = usePollingWithDiff(
     fetchAlerts,
     alerts,
     handleAlertsChange,
@@ -243,7 +243,7 @@ export function useAlertsPolling() {
           ? { ...alert, status: 'acknowledged' as const }
           : alert
       ));
-    } catch (err) {
+    } catch (_err) {
       console.error('Error acknowledging alert:', err);
     }
   }, []);

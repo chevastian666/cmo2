@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, BellOff, Volume2, VolumeX, AlertTriangle } from 'lucide-react';
+import {Bell, _BellOff, Volume2, VolumeX, _AlertTriangle} from 'lucide-react';
 import { cn } from '../../utils/utils';
 import { notificationService } from '../../services/shared/notification.service';
 

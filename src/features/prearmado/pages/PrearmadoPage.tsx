@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, Search, AlertCircle, CheckCircle, Loader } from 'lucide-react';
+import {_Package, Search, AlertCircle, _CheckCircle, Loader} from 'lucide-react';
 import { notificationService } from '../../../services/shared/notification.service';
 import { prearmadoService } from '../services/prearmado.service';
 
@@ -68,7 +68,7 @@ export const PrearmadoPage: React.FC = () => {
         setTransitInfo(null);
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados');
       }
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'Error al buscar la información del tránsito');
       setTransitInfo(null);
     } finally {

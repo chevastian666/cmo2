@@ -7,15 +7,15 @@
 import React, { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Building, Package, TrendingUp } from 'lucide-react';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {_Building, _Package, _TrendingUp} from 'lucide-react';
 import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
 import { transformPrecintosByCompany, createHierarchy } from '@/components/charts/treemap/utils/dataTransformers';
 import { usePrecintosStore } from '@/store/store';
 import type { TreemapData } from '@/components/charts/treemap/types';
 
 export const PrecintosTreemap: React.FC = () => {
-  const { precintos } = usePrecintosStore();
+  const {_precintos} = usePrecintosStore();
   const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company');
 
   const treemapData = useMemo(() => {
@@ -101,7 +101,7 @@ export const PrecintosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Distribución de Precintos</CardTitle>
-            <Select value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
+            <Select value={groupBy} onValueChange={(value: unknown) => setGroupBy(value)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>

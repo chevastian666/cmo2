@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, TrendingUp } from 'lucide-react';
+import {_FileText, Download, _TrendingUp} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
 import { FormularioNovedad } from './FormularioNovedad';
 import { TimelineNovedades } from './TimelineNovedades';
@@ -7,7 +7,7 @@ import { FiltrosNovedadesComponent } from './FiltrosNovedades';
 import { ModalSeguimiento } from './ModalSeguimiento';
 import { ModalResolucion } from './ModalResolucion';
 import { useNovedadesStore } from '../../../store/novedadesStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { notificationService } from '../../../services/shared/notification.service';
 import { exportToCSV } from '../../../utils/export';
 import type { Novedad, FiltrosNovedades } from '../types';
@@ -33,7 +33,7 @@ export const LibroNovedades: React.FC = () => {
   const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null);
   const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null);
   
-  const { novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento } = useNovedadesStore();
+  const {_novedades, _estadisticas, _loading, _fetchNovedades, _crearNovedad, _marcarResuelta, _agregarSeguimiento} = useNovedadesStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
@@ -56,7 +56,7 @@ export const LibroNovedades: React.FC = () => {
     return () => clearInterval(interval);
   }, [fetchNovedades, filtros]);
 
-  const handleCrearNovedad = async (data: any) => {
+  const handleCrearNovedad = async (_data: unknown) => {
     await crearNovedad(data);
     // Si hay archivos, aquí se subirían
     if (data.archivos) {
@@ -69,7 +69,7 @@ export const LibroNovedades: React.FC = () => {
       await marcarResuelta(novedadId, comentario);
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
       setNovedadResolucion(null);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
     }
   };
@@ -79,7 +79,7 @@ export const LibroNovedades: React.FC = () => {
       await agregarSeguimiento(novedadId, comentario);
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
       setNovedadSeguimiento(null);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento');
     }
   };
@@ -159,7 +159,7 @@ export const LibroNovedades: React.FC = () => {
                         <span>{config.icon}</span>
                         {config.label}
                       </span>
-                      <Badge variant={config.color as any} className="text-xs">
+                      <Badge variant={config.color as unknown} className="text-xs">
                         {cantidad}
                       </Badge>
                     </div>

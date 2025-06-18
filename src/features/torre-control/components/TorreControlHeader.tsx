@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, RefreshCw, Filter, Monitor } from 'lucide-react';
+import {_Clock, RefreshCw, _Filter, Monitor} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface TorreControlHeaderProps {

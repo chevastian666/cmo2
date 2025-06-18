@@ -33,7 +33,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
   expanded = false, 
   onToggleExpand 
 }) => {
-  const { permissions, togglePermission } = useRolesStore();
+  const {_permissions, _togglePermission} = useRolesStore();
   
   const hasPermission = (section: Section, permission: Permission) => {
     return permissions[role][section].includes(permission);

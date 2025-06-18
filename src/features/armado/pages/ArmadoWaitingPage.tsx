@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  Package, CheckCircle, AlertCircle, Clock, MapPin, Truck, User, 
-  Phone, Calendar, FileText, ExternalLink, Copy, Download, Loader,
-  XCircle, RefreshCw
-} from 'lucide-react';
+import {_Package, _CheckCircle, AlertCircle, _Clock, _MapPin, _Truck, _User, _Phone, _Calendar, _FileText, ExternalLink, Copy, Download, Loader, _XCircle, RefreshCw} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { armadoService } from '../services/armado.service';
 import { notificationService } from '../../../services/shared/notification.service';
@@ -67,7 +63,7 @@ const UBICACIONES: Record<string, string> = {
 };
 
 export const ArmadoWaitingPage: React.FC = () => {
-  const { transitId } = useParams<{ transitId: string }>();
+  const {_transitId} = useParams<{ transitId: string }>();
   const navigate = useNavigate();
   const [transitData, setTransitData] = useState<TransitData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -143,13 +139,13 @@ export const ArmadoWaitingPage: React.FC = () => {
 
   // Fetch transit data
   const fetchTransitData = async () => {
-    if (!transitId) return;
+    if (!_transitId) return;
 
     try {
       // In a real implementation, this would call the API
       // For now, we'll use mock data based on the HTML example
       const mockData: TransitData = {
-        pvid: transitId,
+        pvid: _transitId,
         precintoid: '549',
         track: '16-06-25-48/URAZD',
         empresaid: '176',
@@ -211,8 +207,8 @@ export const ArmadoWaitingPage: React.FC = () => {
         setExitConfirmed(true);
         setPollingActive(false);
       }
-    } catch (error) {
-      console.error('Error fetching transit data:', error);
+    } catch (_error) {
+      console.error('Error fetching transit data:', _error);
       notificationService.error('Error', 'No se pudo cargar la información del tránsito');
       setLoading(false);
     }
@@ -240,7 +236,7 @@ export const ArmadoWaitingPage: React.FC = () => {
       setTimeout(() => {
         navigate('/transitos');
       }, 2000);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo confirmar la salida');
     }
   };
@@ -261,7 +257,7 @@ export const ArmadoWaitingPage: React.FC = () => {
 
       return () => clearInterval(interval);
     }
-  }, [transitId, pollingActive]);
+  }, [_transitId, pollingActive]);
 
   if (loading) {
     return (

@@ -1,19 +1,8 @@
 import React, { useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  User, 
-  Phone,
-  Flag,
-  Truck,
-  Calendar,
-  Activity,
-  Route,
-  Download,
-  FileText
-} from 'lucide-react';
+import {ArrowLeft, _User, _Phone, Flag, _Truck, _Calendar, Activity, Route, Download, _FileText} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge, LoadingState } from '../../../components/ui';
 import { useCamionerosStore } from '../../../store/camionerosStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { exportToCSV } from '../../../utils/export';
 import { notificationService } from '../../../services/shared/notification.service';
 import { cn } from '../../../utils/utils';
@@ -29,16 +18,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
   const userInfo = useUserInfo();
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
   
-  const {
-    camioneroSeleccionado,
-    transitosCamionero,
-    matriculasFrecuentes,
-    estadisticasCamionero,
-    loading,
-    selectCamionero,
-    updateCamionero,
-    clearSelection
-  } = useCamionerosStore();
+  const {_camioneroSeleccionado, _transitosCamionero, _matriculasFrecuentes, _estadisticasCamionero, _loading, _selectCamionero, _updateCamionero, _clearSelection} = useCamionerosStore();
 
   useEffect(() => {
     selectCamionero(documento);
@@ -282,7 +262,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                               {matricula.matricula}
                             </p>
                             {estadoConfig && (
-                              <Badge variant={estadoConfig.color as any} className="text-xs mb-1">
+                              <Badge variant={estadoConfig.color as unknown} className="text-xs mb-1">
                                 {estadoConfig.icon} {estadoConfig.label}
                               </Badge>
                             )}

@@ -19,14 +19,14 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(error: Error): State {
-    console.error('ErrorBoundary: Error caught:', error);
-    return { hasError: true, error, errorInfo: null };
+    console.error('ErrorBoundary: Error caught:', _error);
+    return { hasError: true, _error, errorInfo: null };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary: Error details:', {
       componentName: this.props.componentName,
-      error: error,
+      error: _error,
       errorInfo: errorInfo
     });
     this.setState({ errorInfo });

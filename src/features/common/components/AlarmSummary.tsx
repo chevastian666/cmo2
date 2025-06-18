@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import {_AlertTriangle} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAlertasActivas } from '../../../store/hooks';
 import { cn } from '../../../utils/utils';
@@ -11,7 +11,7 @@ interface AlarmCount {
 }
 
 export const AlarmSummary: React.FC = () => {
-  const { alertas, loading } = useAlertasActivas();
+  const {_alertas, _loading} = useAlertasActivas();
   const navigate = useNavigate();
 
   const alarmCounts = useMemo(() => {

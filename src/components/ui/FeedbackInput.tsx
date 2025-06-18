@@ -5,7 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, InputProps } from '@/components/ui/input';
-import { Check, X, Loader2, Search, Eye, EyeOff } from 'lucide-react';
+import {Check, _X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -63,7 +63,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
       const result = await validationFn(val);
       setIsValid(result);
       onValidationChange?.(result);
-    } catch (error) {
+    } catch (_error) {
       setIsValid(false);
       onValidationChange?.(false);
     } finally {
@@ -100,7 +100,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
     // Create synthetic event
     const input = document.createElement('input');
     input.value = '';
-    const event = new Event('change', { bubbles: true }) as any;
+    const event = new Event('change', { bubbles: true }) as unknown;
     Object.defineProperty(event, 'target', { value: input });
     onChange?.(event);
   };
@@ -250,6 +250,6 @@ export const urlValidation = (url: string): boolean => {
 };
 
 export const phoneValidation = (phone: string): boolean => {
-  const regex = /^[\d\s\-\+\(\)]+$/;
+  const regex = /^[\d\s\-+()]+$/;
   return regex.test(phone) && phone.replace(/\D/g, '').length >= 10;
 };

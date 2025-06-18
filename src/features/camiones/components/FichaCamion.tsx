@@ -1,19 +1,8 @@
 import React, { useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  Truck, 
-  Calendar, 
-  User,
-  Route,
-  AlertCircle,
-  Download,
-  Edit,
-  Camera,
-  Activity
-} from 'lucide-react';
+import {ArrowLeft, _Truck, _Calendar, _User, Route, AlertCircle, Download, Edit, Camera, Activity} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge, LoadingState } from '../../../components/ui';
 import { useCamionesStore } from '../../../store/camionesStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { exportToCSV } from '../../../utils/export';
 import { notificationService } from '../../../services/shared/notification.service';
 import { cn } from '../../../utils/utils';
@@ -28,16 +17,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
   const userInfo = useUserInfo();
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
   
-  const {
-    camionSeleccionado,
-    transitosCamion,
-    estadisticasCamion,
-    loading,
-    selectCamion,
-    updateCamion,
-    uploadFotoCamion,
-    clearSelection
-  } = useCamionesStore();
+  const {_camionSeleccionado, _transitosCamion, _estadisticasCamion, _loading, _selectCamion, _updateCamion, _uploadFotoCamion, _clearSelection} = useCamionesStore();
 
   useEffect(() => {
     selectCamion(matricula);
@@ -94,7 +74,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
               <Truck className="h-8 w-8 text-blue-500" />
               {camionSeleccionado.matricula}
             </h2>
-            <Badge variant={estadoConfig.color as any} className="mt-1">
+            <Badge variant={estadoConfig.color as unknown} className="mt-1">
               {estadoConfig.icon} {estadoConfig.label}
             </Badge>
           </div>

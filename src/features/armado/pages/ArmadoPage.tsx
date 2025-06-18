@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, AlertCircle, Loader } from 'lucide-react';
+import {_Package, AlertCircle, Loader} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PrecintoSearch } from '../components/PrecintoSearchCompact';
 import { PrecintoStatus } from '../components/PrecintoStatusCompact';
@@ -157,7 +157,7 @@ export const ArmadoPage: React.FC = () => {
         'Precinto Encontrado',
         `Precinto ${nqr} cargado correctamente`
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       setSearchError(error.message || 'Error al buscar precinto');
       notificationService.error('Error', error.message || 'Error al buscar precinto');
     } finally {
@@ -165,7 +165,7 @@ export const ArmadoPage: React.FC = () => {
     }
   };
 
-  const handleTransitoUpdate = (field: string, value: any) => {
+  const handleTransitoUpdate = (field: string, value: unknown) => {
     setArmadoData(prev => ({
       ...prev,
       transito: {
@@ -185,7 +185,7 @@ export const ArmadoPage: React.FC = () => {
 
   const validateArmado = (): string[] => {
     const errors: string[] = [];
-    const { precinto, transito } = armadoData;
+    const {_precinto, _transito} = armadoData;
 
     if (!precinto) {
       errors.push('Debe buscar un precinto');
@@ -244,7 +244,7 @@ export const ArmadoPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const { precinto, transito, fotos } = armadoData;
+      const {_precinto, _transito, _fotos} = armadoData;
       
       if (!precinto) {
         throw new Error('No hay precinto seleccionado');
@@ -319,7 +319,7 @@ export const ArmadoPage: React.FC = () => {
       });
 
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       notificationService.error(
         'Error en Armado',
         error.message || 'Error al ejecutar el armado'

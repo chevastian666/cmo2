@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { Request, Response, NextFunction } from 'express';
+// import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { ApiError } from '../middleware/errorHandler';
 import { webhookService } from '../services/webhook.service';
@@ -19,8 +19,8 @@ export const getWebhooks = async (
   try {
     const webhooks = await webhookService.getAll(req.user?.companyId);
     res.json(webhooks);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -69,8 +69,8 @@ export const createWebhook = async (
     logger.info(`Webhook created: ${webhook.id} for ${url}`);
     
     res.status(201).json(webhook);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -94,8 +94,8 @@ export const updateWebhook = async (
     
     const updated = await webhookService.update(id, req.body);
     res.json(updated);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -122,8 +122,8 @@ export const deleteWebhook = async (
     logger.info(`Webhook deleted: ${id}`);
     
     res.status(204).send();
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -162,12 +162,12 @@ export const testWebhook = async (
     res.json({
       success: result.success,
       response: result.response,
-      error: result.error,
+      error: result._error,
       statusCode: result.statusCode,
       responseTime: result.responseTime
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -193,8 +193,8 @@ export const getWebhookLogs = async (
     
     const logs = await webhookService.getLogs(id, limit);
     res.json(logs);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -230,7 +230,7 @@ export const receiveWebhook = async (
       received: true,
       timestamp: new Date()
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };

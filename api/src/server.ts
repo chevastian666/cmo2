@@ -100,21 +100,21 @@ const startServer = async () => {
       logger.info(`🔌 WebSocket server ready`);
       logger.info(`🌍 Environment: ${config.env}`);
     });
-  } catch (error) {
-    logger.error('Failed to start server:', error);
+  } catch (_error) {
+    logger.error('Failed to start server:', _error);
     process.exit(1);
   }
 };
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  logger.error('Uncaught Exception:', error);
+process.on('uncaughtException', (_error) => {
+  logger.error('Uncaught Exception:', _error);
   process.exit(1);
 });
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (error) => {
-  logger.error('Unhandled Rejection:', error);
+process.on('unhandledRejection', (_error) => {
+  logger.error('Unhandled Rejection:', _error);
   process.exit(1);
 });
 

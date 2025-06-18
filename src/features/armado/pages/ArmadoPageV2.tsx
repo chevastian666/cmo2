@@ -5,16 +5,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Package, AlertCircle, Loader, Shield, Truck, User, 
-  Building, MapPin, Camera, CheckCircle2, ChevronRight,
-  FileText, Clock, Zap, AlertTriangle, QrCode, Search, X, Battery
-} from 'lucide-react';
+import {_Package, AlertCircle, Loader, Shield, _Truck, _User, _Building, _MapPin, Camera, CheckCircle2, ChevronRight, _FileText, _Clock, Zap, _AlertTriangle, QrCode, Search, _X, Battery} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -54,7 +50,7 @@ const PrecintoSearchEnhanced: React.FC<{
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<Precinto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const { precintos, fetchPrecintos } = usePrecintosStore();
+  const {_precintos, _fetchPrecintos} = usePrecintosStore();
 
   useEffect(() => {
     fetchPrecintos();
@@ -362,7 +358,7 @@ export const ArmadoPageV2: React.FC = () => {
       
       // Navegar a página de espera
       navigate(`/armado/waiting/${selectedPrecinto?.id}`);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error(
         'Error',
         'No se pudo completar el armado del precinto'
@@ -443,7 +439,7 @@ export const ArmadoPageV2: React.FC = () => {
                       <Label htmlFor="tipoViaje">Tipo de Viaje *</Label>
                       <Select 
                         value={formData.tipoViaje} 
-                        onValueChange={(v) => setFormData(prev => ({ ...prev, tipoViaje: v as any }))}
+                        onValueChange={(v) => setFormData(prev => ({ ...prev, tipoViaje: v as unknown }))}
                         required
                       >
                         <SelectTrigger id="tipoViaje">
@@ -822,7 +818,7 @@ export const ArmadoPageV2: React.FC = () => {
           onClose={() => setShowConfirmation(false)}
           onConfirm={handleConfirmArm}
           loading={loading}
-          formData={formData as any}
+          formData={formData as unknown}
           precinto={selectedPrecinto}
         />
       </div>

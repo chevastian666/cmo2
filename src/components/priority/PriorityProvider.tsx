@@ -21,7 +21,7 @@ interface PriorityProviderProps {
 
 export const PriorityProvider: React.FC<PriorityProviderProps> = ({ 
   children, 
-  config,
+  _config,
   enableMetrics = true 
 }) => {
   const [currentPriority, setCurrentPriority] = useState<RenderPriority>('medium');

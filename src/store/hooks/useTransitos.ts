@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {_useEffect} from 'react';
 import { useTransitosStore } from '../store';
 
 export const useTransitos = () => {
@@ -14,7 +14,7 @@ export const useTransitos = () => {
   return {
     transitos: store.transitos,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     actions: {
       updateTransito: store.updateTransito,
       removeTransito: store.removeTransito,
@@ -36,7 +36,7 @@ export const useTransitosPendientes = () => {
   return {
     transitos: store.transitosPendientes,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     actions: {
       updateTransito: store.updateTransito,
       precintarTransito: store.precintarTransito,

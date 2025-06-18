@@ -7,7 +7,7 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Package, CheckCircle, XCircle, Zap, TrendingDown } from 'lucide-react';
+import {_Package, _CheckCircle, _XCircle, Zap, _TrendingDown} from 'lucide-react';
 import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
 import { transformPrecintoLifecycle } from '@/components/charts/sankey/utils/dataTransformers';
 import { usePrecintosStore } from '@/store/store';
@@ -18,7 +18,7 @@ interface PrecintoLifecycleFlowProps {
 }
 
 export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ dateRange }) => {
-  const { precintos } = usePrecintosStore();
+  const {_precintos} = usePrecintosStore();
 
   // Calculate lifecycle stages from actual data
   const lifecycleData = useMemo(() => {
@@ -65,7 +65,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
     const rates = [];
     for (let i = 0; i < lifecycleData.length - 1; i++) {
       const current = lifecycleData[i];
-      const next = lifecycleData[i + 1];
+      const _next = lifecycleData[i + 1];
       if (current.count > 0) {
         rates.push({
           from: current.stage,

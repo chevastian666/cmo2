@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
+import {useRef, _useState, _useCallback, _useEffect, _useMemo} from 'react';
 import { 
   calculateVisibleRange, 
   calculateTotalHeight,
@@ -12,7 +12,7 @@ import { PerformanceMonitor } from '../utils/performanceMonitor';
 import type { VirtualListState, VirtualizedListConfig } from '../types/virtualization';
 
 interface UseVirtualizationProps {
-  items: any[];
+  items: unknown[];
   itemHeight: number | ((index: number) => number);
   containerHeight: number;
   overscan?: number;

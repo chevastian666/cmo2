@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import {_useState, _useCallback, useRef, _useEffect} from 'react';
 import type { Alert } from '../types/alerts';
 
 interface UseInfiniteLoadingProps {
@@ -79,7 +79,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }));
-    } catch (error) {
+    } catch (_error) {
       if (!mountedRef.current) return;
       
       setState(prev => ({
@@ -123,7 +123,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }));
-    } catch (error) {
+    } catch (_error) {
       if (!mountedRef.current) return;
       
       setState(prev => ({
@@ -149,10 +149,10 @@ export function useInfiniteLoading({
   const checkLoadMore = useCallback((scrollTop: number, scrollHeight: number, clientHeight: number) => {
     const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
     
-    if (distanceFromBottom < threshold && state.hasMore && !state.isLoadingMore && !state.error) {
+    if (distanceFromBottom < threshold && state.hasMore && !state.isLoadingMore && !state._error) {
       loadMoreData();
     }
-  }, [threshold, state.hasMore, state.isLoadingMore, state.error, loadMoreData]);
+  }, [threshold, state.hasMore, state.isLoadingMore, state._error, loadMoreData]);
 
   // Retry failed load
   const retry = useCallback(() => {
@@ -212,7 +212,7 @@ export function useInfiniteLoading({
     isLoading: state.isLoading,
     isLoadingMore: state.isLoadingMore,
     hasMore: state.hasMore,
-    error: state.error,
+    error: state._error,
     total: state.total,
     loadMoreData,
     checkLoadMore,

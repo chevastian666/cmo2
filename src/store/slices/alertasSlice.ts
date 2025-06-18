@@ -153,13 +153,13 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       set((state) => {
         state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
       });
-    } catch (error) {
+    } catch (_error) {
       // En desarrollo, simular atención
       updateAlerta(id, { atendida: true });
       set((state) => {
         state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
       });
-      console.warn('Simulating alert attention:', error);
+      console.warn('Simulating alert attention:', _error);
     }
   },
   
@@ -184,11 +184,11 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       const data = await alertasService.getAll(filter);
       setAlertas(data);
       return data;
-    } catch (error) {
+    } catch (_error) {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas();
       setAlertas(mockData);
-      console.warn('Using mock data for alertas:', error);
+      console.warn('Using mock data for alertas:', _error);
       return mockData;
     } finally {
       setLoading(false);
@@ -204,11 +204,11 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       const data = await alertasService.getActivas();
       setAlertasActivas(data);
       return data;
-    } catch (error) {
+    } catch (_error) {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas().filter(a => !a.atendida);
       setAlertasActivas(mockData);
-      console.warn('Using mock data for alertas activas:', error);
+      console.warn('Using mock data for alertas activas:', _error);
       return mockData;
     } finally {
       setLoading(false);
@@ -243,8 +243,8 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       
       // Remove from active alerts
       setAlertasActivas(alertasActivas.filter(a => !ids.includes(a.id)));
-    } catch (error) {
-      console.error('Error batch attending alerts:', error);
+    } catch (_error) {
+      console.error('Error batch attending alerts:', _error);
       // Still update in development
       batchUpdateAlertas(ids.map(id => ({ id, data: { atendida: true } })));
       setAlertasActivas(alertasActivas.filter(a => !ids.includes(a.id)));
@@ -348,9 +348,9 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       // Update base alert
       get().updateAlerta(alertaId, { atendida: true });
       
-    } catch (error) {
-      console.error('Error asignando alerta:', error);
-      throw error;
+    } catch (_error) {
+      console.error('Error asignando alerta:', _error);
+      throw _error;
     }
   },
 
@@ -387,9 +387,9 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
         historial: [...alertaExtendida.historial, historialEntry]
       });
       
-    } catch (error) {
-      console.error('Error agregando comentario:', error);
-      throw error;
+    } catch (_error) {
+      console.error('Error agregando comentario:', _error);
+      throw _error;
     }
   },
 
@@ -432,9 +432,9 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       get().updateAlerta(alertaId, { atendida: true });
       setAlertasActivas(alertasActivas.filter(a => a.id !== alertaId));
       
-    } catch (error) {
-      console.error('Error resolviendo alerta:', error);
-      throw error;
+    } catch (_error) {
+      console.error('Error resolviendo alerta:', _error);
+      throw _error;
     }
   },
 

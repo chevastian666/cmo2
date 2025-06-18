@@ -50,8 +50,8 @@ class JWTService {
       if (!tokenToDecode) return null;
       
       return jwtDecode<DecodedToken>(tokenToDecode);
-    } catch (error) {
-      console.error('Error decoding token:', error);
+    } catch (_error) {
+      console.error('Error decoding token:', _error);
       return null;
     }
   }

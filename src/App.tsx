@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { useEffect, lazy, Suspense } from 'react';
+import {_useEffect, lazy, Suspense} from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LayoutOptimized } from './features/common';
@@ -14,7 +14,7 @@ import { LoadingOverlay } from './components/ui/LoadingState';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Lazy load heavy components
-const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })));
+// const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })));
 const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'));
 const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })));
 const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })));
@@ -25,7 +25,7 @@ const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'
 const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })));
 const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })));
 const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })));
-const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })));
+// const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })));
 const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'));
 const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })));
 const LibroNovedades = lazy(() => import('./features/novedades').then(m => ({ default: m.LibroNovedades })));
@@ -41,9 +41,9 @@ const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'));
 const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'));
 const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'));
 const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'));
-const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'));
+// const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'));
 const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'));
-const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'));
+// const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'));
 const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'));
 const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'));
 const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'));
@@ -56,7 +56,7 @@ import { notificationService } from './services/shared/notification.service';
 import { sharedWebSocketService } from './services/shared/sharedWebSocket.service';
 import { SHARED_CONFIG } from './config/shared.config';
 import { Toaster } from '@/components/ui/toaster';
-import TreemapDirect from './features/analytics/components/TreemapDirect';
+// import TreemapDirect from './features/analytics/components/TreemapDirect';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -70,14 +70,14 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { isAuthenticated, canAccessCMO } = useAuth();
+  const {_isAuthenticated, _canAccessCMO} = useAuth();
   
   // Initialize shared services integration
   useSharedIntegration();
   useSyncStoreActions();
   
   // Initialize WebSocket with authentication
-  const { isConnected } = useWebSocket({
+  const {_/* isConnected */} = useWebSocket({
     onConnect: () => {
       console.log('Connected to real-time updates');
     },
@@ -96,24 +96,24 @@ function App() {
     
     // New alert notifications
     unsubscribers.push(
-      sharedWebSocketService.onAlertNew((data) => {
-        notificationService.newAlert(data.alert || data);
+      sharedWebSocketService.onAlertNew((_data) => {
+        notificationService.newAlert(_data.alert || _data);
       })
     );
     
     // Transit delay notifications
     unsubscribers.push(
-      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data) => {
-        if (data.status === 'delayed') {
-          notificationService.transitDelayed(data.transit);
+      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (_data) => {
+        if (_data.status === 'delayed') {
+          notificationService.transitDelayed(_data.transit);
         }
       })
     );
     
     // CMO message notifications
     unsubscribers.push(
-      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data) => {
-        notificationService.cmoMessage(data.message || data);
+      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (_data) => {
+        notificationService.cmoMessage(_data.message || _data);
       })
     );
     

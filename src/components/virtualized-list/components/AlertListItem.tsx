@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef } from 'react';
-import { AlertTriangle, MapPin, Clock, User, CheckCircle, Circle } from 'lucide-react';
+import {_AlertTriangle, _MapPin, _Clock, _User, _CheckCircle, Circle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Alert } from '../types/alerts';
 
@@ -68,7 +68,7 @@ export const AlertListItem = memo<AlertListItemProps>(({
   onHeightChange
 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
-  const config = severityConfig[alert.severity];
+  const _config = severityConfig[alert.severity];
   const StatusIcon = statusConfig[alert.status].icon;
 
   // Measure height on mount and updates

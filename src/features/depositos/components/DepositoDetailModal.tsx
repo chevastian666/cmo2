@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Phone, Clock, Building2, Package, Activity, ExternalLink } from 'lucide-react';
+import {_X, _MapPin, _Phone, _Clock, Building2, _Package, Activity, ExternalLink} from 'lucide-react';
 import type { Deposito } from '../types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

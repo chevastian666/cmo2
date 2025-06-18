@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Shield, Battery, Thermometer, Signal } from 'lucide-react';
+import {Shield, Battery, _Thermometer, Signal} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 import { usePrecintosStore } from '../../../store/store';

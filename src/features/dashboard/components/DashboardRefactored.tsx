@@ -24,13 +24,13 @@ import {
   useSystemStatus 
 } from '../../../store/hooks';
 import { formatTimeAgo } from '../../../utils/formatters';
-import { Package, Truck, AlertTriangle, Activity } from 'lucide-react';
+import {_Package, _Truck, _AlertTriangle, Activity} from 'lucide-react';
 
 export const DashboardRefactored: React.FC = () => {
-  const { precintos, loading: precintosLoading } = usePrecintosActivos();
-  const { estadisticas, smsPendientes, dbStats, apiStats, reportesPendientes } = useSystemStatus();
-  const { alertas, loading: alertasLoading } = useAlertasActivas();
-  const { transitos, loading: transitosLoading } = useTransitosPendientes();
+  const {_precintos,loading: __precintosLoading} =  usePrecintosActivos();
+  const {_estadisticas, _smsPendientes, _dbStats, _apiStats, _reportesPendientes} = useSystemStatus();
+  const {_alertas,loading: __alertasLoading} =  useAlertasActivas();
+  const {_transitos,loading: __transitosLoading} =  useTransitosPendientes();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Transform alerts for AlertsPanel

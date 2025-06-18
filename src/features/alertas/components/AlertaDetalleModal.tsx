@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, Navigation, Pause, Zap } from 'lucide-react';
+import {_X, _User, _MessageSquare, _CheckCircle, _AlertTriangle, _Clock, _MapPin, Shield, Battery, _Radio, _Thermometer, _Package, Navigation, Pause, Zap} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
 import type { AlertaExtendida, Usuario, ComentarioAlerta } from '../../../types';

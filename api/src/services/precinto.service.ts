@@ -84,7 +84,7 @@ class PrecintoService {
     
     const updated = {
       ...precinto,
-      ...data,
+      ..._data,
       id,
       updatedAt: new Date()
     };
@@ -122,7 +122,7 @@ class PrecintoService {
   async updateLocation(
     id: string, 
     location: { lat: number; lng: number; address?: string; timestamp: Date }
-  ): Promise<any> {
+  ): Promise<unknown> {
     const precinto = await this.getById(id);
     if (!precinto) {
       throw new ApiError(404, 'Precinto not found');

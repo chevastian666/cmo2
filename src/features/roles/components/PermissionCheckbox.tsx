@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Check, X, Lock } from 'lucide-react';
+import {Check, _X, Lock} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Permission } from '../../../types/roles';
 

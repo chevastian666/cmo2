@@ -3,15 +3,7 @@ import { cn } from '../../utils/utils';
 import { Card } from './Card';
 import { StatusBadge } from './StatusBadge';
 import { InfoRow } from './InfoRow';
-import { 
-  Clock, 
-  User, 
-  Package, 
-  History,
-  TruckIcon,
-  Link2,
-  AlertTriangle
-} from 'lucide-react';
+import {_Clock, _User, _Package, History, TruckIcon, Link2, _AlertTriangle} from 'lucide-react';
 
 export interface TransitInfo {
   id: string;
@@ -35,7 +27,7 @@ export interface TransitInfo {
     precinto?: string; // Número de precinto
     eslingas?: number; // Cantidad de eslingas
   };
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface TransitCardProps {

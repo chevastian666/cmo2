@@ -9,7 +9,7 @@ export interface TreemapNode {
   value?: number;
   children?: TreemapNode[];
   color?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface TreemapData {
@@ -40,7 +40,7 @@ export interface TreemapTooltipData {
   value: number;
   percentage?: number;
   path: string[];
-  data?: any;
+  data?: unknown;
 }
 
 export interface ZoomState {

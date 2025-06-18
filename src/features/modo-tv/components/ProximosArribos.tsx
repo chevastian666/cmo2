@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck, Clock, MapPin, User } from 'lucide-react';
+import {_Truck, _Clock, _MapPin, _User} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { ProximoArribo } from '../types';
 

@@ -5,11 +5,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Truck, Download, Filter, RefreshCw, MapPin, CheckCircle2, Clock, AlertTriangle, Package } from 'lucide-react';
+import {_Truck, Download, _Filter, RefreshCw, _MapPin, CheckCircle2, _Clock, _AlertTriangle, _Package} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { 
   PageTransition, 
@@ -172,7 +172,7 @@ const TransitoRow: React.FC<{
       
       <td className="px-6 py-4 whitespace-nowrap">
         <AnimatedBadge 
-          variant={estadoInfo.color as any}
+          variant={estadoInfo.color as unknown}
           className="flex items-center gap-1"
         >
           {estadoInfo.icon}
@@ -246,18 +246,10 @@ const TransitoRow: React.FC<{
 };
 
 const TransitosPageV2: React.FC = () => {
-  const {
-    transitos,
-    loading,
-    fetchTransitos,
-    transitosEnCurso,
-    transitosCompletados,
-    transitosPendientes,
-    markDesprecintado
-  } = useTransitosStore();
+  const {_transitos, _loading, _fetchTransitos, _transitosEnCurso, _transitosCompletados, _transitosPendientes, _markDesprecintado} = useTransitosStore();
 
-  const { alertasActivas } = useAlertasStore();
-  const { precintosActivos } = usePrecintosStore();
+  const {_alertasActivas} = useAlertasStore();
+  const {_precintosActivos} = usePrecintosStore();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('todos');

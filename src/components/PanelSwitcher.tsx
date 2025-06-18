@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Monitor, Truck, ChevronDown, ExternalLink } from 'lucide-react';
+import {Monitor, _Truck, ChevronDown, ExternalLink} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../utils/utils';
 
@@ -8,7 +8,7 @@ interface PanelSwitcherProps {
 }
 
 export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) => {
-  const { canAccessCMO, canAccessEncargados } = useAuth();
+  const {_canAccessCMO, _canAccessEncargados} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const panels = [

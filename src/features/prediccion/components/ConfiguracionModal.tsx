@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Save, RotateCcw, Plus, Trash2 } from 'lucide-react';
+import {_X, Save, RotateCcw, Plus, Trash2} from 'lucide-react';
 import { 
   Card,
   CardHeader,
@@ -21,14 +21,14 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
   onClose,
   onSave
 }) => {
-  const [config, setConfig] = useState<ConfiguracionPrediccion>(CONFIGURACION_DEFAULT);
+  const [_config, setConfig] = useState<ConfiguracionPrediccion>(CONFIGURACION_DEFAULT);
   const [nuevoDestino, setNuevoDestino] = useState('');
 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    congestionAnalyzer.actualizarConfiguracion(config);
-    onSave?.(config);
+    congestionAnalyzer.actualizarConfiguracion(_config);
+    onSave?.(_config);
     onClose();
   };
 
@@ -39,7 +39,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
   const agregarDestino = () => {
     if (nuevoDestino && !config.destinosMonitoreados.includes(nuevoDestino)) {
       setConfig({
-        ...config,
+        ..._config,
         destinosMonitoreados: [...config.destinosMonitoreados, nuevoDestino]
       });
       setNuevoDestino('');
@@ -48,7 +48,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
 
   const eliminarDestino = (destino: string) => {
     setConfig({
-      ...config,
+      ..._config,
       destinosMonitoreados: config.destinosMonitoreados.filter(d => d !== destino)
     });
   };
@@ -92,7 +92,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                     <input
                       type="number"
                       value={config.ventanaTiempo}
-                      onChange={(e) => setConfig({ ...config, ventanaTiempo: Number(e.target.value) })}
+                      onChange={(e) => setConfig({ ..._config, ventanaTiempo: Number(e.target.value) })}
                       min="5"
                       max="60"
                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -109,7 +109,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                     <input
                       type="number"
                       value={config.horasProyeccion}
-                      onChange={(e) => setConfig({ ...config, horasProyeccion: Number(e.target.value) })}
+                      onChange={(e) => setConfig({ ..._config, horasProyeccion: Number(e.target.value) })}
                       min="1"
                       max="24"
                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -131,7 +131,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                     <input
                       type="number"
                       value={config.umbralBajo}
-                      onChange={(e) => setConfig({ ...config, umbralBajo: Number(e.target.value) })}
+                      onChange={(e) => setConfig({ ..._config, umbralBajo: Number(e.target.value) })}
                       min="2"
                       max="10"
                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -148,7 +148,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                     <input
                       type="number"
                       value={config.umbralMedio}
-                      onChange={(e) => setConfig({ ...config, umbralMedio: Number(e.target.value) })}
+                      onChange={(e) => setConfig({ ..._config, umbralMedio: Number(e.target.value) })}
                       min="3"
                       max="15"
                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -165,7 +165,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                     <input
                       type="number"
                       value={config.umbralAlto}
-                      onChange={(e) => setConfig({ ...config, umbralAlto: Number(e.target.value) })}
+                      onChange={(e) => setConfig({ ..._config, umbralAlto: Number(e.target.value) })}
                       min="5"
                       max="20"
                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"

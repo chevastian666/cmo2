@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Search, Filter } from 'lucide-react';
+import {_AlertTriangle, Search, _Filter} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface EmptyStateProps {

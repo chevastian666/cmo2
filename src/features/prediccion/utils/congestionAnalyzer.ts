@@ -155,7 +155,7 @@ export class CongestionAnalyzer {
    * Actualiza la configuración
    */
   actualizarConfiguracion(nuevaConfig: Partial<ConfiguracionPrediccion>) {
-    this.config = { ...this.config, ...nuevaConfig };
+    this.config = { ...this._config, ...nuevaConfig };
   }
 
   /**

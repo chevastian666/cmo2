@@ -12,12 +12,12 @@ interface BatchConfig {
 
 interface BatchedUpdate {
   type: string;
-  updates: any[];
+  updates: unknown[];
   timestamp: number;
 }
 
 export class WebSocketOptimizer {
-  private batches = new Map<string, any[]>();
+  private batches = new Map<string, unknown[]>();
   private batchTimers = new Map<string, NodeJS.Timeout>();
   private throttleTimers = new Map<string, NodeJS.Timeout>();
   private lastEmitTime = new Map<string, number>();
@@ -40,7 +40,7 @@ export class WebSocketOptimizer {
   /**
    * Add an update to the batch queue
    */
-  addUpdate(type: string, data: any): void {
+  addUpdate(type: string, data: unknown): void {
     // Check if this event type should be throttled
     if (this.shouldThrottle(type)) {
       this.addThrottledUpdate(type, data);
@@ -81,7 +81,7 @@ export class WebSocketOptimizer {
   /**
    * Handle throttled updates
    */
-  private addThrottledUpdate(type: string, data: any): void {
+  private addThrottledUpdate(type: string, data: unknown): void {
     const now = Date.now();
     const lastEmit = this.lastEmitTime.get(type) || 0;
 

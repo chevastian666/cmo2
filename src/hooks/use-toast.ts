@@ -91,7 +91,7 @@ export const reducer = (state: State, action: Action): State => {
       }
 
     case "DISMISS_TOAST": {
-      const { toastId } = action
+      const {_toastId} = action
 
       // ! Side effects ! - This could be extracted into a dismissToast() action,
       // but I'll keep it here for simplicity
@@ -145,7 +145,7 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
-  const update = (props: ToasterToast) =>
+  const update = (_props: ToasterToast) =>
     dispatch({
       type: "UPDATE_TOAST",
       toast: { ...props, id },

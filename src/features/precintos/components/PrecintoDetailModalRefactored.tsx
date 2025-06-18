@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle } from 'lucide-react';
+import {_X, _MapPin, Battery, _Thermometer, Activity, _Package, _AlertTriangle} from 'lucide-react';
 import { 
   Card,
   CardHeader,
@@ -30,7 +30,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
   onClose
 }) => {
   const [activeTab, setActiveTab] = React.useState('info');
-  const statusInfo = getStatusInfo(precinto.estado as any);
+  const statusInfo = getStatusInfo(precinto.estado as unknown);
 
   if (!isOpen) return null;
 
@@ -82,7 +82,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
                 </h2>
                 <BadgeGroup>
                   <StatusBadge 
-                    variant={statusInfo.variant as any}
+                    variant={statusInfo.variant as unknown}
                     pulse={precinto.estado === 'alarma'}
                   >
                     {statusInfo.label}

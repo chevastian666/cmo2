@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Zap, RotateCw, Satellite, Trash2 } from 'lucide-react';
+import {_X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import type { Alerta } from '../../../types';
@@ -130,7 +130,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
       setLoading(true);
       await onRespond(alerta.id, Number(motivoSeleccionado), motivoDescripcion, observaciones);
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al responder la alerta');
     } finally {
       setLoading(false);
@@ -145,7 +145,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al enviar el comando');
     } finally {
       setSendingCommand(null);

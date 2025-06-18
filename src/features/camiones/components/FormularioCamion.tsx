@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, Truck, Camera, AlertCircle } from 'lucide-react';
+import {_X, _Truck, Camera, AlertCircle} from 'lucide-react';
 import { useCamionesStore } from '../../../store/camionesStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { ESTADOS_CAMION } from '../types';
 import type { EstadoCamion } from '../types';
 
@@ -11,7 +11,7 @@ interface FormularioCamionProps {
 
 export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const { createCamion } = useCamionesStore();
+  const {_createCamion} = useCamionesStore();
   
   const [formData, setFormData] = useState({
     matricula: '',
@@ -20,10 +20,10 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
     foto: null as File | null
   });
   
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>(_);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -68,7 +68,7 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       });
       
       onClose();
-    } catch (error) {
+    } catch (_error) {
       setErrors({ general: 'Error al registrar el camión' });
     } finally {
       setLoading(false);

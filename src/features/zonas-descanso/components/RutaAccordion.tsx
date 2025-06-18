@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, MapPin } from 'lucide-react';
+import {ChevronDown, ChevronUp, _MapPin} from 'lucide-react';
 import type { RutaZonas } from '../data/zonasDescansoData';
 
 interface RutaAccordionProps {

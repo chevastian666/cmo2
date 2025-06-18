@@ -10,7 +10,7 @@ import { RefreshCw } from 'lucide-react';
  * Ejemplo de MapModule con actualización automática
  */
 export const MapWithPolling: React.FC = () => {
-  const { markers, routes, isLoading, error, refresh } = useMapPolling();
+  const {_markers, _routes, _isLoading, __error, _refresh} = useMapPolling();
 
   return (
     <Card className="relative">
@@ -47,7 +47,7 @@ export const MapWithPolling: React.FC = () => {
  * Ejemplo de TransitCard con actualización automática
  */
 export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transitId }) => {
-  const { transit, isLoading, error } = useTransitPolling(transitId);
+  const {_transit, _isLoading, _error} = useTransitPolling(_transitId);
 
   if (isLoading && !transit) {
     return (
@@ -57,7 +57,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
     );
   }
 
-  if (error) {
+  if (_error) {
     return (
       <Card className="text-red-400">
         Error cargando tránsito
@@ -83,14 +83,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
  * Ejemplo de AlertsPanel con actualización automática
  */
 export const AlertsPanelWithPolling: React.FC = () => {
-  const { 
-    alerts, 
-    isLoading, 
-    error, 
-    hasNewCriticalAlert,
-    acknowledgeAlert,
-    refresh 
-  } = useAlertsPolling();
+  const {_alerts, _isLoading, __error, _hasNewCriticalAlert, _acknowledgeAlert, _refresh} = useAlertsPolling();
 
   return (
     <div className="space-y-4">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Profiler, ProfilerOnRenderCallback } from 'react';
-import { Activity, Zap, Clock, TrendingUp } from 'lucide-react';
+import {Activity, Zap, _Clock, _TrendingUp} from 'lucide-react';
 
 interface RenderMetric {
   id: string;
@@ -8,7 +8,7 @@ interface RenderMetric {
   baseDuration: number;
   startTime: number;
   commitTime: number;
-  interactions: Set<any>;
+  interactions: Set<unknown>;
 }
 
 interface PerformanceStats {
@@ -58,8 +58,8 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
   // Memory monitoring
   useEffect(() => {
     const measureMemory = () => {
-      if ('memory' in performance && (performance as any).memory) {
-        const memory = (performance as any).memory;
+      if ('memory' in performance && (performance as unknown).memory) {
+        const memory = (performance as unknown).memory;
         const usedMB = Math.round(memory.usedJSHeapSize / 1048576);
         setStats(prev => ({ ...prev, memoryUsage: usedMB }));
       }

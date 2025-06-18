@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { cn } from '../../utils/utils';
 import { Card } from './Card';
-import { MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine } from './map';
+import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map';
 import type { MapFilters } from './map/MapHeader';
 
 export interface MapMarker {
@@ -11,7 +11,7 @@ export interface MapMarker {
   type: 'origin' | 'destination' | 'waypoint' | 'alert' | 'vehicle';
   label?: string;
   status?: 'active' | 'inactive' | 'alert' | 'critical' | 'warning';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   direction?: number;
 }
 

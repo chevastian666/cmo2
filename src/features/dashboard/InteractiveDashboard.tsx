@@ -4,16 +4,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { 
-  BarChart3, 
-  AlertCircle, 
-  Map, 
-  Activity, 
-  TrendingUp,
-  Truck,
-  Shield,
-  Package
-} from 'lucide-react';
+import {_BarChart3, AlertCircle, Map, Activity, _TrendingUp, _Truck, Shield, _Package} from 'lucide-react';
 import DashboardGrid, { type WidgetConfig } from '../../components/dashboard/DashboardGrid';
 import {
   KPIWidget,

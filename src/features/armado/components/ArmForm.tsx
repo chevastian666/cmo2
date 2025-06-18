@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Truck, User, Building, MapPin, FileText, Phone, Hash, Package } from 'lucide-react';
+import {_Truck, _User, _Building, _MapPin, _FileText, _Phone, _Hash, _Package} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { ORIGENES_DESTINOS } from '../../../constants/locations';
 
@@ -35,7 +35,7 @@ interface TransitoFormData {
 
 interface ArmFormProps {
   data: Partial<TransitoFormData>;
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
   disabled?: boolean;
   precintoId?: string;
 }

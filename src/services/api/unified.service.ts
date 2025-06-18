@@ -233,7 +233,7 @@ class UnifiedAPIService {
     return `${Math.floor(diff / 86400)} días`;
   }
 
-  private calculateReadingsPerHour(precintos: any[]): number {
+  private calculateReadingsPerHour(precintos: unknown[]): number {
     // Calcular basado en la frecuencia de muestreo promedio
     const avgSamplingRate = precintos.reduce((acc, p) => acc + p.lmuestreo, 0) / precintos.length;
     return Math.round((60 / avgSamplingRate) * precintos.length);
@@ -292,7 +292,7 @@ class UnifiedAPIService {
             
             synced++;
           }
-        } catch (error) {
+        } catch (_error) {
           console.error('Error syncing record:', error);
           errors++;
         }
@@ -303,7 +303,7 @@ class UnifiedAPIService {
         errors,
         message: `Sincronización completada: ${synced} registros sincronizados, ${errors} errores`
       };
-    } catch (error) {
+    } catch (_error) {
       console.error('Database sync error:', error);
       return {
         synced: 0,

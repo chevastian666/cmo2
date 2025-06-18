@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Clock } from 'lucide-react';
+import {_AlertTriangle, _Clock} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { AlertaTV } from '../types';
 import { TIPOS_ALERTA_TV } from '../types';

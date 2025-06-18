@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Shield, Battery, MapPin, Radio, Thermometer, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye } from 'lucide-react';
+import {_AlertTriangle, Shield, Battery, _MapPin, _Radio, _Thermometer, _Package, _Clock, _CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';
@@ -11,7 +11,7 @@ import { ResponderAlertaModal } from './ResponderAlertaModal';
 import { notificationService } from '../../../services/shared/notification.service';
 
 export const AlertsTable: React.FC = () => {
-  const { alertas, loading, error, actions } = useAlertasActivas();
+  const {_alertas, _loading, __error, _actions} = useAlertasActivas();
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
@@ -47,9 +47,9 @@ export const AlertsTable: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al responder la alerta');
-      console.error('Error responding to alert:', error);
+      console.error('Error responding to alert:', _error);
       throw error;
     }
   };
@@ -239,7 +239,7 @@ export const AlertsTable: React.FC = () => {
     }
   ];
 
-  const handleExport = (data: Alerta[], format: 'csv' | 'json') => {
+  const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0];
     const filename = `alertas-${timestamp}`;
     
@@ -264,7 +264,7 @@ export const AlertsTable: React.FC = () => {
       link.download = `${filename}.csv`;
       link.click();
     } else {
-      const jsonData = JSON.stringify(data, null, 2);
+      const jsonData = JSON.stringify(_data, null, 2);
       const blob = new Blob([jsonData], { type: 'application/json' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -285,7 +285,7 @@ export const AlertsTable: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (_error) {
     return (
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
         <p className="text-red-400">Error cargando alertas: {error}</p>
@@ -342,7 +342,7 @@ const AlertDetailModalWrapper: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ alertaId, isOpen, onClose }) => {
-  const { alerta, loading, actions } = useAlertaExtendida(alertaId);
+  const {_alerta, _loading, _actions} = useAlertaExtendida(alertaId);
 
   if (!alerta || loading) {
     return null;

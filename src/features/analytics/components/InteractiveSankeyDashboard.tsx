@@ -6,16 +6,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Settings, 
-  Download, 
-  Maximize2, 
-  Info,
-  TrendingUp,
-  Filter,
-  Calendar,
-  RefreshCw
-} from 'lucide-react';
+import {_Settings, Download, Maximize2, Info, _TrendingUp, _Filter, _Calendar, RefreshCw} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 

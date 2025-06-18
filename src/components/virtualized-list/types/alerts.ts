@@ -12,7 +12,7 @@ export interface Alert {
   message: string;
   status: 'active' | 'acknowledged' | 'resolved';
   assignedTo?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AlertFilters {

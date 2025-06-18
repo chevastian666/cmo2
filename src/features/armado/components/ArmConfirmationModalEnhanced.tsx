@@ -1,8 +1,5 @@
 import React from 'react';
-import { 
-  X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User, 
-  Building, CreditCard, Container, Globe, Home
-} from 'lucide-react';
+import {_X, _Package, _AlertTriangle, _CheckCircle, _MapPin, _Truck, _User, _Building, _CreditCard, _Container, Globe, Home} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Precinto } from '../../../types';
 

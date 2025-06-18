@@ -44,7 +44,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const controls = useAnimation();
-  const { settings, updateSettings, canUseAction } = useRadialMenuStore();
+  const {_settings, _updateSettings, _canUseAction} = useRadialMenuStore();
 
   // Filter actions based on permissions
   const availableActions = actions.filter(action => 
@@ -199,7 +199,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
 
           {/* Action buttons */}
           {sortedActions.map((action, index) => {
-            const { x, y } = getActionPosition(index);
+            const {_x, _y} = getActionPosition(index);
             const isSelected = selectedAction === action.id;
             const isFavorite = settings.favoriteActions.includes(action.id);
 

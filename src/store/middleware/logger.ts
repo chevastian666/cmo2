@@ -14,7 +14,7 @@ export interface LoggerConfig {
   timestamp?: boolean;
   duration?: boolean;
   actionFilter?: (action: string) => boolean;
-  stateFilter?: (state: any) => any;
+  stateFilter?: (state: unknown) => any;
   colors?: {
     title?: string;
     prevState?: string;
@@ -47,24 +47,14 @@ type LoggerImpl = <T>(
 ) => StateCreator<T, [], []>;
 
 const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
-  const {
-    name = 'zustand',
-    enabled = process.env.NODE_ENV === 'development',
-    collapsed = true,
-    diff = true,
-    timestamp = true,
-    duration = true,
-    actionFilter = () => true,
-    stateFilter = (state) => state,
-    colors = defaultColors
-  } = options;
+  const {_name = 'zustand', _enabled = process.env.NODE_ENV === 'development', _collapsed = true, _diff = true, _timestamp = true, _duration = true, _actionFilter = () => true, _stateFilter = (state) => state, _colors = defaultColors} = options;
 
   const mergedColors = { ...defaultColors, ...colors };
   let startTime: number;
 
   const loggedSet: typeof set = (...args) => {
     const [nextStateOrUpdater] = args;
-    const action = (nextStateOrUpdater as any)?.type || 'anonymous';
+    const action = (nextStateOrUpdater as unknown)?.type || 'anonymous';
 
     if (!enabled || !actionFilter(action)) {
       return set(...args);
@@ -105,7 +95,7 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
     try {
       set(...args);
       log();
-    } catch (error) {
+    } catch (_error) {
       console.group(`%c${name} | ERROR`, `color: ${mergedColors.error}; font-weight: bold;`);
       console.error('Error in action:', action);
       console.error(error);
@@ -120,8 +110,8 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
 };
 
 // Función helper para calcular diff
-function getDiff(prev: any, next: any): Record<string, { from: any; to: any }> {
-  const diff: Record<string, { from: any; to: any }> = {};
+function getDiff(prev: unknown, next: unknown): Record<string, { from: unknown; to: unknown }> {
+  const diff: Record<string, { from: unknown; to: unknown }> = {};
   
   // Revisar propiedades eliminadas o modificadas
   for (const key in prev) {

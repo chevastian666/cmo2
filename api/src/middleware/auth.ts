@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { Request, Response, NextFunction } from 'express';
+// import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { ApiError } from './errorHandler';
@@ -30,7 +30,7 @@ export const authenticate = async (
       throw new ApiError(401, 'No token provided');
     }
 
-    const decoded = jwt.verify(token, config.jwt.secret) as any;
+    const decoded = jwt.verify(token, config.jwt.secret) as unknown;
     
     req.user = {
       id: decoded.id,
@@ -40,13 +40,13 @@ export const authenticate = async (
     };
 
     next();
-  } catch (error) {
+  } catch (_error) {
     if (error instanceof jwt.TokenExpiredError) {
       next(new ApiError(401, 'Token expired'));
     } else if (error instanceof jwt.JsonWebTokenError) {
       next(new ApiError(401, 'Invalid token'));
     } else {
-      next(error);
+      next(_error);
     }
   }
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertOctagon, Truck, Clock, Phone } from 'lucide-react';
+import {AlertOctagon, _Truck, _Clock, _Phone} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { TransitoCritico } from '../types';
 

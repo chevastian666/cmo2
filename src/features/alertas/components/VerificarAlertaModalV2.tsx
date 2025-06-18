@@ -4,20 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  X, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  MapPin, 
-  Shield, 
-  Battery, 
-  Radio, 
-  Thermometer,
-  Package,
-  User,
-  MessageSquare
-} from 'lucide-react';
+import {_X, _AlertTriangle, _CheckCircle, _Clock, _MapPin, Shield, Battery, _Radio, _Thermometer, _Package, _User, _MessageSquare} from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -106,9 +93,9 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
       await onVerificar(alerta.id, comentario || undefined);
       notificationService.success(`Alerta ${alerta.codigoPrecinto} verificada correctamente`);
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al verificar la alerta');
-      console.error('Error verifying alert:', error);
+      console.error('Error verifying alert:', _error);
     } finally {
       setVerificando(false);
     }

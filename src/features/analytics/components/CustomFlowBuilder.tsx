@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Plus, Trash2, Play } from 'lucide-react';
 import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
 import type { SankeyData, FlowData } from '@/components/charts/types/sankey.types';
@@ -58,8 +58,8 @@ export const CustomFlowBuilder: React.FC = () => {
       return;
     }
 
-    const data = aggregateFlows(flows);
-    setChartData(data);
+    const _data = aggregateFlows(flows);
+    setChartData(_data);
   };
 
   // Get unique nodes for suggestions

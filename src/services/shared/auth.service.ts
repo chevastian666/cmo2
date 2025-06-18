@@ -61,7 +61,7 @@ class AuthService {
           return true;
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Auth check failed:', error);
       
       // Try to refresh token if it's expired
@@ -107,7 +107,7 @@ class AuthService {
       await sharedStateService.initialize();
 
       return response.user as Usuario;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = error.response?.data?.message || error.message || 'Login failed';
       this.notifyListeners({
         user: null,
@@ -124,7 +124,7 @@ class AuthService {
     try {
       // Notify server about logout
       await sharedStateService.logout();
-    } catch (error) {
+    } catch (_error) {
       console.error('Logout error:', error);
     } finally {
       this.clearAuth();
@@ -163,7 +163,7 @@ class AuthService {
           
           return true;
         }
-      } catch (error) {
+      } catch (_error) {
         console.error('Token refresh failed:', error);
         return false;
       } finally {
@@ -256,7 +256,7 @@ class AuthService {
     this.listeners.forEach(listener => {
       try {
         listener(state);
-      } catch (error) {
+      } catch (_error) {
         console.error('Error in auth listener:', error);
       }
     });

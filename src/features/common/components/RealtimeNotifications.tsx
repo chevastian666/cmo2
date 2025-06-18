@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, AlertCircle, AlertTriangle, Shield, CheckCircle } from 'lucide-react';
+import {_X, AlertCircle, _AlertTriangle, Shield, _CheckCircle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 export interface Notification {
@@ -28,9 +28,9 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
       addNotification(event.detail);
     };
 
-    window.addEventListener('realtime-notification' as any, handleNotification);
+    window.addEventListener('realtime-notification' as unknown, handleNotification);
     return () => {
-      window.removeEventListener('realtime-notification' as any, handleNotification);
+      window.removeEventListener('realtime-notification' as unknown, handleNotification);
     };
   }, []);
 

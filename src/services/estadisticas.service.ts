@@ -35,8 +35,8 @@ export const estadisticasService = {
       }
       
       return await unifiedAPIService.getEstadisticas();
-    } catch (error) {
-      console.error('Error fetching estadisticas:', error);
+    } catch (_error) {
+      console.error('Error fetching estadisticas:', _error);
       // Return default values
       return {
         precintosActivos: 0,
@@ -66,7 +66,7 @@ export const estadisticasService = {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Generate mock data
         const now = Date.now() / 1000;
-        const data = [];
+        const _data = [];
         for (let i = 0; i < horas; i++) {
           data.push({
             timestamp: now - (i * 3600),
@@ -78,8 +78,8 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (error) {
-      console.error('Error fetching historico lecturas:', error);
+    } catch (_error) {
+      console.error('Error fetching historico lecturas:', _error);
       return [];
     }
   },
@@ -90,7 +90,7 @@ export const estadisticasService = {
         // Generate mock data
         const now = Date.now() / 1000;
         const tipos = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'temperatura', 'sin_signal'];
-        const data = [];
+        const _data = [];
         
         for (let i = 0; i < horas; i++) {
           data.push({
@@ -104,8 +104,8 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (error) {
-      console.error('Error fetching historico alertas:', error);
+    } catch (_error) {
+      console.error('Error fetching historico alertas:', _error);
       return [];
     }
   },
@@ -133,8 +133,8 @@ export const estadisticasService = {
         lecturasPromedioPorHora: stats.lecturasPorHora,
         alertasPromedioPorDia: Math.round(stats.alertasActivas * 24 / 7) // Rough estimate
       };
-    } catch (error) {
-      console.error('Error fetching rendimiento:', error);
+    } catch (_error) {
+      console.error('Error fetching rendimiento:', _error);
       return {
         tasaExito: 0,
         tiempoPromedioTransito: 0,
@@ -189,8 +189,8 @@ export const estadisticasService = {
         },
         reportesPendientes: stats.reportesPendientes
       };
-    } catch (error) {
-      console.error('Error fetching estado sistema:', error);
+    } catch (_error) {
+      console.error('Error fetching estado sistema:', _error);
       return {
         smsPendientes: 0,
         dbStats: {

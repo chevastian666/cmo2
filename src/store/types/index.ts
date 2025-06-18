@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import type { Precinto, Alerta, EstadisticasMonitoreo, AlertaExtendida, ComentarioAlerta } from '../../types';
+// import type { Precinto, Alerta, EstadisticasMonitoreo, AlertaExtendida, ComentarioAlerta } from '../../types';
 import type { Transito } from '../../features/transitos/types';
 
 // Filters for stores

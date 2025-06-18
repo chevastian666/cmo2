@@ -58,7 +58,7 @@ export interface HistorialAlerta {
   usuarioId?: string;
   usuario?: Usuario;
   timestamp: number;
-  detalles: any;
+  detalles: unknown;
 }
 
 export interface FiltrosAlertas {

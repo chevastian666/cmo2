@@ -16,7 +16,7 @@ import {
   Code,
   Eye
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,7 +29,7 @@ import { useTenantStore } from '@/store/tenantStore';
 import type { TenantCustomization as TCustomization } from '../types';
 
 export const TenantCustomization: React.FC = () => {
-  const { currentTenant, updateTenantCustomization, checkFeature } = useTenantStore();
+  const {_currentTenant, _updateTenantCustomization, _checkFeature} = useTenantStore();
   const [customization, setCustomization] = useState<TCustomization>(
     currentTenant?.customization || {} as TCustomization
   );
@@ -49,7 +49,7 @@ export const TenantCustomization: React.FC = () => {
       
       // Apply theme changes immediately
       applyTheme(customization.branding);
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error saving customization',
         description: 'Please try again later.',

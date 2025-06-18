@@ -1,13 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { 
-  Calendar, 
-  MapPin, 
-  FileText, 
-  Upload, 
-  X, 
-  Save,
-  Paperclip
-} from 'lucide-react';
+import {_Calendar, _MapPin, _FileText, Upload, _X, Save, Paperclip} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import { notificationService } from '../../../services/shared/notification.service';
@@ -41,7 +33,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
   });
   const [archivos, setArchivos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>(_);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,10 +98,10 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
         descripcion: ''
       });
       setArchivos([]);
-      setErrors({});
+      setErrors(_);
       
       notificationService.success('Novedad registrada', 'La novedad se ha guardado correctamente');
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al guardar', 'No se pudo registrar la novedad');
     } finally {
       setLoading(false);

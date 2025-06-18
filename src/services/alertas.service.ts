@@ -43,8 +43,8 @@ export const alertasService = {
       }
       
       return filtered;
-    } catch (error) {
-      console.error('Error fetching alertas:', error);
+    } catch (_error) {
+      console.error('Error fetching alertas:', _error);
       return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i));
     }
   },
@@ -60,8 +60,8 @@ export const alertasService = {
         limit: 10
       });
       return response.data;
-    } catch (error) {
-      console.error('Error fetching alertas activas:', error);
+    } catch (_error) {
+      console.error('Error fetching alertas activas:', _error);
       return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i));
     }
   },
@@ -77,8 +77,8 @@ export const alertasService = {
       const alerta = all.find(a => a.id === id);
       if (!alerta) throw new Error('Alerta not found');
       return alerta;
-    } catch (error) {
-      console.error('Error fetching alerta:', error);
+    } catch (_error) {
+      console.error('Error fetching alerta:', _error);
       return generateMockAlerta(parseInt(id) || 1);
     }
   },
@@ -92,8 +92,8 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (error) {
-      console.error('Error atendiendo alerta:', error);
+    } catch (_error) {
+      console.error('Error atendiendo alerta:', _error);
     }
   },
 
@@ -109,8 +109,8 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (error) {
-      console.error('Error creating alerta:', error);
+    } catch (_error) {
+      console.error('Error creating alerta:', _error);
       throw error;
     }
   },
@@ -136,8 +136,8 @@ export const alertasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (error) {
-      console.error('Error fetching estadisticas:', error);
+    } catch (_error) {
+      console.error('Error fetching estadisticas:', _error);
       return [];
     }
   },

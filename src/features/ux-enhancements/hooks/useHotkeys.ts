@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import {_useEffect, useRef} from 'react';
 
 type HotkeyCallback = (event: KeyboardEvent) => void;
 

@@ -6,17 +6,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BarChart3, 
-  Info, 
-  Download, 
-  Maximize2,
-  Grid3X3,
-  Package,
-  Truck,
-  AlertTriangle,
-  Building
-} from 'lucide-react';
+import {_BarChart3, Info, Download, Maximize2, Grid3X3, _Package, _Truck, _AlertTriangle, _Building} from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 

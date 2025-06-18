@@ -14,17 +14,17 @@ interface TransitosParams {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 }
 
 class TransitosService {
   private readonly API_BASE = '/api/transitos';
-  private cache = new Map<string, { data: any; timestamp: number }>();
+  private cache = new Map<string, { data: unknown; timestamp: number }>();
   private readonly CACHE_TTL = 30000; // 30 seconds
 
   async getTransitos(params: TransitosParams = {}): Promise<TransitosResponse> {
     try {
-      const { page = 1, limit = 10, sortBy, sortOrder, filters } = params;
+      const {_page = 1, _limit = 10, _sortBy, _sortOrder, _filters} = params;
       
       // In development, return mock data with pagination
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
@@ -65,20 +65,20 @@ class TransitosService {
         page,
         limit
       };
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching transitos:', error);
       // Return paginated mock data on error
       return this.getTransitos({ ...params });
     }
   }
   
-  private applyFilters(data: Transito[], filters?: Record<string, any>): Transito[] {
+  private applyFilters(data: Transito[], filters?: Record<string, unknown>): Transito[] {
     if (!filters || Object.keys(filters).length === 0) return data;
     
     return data.filter(item => {
       return Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
-        const itemValue = (item as any)[key];
+        const itemValue = (item as unknown)[key];
         if (typeof value === 'string') {
           return itemValue?.toString().toLowerCase().includes(value.toLowerCase());
         }
@@ -91,8 +91,8 @@ class TransitosService {
     if (!sortBy) return data;
     
     return [...data].sort((a, b) => {
-      const aValue = (a as any)[sortBy];
-      const bValue = (b as any)[sortBy];
+      const aValue = (a as unknown)[sortBy];
+      const bValue = (b as unknown)[sortBy];
       
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
@@ -109,7 +109,7 @@ class TransitosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching transito:', error);
       return null;
     }
@@ -128,7 +128,7 @@ class TransitosService {
         this.clearCache(); // Clear cache after successful update
       }
       return response.data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error marking desprecintado:', error);
       return false;
     }
@@ -148,7 +148,7 @@ class TransitosService {
         this.clearCache(); // Clear cache after successful update
       }
       return response.data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error updating transito:', error);
       throw error;
     }

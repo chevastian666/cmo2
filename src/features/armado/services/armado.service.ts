@@ -3,7 +3,7 @@ import type { Precinto } from '../../../types';
 
 interface ArmadoCommand {
   precintoId: string;
-  transitoData: any;
+  transitoData: unknown;
   fotos: File[];
 }
 
@@ -19,13 +19,13 @@ class ArmadoService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error searching precinto:', error);
       return null;
     }
   }
 
-  async getPendingPrecintos(): Promise<any[]> {
+  async getPendingPrecintos(): Promise<unknown[]> {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
@@ -34,7 +34,7 @@ class ArmadoService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/pending`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching pending precintos:', error);
       return [];
     }
@@ -59,7 +59,7 @@ class ArmadoService {
         },
       });
       return response.data.urls;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error uploading photos:', error);
       return [];
     }
@@ -76,7 +76,7 @@ class ArmadoService {
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/execute`, command);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error executing armado:', error);
       throw error;
     }
@@ -134,7 +134,7 @@ class ArmadoService {
     };
   }
 
-  private getMockPendingPrecintos(): any[] {
+  private getMockPendingPrecintos(): unknown[] {
     const locations = ['Puerto de Montevideo', 'Nueva Palmira', 'Colonia', 'Rivera', 'Chuy'];
     const precintos = [];
     

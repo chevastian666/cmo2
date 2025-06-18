@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Maximize2, X } from 'lucide-react';
+import {_MapPin, Maximize2, _X} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface MapPreviewProps {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, User, Phone, Flag, AlertCircle } from 'lucide-react';
+import {_X, _User, _Phone, Flag, AlertCircle} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,19 +7,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import {Form, _FormControl, _FormDescription, FormField, _FormItem, _FormLabel, _FormMessage, } from '@/components/ui/form';
 import { useCamionerosStore } from '../../../store/camionerosStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
 import type { Nacionalidad } from '../types';
 
@@ -34,13 +26,13 @@ const formSchema = z.object({
   telefonoUruguayo: z.string().optional(),
   telefonoPais: z.string().optional(),
   comentario: z.string().optional(),
-}).refine((data) => {
+}).refine((_data) => {
   // At least one phone is required
   return data.telefonoUruguayo || data.telefonoPais;
 }, {
   message: 'Debe proporcionar al menos un teléfono de contacto',
   path: ['telefonoUruguayo'],
-}).refine((data) => {
+}).refine((_data) => {
   // If nacionalidad is 'Otro', paisOrigen is required
   if (data.nacionalidad === 'Otro') {
     return data.paisOrigen && data.paisOrigen.trim().length > 0;
@@ -60,7 +52,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
   const userInfo = useUserInfo();
-  const { createCamionero } = useCamionerosStore();
+  const {_createCamionero} = useCamionerosStore();
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
 
@@ -79,7 +71,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
     },
   });
 
-  const handleSubmit = async (data: FormData) => {
+  const handleSubmit = async (_data: FormData) => {
     setLoading(true);
     setGeneralError(null);
     
@@ -102,7 +94,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
       
       form.reset();
       onClose();
-    } catch (error) {
+    } catch (_error) {
       setGeneralError('Error al registrar el camionero');
     } finally {
       setLoading(false);

@@ -25,14 +25,14 @@ interface SharedState {
   alertasRecientes: Alerta[];
   
   // System
-  systemStatus: any;
+  systemStatus: unknown;
   connectionStatus: 'connected' | 'disconnected' | 'reconnecting';
   
   // Vehicles (for encargados)
-  vehiculosEnRuta: any[];
+  vehiculosEnRuta: unknown[];
   
   // CMO Messages
-  cmoMessages: any[];
+  cmoMessages: unknown[];
   unreadCmoMessages: number;
 }
 
@@ -56,7 +56,7 @@ export class SharedStateService {
   };
 
   private listeners = new Set<StateListener>();
-  private specificListeners = new Map<keyof SharedState, Set<SpecificStateListener<any>>>();
+  private specificListeners = new Map<keyof SharedState, Set<SpecificStateListener<unknown>>>();
   private updateTimers = new Map<string, NodeJS.Timeout>();
   private isInitialized = false;
 
@@ -91,7 +91,7 @@ export class SharedStateService {
       this.setupAutoRefresh();
 
       this.isInitialized = true;
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to initialize shared state:', error);
       // Continue with initialization even if some parts fail
       this.isInitialized = true;
@@ -113,7 +113,7 @@ export class SharedStateService {
         alertasActivas: alertas,
         systemStatus: status
       });
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to load initial data:', error);
     }
   }
@@ -207,7 +207,7 @@ export class SharedStateService {
     this.listeners.forEach(listener => {
       try {
         listener(updates);
-      } catch (error) {
+      } catch (_error) {
         console.error('Error in state listener:', error);
       }
     });
@@ -219,7 +219,7 @@ export class SharedStateService {
         listeners.forEach(listener => {
           try {
             listener(this.state[key as keyof SharedState]);
-          } catch (error) {
+          } catch (_error) {
             console.error(`Error in specific state listener for ${key}:`, error);
           }
         });
@@ -228,8 +228,8 @@ export class SharedStateService {
   }
 
   // Event handlers
-  private handleTransitUpdate(data: any): void {
-    const { transitId, action, transit } = data;
+  private handleTransitUpdate(data: unknown): void {
+    const {_transitId, _action, _transit} = data;
 
     switch (action) {
       case 'update':
@@ -244,8 +244,8 @@ export class SharedStateService {
     }
   }
 
-  private handlePrecintoUpdate(data: any): void {
-    const { precintoId, action, precinto } = data;
+  private handlePrecintoUpdate(data: unknown): void {
+    const {_precintoId, _action, _precinto} = data;
 
     switch (action) {
       case 'update':
@@ -260,7 +260,7 @@ export class SharedStateService {
     }
   }
 
-  private handleNewAlert(data: any): void {
+  private handleNewAlert(data: unknown): void {
     const alert = data.alert || data;
     
     // Add to active alerts
@@ -277,7 +277,7 @@ export class SharedStateService {
     }
   }
 
-  private handleCMOMessage(data: any): void {
+  private handleCMOMessage(data: unknown): void {
     const message = data.message || data;
     const cmoMessages = [message, ...this.state.cmoMessages];
     const unreadCmoMessages = this.state.unreadCmoMessages + (message.read ? 0 : 1);
@@ -285,8 +285,8 @@ export class SharedStateService {
     this.updateState({ cmoMessages, unreadCmoMessages });
   }
 
-  private handleVehicleUpdate(data: any): void {
-    const { truckId, position } = data;
+  private handleVehicleUpdate(data: unknown): void {
+    const {_truckId, _position} = data;
     const vehiculosEnRuta = this.state.vehiculosEnRuta.map(v => 
       v.id === truckId ? { ...v, position, lastUpdate: Date.now() } : v
     );
@@ -345,7 +345,7 @@ export class SharedStateService {
       try {
         const data = JSON.parse(stored);
         this.state = { ...this.state, ...data };
-      } catch (error) {
+      } catch (_error) {
         console.error('Failed to load stored state:', error);
       }
     }

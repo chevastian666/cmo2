@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { Link2, Battery, MapPin, AlertTriangle, ChevronUp, ChevronDown, Network, Eye } from 'lucide-react';
+import {Link2, Battery, _MapPin, _AlertTriangle, ChevronUp, ChevronDown, Network, Eye} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -47,7 +47,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
   ];
 
   // Map the incoming precintos to the expected format
-  const mappedPrecintos: PrecintoActivo[] = precintos.map((p: any) => ({
+  const mappedPrecintos: PrecintoActivo[] = precintos.map((p: unknown) => ({
     id: p.id,
     nserie: p.codigo || p.nserie || `BT${p.id}`,
     nqr: p.numeroPrecinto?.toString() || p.nqr || Math.floor(Math.random() * 1000 + 1).toString(),
@@ -149,8 +149,8 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
     if (!sortColumn) return dataToSort;
 
     return [...dataToSort].sort((a, b) => {
-      let aValue: any = a[sortColumn as keyof PrecintoActivo];
-      let bValue: any = b[sortColumn as keyof PrecintoActivo];
+      let aValue: unknown = a[sortColumn as keyof PrecintoActivo];
+      let bValue: unknown = b[sortColumn as keyof PrecintoActivo];
 
       // Manejo especial para columnas numéricas
       if (sortColumn === 'nqr' || sortColumn === 'bateria') {

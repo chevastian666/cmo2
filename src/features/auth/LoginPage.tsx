@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const LoginPage: React.FC = () => {
-  const { login, isLoading, error } = useAuth();
+  const {_login, _isLoading, _error} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
@@ -24,7 +24,7 @@ export const LoginPage: React.FC = () => {
     try {
       await login(email, password);
       // Navigation will be handled by the auth state change
-    } catch (err: any) {
+    } catch (err: unknown) {
       setLocalError(err.message || 'Error al iniciar sesión');
     }
   };

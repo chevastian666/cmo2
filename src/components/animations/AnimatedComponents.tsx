@@ -5,18 +5,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  fadeVariants, 
-  scaleVariants, 
-  slideUpVariants,
-  slideDownVariants,
-  hoverScaleVariants,
-  hoverLiftVariants,
-  staggerContainer,
-  staggerItem,
-  modalVariants,
-  overlayVariants
-} from './AnimationPresets';
+import {fadeVariants, scaleVariants, slideUpVariants, slideDownVariants, hoverScaleVariants, hoverLiftVariants, staggerContainer, staggerItem, modalVariants, overlayVariants} from './AnimationPresets';
 import { tokenClasses } from '../../styles/useDesignTokens';
 
 // ==========================================
@@ -26,7 +15,7 @@ import { tokenClasses } from '../../styles/useDesignTokens';
 interface AnimatedDivProps {
   children: React.ReactNode;
   className?: string;
-  [key: string]: any; // Allow all motion props
+  [key: string]: unknown; // Allow all motion props
 }
 
 // Div con fade animation
@@ -408,7 +397,7 @@ interface AnimatedDivProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  [key: string]: any; // Allow all motion props
+  [key: string]: unknown; // Allow all motion props
 }
 
 export const AnimatedDiv: React.FC<AnimatedDivProps> = ({ 

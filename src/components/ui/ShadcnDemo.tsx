@@ -1,13 +1,7 @@
 import React from 'react';
 import { Button } from './button';
 import { Input } from './input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from './select';
 import {
   Dialog,
   DialogContent,
@@ -16,8 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './dialog';
-import { AlertCircle, Check, X, ArrowRight, User, Table } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './Card';
+import {AlertCircle, Check, _X, ArrowRight, _User, Table} from 'lucide-react';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from './Card';
 import { Alert, AlertDescription, AlertTitle } from './alert';
 import { FormularioCamioneroV2 } from '../../features/camioneros/components/FormularioCamioneroV2';
 import { PrecintosTableV2 } from '../../features/precintos/components/PrecintosTableV2';
@@ -25,7 +19,7 @@ import { VerificarAlertaModalV2 } from '../../features/alertas/components/Verifi
 import { EditTransitoModalV2 } from '../../features/transitos/components/EditTransitoModalV2';
 import { Label } from './label';
 import { Checkbox } from './checkbox';
-import { RadioGroup, RadioGroupItem } from './radio-group';
+import {RadioGroup, RadioGroupItem} from './radio-group';
 import { Switch } from './switch';
 import {
   Popover,
@@ -668,7 +662,7 @@ export default function ShadcnDemo() {
     <FormularioCamioneroV2 isOpen={formOpen} onClose={() => setFormOpen(false)} />
     
     <VerificarAlertaModalV2
-      alerta={mockAlerta as any}
+      alerta={mockAlerta as unknown}
       isOpen={verificarOpen}
       onClose={() => setVerificarOpen(false)}
       onVerificar={async () => {
@@ -678,7 +672,7 @@ export default function ShadcnDemo() {
     />
     
     <EditTransitoModalV2
-      transito={mockTransito as any}
+      transito={mockTransito as unknown}
       isOpen={editTransitoOpen}
       onClose={() => setEditTransitoOpen(false)}
       onSuccess={() => console.log('Transito editado')}

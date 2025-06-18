@@ -122,8 +122,8 @@ export class PerformanceMonitor {
    * Get memory usage
    */
   private getMemoryUsage(): number {
-    if ('memory' in performance && (performance as any).memory) {
-      const memory = (performance as any).memory;
+    if ('memory' in performance && (performance as unknown).memory) {
+      const memory = (performance as unknown).memory;
       return memory.usedJSHeapSize / 1048576; // Convert to MB
     }
     return 0;
@@ -228,8 +228,8 @@ export class PerformanceOptimizer {
    */
   autoOptimize(
     metrics: PerformanceMetrics,
-    config: any,
-    updateConfig: (updates: any) => void
+    config: unknown,
+    updateConfig: (updates: unknown) => void
   ): boolean {
     if (metrics.fps < 30) {
       this.degradedPerformanceCount++;

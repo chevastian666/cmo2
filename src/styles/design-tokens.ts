@@ -450,7 +450,7 @@ export const components = {
 // Función para obtener el valor de color por string path
 export const getColor = (path: string): string => {
   const keys = path.split('.');
-  let value: any = colors;
+  let value: unknown = colors;
   
   for (const key of keys) {
     value = value[key];

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare } from 'lucide-react';
+import {AlertCircle, _CheckCircle, _XCircle, _Clock, _MapPin, Eye, _MessageSquare} from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,13 +11,7 @@ import {
   AnimatedList,
   AnimatedListItem 
 } from '@/components/animations/AnimatedComponents';
-import { 
-  alertCriticalVariants, 
-  transitions,
-  staggerContainer,
-  staggerItem,
-  pulseVariants
-} from '@/components/animations/AnimationPresets';
+import {alertCriticalVariants, transitions, staggerContainer, staggerItem, pulseVariants} from '@/components/animations/AnimationPresets';
 
 interface AlertsTableAnimatedProps {
   alertas: Alerta[];

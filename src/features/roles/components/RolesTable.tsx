@@ -24,11 +24,11 @@ const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
 const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
 
 export const RolesTable: React.FC = () => {
-  const { permissions, togglePermission, setSectionPermissions, setRolePermissions } = useRolesStore();
+  const {_permissions, _togglePermission, _setSectionPermissions, _setRolePermissions} = useRolesStore();
   
   // Calculate bulk checkbox states for sections
   const sectionBulkStates = useMemo(() => {
-    const states: Record<Section, { checked: boolean; indeterminate: boolean }> = {} as any;
+    const states: Record<Section, { checked: boolean; indeterminate: boolean }> = {} as unknown;
     
     SECTIONS.forEach(section => {
       let totalPermissions = 0;
@@ -54,7 +54,7 @@ export const RolesTable: React.FC = () => {
   
   // Calculate bulk checkbox states for roles
   const roleBulkStates = useMemo(() => {
-    const states: Record<Role, { checked: boolean; indeterminate: boolean }> = {} as any;
+    const states: Record<Role, { checked: boolean; indeterminate: boolean }> = {} as unknown;
     
     ROLES.forEach(role => {
       let totalPermissions = 0;
@@ -79,7 +79,7 @@ export const RolesTable: React.FC = () => {
   }, [permissions]);
   
   const handleSectionBulkToggle = useCallback((section: Section, checked: boolean) => {
-    const newPermissions: Record<Role, Permission[]> = {} as any;
+    const newPermissions: Record<Role, Permission[]> = {} as unknown;
     
     ROLES.forEach(role => {
       newPermissions[role] = checked ? [...PERMISSIONS] : [];
@@ -89,7 +89,7 @@ export const RolesTable: React.FC = () => {
   }, [setSectionPermissions]);
   
   const handleRoleBulkToggle = useCallback((role: Role, checked: boolean) => {
-    const newPermissions: Record<Section, Permission[]> = {} as any;
+    const newPermissions: Record<Section, Permission[]> = {} as unknown;
     
     SECTIONS.forEach(section => {
       newPermissions[section] = checked ? [...PERMISSIONS] : [];

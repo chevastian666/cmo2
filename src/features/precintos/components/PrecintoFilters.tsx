@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Battery, MapPin, Calendar, X } from 'lucide-react';
+import {Search, _Filter, Battery, _MapPin, _Calendar, _X} from 'lucide-react';
 import { PrecintoStatus, PrecintoStatusText } from '../types';
 import type { PrecintoFilters as PrecintoFiltersType } from '../types';
 
@@ -19,12 +19,12 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
   console.log('PrecintoFilters: Rendering with', { filters, empresasCount: empresas.length, ubicacionesCount: ubicaciones.length });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const handleChange = (key: keyof PrecintoFiltersType, value: any) => {
+  const handleChange = (key: keyof PrecintoFiltersType, value: unknown) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
   const clearFilters = () => {
-    onFiltersChange({});
+    onFiltersChange(_);
     setShowAdvancedFilters(false);
   };
 

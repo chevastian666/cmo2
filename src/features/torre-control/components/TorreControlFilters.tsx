@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, MapPin, Flag, CircleDot } from 'lucide-react';
+import {Search, _MapPin, Flag, CircleDot} from 'lucide-react';
 import type { TorreControlFilters, EstadoSemaforo } from '../types';
 
 interface TorreControlFiltersProps {

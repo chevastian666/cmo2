@@ -62,8 +62,8 @@ export const connectDatabase = async (): Promise<void> => {
       await auxDB.sync({ alter: true });
       logger.info('📊 Auxiliary database models synchronized');
     }
-  } catch (error) {
-    logger.error('❌ Database connection failed:', error);
+  } catch (_error) {
+    logger.error('❌ Database connection failed:', _error);
     throw error;
   }
 };
@@ -74,7 +74,7 @@ export const closeDatabaseConnections = async (): Promise<void> => {
     await mainDB.close();
     await auxDB.close();
     logger.info('Database connections closed');
-  } catch (error) {
-    logger.error('Error closing database connections:', error);
+  } catch (_error) {
+    logger.error('Error closing database connections:', _error);
   }
 };

@@ -31,7 +31,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
   const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [breadcrumb, setBreadcrumb] = useState<string[]>(['Root']);
-  const [currentRoot, setCurrentRoot] = useState<any>(null);
+  const [currentRoot, setCurrentRoot] = useState<unknown>(null);
 
   // Validate data
   if (!data || !data.children) {
@@ -76,7 +76,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
 
     // Create hierarchy
     const root = d3.hierarchy(data)
-      .sum((d: any) => d.value || 0)
+      .sum((d: unknown) => d.value || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
 
     // Create treemap layout
@@ -123,13 +123,13 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .data(root.leaves())
       .enter()
       .append('g')
-      .attr('transform', (d: any) => `translate(${d.x0},${d.y0})`);
+      .attr('transform', (d: unknown) => `translate(${d.x0},${d.y0})`);
 
     // Add rectangles
     const rects = cell.append('rect')
-      .attr('width', (d: any) => d.x1 - d.x0)
-      .attr('height', (d: any) => d.y1 - d.y0)
-      .attr('fill', (d: any) => {
+      .attr('width', (d: unknown) => d.x1 - d.x0)
+      .attr('height', (d: unknown) => d.y1 - d.y0)
+      .attr('fill', (d: unknown) => {
         const node = d.data as TreemapNode;
         return node.color || colorScale(node.name);
       })
@@ -157,7 +157,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .attr('opacity', animated ? 0 : 1);
 
     labels.append('tspan')
-      .text((d: any) => {
+      .text((d: unknown) => {
         const node = d.data as TreemapNode;
         const width = d.x1 - d.x0;
         const maxChars = Math.floor(width / 8);
@@ -171,7 +171,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .attr('dy', '1.2em')
       .attr('font-size', '12px')
       .attr('fill', 'rgba(255, 255, 255, 0.8)')
-      .text((d: any) => valueFormat(d.value));
+      .text((d: unknown) => valueFormat(d.value));
 
     if (animated) {
       labels.transition()
@@ -182,7 +182,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
 
     // Add interactivity
     cell
-      .on('click', function(event, d: any) {
+      .on('click', function(event, d: unknown) {
         event.stopPropagation();
         
         // Zoom to node
@@ -201,21 +201,21 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         svg.transition()
           .duration(750)
           .call(
-            zoom.transform as any,
+            zoom.transform as unknown,
             d3.zoomIdentity
               .translate(translate[0], translate[1])
               .scale(scale)
           );
 
         // Update breadcrumb
-        const path = d.ancestors().reverse().map((node: any) => node.data.name);
+        const path = d.ancestors().reverse().map((node: unknown) => node.data.name);
         setBreadcrumb(path);
 
         if (onNodeClick) {
           onNodeClick(d.data, event);
         }
       })
-      .on('mouseenter', function(event, d: any) {
+      .on('mouseenter', function(event, d: unknown) {
         // Highlight node
         d3.select(this).select('rect')
           .transition()
@@ -224,7 +224,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
 
         if (showTooltip) {
           const ancestors = d.ancestors().reverse();
-          const path = ancestors.map((node: any) => node.data.name);
+          const path = ancestors.map((node: unknown) => node.data.name);
           const rootValue = ancestors[0].value || 1;
           
           setHoveredNode({
@@ -263,7 +263,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
     svg.on('click', function() {
       svg.transition()
         .duration(750)
-        .call(zoom.transform as any, d3.zoomIdentity);
+        .call(zoom.transform as unknown, d3.zoomIdentity);
       
       setBreadcrumb(['Root']);
     });
@@ -321,7 +321,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
               if (svgRef.current) {
                 const svg = d3.select(svgRef.current);
                 const zoom = d3.zoom<SVGSVGElement, unknown>();
-                svg.call(zoom.transform as any, d3.zoomIdentity);
+                svg.call(zoom.transform as unknown, d3.zoomIdentity);
                 setBreadcrumb(['Root']);
               }
             }}

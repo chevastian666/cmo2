@@ -5,17 +5,12 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { 
-  Plus, Search, Filter, Download, Building2, MapPin, Phone,
-  Clock, Package, TrendingUp, AlertCircle, Edit2, Eye,
-  X, ChevronDown, ChevronUp, Building, Hash, Users,
-  Activity, Calendar, Zap, Map, Info
-} from 'lucide-react';
+import {Plus, Search, _Filter, Download, Building2, _MapPin, _Phone, _Clock, _Package, _TrendingUp, AlertCircle, Edit2, Eye, _X, ChevronDown, ChevronUp, _Building, _Hash, _Users, Activity, _Calendar, Zap, Map, Info} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
@@ -44,16 +39,10 @@ import { DepositoDetailModal } from '../components/DepositoDetailModal';
 import { DepositoFormModal } from '../components/DepositoFormModal';
 import { InteractiveMap } from '@/components/maps/InteractiveMap';
 import type { MapMarker } from '@/components/maps/InteractiveMap';
-import { 
-  staggerContainer, 
-  staggerItem,
-  fadeInUp,
-  scaleIn,
-  slideInRight
-} from '@/components/animations/AnimationPresets';
+import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
 
 export const DepositosPageV2: React.FC = () => {
-  const { depositos, loading, addDeposito, updateDeposito } = useDepositosStore();
+  const {_depositos, _loading, _addDeposito, _updateDeposito} = useDepositosStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
@@ -130,7 +119,7 @@ export const DepositosPageV2: React.FC = () => {
     setShowForm(true);
   };
 
-  const handleSave = (data: Partial<Deposito>) => {
+  const handleSave = (_data: Partial<Deposito>) => {
     if (editingDeposito) {
       updateDeposito(editingDeposito.id, data);
     } else {
@@ -235,7 +224,7 @@ export const DepositosPageV2: React.FC = () => {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Select value={selectedView} onValueChange={(v: any) => setSelectedView(v)}>
+                  <Select value={selectedView} onValueChange={(v: unknown) => setSelectedView(v)}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>

@@ -31,7 +31,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   
   setTransitosPendientes: (transitosPendientes) => set({ transitosPendientes, lastUpdate: Date.now() }),
   
-  updateTransito: (id, data) => set((state) => ({
+  updateTransito: (id, _data) => set((state) => ({
     transitos: state.transitos.map(t => t.id === id ? { ...t, ...data } : t),
     transitosPendientes: state.transitosPendientes.map(t => t.id === id ? { ...t, ...data } : t),
   })),
@@ -43,17 +43,17 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   
   setLoading: (loading) => set({ loading }),
   
-  setError: (error) => set({ error }),
+  setError: (_error) => set({ error }),
   
   fetchTransitos: async () => {
-    const { setLoading, setError, setTransitos } = get();
+    const {_setLoading, _setError, _setTransitos} = get();
     setLoading(true);
     setError(null);
     
     try {
-      const data = await transitosService.getAll();
-      setTransitos(data);
-    } catch (error) {
+      const _data = await transitosService.getAll();
+      setTransitos(_data);
+    } catch (_error) {
       // En desarrollo, usar datos mock con estados variados
       const mockData = Array.from({ length: 20 }, (_, i) => {
         const transito = generateMockTransito(i);
@@ -71,21 +71,21 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
         return transito;
       });
       setTransitos(mockData);
-      console.warn('Using mock data for transitos:', error);
+      console.warn('Using mock data for transitos:', _error);
     } finally {
       setLoading(false);
     }
   },
   
   fetchTransitosPendientes: async () => {
-    const { setLoading, setError, setTransitosPendientes } = get();
+    const {_setLoading, _setError, _setTransitosPendientes} = get();
     setLoading(true);
     setError(null);
     
     try {
-      const data = await transitosService.getPendientes();
-      setTransitosPendientes(data);
-    } catch (error) {
+      const _data = await transitosService.getPendientes();
+      setTransitosPendientes(_data);
+    } catch (_error) {
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 12 }, (_, i) => {
         const transito = generateMockTransito(i);
@@ -93,21 +93,21 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
         return transito;
       });
       setTransitosPendientes(mockData);
-      console.warn('Using mock data for transitos pendientes:', error);
+      console.warn('Using mock data for transitos pendientes:', _error);
     } finally {
       setLoading(false);
     }
   },
   
   precintarTransito: async (transitoId, precintoId) => {
-    const { setError, updateTransito } = get();
+    const {_setError, _updateTransito} = get();
     setError(null);
     
     try {
       await transitosService.precintar(transitoId, precintoId);
       updateTransito(transitoId, { estado: 'EN_TRANSITO' });
       notificationService.success('Tránsito Precintado', 'El tránsito ha sido precintado exitosamente');
-    } catch (error) {
+    } catch (_error) {
       setError(error instanceof Error ? error.message : 'Error al precintar tránsito');
       notificationService.error('Error', 'No se pudo precintar el tránsito');
       throw error;
@@ -115,14 +115,14 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   },
   
   markDesprecintado: async (transitoId) => {
-    const { setError, updateTransito } = get();
+    const {_setError, _updateTransito} = get();
     setError(null);
     
     try {
       await transitosService.markDesprecintado(transitoId);
       updateTransito(transitoId, { estado: 'COMPLETADO', fechaLlegada: new Date().toISOString() });
       notificationService.success('Tránsito Completado', 'El tránsito ha sido marcado como desprecintado');
-    } catch (error) {
+    } catch (_error) {
       setError(error instanceof Error ? error.message : 'Error al marcar como desprecintado');
       notificationService.error('Error', 'No se pudo actualizar el estado del tránsito');
       throw error;

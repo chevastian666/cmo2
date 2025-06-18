@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Settings, X, TrendingUp } from 'lucide-react';
+import {_AlertTriangle, _Settings, _X, _TrendingUp} from 'lucide-react';
 import { Card, CardHeader, CardContent, EmptyState, Badge } from '../../../components/ui';
 import { CongestionAlert } from './CongestionAlert';
 import { CongestionDetailModal } from './CongestionDetailModal';

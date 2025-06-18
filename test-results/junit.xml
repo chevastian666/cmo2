@@ -1,0 +1,333 @@
+<testsuites id="" name="" tests="10" failures="9" skipped="0" errors="0" time="71.824555">
+<testsuite name="tests/auth.spec.ts" timestamp="2025-06-18T18:44:04.781Z" hostname="chromium" tests="10" failures="9" skipped="0" time="206.706" errors="0">
+<testcase name="Authentication › should display login page correctly" classname="tests/auth.spec.ts" time="7.585">
+<failure message="auth.spec.ts:16:3 should display login page correctly" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:16:3 › Authentication › should display login page correctly ──────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByText('CMO - Centro de Monitoreo')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('CMO - Centro de Monitoreo')
+
+
+      15 |
+      16 |   test('should display login page correctly', async ({ page }) => {
+    > 17 |     await expect(loginPage.title).toBeVisible();
+         |                                   ^
+      18 |     await expect(loginPage.emailInput).toBeVisible();
+      19 |     await expect(loginPage.passwordInput).toBeVisible();
+      20 |     await expect(loginPage.submitButton).toBeVisible();
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:17:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication--adb6f-isplay-login-page-correctly-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication--adb6f-isplay-login-page-correctly-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication--adb6f-isplay-login-page-correctly-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication--adb6f-isplay-login-page-correctly-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show validation errors for empty fields" classname="tests/auth.spec.ts" time="8.047">
+<failure message="auth.spec.ts:27:3 should show validation errors for empty fields" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:27:3 › Authentication › should show validation errors for empty fields 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByText(/el email es requerido/i)
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/el email es requerido/i)
+
+
+      28 |     await loginPage.submitButton.click();
+      29 |     
+    > 30 |     await expect(loginPage.page.getByText(/el email es requerido/i)).toBeVisible();
+         |                                                                      ^
+      31 |     await expect(loginPage.page.getByText(/la contraseña es requerida/i)).toBeVisible();
+      32 |   });
+      33 |
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:30:70
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication--f0a77-ion-errors-for-empty-fields-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication--f0a77-ion-errors-for-empty-fields-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication--f0a77-ion-errors-for-empty-fields-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication--f0a77-ion-errors-for-empty-fields-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show error for invalid email format" classname="tests/auth.spec.ts" time="7.893">
+<failure message="auth.spec.ts:34:3 should show error for invalid email format" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:34:3 › Authentication › should show error for invalid email format 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByText(/email inválido/i)
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/email inválido/i)
+
+
+      37 |     await loginPage.submitButton.click();
+      38 |     
+    > 39 |     await expect(loginPage.page.getByText(/email inválido/i)).toBeVisible();
+         |                                                               ^
+      40 |   });
+      41 |
+      42 |   test('should toggle password visibility', async () => {
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:39:63
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication--e91e8-or-for-invalid-email-format-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication--e91e8-or-for-invalid-email-format-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication--e91e8-or-for-invalid-email-format-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication--e91e8-or-for-invalid-email-format-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should toggle password visibility" classname="tests/auth.spec.ts" time="30.315">
+<failure message="auth.spec.ts:42:3 should toggle password visibility" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:42:3 › Authentication › should toggle password visibility ────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel(/mostrar contraseña/i)
+
+
+       at pages/LoginPage.ts:44
+
+      42 |
+      43 |   async togglePasswordVisibility() {
+    > 44 |     await this.showPasswordButton.click();
+         |                                   ^
+      45 |   }
+      46 |
+      47 |   async isPasswordVisible() {
+        at LoginPage.togglePasswordVisibility (/Users/cheva/Coding/cmo3/e2e/pages/LoginPage.ts:44:35)
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:49:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication-should-toggle-password-visibility-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication-should-toggle-password-visibility-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication-should-toggle-password-visibility-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication-should-toggle-password-visibility-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show error for invalid credentials" classname="tests/auth.spec.ts" time="2.247">
+</testcase>
+<testcase name="Authentication › should login successfully with valid credentials" classname="tests/auth.spec.ts" time="30.122">
+<failure message="auth.spec.ts:65:3 should login successfully with valid credentials" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:65:3 › Authentication › should login successfully with valid credentials 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      67 |     
+      68 |     // Should redirect to dashboard
+    > 69 |     await page.waitForURL('/');
+         |                ^
+      70 |     
+      71 |     // Should see dashboard content
+      72 |     await expect(page.getByText(/Centro de Monitoreo de Operaciones/i)).toBeVisible();
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:69:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication--cd9ab-ully-with-valid-credentials-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication--cd9ab-ully-with-valid-credentials-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication--cd9ab-ully-with-valid-credentials-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication--cd9ab-ully-with-valid-credentials-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should persist login state" classname="tests/auth.spec.ts" time="30.154">
+<failure message="auth.spec.ts:78:3 should persist login state" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:78:3 › Authentication › should persist login state ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      79 |     // Login
+      80 |     await loginPage.login('admin@cmo.com', 'admin123');
+    > 81 |     await page.waitForURL('/');
+         |                ^
+      82 |     
+      83 |     // Save storage state
+      84 |     await context.storageState({ path: 'e2e/.auth/user.json' });
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:81:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication-should-persist-login-state-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication-should-persist-login-state-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication-should-persist-login-state-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication-should-persist-login-state-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should logout successfully" classname="tests/auth.spec.ts" time="30.119">
+<failure message="auth.spec.ts:97:3 should logout successfully" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:97:3 › Authentication › should logout successfully ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+       98 |     // Login first
+       99 |     await loginPage.login('admin@cmo.com', 'admin123');
+    > 100 |     await page.waitForURL('/');
+          |                ^
+      101 |     
+      102 |     // Open user menu
+      103 |     await page.getByRole('button', { name: /admin/i }).click();
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:100:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication-should-logout-successfully-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication-should-logout-successfully-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication-should-logout-successfully-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication-should-logout-successfully-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should redirect to login when accessing protected routes" classname="tests/auth.spec.ts" time="30.123">
+<failure message="auth.spec.ts:113:3 should redirect to login when accessing protected routes" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:113:3 › Authentication › should redirect to login when accessing protected routes 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/login" until "load"
+    ============================================================
+
+      116 |     
+      117 |     // Should redirect to login
+    > 118 |     await page.waitForURL('/login');
+          |                ^
+      119 |     await expect(loginPage.title).toBeVisible();
+      120 |   });
+      121 |
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:118:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication--4730d--accessing-protected-routes-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication--4730d--accessing-protected-routes-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication--4730d--accessing-protected-routes-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication--4730d--accessing-protected-routes-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should handle login with Enter key" classname="tests/auth.spec.ts" time="30.101">
+<failure message="auth.spec.ts:122:3 should handle login with Enter key" type="FAILURE">
+<![CDATA[  [chromium] › tests/auth.spec.ts:122:3 › Authentication › should handle login with Enter key ──────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      128 |     
+      129 |     // Should login successfully
+    > 130 |     await page.waitForURL('/');
+          |                ^
+      131 |     await expect(page.getByText(/Centro de Monitoreo de Operaciones/i)).toBeVisible();
+      132 |   });
+      133 | });
+        at /Users/cheva/Coding/cmo3/e2e/tests/auth.spec.ts:130:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tests-auth-Authentication-should-handle-login-with-Enter-key-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/tests-auth-Authentication-should-handle-login-with-Enter-key-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|tests-auth-Authentication-should-handle-login-with-Enter-key-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|tests-auth-Authentication-should-handle-login-with-Enter-key-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,22 +1,6 @@
 import React from 'react';
-import { 
-  Card, 
-  CardHeader, 
-  CardContent, 
-  CardFooter,
-  Tabs,
-  StatusBadge,
-  Badge,
-  BadgeGroup,
-  InfoRow,
-  InfoGrid,
-  AlertsPanel,
-  TransitCard,
-  EmptyState,
-  LoadingState,
-  MapModule
-} from '../index';
-import { Package, Truck, AlertTriangle, Activity, MapPin } from 'lucide-react';
+import {Card, CardHeader, CardContent, _CardFooter, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index';
+import {_Package, _Truck, _AlertTriangle, Activity, _MapPin} from 'lucide-react';
 
 /**
  * This example demonstrates how to compose the modular UI components

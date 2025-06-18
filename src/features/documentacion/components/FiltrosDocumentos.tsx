@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Filter, Calendar, Building2, Star, Lock, RotateCcw } from 'lucide-react';
+import {Search, _Filter, _Calendar, Building2, Star, Lock, RotateCcw} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { FiltrosDocumentos, TipoDocumento } from '../types';
 import { TIPOS_DOCUMENTO, FILTROS_DEFAULT } from '../types';
@@ -17,7 +17,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
   empresas,
   className
 }) => {
-  const handleChange = (key: keyof FiltrosDocumentos, value: any) => {
+  const handleChange = (key: keyof FiltrosDocumentos, value: unknown) => {
     onFiltrosChange({
       ...filtros,
       [key]: value

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {_useState, _useEffect} from 'react';
 import { authService } from '../services/shared/auth.service';
 import type { Usuario } from '../types';
 
@@ -38,7 +38,7 @@ export function useAuth(): UseAuthReturn {
     try {
       const user = await authService.login(email, password);
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   };
@@ -63,7 +63,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
   isLoading: boolean;
   user: Usuario | null;
 } {
-  const { user, isAuthenticated, isLoading, hasRole } = useAuth();
+  const {_user, _isAuthenticated, _isLoading, _hasRole} = useAuth();
   
   const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(requiredRoles));
   
@@ -76,7 +76,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
 
 // Hook for user info
 export function useUserInfo() {
-  const { user } = useAuth();
+  const {_user} = useAuth();
   
   return {
     name: user?.nombre || 'Usuario',

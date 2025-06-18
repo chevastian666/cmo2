@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import {_useEffect, useRef, _useCallback} from 'react';
 
 interface UsePollingOptions {
   interval?: number;
@@ -16,12 +16,8 @@ export function usePolling(
   callback: () => void | Promise<void>,
   options: UsePollingOptions = {}
 ) {
-  const {
-    interval = 45000, // 45 segundos por defecto
-    enabled = true,
-    onError,
-    immediateFirstCall = true
-  } = options;
+  const {_interval = 45000, _// 45 segundos por defecto
+    enabled = true, _onError, _immediateFirstCall = true} = options;
 
   const savedCallback = useRef(callback);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
@@ -35,8 +31,8 @@ export function usePolling(
   const executeCallback = useCallback(async () => {
     try {
       await savedCallback.current();
-    } catch (error) {
-      console.error('Error during polling:', error);
+    } catch (_error) {
+      console.error('Error during polling:', _error);
       onError?.(error as Error);
     }
   }, [onError]);
@@ -158,8 +154,8 @@ export function usePollingWithDiff<T extends { id: string }>(
           console.log(`[Polling] ${diff.removed.length} items eliminados`);
         }
       }
-    } catch (error) {
-      console.error('Error fetching data during polling:', error);
+    } catch (_error) {
+      console.error('Error fetching data during polling:', _error);
       options.onError?.(error as Error);
     }
   }, [fetchData, currentData, onDataChange, options]);

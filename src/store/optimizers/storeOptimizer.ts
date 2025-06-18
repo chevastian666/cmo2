@@ -90,7 +90,7 @@ export class StoreOptimizer<T extends object> {
   /**
    * Compare values for equality
    */
-  private areEqual(a: any, b: any): boolean {
+  private areEqual(a: unknown, b: unknown): boolean {
     // Same reference
     if (a === b) return true;
 

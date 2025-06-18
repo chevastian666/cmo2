@@ -3,24 +3,15 @@ import { RadialMenu } from '../components/RadialMenu/RadialMenu';
 import { SmartClipboard } from '../components/SmartClipboard/SmartClipboard';
 import { useClipboard } from '../hooks/useClipboard';
 import { useRadialMenuStore } from '../stores/radialMenuStore';
-import {
-  LockClosedIcon,
-  BellIcon,
-  DocumentTextIcon,
-  MapPinIcon,
-  ChartBarIcon,
-  CameraIcon,
-  TruckIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/react/24/outline';
+import {LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline';
 
 export const UXEnhancementsDemo: React.FC = () => {
   const [radialMenuOpen, setRadialMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null);
   
-  const { copyToClipboard } = useClipboard();
-  const { setUserPermissions } = useRadialMenuStore();
+  const {_copyToClipboard} = useClipboard();
+  const {_setUserPermissions} = useRadialMenuStore();
 
   // Simular datos de precintos
   const precintos = [
@@ -50,7 +41,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'lock',
       label: 'Bloquear Precinto',
       icon: LockClosedIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         console.log('Bloqueando precinto:', context.precintoId);
         copyToClipboard(`BLOQUEO: Precinto ${context.precintoId} bloqueado`, {
           source: 'radial-menu',
@@ -66,7 +57,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'alert',
       label: 'Crear Alerta',
       icon: BellIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         const alertId = Math.floor(Math.random() * 10000);
         console.log('Creando alerta para:', context.precintoId);
         copyToClipboard(`ALERTA #${alertId}: Precinto ${context.precintoId} - SEVERIDAD: ALTA`, {
@@ -83,7 +74,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'report',
       label: 'Generar Reporte',
       icon: DocumentTextIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         const reportNum = Math.floor(Math.random() * 1000);
         console.log('Generando reporte:', context.precintoId);
         copyToClipboard(
@@ -99,7 +90,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'location',
       label: 'Ver Ubicación',
       icon: MapPinIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         const precinto = precintos.find(p => p.id === context.precintoId);
         if (precinto) {
           copyToClipboard(
@@ -116,7 +107,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'stats',
       label: 'Ver Estadísticas',
       icon: ChartBarIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         console.log('Mostrando estadísticas:', context.precintoId);
       },
       color: 'bg-purple-600 hover:bg-purple-500',
@@ -127,7 +118,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       id: 'photo',
       label: 'Tomar Foto',
       icon: CameraIcon,
-      action: (context: any) => {
+      action: (context: unknown) => {
         console.log('Tomando foto:', context.precintoId);
       },
       color: 'bg-indigo-600 hover:bg-indigo-500',

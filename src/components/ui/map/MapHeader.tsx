@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Map, 
-  Filter, 
-  Layers, 
-  Search,
-  X,
-  Building2,
-  Truck
-} from 'lucide-react';
+import {Map, _Filter, Layers, Search, _X, Building2, _Truck} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { DESPACHANTES } from '../../../constants/locations';
 
@@ -49,7 +41,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
 
-  const handleFilterChange = (key: keyof MapFilters, value: any) => {
+  const handleFilterChange = (key: keyof MapFilters, value: unknown) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFilterChange?.(newFilters);

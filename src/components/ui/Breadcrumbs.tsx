@@ -61,9 +61,9 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
     currentPath += `/${segment}`;
     
     // Check if we have a config for this exact path
-    const config = routeConfig[currentPath];
+    const _config = routeConfig[currentPath];
     
-    if (config) {
+    if (_config) {
       items.push({
         label: config.label,
         href: index === segments.length - 1 ? undefined : currentPath
@@ -76,7 +76,7 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
       });
       
       if (dynamicKey) {
-        const config = routeConfig[dynamicKey];
+        const _config = routeConfig[dynamicKey];
         items.push({
           label: config.label,
           href: index === segments.length - 1 ? undefined : currentPath

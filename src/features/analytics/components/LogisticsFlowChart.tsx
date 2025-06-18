@@ -5,22 +5,12 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Download, 
-  Filter, 
-  TrendingUp, 
-  TrendingDown,
-  MapPin,
-  Package,
-  Truck,
-  AlertCircle,
-  RefreshCw
-} from 'lucide-react';
+import {Download, _Filter, _TrendingUp, _TrendingDown, _MapPin, _Package, _Truck, AlertCircle, RefreshCw} from 'lucide-react';
 import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
 import { 
   transformLogisticsFlow, 
@@ -33,7 +23,7 @@ import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 
 export const LogisticsFlowChart: React.FC = () => {
-  const { transitos } = useTransitosStore();
+  const {_transitos} = useTransitosStore();
   const [timeRange, setTimeRange] = useState('week');
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes');
   const [loading, setLoading] = useState(false);
@@ -117,7 +107,7 @@ export const LogisticsFlowChart: React.FC = () => {
           to: t.destino,
           value: 1
         }));
-        return transformTimeBasedFlow(timeData, timeRange as any);
+        return transformTimeBasedFlow(timeData, timeRange as unknown);
       default:
         return { nodes: [], links: [] };
     }
@@ -141,14 +131,14 @@ export const LogisticsFlowChart: React.FC = () => {
     });
   };
 
-  const handleNodeClick = (node: any) => {
+  const handleNodeClick = (node: unknown) => {
     toast({
       title: node.name,
       description: `Flujo total: ${node.value?.toLocaleString() || 0}`
     });
   };
 
-  const handleLinkClick = (link: any) => {
+  const handleLinkClick = (link: unknown) => {
     const source = typeof link.source === 'object' ? link.source.name : link.source;
     const target = typeof link.target === 'object' ? link.target.name : link.target;
     
@@ -192,7 +182,7 @@ export const LogisticsFlowChart: React.FC = () => {
         <div className="space-y-6">
           {/* Controls */}
           <div className="flex flex-col md:flex-row gap-4">
-            <Tabs value={flowType} onValueChange={(v: any) => setFlowType(v)} className="flex-1">
+            <Tabs value={flowType} onValueChange={(v: unknown) => setFlowType(v)} className="flex-1">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="routes" className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />

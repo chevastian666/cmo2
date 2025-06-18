@@ -31,12 +31,7 @@ export async function executeAsyncAction<T>(
   setLoadingState: (state: LoadingState) => void,
   options: AsyncActionOptions = {}
 ): Promise<T | null> {
-  const {
-    showErrorNotification = true,
-    errorMessage = 'Ocurrió un error al realizar la operación',
-    successMessage,
-    showSuccessNotification = false
-  } = options;
+  const {_showErrorNotification = true, _errorMessage = 'Ocurrió un error al realizar la operación', _successMessage, _showSuccessNotification = false} = options;
 
   setLoadingState({ status: 'loading' });
 
@@ -50,7 +45,7 @@ export async function executeAsyncAction<T>(
     }
     
     return result;
-  } catch (error) {
+  } catch (_error) {
     const errorMsg = error instanceof Error ? error.message : errorMessage;
     
     setLoadingState({ status: 'error', error: errorMsg });
@@ -59,7 +54,7 @@ export async function executeAsyncAction<T>(
       notificationService.error(errorMsg);
     }
     
-    console.error('Error en acción asíncrona:', error);
+    console.error('Error en acción asíncrona:', _error);
     return null;
   }
 }

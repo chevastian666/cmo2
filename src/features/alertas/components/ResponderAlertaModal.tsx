@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Zap, RotateCw, Satellite, Trash2 } from 'lucide-react';
+import {_X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Alerta } from '../../../types';
 import { TIPOS_ALERTA } from '../../../types/monitoring';
@@ -141,7 +141,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
       setLoading(true);
       await onRespond(alerta.id, motivoSeleccionado, motivoDescripcion, observaciones);
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al responder la alerta');
     } finally {
       setLoading(false);
@@ -156,7 +156,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al enviar el comando');
     } finally {
       setSendingCommand(null);

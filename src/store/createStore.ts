@@ -36,21 +36,14 @@ export function createStore<T>(
   >,
   options: CreateStoreOptions<T>
 ) {
-  const {
-    name,
-    enableDevtools = process.env.NODE_ENV === 'development',
-    enableLogger: enableLoggerOption = process.env.NODE_ENV === 'development',
-    enableImmer: enableImmerOption = true,
-    enableSubscribeWithSelector: enableSelector = true,
-    persist: persistOptions
-  } = options;
+  const {_name, _enableDevtools = process.env.NODE_ENV === 'development', enableLogger: _enableLoggerOption = process.env.NODE_ENV === 'development', enableImmer: _enableImmerOption = true, enableSubscribeWithSelector: _enableSelector = true, persist: _persistOptions} = options;
 
   // Construir la cadena de middlewares dinámicamente
   let enhancedCreator = stateCreator;
 
   // Immer debe ser el más interno para que funcione correctamente
   if (enableImmerOption) {
-    enhancedCreator = immer(enhancedCreator) as any;
+    enhancedCreator = immer(enhancedCreator) as unknown;
   }
 
   // Logger
@@ -59,7 +52,7 @@ export function createStore<T>(
       ? { name } 
       : { name, ...enableLoggerOption };
     
-    enhancedCreator = logger(enhancedCreator, loggerConfig) as any;
+    enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown;
   }
 
   // Persist
@@ -68,17 +61,17 @@ export function createStore<T>(
       name,
       ...persistOptions
     });
-    enhancedCreator = persist(enhancedCreator, persistConfig as any) as any;
+    enhancedCreator = persist(enhancedCreator, persistConfig as unknown) as unknown;
   }
 
   // DevTools
   if (enableDevtools) {
-    enhancedCreator = devtools(enhancedCreator, { name }) as any;
+    enhancedCreator = devtools(enhancedCreator, { name }) as unknown;
   }
 
   // Subscribe with selector
   if (enableSelector) {
-    enhancedCreator = subscribeWithSelector(enhancedCreator) as any;
+    enhancedCreator = subscribeWithSelector(enhancedCreator) as unknown;
   }
 
   return create(enhancedCreator);
@@ -104,7 +97,7 @@ export function createTemporaryStore<T>(
   stateCreator: StateCreator<T>,
   name: string
 ) {
-  return createStore(stateCreator as any, {
+  return createStore(stateCreator as unknown, {
     name,
     enableDevtools: true,
     enableLogger: true,
@@ -122,7 +115,7 @@ export function createSyncedStore<T>(
   name: string,
   partialize?: (state: T) => Partial<T>
 ) {
-  const store = createStore(stateCreator as any, {
+  const store = createStore(stateCreator as unknown, {
     name,
     persist: { partialize }
   });

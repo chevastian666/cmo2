@@ -2,7 +2,7 @@ import React from 'react';
 import { formatTimeAgo } from '../../../utils/formatters';
 import type { TransitoPendiente } from '../../../types/monitoring';
 import { cn } from '../../../utils/utils';
-import { Clock, Truck, MessageSquare } from 'lucide-react';
+import {_Clock, _Truck, _MessageSquare} from 'lucide-react';
 import { THRESHOLDS } from '../../../constants';
 import { DataTable, type Column } from '../../../components/DataTable';
 
@@ -155,7 +155,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
     }
   ];
 
-  const handleExport = (data: TransitoPendiente[], format: 'csv' | 'json') => {
+  const handleExport = (_data: TransitoPendiente[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0];
     const filename = `transitos-pendientes-${timestamp}`;
     
@@ -182,7 +182,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       link.download = `${filename}.csv`;
       link.click();
     } else {
-      const jsonData = JSON.stringify(data, null, 2);
+      const jsonData = JSON.stringify(_data, null, 2);
       const blob = new Blob([jsonData], { type: 'application/json' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);

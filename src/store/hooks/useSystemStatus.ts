@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {_useEffect} from 'react';
 import { useSystemStatusStore } from '../store';
 
 export const useSystemStatus = () => {
@@ -18,7 +18,7 @@ export const useSystemStatus = () => {
     apiStats: store.apiStats,
     reportesPendientes: store.reportesPendientes,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     actions: {
       updateStatus: store.updateSystemStatus,
       refresh: store.fetchEstadisticas,

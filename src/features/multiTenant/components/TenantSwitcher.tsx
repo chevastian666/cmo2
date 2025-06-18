@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Building2, Check, ChevronDown, Plus } from 'lucide-react';
+import {Building2, Check, ChevronDown, Plus} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +22,7 @@ import { cn } from '@/utils/utils';
 import { motion } from 'framer-motion';
 
 export const TenantSwitcher: React.FC = () => {
-  const { currentTenant, tenants, switchTenant, canSwitchTenants, isLoading } = useTenantStore();
+  const {_currentTenant, _tenants, _switchTenant, _canSwitchTenants, _isLoading} = useTenantStore();
   const [open, setOpen] = useState(false);
 
   if (!currentTenant) {

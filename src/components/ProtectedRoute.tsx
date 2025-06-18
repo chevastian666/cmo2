@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { AlertTriangle } from 'lucide-react';
+import {_AlertTriangle} from 'lucide-react';
 import { useAccess } from '../hooks/useAccess';
 import type { Section, Permission } from '../types/roles';
 

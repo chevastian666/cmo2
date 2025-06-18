@@ -20,8 +20,8 @@ export const transitosService = {
       
       const response = await unifiedAPIService.getTransitosPendientesLucia(25);
       return response;
-    } catch (error) {
-      console.error('Error fetching transitos pendientes:', error);
+    } catch (_error) {
+      console.error('Error fetching transitos pendientes:', _error);
       return Array.from({ length: 12 }, (_, i) => generateMockTransito(i));
     }
   },
@@ -59,8 +59,8 @@ export const transitosService = {
         observaciones: transito.observaciones,
         vehiculo: transito.vehiculo
       }));
-    } catch (error) {
-      console.error('Error fetching all transitos:', error);
+    } catch (_error) {
+      console.error('Error fetching all transitos:', _error);
       return Array.from({ length: 20 }, (_, i) => generateMockTransito(i));
     }
   },
@@ -76,8 +76,8 @@ export const transitosService = {
       const transito = all.find(t => t.id === id);
       if (!transito) throw new Error('Transito not found');
       return transito;
-    } catch (error) {
-      console.error('Error fetching transito:', error);
+    } catch (_error) {
+      console.error('Error fetching transito:', _error);
       return generateMockTransito(parseInt(id) || 1);
     }
   },
@@ -91,8 +91,8 @@ export const transitosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (error) {
-      console.error('Error updating estado:', error);
+    } catch (_error) {
+      console.error('Error updating estado:', _error);
     }
   },
 
@@ -105,8 +105,8 @@ export const transitosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (error) {
-      console.error('Error precintando:', error);
+    } catch (_error) {
+      console.error('Error precintando:', _error);
     }
   },
 
@@ -133,8 +133,8 @@ export const transitosService = {
         precintados: 0, // Calculate from historical data
         tiempoPromedio: stats.tiempoPromedioTransito || 48
       };
-    } catch (error) {
-      console.error('Error fetching estadisticas:', error);
+    } catch (_error) {
+      console.error('Error fetching estadisticas:', _error);
       return {
         pendientes: 15,
         enProceso: 8,

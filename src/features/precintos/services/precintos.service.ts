@@ -25,7 +25,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}?${params.toString()}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching precintos:', error);
       return this.getMockPrecintos(filters);
     }
@@ -40,7 +40,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching precinto:', error);
       return null;
     }
@@ -55,7 +55,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data);
       return response.data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error updating precinto:', error);
       return false;
     }
@@ -73,13 +73,13 @@ class PrecintosService {
         ubicacion
       });
       return response.data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error assigning precinto:', error);
       return false;
     }
   }
 
-  async sendCommand(id: string, command: string, params?: any): Promise<boolean> {
+  async sendCommand(id: string, command: string, params?: unknown): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -91,7 +91,7 @@ class PrecintosService {
         params
       });
       return response.data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error sending command:', error);
       return false;
     }

@@ -40,7 +40,7 @@ export const useCamionerosStore = create<CamionerosState>()(
         try {
           const camioneros = await camionerosService.getCamioneros(filtros);
           set({ camioneros, loading: false });
-        } catch (error) {
+        } catch (_error) {
           set({ error: 'Error al cargar camioneros', loading: false });
           notificationService.error('Error', 'No se pudieron cargar los camioneros');
         }
@@ -67,31 +67,31 @@ export const useCamionerosStore = create<CamionerosState>()(
             estadisticasCamionero: estadisticas,
             loading: false
           });
-        } catch (error) {
+        } catch (_error) {
           set({ error: 'Error al cargar información del camionero', loading: false });
           notificationService.error('Error', 'No se pudo cargar la información del camionero');
         }
       },
 
-      createCamionero: async (data) => {
+      createCamionero: async (_data) => {
         set({ loading: true, error: null });
         try {
-          const nuevoCamionero = await camionerosService.createCamionero(data);
+          const nuevoCamionero = await camionerosService.createCamionero(_data);
           set(state => ({
             camioneros: [nuevoCamionero, ...state.camioneros],
             loading: false
           }));
           notificationService.success('Éxito', 'Camionero registrado correctamente');
-        } catch (error) {
+        } catch (_error) {
           set({ error: 'Error al crear camionero', loading: false });
           notificationService.error('Error', 'No se pudo registrar el camionero');
         }
       },
 
-      updateCamionero: async (documento, data) => {
+      updateCamionero: async (documento, _data) => {
         set({ loading: true, error: null });
         try {
-          const camioneroActualizado = await camionerosService.updateCamionero(documento, data);
+          const camioneroActualizado = await camionerosService.updateCamionero(documento, _data);
           if (!camioneroActualizado) {
             throw new Error('Camionero no encontrado');
           }
@@ -106,7 +106,7 @@ export const useCamionerosStore = create<CamionerosState>()(
             loading: false
           }));
           notificationService.success('Éxito', 'Camionero actualizado correctamente');
-        } catch (error) {
+        } catch (_error) {
           set({ error: 'Error al actualizar camionero', loading: false });
           notificationService.error('Error', 'No se pudo actualizar el camionero');
         }

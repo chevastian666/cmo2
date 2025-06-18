@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Monitor, Volume2, Layout, MapPin } from 'lucide-react';
+import {_X, Monitor, Volume2, Layout, _MapPin} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { ConfiguracionTV } from '../types';
 import { PUNTOS_OPERACION_TV } from '../types';

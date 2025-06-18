@@ -4,17 +4,7 @@ import { cn } from '../../../../utils/utils';
 import { useClipboardStore } from '../../stores/clipboardStore';
 import { useClipboard } from '../../hooks/useClipboard';
 import type { SmartClipboardProps, ClipboardEntry } from '../../types';
-import {
-  ClipboardIcon,
-  ClockIcon,
-  SearchIcon,
-  TrashIcon,
-  FilterIcon,
-  CheckIcon,
-  XMarkIcon,
-  DocumentDuplicateIcon,
-  TagIcon
-} from '@heroicons/react/24/outline';
+import {ClipboardIcon, ClockIcon, SearchIcon, TrashIcon, FilterIcon, CheckIcon, XMarkIcon, DocumentDuplicateIcon, TagIcon} from '@heroicons/react/24/outline';
 
 const TYPE_COLORS = {
   precinto: 'bg-blue-500',
@@ -42,23 +32,9 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
-  const {
-    searchQuery,
-    selectedType,
-    syncStatus,
-    setSearchQuery,
-    setSelectedType,
-    clearHistory,
-    removeEntry
-  } = useClipboardStore();
+  const {_searchQuery, _selectedType, _syncStatus, _setSearchQuery, _setSelectedType, _clearHistory, _removeEntry} = useClipboardStore();
   
-  const {
-    history,
-    isOpen,
-    setIsOpen,
-    copyToClipboard,
-    pasteFromHistory
-  } = useClipboard();
+  const {_history, _isOpen, _setIsOpen, _copyToClipboard, _pasteFromHistory} = useClipboard();
 
   // Position classes
   const positionClasses = {

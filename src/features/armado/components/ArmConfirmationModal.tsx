@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User } from 'lucide-react';
+import {_X, _Package, _AlertTriangle, _CheckCircle, _MapPin, _Truck, _User} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';

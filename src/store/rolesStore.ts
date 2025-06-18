@@ -169,12 +169,12 @@ export const useRolesStore = create<RolesStore>()(
         },
 
         canAccess: (section, permission = 'view') => {
-          const { currentUserRole, permissions } = get();
+          const {_currentUserRole, _permissions} = get();
           return permissions[currentUserRole][section].includes(permission);
         },
 
         canAccessForRole: (role, section, permission = 'view') => {
-          const { permissions } = get();
+          const {_permissions} = get();
           return permissions[role][section].includes(permission);
         },
 
@@ -190,7 +190,7 @@ export const useRolesStore = create<RolesStore>()(
             // set({ permissions: response.data });
             
             notificationService.success('Permisos cargados correctamente');
-          } catch (error) {
+          } catch (_error) {
             notificationService.error('Error al cargar permisos');
           } finally {
             set({ loading: false });
@@ -208,7 +208,7 @@ export const useRolesStore = create<RolesStore>()(
             // await api.savePermissions(get().permissions);
             
             notificationService.success('Permisos guardados correctamente');
-          } catch (error) {
+          } catch (_error) {
             notificationService.error('Error al guardar permisos');
           } finally {
             set({ saving: false });

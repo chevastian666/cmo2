@@ -70,7 +70,7 @@ export interface TenantSettings {
   integrations: {
     [key: string]: {
       enabled: boolean;
-      config: Record<string, any>;
+      config: Record<string, unknown>;
     };
   };
 }
@@ -167,7 +167,7 @@ export interface CustomWidget {
   id: string;
   name: string;
   type: 'chart' | 'table' | 'metric' | 'custom';
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   dataSource: string;
   refreshInterval?: number;
 }
@@ -186,12 +186,12 @@ export interface CustomWorkflow {
 export interface Condition {
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
-  value: any;
+  value: unknown;
 }
 
 export interface WorkflowAction {
   type: 'email' | 'webhook' | 'update_field' | 'create_alert' | 'assign_user';
-  config: Record<string, any>;
+  config: Record<string, unknown>;
 }
 
 export interface Invoice {

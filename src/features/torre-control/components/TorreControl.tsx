@@ -4,24 +4,12 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Truck, 
-  AlertTriangle, 
-  CheckCircle, 
-  XCircle, 
-  Clock,
-  MapPin,
-  User,
-  RefreshCw,
-  Filter,
-  ChevronRight,
-  Activity
-} from 'lucide-react';
+import {_Truck, _AlertTriangle, _CheckCircle, _XCircle, _Clock, _MapPin, _User, RefreshCw, _Filter, ChevronRight, Activity} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { Card } from '../../../components/ui';
 import { TransitoRow } from './TransitoRow';
 import { TransitoDetailModal } from './TransitoDetailModal';
-import { TorreControlFilters } from './TorreControlFilters';
+import {TorreControlFilters} from './TorreControlFilters';
 import { TorreControlHeader } from './TorreControlHeader';
 import { CountdownTimer } from './CountdownTimer';
 import { CongestionPanel } from '../../prediccion';
@@ -37,7 +25,7 @@ interface TorreControlProps {
 export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   const [transitos, setTransitos] = useState<TransitoTorreControl[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
   const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showCongestionPanel, setShowCongestionPanel] = useState(true);
@@ -55,8 +43,8 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       setLoading(true);
       setError(null);
       
-      const data = await torreControlService.getTransitosEnRuta();
-      setTransitos(data);
+      const _data = await torreControlService.getTransitosEnRuta();
+      setTransitos(_data);
       setLastUpdate(new Date());
       
       // Mock data fallback (remove this when API is ready)
@@ -162,7 +150,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
         ];
         setTransitos(mockData);
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Error al cargar los tránsitos');
       console.error('Error fetching transitos:', err);
     } finally {

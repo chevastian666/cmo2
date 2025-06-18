@@ -4,9 +4,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Truck, Download, MapPin } from 'lucide-react';
+import {_Truck, Download, _MapPin} from 'lucide-react';
 import { TransitTable } from '../components/TransitTable';
-import { TransitFilters } from '../components/TransitFilters';
+import {TransitFilters} from '../components/TransitFilters';
 import { TransitDetailModalEnhanced as TransitDetailModal } from '../components/TransitoDetailModalEnhanced';
 import { EditTransitoModal } from '../components/EditTransitoModal';
 import { notificationService } from '../../../services/shared/notification.service';
@@ -48,7 +48,7 @@ export const TransitosPage: React.FC = () => {
       setLoading(true);
       
       // Build filters object for API
-      const apiFilters: Record<string, any> = {};
+      const apiFilters: Record<string, unknown> = {};
       Object.entries(filters).forEach(([key, value]) => {
         if (value && value !== '') {
           apiFilters[key] = value;
@@ -63,10 +63,10 @@ export const TransitosPage: React.FC = () => {
         filters: apiFilters
       });
       
-      setTransitos(response.data);
+      setTransitos(response._data);
       setTotalTransitos(response.total);
-    } catch (error) {
-      console.error('Error loading transitos:', error);
+    } catch (_error) {
+      console.error('Error loading transitos:', _error);
       notificationService.error('Error', 'No se pudieron cargar los tránsitos');
     } finally {
       setLoading(false);
@@ -140,7 +140,7 @@ export const TransitosPage: React.FC = () => {
       await transitosService.markDesprecintado(transito.id);
       notificationService.success('Éxito', `Tránsito ${transito.dua} marcado como desprecintado`);
       loadTransitos();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo actualizar el tránsito');
     }
   };
@@ -155,7 +155,7 @@ export const TransitosPage: React.FC = () => {
     downloadCSV(csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`);
   };
 
-  const generateCSV = (data: Transito[]) => {
+  const generateCSV = (_data: Transito[]) => {
     const headers = ['DUA', 'Precinto', 'Estado', 'Fecha Salida', 'ETA', 'Origen', 'Destino', 'Empresa', 'Encargado'];
     const rows = data.map(t => [
       t.dua,

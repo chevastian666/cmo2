@@ -5,14 +5,10 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { 
-  MapPin, Search, Navigation, ExternalLink, Map, 
-  ChevronDown, ChevronRight, Truck, Info, Clock,
-  Filter, Download, Star, Coffee, Fuel
-} from 'lucide-react';
+import {_MapPin, Search, Navigation, ExternalLink, Map, ChevronDown, ChevronRight, _Truck, Info, _Clock, _Filter, Download, Star, Coffee, Fuel} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -37,13 +33,7 @@ import { zonasDescansoData } from '../data/zonasDescansoData';
 import type { RutaZonas, ZonaDescanso } from '../data/zonasDescansoData';
 import { InteractiveMap } from '@/components/maps/InteractiveMap';
 import type { MapMarker, MapRoute } from '@/components/maps/InteractiveMap';
-import { 
-  staggerContainer, 
-  staggerItem,
-  fadeInUp,
-  scaleIn,
-  slideInRight
-} from '@/components/animations/AnimationPresets';
+import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
 
 export const ZonasDescansoPageV2: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -103,7 +93,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
   };
 
   const exportData = () => {
-    const data = zonasDescansoData.flatMap(ruta => 
+    const _data = zonasDescansoData.flatMap(ruta => 
       ruta.zonas.map(zona => ({
         Ruta: ruta.ruta,
         Ubicación: zona.ubicacion,
@@ -305,7 +295,7 @@ const RutasListView: React.FC<{
   highlightedZone: string | null;
   onHighlightZone: (zone: string | null) => void;
   searchTerm: string;
-}> = ({ data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
+}> = ({ _data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
   if (data.length === 0) {
     return (
       <Card>
@@ -502,8 +492,8 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       
       // Default to center of Uruguay
       return { lat: -32.5228, lng: -55.7658 };
-    } catch (error) {
-      console.error('Error extracting coordinates:', error);
+    } catch (_error) {
+      console.error('Error extracting coordinates:', _error);
       return null;
     }
   };

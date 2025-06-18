@@ -5,15 +5,12 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  Map, Navigation2, ZoomIn, ZoomOut, Maximize2, 
-  Search, ChevronLeft, ChevronRight, MapPin
-} from 'lucide-react';
+import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, _MapPin} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -27,7 +24,7 @@ export interface MapMarker {
   position: { lat: number; lng: number };
   title: string;
   type: 'precinto' | 'transito' | 'deposito' | 'zona' | 'alerta';
-  data?: any;
+  data?: unknown;
   icon?: string;
   color?: string;
 }

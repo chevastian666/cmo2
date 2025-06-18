@@ -5,16 +5,11 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Truck, AlertTriangle, CheckCircle, XCircle, Clock, MapPin, User,
-  RefreshCw, Filter, ChevronRight, Activity, Monitor, Zap, Radio,
-  Gauge, TrendingUp, Shield, Eye, Maximize2, Minimize2, Settings,
-  Layout, Save, RotateCcw
-} from 'lucide-react';
+import {_Truck, _AlertTriangle, _CheckCircle, _XCircle, _Clock, _MapPin, _User, RefreshCw, _Filter, ChevronRight, Activity, Monitor, Zap, _Radio, Gauge, _TrendingUp, Shield, Eye, Maximize2, Minimize2, _Settings, Layout, Save, RotateCcw} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -47,14 +42,7 @@ import { CountdownTimer } from './CountdownTimer';
 import { TransitoDetailModal } from './TransitoDetailModal';
 import { MapWidget } from './MapWidget';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { 
-  staggerContainer, 
-  staggerItem,
-  fadeInUp,
-  scaleIn,
-  pulseVariants,
-  alertCriticalVariants
-} from '@/components/animations/AnimationPresets';
+import {staggerContainer, staggerItem, fadeInUp, scaleIn, pulseVariants, alertCriticalVariants} from '@/components/animations/AnimationPresets';
 
 // Dashboard Grid Layout
 import { Responsive, WidthProvider } from 'react-grid-layout';
@@ -323,9 +311,9 @@ export const TorreControlV2: React.FC = () => {
   const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both');
   const [lastUpdate, setLastUpdate] = useState(new Date());
   
-  const { alertasActivas } = useAlertasStore();
-  const { precintosActivos } = usePrecintosStore();
-  const { layouts, setLayouts, resetLayouts: resetDashboardLayouts } = useDashboardStore();
+  const {_alertasActivas} = useAlertasStore();
+  const {_precintosActivos} = usePrecintosStore();
+  const {_layouts, _setLayouts, resetLayouts: _resetDashboardLayouts} = useDashboardStore();
 
   const [filters, setFilters] = useState({
     origen: '',
@@ -365,7 +353,7 @@ export const TorreControlV2: React.FC = () => {
       const data = await torreControlService.getTransitosEnRuta();
       setTransitos(data);
       setLastUpdate(new Date());
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching transitos:', error);
     } finally {
       setLoading(false);
@@ -401,7 +389,7 @@ export const TorreControlV2: React.FC = () => {
     return filtered;
   }, [transitos, filters]);
 
-  const handleLayoutChange = (layout: any, newLayouts: any) => {
+  const handleLayoutChange = (layout: unknown, newLayouts: unknown) => {
     if (!isEditMode) return;
     setLayouts(newLayouts);
   };
@@ -499,7 +487,7 @@ export const TorreControlV2: React.FC = () => {
                 Filtros
               </AnimatedButton>
 
-              <Select value={selectedView} onValueChange={(v: any) => setSelectedView(v)}>
+              <Select value={selectedView} onValueChange={(v: unknown) => setSelectedView(v)}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -574,7 +562,7 @@ export const TorreControlV2: React.FC = () => {
                     />
                     <Select 
                       value={filters.estado} 
-                      onValueChange={(v) => setFilters(prev => ({ ...prev, estado: v as any }))}
+                      onValueChange={(v) => setFilters(prev => ({ ...prev, estado: v as unknown }))}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Estado semáforo" />

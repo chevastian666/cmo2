@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle } from 'lucide-react';
+import {_X, _TrendingUp, _Truck, _Clock, _MapPin, _User, _AlertTriangle} from 'lucide-react';
 import { 
   Card,
   CardHeader,

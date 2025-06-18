@@ -4,17 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  X, 
-  Unlock, 
-  RotateCcw, 
-  Zap, 
-  Clock, 
-  Compass, 
-  Trash2,
-  Send,
-  AlertTriangle
-} from 'lucide-react';
+import {_X, Unlock, RotateCcw, Zap, _Clock, Compass, Trash2, Send, _AlertTriangle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { notificationService } from '../../../services/shared/notification.service';
 import type { PrecintoActivo } from '../../../types/monitoring';
@@ -133,7 +123,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
       });
       
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error(
         `Error al enviar comando: ${error instanceof Error ? error.message : 'Error desconocido'}`
       );

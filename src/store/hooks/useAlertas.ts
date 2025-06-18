@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {_useEffect, _useState} from 'react';
 import { useAlertasStore } from '../store';
 import type { AlertaExtendida } from '../../types';
 
@@ -15,7 +15,7 @@ export const useAlertas = () => {
   return {
     alertas: store.alertas,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     filter: store.filter,
     actions: {
       addAlerta: store.addAlerta,
@@ -41,7 +41,7 @@ export const useAlertasActivas = () => {
   return {
     alertas: store.alertasActivas,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     count: store.alertasActivas.length,
     actions: {
       atenderAlerta: store.atenderAlerta,
@@ -72,10 +72,10 @@ export const useAlertaExtendida = (id: string) => {
     const fetchAlerta = async () => {
       setLoading(true);
       try {
-        const data = await store.fetchAlertaExtendida(id);
-        setAlertaExtendida(data);
-      } catch (error) {
-        console.error('Error fetching extended alert:', error);
+        const _data = await store.fetchAlertaExtendida(id);
+        setAlertaExtendida(_data);
+      } catch (_error) {
+        console.error('Error fetching extended alert:', _error);
       } finally {
         setLoading(false);
       }
@@ -107,8 +107,8 @@ export const useAlertaExtendida = (id: string) => {
       resolver: (tipo: string, descripcion: string, acciones?: string[]) => 
         store.resolverAlerta(id, tipo, descripcion, acciones),
       refresh: async () => {
-        const data = await store.fetchAlertaExtendida(id);
-        setAlertaExtendida(data);
+        const _data = await store.fetchAlertaExtendida(id);
+        setAlertaExtendida(_data);
       }
     }
   };

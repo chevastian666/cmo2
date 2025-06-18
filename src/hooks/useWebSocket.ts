@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import {_useEffect, useRef, _useCallback} from 'react';
 import { sharedWebSocketService } from '../services/shared/sharedWebSocket.service';
 import { useConnectionStatus } from './useSharedState';
 
@@ -10,12 +10,7 @@ interface UseWebSocketOptions {
 }
 
 export function useWebSocket(options: UseWebSocketOptions = {}) {
-  const { 
-    onConnect, 
-    onDisconnect, 
-    onReconnect, 
-    autoConnect = true 
-  } = options;
+  const {_onConnect, _onDisconnect, _onReconnect, _autoConnect = true} = options;
   
   const connectionStatus = useConnectionStatus();
   const previousStatus = useRef(connectionStatus);
@@ -49,7 +44,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     }
   }, [connectionStatus, onConnect, onDisconnect, onReconnect]);
 
-  const send = useCallback((type: string, data: any) => {
+  const send = useCallback((type: string, data: unknown) => {
     sharedWebSocketService.send(type, data);
   }, []);
 
@@ -74,7 +69,7 @@ export function useWebSocketEvent<T = any>(
   handlerRef.current = handler;
 
   useEffect(() => {
-    const wrappedHandler = (data: T) => {
+    const wrappedHandler = (_data: T) => {
       handlerRef.current(data);
     };
 
@@ -85,42 +80,42 @@ export function useWebSocketEvent<T = any>(
 
 // Typed event hooks
 export function useTransitUpdates(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('transit_update', handler, deps);
 }
 
 export function usePrecintoUpdates(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('precinto_update', handler, deps);
 }
 
 export function useAlertUpdates(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('alert_new', handler, deps);
 }
 
 export function useSystemUpdates(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('system_update', handler, deps);
 }
 
 export function useCMOMessages(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('cmo_message', handler, deps);
 }
 
 export function useVehicleTracking(
-  handler: (data: any) => void,
+  handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('truck_position', handler, deps);

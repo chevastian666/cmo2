@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Shield, TrendingUp, Clock, Users, CheckCircle, History } from 'lucide-react';
+import {_AlertTriangle, Shield, _TrendingUp, _Clock, _Users, _CheckCircle, History} from 'lucide-react';
 import { AlertsTable } from '../components/AlertsTable';
 import { HistorialAlertasCriticasModal } from '../components/HistorialAlertasCriticasModal';
 import { useAlertasStore } from '../../../store';

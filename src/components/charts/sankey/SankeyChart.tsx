@@ -241,7 +241,7 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
           links
             .transition()
             .duration(200)
-            .attr('opacity', (l: any) => {
+            .attr('opacity', (l: unknown) => {
               return (l.source as SankeyNode).id === (d as SankeyNode).id || 
                      (l.target as SankeyNode).id === (d as SankeyNode).id ? 0.8 : 0.2;
             });

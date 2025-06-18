@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {_useEffect} from 'react';
 import { usePrecintosStore } from '../store';
 
 export const usePrecintos = () => {
@@ -14,7 +14,7 @@ export const usePrecintos = () => {
   return {
     precintos: store.precintos,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     actions: {
       updatePrecinto: store.updatePrecinto,
       removePrecinto: store.removePrecinto,
@@ -36,7 +36,7 @@ export const usePrecintosActivos = () => {
   return {
     precintos: store.precintosActivos,
     loading: store.loading,
-    error: store.error,
+    error: store._error,
     actions: {
       updatePrecinto: store.updatePrecinto,
       refresh: store.fetchPrecintosActivos,

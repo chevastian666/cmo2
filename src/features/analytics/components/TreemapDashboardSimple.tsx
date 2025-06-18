@@ -9,13 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TreemapChart } from '@/components/charts/treemap/TreemapChart';
 import { usePrecintosStore, useTransitosStore, useAlertasStore } from '@/store/store';
-import { Package, Truck, AlertTriangle } from 'lucide-react';
+import {_Package, _Truck, _AlertTriangle} from 'lucide-react';
 
 const TreemapDashboardSimple: React.FC = () => {
   const [activeTab, setActiveTab] = useState('precintos');
-  const { precintos } = usePrecintosStore();
-  const { transitos } = useTransitosStore();
-  const { alertas } = useAlertasStore();
+  const {_precintos} = usePrecintosStore();
+  const {_transitos} = useTransitosStore();
+  const {_alertas} = useAlertasStore();
 
   // Transform precintos data
   const precintosData = useMemo(() => {

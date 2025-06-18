@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import {_useMemo} from 'react';
 import { useRolesStore } from '../store/rolesStore';
 import type { Section, Permission } from '../types/roles';
 
@@ -42,10 +42,10 @@ export function useAccessForRole(role: string, section: Section): AccessPermissi
   const canAccessForRole = useRolesStore(state => state.canAccessForRole);
   
   return useMemo(() => ({
-    canView: canAccessForRole(role as any, section, 'view'),
-    canCreate: canAccessForRole(role as any, section, 'create'),
-    canEdit: canAccessForRole(role as any, section, 'edit'),
-    canDelete: canAccessForRole(role as any, section, 'delete'),
-    hasAccess: canAccessForRole(role as any, section, 'view')
+    canView: canAccessForRole(role as unknown, section, 'view'),
+    canCreate: canAccessForRole(role as unknown, section, 'create'),
+    canEdit: canAccessForRole(role as unknown, section, 'edit'),
+    canDelete: canAccessForRole(role as unknown, section, 'delete'),
+    hasAccess: canAccessForRole(role as unknown, section, 'view')
   }), [role, section, canAccessForRole]);
 }

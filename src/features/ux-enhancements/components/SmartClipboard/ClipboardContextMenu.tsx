@@ -20,9 +20,9 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
   position,
   onClose
 }) => {
-  const { copyToClipboard } = useClipboard();
+  const {_copyToClipboard} = useClipboard();
 
-  const handleCopy = async (context: string) => {
+  const handleCopy = async (_context: string) => {
     await copyToClipboard(selection, {
       source: 'context-menu',
       context: { action: context }

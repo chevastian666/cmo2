@@ -1,13 +1,13 @@
 import { SHARED_CONFIG } from '../../config/shared.config';
 import { jwtService } from '../jwt.service';
 
-type EventCallback = (data: any) => void;
+type EventCallback = (data: unknown) => void;
 type ConnectionCallback = (status: 'connected' | 'disconnected' | 'reconnecting') => void;
 
 interface QueuedMessage {
   id: string;
   type: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   retries: number;
 }
@@ -60,7 +60,7 @@ export class SharedWebSocketService {
       this.ws = new WebSocket(this.url);
       this.setupEventListeners();
       this.updateConnectionState('reconnecting');
-    } catch (error) {
+    } catch (_error) {
       console.error('WebSocket connection error:', error);
       // Fall back to simulation mode
       if (SHARED_CONFIG.IS_DEVELOPMENT) {
@@ -102,7 +102,7 @@ export class SharedWebSocketService {
       try {
         const message = JSON.parse(event.data);
         this.handleMessage(message);
-      } catch (error) {
+      } catch (_error) {
         console.error('Failed to parse WebSocket message:', error);
       }
     };
@@ -120,8 +120,8 @@ export class SharedWebSocketService {
     };
   }
 
-  private handleMessage(message: any): void {
-    const { type, data, id, timestamp } = message;
+  private handleMessage(message: unknown): void {
+    const {_type, _data, _id, _timestamp} = message;
 
     // Handle system messages
     switch (type) {
@@ -202,7 +202,7 @@ export class SharedWebSocketService {
   }
 
   // Message handling
-  send(type: string, data: any = {}): void {
+  send(type: string, data: unknown = {}): void {
     const message = {
       id: this.generateMessageId(),
       type,
@@ -213,7 +213,7 @@ export class SharedWebSocketService {
     if (this.isConnected() && this.isAuthenticated) {
       try {
         this.ws!.send(JSON.stringify(message));
-      } catch (error) {
+      } catch (_error) {
         console.error('Failed to send message:', error);
         this.queueMessage(message);
       }
@@ -240,7 +240,7 @@ export class SharedWebSocketService {
     for (const message of messages) {
       try {
         this.ws!.send(JSON.stringify(message));
-      } catch (error) {
+      } catch (_error) {
         if (message.retries < 3) {
           message.retries++;
           this.messageQueue.push(message);
@@ -292,14 +292,14 @@ export class SharedWebSocketService {
     }
   }
 
-  private emitEvent(event: string, data: any): void {
+  private emitEvent(event: string, data: unknown): void {
     // Emit to specific event listeners
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       listeners.forEach(callback => {
         try {
           callback(data);
-        } catch (error) {
+        } catch (_error) {
           console.error(`Error in event listener for ${event}:`, error);
         }
       });
@@ -309,7 +309,7 @@ export class SharedWebSocketService {
     this.globalListeners.forEach(callback => {
       try {
         callback({ type: event, data });
-      } catch (error) {
+      } catch (_error) {
         console.error('Error in global event listener:', error);
       }
     });
@@ -438,40 +438,40 @@ export class SharedWebSocketService {
   }
 
   // Typed event methods for common operations
-  emitTransitUpdate(transitId: string, data: any): void {
+  emitTransitUpdate(transitId: string, data: unknown): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, { transitId, ...data });
   }
 
-  emitPrecintoUpdate(precintoId: string, data: any): void {
+  emitPrecintoUpdate(precintoId: string, data: unknown): void {
     this.send(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, { precintoId, ...data });
   }
 
-  emitAlertUpdate(alertId: string, data: any): void {
+  emitAlertUpdate(alertId: string, data: unknown): void {
     this.send(SHARED_CONFIG.WS_EVENTS.ALERT_UPDATE, { alertId, ...data });
   }
 
-  emitTruckPosition(truckId: string, position: any): void {
+  emitTruckPosition(truckId: string, position: unknown): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRUCK_POSITION, { truckId, position });
   }
 
-  emitCMOMessage(message: any): void {
+  emitCMOMessage(message: unknown): void {
     this.send(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, message);
   }
 
   // Subscribe to typed events
-  onTransitUpdate(callback: (data: any) => void): () => void {
+  onTransitUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, callback);
   }
 
-  onPrecintoUpdate(callback: (data: any) => void): () => void {
+  onPrecintoUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, callback);
   }
 
-  onAlertNew(callback: (data: any) => void): () => void {
+  onAlertNew(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.ALERT_NEW, callback);
   }
 
-  onSystemUpdate(callback: (data: any) => void): () => void {
+  onSystemUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.SYSTEM_UPDATE, callback);
   }
 }

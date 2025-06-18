@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Search, Filter, Download, Building2 } from 'lucide-react';
+import {Plus, Search, _Filter, Download, Building2} from 'lucide-react';
 import { DepositoTable } from '../components/DepositoTable';
-import { DepositoFilters } from '../components/DepositoFilters';
+import {DepositoFilters} from '../components/DepositoFilters';
 import { DepositoDetailModal } from '../components/DepositoDetailModal';
 import { DepositoFormModal } from '../components/DepositoFormModal';
 import { useDepositosStore } from '../../../store/useDepositosStore';
@@ -9,7 +9,7 @@ import { exportToCSV } from '../../../utils/export';
 import type { Deposito } from '../types';
 
 export const DepositosPage: React.FC = () => {
-  const { depositos, loading, addDeposito, updateDeposito } = useDepositosStore();
+  const {_depositos, _loading, _addDeposito, _updateDeposito} = useDepositosStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
@@ -38,7 +38,7 @@ export const DepositosPage: React.FC = () => {
   }, [depositos, searchTerm, filters]);
 
   const handleExport = () => {
-    const data = filteredDepositos.map(d => ({
+    const _data = filteredDepositos.map(d => ({
       Código: d.codigo,
       Nombre: d.nombre,
       Alias: d.alias,
@@ -50,7 +50,7 @@ export const DepositosPage: React.FC = () => {
       'Tránsitos Activos': d.transitosActivos,
       Estado: d.estado
     }));
-    exportToCSV(data, 'depositos');
+    exportToCSV(_data, 'depositos');
   };
 
   const handleView = (deposito: Deposito) => {
@@ -68,9 +68,9 @@ export const DepositosPage: React.FC = () => {
     setShowForm(true);
   };
 
-  const handleSave = (data: Partial<Deposito>) => {
+  const handleSave = (_data: Partial<Deposito>) => {
     if (editingDeposito) {
-      updateDeposito(editingDeposito.id, data);
+      updateDeposito(editingDeposito.id, _data);
     } else {
       addDeposito(data as Omit<Deposito, 'id'>);
     }

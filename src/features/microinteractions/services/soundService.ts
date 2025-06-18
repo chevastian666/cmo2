@@ -33,9 +33,9 @@ class ASMRSoundService {
 
   private initializeAudioContext() {
     try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    } catch (error) {
-      console.warn('Web Audio API not supported:', error);
+      this.audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
+    } catch (_error) {
+      console.warn('Web Audio API not supported:', _error);
     }
   }
 
@@ -58,7 +58,7 @@ class ASMRSoundService {
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
         this.sounds.set(name, audioBuffer);
-      } catch (error) {
+      } catch (_error) {
         // Silently fail in production, only log in development
         if (process.env.NODE_ENV === 'development') {
           console.debug(`Sound ${name} not available`);
@@ -70,7 +70,7 @@ class ASMRSoundService {
   private loadConfig() {
     const savedConfig = localStorage.getItem('asmr-sound-config');
     if (savedConfig) {
-      this.config = { ...this.config, ...JSON.parse(savedConfig) };
+      this.config = { ...this._config, ...JSON.parse(savedConfig) };
     }
 
     // Check system preference
@@ -83,8 +83,8 @@ class ASMRSoundService {
   }
 
   saveConfig(updates: Partial<SoundConfig>) {
-    this.config = { ...this.config, ...updates };
-    localStorage.setItem('asmr-sound-config', JSON.stringify(this.config));
+    this.config = { ...this._config, ...updates };
+    localStorage.setItem('asmr-sound-config', JSON.stringify(this._config));
   }
 
   async play(soundName: string, options?: { volume?: number; pitch?: number }) {
@@ -117,8 +117,8 @@ class ASMRSoundService {
       source.detune.setValueAtTime(detune, this.audioContext.currentTime);
 
       source.start();
-    } catch (error) {
-      console.warn('Error playing sound:', error);
+    } catch (_error) {
+      console.warn('Error playing sound:', _error);
     }
   }
 

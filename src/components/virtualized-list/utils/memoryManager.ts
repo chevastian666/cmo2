@@ -161,8 +161,8 @@ export class MemoryMonitor {
   private maxMeasurements: number = 100;
 
   measure(): number {
-    if ('memory' in performance && (performance as any).memory) {
-      const memory = (performance as any).memory;
+    if ('memory' in performance && (performance as unknown).memory) {
+      const memory = (performance as unknown).memory;
       const usage = memory.usedJSHeapSize / memory.totalJSHeapSize;
       
       this.measurements.push(usage);

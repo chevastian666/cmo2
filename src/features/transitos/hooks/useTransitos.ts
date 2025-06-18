@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { transitosService, type TransitoFilters } from '../../../services/transitos.service';
+import {transitosService, type TransitoFilters} from '../../../services/transitos.service';
 import { QUERY_KEYS } from '../../../config';
 
 export const useTransitosPendientes = (filters?: TransitoFilters) => {

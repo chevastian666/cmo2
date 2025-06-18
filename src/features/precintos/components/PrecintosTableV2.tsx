@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { 
-  MoreHorizontal, 
-  ArrowUpDown, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Link2,
-  Battery,
-  Wifi,
-  MapPin,
-  AlertTriangle,
-  CheckCircle
-} from 'lucide-react';
+import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, _Wifi, _MapPin, _AlertTriangle, _CheckCircle} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -157,7 +145,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
           'secondary';
         
         return (
-          <Badge variant={variant as any}>
+          <Badge variant={variant as unknown}>
             {estado === 'ACTIVO' && <CheckCircle className="mr-1 h-3 w-3" />}
             {estado === 'ALERTA' && <AlertTriangle className="mr-1 h-3 w-3" />}
             {estado}

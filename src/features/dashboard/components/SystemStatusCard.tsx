@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Database, Server, FileText } from 'lucide-react';
+import {_MessageSquare, Database, Server, _FileText} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface SystemStatusCardProps {

@@ -5,17 +5,12 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  FileText, Download, TrendingUp, Plus, Filter, Search,
-  Calendar, Clock, AlertCircle, CheckCircle, Eye, MessageSquare,
-  Paperclip, Building2, User, Hash, Activity, ChevronRight,
-  X, Upload, Loader, Star, Bell, Flag
-} from 'lucide-react';
+import {_FileText, Download, _TrendingUp, Plus, _Filter, Search, _Calendar, _Clock, AlertCircle, _CheckCircle, Eye, _MessageSquare, Paperclip, Building2, _User, _Hash, Activity, ChevronRight, _X, Upload, Loader, Star, Bell, Flag} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
@@ -40,20 +35,13 @@ import {
 } from '@/components/animations/AnimatedComponents';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNovedadesStore } from '@/store/novedadesStore';
-import { useUserInfo } from '@/hooks/useAuth';
+import {useUserInfo} from '@/hooks/useAuth';
 import { notificationService } from '@/services/shared/notification.service';
 import { exportToCSV } from '@/utils/export';
 import { cn } from '@/utils/utils';
 import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad } from '../types';
 import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION } from '../types';
-import { 
-  staggerContainer, 
-  staggerItem,
-  fadeInUp,
-  scaleIn,
-  slideInRight,
-  pulseVariants
-} from '@/components/animations/AnimationPresets';
+import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight, pulseVariants} from '@/components/animations/AnimationPresets';
 
 const STORAGE_KEY_FILTROS = 'cmo_novedades_filtros';
 
@@ -79,7 +67,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas');
   const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set());
   
-  const { novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento } = useNovedadesStore();
+  const {_novedades, _estadisticas, _loading, _fetchNovedades, _crearNovedad, _marcarResuelta, _agregarSeguimiento} = useNovedadesStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
@@ -131,7 +119,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
     exportToCSV(data, `novedades-${new Date().toISOString().split('T')[0]}`);
   };
 
-  const handleCrearNovedad = async (data: any) => {
+  const handleCrearNovedad = async (_data: unknown) => {
     await crearNovedad(data);
     setShowFormulario(false);
     notificationService.success('Novedad creada', 'La novedad se ha registrado correctamente');
@@ -142,7 +130,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await marcarResuelta(novedadId, comentario);
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
       setNovedadResolucion(null);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
     }
   };
@@ -152,7 +140,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await agregarSeguimiento(novedadId, comentario);
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
       setNovedadSeguimiento(null);
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento');
     }
   };
@@ -306,7 +294,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
         <AnimatedSection delay={0.3}>
           <Card>
             <CardHeader>
-              <Tabs value={selectedTab} onValueChange={(v: any) => setSelectedTab(v)}>
+              <Tabs value={selectedTab} onValueChange={(v: unknown) => setSelectedTab(v)}>
                 <TabsList className="grid w-full max-w-md grid-cols-3">
                   <TabsTrigger value="todas">
                     Todas ({novedades.length})
@@ -723,8 +711,8 @@ const EmptyState: React.FC<{ tab: string }> = ({ tab }) => (
 const FormularioNovedadModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
-  userInfo: any;
+  onSubmit: (data: unknown) => void;
+  userInfo: unknown;
 }> = ({ isOpen, onClose, onSubmit, userInfo }) => {
   const [formData, setFormData] = useState({
     fecha: new Date(),

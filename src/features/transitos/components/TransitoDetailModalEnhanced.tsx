@@ -1,33 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { 
-  X, 
-  Truck, 
-  User, 
-  MapPin, 
-  Clock, 
-  Package, 
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  Battery,
-  Wifi,
-  Navigation,
-  Calendar,
-  Activity,
-  Shield,
-  Route,
-  Gauge,
-  MessageSquare,
-  FileText,
-  Hash,
-  Camera,
-  Maximize2,
-  Download,
-  Play,
-  Pause,
-  Building,
-  Phone
-} from 'lucide-react';
+import {_X, _Truck, _User, _MapPin, _Clock, _Package, _AlertTriangle, _CheckCircle, _XCircle, Battery, _Wifi, Navigation, _Calendar, Activity, Shield, Route, Gauge, _MessageSquare, _FileText, _Hash, Camera, Maximize2, Download, Play, Pause, _Building, _Phone} from 'lucide-react';
 import { 
   Card,
   CardHeader,

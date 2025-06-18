@@ -71,15 +71,15 @@ class ModoTvService {
         .slice(0, limite);
       
       return arribos;
-    } catch (error) {
-      console.error('Error obteniendo próximos arribos:', error);
+    } catch (_error) {
+      console.error('Error obteniendo próximos arribos:', _error);
       return this.getMockArribos();
     }
   }
 
   async getAlertasActivas(limite: number = 10): Promise<AlertaTV[]> {
     try {
-      // En desarrollo o si hay error, usar mock data
+      // En desarrollo o si hay _error, usar mock data
       if (import.meta.env.DEV) {
         return this.getMockAlertas().slice(0, limite);
       }
@@ -120,8 +120,8 @@ class ModoTvService {
           };
         })
         .slice(0, limite);
-    } catch (error) {
-      console.error('Error obteniendo alertas, usando datos mock:', error);
+    } catch (_error) {
+      console.error('Error obteniendo alertas, usando datos mock:', _error);
       return this.getMockAlertas().slice(0, limite);
     }
   }
@@ -177,8 +177,8 @@ class ModoTvService {
           return niveles[b.nivel] - niveles[a.nivel];
         })
         .slice(0, limite);
-    } catch (error) {
-      console.error('Error obteniendo tránsitos críticos:', error);
+    } catch (_error) {
+      console.error('Error obteniendo tránsitos críticos:', _error);
       return this.getMockCriticos();
     }
   }

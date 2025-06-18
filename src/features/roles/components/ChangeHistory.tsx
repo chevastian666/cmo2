@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Clock, User, Shield, Filter, FileText } from 'lucide-react';
+import {_X, _Clock, _User, Shield, _Filter, _FileText} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { useRolesStore } from '../../../store/rolesStore';
 import type { PermissionChange, Role, Section } from '../../../types/roles';
@@ -16,7 +16,7 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
   const [filterSection, setFilterSection] = useState<Section | ''>('');
   
   const history = useMemo(() => {
-    const filters: any = {};
+    const filters: unknown = {};
     if (filterRole) filters.role = filterRole;
     if (filterSection) filters.section = filterSection;
     

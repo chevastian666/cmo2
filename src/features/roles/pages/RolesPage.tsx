@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Save, History, Eye, Users, AlertTriangle } from 'lucide-react';
+import {Shield, Save, History, Eye, _Users, _AlertTriangle} from 'lucide-react';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { RolesTable } from '../components/RolesTable';
 import { RoleCard } from '../components/RoleCard';
@@ -14,14 +14,7 @@ import { cn } from '../../../utils/utils';
 const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
 
 export const RolesPage: React.FC = () => {
-  const { 
-    loading, 
-    saving, 
-    currentUserRole,
-    loadPermissions, 
-    savePermissions,
-    setCurrentUserRole
-  } = useRolesStore();
+  const {_loading, _saving, _currentUserRole, _loadPermissions, _savePermissions, _setCurrentUserRole} = useRolesStore();
   
   const [showHistory, setShowHistory] = useState(false);
   const [expandedRole, setExpandedRole] = useState<Role | null>(null);
@@ -51,7 +44,7 @@ export const RolesPage: React.FC = () => {
     try {
       await savePermissions();
       setHasChanges(false);
-    } catch (error) {
+    } catch (_error) {
       // Error is handled in the store
     }
   };

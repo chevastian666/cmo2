@@ -10,7 +10,7 @@ export interface PersistOptions<T> {
   name: string;
   partialize?: (state: T) => Partial<T>;
   version?: number;
-  migrate?: (persistedState: any, version: number) => T;
+  migrate?: (persistedState: unknown, version: number) => T;
   storage?: StateStorage;
   skipHydration?: boolean;
 }
@@ -19,14 +19,7 @@ export interface PersistOptions<T> {
  * Crea una configuración de persist con valores por defecto
  */
 export function createPersistConfig<T>(options: PersistOptions<T>) {
-  const {
-    name,
-    partialize,
-    version = 1,
-    migrate,
-    storage = createJSONStorage(() => localStorage),
-    skipHydration = false
-  } = options;
+  const {_name, _partialize, _version = 1, _migrate, _storage = createJSONStorage(() => localStorage), _skipHydration = false} = options;
 
   return {
     name,
@@ -83,7 +76,7 @@ export function enableCrossTabSync<T>(
         if (newState && typeof newState === 'object') {
           setState(newState);
         }
-      } catch (error) {
+      } catch (_error) {
         console.error(`Error sincronizando ${storeName} entre pestañas:`, error);
       }
     }
@@ -102,10 +95,10 @@ export function clearPersistedStore(storeName: string) {
 /**
  * Helper para exportar todos los estados persistidos
  */
-export function exportAllPersistedStates(): Record<string, any> {
+export function exportAllPersistedStates(): Record<string, unknown> {
   if (typeof window === 'undefined') return {};
 
-  const states: Record<string, any> = {};
+  const states: Record<string, unknown> = {};
   
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -116,7 +109,7 @@ export function exportAllPersistedStates(): Record<string, any> {
         if (value) {
           states[storeName] = JSON.parse(value);
         }
-      } catch (error) {
+      } catch (_error) {
         console.error(`Error exportando ${key}:`, error);
       }
     }
@@ -128,13 +121,13 @@ export function exportAllPersistedStates(): Record<string, any> {
 /**
  * Helper para importar estados persistidos
  */
-export function importPersistedStates(states: Record<string, any>) {
+export function importPersistedStates(states: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
 
   Object.entries(states).forEach(([storeName, state]) => {
     try {
       localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state));
-    } catch (error) {
+    } catch (_error) {
       console.error(`Error importando ${storeName}:`, error);
     }
   });

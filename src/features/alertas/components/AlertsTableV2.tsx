@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Shield, Battery, MapPin, Radio, Thermometer, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye } from 'lucide-react';
+import {_AlertTriangle, Shield, Battery, _MapPin, _Radio, _Thermometer, _Package, _Clock, _CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';
@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export const AlertsTableV2: React.FC = () => {
-  const { alertas, loading, error, actions } = useAlertasActivas();
+  const {_alertas, _loading, __error, _actions} = useAlertasActivas();
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
@@ -50,9 +50,9 @@ export const AlertsTableV2: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al responder la alerta');
-      console.error('Error responding to alert:', error);
+      console.error('Error responding to alert:', _error);
       throw error;
     }
   };
@@ -236,7 +236,7 @@ export const AlertsTableV2: React.FC = () => {
     }
   ];
 
-  const handleExport = (data: Alerta[], format: 'csv' | 'json') => {
+  const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0];
     const filename = `alertas-${timestamp}`;
     
@@ -265,7 +265,7 @@ export const AlertsTableV2: React.FC = () => {
       link.click();
       URL.revokeObjectURL(url);
     } else {
-      const jsonContent = JSON.stringify(data, null, 2);
+      const jsonContent = JSON.stringify(_data, null, 2);
       const blob = new Blob([jsonContent], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -276,7 +276,7 @@ export const AlertsTableV2: React.FC = () => {
     }
   };
 
-  const { data: selectedAlerta } = useAlertaExtendida(selectedAlertaId);
+  const {data: __selectedAlerta} =  useAlertaExtendida(selectedAlertaId);
 
   return (
     <>

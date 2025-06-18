@@ -3,7 +3,7 @@ import type { ClipboardContentType } from '../types';
 interface DetectionResult {
   type: ClipboardContentType;
   confidence: number;
-  extractedData?: Record<string, any>;
+  extractedData?: Record<string, unknown>;
 }
 
 // Regex patterns for different content types
@@ -116,7 +116,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   };
 }
 
-export function extractPrecintoData(content: string): Record<string, any> {
+export function extractPrecintoData(content: string): Record<string, unknown> {
   const result = detectClipboardContent(content);
   
   if (result.type === 'precinto' && result.extractedData) {
@@ -141,7 +141,7 @@ export function generateSmartPaste(
   targetContext: 'form' | 'search' | 'report' | 'message'
 ): string {
   const detection = detectClipboardContent(content);
-  const data = detection.extractedData || {};
+  const _data = detection.extractedData || {};
   
   switch (targetContext) {
     case 'form':

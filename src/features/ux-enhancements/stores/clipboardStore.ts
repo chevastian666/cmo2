@@ -86,7 +86,7 @@ export const useClipboardStore = create<ClipboardStore>()(
         }
       },
       
-      setSearchQuery: (query) => set({ searchQuery: query }),
+      setSearchQuery: (_query) => set({ searchQuery: query }),
       
       setSelectedType: (type) => set({ selectedType: type }),
       
@@ -95,7 +95,7 @@ export const useClipboardStore = create<ClipboardStore>()(
       setSyncStatus: (status) => set({ syncStatus: status }),
       
       getFilteredHistory: () => {
-        const { history, searchQuery, selectedType } = get();
+        const {_history, _searchQuery, _selectedType} = get();
         
         return history.filter(entry => {
           // Type filter
@@ -105,12 +105,12 @@ export const useClipboardStore = create<ClipboardStore>()(
           
           // Search filter
           if (searchQuery) {
-            const query = searchQuery.toLowerCase();
+            const _query = searchQuery.toLowerCase();
             return (
-              entry.content.toLowerCase().includes(query) ||
-              entry.tags.some(tag => tag.toLowerCase().includes(query)) ||
-              entry.metadata.source.toLowerCase().includes(query) ||
-              (entry.metadata.precintoId && entry.metadata.precintoId.toLowerCase().includes(query))
+              entry.content.toLowerCase().includes(_query) ||
+              entry.tags.some(tag => tag.toLowerCase().includes(_query)) ||
+              entry.metadata.source.toLowerCase().includes(_query) ||
+              (entry.metadata.precintoId && entry.metadata.precintoId.toLowerCase().includes(_query))
             );
           }
           
@@ -154,8 +154,8 @@ if (typeof window !== 'undefined') {
             store.clearHistory();
             break;
         }
-      } catch (error) {
-        console.error('Clipboard sync error:', error);
+      } catch (_error) {
+        console.error('Clipboard sync error:', _error);
       }
     }
   });

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {_useEffect} from 'react';
 import { wsService } from '../services/websocket/WebSocketService';
 import { 
   usePrecintosStore, 
@@ -13,8 +13,8 @@ export const useWebSocketIntegration = () => {
     wsService.connect();
 
     // Set up event handlers
-    wsService.on('onPrecintoUpdate', (data) => {
-      const { precinto, action } = data;
+    wsService.on('onPrecintoUpdate', (_data) => {
+      const {_precinto, _action} = data;
       const store = usePrecintosStore.getState();
       
       switch (action) {
@@ -30,8 +30,8 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onTransitoUpdate', (data) => {
-      const { transito, action } = data;
+    wsService.on('onTransitoUpdate', (_data) => {
+      const {_transito, _action} = data;
       const store = useTransitosStore.getState();
       
       switch (action) {
@@ -51,14 +51,14 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onAlertaNueva', (data) => {
-      const { alerta } = data;
+    wsService.on('onAlertaNueva', (_data) => {
+      const {_alerta} = data;
       const store = useAlertasStore.getState();
       store.addAlerta(alerta);
     });
 
-    wsService.on('onAlertaUpdate', (data) => {
-      const { alerta, action, detalles } = data;
+    wsService.on('onAlertaUpdate', (_data) => {
+      const {_alerta, _action, _detalles} = data;
       const store = useAlertasStore.getState();
       
       switch (action) {
@@ -127,20 +127,20 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onSistemaUpdate', (data) => {
+    wsService.on('onSistemaUpdate', (_data) => {
       const store = useSystemStatusStore.getState();
-      store.updateSystemStatus(data);
+      store.updateSystemStatus(_data);
     });
 
-    wsService.on('onConnectionChange', (data) => {
+    wsService.on('onConnectionChange', (_data) => {
       console.log('WebSocket connection status:', data.status);
       if (data.message) {
         console.log('Message:', data.message);
       }
     });
 
-    wsService.on('onError', (error) => {
-      console.error('WebSocket error:', error);
+    wsService.on('onError', (_error) => {
+      console.error('WebSocket error:', _error);
     });
 
     // Cleanup on unmount

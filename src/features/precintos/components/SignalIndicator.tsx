@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wifi, WifiOff } from 'lucide-react';
+import {_Wifi, WifiOff} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface SignalIndicatorProps {

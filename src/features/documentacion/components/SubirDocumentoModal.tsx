@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { X, Upload, FileText, AlertCircle, Check } from 'lucide-react';
+import {_X, Upload, _FileText, AlertCircle, Check} from 'lucide-react';
 import { 
   Card,
   CardHeader,
@@ -43,7 +43,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
   });
   const [archivo, setArchivo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>(_);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
@@ -91,7 +91,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       });
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
     } finally {
       setLoading(false);
@@ -106,7 +106,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       fechaDocumento: new Date().toISOString().split('T')[0]
     });
     setArchivo(null);
-    setErrors({});
+    setErrors(_);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }

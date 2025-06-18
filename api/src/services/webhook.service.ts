@@ -21,21 +21,21 @@ interface Webhook {
 
 interface WebhookPayload {
   event: string;
-  data: any;
+  data: unknown;
   timestamp?: Date;
 }
 
 interface DeliveryResult {
   success: boolean;
   statusCode?: number;
-  response?: any;
+  response?: unknown;
   error?: string;
   responseTime: number;
 }
 
 class WebhookService {
   private webhooks: Map<string, Webhook> = new Map();
-  private deliveryLogs: Map<string, any[]> = new Map();
+  private deliveryLogs: Map<string, unknown[]> = new Map();
 
   async getAll(companyId?: string): Promise<Webhook[]> {
     const webhooks = Array.from(this.webhooks.values());
@@ -80,7 +80,7 @@ class WebhookService {
     this.deliveryLogs.delete(id);
   }
 
-  async trigger(event: string, data: any): Promise<void> {
+  async trigger(event: string, data: unknown): Promise<void> {
     const payload: WebhookPayload = {
       event,
       data,
@@ -137,7 +137,7 @@ class WebhookService {
       this.logDelivery(webhook.id, payload.event, result);
 
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const result: DeliveryResult = {
         success: false,
         error: error.message,
@@ -151,7 +151,7 @@ class WebhookService {
     }
   }
 
-  async getLogs(webhookId: string, limit: number = 50): Promise<any[]> {
+  async getLogs(webhookId: string, limit: number = 50): Promise<unknown[]> {
     const logs = this.deliveryLogs.get(webhookId) || [];
     return logs.slice(-limit);
   }

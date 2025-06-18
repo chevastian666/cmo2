@@ -23,8 +23,8 @@ interface DashboardState {
   resetLayouts: () => void;
   
   // Configuración de widgets
-  widgetSettings: Record<string, any>;
-  updateWidgetSettings: (widgetId: string, settings: any) => void;
+  widgetSettings: Record<string, unknown>;
+  updateWidgetSettings: (widgetId: string, settings: unknown) => void;
 }
 
 export const useDashboardStore = createStore<DashboardState>(

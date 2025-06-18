@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, Navigation, Pause, Zap, X } from 'lucide-react';
+import {_User, _MessageSquare, _CheckCircle, _AlertTriangle, _Clock, _MapPin, Shield, Battery, _Radio, _Thermometer, _Package, Navigation, Pause, Zap, _X} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
 import type { AlertaExtendida, Usuario, ComentarioAlerta } from '../../../types';
@@ -18,15 +18,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 
 interface AlertaDetalleModalProps {
   alerta: AlertaExtendida;

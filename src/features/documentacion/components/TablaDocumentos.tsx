@@ -1,20 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  FileText, 
-  Download, 
-  Eye, 
-  Trash2, 
-  Star, 
-  Lock,
-  MoreVertical,
-  CheckSquare,
-  Mail,
-  Gavel,
-  File,
-  Archive,
-  ChevronUp,
-  ChevronDown
-} from 'lucide-react';
+import {_FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown} from 'lucide-react';
 import { Badge, EmptyState, LoadingState } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import { formatFileSize, formatDate } from '../../../utils/formatters';
@@ -80,8 +65,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
   };
 
   const documentosOrdenados = [...documentos].sort((a, b) => {
-    let valorA: any;
-    let valorB: any;
+    let valorA: unknown;
+    let valorB: unknown;
 
     switch (ordenColumna) {
       case 'fecha':
@@ -212,7 +197,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <Badge variant={getColorTipo(doc.tipo) as any} className="text-xs w-fit">
+                    <Badge variant={getColorTipo(doc.tipo) as unknown} className="text-xs w-fit">
                       {TIPOS_DOCUMENTO[doc.tipo].label}
                     </Badge>
                     {doc.estado === 'archivado' && (

@@ -22,11 +22,11 @@ interface CacheItem<T> {
 }
 
 class SharedApiService {
-  private cache = new Map<string, CacheItem<any>>();
-  private pendingRequests = new Map<string, Promise<any>>();
+  private cache = new Map<string, CacheItem<unknown>>();
+  private pendingRequests = new Map<string, Promise<unknown>>();
 
   // Cache management
-  private getCacheKey(endpoint: string, params?: any): string {
+  private getCacheKey(endpoint: string, params?: unknown): string {
     const paramStr = params ? JSON.stringify(params) : '';
     return `${SHARED_CONFIG.CACHE_PREFIX}${endpoint}_${paramStr}`;
   }
@@ -69,7 +69,7 @@ class SharedApiService {
   async request<T>(
     method: string,
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestInit = {},
     useCache = true,
     retries = 3
@@ -136,7 +136,7 @@ class SharedApiService {
                   const retryData: ApiResponse<T> = await retryResponse.json();
                   return retryData.data || retryData as T;
                 }
-              } catch (refreshError) {
+              } catch (_refreshError) {
                 // Refresh failed, continue with original error
                 console.error('Token refresh failed:', refreshError);
               }
@@ -161,9 +161,9 @@ class SharedApiService {
         }
         
         return result;
-      } catch (error) {
+      } catch (_error) {
         // If we have retries left and it's a network error, retry
-        if (retriesLeft > 0 && (error instanceof TypeError || (error as any).code === 'ECONNREFUSED')) {
+        if (retriesLeft > 0 && (error instanceof TypeError || (error as unknown).code === 'ECONNREFUSED')) {
           console.warn(`Request failed, retrying... (${retriesLeft} retries left)`);
           await new Promise(resolve => setTimeout(resolve, 1000 * (retries - retriesLeft + 1))); // Exponential backoff
           return executeWithRetry(retriesLeft - 1);
@@ -322,7 +322,7 @@ class SharedApiService {
     return result;
   }
 
-  async precintarTransito(transitoId: string, precintoData: any): Promise<Precinto> {
+  async precintarTransito(transitoId: string, precintoData: unknown): Promise<Precinto> {
     const result = await this.request<Precinto>('POST', `/transitos/${transitoId}/precintar`, precintoData);
     this.clearCache('transitos');
     this.clearCache('precintos');
@@ -355,7 +355,7 @@ class SharedApiService {
   }
 
   // Alert endpoints
-  async getAlertas(filtros?: any): Promise<Alerta[]> {
+  async getAlertas(filtros?: unknown): Promise<Alerta[]> {
     const params = new URLSearchParams(filtros).toString();
     const endpoint = params ? `/alertas?${params}` : '/alertas';
     return this.request<Alerta[]>('GET', endpoint);
@@ -394,27 +394,27 @@ class SharedApiService {
     return this.request<EstadisticasMonitoreo>('GET', '/estadisticas');
   }
 
-  async getEstadisticasTransitos(periodo?: string): Promise<any> {
+  async getEstadisticasTransitos(periodo?: string): Promise<unknown> {
     const params = periodo ? `?periodo=${periodo}` : '';
     return this.request('GET', `/estadisticas/transitos${params}`);
   }
 
-  async getEstadisticasAlertas(periodo?: string): Promise<any> {
+  async getEstadisticasAlertas(periodo?: string): Promise<unknown> {
     const params = periodo ? `?periodo=${periodo}` : '';
     return this.request('GET', `/estadisticas/alertas${params}`);
   }
 
   // Vehicle endpoints (for encargados)
-  async getVehiculosEnRuta(): Promise<any[]> {
+  async getVehiculosEnRuta(): Promise<unknown[]> {
     return this.request('GET', '/vehiculos/en-ruta');
   }
 
-  async buscarVehiculo(criterio: string): Promise<any[]> {
+  async buscarVehiculo(criterio: string): Promise<unknown[]> {
     return this.request('GET', `/vehiculos/buscar?q=${encodeURIComponent(criterio)}`);
   }
 
   // Stock endpoints (for encargados)
-  async getStock(): Promise<any> {
+  async getStock(): Promise<unknown> {
     return this.request('GET', '/stock');
   }
 
@@ -424,7 +424,7 @@ class SharedApiService {
   }
 
   // CMO messaging endpoints
-  async getCMOMessages(unreadOnly = false): Promise<any[]> {
+  async getCMOMessages(unreadOnly = false): Promise<unknown[]> {
     const params = unreadOnly ? '?unread=true' : '';
     return this.request('GET', `/cmo/messages${params}`);
   }
@@ -438,11 +438,11 @@ class SharedApiService {
   }
 
   // System status endpoints
-  async getSystemStatus(): Promise<any> {
+  async getSystemStatus(): Promise<unknown> {
     return this.request('GET', '/system/status');
   }
 
-  async getSystemHealth(): Promise<any> {
+  async getSystemHealth(): Promise<unknown> {
     return this.request('GET', '/system/health', null, {}, false);
   }
 
@@ -450,7 +450,7 @@ class SharedApiService {
   async exportData(
     type: 'transitos' | 'precintos' | 'alertas',
     format: 'csv' | 'xlsx' | 'pdf',
-    filtros?: any
+    filtros?: unknown
   ): Promise<Blob> {
     const params = new URLSearchParams({ format, ...filtros }).toString();
     const response = await fetch(
@@ -470,7 +470,7 @@ class SharedApiService {
   }
 
   // Real-time subscription management
-  subscribeToUpdates(eventType: string, callback: (data: any) => void): () => void {
+  subscribeToUpdates(eventType: string, callback: (data: unknown) => void): () => void {
     // This will be handled by the WebSocket service
     // Return unsubscribe function
     return () => {};
@@ -483,22 +483,22 @@ class SharedApiService {
 
     // Generate mock data based on endpoint
     if (endpoint.includes('/transitos/pendientes')) {
-      const { generateMockTransitos } = await import('../../utils/mockData');
+      const {_generateMockTransitos} = await import('../../utils/mockData');
       return generateMockTransitos() as T;
     }
     
     if (endpoint.includes('/precintos/activos')) {
-      const { generateMockPrecintos } = await import('../../utils/mockData');
+      const {_generateMockPrecintos} = await import('../../utils/mockData');
       return generateMockPrecintos() as T;
     }
     
     if (endpoint.includes('/alertas/activas')) {
-      const { generateMockAlertas } = await import('../../utils/mockData');
+      const {_generateMockAlertas} = await import('../../utils/mockData');
       return generateMockAlertas().filter(a => !a.atendida) as T;
     }
     
     if (endpoint.includes('/alertas')) {
-      const { generateMockAlertas } = await import('../../utils/mockData');
+      const {_generateMockAlertas} = await import('../../utils/mockData');
       return generateMockAlertas() as T;
     }
     

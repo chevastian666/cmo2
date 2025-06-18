@@ -23,14 +23,14 @@ class TorreControlService {
       
       // Map to TorreControl format
       return response.data.map(transito => this.mapTransitoToTorreControl(transito));
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching transitos en ruta:', error);
       // Fallback to mock data
       return this.getMockTransitos();
     }
   }
 
-  private mapTransitoToTorreControl(transito: any): TransitoTorreControl {
+  private mapTransitoToTorreControl(transito: unknown): TransitoTorreControl {
     const now = Date.now();
     const salidaTime = new Date(transito.fechaSalida).getTime();
     const etaTime = transito.eta ? new Date(transito.eta).getTime() : now + 3600000;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, MessageSquare, Send } from 'lucide-react';
+import {_X, _MessageSquare, Send} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import type { Novedad } from '../types';
@@ -19,7 +19,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
 }) => {
   const [comentario, setComentario] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [_error, setError] = useState('');
 
   if (!isOpen || !novedad) return null;
 
@@ -43,7 +43,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
       await onSubmit(novedad.id, comentario.trim());
       setComentario('');
       onClose();
-    } catch (err) {
+    } catch (_err) {
       setError('Error al guardar el seguimiento');
     } finally {
       setLoading(false);

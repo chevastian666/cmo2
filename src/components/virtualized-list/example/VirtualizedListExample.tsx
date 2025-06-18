@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { VirtualizedAlertList } from '../VirtualizedAlertList';
-import { Search, Filter, AlertTriangle } from 'lucide-react';
+import {Search, _Filter, _AlertTriangle} from 'lucide-react';
 import type { Alert, AlertFilters } from '../types/alerts';
 
 // Mock data generator
@@ -52,7 +52,7 @@ function generateRandomMessage(): string {
 }
 
 export const VirtualizedListExample: React.FC = () => {
-  const [filters, setFilters] = useState<AlertFilters>({});
+  const [filters, setFilters] = useState<AlertFilters>(_);
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock API call
@@ -178,7 +178,7 @@ export const VirtualizedListExample: React.FC = () => {
               {/* Clear filters */}
               <div className="flex items-end">
                 <button
-                  onClick={() => setFilters({})}
+                  onClick={() => setFilters(_)}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
                 >
                   Limpiar filtros

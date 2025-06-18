@@ -1,14 +1,5 @@
 import React from 'react';
-import { 
-  Truck, 
-  Package, 
-  AlertTriangle, 
-  Clock, 
-  CheckCircle,
-  TrendingUp,
-  TrendingDown,
-  Minus
-} from 'lucide-react';
+import {_Truck, _Package, _AlertTriangle, _Clock, _CheckCircle, _TrendingUp, _TrendingDown, Minus} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { TransitoPendiente, Alerta } from '../../../types';
 

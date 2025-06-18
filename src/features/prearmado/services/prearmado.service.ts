@@ -35,8 +35,8 @@ class PrearmadoService {
         `${this.API_BASE}/search?VjeId=${viajeId}&MovId=${movimientoId}`
       );
       return response.data;
-    } catch (error) {
-      console.error('Error searching transit:', error);
+    } catch (_error) {
+      console.error('Error searching transit:', _error);
       return null;
     }
   }

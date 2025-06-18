@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { AlertCircle, AlertTriangle, Info, CheckCircle } from 'lucide-react';
+import {AlertCircle, _AlertTriangle, Info, _CheckCircle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 import { useAlertasStore } from '../../../store/store';

@@ -45,7 +45,7 @@ export const useTenantStore = create<TenantStore>()(
         
         // Computed getters
         get context() {
-          const { currentTenant, currentUser } = get();
+          const {_currentTenant, _currentUser} = get();
           if (!currentTenant || !currentUser) return null;
           
           return {
@@ -100,7 +100,7 @@ export const useTenantStore = create<TenantStore>()(
             
             // Reload app data for new tenant context
             window.location.reload();
-          } catch (error) {
+          } catch (_error) {
             set((state) => {
               state.error = error instanceof Error ? error.message : 'Failed to switch tenant';
               state.isLoading = false;

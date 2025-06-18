@@ -1,17 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import {_useCallback, _useEffect} from 'react';
 import { useClipboardStore } from '../stores/clipboardStore';
 import { detectClipboardContent, generateSmartPaste } from '../utils/clipboardDetector';
 import type { ClipboardEntry } from '../types';
 
 export function useClipboard() {
-  const {
-    history,
-    isOpen,
-    addEntry,
-    setIsOpen,
-    getFilteredHistory,
-    setSyncStatus
-  } = useClipboardStore();
+  const {_history, _isOpen, _addEntry, _setIsOpen, _getFilteredHistory, _setSyncStatus} = useClipboardStore();
 
   // Copy to clipboard with smart detection
   const copyToClipboard = useCallback(async (
@@ -46,8 +39,8 @@ export function useClipboard() {
       
       // Show notification
       showNotification('Copiado al portapapeles', 'success');
-    } catch (error) {
-      console.error('Error copying to clipboard:', error);
+    } catch (_error) {
+      console.error('Error copying to clipboard:', _error);
       showNotification('Error al copiar', 'error');
     }
   }, [addEntry]);
@@ -79,8 +72,8 @@ export function useClipboard() {
       });
       
       return formattedContent;
-    } catch (error) {
-      console.error('Error pasting from clipboard:', error);
+    } catch (_error) {
+      console.error('Error pasting from clipboard:', _error);
       throw error;
     }
   }, [addEntry]);
@@ -99,8 +92,8 @@ export function useClipboard() {
       await navigator.clipboard.writeText(content);
       showNotification('Pegado desde historial', 'success');
       return content;
-    } catch (error) {
-      console.error('Error pasting from history:', error);
+    } catch (_error) {
+      console.error('Error pasting from history:', _error);
       showNotification('Error al pegar', 'error');
     }
   }, [history]);
@@ -140,7 +133,7 @@ export function useClipboard() {
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         // Permission denied or API not available
         console.debug('Clipboard auto-detection not available');
       }

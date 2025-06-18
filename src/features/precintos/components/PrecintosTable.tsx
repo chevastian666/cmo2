@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatTime24h } from '../../../utils/formatters';
 import type { Precinto } from '../../../types/monitoring';
-import { Battery, MapPin, Radio, Lock, LockOpen, ShieldAlert } from 'lucide-react';
+import {Battery, _MapPin, _Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { DataTable, type Column } from '../../../components/DataTable';
 
@@ -141,7 +141,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
     }
   ];
 
-  const handleExport = (data: Precinto[], format: 'csv' | 'json') => {
+  const handleExport = (_data: Precinto[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0];
     const filename = `precintos-activos-${timestamp}`;
     
@@ -168,7 +168,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       link.download = `${filename}.csv`;
       link.click();
     } else {
-      const jsonData = JSON.stringify(data, null, 2);
+      const jsonData = JSON.stringify(_data, null, 2);
       const blob = new Blob([jsonData], { type: 'application/json' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);

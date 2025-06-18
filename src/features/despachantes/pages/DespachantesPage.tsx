@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Phone, Mail, MapPin, FileText, Calendar } from 'lucide-react';
+import {Building2, _Phone, Mail, _MapPin, _FileText, _Calendar} from 'lucide-react';
 
 export const DespachantesPage: React.FC = () => {
   // Mock data de despachantes

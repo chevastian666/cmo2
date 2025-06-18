@@ -9,7 +9,7 @@ export interface RadialMenuAction {
   id: string;
   label: string;
   icon: ComponentType<{ className?: string }>;
-  action: (context?: any) => void;
+  action: (context?: unknown) => void;
   color?: string;
   shortcut?: string;
   permissions?: string[];
@@ -24,7 +24,7 @@ export interface RadialMenuProps {
   onClose: () => void;
   customizable?: boolean;
   gestureEnabled?: boolean;
-  context?: any;
+  context?: unknown;
   size?: 'small' | 'medium' | 'large';
   animationPreset?: 'smooth' | 'bouncy' | 'stiff';
 }
@@ -48,7 +48,7 @@ export interface ClipboardEntry {
   metadata: {
     source: string;
     operatorId: string;
-    context?: any;
+    context?: unknown;
     precintoId?: string;
     alertId?: string;
   };

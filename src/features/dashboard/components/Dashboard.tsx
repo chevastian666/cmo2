@@ -10,7 +10,7 @@ import { TransitosPendientesTable } from '../../transitos';
 import { AlertsList } from '../../alertas';
 import { RealtimeIndicator } from './RealtimeIndicator';
 import { KPICards } from './KPICards';
-import { NotificationSettings } from '../../../components/ui/NotificationSettings';
+import {NotificationSettings} from '../../../components/ui/NotificationSettings';
 import { 
   usePrecintosActivos, 
   useTransitosPendientes, 
@@ -19,10 +19,10 @@ import {
 } from '../../../store/hooks';
 
 export const Dashboard: React.FC = memo(() => {
-  const { precintos } = usePrecintosActivos();
-  const { estadisticas, smsPendientes, dbStats, apiStats, reportesPendientes } = useSystemStatus();
-  const { alertas } = useAlertasActivas();
-  const { transitos } = useTransitosPendientes();
+  const {_precintos} = usePrecintosActivos();
+  const {_estadisticas, _smsPendientes, _dbStats, _apiStats, _reportesPendientes} = useSystemStatus();
+  const {_alertas} = useAlertasActivas();
+  const {_transitos} = useTransitosPendientes();
 
   return (
     <div className="space-y-6">

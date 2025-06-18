@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Tabs, TabsList, TabsTrigger, TabsContent,
-  AlertsPanel, Alert,
-  TransitCard, TransitInfo,
-  StatusBadge,
-  MapModule, MapMarker,
-  Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
-  Badge, BadgeGroup,
-  InfoRow, InfoGrid, InfoSection,
-  EmptyState,
-  LoadingState, LoadingOverlay, Skeleton
-} from './index';
+import {Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, _CardDescription, CardContent, _CardFooter, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, LoadingOverlay, Skeleton} from './index';
 
 export const UIComponentsDemo: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('tabs');

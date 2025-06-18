@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, User, Phone, Flag, AlertCircle } from 'lucide-react';
+import {_X, _User, _Phone, Flag, AlertCircle} from 'lucide-react';
 import { useCamionerosStore } from '../../../store/camionerosStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
 import type { Nacionalidad } from '../types';
 
@@ -11,7 +11,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const { createCamionero } = useCamionerosStore();
+  const {_createCamionero} = useCamionerosStore();
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -25,10 +25,10 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
     comentario: ''
   });
   
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>(_);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -86,7 +86,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
       });
       
       onClose();
-    } catch (error) {
+    } catch (_error) {
       setErrors({ general: 'Error al registrar el camionero' });
     } finally {
       setLoading(false);

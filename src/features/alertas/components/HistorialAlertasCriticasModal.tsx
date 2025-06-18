@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { X, AlertTriangle, Clock, User, MessageSquare, CheckCircle, Search, Calendar } from 'lucide-react';
+import {_X, _AlertTriangle, _Clock, _User, _MessageSquare, _CheckCircle, Search, _Calendar} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';
@@ -76,8 +76,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
       // For now, generate mock data
       const mockData: AlertaCriticaHistorial[] = generateMockAlertasCriticas();
       setAlertasCriticas(mockData);
-    } catch (error) {
-      console.error('Error fetching critical alerts history:', error);
+    } catch (_error) {
+      console.error('Error fetching critical alerts history:', _error);
     } finally {
       setLoading(false);
     }
@@ -495,7 +495,7 @@ function generateMockAlertasCriticas(): AlertaCriticaHistorial[] {
     
     return {
       id: `ALR-CRIT-${i + 1}`,
-      tipo: 'violacion' as any,
+      tipo: 'violacion' as unknown,
       precintoId: `pr-${Math.floor(Math.random() * 100)}`,
       codigoPrecinto: `BT2024${String(Math.floor(Math.random() * 9000 + 1000)).padStart(4, '0')}`,
       mensaje: [
@@ -509,7 +509,7 @@ function generateMockAlertasCriticas(): AlertaCriticaHistorial[] {
         lat: -34.9011 + (Math.random() - 0.5) * 0.1,
         lng: -56.1645 + (Math.random() - 0.5) * 0.1
       },
-      severidad: 'critica' as any,
+      severidad: 'critica' as unknown,
       atendida: isResolved,
       respuesta: isResolved ? {
         tipo: tiposRespuesta[Math.floor(Math.random() * tiposRespuesta.length)],

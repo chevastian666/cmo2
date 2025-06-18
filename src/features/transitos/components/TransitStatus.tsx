@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, Truck, AlertTriangle } from 'lucide-react';
+import {_CheckCircle, _Truck, _AlertTriangle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface TransitStatusProps {
@@ -33,7 +33,7 @@ export const TransitStatus: React.FC<TransitStatusProps> = ({ estado }) => {
     }
   };
 
-  const config = getStatusConfig();
+  const _config = getStatusConfig();
 
   return (
     <div className={cn(

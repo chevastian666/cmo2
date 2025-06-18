@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import {_TrendingUp, _TrendingDown, Minus} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 

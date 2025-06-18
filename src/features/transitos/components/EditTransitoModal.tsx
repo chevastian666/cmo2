@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import {_X} from 'lucide-react';
 import { notificationService } from '../../../services/shared/notification.service';
 import { transitosService } from '../services/transitos.service';
 import type { Transito } from '../types';
@@ -70,7 +70,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
 
       onSuccess?.();
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'

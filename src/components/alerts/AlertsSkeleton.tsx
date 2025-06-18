@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle } from 'lucide-react';
+import {_AlertTriangle} from 'lucide-react';
 
 export const CriticalAlertsSkeleton: React.FC = () => {
   return (

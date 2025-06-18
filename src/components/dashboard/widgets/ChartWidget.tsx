@@ -4,29 +4,13 @@
  */
 
 import React, { useMemo } from 'react';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  AreaChart,
-  Area,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
+import {LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts';
 import { useDashboardStore } from '../../../store/dashboardStore';
 
 interface ChartWidgetProps {
   widgetId: string;
   type?: 'line' | 'bar' | 'area' | 'pie';
-  data?: any[];
+  data?: unknown[];
   dataKey?: string;
   xAxisKey?: string;
   colors?: string[];

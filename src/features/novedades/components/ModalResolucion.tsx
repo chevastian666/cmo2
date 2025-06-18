@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, CheckCircle } from 'lucide-react';
+import {_X, Check, _CheckCircle} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import type { Novedad } from '../types';
@@ -31,7 +31,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
       await onSubmit(novedad.id, comentario.trim() || undefined);
       setComentario('');
       onClose();
-    } catch (err) {
+    } catch (_err) {
       // Error manejado en el componente padre
     } finally {
       setLoading(false);

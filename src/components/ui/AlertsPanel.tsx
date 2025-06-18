@@ -2,15 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '../../utils/utils';
 import { StatusBadge } from './StatusBadge';
 import { EmptyState } from './EmptyState';
-import { 
-  AlertTriangle, 
-  CheckCircle, 
-  Info, 
-  Bell,
-  BellOff,
-  ChevronDown,
-  ChevronRight
-} from 'lucide-react';
+import {_AlertTriangle, _CheckCircle, Info, Bell, _BellOff, ChevronDown, ChevronRight} from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
@@ -22,7 +14,7 @@ export interface Alert {
   timestamp: Date | string;
   source?: string;
   status?: 'active' | 'acknowledged' | 'resolved';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface AlertsPanelProps {
@@ -102,7 +94,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             const audio = new Audio('/sounds/alert.mp3');
             audio.volume = 0.5;
             audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e));
-          } catch (e) {
+          } catch (_e) {
             console.log('Error al crear audio:', e);
           }
         }

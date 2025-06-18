@@ -8,7 +8,7 @@ import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 interface TreemapChartProps {
-  data: any;
+  data: unknown;
   width?: number;
   height?: number;
 }
@@ -29,7 +29,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
 
     // Create hierarchy
     const root = d3.hierarchy(data)
-      .sum((d: any) => d.value || 0)
+      .sum((d: unknown) => d.value || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
 
     // Create treemap layout
@@ -45,13 +45,13 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     const cell = svg.selectAll('g')
       .data(root.leaves())
       .enter().append('g')
-      .attr('transform', (d: any) => `translate(${d.x0},${d.y0})`);
+      .attr('transform', (d: unknown) => `translate(${d.x0},${d.y0})`);
 
     // Add rectangles
     cell.append('rect')
-      .attr('width', (d: any) => d.x1 - d.x0)
-      .attr('height', (d: any) => d.y1 - d.y0)
-      .attr('fill', (d: any) => color(d.data.name))
+      .attr('width', (d: unknown) => d.x1 - d.x0)
+      .attr('height', (d: unknown) => d.y1 - d.y0)
+      .attr('fill', (d: unknown) => color(d.data.name))
       .attr('stroke', '#fff')
       .attr('stroke-width', 1);
 
@@ -59,7 +59,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     cell.append('text')
       .attr('x', 4)
       .attr('y', 20)
-      .text((d: any) => d.data.name)
+      .text((d: unknown) => d.data.name)
       .attr('font-size', '12px')
       .attr('fill', 'white');
 
@@ -67,7 +67,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     cell.append('text')
       .attr('x', 4)
       .attr('y', 35)
-      .text((d: any) => d.value)
+      .text((d: unknown) => d.value)
       .attr('font-size', '10px')
       .attr('fill', 'rgba(255,255,255,0.7)');
 

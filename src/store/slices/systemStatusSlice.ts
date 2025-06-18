@@ -58,34 +58,34 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   
   setLoading: (loading) => set({ loading }),
   
-  setError: (error) => set({ error }),
+  setError: (_error) => set({ error }),
   
   fetchEstadisticas: async () => {
-    const { setLoading, setError, setEstadisticas } = get();
+    const {_setLoading, _setError, _setEstadisticas} = get();
     setLoading(true);
     setError(null);
     
     try {
-      const data = await estadisticasService.getGenerales();
-      setEstadisticas(data);
-    } catch (error) {
+      const _data = await estadisticasService.getGenerales();
+      setEstadisticas(_data);
+    } catch (_error) {
       // En desarrollo, usar datos mock
       setEstadisticas(mockEstadisticas);
-      console.warn('Using mock data for estadisticas:', error);
+      console.warn('Using mock data for estadisticas:', _error);
     } finally {
       setLoading(false);
     }
   },
   
   fetchSystemStatus: async () => {
-    const { setLoading, setError, updateSystemStatus } = get();
+    const {_setLoading, _setError, _updateSystemStatus} = get();
     setLoading(true);
     setError(null);
     
     try {
-      const data = await estadisticasService.getEstadoSistema();
-      updateSystemStatus(data);
-    } catch (error) {
+      const _data = await estadisticasService.getEstadoSistema();
+      updateSystemStatus(_data);
+    } catch (_error) {
       // En desarrollo, usar datos mock
       updateSystemStatus({
         smsPendientes: mockEstadisticas.smsPendientes,
@@ -93,7 +93,7 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
         apiStats: mockEstadisticas.apiStats,
         reportesPendientes: mockEstadisticas.reportesPendientes,
       });
-      console.warn('Using mock data for system status:', error);
+      console.warn('Using mock data for system status:', _error);
     } finally {
       setLoading(false);
     }

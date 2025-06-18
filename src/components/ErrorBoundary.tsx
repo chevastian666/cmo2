@@ -4,7 +4,7 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import {_AlertTriangle, RefreshCw} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
@@ -28,15 +28,15 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error, errorInfo: null };
+    return { hasError: true, _error, errorInfo: null };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error('Error caught by boundary:', _error, errorInfo);
     this.setState({ errorInfo });
     
     if (this.props.onError) {
-      this.props.onError(error, errorInfo);
+      this.props.onError(_error, errorInfo);
     }
   }
 

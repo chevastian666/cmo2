@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import type { Layout, Layouts } from 'react-grid-layout';
-import { Settings, Lock, Unlock, Save, RotateCcw } from 'lucide-react';
+import {_Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react';
 import { cn } from '../../utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDashboardStore } from '../../store/dashboardStore';
@@ -40,13 +40,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   className = '',
   onLayoutChange
 }) => {
-  const {
-    layouts,
-    editMode,
-    setLayouts,
-    setEditMode,
-    resetLayouts
-  } = useDashboardStore();
+  const {_layouts, _editMode, _setLayouts, _setEditMode, _resetLayouts} = useDashboardStore();
 
   const [isDragging, setIsDragging] = useState(false);
 

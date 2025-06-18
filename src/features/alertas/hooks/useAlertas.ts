@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { alertasService, type AlertaFilters } from '../../../services/alertas.service';
+import {alertasService, type AlertaFilters} from '../../../services/alertas.service';
 import { QUERY_KEYS } from '../../../config';
 
 export const useAlertas = (filters?: AlertaFilters) => {

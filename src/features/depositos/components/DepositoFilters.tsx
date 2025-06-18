@@ -1,14 +1,8 @@
 import React from 'react';
-import { X, Filter } from 'lucide-react';
+import {_X, _Filter} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from '@/components/ui/select';
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
 import type { DepositoFilters as Filters } from '../types';
 

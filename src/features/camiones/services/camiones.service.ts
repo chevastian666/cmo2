@@ -173,7 +173,7 @@ class CamionesService {
 
   async createCamion(data: Omit<Camion, 'id' | 'fechaRegistro' | 'fechaActualizacion'>): Promise<Camion> {
     const camion: Camion = {
-      ...data,
+      ..._data,
       id: Date.now().toString(),
       fechaRegistro: new Date(),
       fechaActualizacion: new Date()
@@ -189,7 +189,7 @@ class CamionesService {
 
     const updated = {
       ...camion,
-      ...data,
+      ..._data,
       matricula: camion.matricula, // No permitir cambiar la matrícula
       fechaActualizacion: new Date()
     };

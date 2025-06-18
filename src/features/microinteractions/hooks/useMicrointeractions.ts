@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {_useEffect, _useState} from 'react';
 
 interface MicrointeractionsConfig {
   animationsEnabled: boolean;
@@ -10,7 +10,7 @@ interface MicrointeractionsConfig {
 }
 
 export const useMicrointeractions = () => {
-  const [config, setConfig] = useState<MicrointeractionsConfig>({
+  const [_config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
     animationIntensity: 'medium',
     particlesEnabled: true,
@@ -58,7 +58,7 @@ export const useMicrointeractions = () => {
   };
 
   return {
-    config,
+    _config,
     shouldAnimate,
     shouldShowParticles,
     getAnimationClass

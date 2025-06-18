@@ -54,7 +54,7 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
     throw new Error('ToggleGroupItem must be used within ToggleGroup');
   }
 
-  const { value: selectedValue, onValueChange } = context;
+  const {value: _selectedValue, _onValueChange} = context;
   const isSelected = selectedValue === value;
 
   return (

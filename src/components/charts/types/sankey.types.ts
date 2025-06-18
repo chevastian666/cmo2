@@ -8,7 +8,7 @@ export interface SankeyNode {
   name: string;
   value?: number;
   color?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SankeyLink {
@@ -16,7 +16,7 @@ export interface SankeyLink {
   target: string | number;
   value: number;
   color?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SankeyData {
@@ -37,8 +37,8 @@ export interface SankeyChartProps {
   nodeWidth?: number;
   nodePadding?: number;
   nodeAlign?: 'left' | 'right' | 'center' | 'justify';
-  nodeSort?: ((a: any, b: any) => number) | null;
-  linkSort?: ((a: any, b: any) => number) | null;
+  nodeSort?: ((a: unknown, b: unknown) => number) | null;
+  linkSort?: ((a: unknown, b: unknown) => number) | null;
   iterations?: number;
   colors?: string[];
   animated?: boolean;
@@ -47,9 +47,9 @@ export interface SankeyChartProps {
   showValues?: boolean;
   labelPosition?: 'inside' | 'outside';
   valueFormat?: (value: number) => string;
-  onNodeClick?: (node: any, event: React.MouseEvent) => void;
+  onNodeClick?: (node: unknown, event: React.MouseEvent) => void;
   onNodeHover?: (node: any | null, event: React.MouseEvent) => void;
-  onLinkClick?: (link: any, event: React.MouseEvent) => void;
+  onLinkClick?: (link: unknown, event: React.MouseEvent) => void;
   onLinkHover?: (link: any | null, event: React.MouseEvent) => void;
   className?: string;
 }
@@ -59,7 +59,7 @@ export interface FlowData {
   from: string;
   to: string;
   value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface MultiLevelFlow {

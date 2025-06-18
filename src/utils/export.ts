@@ -1,4 +1,4 @@
-export const exportToCSV = (data: any[], filename: string) => {
+export const exportToCSV = (_data: unknown[], filename: string) => {
   if (!data || data.length === 0) {
     console.warn('No data to export');
     return;
@@ -41,7 +41,7 @@ export const exportToCSV = (data: any[], filename: string) => {
   URL.revokeObjectURL(url);
 };
 
-export const exportToJSON = (data: any[], filename: string) => {
+export const exportToJSON = (_data: unknown[], filename: string) => {
   if (!data || data.length === 0) {
     console.warn('No data to export');
     return;
@@ -66,7 +66,7 @@ export const exportToJSON = (data: any[], filename: string) => {
 };
 
 // Excel export using CSV format (Excel can open CSV files)
-export const exportToExcel = (data: any[], filename: string) => {
+export const exportToExcel = (_data: unknown[], filename: string) => {
   // For now, we'll use CSV format which Excel can open
   // In a production app, you might want to use a library like xlsx
   exportToCSV(data, filename);

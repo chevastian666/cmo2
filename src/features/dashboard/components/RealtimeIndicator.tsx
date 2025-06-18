@@ -17,10 +17,10 @@ export const RealtimeIndicator: React.FC = () => {
     };
 
     // Custom event for any real-time update
-    window.addEventListener('realtime-update' as any, handleUpdate);
+    window.addEventListener('realtime-update' as unknown, handleUpdate);
     
     return () => {
-      window.removeEventListener('realtime-update' as any, handleUpdate);
+      window.removeEventListener('realtime-update' as unknown, handleUpdate);
     };
   }, []);
 

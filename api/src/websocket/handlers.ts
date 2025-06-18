@@ -28,7 +28,7 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
         return next(new Error('Authentication required'));
       }
 
-      const decoded = jwt.verify(token, config.jwt.secret) as any;
+      const decoded = jwt.verify(token, config.jwt.secret) as unknown;
       socket.user = {
         id: decoded.id,
         email: decoded.email,
@@ -45,7 +45,7 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
       socket.join(`user:${decoded.id}`);
 
       next();
-    } catch (error) {
+    } catch (_error) {
       next(new Error('Invalid token'));
     }
   });
@@ -97,7 +97,7 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
         });
 
         logger.debug(`Location update for precinto ${data.precintoId}`);
-      } catch (error) {
+      } catch (_error) {
         socket.emit('error', { message: 'Failed to update location' });
       }
     });
@@ -114,31 +114,31 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
   });
 
   // Emit functions for server-side events
-  const emitPrecintoUpdate = (precintoId: string, data: any) => {
+  const emitPrecintoUpdate = (precintoId: string, _data: unknown) => {
     io.to(`precinto:${precintoId}`).emit('precinto:updated', data);
   };
 
-  const emitTransitUpdate = (transitId: string, data: any) => {
+  const emitTransitUpdate = (transitId: string, _data: unknown) => {
     io.to(`transit:${transitId}`).emit('transit:updated', data);
   };
 
-  const emitAlert = (data: any) => {
+  const emitAlert = (_data: unknown) => {
     io.to('alerts').emit('alert:new', data);
     if (data.companyId) {
       io.to(`alerts:${data.companyId}`).emit('alert:new', data);
     }
   };
 
-  const emitToCompany = (companyId: string, event: string, data: any) => {
+  const emitToCompany = (companyId: string, event: string, _data: unknown) => {
     io.to(`company:${companyId}`).emit(event, data);
   };
 
-  const emitToUser = (userId: string, event: string, data: any) => {
+  const emitToUser = (userId: string, event: string, _data: unknown) => {
     io.to(`user:${userId}`).emit(event, data);
   };
 
   // Export emit functions for use in other parts of the application
-  (global as any).wsEmitters = {
+  (global as unknown).wsEmitters = {
     emitPrecintoUpdate,
     emitTransitUpdate,
     emitAlert,

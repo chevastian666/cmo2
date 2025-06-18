@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, FileText, Download, Upload, Search } from 'lucide-react';
+import {Plus, _FileText, Download, Upload, Search} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
 import { SubirDocumentoModal } from './SubirDocumentoModal';
 import { FiltrosDocumentosComponent } from './FiltrosDocumentos';
@@ -7,7 +7,7 @@ import { TablaDocumentos } from './TablaDocumentos';
 import { VisualizadorPDF } from './VisualizadorPDF';
 import { notificationService } from '../../../services/shared/notification.service';
 import { useDocumentosStore } from '../../../store/documentosStore';
-import { useUserInfo } from '../../../hooks/useAuth';
+import {useUserInfo} from '../../../hooks/useAuth';
 import { exportToCSV } from '../../../utils/export';
 import type { Documento, FiltrosDocumentos } from '../types';
 import { FILTROS_DEFAULT } from '../types';
@@ -23,7 +23,7 @@ export const CentroDocumentacion: React.FC = () => {
   const [showSubirModal, setShowSubirModal] = useState(false);
   const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null);
   
-  const { documentos, loading, estadisticas, fetchDocumentos, uploadDocumento, deleteDocumento, updateDocumento } = useDocumentosStore();
+  const {_documentos, _loading, _estadisticas, _fetchDocumentos, _uploadDocumento, _deleteDocumento, _updateDocumento} = useDocumentosStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor';
@@ -72,12 +72,12 @@ export const CentroDocumentacion: React.FC = () => {
 
   const empresasUnicas = [...new Set(documentos.map(d => d.empresa).filter(Boolean) as string[])];
 
-  const handleSubirDocumento = async (data: any) => {
+  const handleSubirDocumento = async (_data: unknown) => {
     try {
       await uploadDocumento(data);
       setShowSubirModal(false);
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
     }
   };
@@ -99,7 +99,7 @@ export const CentroDocumentacion: React.FC = () => {
       try {
         await deleteDocumento(doc.id);
         notificationService.success('Documento eliminado', 'El documento se ha eliminado correctamente');
-      } catch (error) {
+      } catch (_error) {
         notificationService.error('Error al eliminar', 'No se pudo eliminar el documento');
       }
     }
@@ -114,7 +114,7 @@ export const CentroDocumentacion: React.FC = () => {
         doc.estado === 'archivado' ? 'Documento desarchivado' : 'Documento archivado',
         'El estado del documento se ha actualizado'
       );
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al actualizar', 'No se pudo cambiar el estado del documento');
     }
   };
@@ -124,7 +124,7 @@ export const CentroDocumentacion: React.FC = () => {
       await updateDocumento(doc.id, {
         destacado: !doc.destacado
       });
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al actualizar', 'No se pudo cambiar el estado destacado');
     }
   };

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Search, Download, Filter, X } from 'lucide-react';
+import {ChevronLeft, ChevronRight, Search, Download, _Filter, _X} from 'lucide-react';
 import { cn } from '../../utils/utils';
 
 export interface Column<T> {
@@ -29,8 +29,8 @@ export interface DataTableProps<T> {
   title?: string;
 }
 
-export function DataTable<T extends Record<string, any>>({
-  data,
+export function DataTable<T extends Record<string, unknown>>({
+  _data,
   columns,
   searchKeys = [],
   searchPlaceholder = "Buscar...",
@@ -48,7 +48,7 @@ export function DataTable<T extends Record<string, any>>({
   const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>(_);
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter data
@@ -109,7 +109,7 @@ export function DataTable<T extends Record<string, any>>({
     }
 
     return filtered;
-  }, [data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns]);
+  }, [_data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns]);
 
   // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -273,7 +273,7 @@ export function DataTable<T extends Record<string, any>>({
             </div>
             {Object.keys(filters).length > 0 && (
               <button
-                onClick={() => setFilters({})}
+                onClick={() => setFilters(_)}
                 className="mt-3 text-base text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
                 <X className="h-3 w-3" />

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Plus, 
-  User, 
-  Phone,
-  MapPin,
-  Calendar,
-  Flag
-} from 'lucide-react';
+import {Search, Plus, _User, _Phone, _MapPin, _Calendar, Flag} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge, EmptyState, LoadingState } from '../../../components/ui';
 import { useCamionerosStore } from '../../../store/camionerosStore';
 import { FichaCamionero } from './FichaCamionero';
@@ -21,11 +13,7 @@ export const ListaCamioneros: React.FC = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(null);
   
-  const { 
-    camioneros, 
-    loading, 
-    fetchCamioneros 
-  } = useCamionerosStore();
+  const {_camioneros, _loading, _fetchCamioneros} = useCamionerosStore();
 
   useEffect(() => {
     fetchCamioneros(filtros);

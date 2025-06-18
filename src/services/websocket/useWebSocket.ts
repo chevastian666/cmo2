@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {_useEffect, _useState} from 'react';
 import { wsService } from './WebSocketService';
 import { 
   usePrecintosStore, 
@@ -23,7 +23,7 @@ export const useWebSocket = () => {
 
   useEffect(() => {
     // Set up event handlers
-    wsService.on('onConnectionChange', (data) => {
+    wsService.on('onConnectionChange', (_data) => {
       setConnectionStatus({
         isConnected: data.status === 'connected',
         status: data.status,
@@ -48,7 +48,7 @@ export const useWebSocket = () => {
     });
 
     // Handle precinto updates
-    wsService.on('onPrecintoUpdate', (data) => {
+    wsService.on('onPrecintoUpdate', (_data) => {
       const store = usePrecintosStore.getState();
       
       switch (data.action) {
@@ -57,7 +57,7 @@ export const useWebSocket = () => {
           break;
         case 'create':
           // Add new precinto to both lists if active
-          const newPrecinto = data.precinto as any;
+          const newPrecinto = data.precinto as unknown;
           store.setPrecintos([...store.precintos, newPrecinto]);
           if (['SAL', 'LLE', 'FMF', 'CFM', 'CNP'].includes(newPrecinto.estado)) {
             store.setPrecintosActivos([...store.precintosActivos, newPrecinto]);
@@ -70,15 +70,16 @@ export const useWebSocket = () => {
     });
 
     // Handle transito updates
-    wsService.on('onTransitoUpdate', (data) => {
+    wsService.on('onTransitoUpdate', (_data) => {
       const store = useTransitosStore.getState();
       
       switch (data.action) {
         case 'update':
           store.updateTransito(data.transito.id, data.transito);
           break;
-        case 'create':
-          const newTransito = data.transito as any;
+        case 'create': {
+          const 
+            newTransito = data.transito as unknown;
           store.setTransitos([...store.transitos, newTransito]);
           if (newTransito.estado === 'pendiente') {
             store.setTransitosPendientes([...store.transitosPendientes, newTransito]);
@@ -98,7 +99,7 @@ export const useWebSocket = () => {
     });
 
     // Handle new alerts
-    wsService.on('onAlertaNueva', (data) => {
+    wsService.on('onAlertaNueva', (_data) => {
       const store = useAlertasStore.getState();
       store.addAlerta(data.alerta);
       
@@ -129,7 +130,7 @@ export const useWebSocket = () => {
     });
 
     // Handle alert updates
-    wsService.on('onAlertaUpdate', (data) => {
+    wsService.on('onAlertaUpdate', (_data) => {
       const store = useAlertasStore.getState();
       
       if (data.action === 'atender') {
@@ -143,9 +144,9 @@ export const useWebSocket = () => {
     });
 
     // Handle system updates
-    wsService.on('onSistemaUpdate', (data) => {
+    wsService.on('onSistemaUpdate', (_data) => {
       const store = useSystemStatusStore.getState();
-      store.updateSystemStatus(data);
+      store.updateSystemStatus(_data);
     });
 
     // Connect WebSocket

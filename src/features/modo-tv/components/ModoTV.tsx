@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Monitor, Volume2, VolumeX, Maximize2, Settings } from 'lucide-react';
+import {Monitor, Volume2, VolumeX, Maximize2, _Settings} from 'lucide-react';
 import { ProximosArribos } from './ProximosArribos';
 import { AlertasActivas } from './AlertasActivas';
 import { TransitosCriticos } from './TransitosCriticos';
@@ -54,8 +54,8 @@ export const ModoTV: React.FC = () => {
       nuevasAlertas.forEach(a => ultimasAlertasRef.current.add(a.id));
       
       setAlertas(nuevasAlertas);
-    } catch (error) {
-      console.error('Error cargando datos:', error);
+    } catch (_error) {
+      console.error('Error cargando datos:', _error);
     }
   };
 
@@ -85,14 +85,14 @@ export const ModoTV: React.FC = () => {
       try {
         await containerRef.current.requestFullscreen();
         setFullscreen(true);
-      } catch (err) {
+      } catch (_err) {
         console.error('Error al entrar en fullscreen:', err);
       }
     } else if (fullscreen) {
       try {
         await document.exitFullscreen();
         setFullscreen(false);
-      } catch (err) {
+      } catch (_err) {
         console.error('Error al salir de fullscreen:', err);
       }
     }

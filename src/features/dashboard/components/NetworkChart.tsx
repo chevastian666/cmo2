@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Area,
-  AreaChart
-} from 'recharts';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart} from 'recharts';
 import { format } from 'date-fns';
 
 interface NetworkChartProps {
@@ -24,7 +14,7 @@ interface NetworkChartProps {
 }
 
 export const NetworkChart: React.FC<NetworkChartProps> = ({
-  data,
+  _data,
   title,
   color = '#3B82F6',
   type = 'line'

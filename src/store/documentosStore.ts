@@ -74,7 +74,7 @@ interface DocumentosState {
   
   // Actions
   fetchDocumentos: () => Promise<void>;
-  uploadDocumento: (data: any) => Promise<void>;
+  uploadDocumento: (data: unknown) => Promise<void>;
   deleteDocumento: (id: string) => Promise<void>;
   updateDocumento: (id: string, updates: Partial<Documento>) => Promise<void>;
   registrarLog: (log: Omit<LogAuditoria, 'id' | 'fecha'>) => void;
@@ -114,7 +114,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         loading: false,
         error: null
       });
-    } catch (error) {
+    } catch (_error) {
       set({ 
         error: 'Error al cargar documentos',
         loading: false
@@ -149,7 +149,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         estado: 'activo'
       };
 
-      const { documentos } = get();
+      const {_documentos} = get();
       set({ documentos: [...documentos, nuevoDoc] });
       
       // Registrar log
@@ -160,14 +160,14 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al subir documento');
     }
   },
 
   deleteDocumento: async (id) => {
     try {
-      const { documentos } = get();
+      const {_documentos} = get();
       set({ documentos: documentos.filter(d => d.id !== id) });
       
       // Registrar log
@@ -178,14 +178,14 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al eliminar documento');
     }
   },
 
   updateDocumento: async (id, updates) => {
     try {
-      const { documentos } = get();
+      const {_documentos} = get();
       set({
         documentos: documentos.map(d => 
           d.id === id 
@@ -211,7 +211,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         ip: '192.168.1.1',
         detalles: JSON.stringify(updates)
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al actualizar documento');
     }
   },

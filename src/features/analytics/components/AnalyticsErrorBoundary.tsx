@@ -7,7 +7,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import {_AlertTriangle, RefreshCw} from 'lucide-react';
 
 interface Props {
   children: ReactNode;
@@ -26,12 +26,12 @@ class AnalyticsErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error, errorInfo: null };
+    return { hasError: true, _error, errorInfo: null };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Analytics Error:', error, errorInfo);
-    this.setState({ error, errorInfo });
+    console.error('Analytics Error:', _error, errorInfo);
+    this.setState({ _error, errorInfo });
   }
 
   handleReset = () => {

@@ -21,9 +21,9 @@ import type {
 } from './types';
 
 // Custom logger middleware for development
-const logger = (config: any) => (set: any, get: any, api: any) =>
+const logger = (config: unknown) => (set: unknown, get: unknown, api: unknown) =>
   config(
-    (...args: any[]) => {
+    (...args: unknown[]) => {
       if (import.meta.env.DEV) {
         console.log('  applying', args);
       }
@@ -52,7 +52,7 @@ export const usePrecintosStore = create<PrecintosStore>()(
             filters: state.filters
           }),
           version: 1,
-          migrate: (persistedState: any, version: number) => {
+          migrate: (persistedState: unknown, version: number) => {
             if (version === 0) {
               // Migration logic if needed
             }

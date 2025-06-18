@@ -17,7 +17,7 @@ export interface Notification {
     label: string;
     handler: () => void;
   };
-  metadata?: any;
+  metadata?: unknown;
 }
 
 type NotificationListener = (notification: Notification) => void;
@@ -64,7 +64,7 @@ class NotificationService {
     title: string,
     message: string,
     action?: Notification['action'],
-    metadata?: any
+    metadata?: unknown
   ): Notification {
     const notification: Notification = {
       id: this.generateId(),
@@ -107,7 +107,7 @@ class NotificationService {
   }
 
   // Alert-specific notifications
-  newAlert(alert: any): void {
+  newAlert(alert: unknown): void {
     const severityMap = {
       critica: 'error',
       alta: 'warning',
@@ -130,7 +130,7 @@ class NotificationService {
     );
   }
 
-  transitDelayed(transit: any): void {
+  transitDelayed(transit: unknown): void {
     this.create(
       'warning',
       'Tránsito Demorado',
@@ -144,7 +144,7 @@ class NotificationService {
     );
   }
 
-  cmoMessage(message: any): void {
+  cmoMessage(message: unknown): void {
     this.create(
       'info',
       'Nuevo Mensaje CMO',
@@ -269,7 +269,7 @@ class NotificationService {
     this.listListeners.forEach(listener => {
       try {
         listener(allNotifications);
-      } catch (error) {
+      } catch (_error) {
         console.error('Error in notification list listener:', error);
       }
     });
@@ -279,7 +279,7 @@ class NotificationService {
     this.listeners.forEach(listener => {
       try {
         listener(notification);
-      } catch (error) {
+      } catch (_error) {
         console.error('Error in notification listener:', error);
       }
     });
@@ -290,7 +290,7 @@ class NotificationService {
     const variant = notification.type === 'error' || notification.type === 'alert' ? 'destructive' : 'default';
     
     // Show toast with action if provided
-    const toastOptions: any = {
+    const toastOptions: unknown = {
       title: notification.title,
       description: notification.message,
       variant,
@@ -358,7 +358,7 @@ class NotificationService {
             console.debug('Audio playback failed:', error.message);
           }
         });
-      } catch (error) {
+      } catch (_error) {
         console.debug('Failed to play audio:', error);
       }
     }
@@ -383,7 +383,7 @@ class NotificationService {
   private persist(): void {
     try {
       localStorage.setItem('notifications', JSON.stringify(this.notifications));
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to persist notifications:', error);
     }
   }
@@ -396,7 +396,7 @@ class NotificationService {
         // Clean old notifications on load
         this.clearOld();
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to load notifications:', error);
       this.notifications = [];
     }

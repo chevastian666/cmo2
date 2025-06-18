@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Clock, TrendingUp } from 'lucide-react';
+import {BarChart, _Clock, _TrendingUp} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../../../components/ui';
 import { congestionAnalyzer } from '../utils/congestionAnalyzer';
 import { cn } from '../../../utils/utils';
@@ -21,8 +21,8 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
   const [maxCamiones, setMaxCamiones] = useState(0);
 
   useEffect(() => {
-    const data = congestionAnalyzer.generarProyeccionPorHora(transitos);
-    setProyeccion(data);
+    const _data = congestionAnalyzer.generarProyeccionPorHora(transitos);
+    setProyeccion(_data);
     
     // Calcular máximo para escala
     const max = Math.max(...data.flatMap(p => 

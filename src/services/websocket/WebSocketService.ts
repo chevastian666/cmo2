@@ -37,7 +37,7 @@ export class WebSocketService {
     try {
       this.ws = new WebSocket(this.url);
       this.setupEventListeners();
-    } catch (error) {
+    } catch (_error) {
       console.error('WebSocket connection error:', error);
       this.handleReconnect();
     }
@@ -62,7 +62,7 @@ export class WebSocketService {
     this.notifyConnectionChange({ status: 'disconnected' });
   }
 
-  send(message: any): void {
+  send(message: unknown): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else if (this.isSimulated) {
@@ -98,7 +98,7 @@ export class WebSocketService {
       try {
         const message: WebSocketMessage = JSON.parse(event.data);
         this.handleMessage(message);
-      } catch (error) {
+      } catch (_error) {
         console.error('Failed to parse WebSocket message:', error);
       }
     };
@@ -206,12 +206,12 @@ export class WebSocketService {
     const alerta: AlertaUpdateData = {
       alerta: {
         id: `alert-${Date.now()}`,
-        tipo: alertTypes[Math.floor(Math.random() * alertTypes.length)] as any,
+        tipo: alertTypes[Math.floor(Math.random() * alertTypes.length)] as unknown,
         precintoId: `pr-${Math.floor(Math.random() * 10)}`,
         codigoPrecinto: `BT${String(2024000 + Math.floor(Math.random() * 100)).padStart(8, '0')}`,
         mensaje: 'Alerta simulada en tiempo real',
         timestamp: Math.floor(Date.now() / 1000),
-        severidad: severidades[Math.floor(Math.random() * severidades.length)] as any,
+        severidad: severidades[Math.floor(Math.random() * severidades.length)] as unknown,
         atendida: false,
         ubicacion: {
           lat: -34.9011 + (Math.random() - 0.5) * 0.1,
@@ -249,7 +249,7 @@ export class WebSocketService {
     const update: PrecintoUpdateData = {
       precinto: {
         id: `pr-${Math.floor(Math.random() * 10)}`,
-        estado: estados[Math.floor(Math.random() * estados.length)] as any,
+        estado: estados[Math.floor(Math.random() * estados.length)] as unknown,
         ubicacionActual: {
           lat: -34.9011 + (Math.random() - 0.5) * 0.1,
           lng: -56.1645 + (Math.random() - 0.5) * 0.1,

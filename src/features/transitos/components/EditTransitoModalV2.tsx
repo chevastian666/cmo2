@@ -57,7 +57,7 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
 
       onSuccess?.();
       onClose();
-    } catch (error) {
+    } catch (_error) {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'

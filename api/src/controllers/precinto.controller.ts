@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { Request, Response, NextFunction } from 'express';
+// import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { ApiError } from '../middleware/errorHandler';
 import { precintoService } from '../services/precinto.service';
@@ -28,7 +28,7 @@ export const getAllPrecintos = async (
     const result = await precintoService.getAll(page, limit, filters);
     
     res.json({
-      data: result.data,
+      data: result._data,
       pagination: {
         page,
         limit,
@@ -36,8 +36,8 @@ export const getAllPrecintos = async (
         totalPages: Math.ceil(result.total / limit)
       }
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -60,8 +60,8 @@ export const getPrecintoById = async (
     }
     
     res.json(precinto);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -89,8 +89,8 @@ export const createPrecinto = async (
     logger.info(`Precinto created: ${precinto.id} by user ${req.user?.id}`);
     
     res.status(201).json(precinto);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -123,8 +123,8 @@ export const updatePrecinto = async (
     });
     
     res.json(updatedPrecinto);
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -151,8 +151,8 @@ export const deletePrecinto = async (
     logger.info(`Precinto deleted: ${id} by user ${req.user?.id}`);
     
     res.status(204).send();
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -165,12 +165,12 @@ export const activatePrecinto = async (
     const { id } = req.params;
     const { transitId } = req.body;
     
-    const precinto = await precintoService.activate(id, transitId, req.user?.id);
+    const precinto = await precintoService.activate(id, _transitId, req.user?.id);
     
     // Send webhook notification
     await webhookService.trigger('precinto.activated', {
       precinto,
-      transitId,
+      _transitId,
       user: req.user,
       timestamp: new Date()
     });
@@ -179,8 +179,8 @@ export const activatePrecinto = async (
       message: 'Precinto activated successfully',
       precinto
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -193,12 +193,12 @@ export const deactivatePrecinto = async (
     const { id } = req.params;
     const { reason } = req.body;
     
-    const precinto = await precintoService.deactivate(id, reason, req.user?.id);
+    const precinto = await precintoService.deactivate(id, _reason, req.user?.id);
     
     // Send webhook notification
     await webhookService.trigger('precinto.deactivated', {
       precinto,
-      reason,
+      _reason,
       user: req.user,
       timestamp: new Date()
     });
@@ -207,8 +207,8 @@ export const deactivatePrecinto = async (
       message: 'Precinto deactivated successfully',
       precinto
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };
 
@@ -232,7 +232,7 @@ export const updateLocation = async (
       message: 'Location updated successfully',
       location
     });
-  } catch (error) {
-    next(error);
+  } catch (_error) {
+    next(_error);
   }
 };

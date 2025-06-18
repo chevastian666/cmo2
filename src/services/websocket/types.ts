@@ -29,9 +29,9 @@ export interface AlertaUpdateData {
   alerta: Alerta;
   action: 'create' | 'update' | 'atender' | 'asignar' | 'comentar' | 'resolver';
   detalles?: {
-    asignacion?: any;
-    comentario?: any;
-    resolucion?: any;
+    asignacion?: unknown;
+    comentario?: unknown;
+    resolucion?: unknown;
   };
 }
 

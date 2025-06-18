@@ -17,7 +17,7 @@ export function renderAppToStream(
   res: Response,
   options: StreamingOptions = {}
 ) {
-  const { bootstrapScripts = ['/static/js/bundle.js'], nonce } = options;
+  const {_bootstrapScripts = ['/static/js/bundle.js'], _nonce} = options;
 
   let didError = false;
 
@@ -113,7 +113,7 @@ export function renderAppToStream(
 
 // Express middleware
 export function streamingSSRMiddleware(options: StreamingOptions = {}) {
-  return (req: any, res: Response, next: any) => {
+  return (req: unknown, res: Response, next: unknown) => {
     // Only handle GET requests to app routes
     if (req.method !== 'GET' || req.path.startsWith('/api')) {
       return next();
@@ -121,7 +121,7 @@ export function streamingSSRMiddleware(options: StreamingOptions = {}) {
 
     try {
       renderAppToStream(req.url, res, options);
-    } catch (error) {
+    } catch (_error) {
       console.error('SSR error:', error);
       next(error);
     }

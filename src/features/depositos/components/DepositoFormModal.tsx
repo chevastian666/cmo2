@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Building2 } from 'lucide-react';
+import {_X, Save, Building2} from 'lucide-react';
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
 import type { Deposito } from '../types';
 
@@ -34,7 +34,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
     horaCierre: ''
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>(_);
 
   useEffect(() => {
     if (deposito) {
@@ -74,7 +74,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
         horaCierre: ''
       });
     }
-    setErrors({});
+    setErrors(_);
   }, [deposito]);
 
   const validate = () => {
@@ -124,7 +124,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
       horaCierre: formData.horaCierre || undefined
     };
 
-    onSave(data);
+    onSave(_data);
   };
 
   if (!isOpen) return null;

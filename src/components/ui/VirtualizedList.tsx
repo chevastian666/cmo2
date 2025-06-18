@@ -11,7 +11,7 @@ export interface VirtualizedListProps<T> {
   onScroll?: (scrollTop: number) => void;
 }
 
-export const VirtualizedList = memo(<T extends any>({
+export const VirtualizedList = memo(<T>({
   items,
   itemHeight,
   containerHeight,
@@ -100,7 +100,7 @@ export interface VirtualizedTableProps<T> {
   rowClassName?: string | ((item: T, index: number) => string);
 }
 
-export const VirtualizedTable = memo(<T extends Record<string, any>>({
+export const VirtualizedTable = memo(<T extends Record<string, unknown>>({
   items,
   columns,
   rowHeight = 60,
@@ -165,6 +165,6 @@ export const VirtualizedTable = memo(<T extends Record<string, any>>({
       />
     </div>
   );
-}) as <T extends Record<string, any>>(props: VirtualizedTableProps<T>) => JSX.Element;
+}) as <T extends Record<string, unknown>>(props: VirtualizedTableProps<T>) => JSX.Element;
 
 VirtualizedTable.displayName = 'VirtualizedTable';

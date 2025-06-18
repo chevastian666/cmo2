@@ -10,7 +10,7 @@ interface CacheEntry<T = any> {
 }
 
 interface PendingRequest {
-  promise: Promise<any>;
+  promise: Promise<unknown>;
   timestamp: number;
 }
 
@@ -42,7 +42,7 @@ class CacheService {
    */
   set<T>(key: string, data: T, ttl: number = this.DEFAULT_TTL): void {
     this.cache.set(key, {
-      data,
+      _data,
       timestamp: Date.now(),
       ttl
     });
@@ -125,7 +125,7 @@ class CacheService {
         expiredEntries++;
       }
       // Rough size estimation
-      totalSize += JSON.stringify(entry.data).length;
+      totalSize += JSON.stringify(entry._data).length;
     }
 
     return {

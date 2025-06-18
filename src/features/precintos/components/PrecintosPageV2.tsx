@@ -5,11 +5,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Download, Filter, RefreshCw, Shield, AlertCircle } from 'lucide-react';
+import {Plus, Download, _Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { 
   PageTransition, 
@@ -149,14 +149,7 @@ const PrecintoRow: React.FC<{
 };
 
 const PrecintosPageV2: React.FC = () => {
-  const {
-    precintos,
-    loading,
-    fetchPrecintos,
-    precintosActivos,
-    getPrecintosConAlertas,
-    getPrecintosBajaBateria
-  } = usePrecintosStore();
+  const {_precintos, _loading, _fetchPrecintos, _precintosActivos, _getPrecintosConAlertas, _getPrecintosBajaBateria} = usePrecintosStore();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('todos');
