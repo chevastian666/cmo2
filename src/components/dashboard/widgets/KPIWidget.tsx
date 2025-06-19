@@ -16,6 +16,7 @@ interface KPIWidgetProps {
   trend?: 'up' | 'down' | 'neutral';
   icon?: React.ReactNode;
   color?: 'blue' | 'green' | 'red' | 'yellow' | 'purple';
+  description?: string;
 }
 
 export const KPIWidget: React.FC<KPIWidgetProps> = ({
@@ -25,7 +26,8 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
   change,
   trend = 'neutral',
   icon,
-  color = 'blue'
+  color = 'blue',
+  description
 }) => {
   const colorClasses = {
     blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -60,7 +62,12 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
       )}
       
       {/* Título */}
-      <p className="text-sm text-gray-400 mb-1">{title}</p>
+      <div className="mb-1">
+        <p className="text-sm text-gray-400">{title}</p>
+        {description && (
+          <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+        )}
+      </div>
       
       {/* Valor */}
       <div className="flex-1 flex items-center">

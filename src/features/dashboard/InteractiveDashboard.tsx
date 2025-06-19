@@ -14,7 +14,8 @@ import {
   ActivityWidget,
   StatisticsWidget,
   TransitWidget,
-  PrecintoStatusWidget
+  PrecintoStatusWidget,
+  PendingPrecintosWidget
 } from '../../components/dashboard/widgets';
 import { PageTransition, AnimatedHeader } from '../../components/animations/PageTransitions';
 import { usePrecintosStore } from '../../store/store';
@@ -35,31 +36,30 @@ const InteractiveDashboard: React.FC = () => {
     tasaCumplimiento: 94.5
   }), [precintos, transitos, alertas]);
 
-  // Configuración de widgets
+  // Configuración de widgets - ordenados por prioridad visual
   const widgets: WidgetConfig[] = [
+    // Widgets prioritarios (parte superior)
     {
       id: 'kpi-precintos',
       type: 'kpi',
-      title: 'Precintos Activos',
+      title: 'Precintos Activos - PRIORIDAD',
       minW: 3,
       minH: 2,
       maxH: 3
     },
     {
-      id: 'kpi-transitos',
-      type: 'kpi',
-      title: 'Tránsitos en Ruta',
-      minW: 3,
-      minH: 2,
-      maxH: 3
+      id: 'pending-precintos',
+      type: 'pending-precintos',
+      title: 'Pendientes Precintar/Desprecintar - URGENTE',
+      minW: 4,
+      minH: 4
     },
     {
-      id: 'kpi-alertas',
-      type: 'kpi',
-      title: 'Alertas Críticas',
-      minW: 3,
-      minH: 2,
-      maxH: 3
+      id: 'precinto-status',
+      type: 'precinto-status',
+      title: 'Estado de Precintos - FOCO PRINCIPAL',
+      minW: 4,
+      minH: 4
     },
     {
       id: 'kpi-cumplimiento',
@@ -69,6 +69,7 @@ const InteractiveDashboard: React.FC = () => {
       minH: 2,
       maxH: 3
     },
+    // Widgets centrales
     {
       id: 'chart-main',
       type: 'chart',
@@ -84,9 +85,9 @@ const InteractiveDashboard: React.FC = () => {
       minH: 4
     },
     {
-      id: 'alerts',
-      type: 'alerts',
-      title: 'Alertas Recientes',
+      id: 'statistics',
+      type: 'statistics',
+      title: 'Estadísticas',
       minW: 4,
       minH: 3
     },
@@ -97,26 +98,36 @@ const InteractiveDashboard: React.FC = () => {
       minW: 4,
       minH: 3
     },
+    // Widgets de tránsitos y alertas (parte inferior)
     {
-      id: 'statistics',
-      type: 'statistics',
-      title: 'Estadísticas',
-      minW: 4,
-      minH: 3
+      id: 'kpi-transitos',
+      type: 'kpi',
+      title: 'Tránsitos en Ruta',
+      minW: 3,
+      minH: 2,
+      maxH: 3
     },
     {
       id: 'transits',
       type: 'transits',
-      title: 'Tránsitos Activos',
+      title: 'Resumen de Tránsitos',
       minW: 4,
       minH: 4
     },
     {
-      id: 'precinto-status',
-      type: 'precinto-status',
-      title: 'Estado de Precintos',
+      id: 'kpi-alertas',
+      type: 'kpi',
+      title: 'Alertas Críticas',
+      minW: 3,
+      minH: 2,
+      maxH: 3
+    },
+    {
+      id: 'alerts',
+      type: 'alerts',
+      title: 'Alertas Recientes',
       minW: 4,
-      minH: 4
+      minH: 3
     }
   ];
 
@@ -128,34 +139,37 @@ const InteractiveDashboard: React.FC = () => {
           case 'kpi-precintos':
             return (
               <KPIWidget
-                title="Activos"
+                title="Precintos Activos"
                 value={kpis.precintosActivos}
                 change={12}
                 trend="up"
                 icon={<Shield className="h-6 w-6" />}
                 color="blue"
+                description="Precintos en operación"
               />
             );
           case 'kpi-transitos':
             return (
               <KPIWidget
-                title="En Ruta"
+                title="Tránsitos Activos"
                 value={kpis.transitosEnRuta}
                 change={-5}
                 trend="down"
                 icon={<Truck className="h-6 w-6" />}
                 color="green"
+                description="En viaje / Pendientes"
               />
             );
           case 'kpi-alertas':
             return (
               <KPIWidget
-                title="Críticas"
+                title="Alertas"
                 value={kpis.alertasCriticas}
                 change={0}
                 trend="neutral"
                 icon={<AlertCircle className="h-6 w-6" />}
                 color="red"
+                description="Críticas / Medias / Bajas"
               />
             );
           case 'kpi-cumplimiento':
@@ -193,6 +207,9 @@ const InteractiveDashboard: React.FC = () => {
       
       case 'precinto-status':
         return <PrecintoStatusWidget />;
+      
+      case 'pending-precintos':
+        return <PendingPrecintosWidget />;
       
       default:
         return <div>Widget no encontrado</div>;

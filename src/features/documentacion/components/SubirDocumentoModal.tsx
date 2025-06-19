@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import {X, Upload,FileText, AlertCircle, Check} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { InfoSection } from '@/components/ui/InfoRow';
 import { cn } from '../../../utils/utils';
 import { notificationService } from '../../../services/shared/notification.service';
 import type { TipoDocumento } from '../types';
@@ -39,7 +38,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
   });
   const [archivo, setArchivo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>(_);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
@@ -102,7 +101,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       fechaDocumento: new Date().toISOString().split('T')[0]
     });
     setArchivo(null);
-    setErrors(_);
+    setErrors({});
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }

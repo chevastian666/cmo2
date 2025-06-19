@@ -167,11 +167,21 @@ export const AlertsList: React.FC = () => {
 
   return (
     <>
-      <div className="bg-gray-800 rounded-lg">
+      <div className="bg-gray-800 rounded-lg border-2 border-red-600/50 shadow-lg shadow-red-600/10">
         <div className="p-4 border-b border-gray-700">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">Alarmas Activas</h2>
-            <span className="text-sm text-gray-400">{alertas.length} alarmas</span>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-600/20 rounded-lg">
+                <AlertTriangle className="h-6 w-6 text-red-500" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">ALERTAS ACTIVAS</h2>
+                <p className="text-sm text-red-400 mt-0.5">Atención inmediata</p>
+              </div>
+            </div>
+            <span className="text-lg font-semibold text-red-400 bg-red-900/30 px-3 py-1 rounded-lg">
+              {alertas.length} alertas
+            </span>
           </div>
         </div>
         

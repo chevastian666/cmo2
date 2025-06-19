@@ -1,0 +1,64 @@
+/* Animaciones para el Dashboard */
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* Efecto de pulso para el contador cuando queda poco tiempo */
+@keyframes pulse-warning {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-warning {
+  animation: pulse-warning 1s ease-in-out infinite;
+}
+
+/* Transiciones suaves para actualizaciones de datos */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Evitar parpadeos en las tablas */
+table tbody tr {
+  transition: all 0.2s ease;
+}
+
+/* Transición suave para badges y contadores */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animación de fade para contenido actualizado */
+@keyframes fade-update {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.update-animation {
+  animation: fade-update 0.5s ease-out;
+}

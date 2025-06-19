@@ -177,15 +177,28 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
   }, [mappedPrecintos, mockPrecintos, sortColumn, sortDirection]);
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700">
+    <div className="bg-gray-800 rounded-lg border-2 border-blue-600/50 shadow-lg shadow-blue-600/10">
       <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-700 flex justify-between items-center">
-        <h3 className="text-lg sm:text-xl font-semibold text-white">Precintos Activos</h3>
-        <Link 
-          to="/precintos" 
-          className="text-sm sm:text-base text-blue-400 hover:text-blue-300 whitespace-nowrap"
-        >
-          Ver todos →
-        </Link>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-600/20 rounded-lg">
+            <Link2 className="h-6 w-6 text-blue-500" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">PRECINTOS ACTIVOS</h3>
+            <p className="text-sm text-blue-400 mt-0.5">Monitoreo en tiempo real</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-lg font-semibold text-blue-400 bg-blue-900/30 px-3 py-1 rounded-lg">
+            {sortedPrecintos.length} activos
+          </span>
+          <Link 
+            to="/precintos" 
+            className="text-sm sm:text-base text-blue-400 hover:text-blue-300 whitespace-nowrap"
+          >
+            Ver todos →
+          </Link>
+        </div>
       </div>
       
       <div className="overflow-x-auto">

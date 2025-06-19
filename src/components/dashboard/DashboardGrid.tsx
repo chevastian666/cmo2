@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import type { Layout, Layouts } from 'react-grid-layout';
 import {Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react';
@@ -34,32 +34,104 @@ interface DashboardGridProps {
   onLayoutChange?: (layouts: Layouts) => void;
 }
 
+const CURRENT_LAYOUT_VERSION = 2;
+
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
   widgets,
   renderWidget,
   className = '',
   onLayoutChange
 }) => {
-  const {layouts, editMode, setLayouts, setEditMode, resetLayouts} = useDashboardStore();
+  const {layouts, layoutVersion, editMode, setLayouts, setEditMode, resetLayouts} = useDashboardStore();
 
   const [isDragging, setIsDragging] = useState(false);
+  
+  // Reset layouts if version is outdated
+  useEffect(() => {
+    if (layoutVersion < CURRENT_LAYOUT_VERSION) {
+      resetLayouts();
+    }
+  }, [layoutVersion, resetLayouts]);
 
   // Generar layouts por defecto si no existen
   const defaultLayouts = useMemo(() => {
     const generateLayout = (cols: number): Layout[] => {
-      const itemsPerRow = Math.floor(cols / 4);
-      return widgets.map((widget, i) => ({
-        i: widget.id,
-        x: (i % itemsPerRow) * 4,
-        y: Math.floor(i / itemsPerRow) * 4,
-        w: 4,
-        h: 4,
-        minW: widget.minW || 2,
-        minH: widget.minH || 2,
-        maxW: widget.maxW,
-        maxH: widget.maxH,
-        static: !editMode
-      }));
+      // Layout personalizado para priorizar precintos activos y pendientes
+      const priorityWidgets = ['kpi-precintos', 'precinto-status', 'kpi-cumplimiento', 'chart-main', 'map', 'statistics', 'activity'];
+      const bottomWidgets = ['kpi-transitos', 'transits', 'kpi-alertas', 'alerts'];
+      
+      return widgets.map((widget) => {
+        let x = 0, y = 0, w = 4, h = 4;
+        
+        // Posicionamiento específico según el widget
+        if (widget.id === 'kpi-precintos') {
+          // Precintos activos - arriba a la izquierda, más grande
+          x = 0; y = 0; w = 6; h = 3;
+        } else if (widget.id === 'pending-precintos') {
+          // Pendientes precintar/desprecintar - arriba centro, muy prominente
+          x = 6; y = 0; w = 6; h = 4;
+        } else if (widget.id === 'precinto-status') {
+          // Estado de precintos - segunda fila
+          x = 0; y = 4; w = 6; h = 4;
+        } else if (widget.id === 'kpi-cumplimiento') {
+          // Tasa de cumplimiento - primera fila derecha
+          x = 0; y = 3; w = 3; h = 2;
+        } else if (widget.id === 'chart-main') {
+          // Gráfico principal - segunda fila derecha
+          x = 6; y = 4; w = 6; h = 5;
+        } else if (widget.id === 'map') {
+          // Mapa - tercera fila
+          x = 0; y = 8; w = 6; h = 5;
+        } else if (widget.id === 'statistics') {
+          // Estadísticas - tercera fila derecha
+          x = 6; y = 9; w = 6; h = 4;
+        } else if (widget.id === 'activity') {
+          // Actividad - cuarta fila
+          x = 0; y = 13; w = 6; h = 4;
+        } else if (widget.id === 'kpi-transitos') {
+          // KPI tránsitos - al fondo
+          x = 0; y = 17; w = 3; h = 2;
+        } else if (widget.id === 'transits') {
+          // Widget tránsitos - al fondo
+          x = 3; y = 17; w = 6; h = 4;
+        } else if (widget.id === 'kpi-alertas') {
+          // KPI alertas - al fondo
+          x = 9; y = 17; w = 3; h = 2;
+        } else if (widget.id === 'alerts') {
+          // Widget alertas - al fondo
+          x = 0; y = 19; w = 6; h = 4;
+        }
+        
+        // Ajustar para diferentes tamaños de pantalla
+        if (cols === 10) { // md
+          w = Math.min(w, 5);
+          x = Math.min(x, 5);
+        } else if (cols === 6) { // sm
+          w = Math.min(w, 6);
+          x = x % 6;
+        } else if (cols === 4) { // xs
+          w = 4;
+          x = 0;
+          y = widgets.indexOf(widget) * 4;
+        } else if (cols === 2) { // xxs
+          w = 2;
+          x = 0;
+          y = widgets.indexOf(widget) * 3;
+        }
+        
+        return {
+          i: widget.id,
+          x,
+          y,
+          w,
+          h,
+          minW: widget.minW || 2,
+          minH: widget.minH || 2,
+          maxW: widget.maxW,
+          maxH: widget.maxH,
+          static: !editMode
+        };
+      });
     };
 
     return {

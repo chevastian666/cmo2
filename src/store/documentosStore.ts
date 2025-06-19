@@ -122,7 +122,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
     }
   },
 
-  uploadDocumento: async (data) => {
+  uploadDocumento: async (data: any) => {
     try {
       // Simular subida
       await new Promise(resolve => setTimeout(resolve, 1000));

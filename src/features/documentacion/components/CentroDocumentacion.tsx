@@ -33,6 +33,10 @@ export const CentroDocumentacion: React.FC = () => {
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor';
   const canDelete = userInfo.role === 'admin';
   
+  console.log('User info:', userInfo);
+  console.log('Can edit:', canEdit);
+  console.log('Show modal state:', showSubirModal);
+  
   useEffect(() => {
     fetchDocumentos();
   }, [fetchDocumentos]);
@@ -84,11 +88,12 @@ export const CentroDocumentacion: React.FC = () => {
   const handleUpload = async (data: any) => {
     try {
       await uploadDocumento(data);
-      await fetchDocumentos();
-      setShowSubirModal(false);
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
+      setShowSubirModal(false);
+      fetchDocumentos(); // Recargar documentos
     } catch (_error) {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
+      throw _error; // Re-throw para que el modal maneje el estado de loading
     }
   };
 
@@ -168,7 +173,10 @@ export const CentroDocumentacion: React.FC = () => {
           )}
           {canEdit && (
             <button
-              onClick={() => setShowSubirModal(true)}
+              onClick={() => {
+                console.log('Button clicked, setting showSubirModal to true');
+                setShowSubirModal(true);
+              }}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-5 w-5" />
@@ -280,9 +288,11 @@ export const CentroDocumentacion: React.FC = () => {
       {showSubirModal && (
         <SubirDocumentoModal
           isOpen={showSubirModal}
-          onClose={() => setShowSubirModal(false)}
-          onUpload={handleUpload}
-          empresas={empresasUnicas}
+          onClose={() => {
+            console.log('Modal closing');
+            setShowSubirModal(false);
+          }}
+          onSubmit={handleUpload}
         />
       )}
 

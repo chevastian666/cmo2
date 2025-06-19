@@ -1,10 +1,10 @@
 /**
- * Centro de Monitoreo de Tránsitos - Versión 2.0
+ * Centro de Monitoreo de Tránsitos - Versión Optimizada
  * Panel principal para funcionarios del CMO
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { 
   Truck, Download, Filter, RefreshCw, MapPin, CheckCircle2, 
   Clock, AlertTriangle, Package, Search, Calendar, Building2,
@@ -21,58 +21,88 @@ import { useTransitosStore, useAlertasStore, usePrecintosStore } from '@/store/s
 import { cn } from '@/utils/utils';
 import type { Transito } from '../types';
 import { exportToExcel } from '@/utils/export';
-import { TransitDetailModalEnhanced } from '../components/TransitoDetailModalEnhanced';
 
-// Estado del tránsito con información clara
-const getEstadoInfo = (estado: string) => {
-  switch (estado) {
-    case 'EN_TRANSITO':
-      return { 
-        color: 'bg-blue-900/20 text-blue-400 border-blue-800', 
-        icon: <Truck className="h-4 w-4" />, 
-        label: 'En Tránsito',
-        dotColor: 'bg-blue-500'
-      };
-    case 'COMPLETADO':
-      return { 
-        color: 'bg-green-900/20 text-green-400 border-green-800', 
-        icon: <CheckCircle2 className="h-4 w-4" />, 
-        label: 'Completado',
-        dotColor: 'bg-green-500'
-      };
-    case 'PENDIENTE':
-      return { 
-        color: 'bg-yellow-900/20 text-yellow-400 border-yellow-800', 
-        icon: <Clock className="h-4 w-4" />, 
-        label: 'Pendiente',
-        dotColor: 'bg-yellow-500'
-      };
-    case 'ALERTA':
-      return { 
-        color: 'bg-red-900/20 text-red-400 border-red-800', 
-        icon: <AlertTriangle className="h-4 w-4" />, 
-        label: 'Con Alerta',
-        dotColor: 'bg-red-500'
-      };
-    default:
-      return { 
-        color: 'bg-gray-900/20 text-gray-400 border-gray-800', 
-        icon: <Package className="h-4 w-4" />, 
-        label: estado,
-        dotColor: 'bg-gray-500'
-      };
+// Lazy load el modal pesado
+const TransitDetailModalEnhanced = lazy(() => 
+  import('../components/TransitoDetailModalEnhanced').then(m => ({ 
+    default: m.TransitDetailModalEnhanced 
+  }))
+);
+
+// Estado del tránsito con información clara - Memoizado globalmente
+const ESTADO_INFO_MAP = {
+  'EN_TRANSITO': { 
+    color: 'bg-blue-900/20 text-blue-400 border-blue-800', 
+    icon: <Truck className="h-4 w-4" />, 
+    label: 'En Tránsito',
+    dotColor: 'bg-blue-500'
+  },
+  'COMPLETADO': { 
+    color: 'bg-green-900/20 text-green-400 border-green-800', 
+    icon: <CheckCircle2 className="h-4 w-4" />, 
+    label: 'Completado',
+    dotColor: 'bg-green-500'
+  },
+  'PENDIENTE': { 
+    color: 'bg-yellow-900/20 text-yellow-400 border-yellow-800', 
+    icon: <Clock className="h-4 w-4" />, 
+    label: 'Pendiente',
+    dotColor: 'bg-yellow-500'
+  },
+  'ALERTA': { 
+    color: 'bg-red-900/20 text-red-400 border-red-800', 
+    icon: <AlertTriangle className="h-4 w-4" />, 
+    label: 'Con Alerta',
+    dotColor: 'bg-red-500'
   }
 };
 
-// Tarjeta de resumen mejorada
-const ResumenCard: React.FC<{
+const getEstadoInfo = (estado: string) => {
+  return ESTADO_INFO_MAP[estado as keyof typeof ESTADO_INFO_MAP] || {
+    color: 'bg-gray-900/20 text-gray-400 border-gray-800', 
+    icon: <Package className="h-4 w-4" />, 
+    label: estado,
+    dotColor: 'bg-gray-500'
+  };
+};
+
+// Loading skeleton optimizado
+const TransitoSkeleton = () => (
+  <Card className="bg-gray-900 border-gray-800">
+    <CardContent className="p-6 animate-pulse">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start gap-3">
+          <div className="w-3 h-3 bg-gray-700 rounded-full mt-1"></div>
+          <div>
+            <div className="h-6 w-32 bg-gray-700 rounded mb-2"></div>
+            <div className="h-4 w-24 bg-gray-800 rounded"></div>
+          </div>
+        </div>
+        <div className="h-8 w-20 bg-gray-800 rounded"></div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <div className="h-4 w-full bg-gray-800 rounded"></div>
+          <div className="h-4 w-3/4 bg-gray-800 rounded"></div>
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 w-full bg-gray-800 rounded"></div>
+          <div className="h-4 w-3/4 bg-gray-800 rounded"></div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+// Tarjeta de resumen optimizada con React.memo
+const ResumenCard = React.memo<{
   title: string;
   value: number;
   total?: number;
   icon: React.ReactNode;
   color: string;
   description?: string;
-}> = ({ title, value, total, icon, color, description }) => (
+}>(({ title, value, total, icon, color, description }) => (
   <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors">
     <CardContent className="p-6">
       <div className="flex items-start justify-between">
@@ -95,11 +125,9 @@ const ResumenCard: React.FC<{
       {total && (
         <div className="mt-4">
           <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${(value / total) * 100}%` }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className={cn("h-full rounded-full", color.replace('/10', ''))}
+            <div
+              style={{ width: `${(value / total) * 100}%` }}
+              className={cn("h-full rounded-full transition-all duration-500", color.replace('/10', ''))}
             />
           </div>
           <p className="text-xs text-gray-500 mt-1">
@@ -109,14 +137,14 @@ const ResumenCard: React.FC<{
       )}
     </CardContent>
   </Card>
-);
+));
 
-// Componente de fila de tránsito mejorado
-const TransitoCard: React.FC<{
+// Componente de fila de tránsito optimizado
+const TransitoCard = React.memo<{
   transito: Transito;
   onView: (transito: Transito) => void;
   onViewMap: (transito: Transito) => void;
-}> = ({ transito, onView, onViewMap }) => {
+}>(({ transito, onView, onViewMap }) => {
   const estadoInfo = getEstadoInfo(transito.estado);
   const tiempoTranscurrido = React.useMemo(() => {
     const ahora = new Date();
@@ -131,20 +159,18 @@ const TransitoCard: React.FC<{
     return `${horas}h`;
   }, [transito.fechaSalida]);
 
+  const handleView = useCallback(() => onView(transito), [onView, transito]);
+  const handleViewMap = useCallback(() => onViewMap(transito), [onViewMap, transito]);
+
   return (
     <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all duration-200 group">
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-start gap-3">
-            <motion.div 
+            <div 
               className={cn("w-3 h-3 rounded-full mt-1", estadoInfo.dotColor)}
-              animate={transito.estado === 'EN_TRANSITO' ? {
-                scale: [1, 1.3, 1],
-                opacity: [1, 0.6, 1]
-              } : {}}
-              transition={{
-                duration: 2,
-                repeat: transito.estado === 'EN_TRANSITO' ? Infinity : 0
+              style={{
+                animation: transito.estado === 'EN_TRANSITO' ? 'pulse 2s infinite' : undefined
               }}
             />
             <div>
@@ -162,7 +188,7 @@ const TransitoCard: React.FC<{
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onView(transito)}
+              onClick={handleView}
               className="bg-gray-800 hover:bg-gray-700"
             >
               <Eye className="h-4 w-4 mr-1" />
@@ -171,7 +197,7 @@ const TransitoCard: React.FC<{
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onViewMap(transito)}
+              onClick={handleViewMap}
               className="bg-gray-800 hover:bg-gray-700"
             >
               <MapPin className="h-4 w-4" />
@@ -237,11 +263,9 @@ const TransitoCard: React.FC<{
               <span>{transito.progreso}%</span>
             </div>
             <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${transito.progreso}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="h-full bg-blue-500 rounded-full"
+              <div
+                style={{ width: `${transito.progreso}%` }}
+                className="h-full bg-blue-500 rounded-full transition-all duration-500"
               />
             </div>
           </div>
@@ -259,102 +283,139 @@ const TransitoCard: React.FC<{
       </CardContent>
     </Card>
   );
-};
+}, (prevProps, nextProps) => {
+  // Custom comparison for better performance
+  return (
+    prevProps.transito.id === nextProps.transito.id &&
+    prevProps.transito.estado === nextProps.transito.estado &&
+    prevProps.transito.progreso === nextProps.transito.progreso
+  );
+});
 
 const TransitosPageV2: React.FC = () => {
-  const { 
-    transitos, 
-    loading, 
-    fetchTransitos, 
-    transitosEnCurso, 
-    transitosCompletados, 
-    transitosPendientes 
-  } = useTransitosStore();
+  // Optimized store subscriptions
+  const transitos = useTransitosStore(state => state.transitos);
+  const loading = useTransitosStore(state => state.loading);
+  const fetchTransitos = useTransitosStore(state => state.fetchTransitos);
+  const transitosEnCurso = useTransitosStore(state => state.transitosEnCurso);
+  const transitosCompletados = useTransitosStore(state => state.transitosCompletados);
+  const transitosPendientes = useTransitosStore(state => state.transitosPendientes);
   
-  const { alertasActivas } = useAlertasStore();
-  const { precintosActivos } = usePrecintosStore();
+  const alertasActivas = useAlertasStore(state => state.alertasActivas);
+  const precintosActivos = usePrecintosStore(state => state.precintosActivos);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [estadoFilter, setEstadoFilter] = useState('todos');
   const [empresaFilter, setEmpresaFilter] = useState('todas');
   const [fechaFilter, setFechaFilter] = useState('todos');
   const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [activeTab, setActiveTab] = useState('activos');
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
+  // Load data once with loading state
   useEffect(() => {
-    fetchTransitos();
-  }, [fetchTransitos]);
+    const loadData = async () => {
+      if (!isInitialLoad) return;
+      
+      try {
+        await fetchTransitos();
+      } finally {
+        setIsInitialLoad(false);
+      }
+    };
+    loadData();
+  }, [isInitialLoad, fetchTransitos]);
 
-  // Obtener lista única de empresas
+  // Obtener lista única de empresas - memoizado
   const empresas = React.useMemo(() => {
     const uniqueEmpresas = new Set(transitos.map(t => t.empresa));
     return Array.from(uniqueEmpresas).sort();
   }, [transitos]);
 
-  // Filtrar tránsitos
-  const filteredTransitos = React.useMemo(() => {
-    let filtered = [...transitos];
+  // Filtrar tránsitos - optimizado con paginación
+  const { filteredTransitos, totalPages, totalItems } = React.useMemo(() => {
+    let filtered = transitos;
 
     // Filtro por pestaña activa
     switch (activeTab) {
       case 'activos':
-        filtered = filtered.filter(t => t.estado === 'EN_TRANSITO');
+        filtered = transitosEnCurso;
         break;
       case 'pendientes':
-        filtered = filtered.filter(t => t.estado === 'PENDIENTE');
+        filtered = transitosPendientes;
         break;
       case 'completados':
-        filtered = filtered.filter(t => t.estado === 'COMPLETADO');
+        filtered = transitosCompletados;
         break;
       case 'alertas':
-        filtered = filtered.filter(t => t.estado === 'ALERTA');
+        filtered = transitos.filter(t => t.estado === 'ALERTA');
         break;
     }
 
-    // Filtro por búsqueda
-    if (searchTerm) {
-      const search = searchTerm.toLowerCase();
-      filtered = filtered.filter(t => 
-        t.dua.toLowerCase().includes(search) ||
-        t.precinto.toLowerCase().includes(search) ||
-        t.empresa.toLowerCase().includes(search) ||
-        t.origen.toLowerCase().includes(search) ||
-        t.destino.toLowerCase().includes(search)
-      );
-    }
+    // Single pass filtering
+    filtered = filtered.filter(t => {
+      // Filtro por búsqueda
+      if (searchTerm) {
+        const search = searchTerm.toLowerCase();
+        const matches = 
+          t.dua.toLowerCase().includes(search) ||
+          t.precinto.toLowerCase().includes(search) ||
+          t.empresa.toLowerCase().includes(search) ||
+          t.origen.toLowerCase().includes(search) ||
+          t.destino.toLowerCase().includes(search);
+        if (!matches) return false;
+      }
 
-    // Filtro por empresa
-    if (empresaFilter !== 'todas') {
-      filtered = filtered.filter(t => t.empresa === empresaFilter);
-    }
+      // Filtro por empresa
+      if (empresaFilter !== 'todas' && t.empresa !== empresaFilter) {
+        return false;
+      }
 
-    // Filtro por fecha
-    const ahora = new Date();
-    switch (fechaFilter) {
-      case 'hoy':
-        filtered = filtered.filter(t => {
-          const fecha = new Date(t.fechaSalida);
-          return fecha.toDateString() === ahora.toDateString();
-        });
-        break;
-      case 'semana':
-        const unaSemanaAtras = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000);
-        filtered = filtered.filter(t => new Date(t.fechaSalida) >= unaSemanaAtras);
-        break;
-      case 'mes':
-        const unMesAtras = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
-        filtered = filtered.filter(t => new Date(t.fechaSalida) >= unMesAtras);
-        break;
-    }
+      // Filtro por fecha
+      if (fechaFilter !== 'todos') {
+        const fecha = new Date(t.fechaSalida);
+        const ahora = new Date();
+        
+        switch (fechaFilter) {
+          case 'hoy':
+            if (fecha.toDateString() !== ahora.toDateString()) return false;
+            break;
+          case 'semana':
+            const unaSemanaAtras = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000);
+            if (fecha < unaSemanaAtras) return false;
+            break;
+          case 'mes':
+            const unMesAtras = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
+            if (fecha < unMesAtras) return false;
+            break;
+        }
+      }
 
-    // Ordenar por fecha más reciente
-    filtered.sort((a, b) => new Date(b.fechaSalida).getTime() - new Date(a.fechaSalida).getTime());
+      return true;
+    });
 
-    return filtered;
-  }, [transitos, searchTerm, estadoFilter, empresaFilter, fechaFilter, activeTab]);
+    // Calculate pagination
+    const total = Math.ceil(filtered.length / itemsPerPage);
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    
+    // Sort and paginate
+    const sortedPage = filtered
+      .sort((a, b) => new Date(b.fechaSalida).getTime() - new Date(a.fechaSalida).getTime())
+      .slice(start, end);
 
-  // Estadísticas
+    return { 
+      filteredTransitos: sortedPage, 
+      totalPages: total,
+      totalItems: filtered.length 
+    };
+  }, [transitos, transitosEnCurso, transitosCompletados, transitosPendientes, searchTerm, empresaFilter, fechaFilter, activeTab, currentPage, itemsPerPage]);
+
+  // Estadísticas - optimizadas
   const stats = React.useMemo(() => {
     const alertas = transitos.filter(t => t.estado === 'ALERTA');
     const demorados = transitosEnCurso.filter(t => {
@@ -374,18 +435,27 @@ const TransitosPageV2: React.FC = () => {
     };
   }, [transitos, transitosEnCurso, transitosCompletados, transitosPendientes, precintosActivos, alertasActivas]);
 
-  const handleExport = () => {
+  const handleExport = useCallback(() => {
     exportToExcel(filteredTransitos, 'transitos');
-  };
+  }, [filteredTransitos]);
 
-  const handleViewTransito = (transito: Transito) => {
+  const handleViewTransito = useCallback((transito: Transito) => {
     setSelectedTransito(transito);
     setShowDetailModal(true);
-  };
+  }, []);
 
-  const handleViewMap = (transito: Transito) => {
+  const handleViewMap = useCallback((transito: Transito) => {
     window.open(`/torre-control?transito=${transito.id}`, '_blank');
-  };
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    await fetchTransitos();
+  }, [fetchTransitos]);
+
+  // Reset page when changing filters
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchTerm, empresaFilter, fechaFilter]);
 
   return (
     <div className="space-y-6">
@@ -403,7 +473,7 @@ const TransitosPageV2: React.FC = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={() => fetchTransitos()}
+            onClick={handleRefresh}
             disabled={loading}
             className="bg-gray-800 border-gray-700"
           >
@@ -550,16 +620,24 @@ const TransitosPageV2: React.FC = () => {
               </div>
             </div>
 
-            <TabsContent value="activos" className="mt-0">
+            {/* Content for all tabs */}
+            <TabsContent value={activeTab} className="mt-0">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {loading ? (
-                  <div className="col-span-full flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                  </div>
+                {loading && isInitialLoad ? (
+                  <>
+                    {[...Array(4)].map((_, i) => (
+                      <TransitoSkeleton key={i} />
+                    ))}
+                  </>
                 ) : filteredTransitos.length === 0 ? (
                   <div className="col-span-full text-center py-12">
                     <Truck className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-500">No hay tránsitos activos en este momento</p>
+                    <p className="text-gray-500">
+                      {activeTab === 'activos' && 'No hay tránsitos activos en este momento'}
+                      {activeTab === 'pendientes' && 'No hay tránsitos pendientes'}
+                      {activeTab === 'alertas' && 'No hay tránsitos con alertas activas'}
+                      {activeTab === 'completados' && 'No hay tránsitos completados con los filtros actuales'}
+                    </p>
                   </div>
                 ) : (
                   filteredTransitos.map((transito) => (
@@ -572,82 +650,53 @@ const TransitosPageV2: React.FC = () => {
                   ))
                 )}
               </div>
-            </TabsContent>
-
-            <TabsContent value="pendientes" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {filteredTransitos.length === 0 ? (
-                  <div className="col-span-full text-center py-12">
-                    <Clock className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-500">No hay tránsitos pendientes</p>
+              
+              {/* Paginación */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between px-6 py-3 mt-4">
+                  <p className="text-sm text-gray-400">
+                    Página {currentPage} de {totalPages} - {totalItems} tránsitos
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="bg-gray-800 border-gray-700"
+                    >
+                      Anterior
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="bg-gray-800 border-gray-700"
+                    >
+                      Siguiente
+                    </Button>
                   </div>
-                ) : (
-                  filteredTransitos.map((transito) => (
-                    <TransitoCard
-                      key={transito.id}
-                      transito={transito}
-                      onView={handleViewTransito}
-                      onViewMap={handleViewMap}
-                    />
-                  ))
-                )}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="alertas" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {filteredTransitos.length === 0 ? (
-                  <div className="col-span-full text-center py-12">
-                    <AlertTriangle className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-500">No hay tránsitos con alertas activas</p>
-                  </div>
-                ) : (
-                  filteredTransitos.map((transito) => (
-                    <TransitoCard
-                      key={transito.id}
-                      transito={transito}
-                      onView={handleViewTransito}
-                      onViewMap={handleViewMap}
-                    />
-                  ))
-                )}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="completados" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {filteredTransitos.length === 0 ? (
-                  <div className="col-span-full text-center py-12">
-                    <CheckCircle2 className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-500">No hay tránsitos completados con los filtros actuales</p>
-                  </div>
-                ) : (
-                  filteredTransitos.map((transito) => (
-                    <TransitoCard
-                      key={transito.id}
-                      transito={transito}
-                      onView={handleViewTransito}
-                      onViewMap={handleViewMap}
-                    />
-                  ))
-                )}
-              </div>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
 
-      {/* Modal de detalles */}
-      {selectedTransito && (
-        <TransitDetailModalEnhanced
-          isOpen={showDetailModal}
-          onClose={() => {
-            setShowDetailModal(false);
-            setSelectedTransito(null);
-          }}
-          transito={selectedTransito}
-        />
-      )}
+      {/* Modal de detalles con lazy loading */}
+      <Suspense fallback={null}>
+        {selectedTransito && (
+          <TransitDetailModalEnhanced
+            isOpen={showDetailModal}
+            onClose={() => {
+              setShowDetailModal(false);
+              setSelectedTransito(null);
+            }}
+            transito={selectedTransito}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };

@@ -11,3 +11,4 @@ export { ActivityWidget } from './ActivityWidget';
 export { StatisticsWidget } from './StatisticsWidget';
 export { TransitWidget } from './TransitWidget';
 export { PrecintoStatusWidget } from './PrecintoStatusWidget';
+export { PendingPrecintosWidget } from './PendingPrecintosWidget';

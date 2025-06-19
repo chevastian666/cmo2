@@ -10,6 +10,9 @@ interface DashboardState {
   // Layouts guardados
   layouts: Layouts | null;
   
+  // Versión del layout (incrementar para forzar reset)
+  layoutVersion: number;
+  
   // Modo edición
   editMode: boolean;
   
@@ -31,6 +34,7 @@ export const useDashboardStore = createStore<DashboardState>(
   (set, get) => ({
     // Estado inicial
     layouts: null,
+    layoutVersion: 2, // Incrementado para forzar reset
     editMode: false,
     visibleWidgets: [],
     widgetSettings: {},
@@ -62,6 +66,7 @@ export const useDashboardStore = createStore<DashboardState>(
     resetLayouts: () => {
       set((state) => {
         state.layouts = null;
+        state.layoutVersion = 2; // Actualizar a la versión actual
         // También resetear configuraciones
         state.widgetSettings = {};
       });

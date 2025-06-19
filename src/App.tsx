@@ -12,6 +12,7 @@ import { Dashboard } from './features/dashboard/components/Dashboard';
 import { LoginPage } from './features/auth/LoginPage';
 import { LoadingOverlay } from './components/ui/LoadingState';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import './utils/clearDashboardLayout';
 
 // Lazy load heavy components
 // const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })));
