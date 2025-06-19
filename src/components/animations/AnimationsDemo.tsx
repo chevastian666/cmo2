@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, _CheckCircle, Info, _Settings} from 'lucide-react';
+import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle,CheckCircle, Info,Settings} from 'lucide-react';
 import { 
   AnimatedCard,
   AnimatedButton,

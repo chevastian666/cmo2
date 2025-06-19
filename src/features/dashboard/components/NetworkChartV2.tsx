@@ -1,7 +1,7 @@
 import React from 'react';
 import {Area, AreaChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, } from 'recharts';
 import { format } from 'date-fns';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle, } from '@/components/ui/card';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle, } from '@/components/ui/card';
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart';
 
 interface NetworkChartProps {
@@ -16,7 +16,7 @@ interface NetworkChartProps {
 }
 
 export const NetworkChartV2: React.FC<NetworkChartProps> = ({
-  _data,
+  data,
   title,
   color = '#3B82F6',
   type = 'line'

@@ -5,12 +5,12 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import {_FileText, Download, _TrendingUp, Plus, _Filter, Search, _Calendar, _Clock, AlertCircle, _CheckCircle, Eye, _MessageSquare, Paperclip, Building2, _User, _Hash, Activity, ChevronRight, _X, Upload, Loader, Star, Bell, Flag} from 'lucide-react';
+import {FileText, Download,TrendingUp, Plus,Filter, Search,Calendar,Clock, AlertCircle,CheckCircle, Eye,MessageSquare, Paperclip, Building2,User,Hash, Activity, ChevronRight,X, Upload, Loader, Star, Bell, Flag} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,9 +43,11 @@ import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad } from '../t
 import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION } from '../types';
 import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight, pulseVariants} from '@/components/animations/AnimationPresets';
 
-const STORAGE_KEY_FILTROS = 'cmo_novedades_filtros';
+const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
 
 export const LibroNovedadesPageV2: React.FC = () => {
+  console.log('LibroNovedadesPageV2: Componente renderizando');
+  
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
     const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
     if (saved) {
@@ -67,7 +69,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas');
   const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set());
   
-  const {_novedades, _estadisticas, _loading, _fetchNovedades, _crearNovedad, _marcarResuelta, _agregarSeguimiento} = useNovedadesStore();
+  const {novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento} = useNovedadesStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
@@ -120,7 +122,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
   };
 
   const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(data);
+    await crearNovedad(_data);
     setShowFormulario(false);
     notificationService.success('Novedad creada', 'La novedad se ha registrado correctamente');
   };
@@ -130,7 +132,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await marcarResuelta(novedadId, comentario);
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
       setNovedadResolucion(null);
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
     }
   };
@@ -140,7 +142,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await agregarSeguimiento(novedadId, comentario);
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
       setNovedadSeguimiento(null);
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento');
     }
   };
@@ -196,47 +198,47 @@ export const LibroNovedadesPageV2: React.FC = () => {
           <AnimatedGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <StatsCard
               title="Total del Día"
-              value={estadisticas.totalDia}
+              value={estadisticas?.totalDia || 0}
               icon={<Calendar className="h-5 w-5" />}
               color="text-blue-400"
               trend={`${new Date().toLocaleDateString('es-UY')}`}
             />
             <StatsCard
               title="Pendientes"
-              value={estadisticas.pendientes}
+              value={estadisticas?.pendientes || 0}
               icon={<Clock className="h-5 w-5" />}
               color="text-yellow-400"
               trend="Requieren atención"
-              pulse={estadisticas.pendientes > 0}
+              pulse={(estadisticas?.pendientes || 0) > 0}
             />
             <StatsCard
               title="En Seguimiento"
-              value={estadisticas.enSeguimiento}
+              value={estadisticas?.enSeguimiento || 0}
               icon={<Eye className="h-5 w-5" />}
               color="text-orange-400"
               trend="Con actividad"
             />
             <StatsCard
               title="Resueltas"
-              value={estadisticas.resueltas}
+              value={estadisticas?.resueltas || 0}
               icon={<CheckCircle className="h-5 w-5" />}
               color="text-green-400"
               trend="Completadas hoy"
             />
             <StatsCard
               title="Reclamos"
-              value={estadisticas.porTipo.reclamo || 0}
+              value={estadisticas?.porTipo?.reclamo || 0}
               icon={<AlertCircle className="h-5 w-5" />}
               color="text-red-400"
               trend="Atención prioritaria"
-              pulse={(estadisticas.porTipo.reclamo || 0) > 0}
+              pulse={(estadisticas?.porTipo?.reclamo || 0) > 0}
             />
           </AnimatedGrid>
         </AnimatedSection>
 
         {/* Filtros y Búsqueda */}
         <AnimatedSection delay={0.2}>
-          <Card>
+          <Card className="bg-gray-800 border-gray-700">
             <CardContent className="p-4">
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1 relative">
@@ -292,9 +294,9 @@ export const LibroNovedadesPageV2: React.FC = () => {
 
         {/* Tabs y Lista de Novedades */}
         <AnimatedSection delay={0.3}>
-          <Card>
+          <Card className="bg-gray-800 border-gray-700">
             <CardHeader>
-              <Tabs value={selectedTab} onValueChange={(v: unknown) => setSelectedTab(v)}>
+              <Tabs value={selectedTab} onValueChange={(v) => setSelectedTab(v as 'todas' | 'activas' | 'resueltas')}>
                 <TabsList className="grid w-full max-w-md grid-cols-3">
                   <TabsTrigger value="todas">
                     Todas ({novedades.length})
@@ -303,7 +305,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
                     Activas ({novedades.filter(n => n.estado !== 'resuelta').length})
                   </TabsTrigger>
                   <TabsTrigger value="resueltas">
-                    Resueltas ({estadisticas.resueltas})
+                    Resueltas ({estadisticas?.resueltas || 0})
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -370,16 +372,12 @@ const StatsCard: React.FC<{
   trend?: string;
   pulse?: boolean;
 }> = ({ title, value, icon, color, trend, pulse }) => (
-  <AnimatedCard 
-    whileHover={{ y: -4 }} 
-    whileTap={{ scale: 0.98 }}
-    className={cn(pulse && "animate-pulse")}
-  >
-    <CardHeader className="pb-2">
+  <AnimatedCard className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors">
+    <CardHeader className="px-6 pb-2 pt-4">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{title}</CardDescription>
+        <CardDescription className="text-sm font-medium text-gray-400">{title}</CardDescription>
         <motion.div 
-          className={cn("p-2 rounded-lg bg-gray-800", color)}
+          className={cn("p-2 rounded-lg bg-gray-900", color)}
           whileHover={{ rotate: 15 }}
           animate={pulse ? pulseVariants.animate : {}}
         >
@@ -387,8 +385,8 @@ const StatsCard: React.FC<{
         </motion.div>
       </div>
     </CardHeader>
-    <CardContent>
-      <div className="text-3xl font-bold">{value}</div>
+    <CardContent className="px-6 pt-2">
+      <div className="text-3xl font-bold text-white">{value}</div>
       {trend && (
         <p className="text-sm text-gray-500 mt-1">{trend}</p>
       )}
@@ -410,7 +408,7 @@ const FilterPanel: React.FC<{
           value={filtros.puntoOperacion} 
           onValueChange={(v) => onFiltersChange({ ...filtros, puntoOperacion: v })}
         >
-          <SelectTrigger id="puntoOperacion" className="mt-1">
+          <SelectTrigger id="puntoOperacion" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los puntos" />
           </SelectTrigger>
           <SelectContent>
@@ -428,7 +426,7 @@ const FilterPanel: React.FC<{
           value={filtros.tipoNovedad} 
           onValueChange={(v) => onFiltersChange({ ...filtros, tipoNovedad: v as TipoNovedad | '' })}
         >
-          <SelectTrigger id="tipoNovedad" className="mt-1">
+          <SelectTrigger id="tipoNovedad" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los tipos" />
           </SelectTrigger>
           <SelectContent>
@@ -451,7 +449,7 @@ const FilterPanel: React.FC<{
           value={filtros.estado} 
           onValueChange={(v) => onFiltersChange({ ...filtros, estado: v as EstadoNovedad | '' })}
         >
-          <SelectTrigger id="estado" className="mt-1">
+          <SelectTrigger id="estado" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los estados" />
           </SelectTrigger>
           <SelectContent>
@@ -513,7 +511,7 @@ const NovedadItem: React.FC<{
               <motion.div
                 animate={{ rotate: isExpanded ? 90 : 0 }}
                 transition={{ duration: 0.2 }}
-                className="mt-1"
+                className="mt-1 bg-gray-900 border-gray-700 text-white"
               >
                 <ChevronRight className="h-5 w-5 text-gray-400" />
               </motion.div>
@@ -597,7 +595,7 @@ const NovedadItem: React.FC<{
                         <a
                           key={archivo.id}
                           href={archivo.url}
-                          target="_blank"
+                          target="blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
                         >
@@ -697,7 +695,7 @@ const EmptyState: React.FC<{ tab: string }> = ({ tab }) => (
       animate={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 200 }}
     >
-      <FileText className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+      <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
     </motion.div>
     <p className="text-gray-400">
       {tab === 'activas' ? 'No hay novedades activas' :
@@ -712,7 +710,12 @@ const FormularioNovedadModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: unknown) => void;
-  userInfo: unknown;
+  userInfo: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
 }> = ({ isOpen, onClose, onSubmit, userInfo }) => {
   const [formData, setFormData] = useState({
     fecha: new Date(),
@@ -764,7 +767,7 @@ const FormularioNovedadModal: React.FC<{
                 value={formData.puntoOperacion} 
                 onValueChange={(v) => setFormData(prev => ({ ...prev, puntoOperacion: v }))}
               >
-                <SelectTrigger id="puntoOperacion" className="mt-1">
+                <SelectTrigger id="puntoOperacion" className="mt-1 bg-gray-900 border-gray-700 text-white">
                   <SelectValue placeholder="Seleccionar punto" />
                 </SelectTrigger>
                 <SelectContent>
@@ -781,7 +784,7 @@ const FormularioNovedadModal: React.FC<{
                 value={formData.tipoNovedad} 
                 onValueChange={(v) => setFormData(prev => ({ ...prev, tipoNovedad: v as TipoNovedad }))}
               >
-                <SelectTrigger id="tipoNovedad" className="mt-1">
+                <SelectTrigger id="tipoNovedad" className="mt-1 bg-gray-900 border-gray-700 text-white">
                   <SelectValue placeholder="Seleccionar tipo" />
                 </SelectTrigger>
                 <SelectContent>

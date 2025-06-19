@@ -31,7 +31,7 @@ export async function executeAsyncAction<T>(
   setLoadingState: (state: LoadingState) => void,
   options: AsyncActionOptions = {}
 ): Promise<T | null> {
-  const {_showErrorNotification = true, _errorMessage = 'Ocurrió un error al realizar la operación', _successMessage, _showSuccessNotification = false} = options;
+  const {showErrorNotification = true, errorMessage = 'Ocurrió un error al realizar la operación', successMessage, showSuccessNotification = false} = options;
 
   setLoadingState({ status: 'loading' });
 

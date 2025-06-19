@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_X, _Truck, Camera, AlertCircle} from 'lucide-react';
+import {X,Truck, Camera, AlertCircle} from 'lucide-react';
 import { useCamionesStore } from '../../../store/camionesStore';
 import {useUserInfo} from '../../../hooks/useAuth';
 import { ESTADOS_CAMION } from '../types';
@@ -11,7 +11,7 @@ interface FormularioCamionProps {
 
 export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const {_createCamion} = useCamionesStore();
+  const {createCamion} = useCamionesStore();
   
   const [formData, setFormData] = useState({
     matricula: '',

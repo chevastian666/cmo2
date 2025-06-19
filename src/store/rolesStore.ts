@@ -169,12 +169,12 @@ export const useRolesStore = create<RolesStore>()(
         },
 
         canAccess: (section, permission = 'view') => {
-          const {_currentUserRole, _permissions} = get();
+          const {currentUserRole, permissions} = get();
           return permissions[currentUserRole][section].includes(permission);
         },
 
         canAccessForRole: (role, section, permission = 'view') => {
-          const {_permissions} = get();
+          const {permissions} = get();
           return permissions[role][section].includes(permission);
         },
 

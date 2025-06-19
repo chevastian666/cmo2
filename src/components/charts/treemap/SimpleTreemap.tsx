@@ -8,7 +8,7 @@ import React from 'react';
 import { TreemapProps } from './types';
 
 export const SimpleTreemap: React.FC<TreemapProps> = ({
-  _data,
+  data,
   width = 800,
   height = 600,
   className = ''

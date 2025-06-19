@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_Clock, _User, _MapPin, MoreVertical, Check, Eye, Edit2, _MessageSquare, Paperclip, _Calendar} from 'lucide-react';
+import {Clock,User,MapPin, MoreVertical, Check, Eye, Edit2,MessageSquare, Paperclip,Calendar} from 'lucide-react';
 import { Badge, Card, CardContent } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';

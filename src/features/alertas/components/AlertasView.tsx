@@ -1,12 +1,12 @@
 import React from 'react';
-import {AlertCircle, _AlertTriangle, Shield, Battery, _MapPin, _Thermometer, _Radio, _Package} from 'lucide-react';
+import {AlertCircle,AlertTriangle, Shield, Battery,MapPin,Thermometer,Radio,Package} from 'lucide-react';
 import { useAlertas } from '../../../store/hooks';
 import { formatDateTime } from '../../../utils/formatters';
 import { cn } from '../../../utils/utils';
 import type { Alerta } from '../../../types';
 
 export const AlertasView: React.FC = () => {
-  const {_alertas, _loading, _filter, _actions} = useAlertas();
+  const {alertas, loading, filter, actions} = useAlertas();
   
   const getIcon = (tipo: Alerta['tipo']) => {
     switch (tipo) {

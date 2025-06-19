@@ -1,18 +1,18 @@
 export const exportToCSV = (_data: unknown[], filename: string) => {
-  if (!data || data.length === 0) {
-    console.warn('No data to export');
+  if (!_data || _data.length === 0) {
+    console.warn('No _data to export');
     return;
   }
 
   // Get headers from the first object
-  const headers = Object.keys(data[0]);
+  const headers = Object.keys(_data[0]);
   
   // Create CSV content
   const csvContent = [
     // Headers row
     headers.join(','),
     // Data rows
-    ...data.map(row => 
+    ..._data.map(row => 
       headers.map(header => {
         const value = row[header];
         // Handle values that might contain commas or quotes
@@ -42,12 +42,12 @@ export const exportToCSV = (_data: unknown[], filename: string) => {
 };
 
 export const exportToJSON = (_data: unknown[], filename: string) => {
-  if (!data || data.length === 0) {
-    console.warn('No data to export');
+  if (!_data || _data.length === 0) {
+    console.warn('No _data to export');
     return;
   }
 
-  const jsonContent = JSON.stringify(data, null, 2);
+  const jsonContent = JSON.stringify(_data, null, 2);
   
   const blob = new Blob([jsonContent], { type: 'application/json' });
   const link = document.createElement('a');
@@ -69,5 +69,5 @@ export const exportToJSON = (_data: unknown[], filename: string) => {
 export const exportToExcel = (_data: unknown[], filename: string) => {
   // For now, we'll use CSV format which Excel can open
   // In a production app, you might want to use a library like xlsx
-  exportToCSV(data, filename);
+  exportToCSV(_data, filename);
 };

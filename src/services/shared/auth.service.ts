@@ -115,7 +115,7 @@ class AuthService {
         isLoading: false,
         error: errorMessage
       });
-      throw error;
+      throw _error;
     }
   }
 
@@ -256,7 +256,7 @@ class AuthService {
     this.listeners.forEach(listener => {
       try {
         listener(state);
-      } catch (_error) {
+      } catch (error) {
         console.error('Error in auth listener:', error);
       }
     });

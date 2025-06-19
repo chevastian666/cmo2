@@ -1,4 +1,4 @@
-export type TipoNovedad = 'evento' | 'reclamo' | 'tarea' | 'pendiente' | 'aviso';
+export type TipoNovedad = 'evento' | 'reclamo' | 'tarea' | 'pendiente' | 'aviso' | 'alerta' | 'incidente' | 'cambio_turno' | 'mantenimiento';
 export type EstadoNovedad = 'activa' | 'resuelta' | 'seguimiento';
 
 export interface Novedad {
@@ -9,6 +9,7 @@ export interface Novedad {
   tipoNovedad: TipoNovedad;
   descripcion: string;
   estado: EstadoNovedad;
+  destacado?: boolean;
   archivosAdjuntos?: {
     id: string;
     nombre: string;

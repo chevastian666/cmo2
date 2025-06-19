@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_X, _MessageSquare, Send} from 'lucide-react';
+import {X,MessageSquare, Send} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import type { Novedad } from '../types';
@@ -19,7 +19,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
 }) => {
   const [comentario, setComentario] = useState('');
   const [loading, setLoading] = useState(false);
-  const [_error, setError] = useState('');
+  const [error, setError] = useState('');
 
   if (!isOpen || !novedad) return null;
 

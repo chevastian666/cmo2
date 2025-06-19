@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import {_X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, _FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent, LoadingState } from '../../../components/ui';
+import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight,FileText} from 'lucide-react';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { LoadingState } from '@/components/ui/LoadingState';
 import { cn } from '../../../utils/utils';
 import type { Documento } from '../types';
 import { TIPOS_DOCUMENTO } from '../types';

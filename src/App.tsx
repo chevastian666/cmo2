@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import {_useEffect, lazy, Suspense} from 'react';
+import {useEffect,  lazy,  Suspense} from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LayoutOptimized } from './features/common';
@@ -28,13 +28,15 @@ const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m 
 // const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })));
 const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'));
 const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })));
-const LibroNovedades = lazy(() => import('./features/novedades').then(m => ({ default: m.LibroNovedades })));
+// const LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'));
+const BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })));
 const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })));
 const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })));
 const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })));
 const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })));
 const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })));
 const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })));
+const SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })));
 const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'));
 const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'));
 const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'));
@@ -70,14 +72,14 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const {_isAuthenticated, _canAccessCMO} = useAuth();
+  const {isAuthenticated, canAccessCMO} = useAuth();
   
   // Initialize shared services integration
   useSharedIntegration();
   useSyncStoreActions();
   
   // Initialize WebSocket with authentication
-  const {_/* isConnected */} = useWebSocket({
+  useWebSocket({
     onConnect: () => {
       console.log('Connected to real-time updates');
     },
@@ -190,12 +192,17 @@ function App() {
                   <Route path="/zonas-descanso" element={<ZonasDescansoPage />} />
                   <Route path="/torre-control" element={<TorreControlV2 />} />
                   <Route path="/documentacion" element={<CentroDocumentacion />} />
-                  <Route path="/novedades" element={<LibroNovedades />} />
+                  <Route path="/novedades" element={<BitacoraOperacional />} />
                   <Route path="/camiones" element={<CamionesPage />} />
                   <Route path="/camioneros" element={<CamionerosPage />} />
                   <Route path="/roles" element={
                     <ProtectedRoute section="roles" permission="view">
                       <RolesPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/sub-paneles" element={
+                    <ProtectedRoute section="roles" permission="view">
+                      <SubPanelesPage />
                     </ProtectedRoute>
                   } />
                   <Route path="/demo" element={<ShadcnDemo />} />

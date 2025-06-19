@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {_X, Save, Building2} from 'lucide-react';
+import {X, Save, Building2} from 'lucide-react';
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
 import type { Deposito } from '../types';
 

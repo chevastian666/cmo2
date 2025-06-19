@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import {ChevronDown, ChevronRight, _Calendar, _AlertTriangle, _MapPin, Shield} from 'lucide-react';
+import {ChevronDown, ChevronRight,Calendar,AlertTriangle,MapPin, Shield} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { GroupingOptions } from '../types/virtualization';
 

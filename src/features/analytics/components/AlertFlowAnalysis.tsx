@@ -7,7 +7,7 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {_AlertTriangle, _CheckCircle, _Clock, _TrendingUp} from 'lucide-react';
+import {AlertTriangle,CheckCircle,Clock,TrendingUp} from 'lucide-react';
 import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
 import { transformAlertFlow } from '@/components/charts/sankey/utils/dataTransformers';
 import { useAlertasStore } from '@/store/store';
@@ -18,7 +18,7 @@ interface AlertFlowAnalysisProps {
 }
 
 export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange }) => {
-  const {_alertas} = useAlertasStore();
+  const {alertas} = useAlertasStore();
 
   // Transform alerts into flow data
   const alertFlowData = useMemo(() => {

@@ -1,5 +1,5 @@
 import React, { useDeferredValue, useTransition, memo, Suspense, useState } from 'react';
-import {Map, Navigation, _Truck, AlertCircle} from 'lucide-react';
+import {Map, Navigation,Truck, AlertCircle} from 'lucide-react';
 import { MapSkeleton } from './MapSkeleton';
 import { PriorityBoundary } from '../priority/withPriority';
 

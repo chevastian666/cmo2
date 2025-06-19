@@ -1,4 +1,4 @@
-import {_useEffect, useRef, _useCallback} from 'react';
+import {useEffect,  useRef, useCallback} from 'react';
 import { sharedWebSocketService } from '../services/shared/sharedWebSocket.service';
 import { useConnectionStatus } from './useSharedState';
 
@@ -10,7 +10,7 @@ interface UseWebSocketOptions {
 }
 
 export function useWebSocket(options: UseWebSocketOptions = {}) {
-  const {_onConnect, _onDisconnect, _onReconnect, _autoConnect = true} = options;
+  const {onConnect, onDisconnect, onReconnect, autoConnect = true} = options;
   
   const connectionStatus = useConnectionStatus();
   const previousStatus = useRef(connectionStatus);

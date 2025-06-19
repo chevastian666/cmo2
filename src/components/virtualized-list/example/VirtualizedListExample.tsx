@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { VirtualizedAlertList } from '../VirtualizedAlertList';
-import {Search, _Filter, _AlertTriangle} from 'lucide-react';
+import {Search,Filter,AlertTriangle} from 'lucide-react';
 import type { Alert, AlertFilters } from '../types/alerts';
 
 // Mock data generator

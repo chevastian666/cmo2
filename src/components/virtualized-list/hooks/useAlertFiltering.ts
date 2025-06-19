@@ -1,4 +1,4 @@
-import {_useMemo, _useCallback, _useState, useRef} from 'react';
+import {useMemo, useCallback, useState,  useRef} from 'react';
 import type { Alert, AlertFilters } from '../types/alerts';
 
 interface UseAlertFilteringProps {
@@ -66,7 +66,7 @@ export function useAlertFiltering({
   }, [alerts]);
 
   // Filter alerts with optimized performance
-  const {_filteredAlerts, _highlightedIndices} = useMemo(() => {
+  const {filteredAlerts, highlightedIndices} = useMemo(() => {
     const startTime = performance.now();
     
     let indices = new Set<number>(Array.from({ length: alerts.length }, (_, i) => i));
@@ -90,7 +90,7 @@ export function useAlertFiltering({
     
     // Apply date range filter
     if (filters.dateRange) {
-      const {_start, _end} = filters.dateRange;
+      const {start, end} = filters.dateRange;
       indices = new Set(
         Array.from(indices).filter(i => {
           const date = alerts[i].timestamp;
@@ -132,7 +132,7 @@ export function useAlertFiltering({
     
     // Apply location filter
     if (filters.location) {
-      const {_lat, _lng, _radius} = filters.location;
+      const {lat, lng, radius} = filters.location;
       indices = new Set(
         Array.from(indices).filter(i => {
           const alert = alerts[i];

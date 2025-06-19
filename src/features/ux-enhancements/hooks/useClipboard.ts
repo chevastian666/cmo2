@@ -1,10 +1,10 @@
-import {_useCallback, _useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import { useClipboardStore } from '../stores/clipboardStore';
 import { detectClipboardContent, generateSmartPaste } from '../utils/clipboardDetector';
 import type { ClipboardEntry } from '../types';
 
 export function useClipboard() {
-  const {_history, _isOpen, _addEntry, _setIsOpen, _getFilteredHistory, _setSyncStatus} = useClipboardStore();
+  const {history, isOpen, addEntry, setIsOpen, getFilteredHistory, setSyncStatus} = useClipboardStore();
 
   // Copy to clipboard with smart detection
   const copyToClipboard = useCallback(async (
@@ -74,7 +74,7 @@ export function useClipboard() {
       return formattedContent;
     } catch (_error) {
       console.error('Error pasting from clipboard:', _error);
-      throw error;
+      throw _error;
     }
   }, [addEntry]);
 

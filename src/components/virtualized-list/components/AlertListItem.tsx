@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef } from 'react';
-import {_AlertTriangle, _MapPin, _Clock, _User, _CheckCircle, Circle} from 'lucide-react';
+import {AlertTriangle,MapPin,Clock,User,CheckCircle, Circle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Alert } from '../types/alerts';
 

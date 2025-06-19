@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Label } from '@/components/ui/label';
-import {_AlertTriangle, AlertCircle, _CheckCircle, _XCircle} from 'lucide-react';
+import {AlertTriangle, AlertCircle,CheckCircle,XCircle} from 'lucide-react';
 import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
 import { transformAlertsBySeverity, createHierarchy } from '@/components/charts/treemap/utils/dataTransformers';
 import { useAlertasStore } from '@/store/store';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {_X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
+import {X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { Alerta } from '../../../types';
 import { TIPOS_ALERTA } from '../../../types/monitoring';

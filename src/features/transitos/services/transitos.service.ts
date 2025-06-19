@@ -24,7 +24,7 @@ class TransitosService {
 
   async getTransitos(params: TransitosParams = {}): Promise<TransitosResponse> {
     try {
-      const {_page = 1, _limit = 10, _sortBy, _sortOrder, _filters} = params;
+      const {page = 1, limit = 10, sortBy, sortOrder, filters} = params;
       
       // In development, return mock data with pagination
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
@@ -150,7 +150,7 @@ class TransitosService {
       return response.data.success;
     } catch (_error) {
       console.error('Error updating transito:', error);
-      throw error;
+      throw _error;
     }
   }
   

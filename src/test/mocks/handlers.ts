@@ -57,7 +57,7 @@ export const handlers = [
   // Auth endpoints
   http.post(`${API_URL}/auth/login`, async ({ request }) => {
     const body = await request.json();
-    const {_email, _password} = body as { email: string; password: string };
+    const {email, password} = body as { email: string; password: string };
     
     if (email === 'test@cmo.com' && password === 'test123') {
       return HttpResponse.json({
@@ -112,7 +112,7 @@ export const handlers = [
     return HttpResponse.json({
       data: {
         ...generateMockPrecinto(),
-        ..._data,
+        ...data,
       },
     });
   }),

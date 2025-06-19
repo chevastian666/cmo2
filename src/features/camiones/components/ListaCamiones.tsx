@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Search, Plus, _Truck, _Filter, Image, _Calendar, _AlertTriangle} from 'lucide-react';
+import {Search, Plus,Truck,Filter, Image,Calendar,AlertTriangle} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge, EmptyState, LoadingState } from '../../../components/ui';
 import { useCamionesStore } from '../../../store/camionesStore';
 import { FichaCamion } from './FichaCamion';
@@ -13,7 +13,7 @@ export const ListaCamiones: React.FC = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null);
   
-  const {_camiones, _loading, _fetchCamiones, _updateEstadoCamion} = useCamionesStore();
+  const {camiones, loading, fetchCamiones, updateEstadoCamion} = useCamionesStore();
 
   useEffect(() => {
     fetchCamiones(filtros);

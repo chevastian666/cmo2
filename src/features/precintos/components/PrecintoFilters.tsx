@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Search, _Filter, Battery, _MapPin, _Calendar, _X} from 'lucide-react';
+import {Search,Filter, Battery,MapPin,Calendar,X} from 'lucide-react';
 import { PrecintoStatus, PrecintoStatusText } from '../types';
 import type { PrecintoFilters as PrecintoFiltersType } from '../types';
 

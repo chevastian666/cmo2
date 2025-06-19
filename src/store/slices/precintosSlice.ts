@@ -24,7 +24,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
 
   // Computed Properties (getters)
   get filteredPrecintos() {
-    const {_precintos, _filters} = get();
+    const {precintos, filters} = get();
     return precintos.filter(precinto => {
       const matchesSearch = !filters.search || 
         precinto.codigo.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -38,7 +38,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
 
   get precintosStats() {
-    const {_precintosActivos} = get();
+    const {precintosActivos} = get();
     return {
       total: precintosActivos.length,
       enTransito: precintosActivos.filter(p => p.estado === 1).length,
@@ -88,7 +88,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   
   // Async Actions
   fetchPrecintos: async () => {
-    const {_setLoading, _setError, _setPrecintos} = get();
+    const {setLoading, setError, setPrecintos} = get();
     setLoading(true);
     setError(null);
     
@@ -100,7 +100,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i));
       setPrecintos(mockData);
-      console.warn('Using mock data for precintos:', error);
+      console.warn('Using mock data for precintos:', _error);
       return mockData;
     } finally {
       setLoading(false);
@@ -108,7 +108,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
   
   fetchPrecintosActivos: async () => {
-    const {_setLoading, _setError, _setPrecintosActivos} = get();
+    const {setLoading, setError, setPrecintosActivos} = get();
     setLoading(true);
     setError(null);
     
@@ -120,7 +120,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
       setPrecintosActivos(mockData);
-      console.warn('Using mock data for precintos activos:', error);
+      console.warn('Using mock data for precintos activos:', _error);
       return mockData;
     } finally {
       setLoading(false);
@@ -155,12 +155,12 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
 
   // Legacy computed properties
   getPrecintosConAlertas: () => {
-    const {_precintosActivos} = get();
+    const {precintosActivos} = get();
     return precintosActivos.filter(p => p.estado === 3);
   },
 
   getPrecintosBajaBateria: () => {
-    const {_precintosActivos} = get();
+    const {precintosActivos} = get();
     return precintosActivos.filter(p => p.bateria && p.bateria < 20);
   }
 });

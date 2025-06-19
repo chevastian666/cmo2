@@ -6,10 +6,10 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {_Package, Search, AlertCircle, _CheckCircle, Loader, _MapPin, _Truck, _User, _FileText, _Phone, _Calendar, ChevronRight, ExternalLink, Copy, _Hash, Shield, _Building, Route, _CreditCard} from 'lucide-react';
+import {Package, Search, AlertCircle,CheckCircle, Loader,MapPin,Truck,User,FileText,Phone,Calendar, ChevronRight, ExternalLink, Copy,Hash, Shield,Building, Route,CreditCard} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
@@ -320,7 +320,7 @@ export const PrearmadoPageV2: React.FC = () => {
                           <div className="mt-4 pt-4 border-t border-gray-700">
                             <a 
                               href={`https://track.trokor.com/${transitInfo.track}`}
-                              target="_blank"
+                              target="blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
                             >

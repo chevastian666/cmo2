@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {_Truck, _User, _Building, _MapPin, _FileText, _Phone, _Hash, _Package} from 'lucide-react';
+import {Truck,User,Building,MapPin,FileText,Phone,Hash,Package} from 'lucide-react';
 import { ORIGENES_DESTINOS } from '../../../constants/locations';
 
 // shadcn/ui components
@@ -11,9 +11,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from '@/components/ui/select';
-import {Form, _FormControl, _FormDescription, FormField, _FormItem, _FormLabel, _FormMessage, } from '@/components/ui/form';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
+import {Form,FormControl,FormDescription, FormField,FormItem,FormLabel,FormMessage, } from '@/components/ui/form';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 
 // Empresas con RUT
 const EMPRESAS = [

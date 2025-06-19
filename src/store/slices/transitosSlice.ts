@@ -46,7 +46,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   setError: (_error) => set({ error }),
   
   fetchTransitos: async () => {
-    const {_setLoading, _setError, _setTransitos} = get();
+    const {setLoading, setError, setTransitos} = get();
     setLoading(true);
     setError(null);
     
@@ -78,7 +78,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   },
   
   fetchTransitosPendientes: async () => {
-    const {_setLoading, _setError, _setTransitosPendientes} = get();
+    const {setLoading, setError, setTransitosPendientes} = get();
     setLoading(true);
     setError(null);
     
@@ -100,7 +100,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   },
   
   precintarTransito: async (transitoId, precintoId) => {
-    const {_setError, _updateTransito} = get();
+    const {setError, updateTransito} = get();
     setError(null);
     
     try {
@@ -108,14 +108,14 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
       updateTransito(transitoId, { estado: 'EN_TRANSITO' });
       notificationService.success('Tránsito Precintado', 'El tránsito ha sido precintado exitosamente');
     } catch (_error) {
-      setError(error instanceof Error ? error.message : 'Error al precintar tránsito');
+      setError(_error instanceof Error ? _error.message : 'Error al precintar tránsito');
       notificationService.error('Error', 'No se pudo precintar el tránsito');
-      throw error;
+      throw _error;
     }
   },
   
   markDesprecintado: async (transitoId) => {
-    const {_setError, _updateTransito} = get();
+    const {setError, updateTransito} = get();
     setError(null);
     
     try {
@@ -123,9 +123,9 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
       updateTransito(transitoId, { estado: 'COMPLETADO', fechaLlegada: new Date().toISOString() });
       notificationService.success('Tránsito Completado', 'El tránsito ha sido marcado como desprecintado');
     } catch (_error) {
-      setError(error instanceof Error ? error.message : 'Error al marcar como desprecintado');
+      setError(_error instanceof Error ? _error.message : 'Error al marcar como desprecintado');
       notificationService.error('Error', 'No se pudo actualizar el estado del tránsito');
-      throw error;
+      throw _error;
     }
   },
 });

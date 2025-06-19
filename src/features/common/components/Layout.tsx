@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Activity, Bell, Menu, _X, _User, _LogOut, _Settings, ChevronDown} from 'lucide-react';
+import {Activity, Bell, Menu,X,User,LogOut,Settings, ChevronDown} from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../../utils/utils';
 import { APP_CONFIG } from '../../../config';
@@ -21,8 +21,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const connectionStatus = useConnectionStatus();
-  const {count: _alertCount} = useAlertasActivas();
-  const {_logout} = useAuth();
+  const {count: alertCount} = useAlertasActivas();
+  const {logout} = useAuth();
   const userInfo = useUserInfo();
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_AlertTriangle, Shield, Battery, _MapPin, _Radio, _Thermometer, _Package, _Clock, _User, _MessageSquare, _CheckCircle, Unlock, Navigation, BatteryLow, _LogOut, WifiOff, Satellite, Pause, Zap} from 'lucide-react';
+import {AlertTriangle, Shield, Battery,MapPin,Radio,Thermometer,Package,Clock,User,MessageSquare,CheckCircle, Unlock, Navigation, BatteryLow,LogOut, WifiOff, Satellite, Pause, Zap} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatTimeAgo } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';
@@ -84,7 +84,7 @@ const ALARM_CODES: Record<string, AlarmCode> = {
 };
 
 export const AlertsList: React.FC = () => {
-  const {_alertas, _loading, __error, _actions} = useAlertasActivas();
+  const {alertas, loading, error, actions} = useAlertasActivas();
   const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -114,7 +114,7 @@ export const AlertsList: React.FC = () => {
     } catch (_error) {
       notificationService.error('Error al responder la alerta');
       console.error('Error responding to alert:', _error);
-      throw error;
+      throw _error;
     }
   };
 
@@ -157,7 +157,7 @@ export const AlertsList: React.FC = () => {
     );
   }
 
-  if (_error) {
+  if (error) {
     return (
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
         <p className="text-red-400">Error cargando alertas: {error}</p>

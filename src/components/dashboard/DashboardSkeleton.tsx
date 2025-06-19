@@ -1,5 +1,5 @@
 import React from 'react';
-import {_Package} from 'lucide-react';
+import {Package} from 'lucide-react';
 
 export const DashboardSkeleton: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {BarChart, _Clock, _TrendingUp} from 'lucide-react';
+import {BarChart,Clock,TrendingUp} from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../../../components/ui';
 import { congestionAnalyzer } from '../utils/congestionAnalyzer';
 import { cn } from '../../../utils/utils';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Download, RefreshCw, Plus, _XCircle} from 'lucide-react';
+import {Download, RefreshCw, Plus,XCircle} from 'lucide-react';
 import { PrecintoTable } from '../components/PrecintoTable';
 import {PrecintoFilters} from '../components/PrecintoFilters';
 import { PrecintoDetailModal } from '../components/PrecintoDetailModal';
@@ -12,7 +12,7 @@ export const PrecintosPage: React.FC = () => {
   
   const [precintos, setPrecintos] = useState<Precinto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<PrecintoFiltersType>(_);
+  const [filters, setFilters] = useState<PrecintoFiltersType>({});
   const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -266,7 +266,7 @@ export const PrecintosPage: React.FC = () => {
     return (
       <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg">
         <h2 className="text-red-400 font-bold mb-2">Error rendering PrecintosPage</h2>
-        <p className="text-red-300">{_error instanceof Error ? _error.message : 'Unknown error'}</p>
+        <p className="text-red-300">{error instanceof Error ? error.message : 'Unknown error'}</p>
       </div>
     );
   }

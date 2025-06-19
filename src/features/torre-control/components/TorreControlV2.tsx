@@ -5,11 +5,11 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {_Truck, _AlertTriangle, _CheckCircle, _XCircle, _Clock, _MapPin, _User, RefreshCw, _Filter, ChevronRight, Activity, Monitor, Zap, _Radio, Gauge, _TrendingUp, Shield, Eye, Maximize2, Minimize2, _Settings, Layout, Save, RotateCcw} from 'lucide-react';
+import {Truck,AlertTriangle,CheckCircle,XCircle,Clock,MapPin,User, RefreshCw,Filter, ChevronRight, Activity, Monitor, Zap,Radio, Gauge,TrendingUp, Shield, Eye, Maximize2, Minimize2,Settings, Layout, Save, RotateCcw} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -311,9 +311,9 @@ export const TorreControlV2: React.FC = () => {
   const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both');
   const [lastUpdate, setLastUpdate] = useState(new Date());
   
-  const {_alertasActivas} = useAlertasStore();
-  const {_precintosActivos} = usePrecintosStore();
-  const {_layouts, _setLayouts, resetLayouts: _resetDashboardLayouts} = useDashboardStore();
+  const {alertasActivas} = useAlertasStore();
+  const {precintosActivos} = usePrecintosStore();
+  const {layouts, setLayouts, resetLayouts: resetDashboardLayouts} = useDashboardStore();
 
   const [filters, setFilters] = useState({
     origen: '',
@@ -353,7 +353,7 @@ export const TorreControlV2: React.FC = () => {
       const data = await torreControlService.getTransitosEnRuta();
       setTransitos(data);
       setLastUpdate(new Date());
-    } catch (_error) {
+    } catch (error) {
       console.error('Error fetching transitos:', error);
     } finally {
       setLoading(false);
@@ -487,7 +487,7 @@ export const TorreControlV2: React.FC = () => {
                 Filtros
               </AnimatedButton>
 
-              <Select value={selectedView} onValueChange={(v: unknown) => setSelectedView(v)}>
+              <Select value={selectedView} onValueChange={(v) => setSelectedView(v as 'dashboard' | 'table' | 'both')}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -562,7 +562,7 @@ export const TorreControlV2: React.FC = () => {
                     />
                     <Select 
                       value={filters.estado} 
-                      onValueChange={(v) => setFilters(prev => ({ ...prev, estado: v as unknown }))}
+                      onValueChange={(v) => setFilters(prev => ({ ...prev, estado: v as EstadoSemaforo | '' }))}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Estado semáforo" />

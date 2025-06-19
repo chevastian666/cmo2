@@ -58,10 +58,10 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   
   setLoading: (loading) => set({ loading }),
   
-  setError: (_error) => set({ error }),
+  setError: (error) => set({ error }),
   
   fetchEstadisticas: async () => {
-    const {_setLoading, _setError, _setEstadisticas} = get();
+    const {setLoading, setError, setEstadisticas} = get();
     setLoading(true);
     setError(null);
     
@@ -78,7 +78,7 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   },
   
   fetchSystemStatus: async () => {
-    const {_setLoading, _setError, _updateSystemStatus} = get();
+    const {setLoading, setError, updateSystemStatus} = get();
     setLoading(true);
     setError(null);
     

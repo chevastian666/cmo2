@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {ChevronDown, ChevronUp, _MapPin} from 'lucide-react';
+import {ChevronDown, ChevronUp,MapPin} from 'lucide-react';
 import type { RutaZonas } from '../data/zonasDescansoData';
 
 interface RutaAccordionProps {
@@ -46,7 +46,7 @@ export const RutaAccordion: React.FC<RutaAccordionProps> = ({ rutaData, defaultO
                 </div>
                 <a
                   href={zona.maps}
-                  target="_blank"
+                  target="blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors whitespace-nowrap"
                 >

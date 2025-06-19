@@ -1,5 +1,5 @@
 import React from 'react';
-import {_CheckCircle, _Truck, _AlertTriangle} from 'lucide-react';
+import {CheckCircle,Truck,AlertTriangle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface TransitStatusProps {

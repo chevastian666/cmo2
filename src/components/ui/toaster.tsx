@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/toast"
 
 export function Toaster() {
-  const {_toasts} = useToast()
+  const {toasts} = useToast()
 
   return (
     <ToastProvider>

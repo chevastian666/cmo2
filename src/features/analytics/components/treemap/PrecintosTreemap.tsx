@@ -7,15 +7,15 @@
 import React, { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
-import {_Building, _Package, _TrendingUp} from 'lucide-react';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
+import {Building,Package,TrendingUp} from 'lucide-react';
 import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
 import { transformPrecintosByCompany, createHierarchy } from '@/components/charts/treemap/utils/dataTransformers';
 import { usePrecintosStore } from '@/store/store';
 import type { TreemapData } from '@/components/charts/treemap/types';
 
 export const PrecintosTreemap: React.FC = () => {
-  const {_precintos} = usePrecintosStore();
+  const {precintos} = usePrecintosStore();
   const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company');
 
   const treemapData = useMemo(() => {

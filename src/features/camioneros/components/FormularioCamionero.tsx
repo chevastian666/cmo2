@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_X, _User, _Phone, Flag, AlertCircle} from 'lucide-react';
+import {X,User,Phone, Flag, AlertCircle} from 'lucide-react';
 import { useCamionerosStore } from '../../../store/camionerosStore';
 import {useUserInfo} from '../../../hooks/useAuth';
 import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
@@ -11,7 +11,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const {_createCamionero} = useCamionerosStore();
+  const {createCamionero} = useCamionerosStore();
   
   const [formData, setFormData] = useState({
     nombre: '',

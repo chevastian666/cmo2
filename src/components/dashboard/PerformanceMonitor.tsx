@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Profiler, ProfilerOnRenderCallback } from 'react';
-import {Activity, Zap, _Clock, _TrendingUp} from 'lucide-react';
+import {Activity, Zap,Clock,TrendingUp} from 'lucide-react';
 
 interface RenderMetric {
   id: string;

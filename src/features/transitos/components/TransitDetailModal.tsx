@@ -1,5 +1,5 @@
 import React from 'react';
-import {_X, _Truck, _User, _Building, _MapPin, _Package, _Clock, _AlertTriangle, _Phone} from 'lucide-react';
+import {X,Truck,User,Building,MapPin,Package,Clock,AlertTriangle,Phone} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { TransitStatus } from './TransitStatus';
 import type { Transito } from '../types';

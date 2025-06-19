@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {_Package, Search, AlertCircle, _CheckCircle, Loader} from 'lucide-react';
+import {Package, Search, AlertCircle,CheckCircle, Loader} from 'lucide-react';
 import { notificationService } from '../../../services/shared/notification.service';
 import { prearmadoService } from '../services/prearmado.service';
 
@@ -240,7 +240,7 @@ export const PrearmadoPage: React.FC = () => {
                       <p className="text-xs text-gray-400 uppercase mb-1">URL de Rastreo</p>
                       <a 
                         href={`https://track.trokor.com/${transitInfo.track}`}
-                        target="_blank"
+                        target="blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 flex items-center gap-1"
                       >

@@ -5,10 +5,10 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {_MapPin, Search, Navigation, ExternalLink, Map, ChevronDown, ChevronRight, _Truck, Info, _Clock, _Filter, Download, Star, Coffee, Fuel} from 'lucide-react';
+import {MapPin, Search, Navigation, ExternalLink, Map, ChevronDown, ChevronRight,Truck, Info,Clock,Filter, Download, Star, Coffee, Fuel} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -295,7 +295,7 @@ const RutasListView: React.FC<{
   highlightedZone: string | null;
   onHighlightZone: (zone: string | null) => void;
   searchTerm: string;
-}> = ({ _data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
+}> = ({ data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
   if (data.length === 0) {
     return (
       <Card>
@@ -576,7 +576,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       showSearch={true}
       onMarkerClick={(marker) => {
         if (marker.data?.mapsUrl) {
-          window.open(marker.data.mapsUrl, '_blank');
+          window.open(marker.data.mapsUrl, 'blank');
         }
       }}
     />

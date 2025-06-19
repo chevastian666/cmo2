@@ -1,5 +1,5 @@
 import React from 'react';
-import {_Wifi, WifiOff, RefreshCw} from 'lucide-react';
+import {Wifi, WifiOff, RefreshCw} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { sharedWebSocketService } from '../../../services/shared/sharedWebSocket.service';
 

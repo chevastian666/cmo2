@@ -14,9 +14,9 @@ import { usePrecintosStore, useTransitosStore, useAlertasStore } from '@/store/s
 import type { TreemapData, TreemapNode } from '@/components/charts/treemap/types';
 
 export const OperationalTreemap: React.FC = () => {
-  const {_precintos} = usePrecintosStore();
-  const {_transitos} = useTransitosStore();
-  const {_alertas} = useAlertasStore();
+  const {precintos} = usePrecintosStore();
+  const {transitos} = useTransitosStore();
+  const {alertas} = useAlertasStore();
   const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview');
 
   const operationalData = useMemo((): TreemapData => {

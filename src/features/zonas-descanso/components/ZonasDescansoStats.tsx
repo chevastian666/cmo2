@@ -1,5 +1,5 @@
 import React from 'react';
-import {_MapPin, Route, _Truck} from 'lucide-react';
+import {MapPin, Route,Truck} from 'lucide-react';
 
 interface ZonasDescansoStatsProps {
   totalZonas: number;

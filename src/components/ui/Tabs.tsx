@@ -75,7 +75,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
     throw new Error('TabsTrigger must be used within Tabs');
   }
 
-  const {_activeTab, _setActiveTab} = context;
+  const {activeTab, setActiveTab} = context;
   const isActive = activeTab === value;
 
   return (
@@ -115,7 +115,7 @@ export const TabsContent: React.FC<TabsContentProps> = ({ value, className, chil
     throw new Error('TabsContent must be used within Tabs');
   }
 
-  const {_activeTab} = context;
+  const {activeTab} = context;
 
   if (activeTab !== value) {
     return null;

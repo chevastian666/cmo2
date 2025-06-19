@@ -1,12 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {_X, Upload, _FileText, AlertCircle, Check} from 'lucide-react';
-import { 
-  Card,
-  CardHeader,
-  CardContent,
-  InfoSection,
-  Badge
-} from '../../../components/ui';
+import {X, Upload,FileText, AlertCircle, Check} from 'lucide-react';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { InfoSection } from '@/components/ui/InfoRow';
 import { cn } from '../../../utils/utils';
 import { notificationService } from '../../../services/shared/notification.service';
 import type { TipoDocumento } from '../types';

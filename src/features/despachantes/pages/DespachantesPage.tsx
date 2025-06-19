@@ -1,7 +1,23 @@
-import React from 'react';
-import {Building2, _Phone, Mail, _MapPin, _FileText, _Calendar} from 'lucide-react';
+import React, { useState } from 'react';
+import {Building2,Phone, Mail,MapPin,FileText,Calendar, Plus, X} from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { notificationService } from '@/services/shared/notification.service';
 
 export const DespachantesPage: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    nombre: '',
+    razonSocial: '',
+    rut: '',
+    telefono: '',
+    email: '',
+    direccion: '',
+    activo: true
+  });
   // Mock data de despachantes
   const despachantes = [
     {
@@ -80,8 +96,11 @@ export const DespachantesPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-white">Despachantes</h1>
           <p className="text-gray-400 mt-1">Gestión de despachantes de aduana autorizados</p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
-          <Building2 className="h-5 w-5" />
+        <button 
+          onClick={() => setShowModal(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+        >
+          <Plus className="h-5 w-5" />
           Nuevo Despachante
         </button>
       </div>
@@ -203,6 +222,135 @@ export const DespachantesPage: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Modal Nuevo Despachante */}
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="bg-gray-900 border-gray-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">Nuevo Despachante</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Registre un nuevo despachante de aduana
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            // Aquí iría la lógica para guardar el despachante
+            notificationService.success('Despachante registrado', `${formData.nombre} ha sido agregado exitosamente`);
+            setShowModal(false);
+            // Reset form
+            setFormData({
+              nombre: '',
+              razonSocial: '',
+              rut: '',
+              telefono: '',
+              email: '',
+              direccion: '',
+              activo: true
+            });
+          }}>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="nombre">Nombre completo</Label>
+                <Input
+                  id="nombre"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                  placeholder="Ej: JUAN PÉREZ GONZÁLEZ"
+                  className="mt-1 bg-gray-800 border-gray-700"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="razonSocial">Razón Social</Label>
+                <Input
+                  id="razonSocial"
+                  value={formData.razonSocial}
+                  onChange={(e) => setFormData({...formData, razonSocial: e.target.value})}
+                  placeholder="Ej: PÉREZ GONZÁLEZ Y ASOCIADOS S.A."
+                  className="mt-1 bg-gray-800 border-gray-700"
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="rut">RUT</Label>
+                <Input
+                  id="rut"
+                  value={formData.rut}
+                  onChange={(e) => setFormData({...formData, rut: e.target.value})}
+                  placeholder="Ej: 217894560012"
+                  className="mt-1 bg-gray-800 border-gray-700"
+                  required
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="telefono">Teléfono</Label>
+                  <Input
+                    id="telefono"
+                    value={formData.telefono}
+                    onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+                    placeholder="Ej: 2908 1234"
+                    className="mt-1 bg-gray-800 border-gray-700"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    placeholder="email@ejemplo.com"
+                    className="mt-1 bg-gray-800 border-gray-700"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="direccion">Dirección</Label>
+                <Input
+                  id="direccion"
+                  value={formData.direccion}
+                  onChange={(e) => setFormData({...formData, direccion: e.target.value})}
+                  placeholder="Ej: Rambla 25 de Agosto 123, Montevideo"
+                  className="mt-1 bg-gray-800 border-gray-700"
+                  required
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <Label htmlFor="activo" className="text-sm">Estado activo</Label>
+                <Switch
+                  id="activo"
+                  checked={formData.activo}
+                  onCheckedChange={(checked) => setFormData({...formData, activo: checked})}
+                />
+              </div>
+            </div>
+            
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowModal(false)}
+                className="bg-gray-800 border-gray-700"
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                Registrar Despachante
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

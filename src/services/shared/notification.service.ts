@@ -269,7 +269,7 @@ class NotificationService {
     this.listListeners.forEach(listener => {
       try {
         listener(allNotifications);
-      } catch (_error) {
+      } catch (error) {
         console.error('Error in notification list listener:', error);
       }
     });
@@ -279,7 +279,7 @@ class NotificationService {
     this.listeners.forEach(listener => {
       try {
         listener(notification);
-      } catch (_error) {
+      } catch (error) {
         console.error('Error in notification listener:', error);
       }
     });

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import {Link2, Battery, _MapPin, _AlertTriangle, ChevronUp, ChevronDown, Network, Eye} from 'lucide-react';
+import {Link2, Battery,MapPin,AlertTriangle, ChevronUp, ChevronDown, Network, Eye} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

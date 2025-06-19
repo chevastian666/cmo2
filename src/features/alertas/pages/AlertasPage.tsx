@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_AlertTriangle, Shield, _TrendingUp, _Clock, _Users, _CheckCircle, History} from 'lucide-react';
+import {AlertTriangle, Shield,TrendingUp,Clock,Users,CheckCircle, History} from 'lucide-react';
 import { AlertsTable } from '../components/AlertsTable';
 import { HistorialAlertasCriticasModal } from '../components/HistorialAlertasCriticasModal';
 import { useAlertasStore } from '../../../store';
@@ -93,7 +93,7 @@ export const AlertasPage: React.FC = () => {
               <div className="mt-2 space-y-1">
                 {Object.entries(stats.porTipo)
                   .filter(([_, count]) => count > 0)
-                  .sort(([, a], [, b]) => b - a)
+                  .sort(([, a], [, _b]) => _b - a)
                   .slice(0, 3)
                   .map(([tipo, count]) => (
                     <div key={tipo} className="flex justify-between text-xs">

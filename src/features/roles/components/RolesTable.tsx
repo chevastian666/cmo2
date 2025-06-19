@@ -24,7 +24,7 @@ const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
 const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
 
 export const RolesTable: React.FC = () => {
-  const {_permissions, _togglePermission, _setSectionPermissions, _setRolePermissions} = useRolesStore();
+  const {permissions, togglePermission, setSectionPermissions, setRolePermissions} = useRolesStore();
   
   // Calculate bulk checkbox states for sections
   const sectionBulkStates = useMemo(() => {

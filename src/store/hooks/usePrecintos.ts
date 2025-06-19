@@ -1,4 +1,4 @@
-import {_useEffect} from 'react';
+import {useEffect} from 'react';
 import { usePrecintosStore } from '../store';
 
 export const usePrecintos = () => {

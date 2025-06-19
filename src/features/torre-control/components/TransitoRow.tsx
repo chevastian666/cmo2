@@ -1,5 +1,5 @@
 import React from 'react';
-import {_Truck, _CheckCircle, _AlertTriangle, _XCircle, _Clock, _User, _MapPin, _Package, ChevronRight, AlertCircle} from 'lucide-react';
+import {Truck,CheckCircle,AlertTriangle,XCircle,Clock,User,MapPin,Package, ChevronRight, AlertCircle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { CountdownTimer } from './CountdownTimer';
 import type { TransitoTorreControl, EstadoSemaforo } from '../types';

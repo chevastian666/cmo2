@@ -10,8 +10,8 @@ export const UXEnhancementsDemo: React.FC = () => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null);
   
-  const {_copyToClipboard} = useClipboard();
-  const {_setUserPermissions} = useRadialMenuStore();
+  const {copyToClipboard} = useClipboard();
+  const {setUserPermissions} = useRadialMenuStore();
 
   // Simular datos de precintos
   const precintos = [

@@ -1,4 +1,4 @@
-import {_useEffect} from 'react';
+import {useEffect} from 'react';
 import { wsService } from '../services/websocket/WebSocketService';
 import { 
   usePrecintosStore, 
@@ -14,7 +14,7 @@ export const useWebSocketIntegration = () => {
 
     // Set up event handlers
     wsService.on('onPrecintoUpdate', (_data) => {
-      const {_precinto, _action} = data;
+      const {precinto, action} = data;
       const store = usePrecintosStore.getState();
       
       switch (action) {
@@ -31,7 +31,7 @@ export const useWebSocketIntegration = () => {
     });
 
     wsService.on('onTransitoUpdate', (_data) => {
-      const {_transito, _action} = data;
+      const {transito, action} = data;
       const store = useTransitosStore.getState();
       
       switch (action) {
@@ -52,13 +52,13 @@ export const useWebSocketIntegration = () => {
     });
 
     wsService.on('onAlertaNueva', (_data) => {
-      const {_alerta} = data;
+      const {alerta} = data;
       const store = useAlertasStore.getState();
       store.addAlerta(alerta);
     });
 
     wsService.on('onAlertaUpdate', (_data) => {
-      const {_alerta, _action, _detalles} = data;
+      const {alerta, action, detalles} = data;
       const store = useAlertasStore.getState();
       
       switch (action) {

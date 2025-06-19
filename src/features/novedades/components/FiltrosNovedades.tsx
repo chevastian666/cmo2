@@ -1,5 +1,5 @@
 import React from 'react';
-import {Search, _Calendar, _MapPin, _Filter, RotateCcw, _User} from 'lucide-react';
+import {Search,Calendar,MapPin,Filter, RotateCcw,User} from 'lucide-react';
 import { Badge } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import type { FiltrosNovedades, TipoNovedad, EstadoNovedad } from '../types';

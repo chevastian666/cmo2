@@ -22,7 +22,7 @@ import { cn } from '@/utils/utils';
 import { motion } from 'framer-motion';
 
 export const TenantSwitcher: React.FC = () => {
-  const {_currentTenant, _tenants, _switchTenant, _canSwitchTenants, _isLoading} = useTenantStore();
+  const {currentTenant, tenants, switchTenant, canSwitchTenants, isLoading} = useTenantStore();
   const [open, setOpen] = useState(false);
 
   if (!currentTenant) {

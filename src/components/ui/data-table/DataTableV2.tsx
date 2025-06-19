@@ -16,8 +16,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from '@/components/ui/select';
-import {ChevronDown, Search, _Filter, ChevronLeft, ChevronRight} from 'lucide-react';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
+import {ChevronDown, Search,Filter, ChevronLeft, ChevronRight} from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,7 +31,7 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTableV2<TData, TValue>({
   columns,
-  _data,
+  data,
   searchKey,
   searchPlaceholder = 'Buscar...',
   showColumnVisibility = true,
@@ -45,7 +45,7 @@ export function DataTableV2<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
-    _data,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

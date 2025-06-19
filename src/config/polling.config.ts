@@ -59,7 +59,7 @@ export function usePollingConfig(context: 'map' | 'transit' | 'alerts' | 'dashbo
     ...options,
     onError: (error: Error) => {
       if (options.logErrors) {
-        console.error(`[Polling ${context}] Error:`, _error);
+        console.error(`[Polling ${context}] Error:`, error);
       }
       if (options.showNotifications) {
         // Aquí se podría integrar con el servicio de notificaciones

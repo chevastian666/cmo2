@@ -1,5 +1,5 @@
 import React, { Fragment, memo, useMemo } from 'react';
-import {ChevronUp, ChevronDown, Unlock, Eye, Edit2, _Truck} from 'lucide-react';
+import {ChevronUp, ChevronDown, Unlock, Eye, Edit2,Truck} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { TransitStatus } from './TransitStatus';
 import { TransitTableSkeleton } from './TransitTableSkeleton';
@@ -195,7 +195,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                   <td className="px-4 py-3">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-blue-400">
-                        {transito.viaje || '-'}
+                        {transito._viaje || '-'}
                       </span>
                       <span className="text-xs text-gray-400">
                         MOV {transito.mov || '-'}

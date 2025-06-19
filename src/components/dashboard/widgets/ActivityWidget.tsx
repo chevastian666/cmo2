@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {_Clock, _Package, _Truck, Shield, AlertCircle} from 'lucide-react';
+import {Clock,Package,Truck, Shield, AlertCircle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 

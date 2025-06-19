@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_AlertTriangle} from 'lucide-react';
+import {AlertTriangle} from 'lucide-react';
 import { BloomingAlert } from '../components/BloomingAlert';
 import { useASMRSound } from '../services/soundService';
 import { cn } from '../../../utils/utils';
@@ -16,7 +16,7 @@ export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }>
   isNew = false 
 }) => {
   const [showBloom, setShowBloom] = useState(isNew);
-  const {_playNotification, _playOpen} = useASMRSound();
+  const {playNotification, playOpen} = useASMRSound();
 
   const handleClick = () => {
     playOpen();

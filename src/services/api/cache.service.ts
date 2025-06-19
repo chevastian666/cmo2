@@ -42,7 +42,7 @@ class CacheService {
    */
   set<T>(key: string, data: T, ttl: number = this.DEFAULT_TTL): void {
     this.cache.set(key, {
-      _data,
+      data,
       timestamp: Date.now(),
       ttl
     });

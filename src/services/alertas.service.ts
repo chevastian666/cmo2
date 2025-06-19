@@ -111,7 +111,7 @@ export const alertasService = {
       throw new Error('Not implemented');
     } catch (_error) {
       console.error('Error creating alerta:', _error);
-      throw error;
+      throw _error;
     }
   },
 

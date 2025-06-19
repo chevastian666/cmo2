@@ -5,12 +5,12 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {Download, _Filter, _TrendingUp, _TrendingDown, _MapPin, _Package, _Truck, AlertCircle, RefreshCw} from 'lucide-react';
+import {Download,Filter,TrendingUp,TrendingDown,MapPin,Package,Truck, AlertCircle, RefreshCw} from 'lucide-react';
 import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
 import { 
   transformLogisticsFlow, 
@@ -23,7 +23,7 @@ import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 
 export const LogisticsFlowChart: React.FC = () => {
-  const {_transitos} = useTransitosStore();
+  const {transitos} = useTransitosStore();
   const [timeRange, setTimeRange] = useState('week');
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes');
   const [loading, setLoading] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Monitor, Volume2, VolumeX, Maximize2, _Settings} from 'lucide-react';
+import {Monitor, Volume2, VolumeX, Maximize2,Settings} from 'lucide-react';
 import { ProximosArribos } from './ProximosArribos';
 import { AlertasActivas } from './AlertasActivas';
 import { TransitosCriticos } from './TransitosCriticos';

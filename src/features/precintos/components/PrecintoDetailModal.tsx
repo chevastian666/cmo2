@@ -1,5 +1,5 @@
 import React from 'react';
-import {_X, _MapPin, _Phone, Battery, _Wifi, Link2, _Calendar, _Clock, _AlertTriangle} from 'lucide-react';
+import {X,MapPin,Phone, Battery,Wifi, Link2,Calendar,Clock,AlertTriangle} from 'lucide-react';
 import { PrecintoStatusBadge } from './PrecintoStatusBadge';
 import { BatteryIndicator } from './BatteryIndicator';
 import { SignalIndicator } from './SignalIndicator';

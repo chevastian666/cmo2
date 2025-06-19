@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_X, _User, _Phone, Flag, AlertCircle} from 'lucide-react';
+import {X,User,Phone, Flag, AlertCircle} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,9 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {Form, _FormControl, _FormDescription, FormField, _FormItem, _FormLabel, _FormMessage, } from '@/components/ui/form';
+import {Form,FormControl,FormDescription, FormField,FormItem,FormLabel,FormMessage, } from '@/components/ui/form';
 import { useCamionerosStore } from '../../../store/camionerosStore';
 import {useUserInfo} from '../../../hooks/useAuth';
 import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
@@ -52,7 +52,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
   const userInfo = useUserInfo();
-  const {_createCamionero} = useCamionerosStore();
+  const {createCamionero} = useCamionerosStore();
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
 

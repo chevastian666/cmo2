@@ -1,5 +1,5 @@
 import React from 'react';
-import {_Clock, _MapPin} from 'lucide-react';
+import {Clock,MapPin} from 'lucide-react';
 import { EmptyState, LoadingState } from '../../../components/ui';
 import { NovedadCard } from './NovedadCard';
 import { cn } from '../../../utils/utils';
@@ -25,7 +25,7 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
   onEditar,
   onVerDetalles,
   canEdit = false,
-  _userId,
+  userId,
   className
 }) => {
   if (loading) {

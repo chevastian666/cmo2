@@ -15,10 +15,10 @@ export function withPriority<P extends object>(
   Component: ComponentType<P>,
   options: WithPriorityOptions
 ) {
-  const {_priority, _fallback, _suspense = true} = options;
+  const {priority, fallback, suspense = true} = options;
 
   return React.forwardRef<any, P>((props, ref) => {
-    const {_schedulePriorityUpdate, _cancelUpdate, _isPending} = usePriorityScheduler();
+    const {schedulePriorityUpdate, cancelUpdate, isPending} = usePriorityScheduler();
     const [shouldRender, setShouldRender] = React.useState(priority === 'immediate');
     const taskIdRef = useRef<string | null>(null);
     const isMountedRef = useRef(true);
@@ -71,7 +71,7 @@ export const PriorityBoundary: React.FC<PriorityBoundaryProps> = ({
   children,
   fallback
 }) => {
-  const {_schedulePriorityUpdate, _cancelUpdate} = usePriorityScheduler();
+  const {schedulePriorityUpdate, cancelUpdate} = usePriorityScheduler();
   const [canRender, setCanRender] = React.useState(priority === 'immediate');
   const taskIdRef = useRef<string | null>(null);
 

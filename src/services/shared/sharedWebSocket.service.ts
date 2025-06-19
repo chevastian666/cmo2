@@ -121,7 +121,7 @@ export class SharedWebSocketService {
   }
 
   private handleMessage(message: unknown): void {
-    const {_type, _data, _id, _timestamp} = message;
+    const {type, data, id, timestamp} = message;
 
     // Handle system messages
     switch (type) {
@@ -299,7 +299,7 @@ export class SharedWebSocketService {
       listeners.forEach(callback => {
         try {
           callback(data);
-        } catch (_error) {
+        } catch (error) {
           console.error(`Error in event listener for ${event}:`, error);
         }
       });

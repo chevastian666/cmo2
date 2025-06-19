@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {_Truck, _MapPin, _Clock, _AlertTriangle} from 'lucide-react';
+import {Truck,MapPin,Clock,AlertTriangle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 import { useTransitosStore } from '../../../store/store';

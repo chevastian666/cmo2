@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, _Wifi, _MapPin, _AlertTriangle, _CheckCircle} from 'lucide-react';
+import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery,Wifi,MapPin,AlertTriangle,CheckCircle} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';

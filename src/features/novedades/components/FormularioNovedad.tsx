@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {_Calendar, _MapPin, _FileText, Upload, _X, Save, Paperclip} from 'lucide-react';
+import {Calendar,MapPin,FileText, Upload,X, Save, Paperclip} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
 import { cn } from '../../../utils/utils';
 import { notificationService } from '../../../services/shared/notification.service';
@@ -101,7 +101,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
       setErrors(_);
       
       notificationService.success('Novedad registrada', 'La novedad se ha guardado correctamente');
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error al guardar', 'No se pudo registrar la novedad');
     } finally {
       setLoading(false);

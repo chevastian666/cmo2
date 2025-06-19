@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {_BarChart3, _TrendingUp, _Users, _Package} from 'lucide-react';
+import {BarChart3,TrendingUp,Users,Package} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { motion } from 'framer-motion';
 

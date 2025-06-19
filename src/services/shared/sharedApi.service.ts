@@ -163,7 +163,7 @@ class SharedApiService {
         return result;
       } catch (_error) {
         // If we have retries left and it's a network error, retry
-        if (retriesLeft > 0 && (error instanceof TypeError || (error as unknown).code === 'ECONNREFUSED')) {
+        if (retriesLeft > 0 && (_error instanceof TypeError || (_error as any).code === 'ECONNREFUSED')) {
           console.warn(`Request failed, retrying... (${retriesLeft} retries left)`);
           await new Promise(resolve => setTimeout(resolve, 1000 * (retries - retriesLeft + 1))); // Exponential backoff
           return executeWithRetry(retriesLeft - 1);
@@ -180,7 +180,7 @@ class SharedApiService {
           }
         }
         
-        throw error;
+        throw _error;
       }
     };
 
@@ -483,22 +483,22 @@ class SharedApiService {
 
     // Generate mock data based on endpoint
     if (endpoint.includes('/transitos/pendientes')) {
-      const {_generateMockTransitos} = await import('../../utils/mockData');
+      const {generateMockTransitos} = await import('../../utils/mockData');
       return generateMockTransitos() as T;
     }
     
     if (endpoint.includes('/precintos/activos')) {
-      const {_generateMockPrecintos} = await import('../../utils/mockData');
+      const {generateMockPrecintos} = await import('../../utils/mockData');
       return generateMockPrecintos() as T;
     }
     
     if (endpoint.includes('/alertas/activas')) {
-      const {_generateMockAlertas} = await import('../../utils/mockData');
+      const {generateMockAlertas} = await import('../../utils/mockData');
       return generateMockAlertas().filter(a => !a.atendida) as T;
     }
     
     if (endpoint.includes('/alertas')) {
-      const {_generateMockAlertas} = await import('../../utils/mockData');
+      const {generateMockAlertas} = await import('../../utils/mockData');
       return generateMockAlertas() as T;
     }
     

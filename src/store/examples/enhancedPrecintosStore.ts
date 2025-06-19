@@ -45,9 +45,9 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>(
         async () => {
           const _data = await precintosService.getPrecintos();
           set((state) => {
-            state.precintos = data;
+            state.precintos = _data;
           });
-          return data;
+          return _data;
         },
         (loadingState) => set({ loadingState }),
         {
@@ -96,7 +96,7 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>(
     
     // Computed selectors
     getFilteredPrecintos: () => {
-      const {_precintos, _filters} = get();
+      const {precintos, filters} = get();
       let filtered = [...precintos];
       
       if (filters.estado) {

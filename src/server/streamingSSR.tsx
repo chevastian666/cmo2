@@ -17,7 +17,7 @@ export function renderAppToStream(
   res: Response,
   options: StreamingOptions = {}
 ) {
-  const {_bootstrapScripts = ['/static/js/bundle.js'], _nonce} = options;
+  const {bootstrapScripts = ['/static/js/bundle.js'], nonce} = options;
 
   let didError = false;
 
@@ -46,7 +46,7 @@ export function renderAppToStream(
   ${nonce ? `<meta property="csp-nonce" content="${nonce}">` : ''}
   <script>
     // Hydration error prevention
-    window.__REACT_HYDRATION_ERROR__ = false;
+    window._REACT_HYDRATION_ERROR__ = false;
   </script>
 </head>
 <body>

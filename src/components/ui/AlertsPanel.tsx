@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '../../utils/utils';
 import { StatusBadge } from './StatusBadge';
 import { EmptyState } from './EmptyState';
-import {_AlertTriangle, _CheckCircle, Info, Bell, _BellOff, ChevronDown, ChevronRight} from 'lucide-react';
+import {AlertTriangle,CheckCircle, Info, Bell,BellOff, ChevronDown, ChevronRight} from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 

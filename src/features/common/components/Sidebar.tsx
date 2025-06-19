@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {Activity, LayoutDashboard, Map, _Truck, _AlertTriangle, History, _FileText, _Package, _Users, Building2, Palmtree, Monitor, BookOpen, HardHat, ChevronLeft, ChevronRight, Menu, _X, Shield} from 'lucide-react';
+import {Activity, LayoutDashboard, Map,Truck,AlertTriangle, History,FileText,Package,Users, Building2, Palmtree, Monitor, BookOpen, HardHat, ChevronLeft, ChevronRight, Menu,X, Shield} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { useAlertasActivas } from '../../../store/hooks';
 import { useAccess } from '../../../hooks/useAccess';
@@ -24,7 +24,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const {count: _alertCount} = useAlertasActivas();
+  const {count: alertCount} = useAlertasActivas();
 
   const allNavItems: NavItem[] = [
     // Módulos principales
@@ -145,6 +145,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       label: 'Gestión de Roles',
       path: '/roles',
       icon: <Shield className="h-5 w-5" />,
+      group: 'admin',
+      section: 'roles'
+    },
+    {
+      id: 'sub-paneles',
+      label: 'Sub Paneles',
+      path: '/sub-paneles',
+      icon: <Users className="h-5 w-5" />,
       group: 'admin',
       section: 'roles'
     },

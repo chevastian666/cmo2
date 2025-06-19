@@ -2,7 +2,7 @@ import React from 'react';
 import { formatTimeAgo } from '../../../utils/formatters';
 import type { TransitoPendiente } from '../../../types/monitoring';
 import { cn } from '../../../utils/utils';
-import {_Clock, _Truck, _MessageSquare} from 'lucide-react';
+import {Clock,Truck,MessageSquare} from 'lucide-react';
 import { THRESHOLDS } from '../../../constants';
 import { DataTable, type Column } from '../../../components/DataTable';
 

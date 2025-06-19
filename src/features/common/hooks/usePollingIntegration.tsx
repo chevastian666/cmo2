@@ -1,4 +1,4 @@
-import {_useState, _useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import { usePolling, usePollingWithDiff, useAutoReconnect } from '../../../hooks/usePolling';
 import type { MapMarker, MapRoute } from '../../../components/ui/MapModule';
 import type { TransitInfo } from '../../../components/ui/TransitCard';
@@ -62,19 +62,19 @@ export function useMapPolling(
 
       setError(null);
     } catch (_err) {
-      setError(err as Error);
-      console.error('Error fetching map data:', err);
+      setError(_err as Error);
+      console.error('Error fetching map data:', _err);
     } finally {
       setIsLoading(false);
     }
   }, [markers]);
 
   // Configurar polling
-  const {_startPolling, _stopPolling, _executeNow} = usePolling(fetchMapData, {
+  const {startPolling, stopPolling, executeNow} = usePolling(fetchMapData, {
     interval: 45000,
     enabled: true,
     immediateFirstCall: true,
-    onError: (err) => setError(err)
+    onError: (_err) => setError(_err)
   });
 
   // Auto-reconexión
@@ -139,8 +139,8 @@ export function useTransitPolling(transitId: string) {
       
       setError(null);
     } catch (_err) {
-      setError(err as Error);
-      console.error('Error fetching transit data:', err);
+      setError(_err as Error);
+      console.error('Error fetching transit data:', _err);
     } finally {
       setIsLoading(false);
     }
@@ -151,7 +151,7 @@ export function useTransitPolling(transitId: string) {
     interval: 30000, // 30 segundos para actualizaciones más frecuentes
     enabled: true,
     immediateFirstCall: true,
-    onError: (err) => setError(err)
+    onError: (_err) => setError(_err)
   });
 
   return {
@@ -184,7 +184,7 @@ export function useAlertsPolling() {
         metadata: alert.metadata
       }));
     } catch (_err) {
-      throw err;
+      throw _err;
     }
   }, []);
 
@@ -211,7 +211,7 @@ export function useAlertsPolling() {
   }, [alerts]);
 
   // Polling con detección de cambios
-  const {_startPolling, _stopPolling, _executeNow} = usePollingWithDiff(
+  const {startPolling, stopPolling, executeNow} = usePollingWithDiff(
     fetchAlerts,
     alerts,
     handleAlertsChange,
@@ -219,9 +219,9 @@ export function useAlertsPolling() {
       interval: 45000,
       enabled: true,
       immediateFirstCall: true,
-      onError: (err) => {
-        setError(err);
-        console.error('Error fetching alerts:', err);
+      onError: (_err) => {
+        setError(_err);
+        console.error('Error fetching alerts:', _err);
       }
     }
   );
@@ -244,7 +244,7 @@ export function useAlertsPolling() {
           : alert
       ));
     } catch (_err) {
-      console.error('Error acknowledging alert:', err);
+      console.error('Error acknowledging alert:', _err);
     }
   }, []);
 

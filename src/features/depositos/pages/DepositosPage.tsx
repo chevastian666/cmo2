@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {Plus, Search, _Filter, Download, Building2} from 'lucide-react';
+import {Plus, Search,Filter, Download, Building2} from 'lucide-react';
 import { DepositoTable } from '../components/DepositoTable';
 import {DepositoFilters} from '../components/DepositoFilters';
 import { DepositoDetailModal } from '../components/DepositoDetailModal';
@@ -9,7 +9,7 @@ import { exportToCSV } from '../../../utils/export';
 import type { Deposito } from '../types';
 
 export const DepositosPage: React.FC = () => {
-  const {_depositos, _loading, _addDeposito, _updateDeposito} = useDepositosStore();
+  const {depositos, loading, addDeposito, updateDeposito} = useDepositosStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);

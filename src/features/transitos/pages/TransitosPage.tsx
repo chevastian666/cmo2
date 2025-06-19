@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {_Truck, Download, _MapPin} from 'lucide-react';
+import {Truck, Download,MapPin} from 'lucide-react';
 import { TransitTable } from '../components/TransitTable';
 import {TransitFilters} from '../components/TransitFilters';
 import { TransitDetailModalEnhanced as TransitDetailModal } from '../components/TransitoDetailModalEnhanced';
@@ -132,7 +132,7 @@ export const TransitosPage: React.FC = () => {
 
   const handleViewMap = (transito: Transito) => {
     // Open map in new tab or modal
-    window.open(`/map/${transito.id}`, '_blank');
+    window.open(`/map/${transito.id}`, 'blank');
   };
 
   const handleMarkDesprecintado = async (transito: Transito) => {

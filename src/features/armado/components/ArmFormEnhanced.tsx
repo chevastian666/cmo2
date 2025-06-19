@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {_Truck, _User, _Building, _MapPin, _FileText, _Phone, _Hash, _Package, _CreditCard, Globe, Home, _Container} from 'lucide-react';
+import {Truck,User,Building,MapPin,FileText,Phone,Hash,Package,CreditCard, Globe, Home,Container} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { ORIGENES_DESTINOS } from '../../../constants/locations';
 

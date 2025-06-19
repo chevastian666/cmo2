@@ -1,5 +1,5 @@
 import React from 'react';
-import {Battery, _Radio, _MapPin, Lock, LockOpen, ShieldAlert, _Clock, _AlertTriangle} from 'lucide-react';
+import {Battery,Radio,MapPin, Lock, LockOpen, ShieldAlert,Clock,AlertTriangle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
 import type { Precinto } from '../../../types';

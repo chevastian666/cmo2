@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {ChevronUp, ChevronDown, _MapPin, Eye, Send, History, Unlink, _XCircle} from 'lucide-react';
+import {ChevronUp, ChevronDown,MapPin, Eye, Send, History, Unlink,XCircle} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PrecintoStatusBadge } from './PrecintoStatusBadge';

@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {_Package, _Truck, _AlertTriangle, _TrendingUp} from 'lucide-react';
+import {Package,Truck,AlertTriangle,TrendingUp} from 'lucide-react';
 import { usePrecintosStore, useTransitosStore, useAlertasStore } from '@/store/store';
 
 const TreemapFixed: React.FC = () => {

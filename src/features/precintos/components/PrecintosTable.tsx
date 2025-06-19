@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatTime24h } from '../../../utils/formatters';
 import type { Precinto } from '../../../types/monitoring';
-import {Battery, _MapPin, _Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react';
+import {Battery,MapPin,Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { DataTable, type Column } from '../../../components/DataTable';
 

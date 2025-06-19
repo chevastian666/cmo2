@@ -7,7 +7,7 @@
 import React, { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import {_MapPin, _Truck, _Clock} from 'lucide-react';
+import {MapPin,Truck,Clock} from 'lucide-react';
 import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
 import { transformTransitsByRoute, createHierarchy, transformByTimePeriod } from '@/components/charts/treemap/utils/dataTransformers';
 import { useTransitosStore } from '@/store/store';

@@ -78,7 +78,7 @@ class ArmadoService {
       return response.data;
     } catch (_error) {
       console.error('Error executing armado:', error);
-      throw error;
+      throw _error;
     }
   }
 

@@ -5,12 +5,12 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {Plus, Search, _Filter, Download, Building2, _MapPin, _Phone, _Clock, _Package, _TrendingUp, AlertCircle, Edit2, Eye, _X, ChevronDown, ChevronUp, _Building, _Hash, _Users, Activity, _Calendar, Zap, Map, Info} from 'lucide-react';
+import {Plus, Search,Filter, Download, Building2,MapPin,Phone,Clock,Package,TrendingUp, AlertCircle, Edit2, Eye,X, ChevronDown, ChevronUp,Building,Hash,Users, Activity,Calendar, Zap, Map, Info} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
@@ -42,7 +42,7 @@ import type { MapMarker } from '@/components/maps/InteractiveMap';
 import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
 
 export const DepositosPageV2: React.FC = () => {
-  const {_depositos, _loading, _addDeposito, _updateDeposito} = useDepositosStore();
+  const {depositos, loading, addDeposito, updateDeposito} = useDepositosStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {_Package, AlertCircle, Loader} from 'lucide-react';
+import {Package, AlertCircle, Loader} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PrecintoSearch } from '../components/PrecintoSearchCompact';
 import { PrecintoStatus } from '../components/PrecintoStatusCompact';
@@ -185,7 +185,7 @@ export const ArmadoPage: React.FC = () => {
 
   const validateArmado = (): string[] => {
     const errors: string[] = [];
-    const {_precinto, _transito} = armadoData;
+    const {precinto, transito} = armadoData;
 
     if (!precinto) {
       errors.push('Debe buscar un precinto');
@@ -244,7 +244,7 @@ export const ArmadoPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const {_precinto, _transito, _fotos} = armadoData;
+      const {precinto, transito, fotos} = armadoData;
       
       if (!precinto) {
         throw new Error('No hay precinto seleccionado');

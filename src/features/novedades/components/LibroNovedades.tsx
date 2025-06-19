@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {_FileText, Download, _TrendingUp} from 'lucide-react';
+import {FileText, Download,TrendingUp} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
 import { FormularioNovedad } from './FormularioNovedad';
 import { TimelineNovedades } from './TimelineNovedades';
@@ -13,7 +13,7 @@ import { exportToCSV } from '../../../utils/export';
 import type { Novedad, FiltrosNovedades } from '../types';
 import { FILTROS_DEFAULT, TIPOS_NOVEDAD } from '../types';
 
-const STORAGE_KEY_FILTROS = 'cmo_novedades_filtros';
+const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
 
 export const LibroNovedades: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
@@ -33,7 +33,7 @@ export const LibroNovedades: React.FC = () => {
   const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null);
   const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null);
   
-  const {_novedades, _estadisticas, _loading, _fetchNovedades, _crearNovedad, _marcarResuelta, _agregarSeguimiento} = useNovedadesStore();
+  const {novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento} = useNovedadesStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
@@ -57,10 +57,10 @@ export const LibroNovedades: React.FC = () => {
   }, [fetchNovedades, filtros]);
 
   const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(data);
+    await crearNovedad(_data);
     // Si hay archivos, aquí se subirían
-    if (data.archivos) {
-      console.log('Archivos a subir:', data.archivos);
+    if ((_data as any).archivos) {
+      console.log('Archivos a subir:', (_data as any).archivos);
     }
   };
 
@@ -69,7 +69,7 @@ export const LibroNovedades: React.FC = () => {
       await marcarResuelta(novedadId, comentario);
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
       setNovedadResolucion(null);
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
     }
   };
@@ -79,7 +79,7 @@ export const LibroNovedades: React.FC = () => {
       await agregarSeguimiento(novedadId, comentario);
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
       setNovedadSeguimiento(null);
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento');
     }
   };
@@ -121,7 +121,7 @@ export const LibroNovedades: React.FC = () => {
 
         {/* Estadísticas del día */}
         {estadisticas && (
-          <Card>
+          <Card className="bg-gray-800 border-gray-700">
             <CardHeader>
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-green-500" />
@@ -193,7 +193,7 @@ export const LibroNovedades: React.FC = () => {
         </div>
 
         {/* Filtros */}
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <FiltrosNovedadesComponent
               filtros={filtros}

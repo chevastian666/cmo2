@@ -32,9 +32,9 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
-  const {_searchQuery, _selectedType, _syncStatus, _setSearchQuery, _setSelectedType, _clearHistory, _removeEntry} = useClipboardStore();
+  const {searchQuery, selectedType, syncStatus, setSearchQuery, setSelectedType, clearHistory, removeEntry} = useClipboardStore();
   
-  const {_history, _isOpen, _setIsOpen, _copyToClipboard, _pasteFromHistory} = useClipboard();
+  const {history, isOpen, setIsOpen, copyToClipboard, pasteFromHistory} = useClipboard();
 
   // Position classes
   const positionClasses = {

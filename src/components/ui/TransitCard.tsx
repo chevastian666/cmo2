@@ -3,7 +3,7 @@ import { cn } from '../../utils/utils';
 import { Card } from './Card';
 import { StatusBadge } from './StatusBadge';
 import { InfoRow } from './InfoRow';
-import {_Clock, _User, _Package, History, TruckIcon, Link2, _AlertTriangle} from 'lucide-react';
+import {Clock,User,Package, History, TruckIcon, Link2,AlertTriangle} from 'lucide-react';
 
 export interface TransitInfo {
   id: string;

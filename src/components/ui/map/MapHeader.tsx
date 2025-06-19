@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Map, _Filter, Layers, Search, _X, Building2, _Truck} from 'lucide-react';
+import {Map,Filter, Layers, Search,X, Building2,Truck} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { DESPACHANTES } from '../../../constants/locations';
 

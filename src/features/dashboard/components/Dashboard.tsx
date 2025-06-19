@@ -11,6 +11,7 @@ import { AlertsList } from '../../alertas';
 import { RealtimeIndicator } from './RealtimeIndicator';
 import { KPICards } from './KPICards';
 import {NotificationSettings} from '../../../components/ui/NotificationSettings';
+import { SkeletonDashboard } from '@/components/ui/skeleton';
 import { 
   usePrecintosActivos, 
   useTransitosPendientes, 
@@ -19,10 +20,32 @@ import {
 } from '../../../store/hooks';
 
 export const Dashboard: React.FC = memo(() => {
-  const {_precintos} = usePrecintosActivos();
-  const {_estadisticas, _smsPendientes, _dbStats, _apiStats, _reportesPendientes} = useSystemStatus();
-  const {_alertas} = useAlertasActivas();
-  const {_transitos} = useTransitosPendientes();
+  const {precintos, loading: loadingPrecintos} = usePrecintosActivos();
+  const {estadisticas, smsPendientes, dbStats, apiStats, reportesPendientes, loading: loadingStatus} = useSystemStatus();
+  const {alertas, loading: loadingAlertas} = useAlertasActivas();
+  const {transitos, loading: loadingTransitos} = useTransitosPendientes();
+
+  // Check if any critical data is still loading
+  const isLoading = loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas;
+
+  // Show skeleton while loading
+  if (isLoading && !estadisticas) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Panel de Control</h2>
+            <p className="text-gray-400 mt-1 text-sm sm:text-base lg:text-lg">Sistema de Monitoreo de Precintos Electrónicos - Block Tracker</p>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <NotificationSettings compact />
+            <RealtimeIndicator />
+          </div>
+        </div>
+        <SkeletonDashboard />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

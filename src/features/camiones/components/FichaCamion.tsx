@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {ArrowLeft, _Truck, _Calendar, _User, Route, AlertCircle, Download, Edit, Camera, Activity} from 'lucide-react';
+import {ArrowLeft,Truck,Calendar,User, Route, AlertCircle, Download, Edit, Camera, Activity} from 'lucide-react';
 import { Card, CardHeader, CardContent, Badge, LoadingState } from '../../../components/ui';
 import { useCamionesStore } from '../../../store/camionesStore';
 import {useUserInfo} from '../../../hooks/useAuth';
@@ -17,7 +17,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
   const userInfo = useUserInfo();
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
   
-  const {_camionSeleccionado, _transitosCamion, _estadisticasCamion, _loading, _selectCamion, _updateCamion, _uploadFotoCamion, _clearSelection} = useCamionesStore();
+  const {camionSeleccionado, transitosCamion, estadisticasCamion, loading, selectCamion, updateCamion, uploadFotoCamion, clearSelection} = useCamionesStore();
 
   useEffect(() => {
     selectCamion(matricula);

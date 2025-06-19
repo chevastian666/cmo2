@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {Camera, Upload, _X, Image as ImageIcon} from 'lucide-react';
+import {Camera, Upload,X, Image as ImageIcon} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 interface PhotoUploaderProps {

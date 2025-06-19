@@ -1,5 +1,5 @@
 import React from 'react';
-import {_AlertTriangle, _TrendingUp, _Truck, _Clock} from 'lucide-react';
+import {AlertTriangle,TrendingUp,Truck,Clock} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import type { CongestionAnalysis } from '../types';
 

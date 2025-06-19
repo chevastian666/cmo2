@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {Plus, _FileText, Download, Upload, Search} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
-import { SubirDocumentoModal } from './SubirDocumentoModal';
+import { Plus, FileText, Download } from 'lucide-react';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { FiltrosDocumentosComponent } from './FiltrosDocumentos';
 import { TablaDocumentos } from './TablaDocumentos';
+import { SubirDocumentoModal } from './SubirDocumentoModal';
 import { VisualizadorPDF } from './VisualizadorPDF';
-import { notificationService } from '../../../services/shared/notification.service';
 import { useDocumentosStore } from '../../../store/documentosStore';
-import {useUserInfo} from '../../../hooks/useAuth';
+import { useUserInfo } from '../../../hooks/useAuth';
+import { notificationService } from '../../../services/shared/notification.service';
 import { exportToCSV } from '../../../utils/export';
 import type { Documento, FiltrosDocumentos } from '../types';
 import { FILTROS_DEFAULT } from '../types';
@@ -16,29 +17,30 @@ const STORAGE_KEY_FILTROS = 'cmo_documentacion_filtros';
 
 export const CentroDocumentacion: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosDocumentos>(() => {
-    // Cargar filtros desde localStorage
-    const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
-    return saved ? JSON.parse(saved) : FILTROS_DEFAULT;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
+      return saved ? JSON.parse(saved) : FILTROS_DEFAULT;
+    } catch {
+      return FILTROS_DEFAULT;
+    }
   });
   const [showSubirModal, setShowSubirModal] = useState(false);
   const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null);
   
-  const {_documentos, _loading, _estadisticas, _fetchDocumentos, _uploadDocumento, _deleteDocumento, _updateDocumento} = useDocumentosStore();
+  const { documentos, loading, estadisticas, fetchDocumentos, uploadDocumento, deleteDocumento } = useDocumentosStore();
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor';
   const canDelete = userInfo.role === 'admin';
-
-  // Cargar documentos al montar
+  
   useEffect(() => {
     fetchDocumentos();
   }, [fetchDocumentos]);
-
-  // Guardar filtros en localStorage cuando cambien
+  
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
   }, [filtros]);
-
+  
   // Filtrar documentos
   const documentosFiltrados = documentos.filter(doc => {
     // Búsqueda global
@@ -56,25 +58,33 @@ export const CentroDocumentacion: React.FC = () => {
     if (filtros.numeroDUA && !doc.numeroDUA?.includes(filtros.numeroDUA)) return false;
     if (filtros.empresa && doc.empresa !== filtros.empresa) return false;
     
-    // Fechas
-    if (filtros.fechaDesde && doc.fechaDocumento < filtros.fechaDesde) return false;
-    if (filtros.fechaHasta && doc.fechaDocumento > filtros.fechaHasta) return false;
+    // Fechas - con verificación de tipos
+    if (filtros.fechaDesde && doc.fechaDocumento) {
+      const fechaDesde = new Date(filtros.fechaDesde);
+      const fechaDoc = new Date(doc.fechaDocumento);
+      if (fechaDoc < fechaDesde) return false;
+    }
+    if (filtros.fechaHasta && doc.fechaDocumento) {
+      const fechaHasta = new Date(filtros.fechaHasta);
+      const fechaDoc = new Date(doc.fechaDocumento);
+      if (fechaDoc > fechaHasta) return false;
+    }
     
-    // Estado
-    if (filtros.estado !== 'todos' && doc.estado !== filtros.estado) return false;
-    
-    // Especiales
+    // Otros filtros
     if (filtros.soloDestacados && !doc.destacado) return false;
-    if (!filtros.incluirConfidenciales && doc.confidencial) return false;
-
+    if (filtros.soloConfidenciales && !doc.confidencial) return false;
+    
     return true;
   });
-
-  const empresasUnicas = [...new Set(documentos.map(d => d.empresa).filter(Boolean) as string[])];
-
-  const handleSubirDocumento = async (_data: unknown) => {
+  
+  // Obtener empresas únicas
+  const empresasUnicas = [...new Set(documentos.map(doc => doc.empresa))];
+  
+  // Handlers
+  const handleUpload = async (data: any) => {
     try {
       await uploadDocumento(data);
+      await fetchDocumentos();
       setShowSubirModal(false);
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
     } catch (_error) {
@@ -83,49 +93,27 @@ export const CentroDocumentacion: React.FC = () => {
   };
 
   const handleDescargar = (doc: Documento) => {
-    // Simular descarga
-    notificationService.info('Descargando...', `Descargando ${doc.nombreArchivo}`);
+    const downloadUrl = doc.rutaArchivo;
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = doc.nombreArchivo;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     
-    // Log auditoría
-    console.log('Descarga registrada:', {
-      documentoId: doc.id,
-      usuario: userInfo.name,
-      fecha: new Date()
-    });
+    notificationService.success('Descarga iniciada', `Descargando ${doc.nombreArchivo}`);
   };
 
   const handleEliminar = async (doc: Documento) => {
-    if (confirm(`¿Está seguro de eliminar "${doc.descripcion}"?`)) {
-      try {
-        await deleteDocumento(doc.id);
-        notificationService.success('Documento eliminado', 'El documento se ha eliminado correctamente');
-      } catch (_error) {
-        notificationService.error('Error al eliminar', 'No se pudo eliminar el documento');
-      }
+    if (!window.confirm(`¿Estás seguro de eliminar "${doc.descripcion}"?`)) {
+      return;
     }
-  };
 
-  const handleArchivar = async (doc: Documento) => {
     try {
-      await updateDocumento(doc.id, {
-        estado: doc.estado === 'archivado' ? 'activo' : 'archivado'
-      });
-      notificationService.success(
-        doc.estado === 'archivado' ? 'Documento desarchivado' : 'Documento archivado',
-        'El estado del documento se ha actualizado'
-      );
+      await deleteDocumento(doc.id);
+      notificationService.success('Documento eliminado', 'El documento ha sido eliminado correctamente');
     } catch (_error) {
-      notificationService.error('Error al actualizar', 'No se pudo cambiar el estado del documento');
-    }
-  };
-
-  const handleToggleDestacado = async (doc: Documento) => {
-    try {
-      await updateDocumento(doc.id, {
-        destacado: !doc.destacado
-      });
-    } catch (_error) {
-      notificationService.error('Error al actualizar', 'No se pudo cambiar el estado destacado');
+      notificationService.error('Error al eliminar', 'No se pudo eliminar el documento');
     }
   };
 
@@ -134,8 +122,11 @@ export const CentroDocumentacion: React.FC = () => {
       Tipo: doc.tipo,
       'Número DUA': doc.numeroDUA || '-',
       Descripción: doc.descripcion,
+      Empresa: doc.empresa,
       'Fecha Documento': doc.fechaDocumento.toLocaleDateString('es-UY'),
-      Empresa: doc.empresa || '-',
+      'Palabras Clave': doc.palabrasClave.join(', '),
+      'Nombre Archivo': doc.nombreArchivo,
+      'Tamaño': `${Math.round(doc.tamanioArchivo / 1024)} KB`,
       'Subido por': doc.subidoPor.nombre,
       'Fecha Subida': doc.fechaSubida.toLocaleDateString('es-UY'),
       Estado: doc.estado,
@@ -146,7 +137,15 @@ export const CentroDocumentacion: React.FC = () => {
     exportToCSV(datosExportar, `documentos_${new Date().toISOString().split('T')[0]}`);
     notificationService.success('Exportación completada', 'Los documentos se han exportado correctamente');
   };
-
+  
+  if (loading) {
+    return (
+      <div className="p-6">
+        <p className="text-white">Cargando documentos...</p>
+      </div>
+    );
+  }
+  
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -157,13 +156,26 @@ export const CentroDocumentacion: React.FC = () => {
             Repositorio centralizado de documentos operativos
           </p>
         </div>
-        <button
-          onClick={() => setShowSubirModal(true)}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
-        >
-          <Plus className="h-5 w-5" />
-          Subir documento
-        </button>
+        <div className="flex gap-2">
+          {documentosFiltrados.length > 0 && (
+            <button
+              onClick={handleExportar}
+              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
+            >
+              <Download className="h-5 w-5" />
+              Exportar
+            </button>
+          )}
+          {canEdit && (
+            <button
+              onClick={() => setShowSubirModal(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
+            >
+              <Plus className="h-5 w-5" />
+              Subir documento
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Estadísticas */}
@@ -180,31 +192,31 @@ export const CentroDocumentacion: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-400">DUAs</p>
-                  <p className="text-2xl font-bold text-white">{estadisticas.porTipo.DUA || 0}</p>
+                  <p className="text-2xl font-bold text-white">{estadisticas.porTipo?.DUA || 0}</p>
                 </div>
-                <Badge variant="blue">DUA</Badge>
+                <FileText className="h-8 w-8 text-green-500 opacity-50" />
               </div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-400">Autorizaciones</p>
-                  <p className="text-2xl font-bold text-white">{estadisticas.porTipo.Autorizacion || 0}</p>
+                  <p className="text-2xl font-bold text-white">{estadisticas.porTipo?.Autorizacion || 0}</p>
                 </div>
-                <Badge variant="green">AUT</Badge>
+                <FileText className="h-8 w-8 text-yellow-500 opacity-50" />
               </div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -212,27 +224,27 @@ export const CentroDocumentacion: React.FC = () => {
                   <p className="text-sm text-gray-400">Este mes</p>
                   <p className="text-2xl font-bold text-white">{estadisticas.documentosMes}</p>
                 </div>
-                <Upload className="h-8 w-8 text-green-500 opacity-50" />
+                <FileText className="h-8 w-8 text-purple-500 opacity-50" />
               </div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-400">Espacio usado</p>
                   <p className="text-2xl font-bold text-white">
-                    {(estadisticas.espacioUsado / 1024 / 1024).toFixed(1)} MB
+                    {Math.round(estadisticas.espacioUsado / 1024 / 1024)} MB
                   </p>
                 </div>
-                <Download className="h-8 w-8 text-purple-500 opacity-50" />
+                <Download className="h-8 w-8 text-orange-500 opacity-50" />
               </div>
             </CardContent>
           </Card>
         </div>
       )}
-
+      
       {/* Filtros */}
       <Card>
         <CardContent className="p-4">
@@ -243,7 +255,7 @@ export const CentroDocumentacion: React.FC = () => {
           />
         </CardContent>
       </Card>
-
+      
       {/* Tabla de documentos */}
       <Card variant="elevated">
         <CardHeader>
@@ -251,45 +263,35 @@ export const CentroDocumentacion: React.FC = () => {
             <h3 className="text-lg font-semibold text-white">
               Documentos ({documentosFiltrados.length})
             </h3>
-            {documentosFiltrados.length > 0 && (
-              <button
-                onClick={handleExportar}
-                className="px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Exportar
-              </button>
-            )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <TablaDocumentos
             documentos={documentosFiltrados}
-            loading={loading}
             onDescargar={handleDescargar}
             onVisualizar={setDocumentoVisualizando}
-            onEliminar={handleEliminar}
-            onArchivar={handleArchivar}
-            onToggleDestacado={handleToggleDestacado}
-            canDelete={canDelete}
-            canEdit={canEdit}
+            onEliminar={canDelete ? handleEliminar : undefined}
+            loading={loading}
           />
         </CardContent>
       </Card>
 
       {/* Modales */}
-      <SubirDocumentoModal
-        isOpen={showSubirModal}
-        onClose={() => setShowSubirModal(false)}
-        onSubmit={handleSubirDocumento}
-      />
+      {showSubirModal && (
+        <SubirDocumentoModal
+          isOpen={showSubirModal}
+          onClose={() => setShowSubirModal(false)}
+          onUpload={handleUpload}
+          empresas={empresasUnicas}
+        />
+      )}
 
-      <VisualizadorPDF
-        documento={documentoVisualizando}
-        isOpen={!!documentoVisualizando}
-        onClose={() => setDocumentoVisualizando(null)}
-        onDescargar={handleDescargar}
-      />
+      {documentoVisualizando && (
+        <VisualizadorPDF
+          documento={documentoVisualizando}
+          onClose={() => setDocumentoVisualizando(null)}
+        />
+      )}
     </div>
   );
 };

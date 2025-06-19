@@ -1,4 +1,4 @@
-import {_useEffect, _useState} from 'react';
+import {useEffect, useState} from 'react';
 import { useAlertasStore } from '../store';
 import type { AlertaExtendida } from '../../types';
 

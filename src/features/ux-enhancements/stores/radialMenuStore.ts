@@ -36,7 +36,7 @@ export const useRadialMenuStore = create<RadialMenuStore>()(
 
       canUseAction: (requiredPermissions) => {
         if (requiredPermissions.length === 0) return true;
-        const {_userPermissions} = get();
+        const {userPermissions} = get();
         return requiredPermissions.some(perm => userPermissions.includes(perm));
       },
 

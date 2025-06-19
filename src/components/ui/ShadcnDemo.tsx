@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './dialog';
-import {AlertCircle, Check, _X, ArrowRight, _User, Table} from 'lucide-react';
+import {AlertCircle, Check,X, ArrowRight,User, Table} from 'lucide-react';
 import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from './Card';
 import { Alert, AlertDescription, AlertTitle } from './alert';
 import { FormularioCamioneroV2 } from '../../features/camioneros/components/FormularioCamioneroV2';

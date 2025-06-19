@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {_X, _AlertTriangle, _Clock, _User, _MessageSquare, _CheckCircle, Search, _Calendar} from 'lucide-react';
+import {X,AlertTriangle,Clock,User,MessageSquare,CheckCircle, Search,Calendar} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import {ChevronLeft, ChevronRight, Search, Download, _Filter, _X} from 'lucide-react';
+import {ChevronLeft, ChevronRight, Search, Download,Filter,X} from 'lucide-react';
 import { cn } from '../../utils/utils';
 
 export interface Column<T> {
@@ -30,7 +30,7 @@ export interface DataTableProps<T> {
 }
 
 export function DataTable<T extends Record<string, unknown>>({
-  _data,
+  data,
   columns,
   searchKeys = [],
   searchPlaceholder = "Buscar...",
@@ -48,7 +48,7 @@ export function DataTable<T extends Record<string, unknown>>({
   const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = useState<Record<string, unknown>>(_);
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter data
@@ -109,7 +109,7 @@ export function DataTable<T extends Record<string, unknown>>({
     }
 
     return filtered;
-  }, [_data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns]);
+  }, [data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns]);
 
   // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);

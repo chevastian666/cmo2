@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Volume2, VolumeX, Sparkles, _Settings, _X} from 'lucide-react';
+import {Volume2, VolumeX, Sparkles,Settings,X} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { asmrSoundService, useASMRSound } from '../services/soundService';
 
@@ -14,7 +14,7 @@ interface MicrointeractionsConfig {
 
 export const MicrointeractionsSettings: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {config: _soundConfig, _playHover, _playOpen, _playClose} = useASMRSound();
+  const {config: soundConfig, playHover, playOpen, playClose} = useASMRSound();
   
   const [_config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,

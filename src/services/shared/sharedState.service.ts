@@ -92,7 +92,7 @@ export class SharedStateService {
 
       this.isInitialized = true;
     } catch (_error) {
-      console.error('Failed to initialize shared state:', error);
+      console.error('Failed to initialize shared state:', _error);
       // Continue with initialization even if some parts fail
       this.isInitialized = true;
     }
@@ -207,7 +207,7 @@ export class SharedStateService {
     this.listeners.forEach(listener => {
       try {
         listener(updates);
-      } catch (_error) {
+      } catch (error) {
         console.error('Error in state listener:', error);
       }
     });
@@ -219,7 +219,7 @@ export class SharedStateService {
         listeners.forEach(listener => {
           try {
             listener(this.state[key as keyof SharedState]);
-          } catch (_error) {
+          } catch (error) {
             console.error(`Error in specific state listener for ${key}:`, error);
           }
         });
@@ -229,7 +229,7 @@ export class SharedStateService {
 
   // Event handlers
   private handleTransitUpdate(data: unknown): void {
-    const {_transitId, _action, _transit} = data;
+    const {transitId, action, transit} = data;
 
     switch (action) {
       case 'update':
@@ -245,7 +245,7 @@ export class SharedStateService {
   }
 
   private handlePrecintoUpdate(data: unknown): void {
-    const {_precintoId, _action, _precinto} = data;
+    const {precintoId, action, precinto} = data;
 
     switch (action) {
       case 'update':
@@ -286,7 +286,7 @@ export class SharedStateService {
   }
 
   private handleVehicleUpdate(data: unknown): void {
-    const {_truckId, _position} = data;
+    const {truckId, position} = data;
     const vehiculosEnRuta = this.state.vehiculosEnRuta.map(v => 
       v.id === truckId ? { ...v, position, lastUpdate: Date.now() } : v
     );

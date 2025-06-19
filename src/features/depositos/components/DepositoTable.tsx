@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react';
+import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react';
 import type { Deposito } from '../types';
 import { cn } from '../../../utils/utils';
 
@@ -151,7 +151,7 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap">
                   <a
                     href={`https://www.google.com/maps?q=${deposito.lat},${deposito.lng}&z=17&hl=es`}
-                    target="_blank"
+                    target="blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
                   >

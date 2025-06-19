@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {AlertCircle, _CheckCircle, _XCircle, _Clock, _MapPin, Eye, _MessageSquare} from 'lucide-react';
+import {AlertCircle,CheckCircle,XCircle,Clock,MapPin, Eye,MessageSquare} from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

@@ -36,21 +36,21 @@ export function createStore<T>(
   >,
   options: CreateStoreOptions<T>
 ) {
-  const {_name, _enableDevtools = process.env.NODE_ENV === 'development', enableLogger: _enableLoggerOption = process.env.NODE_ENV === 'development', enableImmer: _enableImmerOption = true, enableSubscribeWithSelector: _enableSelector = true, persist: _persistOptions} = options;
+  const {name, enableDevtools = process.env.NODE_ENV === 'development', enableLogger: enableLogger = process.env.NODE_ENV === 'development', enableImmer: enableImmer = true, enableSubscribeWithSelector: enableSelector = true, persist: persistOptions} = options;
 
   // Construir la cadena de middlewares dinámicamente
   let enhancedCreator = stateCreator;
 
   // Immer debe ser el más interno para que funcione correctamente
-  if (enableImmerOption) {
+  if (enableImmer) {
     enhancedCreator = immer(enhancedCreator) as unknown;
   }
 
   // Logger
-  if (enableLoggerOption) {
-    const loggerConfig: LoggerConfig = typeof enableLoggerOption === 'boolean' 
+  if (enableLogger) {
+    const loggerConfig: LoggerConfig = typeof enableLogger === 'boolean' 
       ? { name } 
-      : { name, ...enableLoggerOption };
+      : { name, ...enableLogger };
     
     enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown;
   }

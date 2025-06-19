@@ -149,7 +149,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         estado: 'activo'
       };
 
-      const {_documentos} = get();
+      const {documentos} = get();
       set({ documentos: [...documentos, nuevoDoc] });
       
       // Registrar log
@@ -167,7 +167,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
 
   deleteDocumento: async (id) => {
     try {
-      const {_documentos} = get();
+      const {documentos} = get();
       set({ documentos: documentos.filter(d => d.id !== id) });
       
       // Registrar log
@@ -185,7 +185,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
 
   updateDocumento: async (id, updates) => {
     try {
-      const {_documentos} = get();
+      const {documentos} = get();
       set({
         documentos: documentos.map(d => 
           d.id === id 

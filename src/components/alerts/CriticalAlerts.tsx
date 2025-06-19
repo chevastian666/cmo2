@@ -1,5 +1,5 @@
 import React, { useSyncExternalStore, memo } from 'react';
-import {_AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react';
+import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react';
 import { cn } from '../../utils/utils';
 import { alertStore } from '../../stores/alertStore';
 import { PriorityBoundary } from '../priority/withPriority';

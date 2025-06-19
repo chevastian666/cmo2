@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {_MapPin, Navigation, Activity, _AlertTriangle, _TrendingUp, _Clock, _Truck} from 'lucide-react';
+import {MapPin, Navigation, Activity,AlertTriangle,TrendingUp,Clock,Truck} from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -33,7 +33,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
   }, []);
 
   // Ensure data is an array
-  const safeData = Array.isArray(_data) ? data : [];
+  const safeData = Array.isArray(data) ? data : [];
 
   // Group transitos by route
   const routeGroups = safeData.reduce((acc, transito) => {

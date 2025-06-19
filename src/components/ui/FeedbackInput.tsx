@@ -5,7 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, InputProps } from '@/components/ui/input';
-import {Check, _X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
+import {Check,X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 

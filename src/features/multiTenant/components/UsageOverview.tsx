@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import {_Users, _Package, _Truck, _AlertTriangle, Zap, HardDrive, _TrendingUp, _CreditCard} from 'lucide-react';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Users,Package,Truck,AlertTriangle, Zap, HardDrive,TrendingUp,CreditCard} from 'lucide-react';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,14 +25,14 @@ interface UsageMetric {
 }
 
 export const UsageOverview: React.FC = () => {
-  const {_currentTenant, _context} = useTenantStore();
+  const {currentTenant, context} = useTenantStore();
 
   if (!currentTenant || !context) {
     return null;
   }
 
-  const {_usage, _plan} = currentTenant;
-  const {_limits} = context;
+  const {usage, plan} = currentTenant;
+  const {limits} = context;
 
   const metrics: UsageMetric[] = [
     {

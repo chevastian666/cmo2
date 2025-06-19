@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {_X, _AlertTriangle, _CheckCircle, _Clock, _MapPin, Shield, Battery, _Radio, _Thermometer, _Package, _User, _MessageSquare} from 'lucide-react';
+import {X,AlertTriangle,CheckCircle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package,User,MessageSquare} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
 import { notificationService } from '../../../services/shared/notification.service';

@@ -14,7 +14,7 @@ interface NetworkChartProps {
 }
 
 export const NetworkChart: React.FC<NetworkChartProps> = ({
-  _data,
+  data,
   title,
   color = '#3B82F6',
   type = 'line'

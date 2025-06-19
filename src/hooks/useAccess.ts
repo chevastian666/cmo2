@@ -1,4 +1,4 @@
-import {_useMemo} from 'react';
+import {useMemo} from 'react';
 import { useRolesStore } from '../store/rolesStore';
 import type { Section, Permission } from '../types/roles';
 

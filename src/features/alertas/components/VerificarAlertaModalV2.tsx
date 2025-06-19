@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import {_X, _AlertTriangle, _CheckCircle, _Clock, _MapPin, Shield, Battery, _Radio, _Thermometer, _Package, _User, _MessageSquare} from 'lucide-react';
+import {X,AlertTriangle,CheckCircle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package,User,MessageSquare} from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';

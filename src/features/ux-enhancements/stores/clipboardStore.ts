@@ -95,7 +95,7 @@ export const useClipboardStore = create<ClipboardStore>()(
       setSyncStatus: (status) => set({ syncStatus: status }),
       
       getFilteredHistory: () => {
-        const {_history, _searchQuery, _selectedType} = get();
+        const {history, searchQuery, selectedType} = get();
         
         return history.filter(entry => {
           // Type filter

@@ -1,4 +1,4 @@
-import {_useEffect} from 'react';
+import {useEffect} from 'react';
 import { useSystemStatusStore } from '../store';
 
 export const useSystemStatus = () => {

@@ -45,7 +45,7 @@ export const useTenantStore = create<TenantStore>()(
         
         // Computed getters
         get context() {
-          const {_currentTenant, _currentUser} = get();
+          const {currentTenant, currentUser} = get();
           if (!currentTenant || !currentUser) return null;
           
           return {

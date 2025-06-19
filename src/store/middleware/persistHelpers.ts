@@ -19,7 +19,7 @@ export interface PersistOptions<T> {
  * Crea una configuración de persist con valores por defecto
  */
 export function createPersistConfig<T>(options: PersistOptions<T>) {
-  const {_name, _partialize, _version = 1, _migrate, _storage = createJSONStorage(() => localStorage), _skipHydration = false} = options;
+  const {name, partialize, version = 1, migrate, storage = createJSONStorage(() => localStorage), skipHydration = false} = options;
 
   return {
     name,
@@ -27,20 +27,7 @@ export function createPersistConfig<T>(options: PersistOptions<T>) {
     version,
     partialize,
     migrate,
-    skipHydration,
-    // Añadir prefijo común para todas las keys
-    getStorage: () => ({
-      getItem: (key: string) => {
-        const value = storage.getItem(`cmo_${key}`);
-        return value ? JSON.parse(value) : null;
-      },
-      setItem: (key: string, value: string) => {
-        storage.setItem(`cmo_${key}`, value);
-      },
-      removeItem: (key: string) => {
-        storage.removeItem(`cmo_${key}`);
-      }
-    })
+    skipHydration
   };
 }
 

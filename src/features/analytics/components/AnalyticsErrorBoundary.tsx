@@ -7,7 +7,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {_AlertTriangle, RefreshCw} from 'lucide-react';
+import {AlertTriangle, RefreshCw} from 'lucide-react';
 
 interface Props {
   children: ReactNode;
@@ -15,27 +15,27 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error: Error | null;
+  _error: Error | null;
   errorInfo: ErrorInfo | null;
 }
 
 class AnalyticsErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    this.state = { hasError: false, _error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(_error: Error): State {
     return { hasError: true, _error, errorInfo: null };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Analytics Error:', _error, errorInfo);
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
+    console._error('Analytics Error:', _error, errorInfo);
     this.setState({ _error, errorInfo });
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: null, errorInfo: null });
+    this.setState({ hasError: false, _error: null, errorInfo: null });
   };
 
   render() {
@@ -51,13 +51,13 @@ class AnalyticsErrorBoundary extends Component<Props, State> {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-gray-300">
-                Ha ocurrido un error al cargar los gráficos de análisis.
+                Ha ocurrido un _error al cargar los gráficos de análisis.
               </p>
               
-              {this.state.error && (
+              {this.state._error && (
                 <div className="bg-gray-900 rounded-lg p-4">
                   <p className="text-sm font-mono text-red-400">
-                    {this.state.error.toString()}
+                    {this.state._error.toString()}
                   </p>
                   {this.state.errorInfo && (
                     <pre className="text-xs text-gray-500 mt-2 overflow-auto">

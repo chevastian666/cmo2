@@ -1,5 +1,5 @@
 import React from 'react';
-import {_X, _MapPin, Battery, _Thermometer, Activity, _Package, _AlertTriangle} from 'lucide-react';
+import {X,MapPin, Battery,Thermometer, Activity,Package,AlertTriangle} from 'lucide-react';
 import { 
   Card,
   CardHeader,

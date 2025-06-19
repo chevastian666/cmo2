@@ -20,7 +20,7 @@ export interface LoggerConfig {
     prevState?: string;
     action?: string;
     nextState?: string;
-    error?: string;
+    _error?: string;
   };
 }
 
@@ -29,7 +29,7 @@ const defaultColors = {
   prevState: '#9CA3AF',
   action: '#3B82F6',
   nextState: '#10B981',
-  error: '#EF4444'
+  _error: '#EF4444'
 };
 
 type Logger = <
@@ -47,7 +47,7 @@ type LoggerImpl = <T>(
 ) => StateCreator<T, [], []>;
 
 const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
-  const {_name = 'zustand', _enabled = process.env.NODE_ENV === 'development', _collapsed = true, _diff = true, _timestamp = true, _duration = true, _actionFilter = () => true, _stateFilter = (state) => state, _colors = defaultColors} = options;
+  const {name = 'zustand', enabled = process.env.NODE_ENV === 'development', collapsed = true, diff = true, timestamp = true, duration = true, actionFilter = () => true, stateFilter = (state) => state, colors = defaultColors} = options;
 
   const mergedColors = { ...defaultColors, ...colors };
   let startTime: number;
@@ -96,11 +96,11 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
       set(...args);
       log();
     } catch (_error) {
-      console.group(`%c${name} | ERROR`, `color: ${mergedColors.error}; font-weight: bold;`);
-      console.error('Error in action:', action);
-      console.error(error);
+      console.group(`%c${name} | ERROR`, `color: ${mergedColors._error}; font-weight: bold;`);
+      console._error('Error in action:', action);
+      console._error(_error);
       console.groupEnd();
-      throw error;
+      throw _error;
     }
   };
 

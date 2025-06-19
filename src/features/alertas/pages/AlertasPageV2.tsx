@@ -5,11 +5,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {_AlertTriangle, Shield, _TrendingUp, _Clock, _Users, _CheckCircle, History, Bell, _BellOff, _Filter, RefreshCw, _User, _MessageSquare, _XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react';
+import {AlertTriangle, Shield,TrendingUp,Clock,Users,CheckCircle, History, Bell,BellOff,Filter, RefreshCw,User,MessageSquare,XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue} from '@/components/ui/select';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
+import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -312,10 +312,10 @@ const StatCard: React.FC<{
 };
 
 const AlertasPageV2: React.FC = () => {
-  const {_alertas, _alertasActivas, _loading, _fetchAlertas, _fetchAlertasActivas, _atenderAlerta, _asignarAlerta, _filter, _setFilter} = useAlertasStore();
+  const {alertas, alertasActivas, loading, fetchAlertas, fetchAlertasActivas, atenderAlerta, asignarAlerta, filter, setFilter} = useAlertasStore();
 
-  const {_precintos} = usePrecintosStore();
-  const {_transitos} = useTransitosStore();
+  const {precintos} = usePrecintosStore();
+  const {transitos} = useTransitosStore();
 
   const [showHistorialModal, setShowHistorialModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState('todas');

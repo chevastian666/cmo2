@@ -7,7 +7,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {_TrendingUp, Download, RefreshCw} from 'lucide-react';
+import {TrendingUp, Download, RefreshCw} from 'lucide-react';
 
 const SimpleAnalytics: React.FC = () => {
   return (

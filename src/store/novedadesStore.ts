@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Novedad, EstadisticasNovedades } from '../features/novedades/types';
+import type { Novedad, EstadisticasNovedades, FiltrosNovedades, TipoNovedad } from '../features/novedades/types';
 
 // Mock data para desarrollo
 const mockNovedades: Novedad[] = [
@@ -115,9 +115,9 @@ interface NovedadesState {
   error: string | null;
   
   // Actions
-  fetchNovedades: (filtros?: unknown) => Promise<void>;
-  crearNovedad: (data: unknown) => Promise<void>;
-  editarNovedad: (id: string, data: unknown) => Promise<void>;
+  fetchNovedades: (filtros?: FiltrosNovedades) => Promise<void>;
+  crearNovedad: (data: Partial<Novedad>) => Promise<void>;
+  editarNovedad: (id: string, data: Partial<Novedad>) => Promise<void>;
   marcarResuelta: (id: string, comentario?: string) => Promise<void>;
   agregarSeguimiento: (id: string, comentario: string) => Promise<void>;
   calcularEstadisticas: () => void;
@@ -125,7 +125,14 @@ interface NovedadesState {
 
 export const useNovedadesStore = create<NovedadesState>((set, get) => ({
   novedades: [],
-  estadisticas: null,
+  estadisticas: {
+    totalDia: 0,
+    porTipo: {} as Record<TipoNovedad, number>,
+    porPunto: {} as Record<string, number>,
+    pendientes: 0,
+    resueltas: 0,
+    enSeguimiento: 0
+  },
   loading: false,
   error: null,
 
@@ -141,7 +148,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
       if (filtros) {
         if (filtros.fecha) {
           novedadesFiltradas = novedadesFiltradas.filter(n => 
-            n.fecha.toDateString() === filtros.fecha.toDateString()
+            n.fecha.toDateString() === filtros.fecha!.toDateString()
           );
         }
         if (filtros.puntoOperacion) {
@@ -163,7 +170,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     try {
       const nuevaNovedad: Novedad = {
         id: Date.now().toString(),
-        fecha: new Date(data.fecha),
+        fecha: data.fecha || new Date(),
         fechaCreacion: new Date(),
         puntoOperacion: data.puntoOperacion,
         tipoNovedad: data.tipoNovedad,
@@ -177,7 +184,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
         }
       };
 
-      const {_novedades} = get();
+      const {novedades} = get();
       set({ novedades: [nuevaNovedad, ...novedades] });
       get().calcularEstadisticas();
     } catch (_error) {
@@ -187,7 +194,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
 
   editarNovedad: async (id, data) => {
     try {
-      const {_novedades} = get();
+      const {novedades} = get();
       set({
         novedades: novedades.map(n => 
           n.id === id 
@@ -210,7 +217,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
 
   marcarResuelta: async (id, comentario) => {
     try {
-      const {_novedades} = get();
+      const {novedades} = get();
       set({
         novedades: novedades.map(n => 
           n.id === id 
@@ -237,7 +244,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
 
   agregarSeguimiento: async (id, comentario) => {
     try {
-      const {_novedades} = get();
+      const {novedades} = get();
       const nuevoSeguimiento = {
         id: Date.now().toString(),
         fecha: new Date(),
@@ -265,7 +272,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
   },
 
   calcularEstadisticas: () => {
-    const {_novedades} = get();
+    const {novedades} = get();
     const hoy = new Date();
     const novedadesHoy = novedades.filter(n => 
       n.fecha.toDateString() === hoy.toDateString()

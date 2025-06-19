@@ -25,7 +25,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   const lastRenderTime = useRef(0);
 
   // Infinite loading
-  const {items: _loadedAlerts, _isLoading, _isLoadingMore, _hasMore, __error, _total, _checkLoadMore, _retry, _prependItems, _updateItem, _removeItem} = useInfiniteLoading({
+  const {items: loadedAlerts, isLoading, isLoadingMore, hasMore, error, total, checkLoadMore, retry, prependItems, updateItem, removeItem} = useInfiniteLoading({
     loadMore: onLoadMore || (async () => ({ alerts: initialAlerts || [], hasMore: false }))
   });
 
@@ -33,13 +33,13 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   const alerts = onLoadMore ? loadedAlerts : (initialAlerts || []);
 
   // Filtering
-  const {_filteredAlerts, _filters, _updateFilters, _resetFilters, _filterCount, _isFiltering, _highlightedIndices} = useAlertFiltering({
+  const {filteredAlerts, filters, updateFilters, resetFilters, filterCount, isFiltering, highlightedIndices} = useAlertFiltering({
     alerts,
     initialFilters
   });
 
   // Virtualization
-  const {_containerProps, _scrollerProps, _visibleItems, _state, _scrollToItem, _scrollToOffset, _updateItemHeight, _getPerformanceMetrics, _isScrolling, _scrollDirection} = useVirtualization({
+  const {containerProps, scrollerProps, visibleItems, state, scrollToItem, scrollToOffset, updateItemHeight, getPerformanceMetrics, isScrolling, scrollDirection} = useVirtualization({
     items: filteredAlerts,
     itemHeight,
     containerHeight,
@@ -47,7 +47,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
     onScroll: (scrollTop) => {
       // Check if should load more
       if (onLoadMore && containerRef.current) {
-        const {_scrollHeight, _clientHeight} = containerRef.current;
+        const {scrollHeight, clientHeight} = containerRef.current;
         checkLoadMore(scrollTop, scrollHeight, clientHeight);
       }
     }

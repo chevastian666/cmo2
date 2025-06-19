@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {_X, AlertCircle, _AlertTriangle, Shield, _CheckCircle} from 'lucide-react';
+import {X, AlertCircle,AlertTriangle, Shield,CheckCircle} from 'lucide-react';
 import { cn } from '../../../utils/utils';
 
 export interface Notification {

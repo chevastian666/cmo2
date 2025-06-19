@@ -42,7 +42,7 @@ const FormField = <
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
   const itemContext = React.useContext(FormItemContext)
-  const {_getFieldState, _formState} = useFormContext()
+  const {getFieldState, formState} = useFormContext()
 
   const fieldState = getFieldState(fieldContext.name, formState)
 
@@ -88,12 +88,12 @@ const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  const {__error, _formItemId} = useFormField()
+  const {_error, formItemId} = useFormField()
 
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(_error && "text-destructive", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -105,18 +105,18 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const {__error, _formItemId, _formDescriptionId, _formMessageId} = useFormField()
+  const {_error, formItemId, formDescriptionId, formMessageId} = useFormField()
 
   return (
     <Slot
       ref={ref}
       id={formItemId}
       aria-describedby={
-        !error
+        !_error
           ? `${formDescriptionId}`
           : `${formDescriptionId} ${formMessageId}`
       }
-      aria-invalid={!!error}
+      aria-invalid={!!_error}
       {...props}
     />
   )
@@ -127,7 +127,7 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const {_formDescriptionId} = useFormField()
+  const {formDescriptionId} = useFormField()
 
   return (
     <p
@@ -144,8 +144,8 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
-  const {__error, _formMessageId} = useFormField()
-  const body = error ? String(error?.message ?? "") : children
+  const {_error, formMessageId} = useFormField()
+  const body = _error ? String(_error?.message ?? "") : children
 
   if (!body) {
     return null

@@ -1,4 +1,4 @@
-import {_useEffect, _useState} from 'react';
+import {useEffect, useState} from 'react';
 
 interface MicrointeractionsConfig {
   animationsEnabled: boolean;

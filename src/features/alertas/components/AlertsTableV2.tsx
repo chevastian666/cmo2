@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {_AlertTriangle, Shield, Battery, _MapPin, _Radio, _Thermometer, _Package, _Clock, _CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
+import {AlertTriangle, Shield, Battery,MapPin,Radio,Thermometer,Package,Clock,CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
 import type { Alerta } from '../../../types';
@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export const AlertsTableV2: React.FC = () => {
-  const {_alertas, _loading, __error, _actions} = useAlertasActivas();
+  const {alertas, loading, error, actions} = useAlertasActivas();
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
@@ -53,7 +53,7 @@ export const AlertsTableV2: React.FC = () => {
     } catch (_error) {
       notificationService.error('Error al responder la alerta');
       console.error('Error responding to alert:', _error);
-      throw error;
+      throw _error;
     }
   };
 
@@ -276,7 +276,7 @@ export const AlertsTableV2: React.FC = () => {
     }
   };
 
-  const {data: __selectedAlerta} =  useAlertaExtendida(selectedAlertaId);
+  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId);
 
   return (
     <>
