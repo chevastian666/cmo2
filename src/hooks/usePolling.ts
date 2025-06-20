@@ -16,8 +16,12 @@ export function usePolling(
   callback: () => void | Promise<void>,
   options: UsePollingOptions = {}
 ) {
-  const {interval = 45000, _// 45 segundos por defecto
-    enabled = true, onError, immediateFirstCall = true} = options;
+  const {
+    interval = 45000, // 45 segundos por defecto
+    enabled = true, 
+    onError, 
+    immediateFirstCall = true
+  } = options;
 
   const savedCallback = useRef(callback);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);

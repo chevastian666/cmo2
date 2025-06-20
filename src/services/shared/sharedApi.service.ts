@@ -203,8 +203,10 @@ class SharedApiService {
 
   // Authentication endpoints
   async login(email: string, password: string): Promise<LoginResponse> {
+    console.log('Login attempt - Mock enabled:', SHARED_CONFIG.ENABLE_MOCK_DATA, 'Real API:', import.meta.env.VITE_USE_REAL_API);
+    
     // Only use mock authentication if explicitly enabled AND not using real API
-    if (SHARED_CONFIG.ENABLE_MOCK_DATA && !import.meta.env.VITE_USE_REAL_API) {
+    if (SHARED_CONFIG.ENABLE_MOCK_DATA && import.meta.env.VITE_USE_REAL_API !== 'true') {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       

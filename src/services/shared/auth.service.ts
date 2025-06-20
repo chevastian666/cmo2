@@ -62,7 +62,7 @@ class AuthService {
         }
       }
     } catch (_error) {
-      console.error('Auth check failed:', error);
+      console.error('Auth check failed:', _error);
       
       // Try to refresh token if it's expired
       if (jwtService.shouldRefreshToken()) {
@@ -90,7 +90,12 @@ class AuthService {
     try {
       const response = await sharedApiService.login(email, password) as LoginResponse;
       
+      console.log('Login response:', response); // Debug log
+      
       // Save JWT tokens
+      if (!response.tokens) {
+        throw new Error('No tokens in response');
+      }
       jwtService.saveTokens(response.tokens);
       
       // Save user data
@@ -107,15 +112,15 @@ class AuthService {
       await sharedStateService.initialize();
 
       return response.user as Usuario;
-    } catch (error: unknown) {
-      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error?.message || 'Login failed';
       this.notifyListeners({
         user: null,
         isAuthenticated: false,
         isLoading: false,
         error: errorMessage
       });
-      throw _error;
+      throw error;
     }
   }
 
@@ -125,7 +130,7 @@ class AuthService {
       // Notify server about logout
       await sharedStateService.logout();
     } catch (_error) {
-      console.error('Logout error:', error);
+      console.error('Logout error:', _error);
     } finally {
       this.clearAuth();
       this.stopIntervals();
@@ -164,7 +169,7 @@ class AuthService {
           return true;
         }
       } catch (_error) {
-        console.error('Token refresh failed:', error);
+        console.error('Token refresh failed:', _error);
         return false;
       } finally {
         this.refreshPromise = null;

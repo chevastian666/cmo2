@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Activity, Bell, Menu,X,User,LogOut,Settings, ChevronDown} from 'lucide-react';
+import {Activity, Menu,X,User,LogOut,Settings, ChevronDown} from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../../utils/utils';
 import { APP_CONFIG } from '../../../config';
@@ -10,6 +10,7 @@ import { useAlertasActivas } from '../../../store/hooks';
 import {useAuth, useUserInfo} from '../../../hooks/useAuth';
 import { useConnectionStatus } from '../../../hooks/useSharedState';
 import { PanelSwitcher } from '../../../components/PanelSwitcher';
+import { NotificationButton } from '../../../components/notifications/NotificationButton';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -58,17 +59,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
               
               {/* Notifications */}
-              <button className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 relative">
-                <Bell size={18} className="sm:w-5 sm:h-5" />
-                {alertCount > 0 && (
-                  <>
-                    <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
-                    <span className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-red-500 rounded-full flex items-center justify-center">
-                      <span className="text-sm text-white font-bold">{alertCount}</span>
-                    </span>
-                  </>
-                )}
-              </button>
+              <NotificationButton />
               
               {/* User Menu */}
               <div className="relative">
