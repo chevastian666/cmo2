@@ -7,7 +7,6 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import { logger } from '../utils/logger';
-import { config } from '../config/config';
 
 interface Webhook {
   id: string;

@@ -5,6 +5,7 @@
  */
 
 import { ApiError } from '../middleware/errorHandler';
+import crypto from 'crypto';
 
 interface Precinto {
   id: string;
@@ -84,7 +85,7 @@ class PrecintoService {
     
     const updated = {
       ...precinto,
-      ..._data,
+      ...data,
       id,
       updatedAt: new Date()
     };
@@ -97,7 +98,7 @@ class PrecintoService {
     this.precintos.delete(id);
   }
 
-  async activate(id: string, transitId?: string, userId?: string): Promise<Precinto> {
+  async activate(id: string): Promise<Precinto> {
     const precinto = await this.getById(id);
     if (!precinto) {
       throw new ApiError(404, 'Precinto not found');
@@ -110,7 +111,7 @@ class PrecintoService {
     return this.update(id, { estado: 'activado' });
   }
 
-  async deactivate(id: string, reason?: string, userId?: string): Promise<Precinto> {
+  async deactivate(id: string): Promise<Precinto> {
     const precinto = await this.getById(id);
     if (!precinto) {
       throw new ApiError(404, 'Precinto not found');

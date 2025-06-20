@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-// import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { ApiError } from '../middleware/errorHandler';
 import { precintoService } from '../services/precinto.service';
@@ -28,7 +28,7 @@ export const getAllPrecintos = async (
     const result = await precintoService.getAll(page, limit, filters);
     
     res.json({
-      data: result._data,
+      data: result.data,
       pagination: {
         page,
         limit,
@@ -165,12 +165,12 @@ export const activatePrecinto = async (
     const { id } = req.params;
     const { transitId } = req.body;
     
-    const precinto = await precintoService.activate(id, _transitId, req.user?.id);
+    const precinto = await precintoService.activate(id);
     
     // Send webhook notification
     await webhookService.trigger('precinto.activated', {
       precinto,
-      _transitId,
+      transitId,
       user: req.user,
       timestamp: new Date()
     });
@@ -193,12 +193,12 @@ export const deactivatePrecinto = async (
     const { id } = req.params;
     const { reason } = req.body;
     
-    const precinto = await precintoService.deactivate(id, _reason, req.user?.id);
+    const precinto = await precintoService.deactivate(id);
     
     // Send webhook notification
     await webhookService.trigger('precinto.deactivated', {
       precinto,
-      _reason,
+      reason,
       user: req.user,
       timestamp: new Date()
     });

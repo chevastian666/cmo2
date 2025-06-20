@@ -4,12 +4,12 @@
  * By Cheva
  */
 
-import { body, param, _query, validationResult } from 'express-validator';
-// import { Request, Response, NextFunction } from 'express';
+import { body, param, validationResult } from 'express-validator';
+import { Request, Response, NextFunction } from 'express';
 import { ApiError } from '../middleware/errorHandler';
 
 // Validation middleware
-const validate = (_req: Request, _res: Response, _next: NextFunction) => {
+const validate = (req: Request, _res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ApiError(400, 'Validation failed', true);

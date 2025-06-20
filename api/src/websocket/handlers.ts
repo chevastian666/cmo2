@@ -45,7 +45,8 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
       socket.join(`user:${decoded.id}`);
 
       next();
-    } catch (_error) {
+    } catch (error) {
+      logger.error('WebSocket authentication error:', error);
       next(new Error('Invalid token'));
     }
   });
@@ -97,7 +98,8 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
         });
 
         logger.debug(`Location update for precinto ${data.precintoId}`);
-      } catch (_error) {
+      } catch (error) {
+        logger.error('Location update error:', error);
         socket.emit('error', { message: 'Failed to update location' });
       }
     });
@@ -114,26 +116,26 @@ export const setupWebSocketHandlers = (io: SocketIOServer): void => {
   });
 
   // Emit functions for server-side events
-  const emitPrecintoUpdate = (precintoId: string, _data: unknown) => {
+  const emitPrecintoUpdate = (precintoId: string, data: unknown) => {
     io.to(`precinto:${precintoId}`).emit('precinto:updated', data);
   };
 
-  const emitTransitUpdate = (transitId: string, _data: unknown) => {
+  const emitTransitUpdate = (transitId: string, data: unknown) => {
     io.to(`transit:${transitId}`).emit('transit:updated', data);
   };
 
-  const emitAlert = (_data: unknown) => {
+  const emitAlert = (data: { companyId?: string; [key: string]: unknown }) => {
     io.to('alerts').emit('alert:new', data);
     if (data.companyId) {
       io.to(`alerts:${data.companyId}`).emit('alert:new', data);
     }
   };
 
-  const emitToCompany = (companyId: string, event: string, _data: unknown) => {
+  const emitToCompany = (companyId: string, event: string, data: unknown) => {
     io.to(`company:${companyId}`).emit(event, data);
   };
 
-  const emitToUser = (userId: string, event: string, _data: unknown) => {
+  const emitToUser = (userId: string, event: string, data: unknown) => {
     io.to(`user:${userId}`).emit(event, data);
   };
 
