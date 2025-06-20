@@ -24,12 +24,6 @@ import {
   AnimatedGrid
 } from './PageTransitions';
 import {
-  fadeVariants,
-  scaleVariants,
-  slideUpVariants,
-  slideDownVariants,
-  slideLeftVariants,
-  slideRightVariants,
   rotateScaleVariants,
   pulseVariants,
   shakeVariants,
@@ -40,7 +34,6 @@ import {
   transitMovingVariants,
   precintoActiveVariants
 } from './AnimationPresets';
-import { tokenClasses } from '../../styles/useDesignTokens';
 
 export const AnimationsDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basics');

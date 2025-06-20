@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import {AlertTriangle} from 'lucide-react';
-import { useAccess } from '../hooks/useAccess';
 import type { Section, Permission } from '../types/roles';
 
 interface ProtectedRouteProps {
@@ -54,18 +53,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   return <>{children}</>;
 };
 
-// HOC variant for more flexibility
-export function withProtection<P extends object>(
-  Component: React.ComponentType<P>,
-  section: Section,
-  permission: Permission = 'view'
-) {
-  return (props: P) => (
-    <ProtectedRoute section={section} permission={permission}>
-      <Component {...props} />
-    </ProtectedRoute>
-  );
-}
+// Export types and HOC from separate file to fix Fast Refresh warning
+export { withProtection, type Section, type Permission } from './protectionUtils';
 
 // Import the store
 import { useRolesStore } from '../store/rolesStore';

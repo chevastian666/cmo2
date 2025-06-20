@@ -312,7 +312,8 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
 
   }, [data, width, height, margin, nodeWidth, nodePadding, nodeAlign, iterations, 
       colors, animated, interactive, showLabels, showValues, labelPosition, 
-      valueFormat, colorScale, innerWidth, innerHeight]);
+      valueFormat, colorScale, innerWidth, innerHeight, linkSort, nodeSort, 
+      onLinkClick, onLinkHover, onNodeClick, onNodeHover]);
 
   return (
     <div className={cn('relative', className)}>

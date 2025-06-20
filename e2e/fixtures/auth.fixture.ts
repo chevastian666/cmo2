@@ -2,6 +2,7 @@
  * Auth Test Fixtures
  * By Cheva
  */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { test as base } from '@playwright/test';
 import path from 'path';
 

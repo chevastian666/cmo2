@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import {ChevronLeft, ChevronRight, Search, Download,Filter,X} from 'lucide-react';
 import { cn } from '../../utils/utils';
 
@@ -273,7 +273,7 @@ export function DataTable<T extends Record<string, unknown>>({
             </div>
             {Object.keys(filters).length > 0 && (
               <button
-                onClick={() => setFilters(_)}
+                onClick={() => setFilters({})}
                 className="mt-3 text-base text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
                 <X className="h-3 w-3" />

@@ -244,45 +244,9 @@ export const OptimizedGridCell = memo<{
 
 OptimizedGridCell.displayName = 'OptimizedGridCell';
 
-// Factory for creating optimized components
-export function createOptimizedComponent<P extends object>(
-  Component: React.ComponentType<P>,
-  compareProps?: (prevProps: P, nextProps: P) => boolean
-): React.MemoExoticComponent<React.ComponentType<P>> {
-  return memo(Component, compareProps);
-}
-
-// Hook for optimizing render
-export function useOptimizedRender<T>(
-  data: T,
-  dependencies: React.DependencyList = []
-): T {
-  return useMemo(() => data, [data, ...dependencies]);
-}
-
-// Higher order component for optimization
-export function withOptimization<P extends object>(
-  Component: React.ComponentType<P>,
-  options: {
-    compareProps?: (prevProps: P, nextProps: P) => boolean;
-    debounceProps?: Array<keyof P>;
-    throttleProps?: Array<keyof P>;
-  } = {}
-): React.ComponentType<P> {
-  const OptimizedComponent = memo(Component, options.compareProps);
-
-  return (props: P) => {
-    // Apply debounce/throttle to specific props if needed
-    const optimizedProps = { ...props };
-
-    if (options.debounceProps) {
-      // Implementation would use useDebouncedValue for specified props
-    }
-
-    if (options.throttleProps) {
-      // Implementation would use useThrottledValue for specified props
-    }
-
-    return <OptimizedComponent {...optimizedProps} />;
-  };
-}
+// Export utilities from separate file to fix Fast Refresh warning
+export { 
+  createOptimizedComponent, 
+  useOptimizedRender, 
+  withOptimization
+} from './optimizedUtils';

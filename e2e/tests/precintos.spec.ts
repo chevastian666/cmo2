@@ -108,7 +108,7 @@ test.describe('Precintos Management', () => {
     await expect(createdCard).toBeVisible();
   });
 
-  test('should view precinto details', async ({ authenticatedPage }) => {
+  test('should view precinto details', async () => {
     // Get first precinto code
     const firstCard = precintosPage.precintoCards.first();
     const codigo = await firstCard.getByText(/PRE-\d+/).textContent();
@@ -192,7 +192,7 @@ test.describe('Precintos Management', () => {
     await expect(modal).not.toBeVisible();
   });
 
-  test('should handle real-time updates', async ({ authenticatedPage, context }) => {
+  test('should handle real-time updates', async ({ context }) => {
     // Open second tab
     const newPage = await context.newPage();
     const secondPrecintosPage = new PrecintosPage(newPage);

@@ -29,6 +29,18 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
   const [stats, setStats] = useState<NotificationStats | undefined>();
   const [filter, setFilter] = useState<NotificationFilter>({});
 
+  const loadStats = React.useCallback(() => {
+    const currentStats = notificationService.getStats();
+    setStats(currentStats);
+  }, []);
+
+  const loadNotifications = React.useCallback(() => {
+    const filtered = notificationService.getNotifications(filter);
+    const grouped = notificationService.getGroupedNotifications(filter);
+    setNotifications(filtered);
+    setGroups(grouped);
+  }, [filter]);
+
   // Load notifications on mount
   useEffect(() => {
     loadNotifications();
@@ -49,24 +61,12 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
       unsubscribeCreated();
       unsubscribeUpdated();
     };
-  }, []);
+  }, [loadNotifications, loadStats]);
 
   // Reload when filter changes
   useEffect(() => {
     loadNotifications();
-  }, [filter]);
-
-  const loadNotifications = () => {
-    const filtered = notificationService.getNotifications(filter);
-    const grouped = notificationService.getGroupedNotifications(filter);
-    setNotifications(filtered);
-    setGroups(grouped);
-  };
-
-  const loadStats = () => {
-    const currentStats = notificationService.getStats();
-    setStats(currentStats);
-  };
+  }, [loadNotifications]);
 
   const handleNotificationAction = async (
     notificationId: string, 

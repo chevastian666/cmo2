@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
 import { TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
 import { formatters, scales, animations, tooltip } from './utils';
@@ -28,7 +28,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
   const [currentRoot, setCurrentRoot] = useState<TreemapNode>(data);
   const [breadcrumbs, setBreadcrumbs] = useState<TreemapNode[]>([data]);
   
-  const config = { ...DEFAULT_CHART_CONFIG, ...userConfig };
+  const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
   useEffect(() => {

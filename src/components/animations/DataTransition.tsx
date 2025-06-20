@@ -74,19 +74,5 @@ export const ListTransition: React.FC<ListTransitionProps> = ({
   );
 };
 
-// Hook para detectar cambios en los datos
-export const useDataChange = (data: any) => {
-  const [hasChanged, setHasChanged] = useState(false);
-  const [prevData, setPrevData] = useState(data);
-
-  useEffect(() => {
-    if (JSON.stringify(data) !== JSON.stringify(prevData)) {
-      setHasChanged(true);
-      setPrevData(data);
-      const timer = setTimeout(() => setHasChanged(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [data, prevData]);
-
-  return hasChanged;
-};
+// Export hook from separate file to fix Fast Refresh warning
+export { useDataChange } from './animationUtils';

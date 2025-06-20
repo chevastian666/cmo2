@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
 import { TimeSeriesData, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
 import { formatters, scales, animations, tooltip, responsive } from './utils';
@@ -26,7 +26,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 });
   
-  const config = { ...DEFAULT_CHART_CONFIG, ...userConfig };
+  const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
   useEffect(() => {
