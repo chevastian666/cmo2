@@ -82,7 +82,7 @@ const InteractiveDashboard: React.FC = () => {
       type: 'map',
       title: 'Mapa en Tiempo Real',
       minW: 6,
-      minH: 4
+      minH: 5
     },
     {
       id: 'statistics',
@@ -191,7 +191,7 @@ const InteractiveDashboard: React.FC = () => {
         return <ChartWidget widgetId={widget.id} type="area" />;
       
       case 'map':
-        return <MapWidget showLegend />;
+        return <MapWidget showLegend showControls />;
       
       case 'alerts':
         return <AlertsWidget />;
@@ -218,16 +218,17 @@ const InteractiveDashboard: React.FC = () => {
 
   return (
     <PageTransition variant="fade">
-      <div className="min-h-screen bg-gray-900 p-6">
+      <div className="min-h-screen bg-gray-900 p-4">
         <AnimatedHeader
           title="Dashboard Interactivo"
           subtitle="Centro de Monitoreo de Operaciones"
         />
         
-        <div className="mt-6">
+        <div className="mt-4">
           <DashboardGrid
             widgets={widgets}
             renderWidget={renderWidget}
+            className="w-full"
             onLayoutChange={(layouts) => {
               console.log('Layouts cambiados:', layouts);
             }}

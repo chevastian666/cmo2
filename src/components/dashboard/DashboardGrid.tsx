@@ -63,43 +63,43 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       return widgets.map((widget) => {
         let x = 0, y = 0, w = 4, h = 4;
         
-        // Posicionamiento específico según el widget
+        // Posicionamiento específico según el widget - Layout optimizado
         if (widget.id === 'kpi-precintos') {
-          // Precintos activos - arriba a la izquierda, más grande
-          x = 0; y = 0; w = 6; h = 3;
-        } else if (widget.id === 'pending-precintos') {
-          // Pendientes precintar/desprecintar - arriba centro, muy prominente
-          x = 6; y = 0; w = 6; h = 4;
-        } else if (widget.id === 'precinto-status') {
-          // Estado de precintos - segunda fila
-          x = 0; y = 4; w = 6; h = 4;
+          // Precintos activos - arriba a la izquierda
+          x = 0; y = 0; w = 3; h = 3;
         } else if (widget.id === 'kpi-cumplimiento') {
-          // Tasa de cumplimiento - primera fila derecha
-          x = 0; y = 3; w = 3; h = 2;
-        } else if (widget.id === 'chart-main') {
-          // Gráfico principal - segunda fila derecha
-          x = 6; y = 4; w = 6; h = 5;
-        } else if (widget.id === 'map') {
-          // Mapa - tercera fila
-          x = 0; y = 8; w = 6; h = 5;
-        } else if (widget.id === 'statistics') {
-          // Estadísticas - tercera fila derecha
-          x = 6; y = 9; w = 6; h = 4;
-        } else if (widget.id === 'activity') {
-          // Actividad - cuarta fila
-          x = 0; y = 13; w = 6; h = 4;
+          // Tasa de cumplimiento - arriba centro
+          x = 3; y = 0; w = 3; h = 3;
         } else if (widget.id === 'kpi-transitos') {
-          // KPI tránsitos - al fondo
-          x = 0; y = 17; w = 3; h = 2;
-        } else if (widget.id === 'transits') {
-          // Widget tránsitos - al fondo
-          x = 3; y = 17; w = 6; h = 4;
+          // KPI tránsitos - arriba centro-derecha
+          x = 6; y = 0; w = 3; h = 3;
         } else if (widget.id === 'kpi-alertas') {
-          // KPI alertas - al fondo
-          x = 9; y = 17; w = 3; h = 2;
+          // KPI alertas - arriba derecha
+          x = 9; y = 0; w = 3; h = 3;
+        } else if (widget.id === 'pending-precintos') {
+          // Pendientes precintar/desprecintar - segunda fila izquierda, prominente
+          x = 0; y = 3; w = 6; h = 4;
+        } else if (widget.id === 'precinto-status') {
+          // Estado de precintos - segunda fila derecha
+          x = 6; y = 3; w = 6; h = 4;
+        } else if (widget.id === 'map') {
+          // Mapa - tercera fila izquierda, más grande
+          x = 0; y = 7; w = 7; h = 6;
+        } else if (widget.id === 'chart-main') {
+          // Gráfico principal - tercera fila derecha
+          x = 7; y = 7; w = 5; h = 6;
+        } else if (widget.id === 'statistics') {
+          // Estadísticas - cuarta fila izquierda
+          x = 0; y = 13; w = 4; h = 4;
+        } else if (widget.id === 'activity') {
+          // Actividad - cuarta fila centro
+          x = 4; y = 13; w = 4; h = 4;
+        } else if (widget.id === 'transits') {
+          // Widget tránsitos - cuarta fila derecha
+          x = 8; y = 13; w = 4; h = 4;
         } else if (widget.id === 'alerts') {
-          // Widget alertas - al fondo
-          x = 0; y = 19; w = 6; h = 4;
+          // Widget alertas - quinta fila
+          x = 0; y = 17; w = 12; h = 4;
         }
         
         // Ajustar para diferentes tamaños de pantalla
@@ -222,8 +222,8 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
         onLayoutChange={handleLayoutChange}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-        rowHeight={60}
-        margin={[16, 16]}
+        rowHeight={70}
+        margin={[12, 12]}
         containerPadding={[0, 0]}
         isDraggable={editMode}
         isResizable={editMode}
@@ -245,20 +245,20 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
           >
             {/* Header del Widget */}
             <div className={cn(
-              'widget-header px-4 py-2 bg-gray-900/50 border-b border-gray-700',
-              'flex items-center justify-between',
+              'widget-header px-3 py-2.5 bg-gray-900/50 border-b border-gray-700',
+              'flex items-center justify-between shrink-0',
               editMode && 'widget-drag-handle cursor-move'
             )}>
-              <h3 className="text-sm font-medium text-white select-none">
+              <h3 className="text-sm font-medium text-white select-none truncate">
                 {widget.title}
               </h3>
               {editMode && (
-                <Settings className="h-4 w-4 text-gray-500" />
+                <Settings className="h-4 w-4 text-gray-500 shrink-0" />
               )}
             </div>
 
             {/* Contenido del Widget */}
-            <div className="widget-content p-4 h-[calc(100%-40px)] overflow-auto">
+            <div className="widget-content p-3 h-[calc(100%-50px)] overflow-hidden flex flex-col">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={widget.id}
@@ -266,6 +266,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
+                  className="h-full w-full flex-1"
                 >
                   {renderWidget(widget)}
                 </motion.div>

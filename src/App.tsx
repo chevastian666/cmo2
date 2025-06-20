@@ -54,6 +54,7 @@ const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapF
 const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })));
 const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })));
 const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })));
+const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -228,6 +229,7 @@ function App() {
                   <Route path="/d3-visualizations" element={<D3VisualizationsDemo />} />
                   <Route path="/notifications-demo" element={<NotificationSystemDemo />} />
                   <Route path="/performance-demo" element={<PerformanceDemo />} />
+                  <Route path="/integrations" element={<IntegrationsManagementPage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
