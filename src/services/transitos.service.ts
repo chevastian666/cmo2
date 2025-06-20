@@ -15,6 +15,12 @@ export interface TransitoFilters {
 export const transitosService = {
   getPendientes: async (filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
     try {
+      // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
+        console.log('Using mock data for transitos in development mode');
+        return Array.from({ length: 12 }, (_, i) => generateMockTransito(i));
+      }
+
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {

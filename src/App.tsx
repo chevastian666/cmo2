@@ -63,6 +63,7 @@ import { notificationService } from './services/shared/notification.service';
 import { sharedWebSocketService } from './services/shared/sharedWebSocket.service';
 import { SHARED_CONFIG } from './config/shared.config';
 import { Toaster } from '@/components/ui/toaster';
+import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 // import TreemapDirect from './features/analytics/components/TreemapDirect';
 import './App.css';
 
@@ -169,76 +170,82 @@ function App() {
   console.log('App: Rendering authenticated user routes');
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/modo-tv" element={
-            <Suspense fallback={<LoadingOverlay />}>
-              <ModoTVPage />
-            </Suspense>
-          } />
-          <Route path="*" element={
-            <LayoutOptimized>
+    <GlobalErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/modo-tv" element={
               <Suspense fallback={<LoadingOverlay />}>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/armado" element={<ArmadoPageV2 />} />
-                  <Route path="/armado/waiting/:transitId" element={<ArmadoWaitingPage />} />
-                  <Route path="/prearmado" element={<PrearmadoPage />} />
-                  <Route path="/transitos" element={<TransitosPageV2 />} />
-                  <Route path="/precintos" element={
-                    <ErrorBoundary componentName="PrecintosPage">
-                      <PrecintosPage />
-                    </ErrorBoundary>
-                  } />
-                  <Route path="/alertas" element={<AlertasPageV2 />} />
-                  <Route path="/despachantes" element={<DespachantesPage />} />
-                  <Route path="/depositos" element={<DepositosPage />} />
-                  <Route path="/zonas-descanso" element={<ZonasDescansoPage />} />
-                  <Route path="/torre-control" element={<TorreControlV2 />} />
-                  <Route path="/documentacion" element={<CentroDocumentacion />} />
-                  <Route path="/novedades" element={<BitacoraOperacional />} />
-                  <Route path="/camiones" element={<CamionesPage />} />
-                  <Route path="/camioneros" element={<CamionerosPage />} />
-                  <Route path="/roles" element={
-                    <ProtectedRoute section="roles" permission="view">
-                      <RolesPage />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/sub-paneles" element={
-                    <ProtectedRoute section="roles" permission="view">
-                      <SubPanelesPage />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/demo" element={<ShadcnDemo />} />
-                  <Route path="/design-tokens" element={<DesignTokensDemo />} />
-                  <Route path="/animations" element={<AnimationsDemo />} />
-                  <Route path="/dashboard-interactive" element={<InteractiveDashboard />} />
-                  <Route path="/dashboard-test" element={<DashboardTest />} />
-                  <Route path="/analytics" element={
-                    <AnalyticsErrorBoundary>
-                      <InteractiveSankeyDashboard />
-                    </AnalyticsErrorBoundary>
-                  } />
-                  <Route path="/analytics-test" element={<AnalyticsTest />} />
-                  <Route path="/sankey-test" element={<SankeyMinimal />} />
-                  <Route path="/treemaps" element={<TreemapFixed />} />
-                  <Route path="/treemaps-static" element={<TreemapStatic />} />
-                  <Route path="/treemaps-simple" element={<TreemapDashboardSimple />} />
-                  <Route path="/treemap-test" element={<TreemapTest />} />
-                  <Route path="/d3-visualizations" element={<D3VisualizationsDemo />} />
-                  <Route path="/notifications-demo" element={<NotificationSystemDemo />} />
-                  <Route path="/performance-demo" element={<PerformanceDemo />} />
-                  <Route path="/integrations" element={<IntegrationsManagementPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
+                <ModoTVPage />
               </Suspense>
-            </LayoutOptimized>
-          } />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
-    </QueryClientProvider>
+            } />
+            <Route path="*" element={
+              <LayoutOptimized>
+                <Suspense fallback={<LoadingOverlay />}>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/armado" element={<ArmadoPageV2 />} />
+                    <Route path="/armado/waiting/:transitId" element={<ArmadoWaitingPage />} />
+                    <Route path="/prearmado" element={<PrearmadoPage />} />
+                    <Route path="/transitos" element={<TransitosPageV2 />} />
+                    <Route path="/precintos" element={
+                      <ErrorBoundary componentName="PrecintosPage">
+                        <PrecintosPage />
+                      </ErrorBoundary>
+                    } />
+                    <Route path="/alertas" element={<AlertasPageV2 />} />
+                    <Route path="/despachantes" element={<DespachantesPage />} />
+                    <Route path="/depositos" element={<DepositosPage />} />
+                    <Route path="/zonas-descanso" element={<ZonasDescansoPage />} />
+                    <Route path="/torre-control" element={<TorreControlV2 />} />
+                    <Route path="/documentacion" element={<CentroDocumentacion />} />
+                    <Route path="/novedades" element={<BitacoraOperacional />} />
+                    <Route path="/camiones" element={<CamionesPage />} />
+                    <Route path="/camioneros" element={<CamionerosPage />} />
+                    <Route path="/roles" element={
+                      <ProtectedRoute section="roles" permission="view">
+                        <RolesPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/sub-paneles" element={
+                      <ProtectedRoute section="roles" permission="view">
+                        <SubPanelesPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/demo" element={<ShadcnDemo />} />
+                    <Route path="/design-tokens" element={<DesignTokensDemo />} />
+                    <Route path="/animations" element={<AnimationsDemo />} />
+                    <Route path="/dashboard-interactive" element={<InteractiveDashboard />} />
+                    <Route path="/dashboard-test" element={<DashboardTest />} />
+                    <Route path="/analytics" element={
+                      <AnalyticsErrorBoundary>
+                        <InteractiveSankeyDashboard />
+                      </AnalyticsErrorBoundary>
+                    } />
+                    <Route path="/analytics-test" element={<AnalyticsTest />} />
+                    <Route path="/sankey-test" element={<SankeyMinimal />} />
+                    <Route path="/treemaps" element={<TreemapFixed />} />
+                    <Route path="/treemaps-static" element={<TreemapStatic />} />
+                    <Route path="/treemaps-simple" element={<TreemapDashboardSimple />} />
+                    <Route path="/treemap-test" element={<TreemapTest />} />
+                    <Route path="/d3-visualizations" element={<D3VisualizationsDemo />} />
+                    <Route path="/notifications-demo" element={<NotificationSystemDemo />} />
+                    <Route path="/performance-demo" element={<PerformanceDemo />} />
+                    <Route path="/integrations" element={
+                      <GlobalErrorBoundary>
+                        <IntegrationsManagementPage />
+                      </GlobalErrorBoundary>
+                    } />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Suspense>
+              </LayoutOptimized>
+            } />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </GlobalErrorBoundary>
   );
 }
 

@@ -16,6 +16,19 @@ export interface AlertaFilters {
 export const alertasService = {
   getAll: async (filters?: AlertaFilters): Promise<Alerta[]> => {
     try {
+      // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
+        console.log('Using mock data for alertas in development mode');
+        return Array.from({ length: 15 }, (_, i) => generateMockAlerta(i)).filter(alerta => {
+          if (filters?.activa !== undefined && filters.activa !== !alerta.atendida) return false;
+          if (filters?.tipo && alerta.tipo !== filters.tipo) return false;
+          if (filters?.severidad && alerta.severidad !== filters.severidad) return false;
+          if (filters?.atendida !== undefined && alerta.atendida !== filters.atendida) return false;
+          if (filters?.precintoId && alerta.precintoId !== filters.precintoId) return false;
+          return true;
+        });
+      }
+
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {

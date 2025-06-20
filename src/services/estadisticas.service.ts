@@ -11,6 +11,31 @@ export interface EstadisticasFilters {
 export const estadisticasService = {
   getGenerales: async (): Promise<EstadisticasMonitoreo> => {
     try {
+      // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
+        console.log('Using mock data for estadisticas in development mode');
+        return {
+          precintosActivos: 156,
+          precintosEnTransito: 89,
+          precintosViolados: 3,
+          alertasActivas: 7,
+          lecturasPorHora: 4320,
+          tiempoPromedioTransito: 48,
+          tasaExito: 98.5,
+          precintosConBateriaBaja: 12,
+          smsPendientes: 45,
+          dbStats: {
+            memoriaUsada: 72,
+            discoUsado: 58
+          },
+          apiStats: {
+            memoriaUsada: 45,
+            discoUsado: 30
+          },
+          reportesPendientes: 3
+        };
+      }
+
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
@@ -37,30 +62,6 @@ export const estadisticasService = {
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        // Return mock data
-        return {
-          precintosActivos: 156,
-          precintosEnTransito: 89,
-          precintosViolados: 3,
-          alertasActivas: 7,
-          lecturasPorHora: 4320,
-          tiempoPromedioTransito: 48,
-          tasaExito: 98.5,
-          precintosConBateriaBaja: 12,
-          smsPendientes: 45,
-          dbStats: {
-            memoriaUsada: 72,
-            discoUsado: 58
-          },
-          apiStats: {
-            memoriaUsada: 45,
-            discoUsado: 30
-          },
-          reportesPendientes: 3
-        };
-      }
-      
       return await unifiedAPIService.getEstadisticas();
     } catch (_error) {
       console.error('Error fetching estadisticas:', _error);
@@ -90,7 +91,7 @@ export const estadisticasService = {
 
   getHistoricoLecturas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number }>> => {
     try {
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         // Generate mock data
         const now = Date.now() / 1000;
         const data = [];
@@ -113,7 +114,7 @@ export const estadisticasService = {
 
   getHistoricoAlertas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
     try {
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         // Generate mock data
         const now = Date.now() / 1000;
         const tipos = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'temperatura', 'sin_signal'];
@@ -144,7 +145,7 @@ export const estadisticasService = {
     alertasPromedioPorDia: number;
   }> => {
     try {
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         return {
           tasaExito: 98.5,
           tiempoPromedioTransito: 48,
@@ -186,7 +187,7 @@ export const estadisticasService = {
     reportesPendientes: number;
   }> => {
     try {
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         return {
           smsPendientes: 45,
           dbStats: {
