@@ -1,5 +1,6 @@
 import type { Precinto, EventoPrecinto } from '../types/monitoring';
 import { unifiedAPIService } from './api/unified.service';
+import { trokorService } from './api/trokor.service';
 import { generateMockPrecinto } from '../utils/mockData';
 
 export interface PrecintoFilters {
@@ -47,6 +48,31 @@ export const precintosService = {
 
   getActivos: async (): Promise<Precinto[]> => {
     try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          const precintosActivos = await trokorService.getPrecintosActivos();
+          // Convertir PrecintoActivo a Precinto
+          return precintosActivos.map(pa => ({
+            id: pa.id,
+            codigo: pa.codigo,
+            tipo: 'RFID',
+            estado: pa.estado,
+            fechaActivacion: new Date(pa.ultimoReporte),
+            fechaUltimaLectura: new Date(pa.ultimoReporte),
+            bateria: pa.bateria,
+            señal: pa.señal,
+            temperatura: pa.temperatura,
+            ubicacion: pa.ubicacion,
+            asignadoA: pa.asignadoTransito,
+            eventos: []
+          }));
+        } catch (trokorError) {
+          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+        }
+      }
+      
+      // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
       }

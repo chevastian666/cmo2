@@ -6,10 +6,11 @@
 import React, { useMemo } from 'react';
 import {LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts';
 import { useDashboardStore } from '../../../store/dashboardStore';
+import { D3VisualizationWidget } from '../../charts/d3/D3VisualizationWidget';
 
 interface ChartWidgetProps {
   widgetId: string;
-  type?: 'line' | 'bar' | 'area' | 'pie';
+  type?: 'line' | 'bar' | 'area' | 'pie' | 'd3-line' | 'd3-heatmap' | 'd3-network' | 'd3-treemap';
   data?: unknown[];
   dataKey?: string;
   xAxisKey?: string;
@@ -47,6 +48,19 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
   const chartType = widgetSettings?.chartType || type;
 
   const renderChart = () => {
+    // Handle D3 visualizations
+    if (chartType.startsWith('d3-')) {
+      const d3Type = chartType.replace('d3-', '') as 'line' | 'heatmap' | 'network' | 'treemap';
+      return (
+        <D3VisualizationWidget
+          type={d3Type}
+          data={null} // Use generated data
+          config={{ colors }}
+          title={`D3.js ${d3Type.charAt(0).toUpperCase() + d3Type.slice(1)} Chart`}
+        />
+      );
+    }
+    
     switch (chartType) {
       case 'line':
         return (
@@ -167,9 +181,13 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
 
   return (
     <div className="h-full w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        {renderChart()}
-      </ResponsiveContainer>
+      {chartType.startsWith('d3-') ? (
+        renderChart()
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          {renderChart()}
+        </ResponsiveContainer>
+      )}
     </div>
   );
 };

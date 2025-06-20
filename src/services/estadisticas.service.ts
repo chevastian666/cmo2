@@ -1,5 +1,6 @@
 import type { EstadisticasMonitoreo } from '../types/monitoring';
 import { unifiedAPIService } from './api/unified.service';
+import { trokorService } from './api/trokor.service';
 
 export interface EstadisticasFilters {
   desde?: number;
@@ -10,6 +11,32 @@ export interface EstadisticasFilters {
 export const estadisticasService = {
   getGenerales: async (): Promise<EstadisticasMonitoreo> => {
     try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          const stats = await trokorService.getEstadisticas();
+          return {
+            ...stats,
+            precintosEnTransito: stats.transitosEnCurso,
+            precintosViolados: 0, // TODO: obtener de API
+            tasaExito: 98.5, // TODO: calcular
+            smsPendientes: 0, // TODO: obtener de API
+            dbStats: {
+              memoriaUsada: 72,
+              discoUsado: 58
+            },
+            apiStats: {
+              memoriaUsada: 45,
+              discoUsado: 30
+            },
+            reportesPendientes: 0 // TODO: obtener de API
+          };
+        } catch (trokorError) {
+          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+        }
+      }
+      
+      // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Return mock data
         return {
@@ -66,7 +93,7 @@ export const estadisticasService = {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Generate mock data
         const now = Date.now() / 1000;
-        const _data = [];
+        const data = [];
         for (let i = 0; i < horas; i++) {
           data.push({
             timestamp: now - (i * 3600),
@@ -90,7 +117,7 @@ export const estadisticasService = {
         // Generate mock data
         const now = Date.now() / 1000;
         const tipos = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'temperatura', 'sin_signal'];
-        const _data = [];
+        const data = [];
         
         for (let i = 0; i < horas; i++) {
           data.push({

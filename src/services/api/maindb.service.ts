@@ -4,6 +4,8 @@
  */
 
 import { sharedApiService } from '../shared/sharedApi.service';
+import { TROKOR_CONFIG, buildTrokorUrl, getTrokorHeaders } from '../../config/trokor.config';
+import { TrokorAdapter } from './trokor.adapter';
 import type { 
   Precinto, 
   PrecintoViaje, 
@@ -18,7 +20,8 @@ import type { Transito } from '../../features/transitos/types';
 import type { Alerta } from '../../types';
 
 class MainDBService {
-  private readonly API_BASE = '/api/maindb';
+  private readonly API_BASE = import.meta.env.VITE_USE_REAL_API ? TROKOR_CONFIG.MAINDB_BASE : '/api/maindb';
+  private readonly useRealAPI = import.meta.env.VITE_USE_REAL_API === 'true';
 
   // ==================== PRECINTOS ====================
   
@@ -28,6 +31,30 @@ class MainDBService {
     page?: number;
     limit?: number;
   }): Promise<{ data: Precinto[]; total: number }> {
+    if (this.useRealAPI) {
+      try {
+        const url = buildTrokorUrl(TROKOR_CONFIG.ENDPOINTS.PRECINTOS, this.API_BASE);
+        const queryParams = new URLSearchParams();
+        if (params?.status !== undefined) queryParams.append('status', params.status.toString());
+        if (params?.empresaid) queryParams.append('empresaid', params.empresaid.toString());
+        if (params?.page) queryParams.append('page', params.page.toString());
+        if (params?.limit) queryParams.append('limit', params.limit.toString());
+        
+        const response = await fetch(`${url}?${queryParams}`, {
+          headers: getTrokorHeaders()
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch precintos');
+        
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error fetching from Trokor API:', error);
+        // Fallback to mock data
+        return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params);
+      }
+    }
+    
     return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params);
   }
 

@@ -24,9 +24,38 @@ The CMO system has been prepared to consume data from two databases:
 1. **maindb.service.ts** - Handles main database operations
 2. **auxdb.service.ts** - Handles auxiliary database operations  
 3. **unified.service.ts** - Combines both databases with business logic
+4. **trokor.service.ts** - Direct integration with Trokor API (NEW)
+5. **trokor.adapter.ts** - Data transformation from Trokor to CMO format (NEW)
+
+### Trokor API Integration
+
+The system now supports direct integration with the Trokor API. To enable:
+
+1. **Configure Environment Variables** (.env):
+   ```env
+   VITE_USE_REAL_API=true
+   VITE_API_KEY=tu_api_key_de_trokor
+   VITE_TROKOR_API_BASE=https://api.trokor.com
+   ```
+
+2. **Services Updated for Trokor**:
+   - `precintos.service.ts` - Uses trokorService.getPrecintosActivos()
+   - `transitos.service.ts` - Uses trokorService.getTransitosPendientes()
+   - `alertas.service.ts` - Uses trokorService.getAlertasActivas()
+   - `estadisticas.service.ts` - Uses trokorService.getEstadisticas()
+
+3. **Data Flow**:
+   ```
+   Trokor API → trokor.service.ts → trokor.adapter.ts → CMO Format
+   ```
+
+4. **Fallback Strategy**:
+   - Primary: Trokor API (if VITE_USE_REAL_API=true)
+   - Secondary: Unified API (if Trokor fails)
+   - Tertiary: Mock data (for development)
 
 ### Updated Services
-All feature services have been updated to use the unified API service:
+All feature services have been updated to use the Trokor API with fallback:
 - precintos.service.ts
 - transitos.service.ts
 - alertas.service.ts
@@ -34,18 +63,26 @@ All feature services have been updated to use the unified API service:
 - torreControl.service.ts
 
 ### Development Mode
-Services check `import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API` to determine whether to use mock data or real API calls.
+Services check `import.meta.env.VITE_USE_REAL_API === 'true'` to determine whether to use Trokor API.
 
-To enable real API calls in development:
+To enable real API calls:
 ```bash
 VITE_USE_REAL_API=true npm run dev
 ```
 
+### Trokor Endpoints Configured
+- Viajes (Trips): `/viajes`, `/viajes_pendientes`
+- Precintos (Seals): `/precintos`, `/precintos_activos`
+- Alarmas (Alarms): `/alarmas`, `/alarmas_activas`
+- Estadísticas: `/estadisticas/dashboard`
+- Ubicaciones: `/ubicaciones/precinto/:id`
+
 ### Pending Tasks
-1. Configure actual API endpoints in environment variables
-2. Test database synchronization functionality
-3. Implement real-time updates via WebSocket
+1. Obtain actual Trokor API credentials
+2. Test with real Trokor endpoints
+3. Implement WebSocket for real-time updates
 4. Add comprehensive error handling for production
+5. Complete data mapping for all entity types
 
 ## Linting and Type Checking Commands
 ```bash

@@ -1,5 +1,6 @@
 import type { TransitoPendiente } from '../types/monitoring';
 import { unifiedAPIService } from './api/unified.service';
+import { trokorService } from './api/trokor.service';
 import { generateMockTransito } from '../utils/mockData';
 
 export interface TransitoFilters {
@@ -14,6 +15,16 @@ export interface TransitoFilters {
 export const transitosService = {
   getPendientes: async (filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
     try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          return await trokorService.getTransitosPendientes({ limit: 25 });
+        } catch (trokorError) {
+          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+        }
+      }
+      
+      // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         return Array.from({ length: 12 }, (_, i) => generateMockTransito(i));
       }

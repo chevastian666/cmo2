@@ -1,5 +1,6 @@
 import type { Alerta } from '../types/monitoring';
 import { unifiedAPIService } from './api/unified.service';
+import { trokorService } from './api/trokor.service';
 import { generateMockAlerta } from '../utils/mockData';
 
 export interface AlertaFilters {
@@ -15,6 +16,36 @@ export interface AlertaFilters {
 export const alertasService = {
   getAll: async (filters?: AlertaFilters): Promise<Alerta[]> => {
     try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          const alertas = await trokorService.getAlertasActivas({ limit: 100 });
+          
+          // Apply client-side filters
+          let filtered = alertas;
+          if (filters?.activa !== undefined && !filters.activa) {
+            filtered = filtered.filter(a => a.atendida);
+          }
+          if (filters?.tipo) {
+            filtered = filtered.filter(a => a.tipo === filters.tipo);
+          }
+          if (filters?.severidad) {
+            filtered = filtered.filter(a => a.severidad === filters.severidad);
+          }
+          if (filters?.atendida !== undefined) {
+            filtered = filtered.filter(a => a.atendida === filters.atendida);
+          }
+          if (filters?.precintoId) {
+            filtered = filtered.filter(a => a.precintoId === filters.precintoId);
+          }
+          
+          return filtered;
+        } catch (trokorError) {
+          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+        }
+      }
+      
+      // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i));
       }
@@ -51,6 +82,16 @@ export const alertasService = {
 
   getActivas: async (): Promise<Alerta[]> => {
     try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          return await trokorService.getAlertasActivas({ limit: 10 });
+        } catch (trokorError) {
+          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+        }
+      }
+      
+      // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i));
       }
@@ -94,6 +135,38 @@ export const alertasService = {
       throw new Error('Not implemented');
     } catch (_error) {
       console.error('Error atendiendo alerta:', _error);
+    }
+  },
+
+  verificar: async (id: string, datos: {
+    opcionRespuesta: number;
+    comandos: string[];
+    observaciones: string;
+    verificadoPor: string;
+  }): Promise<void> => {
+    try {
+      // Primero intentar con Trokor API si está habilitada
+      if (import.meta.env.VITE_USE_REAL_API === 'true') {
+        try {
+          await trokorService.verificarAlerta(id, datos);
+          return;
+        } catch (trokorError) {
+          console.error('Error con Trokor API:', trokorError);
+          throw trokorError;
+        }
+      }
+      
+      // Si no está habilitada Trokor, simular
+      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+        console.log('Mock: Verificando alerta', id, datos);
+        return;
+      }
+      
+      // TODO: Implement unified API call if needed
+      throw new Error('Not implemented');
+    } catch (_error) {
+      console.error('Error verificando alerta:', _error);
+      throw _error;
     }
   },
 

@@ -51,6 +51,7 @@ const TreemapDashboardSimple = lazy(() => import('./features/analytics/component
 const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'));
 const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'));
 const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'));
+const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })));
 import { initializeStores, setupAutoRefresh } from './store';
 import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
 import { useAuth } from './hooks/useAuth';
@@ -222,6 +223,7 @@ function App() {
                   <Route path="/treemaps-static" element={<TreemapStatic />} />
                   <Route path="/treemaps-simple" element={<TreemapDashboardSimple />} />
                   <Route path="/treemap-test" element={<TreemapTest />} />
+                  <Route path="/d3-visualizations" element={<D3VisualizationsDemo />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>

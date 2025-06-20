@@ -83,6 +83,10 @@ class SharedApiService {
       headers: {
         'Content-Type': 'application/json',
         ...jwtService.getAuthHeader(),
+        // Add API key if configured
+        ...(import.meta.env.VITE_API_KEY && {
+          'X-API-Key': import.meta.env.VITE_API_KEY
+        }),
         ...options.headers
       },
       body: data && method !== 'GET' ? JSON.stringify(data) : undefined
@@ -98,8 +102,8 @@ class SharedApiService {
       if (pending) return pending;
     }
 
-    // In development/mock mode, return mock data
-    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
+    // Only use mock data if explicitly enabled AND not using real API
+    if (SHARED_CONFIG.ENABLE_MOCK_DATA && !import.meta.env.VITE_USE_REAL_API) {
       const mockData = await this.getMockData<T>(endpoint, requestOptions);
       if (mockData !== null) {
         // Cache mock data
@@ -199,8 +203,8 @@ class SharedApiService {
 
   // Authentication endpoints
   async login(email: string, password: string): Promise<LoginResponse> {
-    // Mock authentication for development
-    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
+    // Only use mock authentication if explicitly enabled AND not using real API
+    if (SHARED_CONFIG.ENABLE_MOCK_DATA && !import.meta.env.VITE_USE_REAL_API) {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
