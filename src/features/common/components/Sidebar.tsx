@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Link, useLocation} from 'react-router-dom'
-import { Activity, LayoutDashboard, Map, Truck, AlertTriangle, History, FileText, Package, Users, Building2, Palmtree, Monitor, HardHat, ChevronLeft, ChevronRight, X, Shield} from 'lucide-react'
-import { cn} from '../../../utils/utils'
-import { useAlertasActivas} from '../../../store/hooks'
-import { useAccess} from '../../../hooks/useAccess'
-import type { Section} from '../../../types/roles'
+import { Link, useLocation } from 'react-router-dom'
+import { Activity, LayoutDashboard, Map, Truck, AlertTriangle, History, FileText, Package, Users, Building2, Palmtree, Monitor, HardHat, ChevronLeft, ChevronRight, X, Shield } from 'lucide-react'
+import { cn } from '../../../utils/utils'
+import { useAlertasActivas } from '../../../store/hooks'
+import { useAccess } from '../../../hooks/useAccess'
+import type { Section } from '../../../types/roles'
+
 interface NavItem {
   id: string
   label: string
@@ -22,7 +23,10 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation()
-  const [isCollapsed, setIsCollapsed] = useState(_false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const { alertas } = useAlertasActivas()
+  const alertCount = alertas.length
+  
   const allNavItems: NavItem[] = [
     // Módulos principales
     {
@@ -163,11 +167,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       group: 'otros'
     }
   ]
+  
+  // Check access for each section and create a map
+  const accessMap: Record<string, boolean> = {}
+  
+  // Get unique sections
+  const uniqueSections = Array.from(new Set(allNavItems.filter(item => item.section).map(item => item.section!)))
+  
+  // Call useAccess hooks for known sections (must be called unconditionally)
+  const alertasAccess = useAccess('alertas')
+  const transitosAccess = useAccess('transitos')
+  const precintosAccess = useAccess('precintos')
+  const novedadesAccess = useAccess('novedades')
+  const reportesAccess = useAccess('reportes')
+  const documentacionAccess = useAccess('documentacion')
+  const administracionAccess = useAccess('administracion')
+  const configuracionAccess = useAccess('configuracion')
+  
+  // Build access map
+  accessMap['alertas'] = alertasAccess
+  accessMap['transitos'] = transitosAccess
+  accessMap['precintos'] = precintosAccess
+  accessMap['novedades'] = novedadesAccess
+  accessMap['reportes'] = reportesAccess
+  accessMap['documentacion'] = documentacionAccess
+  accessMap['administracion'] = administracionAccess
+  accessMap['configuracion'] = configuracionAccess
+  
   // Filter items based on access permissions
   const navItems = allNavItems.filter(item => {
-    if (!item.section) return true; // Always show items without section control
-    return useAccess(item.section)
+    if (!item.section) return true // Always show items without section control
+    return accessMap[item.section]
   })
+  
   const groups = {
     principal: 'Módulos Principales',
     operaciones: 'Gestión y Operaciones',
@@ -175,18 +207,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
     admin: 'Administrador',
     otros: 'Otros'
   }
+  
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true
-    if (path !== '/' && location.pathname.startsWith(_path)) return true
+    if (path !== '/' && location.pathname.startsWith(path)) return true
     return false
   }
+  
   return (
     <>
       {/* Mobile backdrop */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={_onToggle}
+          onClick={onToggle}
         />
       )}
 
@@ -211,7 +245,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
           <div className="flex items-center gap-2">
             {/* Mobile close button */}
             <button
-              onClick={_onToggle}
+              onClick={onToggle}
               className="lg:hidden p-2 hover:bg-gray-800 rounded-lg transition-colors"
             >
               <X className="h-5 w-5 text-gray-400" />
@@ -234,14 +268,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
-          {Object.entries(_groups).map(([groupKey, groupLabel]) => {
+          {Object.entries(groups).map(([groupKey, groupLabel]) => {
             const groupItems = navItems.filter(item => item.group === groupKey)
             if (groupItems.length === 0) return null
+            
             return (
-              <div key={_groupKey} className="mb-6">
+              <div key={groupKey} className="mb-6">
                 {!isCollapsed && (
                   <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    {_groupLabel}
+                    {groupLabel}
                   </h3>
                 )}
                 

@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react'
 import { cn} from '../../utils/utils'
 import { Card} from './Card'
-import {_MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map'
+import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map'
 import type { MapFilters} from './map/MapHeader'
 export interface MapMarker {
   id: string
@@ -30,18 +30,17 @@ interface MapModuleProps {
   height?: string
   showControls?: boolean
   showLegend?: boolean
-}
   onMarkerClick?: (marker: MapMarker) => void
   variant?: 'default' | 'fullscreen' | 'compact'
   useDetailedIcons?: boolean
 }
-export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implementation */ }
+export const MapModule: React.FC<MapModuleProps> = ({
   markers = [], routes = [], center = { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
   zoom = 10, className, height = '400px', showControls = true, showLegend = true, onMarkerClick, variant = 'default', useDetailedIcons = false
-}) => { /* TODO: Complete implementation */ }
-  const [isFullscreen, setIsFullscreen] = useState(_false)
-  const [selectedMarker, setSelectedMarker] = useState<string | null>(_null)
-  const [filters, setFilters] = useState<MapFilters>({ /* TODO: Complete implementation */ }
+}) => {
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [selectedMarker, setSelectedMarker] = useState<string | null>(null)
+  const [filters, setFilters] = useState<MapFilters>({
     searchTerm: '',
     selectedDespachante: '',
     showRoutes: true,
@@ -49,43 +48,43 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
     showInactive: false
   })
   // Filter markers based on current filters
-  const filteredMarkers = useMemo(() => { /* TODO: Complete implementation */ }
-    return markers.filter(marker => { /* TODO: Complete implementation */ }
+  const filteredMarkers = useMemo(() => {
+    return markers.filter(marker => {
       // Filter by search term (license plate)
-      if (filters.searchTerm && marker.label) { /* TODO: Complete implementation */ }
-        if (!marker.label.toLowerCase().includes(filters.searchTerm.toLowerCase())) { /* TODO: Complete implementation */ }
+      if (filters.searchTerm && marker.label) {
+        if (!marker.label.toLowerCase().includes(filters.searchTerm.toLowerCase())) {
           return false
         }
       }
       // Filter by despachante
-      if (filters.selectedDespachante && marker.metadata?.despachante) { /* TODO: Complete implementation */ }
-        if (marker.metadata.despachante !== filters.selectedDespachante) { /* TODO: Complete implementation */ }
+      if (filters.selectedDespachante && marker.metadata?.despachante) {
+        if (marker.metadata.despachante !== filters.selectedDespachante) {
           return false
         }
       }
       // Filter alerts
-      if (!filters.showAlerts && (marker.type === 'alert' || marker.status === 'alert' || marker.status === 'critical')) { /* TODO: Complete implementation */ }
+      if (!filters.showAlerts && (marker.type === 'alert' || marker.status === 'alert' || marker.status === 'critical')) {
         return false
       }
       // Filter inactive
-      if (!filters.showInactive && marker.status === 'inactive') { /* TODO: Complete implementation */ }
+      if (!filters.showInactive && marker.status === 'inactive') {
         return false
       }
       return true
     })
   }, [markers, filters])
   // Filter routes based on showRoutes filter
-  const filteredRoutes = useMemo(() => { /* TODO: Complete implementation */ }
+  const filteredRoutes = useMemo(() => {
     return filters.showRoutes ? routes : []
   }, [routes, filters.showRoutes])
-  const handleMarkerClick = (marker: MapMarker) => { /* TODO: Complete implementation */ }
+  const handleMarkerClick = (marker: MapMarker) => {
     setSelectedMarker(marker.id)
-    onMarkerClick?.(_marker)
+    onMarkerClick?.(marker)
   }
-  const handleFilterChange = (newFilters: MapFilters) => { /* TODO: Complete implementation */ }
-    setFilters(_newFilters)
+  const handleFilterChange = (newFilters: MapFilters) => {
+    setFilters(newFilters)
   }
-  const getMarkerStatus = (marker: MapMarker): 'normal' | 'warning' | 'critical' | 'inactive' => { /* TODO: Complete implementation */ }
+  const getMarkerStatus = (marker: MapMarker): 'normal' | 'warning' | 'critical' | 'inactive' => {
     if (marker.status === 'inactive') return 'inactive'
     if (marker.status === 'critical' || marker.status === 'alert') return 'critical'
     if (marker.status === 'warning') return 'warning'
@@ -97,7 +96,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
       {/* Grid Background */}
       <div
         className="absolute inset-0 opacity-10"
-        style={{ /* TODO: Complete implementation */ }
+        style={{
           backgroundImage: `
             linear-gradient(to right, #4b5563 1px, transparent 1px),
             linear-gradient(to bottom, #4b5563 1px, transparent 1px)
@@ -108,7 +107,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
       {/* SVG Container for routes and markers */}
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         {/* Routes */}
-        {filteredRoutes.map((_route) => { /* TODO: Complete implementation */ }
+        {filteredRoutes.map((route) => {
           const RouteComponent = route.animated ? AnimatedRouteLine : RouteLine
           return (
             <RouteComponent
@@ -124,7 +123,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
         })}
       </svg>
       {/* Markers */}
-      {filteredMarkers.map((_marker) => { /* TODO: Complete implementation */ }
+      {filteredMarkers.map((marker) => {
         const TruckComponent = useDetailedIcons ? TruckIconDetailed : TruckIcon
         const isVehicle = marker.type === 'vehicle'
         return (
@@ -135,15 +134,15 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
               'transition-all hover:scale-110',
               selectedMarker === marker.id && 'scale-125 z-10'
             )}
-            style={{ /* TODO: Complete implementation */ }
+            style={{
               left: `${((marker.lng + 180) / 3.6)}%`,
               top: `${((90 - marker.lat) / 1.8)}%`
             }}
-            onClick={() => handleMarkerClick(_marker)}
+            onClick={() => handleMarkerClick(marker)}
           >
             {isVehicle ? (
               <TruckComponent
-                status={getMarkerStatus(_marker)}
+                status={getMarkerStatus(marker)}
                 size="md"
                 animated={marker.status === 'critical' || marker.status === 'warning'}
                 direction={marker.direction || 0}
@@ -185,7 +184,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
           {variant !== 'fullscreen' && (
             <button
               className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-lg shadow-lg"
-              onClick={() => setIsFullscreen(_true)}
+              onClick={() => setIsFullscreen(true)}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -223,7 +222,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
   if (variant === 'compact') { /* TODO: Complete implementation */ }
     return (
       <div className={cn('relative rounded-lg overflow-hidden', className)}>
-        {_mapContent}
+        {mapContent}
       </div>
     )
   }
@@ -236,20 +235,25 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
         onFilterChange={_handleFilterChange}
         className="sticky top-0 z-20"
       />
-      {_mapContent}
+      {mapContent}
       {/* Fullscreen Modal */}
       {isFullscreen && (<div className="fixed inset-0 z-50 bg-gray-900">
           <div className="relative w-full h-full">
             <MapModule
-              {...{ /* TODO: Complete implementation */ }
-                markers, routes, center, zoom, showControls, showLegend, onMarkerClick, useDetailedIcons
-              }}
+              markers={markers}
+              routes={routes}
+              center={center}
+              zoom={zoom}
+              showControls={showControls}
+              showLegend={showLegend}
+              onMarkerClick={onMarkerClick}
+              useDetailedIcons={useDetailedIcons}
               variant="fullscreen"
               height="100vh"
             />
             <button
               className="absolute top-4 left-4 bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-lg shadow-lg"
-              onClick={() => setIsFullscreen(_false)}
+              onClick={() => setIsFullscreen(false)}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -265,36 +269,36 @@ export const MapModule: React.FC<MapModuleProps> = ({ /* TODO: Complete implemen
 const DefaultMarkerIcon: React.FC<{ /* TODO: Complete implementation */ }
   type: MapMarker['type']
   status?: MapMarker['status']
-}> = ({ type, status }) => { /* TODO: Complete implementation */ }
-  const getColor = () => { /* TODO: Complete implementation */ }
+}> = ({ type, status }) => {
+  const getColor = () => {
     if (status === 'alert' || status === 'critical') return 'text-red-500'
     if (status === 'warning') return 'text-yellow-500'
     if (status === 'inactive') return 'text-gray-500'
-    switch (_type) { /* TODO: Complete implementation */ }
-      case 'origin': { /* TODO: Complete implementation */ }
+    switch (_type) {
+      case 'origin': 
   return 'text-green-500'
-      case 'destination': { /* TODO: Complete implementation */ }
+      case 'destination': 
   return 'text-blue-500'
-      case 'alert': { /* TODO: Complete implementation */ }
+      case 'alert': 
   return 'text-red-500'
       default: return 'text-gray-400'
     }
   }
-  const getIcon = () => { /* TODO: Complete implementation */ }
-    switch (_type) { /* TODO: Complete implementation */ }
-      case 'origin': { /* TODO: Complete implementation */ }
+  const getIcon = () => {
+    switch (_type) {
+      case 'origin': 
   return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
           </svg>
         )
-      case 'destination': { /* TODO: Complete implementation */ }
+      case 'destination': 
   return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
           </svg>
         )
-      case 'alert': { /* TODO: Complete implementation */ }
+      case 'alert': 
   return (
           <svg className="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2L1 21h22L12 2zm0 3.83L19.53 19H4.47L12 5.83zM11 16v2h2v-2h-2zm0-6v4h2v-4h-2z"/>

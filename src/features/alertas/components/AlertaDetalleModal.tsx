@@ -18,9 +18,9 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(_null)
-  const [mostrarAsignacion, setMostrarAsignacion] = useState(_false)
-  const [mostrarResolucion, setMostrarResolucion] = useState(_false)
+  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
+  const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
+  const [mostrarResolucion, setMostrarResolucion] = useState(false)
   const [nuevoComentario, setNuevoComentario] = useState('')
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
   const [notasAsignacion, setNotasAsignacion] = useState('')
@@ -28,7 +28,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   const [descripcionResolucion, setDescripcionResolucion] = useState('')
   const [accionesTomadas, setAccionesTomadas] = useState<string[]>([''])
   useEffect(() => {
-    if (_isOpen) {
+    if (isOpen) {
       cargarUsuarios()
     }
   }, [])
@@ -37,74 +37,74 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
       usuariosService.getActivos(),
       usuariosService.getCurrentUser()
     ])
-    setUsuarios(_users)
-    setUsuarioActual(_currentUser)
+    setUsuarios(users)
+    setUsuarioActual(currentUser)
   }
   const getIcon = (tipo: string) => {
-    switch (_tipo) {
-      case 'AAR': {
-  // Atraso en arribo de reporte
+    switch (tipo) {
+      case 'AAR':
+        // Atraso en arribo de reporte
         return <Clock className="h-6 w-6" />
-      case 'BBJ': {
-  // Batería baja
+      case 'BBJ':
+        // Batería baja
         return <Battery className="h-6 w-6" />
-      case 'DEM': {
-  // Demorado
+      case 'DEM':
+        // Demorado
         return <Pause className="h-6 w-6" />
-      case 'DNR': {
-  // Desvío de ruta
+      case 'DNR':
+        // Desvío de ruta
         return <Navigation className="h-6 w-6" />
-      case 'DTN': {
-  // Detenido
+      case 'DTN':
+        // Detenido
         return <Shield className="h-6 w-6" />
-      case 'NPG': {
-  // Sin señal GPS
+      case 'NPG':
+        // Sin señal GPS
         return <Radio className="h-6 w-6" />
-      case 'NPN': {
-  // Sin reporte del precinto
+      case 'NPN':
+        // Sin reporte del precinto
         return <AlertTriangle className="h-6 w-6" />
-      case 'PTN': {
-  // Precinto abierto no autorizado
+      case 'PTN':
+        // Precinto abierto no autorizado
         return <Package className="h-6 w-6" />
-      case 'SNA': {
-  // Salida no autorizada
+      case 'SNA':
+        // Salida no autorizada
         return <Zap className="h-6 w-6" />
       default:
         return <AlertTriangle className="h-6 w-6" />
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'text-red-400 bg-red-900/20'
-      case 'alta': {
-  return 'text-orange-400 bg-orange-900/20'
-      case 'media': {
-  return 'text-yellow-400 bg-yellow-900/20'
-      case 'baja': {
-  return 'text-blue-400 bg-blue-900/20'
+    switch (severidad) {
+      case 'critica':
+        return 'text-red-400 bg-red-900/20'
+      case 'alta':
+        return 'text-orange-400 bg-orange-900/20'
+      case 'media':
+        return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja':
+        return 'text-blue-400 bg-blue-900/20'
       default:
         return 'text-gray-400 bg-gray-900/20'
     }
   }
   const handleAsignar = () => {
-    if (_usuarioSeleccionado) {
-      onAsignar(_usuarioSeleccionado, notasAsignacion)
-      setMostrarAsignacion(_false)
+    if (usuarioSeleccionado) {
+      onAsignar(usuarioSeleccionado, notasAsignacion)
+      setMostrarAsignacion(false)
       setUsuarioSeleccionado('')
       setNotasAsignacion('')
     }
   }
   const handleComentar = () => {
     if (nuevoComentario.trim()) {
-      onComentar(_nuevoComentario)
+      onComentar(nuevoComentario)
       setNuevoComentario('')
     }
   }
   const handleResolver = () => {
     if (descripcionResolucion.trim()) {
-      onResolver(_tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
-      setMostrarResolucion(_false)
+      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
+      setMostrarResolucion(false)
       setDescripcionResolucion('')
       setAccionesTomadas([''])
     }
@@ -115,7 +115,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   const actualizarAccion = (index: number, valor: string) => {
     const nuevasAcciones = [...accionesTomadas]
     nuevasAcciones[index] = valor
-    setAccionesTomadas(_nuevasAcciones)
+    setAccionesTomadas(nuevasAcciones)
   }
   const eliminarAccion = (index: number) => {
     setAccionesTomadas(accionesTomadas.filter((__, i) => i !== index))
@@ -125,7 +125,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-900 opacity-75" onClick={_onClose}></div>
+          <div className="absolute inset-0 bg-gray-900 opacity-75" onClick={onClose}></div>
         </div>
 
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -454,7 +454,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       </button>
                       <button
                         onClick={() => {
-                          setMostrarResolucion(_false)
+                          setMostrarResolucion(false)
                           setDescripcionResolucion('')
                           setAccionesTomadas([''])
                         }}

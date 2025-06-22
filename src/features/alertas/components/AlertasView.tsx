@@ -1,45 +1,55 @@
 import React from 'react'
-import {_AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react'
+import { AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react'
 import { formatDateTime} from '../../../utils/formatters'
 import { cn} from '../../../utils/utils'
 import type { Alerta} from '../../../types'
+
 export const AlertasView: React.FC = () => {
+  // Mock data for demonstration
+  const alertas: Alerta[] = []
+  const loading = false
+  const filter = { tipo: undefined, severidad: undefined, atendida: undefined }
+  const actions = {
+    setFilter: () => {},
+    refresh: () => {},
+    atenderAlerta: () => {}
+  }
 
   const getIcon = (tipo: Alerta['tipo']) => {
-    switch (_tipo) {
-      case 'violacion': {
-  return <Shield className="h-5 w-5" />
-      case 'bateria_baja': {
-  return <Battery className="h-5 w-5" />
-      case 'fuera_de_ruta': {
-  return <MapPin className="h-5 w-5" />
-      case 'temperatura': {
-  return <Thermometer className="h-5 w-5" />
-      case 'sin_signal': {
-  return <Radio className="h-5 w-5" />
-      case 'intrusion': {
-  return <Package className="h-5 w-5" />
+    switch (tipo) {
+      case 'violacion':
+        return <Shield className="h-5 w-5" />
+      case 'bateria_baja':
+        return <Battery className="h-5 w-5" />
+      case 'fuera_de_ruta':
+        return <MapPin className="h-5 w-5" />
+      case 'temperatura':
+        return <Thermometer className="h-5 w-5" />
+      case 'sin_signal':
+        return <Radio className="h-5 w-5" />
+      case 'intrusion':
+        return <Package className="h-5 w-5" />
       default:
         return <AlertCircle className="h-5 w-5" />
     }
   }
   const getStyles = (severidad: Alerta['severidad']) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'bg-red-900/20 border-red-800 text-red-400'
-      case 'alta': {
-  return 'bg-orange-900/20 border-orange-800 text-orange-400'
-      case 'media': {
-  return 'bg-yellow-900/20 border-yellow-800 text-yellow-400'
-      case 'baja': {
-  return 'bg-blue-900/20 border-blue-800 text-blue-400'
+    switch (severidad) {
+      case 'critica':
+        return 'bg-red-900/20 border-red-800 text-red-400'
+      case 'alta':
+        return 'bg-orange-900/20 border-orange-800 text-orange-400'
+      case 'media':
+        return 'bg-yellow-900/20 border-yellow-800 text-yellow-400'
+      case 'baja':
+        return 'bg-blue-900/20 border-blue-800 text-blue-400'
     }
   }
   const handleFilterChange = (key: keyof typeof filter, value: unknown) => {
     actions.setFilter({ ...filter, [key]: value })
     actions.refresh()
   }
-  if (_loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-gray-400">Cargando alertas...</div>
@@ -61,7 +71,7 @@ export const AlertasView: React.FC = () => {
             <select 
               className="bg-gray-700 border-gray-600 rounded-md px-3 py-2 text-white"
               value={filter.tipo || ''}
-              onChange={(_e) => handleFilterChange('tipo', e.target.value || undefined)}
+              onChange={(e) => handleFilterChange('tipo', e.target.value || undefined)}
             >
               <option value="">Todos</option>
               <option value="violacion">Violación</option>
@@ -78,7 +88,7 @@ export const AlertasView: React.FC = () => {
             <select 
               className="bg-gray-700 border-gray-600 rounded-md px-3 py-2 text-white"
               value={filter.severidad || ''}
-              onChange={(_e) => handleFilterChange('severidad', e.target.value || undefined)}
+              onChange={(e) => handleFilterChange('severidad', e.target.value || undefined)}
             >
               <option value="">Todas</option>
               <option value="critica">Crítica</option>
@@ -93,7 +103,7 @@ export const AlertasView: React.FC = () => {
             <select 
               className="bg-gray-700 border-gray-600 rounded-md px-3 py-2 text-white"
               value={filter.atendida === undefined ? '' : filter.atendida.toString()}
-              onChange={(_e) => handleFilterChange('atendida', e.target.value === '' ? undefined : e.target.value === 'true')}
+              onChange={(e) => handleFilterChange('atendida', e.target.value === '' ? undefined : e.target.value === 'true')}
             >
               <option value="">Todas</option>
               <option value="false">Activas</option>
@@ -120,7 +130,7 @@ export const AlertasView: React.FC = () => {
             <div>
               <p className="text-sm text-gray-400">Críticas</p>
               <p className="text-2xl font-semibold text-red-400 mt-1">
-                {alertas.filter((_a) => a.severidad === 'critica').length}
+                {alertas.filter((a) => a.severidad === 'critica').length}
               </p>
             </div>
             <AlertTriangle className="h-8 w-8 text-red-500" />
@@ -132,7 +142,7 @@ export const AlertasView: React.FC = () => {
             <div>
               <p className="text-sm text-gray-400">Activas</p>
               <p className="text-2xl font-semibold text-yellow-400 mt-1">
-                {alertas.filter((_a) => !a.atendida).length}
+                {alertas.filter((a) => !a.atendida).length}
               </p>
             </div>
             <AlertCircle className="h-8 w-8 text-yellow-500" />
@@ -144,7 +154,7 @@ export const AlertasView: React.FC = () => {
             <div>
               <p className="text-sm text-gray-400">Atendidas</p>
               <p className="text-2xl font-semibold text-green-400 mt-1">
-                {alertas.filter((_a) => a.atendida).length}
+                {alertas.filter((a) => a.atendida).length}
               </p>
             </div>
             <Shield className="h-8 w-8 text-green-500" />
@@ -185,7 +195,7 @@ export const AlertasView: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {alertas.map((_alerta) => (
+              {alertas.map((alerta) => (
                 <tr key={alerta.id} className="hover:bg-gray-750">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className={cn('flex items-center', getStyles(alerta.severidad))}>

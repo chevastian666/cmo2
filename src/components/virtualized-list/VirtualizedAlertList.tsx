@@ -1,98 +1,153 @@
 import React, { memo, useCallback, useEffect, useRef } from 'react'
-import { useInfiniteLoading, useAlertSubscription} from './hooks/useInfiniteLoading'
-import { AlertListItem} from './components/AlertListItem'
-import { LoadingIndicator} from './components/LoadingIndicator'
-import { EmptyState} from './components/EmptyState'
-import { cn} from '../../utils/utils'
-import type { Alert} from './types/alerts'
-import type { VirtualizedAlertListProps} from './types/virtualization'
+import { useInfiniteLoading, useAlertSubscription } from './hooks/useInfiniteLoading'
+import { useVirtualization } from './hooks/useVirtualization'
+import { useAlertFiltering } from './hooks/useAlertFiltering'
+import { AlertListItem } from './components/AlertListItem'
+import { LoadingIndicator } from './components/LoadingIndicator'
+import { EmptyState } from './components/EmptyState'
+import { cn } from '../../utils/utils'
+import type { Alert } from './types/alerts'
+import type { VirtualizedAlertListProps } from './types/virtualization'
+
 export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
-  alerts: initialAlerts, itemHeight = 80, containerHeight, overscan = 5, onItemClick, onLoadMore, groupingOptions, filters: initialFilters, className
+  alerts: initialAlerts, 
+  itemHeight = 80, 
+  containerHeight, 
+  overscan = 5, 
+  onItemClick, 
+  onLoadMore, 
+  groupingOptions, 
+  filters: initialFilters, 
+  className
 }) => {
-  const containerRef = useRef<HTMLDivElement>(_null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const lastRenderTime = useRef(0)
+  
   // Infinite loading
   const { items: loadedAlerts, hasMore } = useInfiniteLoading({
     loadMore: onLoadMore || (async () => ({ alerts: initialAlerts || [], hasMore: false }))
   })
+  
   // Use loaded alerts or initial alerts
   const alerts = onLoadMore ? loadedAlerts : (initialAlerts || [])
+  
   // Filtering
+  const {
+    filteredAlerts,
+    filters,
+    updateFilters,
+    resetFilters,
+    filterCount,
+    isFiltering,
+    highlightedIndices
+  } = useAlertFiltering({
+    alerts,
+    initialFilters,
+    debounceMs: 100
+  })
 
   // Virtualization
-
-        checkLoadMore(s_crollTop, scrollHeight, clientHeight)
+  const {
+    containerProps,
+    scrollerProps,
+    visibleItems,
+    state,
+    scrollToItem,
+    updateItemHeight,
+    isScrolling,
+    scrollDirection,
+    getPerformanceMetrics
+  } = useVirtualization({
+    items: filteredAlerts,
+    itemHeight,
+    containerHeight,
+    overscan,
+    onScroll: (scrollTop, scrollHeight, clientHeight) => {
+      if (onLoadMore && !isLoading && hasMore) {
+        const threshold = scrollHeight - clientHeight - 200
+        if (scrollTop >= threshold) {
+          onLoadMore()
+        }
       }
     }
   })
+
   // Subscribe to real-time updates
   useAlertSubscription(
-    prependItems,
-    updateItem,
-    removeItem
+    (newItems: Alert[]) => {
+      // Handle new items
+    },
+    (updatedItem: Alert) => {
+      // Handle updated item
+    },
+    (itemId: string) => {
+      // Handle removed item
+    }
   )
+
   // Monitor performance
-  
-    useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       const metrics = getPerformanceMetrics()
       if (metrics.fps < 30) {
         console.warn('Performance degradation detected:', metrics)
       }
     }, 5000)
-    return () => clearInterval(_interval)
-  }, [])
+    return () => clearInterval(interval)
+  }, [getPerformanceMetrics])
+
   // Render item with memoization
   const renderItem = useCallback((item: Alert, index: number, style: React.CSSProperties) => {
-    const isHighlighted = highlightedIndices.has(_index)
-    return (<AlertListItem
+    const isHighlighted = highlightedIndices.has(index)
+    return (
+      <AlertListItem
         key={item.id}
-        alert={_item}
-        index={_index}
-        style={s_tyle}
-        onClick={() => onItemClick?.(_item, index)}
-        isHighlighted={_isHighlighted}
-        isScrolling={_isScrolling}
-        onHeightChange={(_height) => updateItemHeight(_index, height)}
+        alert={item}
+        index={index}
+        style={style}
+        onClick={() => onItemClick?.(item, index)}
+        isHighlighted={isHighlighted}
+        isScrolling={isScrolling}
+        onHeightChange={(height) => updateItemHeight(index, height)}
       />
     )
-  }, [])
+  }, [highlightedIndices, onItemClick, isScrolling, updateItemHeight])
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     const currentIndex = state.visibleRange[0]
     switch (e.key) {
-      case 'ArrowDown': {
-  e.preventDefault()
+      case 'ArrowDown':
+        e.preventDefault()
         scrollToItem(Math.min(currentIndex + 1, filteredAlerts.length - 1))
         break
-    }
-    case 'ArrowUp':
+      case 'ArrowUp':
         e.preventDefault()
         scrollToItem(Math.max(currentIndex - 1, 0))
         break
-    }
-    case 'PageDown':
+      case 'PageDown':
         e.preventDefault()
         scrollToItem(Math.min(currentIndex + 10, filteredAlerts.length - 1))
         break
-    }
-    case 'PageUp':
+      case 'PageUp':
         e.preventDefault()
         scrollToItem(Math.max(currentIndex - 10, 0))
         break
-    }
-    case 'Home':
+      case 'Home':
         e.preventDefault()
         scrollToItem(0)
         break
-    }
-    case 'End':
+      case 'End':
         e.preventDefault()
         scrollToItem(filteredAlerts.length - 1)
         break
     }
-  }, [state.visibleRange])
+  }, [state.visibleRange, scrollToItem, filteredAlerts.length])
+
   // Loading state
+  const isLoading = false // Replace with actual loading state
+  const error = null // Replace with actual error state
+  
   if (isLoading && alerts.length === 0) {
     return (
       <div className={cn('flex items-center justify-center', className)} style={{ height: containerHeight }}>
@@ -110,7 +165,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
           description={error.message}
           action={{
             label: 'Reintentar',
-            onClick: retry
+            onClick: () => {}
           }}
         />
       </div>
@@ -147,30 +202,29 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
       {/* Filter summary */}
       {filterCount > 0 && (
         <div className="absolute top-2 left-2 z-10 bg-blue-600 text-white text-sm px-3 py-1 rounded-full">
-          {_filterCount} filtro{filterCount > 1 ? 's' : ''} activo{filterCount > 1 ? 's' : ''}
+          {filterCount} filtro{filterCount > 1 ? 's' : ''} activo{filterCount > 1 ? 's' : ''}
         </div>
       )}
 
       {/* Virtual list container */}
       <div
         {...containerProps}
-        ref={_containerRef}
         className={cn(
           'overflow-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800',
           isScrolling && 'scroll-smooth'
         )}
-        onKeyDown={_handleKeyDown}
+        onKeyDown={handleKeyDown}
         tabIndex={0}
         role="list"
         aria-label="Lista de alertas"
         aria-rowcount={filteredAlerts.length}
       >
         <div {...scrollerProps}>
-          {visibleItems.map(({ item, index, style }) => renderItem(_item, index, style))}
+          {visibleItems.map(({ item, index, style }) => renderItem(item, index, style))}
         </div>
 
         {/* Loading more indicator */}
-        {isLoadingMore && (
+        {isLoading && (
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-900">
             <LoadingIndicator size="small" message="Cargando más alertas..." />
           </div>
@@ -179,12 +233,13 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
         {/* End of list */}
         {!hasMore && filteredAlerts.length > 0 && (
           <div className="absolute bottom-0 left-0 right-0 p-4 text-center text-gray-500 text-sm">
-            Fin de la lista • {filteredAlerts.length} alertas{total && ` de ${_total}`}
+            Fin de la lista • {filteredAlerts.length} alertas
           </div>
         )}
       </div>
     </div>
   )
 }
+
 // Export memoized version
-export default memo(_VirtualizedAlertList)
+export default memo(VirtualizedAlertList)

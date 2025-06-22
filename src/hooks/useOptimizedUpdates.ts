@@ -5,7 +5,8 @@
  */
 
 import React, { useCallback, useRef, useEffect, useMemo } from 'react'
-import { debounce, throttle} from 'lodash-es'
+import { debounce, throttle } from 'lodash-es'
+
 interface UseDebounceOptions {
   delay?: number
   leading?: boolean
@@ -24,27 +25,32 @@ export function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   options: UseDebounceOptions = {}
 ): T {
-
-  const callbackRef = useRef(_callback)
+  const { delay = 300, leading = false, trailing = true, maxWait } = options
+  
+  const callbackRef = useRef(callback)
+  
   // Update callback ref on each render
-
-    useEffect(() => {
+  useEffect(() => {
     callbackRef.current = callback
   })
+  
   // Create debounced function
-  const debouncedFn = useMemo(() => debounce((...args: Parameters<T>) => callbackRef.current(...args),
+  const debouncedFn = useMemo(
+    () => debounce(
+      (...args: Parameters<T>) => callbackRef.current(...args),
       delay,
       { leading, trailing, maxWait }
     ),
     [delay, leading, trailing, maxWait]
   )
+  
   // Cleanup on unmount
-
-    useEffect(() => {
+  useEffect(() => {
     return () => {
       debouncedFn.cancel()
     }
-  }, [])
+  }, [debouncedFn])
+  
   return debouncedFn as T
 }
 
@@ -53,27 +59,32 @@ export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   options: UseThrottleOptions = {}
 ): T {
-
-  const callbackRef = useRef(_callback)
+  const { delay = 100, leading = true, trailing = true } = options
+  
+  const callbackRef = useRef(callback)
+  
   // Update callback ref on each render
-
-    useEffect(() => {
+  useEffect(() => {
     callbackRef.current = callback
   })
+  
   // Create throttled function
-  const throttledFn = useMemo(() => throttle((...args: Parameters<T>) => callbackRef.current(...args),
+  const throttledFn = useMemo(
+    () => throttle(
+      (...args: Parameters<T>) => callbackRef.current(...args),
       delay,
       { leading, trailing }
     ),
     [delay, leading, trailing]
   )
+  
   // Cleanup on unmount
-
-    useEffect(() => {
+  useEffect(() => {
     return () => {
       throttledFn.cancel()
     }
-  }, [])
+  }, [throttledFn])
+  
   return throttledFn as T
 }
 
@@ -82,15 +93,18 @@ export function useDebouncedValue<T>(
   value: T,
   delay: number = 300
 ): T {
-  const [debouncedValue, setDebouncedValue] = React.useState(_value)
-    useEffect(() => {
+  const [debouncedValue, setDebouncedValue] = React.useState(value)
+  
+  useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(_value)
+      setDebouncedValue(value)
     }, delay)
+    
     return () => {
-      clearTimeout(_timer)
+      clearTimeout(timer)
     }
   }, [value, delay])
+  
   return debouncedValue
 }
 
@@ -99,57 +113,72 @@ export function useThrottledValue<T>(
   value: T,
   delay: number = 100
 ): T {
-  const [throttledValue, setThrottledValue] = React.useState(_value)
+  const [throttledValue, setThrottledValue] = React.useState(value)
   const lastRun = useRef(Date.now())
-    useEffect(() => {
+  
+  useEffect(() => {
     const handler = setTimeout(() => {
       if (Date.now() - lastRun.current >= delay) {
-        setThrottledValue(_value)
+        setThrottledValue(value)
         lastRun.current = Date.now()
       }
     }, delay - (Date.now() - lastRun.current))
+    
     return () => {
-      clearTimeout(_handler)
+      clearTimeout(handler)
     }
   }, [value, delay])
+  
   return throttledValue
 }
 
 // Combined hook for optimized state updates
-export function useOptimizedState<T>(initialValue: T, options: {
+export function useOptimizedState<T>(
+  initialValue: T,
+  options: {
     debounceDelay?: number
     throttleDelay?: number
     mode?: 'debounce' | 'throttle'
-  } = {}) {
-
-  const [value, setValue] = React.useState(_initialValue)
-  const [optimizedValue, setOptimizedValue] = React.useState(_initialValue)
-  // Create optimized setter
-  const optimizedSetter = mode === 'debounce'
-    ? useDebouncedCallback((newValue: T) => {
-        setOptimizedValue(_newValue)
-      }, { delay: debounceDelay })
-    : useThrottledCallback((newValue: T) => {
-        setOptimizedValue(_newValue)
-      }, { delay: throttleDelay })
+  } = {}
+) {
+  const { debounceDelay = 300, throttleDelay = 100, mode = 'debounce' } = options
+  
+  const [value, setValue] = React.useState(initialValue)
+  const [optimizedValue, setOptimizedValue] = React.useState(initialValue)
+  
+  // Always create both callbacks to satisfy the rules of hooks
+  const debouncedSetter = useDebouncedCallback((newValue: T) => {
+    setOptimizedValue(newValue)
+  }, { delay: debounceDelay })
+  
+  const throttledSetter = useThrottledCallback((newValue: T) => {
+    setOptimizedValue(newValue)
+  }, { delay: throttleDelay })
+  
+  // Use the appropriate setter based on mode
+  const optimizedSetter = mode === 'debounce' ? debouncedSetter : throttledSetter
+  
   // Update optimized value when value changes
-
-    useEffect(() => {
-    optimizedSetter(_value)
-  }, [value])
+  useEffect(() => {
+    optimizedSetter(value)
+  }, [value, optimizedSetter])
+  
   return [value, setValue, optimizedValue] as const
 }
 
 // Batched updates hook
-export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
+export function useBatchedUpdates<T>(
+  updateFn: (updates: T[]) => void,
   options: {
     maxBatchSize?: number
     flushDelay?: number
   } = {}
 ) {
-
+  const { maxBatchSize = 100, flushDelay = 50 } = options
+  
   const batchRef = useRef<T[]>([])
-  const timerRef = useRef<NodeJS.Timeout | null>(_null)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  
   const flush = useCallback(() => {
     if (batchRef.current.length > 0) {
       updateFn([...batchRef.current])
@@ -160,9 +189,11 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
       clearTimeout(timerRef.current)
       timerRef.current = null
     }
-  }, [])
+  }, [updateFn])
+  
   const addUpdate = useCallback((update: T) => {
-    batchRef.current.push(_update)
+    batchRef.current.push(update)
+    
     // Flush if batch is full
     if (batchRef.current.length >= maxBatchSize) {
       flush()
@@ -171,12 +202,12 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
 
     // Schedule flush
     if (!timerRef.current) {
-      timerRef.current = setTimeout(_flush, flushDelay)
+      timerRef.current = setTimeout(flush, flushDelay)
     }
-  }, [flush])
+  }, [flush, maxBatchSize, flushDelay])
+  
   // Cleanup on unmount
-
-    useEffect(() => {
+  useEffect(() => {
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current)
@@ -184,6 +215,7 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
       flush()
     }
   }, [flush])
+  
   return {
     addUpdate,
     flush,
@@ -192,26 +224,32 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
 }
 
 // Request animation frame hook
-export function useAnimationFrame(callback: (deltaTime: number) => void,
+export function useAnimationFrame(
+  callback: (deltaTime: number) => void,
   enabled: boolean = true
 ) {
   const requestRef = useRef<number>()
   const previousTimeRef = useRef<number>()
-  const callbackRef = useRef(_callback)
-    useEffect(() => {
+  const callbackRef = useRef(callback)
+  
+  useEffect(() => {
     callbackRef.current = callback
   }, [callback])
-    useEffect(() => {
+  
+  useEffect(() => {
     if (!enabled) return
+    
     const animate = (time: number) => {
       if (previousTimeRef.current !== undefined) {
         const deltaTime = time - previousTimeRef.current
-        callbackRef.current(_deltaTime)
+        callbackRef.current(deltaTime)
       }
       previousTimeRef.current = time
-      requestRef.current = requestAnimationFrame(_animate)
+      requestRef.current = requestAnimationFrame(animate)
     }
-    requestRef.current = requestAnimationFrame(_animate)
+    
+    requestRef.current = requestAnimationFrame(animate)
+    
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current)

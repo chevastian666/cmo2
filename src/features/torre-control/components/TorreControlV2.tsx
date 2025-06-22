@@ -7,8 +7,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Layout, Save, RotateCcw} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
-import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
 import { Progress} from '@/components/ui/progress'
 import { Switch} from '@/components/ui/switch'
@@ -32,7 +32,7 @@ import { Responsive, WidthProvider} from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import '../styles/torre-control.css'
-const ResponsiveGridLayout = WidthProvider(_Responsive)
+const ResponsiveGridLayout = WidthProvider(Responsive)
 // Widget Components para el Dashboard
 const SemaforoWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const counts = {
@@ -112,8 +112,8 @@ const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
       </h3>
       
       <AnimatedList className="space-y-2 overflow-y-auto flex-1">
-        {recentTransitos.map((_transito, index) => (
-          <AnimatedListItem key={transito.id} index={_index}>
+        {recentTransitos.map((transito, index) => (
+          <AnimatedListItem key={transito.id} index={index}>
             <motion.div 
               className="bg-gray-800/50 rounded-lg p-3 border border-gray-700"
               whileHover={{ x: 5 }}
@@ -146,8 +146,8 @@ const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
 }
 const MetricsWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const metrics = {
-    velocidadPromedio: Math.round(data.reduce((_acc, t) => acc + (60), 0) / data.length),
-    tiempoPromedio: Math.round(data.reduce((_acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / data.length),
+    velocidadPromedio: Math.round(data.reduce((acc, t) => acc + (60), 0) / data.length),
+    tiempoPromedio: Math.round(data.reduce((acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / data.length),
     eficiencia: Math.round((data.filter(t => t.semaforo === 'verde').length / data.length) * 100),
     alertasActivas: data.filter(t => t.alertas && t.alertas.length > 0).length
   }
@@ -207,14 +207,15 @@ const TransitoRowV2: React.FC<{
   onSelect: (transito: TransitoTorreControl) => void
 }> = ({ transito, index, onSelect }) => {
   const getSemaforoColor = (estado: EstadoSemaforo) => {
-    switch (_estado) {
-      case 'verde': {
-  return 'bg-green-500'
-      case 'amarillo': {
-  return 'bg-yellow-500'
-      case 'rojo': {
-  return 'bg-red-500'
-      default: return 'bg-gray-500'
+    switch (estado) {
+      case 'verde':
+        return 'bg-green-500'
+      case 'amarillo':
+        return 'bg-yellow-500'
+      case 'rojo':
+        return 'bg-red-500'
+      default:
+        return 'bg-gray-500'
     }
   }
   return (<motion.tr
@@ -223,7 +224,7 @@ const TransitoRowV2: React.FC<{
       exit={{ opacity: 0, x: -20 }}
       transition={{ delay: index * 0.05 }}
       className="hover:bg-gray-800/50 transition-colors cursor-pointer"
-      onClick={() => onSelect(_transito)}
+      onClick={() => onSelect(transito)}
     >
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center gap-2">
@@ -261,9 +262,9 @@ const TransitoRowV2: React.FC<{
           <AnimatedButton
             size="sm"
             variant="ghost"
-            onClick={(_e) => {
+            onClick={(e) => {
               e.stopPropagation()
-              onSelect(_transito)
+              onSelect(transito)
             }}
           >
             Ver detalles
@@ -276,11 +277,11 @@ const TransitoRowV2: React.FC<{
 // Main Component
 export const TorreControlV2: React.FC = () => {
   const [transitos, setTransitos] = useState<TransitoTorreControl[]>([])
-  const [loading, setLoading] = useState(_true)
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(_null)
-  const [showFilters, setShowFilters] = useState(_false)
-  const [showCongestionPanel] = useState(_true)
-  const [isEditMode, setIsEditMode] = useState(_false)
+  const [loading, setLoading] = useState(true)
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [showCongestionPanel] = useState(true)
+  const [isEditMode, setIsEditMode] = useState(false)
   const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both')
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const { setLayouts } = useDashboardStore()
@@ -316,20 +317,20 @@ export const TorreControlV2: React.FC = () => {
   // Fetch data
   const fetchTransitos = useCallback(async () => {
     try {
-      setLoading(_true)
+      setLoading(true)
       const data = await torreControlService.getTransitosEnRuta()
-      setTransitos(_data)
+      setTransitos(data)
       setLastUpdate(new Date())
-    } catch (_error) {
+    } catch (error) {
       console.error('Error fetching transitos:', error)
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }, [])
     useEffect(() => {
     fetchTransitos()
-    const interval = setInterval(_fetchTransitos, 30000)
-    return () => clearInterval(_interval)
+    const interval = setInterval(fetchTransitos, 30000)
+    return () => clearInterval(interval)
   }, [])
   // Filter data
   const filteredTransitos = React.useMemo(() => {
@@ -354,7 +355,7 @@ export const TorreControlV2: React.FC = () => {
   }, [transitos, filters])
   const handleLayoutChange = (layout: unknown, newLayouts: unknown) => {
     if (!isEditMode) return
-    setLayouts(_newLayouts)
+    setLayouts(newLayouts)
   }
   // Create widgets array - ensure all have valid components
   const widgets = React.useMemo(() => {
@@ -393,7 +394,7 @@ export const TorreControlV2: React.FC = () => {
       }
     ]
     // Only add congestion panel if enabled
-    if (s_howCongestionPanel) {
+    if (showCongestionPanel) {
       widgetList.push({
         id: 'congestion',
         component: (
@@ -405,7 +406,7 @@ export const TorreControlV2: React.FC = () => {
     }
 
     return widgetList
-  }, [])
+  }, [filteredTransitos, showCongestionPanel])
   // Add debug info - only in development
 
     useEffect(() => {
@@ -432,8 +433,8 @@ export const TorreControlV2: React.FC = () => {
             <div className="flex items-center gap-2">
               <AnimatedButton
                 variant="outline"
-                onClick={_fetchTransitos}
-                disabled={_loading}
+                onClick={fetchTransitos}
+                disabled={loading}
               >
                 <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                 Actualizar
@@ -447,7 +448,7 @@ export const TorreControlV2: React.FC = () => {
                 Filtros
               </AnimatedButton>
 
-              <Select value={s_electedView} onValueChange={(_v) => setSelectedView(v as 'dashboard' | 'table' | 'both')}>
+              <Select value={selectedView} onValueChange={(v) => setSelectedView(v as 'dashboard' | 'table' | 'both')}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -481,7 +482,7 @@ export const TorreControlV2: React.FC = () => {
             />
             <KPICard
               title="Tiempo Promedio"
-              value={`${Math.round(filteredTransitos.reduce((_acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / Math.max(filteredTransitos.length, 1))} min`}
+              value={`${Math.round(filteredTransitos.reduce((acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / Math.max(filteredTransitos.length, 1))} min`}
               icon={<Clock className="h-5 w-5" />}
               color="bg-green-500/10 text-green-400"
               subtitle="En ruta"
@@ -510,18 +511,18 @@ export const TorreControlV2: React.FC = () => {
                     <Input
                       placeholder="Filtrar por origen..."
                       value={filters.origen}
-                      onChange={(_e) => setFilters(prev => ({ ...prev, origen: e.target.value }))}
+                      onChange={(e) => setFilters(prev => ({ ...prev, origen: e.target.value }))}
                       icon={<MapPin className="h-4 w-4 text-gray-400" />}
                     />
                     <Input
                       placeholder="Filtrar por destino..."
                       value={filters.destino}
-                      onChange={(_e) => setFilters(prev => ({ ...prev, destino: e.target.value }))}
+                      onChange={(e) => setFilters(prev => ({ ...prev, destino: e.target.value }))}
                       icon={<MapPin className="h-4 w-4 text-gray-400" />}
                     />
                     <Select 
                       value={filters.estado} 
-                      onValueChange={(_v) => setFilters(prev => ({ ...prev, estado: v as EstadoSemaforo | '' }))}
+                      onValueChange={(v) => setFilters(prev => ({ ...prev, estado: v as EstadoSemaforo | '' }))}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Estado semáforo" />
@@ -555,8 +556,8 @@ export const TorreControlV2: React.FC = () => {
                     <Label htmlFor="edit-mode" className="text-sm">Modo edición</Label>
                     <Switch
                       id="edit-mode"
-                      checked={_isEditMode}
-                      onCheckedChange={s_etIsEditMode}
+                      checked={isEditMode}
+                      onCheckedChange={setIsEditMode}
                     />
                     {isEditMode && (
                       <>
@@ -584,16 +585,16 @@ export const TorreControlV2: React.FC = () => {
                   key="torre-control-grid"
                   className="layout"
                   layouts={layouts || defaultLayouts}
-                  onLayoutChange={_handleLayoutChange}
+                  onLayoutChange={handleLayoutChange}
                   breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
                   cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
                   rowHeight={60}
-                  isDraggable={_isEditMode}
-                  isResizable={_isEditMode}
+                  isDraggable={isEditMode}
+                  isResizable={isEditMode}
                   margin={[16, 16]}
                   containerPadding={[0, 0]}
-                  useCSSTransforms={_true}
-                  preventCollision={_false}
+                  useCSSTransforms={true}
+                  preventCollision={false}
                 >
                   {widgets.map(widget => (
                     <div 
@@ -661,12 +662,12 @@ export const TorreControlV2: React.FC = () => {
                           </td>
                         </tr>
                       ) : (<AnimatePresence>
-                          {filteredTransitos.map((_transito, index) => (
+                          {filteredTransitos.map((transito, index) => (
                             <TransitoRowV2
                               key={transito.id}
-                              transito={_transito}
-                              index={_index}
-                              onSelect={s_etSelectedTransito}
+                              transito={transito}
+                              index={index}
+                              onSelect={setSelectedTransito}
                             />
                           ))}
                         </AnimatePresence>
@@ -681,9 +682,9 @@ export const TorreControlV2: React.FC = () => {
 
         {/* Modal de detalles */}
         {selectedTransito && (<TransitoDetailModal
-            transito={s_electedTransito}
+            transito={selectedTransito}
             isOpen={!!selectedTransito}
-            onClose={() => setSelectedTransito(_null)}
+            onClose={() => setSelectedTransito(null)}
           />
         )}
       </div>
@@ -699,7 +700,7 @@ const KPICard: React.FC<{
   color: string
   subtitle?: string
   pulse?: boolean
-}> = (_title, value, icon, color, subtitle, pulse ) => (
+}> = ({ title, value, icon, color, subtitle, pulse }) => (
   <AnimatedCard 
     className={cn("relative overflow-hidden", pulse && "animate-pulse")}
     whileHover={{ scale: 1.02 }}
@@ -707,21 +708,21 @@ const KPICard: React.FC<{
   >
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg", color)}
           animate={pulse ? alertCriticalVariants.animate : {}}
         >
-          {_icon}
+          {icon}
         </motion.div>
       </div>
     </CardHeader>
     <CardContent>
       <div className="flex items-end justify-between">
         <div>
-          <div className="text-3xl font-bold">{_value}</div>
+          <div className="text-3xl font-bold">{value}</div>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{s_ubtitle}</p>
+            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
           )}
         </div>
       </div>

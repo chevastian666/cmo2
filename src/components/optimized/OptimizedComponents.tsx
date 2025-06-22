@@ -22,12 +22,12 @@ interface OptimizedTableRowProps {
 
 export const OptimizedTableRow = memo<OptimizedTableRowProps>(({
   data, columns, onClick, selected = false, className
-}) => { /* TODO: Complete implementation */ }
-  const handleClick = useCallback(() => { /* TODO: Complete implementation */ }
-    if (onClick) { /* TODO: Complete implementation */ }
+}) => {
+  const handleClick = useCallback(() => {
+    if (onClick) {
       onClick(data)
     }
-  }, [data])
+  }, [data, onClick])
   return (
     <tr
       onClick={handleClick}
@@ -51,7 +51,7 @@ export const OptimizedTableRow = memo<OptimizedTableRowProps>(({
       ))}
     </tr>
   )
-}, (_prevProps, nextProps) => { /* TODO: Complete implementation */ }
+}, (prevProps, nextProps) => {
   // Custom comparison for deep equality
   return (
     prevProps.selected === nextProps.selected &&
@@ -76,7 +76,7 @@ interface OptimizedCardProps {
 
 export const OptimizedCard = memo<OptimizedCardProps>(({
   title, value, subtitle, icon, trend, onClick, className
-}) => { /* TODO: Complete implementation */ }
+}) => {
   return (
     <div
       onClick={onClick}
@@ -127,7 +127,7 @@ interface OptimizedListItemProps {
 
 export const OptimizedListItem = memo<OptimizedListItemProps>(({
   primary, secondary, meta, status, actions, onClick, selected = false
-}) => { /* TODO: Complete implementation */ }
+}) => {
   const statusColors = {
     active: 'bg-green-500',
     inactive: 'bg-gray-500',
@@ -185,17 +185,17 @@ interface OptimizedGridCellProps {
 
 export const OptimizedGridCell = memo<OptimizedGridCellProps>(({
   value, type = 'text', format, render, align = 'left', className
-}) => { /* TODO: Complete implementation */ }
-  const formattedValue = useMemo(() => { /* TODO: Complete implementation */ }
+}) => {
+  const formattedValue = useMemo(() => {
     if (render) return render(value)
     if (format) return format(value)
-    switch (type) { /* TODO: Complete implementation */ }
-      case 'number': { /* TODO: Complete implementation */ }
-  return typeof value === 'number' ? value.toLocaleString() : value
-      case 'date': { /* TODO: Complete implementation */ }
-  return value ? new Date(value).toLocaleString() : ''
-      case 'boolean': { /* TODO: Complete implementation */ }
-  return value ? '✓' : '✗'
+    switch (type) {
+      case 'number':
+        return typeof value === 'number' ? value.toLocaleString() : value
+      case 'date':
+        return value ? new Date(value as string).toLocaleString() : ''
+      case 'boolean':
+        return value ? '✓' : '✗'
       default:
         return value
     }
@@ -213,7 +213,7 @@ export const OptimizedGridCell = memo<OptimizedGridCellProps>(({
 })
 OptimizedGridCell.displayName = 'OptimizedGridCell'
 // Export utilities from separate file to fix Fast Refresh warning
-export { /* TODO: Complete implementation */ }
+export {
   createOptimizedComponent,
   useOptimizedRender,
   withOptimization

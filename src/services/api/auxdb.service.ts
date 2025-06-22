@@ -1,15 +1,17 @@
 /**
- * Auxiliary Database API Service (s_atoshi)
+ * Auxiliary Database API Service (satoshi)
  * By Cheva
  */
-import { sharedApiService} from '../shared/sharedApi.service'
-import type { /* TODO: Complete implementation */ }
-  Aduana, DUA, DUAAlert, AduanaAlert, Office, EstadoDUA} from '../../types/api/auxdb.types'
-import type { TransitoPendiente} from '../../types'
-class AuxDBService { /* TODO: Complete implementation */ }
+import { sharedApiService } from '../shared/sharedApi.service'
+import type {
+  Aduana, DUA, DUAAlert, AduanaAlert, Office, EstadoDUA
+} from '../../types/api/auxdb.types'
+import type { TransitoPendiente } from '../../types'
+
+class AuxDBService {
   private readonly API_BASE = '/api/auxdb'
   // ==================== ADUANA ====================
-  async getAduanaRecords(params?: { /* TODO: Complete implementation */ }
+  async getAduanaRecords(params?: {
     viaje?: number
     mov?: number
     dua?: number
@@ -19,17 +21,17 @@ class AuxDBService { /* TODO: Complete implementation */ }
     fechaHasta?: number
     page?: number
     limit?: number
-  }): Promise<{ data: Aduana[]; total: number }> { /* TODO: Complete implementation */ }
+  }): Promise<{ data: Aduana[]; total: number }> {
     return sharedApiService.request('GET', `${this.API_BASE}/aduana`, null, params)
   }
-  async getAduanaByViajeMov(viaje: number, mov: number): Promise<Aduana | null> { /* TODO: Complete implementation */ }
-    return sharedApiService.request('GET', `${this.API_BASE}/aduana/${_viaje}/${_mov}`)
+  async getAduanaByViajeMov(viaje: number, mov: number): Promise<Aduana | null> {
+    return sharedApiService.request('GET', `${this.API_BASE}/aduana/${viaje}/${mov}`)
   }
-  async updateAduanaStatus(alid: number, status: number): Promise<boolean> { /* TODO: Complete implementation */ }
-    return sharedApiService.request('PUT', `${this.API_BASE}/aduana/${_alid}/status`, { status })
+  async updateAduanaStatus(alid: number, status: number): Promise<boolean> {
+    return sharedApiService.request('PUT', `${this.API_BASE}/aduana/${alid}/status`, { status })
   }
   // ==================== DUA ====================
-  async getDUAs(params?: { /* TODO: Complete implementation */ }
+  async getDUAs(params?: {
     estado?: EstadoDUA
     desp?: number
     aduana?: number
@@ -37,63 +39,63 @@ class AuxDBService { /* TODO: Complete implementation */ }
     fechaHasta?: number
     page?: number
     limit?: number
-  }): Promise<{ data: DUA[]; total: number }> { /* TODO: Complete implementation */ }
+  }): Promise<{ data: DUA[]; total: number }> {
     return sharedApiService.request('GET', `${this.API_BASE}/duas`, null, params)
   }
-  async getDUAByNumber(aduana: number, ano: number, numero: number): Promise<DUA | null> { /* TODO: Complete implementation */ }
-    return sharedApiService.request('GET', `${this.API_BASE}/duas/${_aduana}/${_ano}/${_numero}`)
+  async getDUAByNumber(aduana: number, ano: number, numero: number): Promise<DUA | null> {
+    return sharedApiService.request('GET', `${this.API_BASE}/duas/${aduana}/${ano}/${numero}`)
   }
   // ==================== ALERTAS ====================
-  async getAduanaAlerts(params?: { /* TODO: Complete implementation */ }
+  async getAduanaAlerts(params?: {
     debug?: string
     whatsapp?: number
     page?: number
     limit?: number
-  }): Promise<{ data: AduanaAlert[]; total: number }> { /* TODO: Complete implementation */ }
+  }): Promise<{ data: AduanaAlert[]; total: number }> {
     return sharedApiService.request('GET', `${this.API_BASE}/aduana-alerts`, null, params)
   }
-  async getDUAAlerts(params?: { /* TODO: Complete implementation */ }
+  async getDUAAlerts(params?: {
     status?: number
     page?: number
     limit?: number
-  }): Promise<{ data: DUAAlert[]; total: number }> { /* TODO: Complete implementation */ }
+  }): Promise<{ data: DUAAlert[]; total: number }> {
     return sharedApiService.request('GET', `${this.API_BASE}/dua-alerts`, null, params)
   }
   // ==================== OFFICES ====================
-  async getOffices(params?: { /* TODO: Complete implementation */ }
+  async getOffices(params?: {
     status?: number
-  }): Promise<Office[]> { /* TODO: Complete implementation */ }
+  }): Promise<Office[]> {
     return sharedApiService.request('GET', `${this.API_BASE}/offices`, null, params)
   }
-  async getOfficeByCode(code: string): Promise<Office | null> { /* TODO: Complete implementation */ }
-    return sharedApiService.request('GET', `${this.API_BASE}/offices/code/${_code}`)
+  async getOfficeByCode(code: string): Promise<Office | null> {
+    return sharedApiService.request('GET', `${this.API_BASE}/offices/code/${code}`)
   }
   // ==================== ESTADÍSTICAS ====================
-  async getAduanaStats(params?: { /* TODO: Complete implementation */ }
+  async getAduanaStats(params?: {
     desp?: number
     month?: number
     year?: number
-  }): Promise<{ /* TODO: Complete implementation */ }
+  }): Promise<{
     totalTransitos: number
     transitosPendientes: number
     transitosEnProceso: number
     transitosCompletados: number
     alertasActivas: number
-    despachanteStats: Array<{ /* TODO: Complete implementation */ }
+    despachanteStats: Array<{
       desp: number
       nombre: string
       total: number
       pendientes: number
     }>
-  }> { /* TODO: Complete implementation */ }
+  }> {
     return sharedApiService.request('GET', `${this.API_BASE}/stats/aduana`, null, params)
   }
   // ==================== MAPPERS ====================
   /**
    * Convierte un registro de Aduana a TransitoPendiente
    */
-  mapAduanaToTransitoPendiente(aduana: Aduana): TransitoPendiente { /* TODO: Complete implementation */ }
-    return { /* TODO: Complete implementation */ }
+  mapAduanaToTransitoPendiente(aduana: Aduana): TransitoPendiente {
+    return {
       id: `ADU-${aduana.alid}`,
       numeroViaje: aduana.viaje.toString(),
       mov: aduana.mov,
@@ -105,8 +107,8 @@ class AuxDBService { /* TODO: Complete implementation */ }
       despachante: aduana.despnombre || 'Sin asignar',
       fechaIngreso: aduana.date,
       estado: this.mapAduanaStatusToEstado(aduana.status),
-      observaciones: this.buildObservaciones(_aduana),
-      vehiculo: { /* TODO: Complete implementation */ }
+      observaciones: this.buildObservaciones(aduana),
+      vehiculo: {
         matricula: aduana.matricula || '',
         conductor: undefined
       }
@@ -115,14 +117,14 @@ class AuxDBService { /* TODO: Complete implementation */ }
   /**
    * Convierte un DUA a información adicional para Transito
    */
-  mapDUAToTransitoInfo(dua: DUA): { /* TODO: Complete implementation */ }
+  mapDUAToTransitoInfo(dua: DUA): {
     estado: EstadoDUA
     importador: string
     agente: string
     contenedores: number
     urgente: boolean
-  } { /* TODO: Complete implementation */ }
-    return { /* TODO: Complete implementation */ }
+  } {
+    return {
       estado: dua.ESTADO as EstadoDUA,
       importador: dua.NOMB_IMPOR || 'No especificado',
       agente: dua.NombreAgente,
@@ -131,26 +133,27 @@ class AuxDBService { /* TODO: Complete implementation */ }
     }
   }
   // ==================== HELPERS ====================
-  private mapCargaToTipoCarga(carga: string): TransitoPendiente['tipoCarga'] { /* TODO: Complete implementation */ }
+  private mapCargaToTipoCarga(carga: string): TransitoPendiente['tipoCarga'] {
     const upperCarga = carga.toUpperCase()
     if (upperCarga.includes('CONTENEDOR') || upperCarga.includes('CONTAINER')) return 'Contenedor'
     if (upperCarga.includes('ENLONADA') || upperCarga.includes('LONA')) return 'Enlonada'
     return carga
   }
-  private mapAduanaStatusToEstado(status?: number): TransitoPendiente['estado'] { /* TODO: Complete implementation */ }
-    switch (s_tatus) { /* TODO: Complete implementation */ }
-      case 0: { /* TODO: Complete implementation */ }
-  return 'pendiente'
-      case 1: { /* TODO: Complete implementation */ }
-  return 'en_proceso'
-      case 2: { /* TODO: Complete implementation */ }
-  return 'precintado'
-      default: return 'pendiente'
+  private mapAduanaStatusToEstado(status?: number): TransitoPendiente['estado'] {
+    switch (status) {
+      case 0:
+        return 'pendiente'
+      case 1:
+        return 'en_proceso'
+      case 2:
+        return 'precintado'
+      default:
+        return 'pendiente'
     }
   }
-  private getLocationName(origen: number): string { /* TODO: Complete implementation */ }
+  private getLocationName(origen: number): string {
     // Este mapeo debería venir de la tabla office o de una configuración
-    const locationMap: Record<number, string> = { /* TODO: Complete implementation */ }
+    const locationMap: Record<number, string> = {
       1: 'Montevideo',
       2: 'Nueva Palmira',
       3: 'Colonia',
@@ -164,17 +167,17 @@ class AuxDBService { /* TODO: Complete implementation */ }
       11: 'Bella Unión',
       12: 'Aceguá'
     }
-    return locationMap[origen] || `Ubicación ${_origen}`
+    return locationMap[origen] || `Ubicación ${origen}`
   }
-  private buildObservaciones(aduana: Aduana): string | undefined { /* TODO: Complete implementation */ }
+  private buildObservaciones(aduana: Aduana): string | undefined {
     const obs: string[] = []
-    if (aduana.precintadora) { /* TODO: Complete implementation */ }
+    if (aduana.precintadora) {
       obs.push(`Precintadora: ${aduana.precintadora}`)
     }
-    if (aduana.contenedor) { /* TODO: Complete implementation */ }
+    if (aduana.contenedor) {
       obs.push(`Contenedor: ${aduana.contenedor}`)
     }
-    if (aduana.remolque) { /* TODO: Complete implementation */ }
+    if (aduana.remolque) {
       obs.push(`Remolque: ${aduana.remolque}`)
     }
     return obs.length > 0 ? obs.join(' | ') : undefined
@@ -183,17 +186,17 @@ class AuxDBService { /* TODO: Complete implementation */ }
   /**
    * Busca tránsitos pendientes de precintar en LUCIA
    */
-  async getTransitosPendientesLucia(params?: { /* TODO: Complete implementation */ }
+  async getTransitosPendientesLucia(params?: {
     limit?: number
     offset?: number
-  }): Promise<{ data: TransitoPendiente[]; total: number }> { /* TODO: Complete implementation */ }
-    const response = await this.getAduanaRecords({ /* TODO: Complete implementation */ }
+  }): Promise<{ data: TransitoPendiente[]; total: number }> {
+    const response = await this.getAduanaRecords({
       status: 0, // Pendientes
       page: params?.offset ? Math.floor(params.offset / (params?.limit || 25)) + 1 : 1,
       limit: params?.limit || 25
     })
-    const transitos = response.data.map(aduana => this.mapAduanaToTransitoPendiente(_aduana))
-    return { /* TODO: Complete implementation */ }
+    const transitos = response.data.map(aduana => this.mapAduanaToTransitoPendiente(aduana))
+    return {
       data: transitos,
       total: response.total
     }
@@ -201,16 +204,16 @@ class AuxDBService { /* TODO: Complete implementation */ }
   /**
    * Obtiene estadísticas de despachantes para el dashboard
    */
-  async getDespachanteStats(month?: number, year?: number): Promise<Array<{ /* TODO: Complete implementation */ }
+  async getDespachanteStats(month?: number, year?: number): Promise<Array<{
     id: number
     nombre: string
     transitosTotal: number
     transitosPendientes: number
     transitosCompletados: number
     porcentajeCompletado: number
-  }>> { /* TODO: Complete implementation */ }
+  }>> {
     const stats = await this.getAduanaStats({ month, year })
-    return stats.despachanteStats.map(desp => ({ /* TODO: Complete implementation */ }
+    return stats.despachanteStats.map(desp => ({
       id: desp.desp,
       nombre: desp.nombre,
       transitosTotal: desp.total,

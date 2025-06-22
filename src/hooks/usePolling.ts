@@ -1,4 +1,5 @@
-import {_useEffect, useRef, useCallback} from 'react'
+import { useEffect, useRef, useCallback } from 'react'
+
 interface UsePollingOptions {
   interval?: number
   enabled?: boolean
@@ -11,34 +12,39 @@ interface UsePollingOptions {
  * @param callback Función a ejecutar en cada intervalo
  * @param options Opciones de configuración del polling
  */
-export function usePolling(callback: () => void | Promise<void>,
+export function usePolling(
+  callback: () => void | Promise<void>,
   options: UsePollingOptions = {}
 ) {
-
-  const savedCallback = useRef(_callback)
-  const intervalIdRef = useRef<NodeJS.Timeout | null>(_null)
+  const { interval = 5000, enabled = true, onError, immediateFirstCall = false } = options
+  
+  const savedCallback = useRef(callback)
+  const intervalIdRef = useRef<NodeJS.Timeout | null>(null)
+  
   // Actualizar el callback guardado cuando cambie
-
-    useEffect(() => {
+  useEffect(() => {
     savedCallback.current = callback
   }, [callback])
+  
   // Función para ejecutar el callback con manejo de errores
   const executeCallback = useCallback(async () => {
     try {
       await savedCallback.current()
-    } catch {
-      console.error('Error during polling:', _error)
+    } catch (error) {
+      console.error('Error during polling:', error)
       onError?.(error as Error)
     }
-  }, [])
+  }, [onError])
+  
   // Función para iniciar el polling
   const startPolling = useCallback(() => {
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current)
     }
 
-    intervalIdRef.current = setInterval(_executeCallback, interval)
-  }, [interval])
+    intervalIdRef.current = setInterval(executeCallback, interval)
+  }, [interval, executeCallback])
+  
   // Función para detener el polling
   const stopPolling = useCallback(() => {
     if (intervalIdRef.current) {
@@ -46,26 +52,28 @@ export function usePolling(callback: () => void | Promise<void>,
       intervalIdRef.current = null
     }
   }, [])
+  
   // Efecto principal para manejar el polling
-
-    useEffect(() => {
+  useEffect(() => {
     if (!enabled) {
       stopPolling()
       return
     }
 
     // Ejecutar inmediatamente si está configurado
-    if (_immediateFirstCall) {
+    if (immediateFirstCall) {
       executeCallback()
     }
 
     // Iniciar el polling
     startPolling()
+    
     // Cleanup
     return () => {
       stopPolling()
     }
-  }, [enabled])
+  }, [enabled, immediateFirstCall, startPolling, stopPolling, executeCallback])
+  
   return {
     startPolling,
     stopPolling,
@@ -74,9 +82,9 @@ export function usePolling(callback: () => void | Promise<void>,
 }
 
 /**
- * Hook para detectar cambios en los datos y actualizar solo lo necesario
+ * Función para detectar cambios en los datos y actualizar solo lo necesario
  */
-export function useDataDiff<T extends { id: string }>(
+export function compareDataDiff<T extends { id: string }>(
   currentData: T[],
   newData: T[]
 ): {
@@ -87,24 +95,28 @@ export function useDataDiff<T extends { id: string }>(
 } {
   const currentMap = new Map(currentData.map(item => [item.id, item]))
   const newMap = new Map(newData.map(item => [item.id, item]))
+  
   const added: T[] = []
   const updated: T[] = []
   const removed: T[] = []
+  
   // Detectar items agregados o actualizados
   newData.forEach(newItem => {
     const currentItem = currentMap.get(newItem.id)
     if (!currentItem) {
-      added.push(_newItem)
-    } else if (JSON.stringify(_currentItem) !== JSON.stringify(_newItem)) {
-      updated.push(_newItem)
+      added.push(newItem)
+    } else if (JSON.stringify(currentItem) !== JSON.stringify(newItem)) {
+      updated.push(newItem)
     }
   })
+  
   // Detectar items eliminados
   currentData.forEach(currentItem => {
     if (!newMap.has(currentItem.id)) {
-      removed.push(_currentItem)
+      removed.push(currentItem)
     }
   })
+  
   return {
     added,
     updated,
@@ -116,7 +128,8 @@ export function useDataDiff<T extends { id: string }>(
 /**
  * Hook para polling con detección de cambios
  */
-export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Promise<T[]>,
+export function usePollingWithDiff<T extends { id: string }>(
+  fetchData: () => Promise<T[]>,
   currentData: T[],
   onDataChange: (data: T[]) => void,
   options: UsePollingOptions = {}
@@ -124,9 +137,12 @@ export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Pr
   const fetchAndCompare = useCallback(async () => {
     try {
       const newData = await fetchData()
-      const diff = useDataDiff(_currentData, newData)
+      // Call useDataDiff as a regular function, not as a hook
+      const diff = compareDataDiff(currentData, newData)
+      
       if (diff.hasChanges) {
-        onDataChange(_newData)
+        onDataChange(newData)
+        
         // Log de cambios para debugging
         if (diff.added.length > 0) {
           console.log(`[Polling] ${diff.added.length} nuevos items detectados`)
@@ -138,22 +154,25 @@ export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Pr
           console.log(`[Polling] ${diff.removed.length} items eliminados`)
         }
       }
-    } catch {
-      console.error('Error fetching data during polling:', _error)
+    } catch (error) {
+      console.error('Error fetching data during polling:', error)
       options.onError?.(error as Error)
     }
-  }, [options])
-  return usePolling(_fetchAndCompare, options)
+  }, [fetchData, currentData, onDataChange, options])
+  
+  return usePolling(fetchAndCompare, options)
 }
 
 /**
  * Hook para manejar reconexión automática en caso de pérdida de conexión
  */
-export function useAutoReconnect(onReconnect: () => void,
+export function useAutoReconnect(
+  onReconnect: () => void,
   checkInterval = 5000
 ) {
   const isOnlineRef = useRef(navigator.onLine)
-    useEffect(() => {
+  
+  useEffect(() => {
     const handleOnline = () => {
       if (!isOnlineRef.current) {
         console.log('Conexión restaurada, reiniciando polling...')
@@ -161,28 +180,34 @@ export function useAutoReconnect(onReconnect: () => void,
         onReconnect()
       }
     }
+    
     const handleOffline = () => {
       console.log('Conexión perdida, pausando polling...')
       isOnlineRef.current = false
     }
+    
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
+    
     // Check periódico de conectividad
     const intervalId = setInterval(() => {
       const wasOnline = isOnlineRef.current
       const isOnline = navigator.onLine
+      
       if (!wasOnline && isOnline) {
         handleOnline()
       } else if (wasOnline && !isOnline) {
         handleOffline()
       }
     }, checkInterval)
+    
     return () => {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
-      clearInterval(_intervalId)
+      clearInterval(intervalId)
     }
-  }, [])
+  }, [onReconnect, checkInterval])
+  
   return {
     isOnline: navigator.onLine
   }

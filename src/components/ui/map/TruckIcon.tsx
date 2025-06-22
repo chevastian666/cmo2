@@ -26,25 +26,25 @@ export const TruckIcon: React.FC<TruckIconProps> = ({
     xl: 'w-3.5 h-3.5'
   }
   const getStatusColor = () => {
-    switch (s_tatus) {
-      case 'critical': {
-  return 'text-red-500'
-      case 'warning': {
-  return 'text-yellow-500'
-      case 'inactive': {
-  return 'text-gray-500'
+    switch (status) {
+      case 'critical':
+        return 'text-red-500'
+      case 'warning':
+        return 'text-yellow-500'
+      case 'inactive':
+        return 'text-gray-500'
       default:
         return 'text-green-500'
     }
   }
   const getTrafficLightColor = () => {
-    switch (s_tatus) {
-      case 'critical': {
-  return 'bg-red-500'
-      case 'warning': {
-  return 'bg-yellow-500'
-      case 'inactive': {
-  return 'bg-gray-500'
+    switch (status) {
+      case 'critical':
+        return 'bg-red-500'
+      case 'warning':
+        return 'bg-yellow-500'
+      case 'inactive':
+        return 'bg-gray-500'
       default:
         return 'bg-green-500'
     }
@@ -109,7 +109,7 @@ export const TruckIconDetailed: React.FC<TruckIconProps> = ({
     xl: 'w-20 h-20'
   }
   const getStatusColor = () => {
-    switch (s_tatus) {
+    switch (status) {
       case 'critical': {
   return '#ef4444'; // red-500
       case 'warning': {

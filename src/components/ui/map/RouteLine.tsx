@@ -24,18 +24,18 @@ export const RouteLine: React.FC<RouteLineProps> = ({
 }) => {
   if (points.length < 2) return null
   // Convert lat/lng to SVG path
-  const pathData = points.reduce((_path, point, index) => {
+  const pathData = points.reduce((path, point, index) => {
     const command = index === 0 ? 'M' : 'L'
-    return `${_path} ${_command} ${point.lng},${point.lat}`
+    return `${path} ${command} ${point.lng},${point.lat}`
   }, '')
   const getStrokeDasharray = () => {
-    switch (s_tyle) {
-      case 'dashed': {
-  return '10,5'
-      case 'dotted': {
-  return '3,3'
-      case 'animated': {
-  return '10,5'
+    switch (style) {
+      case 'dashed':
+        return '10,5'
+      case 'dotted':
+        return '3,3'
+      case 'animated':
+        return '10,5'
       default:
         return undefined
     }
@@ -160,9 +160,9 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
   points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ...props
 }) => {
   if (points.length < 2) return null
-  const pathData = points.reduce((_path, point, index) => {
+  const pathData = points.reduce((path, point, index) => {
     const command = index === 0 ? 'M' : 'L'
-    return `${_path} ${_command} ${point.lng},${point.lat}`
+    return `${path} ${command} ${point.lng},${point.lat}`
   }, '')
   const pathId = `route-path-${Math.random().toString(36).substr(2, 9)}`
   return (

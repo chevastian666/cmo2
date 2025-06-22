@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, AnimatePresence, useAnimation} from 'framer-motion'
-import { cn} from '../../../../utils/utils'
-import type { RadialMenuProps, RadialMenuAction} from '../../types'
-import { useHotkeys} from '../../hooks/useHotkeys'
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
+import { cn } from '../../../../utils/utils'
+import type { RadialMenuProps, RadialMenuAction } from '../../types'
+import { useHotkeys } from '../../hooks/useHotkeys'
+
 const RADIUS = {
   small: 80,
   medium: 120,
   large: 160
 }
+
 const ANIMATION_PRESETS = {
   smooth: {
     type: 'spring',
@@ -25,20 +27,34 @@ const ANIMATION_PRESETS = {
     damping: 25
   }
 }
+
 export const RadialMenu: React.FC<RadialMenuProps> = ({
   actions, position, isOpen, onClose, customizable = true, gestureEnabled = true, context, size = 'medium', animationPreset = 'smooth'
 }) => {
-  const menuRef = useRef<HTMLDivElement>(_null)
-  const [selectedAction, setSelectedAction] = useState<string | null>(_null)
-  const [isDragging, setIsDragging] = useState(_false)
+  const settings = {
+    favoriteActions: [],
+    customOrder: null as string[] | null,
+    hapticFeedback: true
+  }
+  
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [selectedAction, setSelectedAction] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
   const controls = useAnimation()
+  
   // Filter actions based on permissions
+  const canUseAction = (permissions: string[]) => {
+    // For now, return true. In real implementation, check user permissions
+    return true
+  }
+  
   const availableActions = actions.filter(action => 
     canUseAction(action.permissions || [])
   )
+  
   // Sort actions based on user preferences
   const sortedActions = customizable && settings.customOrder
-    ? availableActions.sort((_a, b) => {
+    ? availableActions.sort((a, b) => {
         const orderA = settings.customOrder!.indexOf(a.id)
         const orderB = settings.customOrder!.indexOf(b.id)
         if (orderA === -1) return 1
@@ -46,32 +62,56 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
         return orderA - orderB
       })
     : availableActions
+    
   const radius = RADIUS[size]
   const angleStep = (2 * Math.PI) / sortedActions.length
+  
   // Calculate action positions
   const getActionPosition = (index: number) => {
     const angle = angleStep * index - Math.PI / 2
-    const x = Math.cos(_angle) * radius
-    const y = Math.sin(_angle) * radius
+    const x = Math.cos(angle) * radius
+    const y = Math.sin(angle) * radius
     return { x, y }
   }
-  // Handle click outside
+  
+  // Handle action click
+  const handleActionClick = useCallback((action: RadialMenuAction) => {
+    // Haptic feedback on mobile
+    if (settings.hapticFeedback && 'vibrate' in navigator) {
+      navigator.vibrate(50)
+    }
 
-    useEffect(() => {
+    // Execute action with context
+    action.action(context)
+    
+    // Track usage for customization
+    if (customizable) {
+      const usageStats = JSON.parse(localStorage.getItem('radialMenuUsage') || '{}')
+      usageStats[action.id] = (usageStats[action.id] || 0) + 1
+      localStorage.setItem('radialMenuUsage', JSON.stringify(usageStats))
+    }
+
+    onClose()
+  }, [context, customizable, onClose])
+  
+  // Handle click outside
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         onClose()
       }
     }
-    if (_isOpen) {
+    
+    if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [])
+  }, [isOpen, onClose])
+  
   // Keyboard navigation
-
-    useEffect(() => {
+  useEffect(() => {
     if (!isOpen) return
+    
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose()
@@ -86,68 +126,75 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
       } else if (e.key === 'Enter' && selectedAction) {
         const action = sortedActions.find(a => a.id === selectedAction)
         if (action && !action.disabled) {
-          handleActionClick(_action)
+          handleActionClick(action)
         }
       }
     }
+    
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
-  // Register hotkeys for actions
-  sortedActions.forEach(action => {
-    if (action.shortcut) {
-      useHotkeys(action.shortcut, () => {
-        if (isOpen && !action.disabled) {
-          handleActionClick(_action)
-        }
-      }, [])
-    }
-  })
-  const handleActionClick = useCallback((action: RadialMenuAction) => {
-    // Haptic feedback on mobile
-    if (settings.hapticFeedback && 'vibrate' in navigator) {
-      navigator.vibrate(50)
-    }
-
-    // Execute action with context
-    action.action(_context)
-    // Track usage for customization
-    if (_customizable) {
-      const usageStats = JSON.parse(localStorage.getItem('radialMenuUsage') || '{}')
-      usageStats[action.id] = (usageStats[action.id] || 0) + 1
-      localStorage.setItem('radialMenuUsage', JSON.stringify(_usageStats))
-    }
-
-    onClose()
-  }, [context, customizable])
+  }, [isOpen, selectedAction, sortedActions, onClose, handleActionClick])
+  
+  // Register hotkeys for actions - hooks must be called unconditionally
+  // Create a stable array of shortcuts for all actions
+  // Build shortcut map for all actions with shortcuts
+  const shortcutMap = useMemo(() => {
+    const map = new Map<string, typeof sortedActions[0]>()
+    sortedActions.forEach(action => {
+      if (action.shortcut && !action.disabled) {
+        map.set(action.shortcut, action)
+      }
+    })
+    return map
+  }, [sortedActions])
+  
+  // Use a single hotkeys hook that handles all shortcuts
+  useHotkeys(
+    Array.from(shortcutMap.keys()).join(','),
+    (event, handler) => {
+      if (!isOpen) return
+      const action = shortcutMap.get(handler.key)
+      if (action && !action.disabled) {
+        handleActionClick(action)
+      }
+    },
+    [isOpen, shortcutMap, handleActionClick]
+  )
+  
   // Gesture support for touch devices
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (!gestureEnabled) return
-    setIsDragging(_true)
-  }, [])
+    setIsDragging(true)
+  }, [gestureEnabled])
+  
   const handleTouchMove = useCallback((e: React.TouchEvent, action: RadialMenuAction) => {
     if (!isDragging || !gestureEnabled) return
+    
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
+    
     if (element?.getAttribute('data-action-id') === action.id) {
       setSelectedAction(action.id)
     }
-  }, [])
+  }, [isDragging, gestureEnabled])
+  
   const handleTouchEnd = useCallback(() => {
     if (!isDragging || !gestureEnabled) return
-    setIsDragging(_false)
-    if (s_electedAction) {
+    
+    setIsDragging(false)
+    if (selectedAction) {
       const action = sortedActions.find(a => a.id === selectedAction)
       if (action && !action.disabled) {
-        handleActionClick(_action)
+        handleActionClick(action)
       }
     }
-  }, [])
+  }, [isDragging, gestureEnabled, selectedAction, sortedActions, handleActionClick])
+  
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          ref={_menuRef}
+          ref={menuRef}
           className="fixed z-50"
           style={{ left: position.x, top: position.y }}
           initial={{ scale: 0, opacity: 0 }}
@@ -160,7 +207,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
             className="absolute w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center cursor-pointer border-2 border-gray-700 shadow-lg"
             style={{ transform: 'translate(-50%, -50%)' }}
             whileHover={{ scale: 1.1 }}
-            onClick={_onClose}
+            onClick={onClose}
           >
             <svg className="w-6 h-6 text-gray-400" viewBox="0 0 24 24">
               <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -168,10 +215,11 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
           </motion.div>
 
           {/* Action buttons */}
-          {sortedActions.map((_action, index) => {
-
+          {sortedActions.map((action, index) => {
+            const { x, y } = getActionPosition(index)
             const isSelected = selectedAction === action.id
             const isFavorite = settings.favoriteActions.includes(action.id)
+            
             return (
               <motion.div
                 key={action.id}
@@ -190,9 +238,9 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
                   ...ANIMATION_PRESETS[animationPreset],
                   delay: index * 0.02
                 }}
-                onTouchStart={_handleTouchStart}
-                onTouchMove={(_e) => handleTouchMove(_e, action)}
-                onTouchEnd={_handleTouchEnd}
+                onTouchStart={handleTouchStart}
+                onTouchMove={(e) => handleTouchMove(e, action)}
+                onTouchEnd={handleTouchEnd}
               >
                 <button
                   className={cn(
@@ -203,9 +251,9 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
                     isSelected && 'ring-2 ring-blue-500 ring-offset-2 ring-offset-gray-900',
                     isFavorite && 'border-2 border-yellow-500'
                   )}
-                  onClick={() => !action.disabled && handleActionClick(_action)}
+                  onClick={() => !action.disabled && handleActionClick(action)}
                   onMouseEnter={() => setSelectedAction(action.id)}
-                  onMouseLeave={() => setSelectedAction(_null)}
+                  onMouseLeave={() => setSelectedAction(null)}
                   disabled={action.disabled}
                 >
                   <action.icon className="w-6 h-6 text-white" />

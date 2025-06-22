@@ -4,14 +4,15 @@
  */
 
 import React, { useMemo } from 'react'
-import { AlertCircle, TrendingUp, Truck, Shield} from 'lucide-react'
+import { AlertCircle, TrendingUp, Truck, Shield } from 'lucide-react'
 import DashboardGrid, { type WidgetConfig } from '../../components/dashboard/DashboardGrid'
 import {
-  KPIWidget, ChartWidget, AlertsWidget, MapWidget, ActivityWidget, StatisticsWidget, TransitWidget, PrecintoStatusWidget, PendingPrecintosWidget} from '../../components/dashboard/widgets'
-import { PageTransition, AnimatedHeader} from '../../components/animations/PageTransitions'
-import { usePrecintosStore} from '../../store/store'
-import { useTransitosStore} from '../../store/store'
-import { useAlertasStore} from '../../store/store'
+  KPIWidget, ChartWidget, AlertsWidget, MapWidget, ActivityWidget, StatisticsWidget, TransitWidget, PrecintoStatusWidget, PendingPrecintosWidget
+} from '../../components/dashboard/widgets'
+import { PageTransition, AnimatedHeader } from '../../components/animations/PageTransitions'
+import { usePrecintosStore } from '../../store/store'
+import { useTransitosStore } from '../../store/store'
+import { useAlertasStore } from '../../store/store'
 const InteractiveDashboard: React.FC = () => {
   // Datos de los stores
   const precintos = usePrecintosStore(state => state.precintos)
@@ -173,8 +174,7 @@ const InteractiveDashboard: React.FC = () => {
             )
         }
         break
-    }
-    case 'chart':
+      case 'chart':
         return <ChartWidget widgetId={widget.id} type="area" />
       case 'map':
         return <MapWidget showLegend showControls />
@@ -203,10 +203,10 @@ const InteractiveDashboard: React.FC = () => {
         
         <div className="mt-4">
           <DashboardGrid
-            widgets={_widgets}
-            renderWidget={_renderWidget}
+            widgets={widgets}
+            renderWidget={renderWidget}
             className="w-full"
-            onLayoutChange={(_layouts) => {
+            onLayoutChange={(layouts) => {
               console.log('Layouts cambiados:', layouts)
             }}
           />

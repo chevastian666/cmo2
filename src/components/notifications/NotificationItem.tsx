@@ -25,17 +25,17 @@ const priorityConfig = {
     bg: 'bg-gray-700',
     icon: Info
   },
-  normal: { /* TODO: Complete implementation */ }
+  normal: {
     color: 'text-blue-400',
     bg: 'bg-blue-900',
     icon: Info
   },
-  high: { /* TODO: Complete implementation */ }
+  high: {
     color: 'text-yellow-400',
     bg: 'bg-yellow-900',
     icon: AlertTriangle
   },
-  critical: { /* TODO: Complete implementation */ }
+  critical: {
     color: 'text-red-400',
     bg: 'bg-red-900',
     icon: XCircle
@@ -47,74 +47,74 @@ const statusConfig = {
     bg: 'bg-blue-900',
     label: 'Sin leer'
   },
-  read: { /* TODO: Complete implementation */ }
+  read: {
     color: 'text-gray-400',
     bg: 'bg-gray-700',
     label: 'Leído'
   },
-  acknowledged: { /* TODO: Complete implementation */ }
+  acknowledged: {
     color: 'text-green-400',
     bg: 'bg-green-900',
     label: 'Confirmado'
   },
-  snoozed: { /* TODO: Complete implementation */ }
+  snoozed: {
     color: 'text-yellow-400',
     bg: 'bg-yellow-900',
     label: 'Pospuesto'
   },
-  escalated: { /* TODO: Complete implementation */ }
+  escalated: {
     color: 'text-red-400',
     bg: 'bg-red-900',
     label: 'Escalado'
   },
-  dismissed: { /* TODO: Complete implementation */ }
+  dismissed: {
     color: 'text-gray-500',
     bg: 'bg-gray-800',
     label: 'Descartado'
   }
 }
-export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Complete implementation */ }
+export const NotificationItem: React.FC<NotificationItemProps> = ({
   notification, isSelected, onSelect, onAction, expanded = false
-}) => { /* TODO: Complete implementation */ }
+}) => {
   const [showDetails, setShowDetails] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const priority = priorityConfig[notification.priority]
   const status = statusConfig[notification.status]
   const PriorityIcon = priority.icon
-  const handlePlaySound = async () => { /* TODO: Complete implementation */ }
-    if (notification.sound && !isPlaying) { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
+  const handlePlaySound = async () => {
+    if (notification.sound && !isPlaying) {
+      try {
         setIsPlaying(true)
         const audio = new Audio(notification.sound.url)
         audio.volume = notification.sound.volume || 0.5
         await audio.play()
         setTimeout(() => setIsPlaying(false), notification.sound.duration)
-      } catch (_error) { /* TODO: Complete implementation */ }
+      } catch (error) {
         console.error('Failed to play notification sound:', error)
         setIsPlaying(false)
       }
     }
   }
-  const formatTimestamp = (date: Date) => { /* TODO: Complete implementation */ }
-    return formatDistanceToNow(date, { /* TODO: Complete implementation */ }
+  const formatTimestamp = (date: Date) => {
+    return formatDistanceToNow(date, {
       addSuffix: true,
       locale: es
     })
   }
-  const getTypeIcon = (type: string) => { /* TODO: Complete implementation */ }
-    switch (type) { /* TODO: Complete implementation */ }
-      case 'alert': { /* TODO: Complete implementation */ }
-  return '🚨'
-      case 'transit': { /* TODO: Complete implementation */ }
-  return '🚛'
-      case 'precinto': { /* TODO: Complete implementation */ }
-  return '🔒'
-      case 'system': { /* TODO: Complete implementation */ }
-  return '⚙️'
-      case 'user': { /* TODO: Complete implementation */ }
-  return '👤'
-      case 'maintenance': { /* TODO: Complete implementation */ }
-  return '🔧'
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'alert':
+        return '🚨'
+      case 'transit':
+        return '🚛'
+      case 'precinto':
+        return '🔒'
+      case 'system':
+        return '⚙️'
+      case 'user':
+        return '👤'
+      case 'maintenance':
+        return '🔧'
       default:
         return '📢'
     }
@@ -124,7 +124,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`border-b border-gray-700 hover:bg-gray-800 transition-colors ${ /* TODO: Complete implementation */ }
+      className={`border-b border-gray-700 hover:bg-gray-800 transition-colors ${
         notification.status === 'unread' ? 'bg-gray-850' : ''
       } ${isSelected ? 'bg-blue-900 bg-opacity-30' : ''}`}
     >
@@ -151,7 +151,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
               <div className="flex-1">
                 {/* Header */}
                 <div className="flex items-center space-x-2 mb-1">
-                  <h3 className={`font-medium ${ /* TODO: Complete implementation */ }
+                  <h3 className={`font-medium ${
                     notification.status === 'unread' ? 'text-white' : 'text-gray-300'
                   }`}>
                     {notification.title}
@@ -170,7 +170,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
                   )}
                 </div>
                 {/* Message */}
-                <p className={`text-sm mb-2 ${ /* TODO: Complete implementation */ }
+                <p className={`text-sm mb-2 ${
                   notification.status === 'unread' ? 'text-gray-300' : 'text-gray-400'
                 }`}>
                   {notification.message}
@@ -261,9 +261,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
                 {/* Sound Button */}
                 {notification.sound && (
                   <button
-                    onClick={_handlePlaySound}
-                    disabled={_isPlaying}
-                    className={`p-1 rounded transition-colors ${ /* TODO: Complete implementation */ }
+                    onClick={handlePlaySound}
+                    disabled={isPlaying}
+                    className={`p-1 rounded transition-colors ${
                       isPlaying
                         ? 'text-blue-400'
                         : 'text-gray-400 hover:text-white'
@@ -302,10 +302,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
             )}
             {/* Action Buttons (_expanded) */}
             {notification.actions.length > 0 && (<div className="mt-3 flex flex-wrap gap-2">
-                {notification.actions.map((_action) => (<button
+                {notification.actions.map((action) => (<button
                     key={action.id}
                     onClick={() => onAction(action.type, action.payload)}
-                    className={`text-xs px-3 py-1 rounded transition-colors ${ /* TODO: Complete implementation */ }
+                    className={`text-xs px-3 py-1 rounded transition-colors ${
                       action.color === 'primary' ? 'bg-blue-600 text-white hover:bg-blue-700' :
                       action.color === 'success' ? 'bg-green-600 text-white hover:bg-green-700' :
                       action.color === 'warning' ? 'bg-yellow-600 text-white hover:bg-yellow-700' :

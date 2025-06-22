@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react'
 import { Button, ButtonProps} from '@/components/ui/button'
-import {_Loader2, Check, X} from 'lucide-react'
+import {Loader2, Check, X} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
 import { toast} from '@/hooks/use-toast'
@@ -27,16 +27,16 @@ export interface FeedbackButtonProps extends ButtonProps {
 type ButtonState = 'idle' | 'loading' | 'success' | 'error'
 export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
   children, onClick, loadingText, successText, errorText, showSuccessIcon = true, showErrorIcon = true, successDuration = 2000, onSuccess, onError, disabled, className, variant = 'default', size = 'default', showToastOnSuccess = false, showToastOnError = true, toastSuccessMessage, toastErrorMessage, ...props
-}) => { /* TODO: Complete implementation */ }
+}) => {
   const [state, setState] = useState<ButtonState>('idle')
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => { /* TODO: Complete implementation */ }
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!onClick || state !== 'idle') return
     setState('loading')
-    try { /* TODO: Complete implementation */ }
+    try {
       await onClick(e)
       setState('success')
-      if (showToastOnSuccess && toastSuccessMessage) { /* TODO: Complete implementation */ }
-        toast({ /* TODO: Complete implementation */ }
+      if (showToastOnSuccess && toastSuccessMessage) {
+        toast({
           title: "Éxito",
           description: toastSuccessMessage,
           variant: "default"
@@ -44,13 +44,13 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
       }
       onSuccess?.()
       // Reset to idle after success duration
-      setTimeout(() => { /* TODO: Complete implementation */ }
+      setTimeout(() => {
         setState('idle')
       }, successDuration)
-    } catch { /* TODO: Complete implementation */ }
+    } catch (error) {
       setState('error')
-      if (s_howToastOnError) { /* TODO: Complete implementation */ }
-        toast({ /* TODO: Complete implementation */ }
+      if (showToastOnError) {
+        toast({
           title: "Error",
           description: toastErrorMessage || (error as Error).message || "Ha ocurrido un error",
           variant: "destructive"
@@ -58,13 +58,13 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
       }
       onError?.(error as Error)
       // Reset to idle after error duration
-      setTimeout(() => { /* TODO: Complete implementation */ }
+      setTimeout(() => {
         setState('idle')
       }, 3000)
     }
   }
-  const getButtonContent = () => { /* TODO: Complete implementation */ }
-    switch (s_tate) { /* TODO: Complete implementation */ }
+  const getButtonContent = () => {
+    switch (state) {
       case 'loading':
         return (
           <>
@@ -90,12 +90,12 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
         return children
     }
   }
-  const getButtonVariant = () => { /* TODO: Complete implementation */ }
-    switch (s_tate) { /* TODO: Complete implementation */ }
-      case 'success': { /* TODO: Complete implementation */ }
-  return 'default'
-      case 'error': { /* TODO: Complete implementation */ }
-  return 'destructive'
+  const getButtonVariant = () => {
+    switch (state) {
+      case 'success':
+        return 'default'
+      case 'error':
+        return 'destructive'
       default:
         return variant
     }
@@ -119,7 +119,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
       >
         <AnimatePresence mode="wait">
           <motion.div
-            key={s_tate}
+            key={state}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}

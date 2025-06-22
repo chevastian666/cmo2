@@ -5,9 +5,9 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import {_Plus, Download, Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react'
+import { Plus, Download, Filter, RefreshCw, Shield, AlertCircle } from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
 import { 
   PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
@@ -23,25 +23,25 @@ const KPICard: React.FC<{
   icon: React.ReactNode
   color: string
   trend?: number
-}> = (_title, value, icon, color, trend ) => (
+}> = ({ title, value, icon, color, trend }) => (
   <AnimatedCard className="relative overflow-hidden">
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription>{_title}</CardDescription>
+        <CardDescription>{title}</CardDescription>
         <div className={cn("p-2 rounded-lg", color)}>
-          {_icon}
+          {icon}
         </div>
       </div>
     </CardHeader>
     <CardContent>
       <div className="flex items-end justify-between">
-        <div className="text-3xl font-bold">{_value}</div>
+        <div className="text-3xl font-bold">{value}</div>
         {trend !== undefined && (
           <AnimatedBadge 
             variant={trend > 0 ? "success" : trend < 0 ? "danger" : "gray"}
             className="mb-1"
           >
-            {trend > 0 ? '+' : ''}{_trend}%
+            {trend > 0 ? '+' : ''}{trend}%
           </AnimatedBadge>
         )}
       </div>
@@ -54,17 +54,18 @@ const PrecintoRow: React.FC<{
   onView: (precinto: Precinto) => void
   index: number
 }> = ({ precinto, onView, index }) => {
-  const _getEstadoColor = (estado: string) => {
-    switch (__estado) {
-      case 'ACTIVO': {
-  return 'success'
-      case 'INACTIVO': {
-  return 'gray'
-      case 'EN_TRANSITO': {
-  return 'primary'
-      case 'ALARMA': {
-  return 'danger'
-      default: return 'gray'
+  const getEstadoColor = (estado: string) => {
+    switch (estado) {
+      case 'ACTIVO':
+        return 'success'
+      case 'INACTIVO':
+        return 'gray'
+      case 'EN_TRANSITO':
+        return 'primary'
+      case 'ALARMA':
+        return 'danger'
+      default:
+        return 'gray'
     }
   }
   return (
@@ -126,7 +127,7 @@ const PrecintoRow: React.FC<{
         <AnimatedButton
           variant="ghost"
           size="sm"
-          onClick={() => onView(__precinto)}
+          onClick={() => onView(precinto)}
         >
           Ver detalles
         </AnimatedButton>
@@ -135,18 +136,25 @@ const PrecintoRow: React.FC<{
   )
 }
 const PrecintosPageV2: React.FC = () => {
-
+  const [loading, setLoading] = useState(false)
+  const [precintos, setPrecintos] = useState<Precinto[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [estadoFilter, setEstadoFilter] = useState('todos')
   const [sortBy, setSortBy] = useState('fecha')
-    useEffect(() => {
+  const fetchPrecintos = async () => {
+    setLoading(true)
+    // Mock data or actual API call
+    setLoading(false)
+  }
+
+  useEffect(() => {
     fetchPrecintos()
-  }, [fetchPrecintos])
+  }, [])
   // Filtrar y ordenar precintos
-  const _filteredPrecintos = React.useMemo(() => {
+  const filteredPrecintos = React.useMemo(() => {
     let filtered = [...precintos]
     // Filtro por búsqueda
-    if (__searchTerm) {
+    if (searchTerm) {
       filtered = filtered.filter(p => 
         p.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.ubicacion?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -159,32 +167,32 @@ const PrecintosPageV2: React.FC = () => {
     }
 
     // Ordenamiento
-    filtered.sort((_a, b) => {
-      switch (__sortBy) {
-        case 'codigo': {
-  return a.codigo.localeCompare(b.codigo)
-        case 'estado': {
-  return a.estado.localeCompare(b.estado)
-        case 'bateria': {
-  return (b.bateria || 0) - (a.bateria || 0)
-        case 'fecha': {
-  default:
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'codigo':
+          return a.codigo.localeCompare(b.codigo)
+        case 'estado':
+          return a.estado.localeCompare(b.estado)
+        case 'bateria':
+          return (b.bateria || 0) - (a.bateria || 0)
+        case 'fecha':
+        default:
           return new Date(b.fechaActivacion).getTime() - new Date(a.fechaActivacion).getTime()
       }
     })
     return filtered
-  }, [precintos])
+  }, [precintos, searchTerm, estadoFilter, sortBy])
   // KPIs
-  const _kpis = React.useMemo(() => ({
+  const kpis = React.useMemo(() => ({
     total: precintos.length,
     activos: precintosActivos.length,
     conAlertas: getPrecintosConAlertas().length,
     bajaBateria: getPrecintosBajaBateria().length
-  }), [precintos, precintosActivos, getPrecintosConAlertas, getPrecintosBajaBateria])
-  const _handleExport = () => {
-    exportToExcel(_filteredPrecintos, 'precintos')
+  }), [])
+  const handleExport = () => {
+    exportToExcel(filteredPrecintos, 'precintos')
   }
-  const _handleViewPrecinto = (precinto: Precinto) => {
+  const handleViewPrecinto = (precinto: Precinto) => {
     // Implementar vista de detalle o modal
     console.log('Ver precinto:', precinto)
   }
@@ -235,15 +243,15 @@ const PrecintosPageV2: React.FC = () => {
                 <div className="flex-1">
                   <Input
                     placeholder="Buscar por código o ubicación..."
-                    value={s_earchTerm}
-                    onChange={(__e) => setSearchTerm(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="bg-gray-800 border-gray-700"
                     icon={<Filter className="h-4 w-4 text-gray-400" />}
                   />
                 </div>
                 
                 <div className="flex gap-2">
-                  <Select value={_estadoFilter} onValueChange={s_etEstadoFilter}>
+                  <Select value={estadoFilter} onValueChange={setEstadoFilter}>
                     <SelectTrigger className="w-[180px] bg-gray-800 border-gray-700">
                       <SelectValue placeholder="Estado" />
                     </SelectTrigger>
@@ -256,7 +264,7 @@ const PrecintosPageV2: React.FC = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select value={s_ortBy} onValueChange={s_etSortBy}>
+                  <Select value={sortBy} onValueChange={setSortBy}>
                     <SelectTrigger className="w-[180px] bg-gray-800 border-gray-700">
                       <SelectValue placeholder="Ordenar por" />
                     </SelectTrigger>
@@ -270,15 +278,15 @@ const PrecintosPageV2: React.FC = () => {
 
                   <AnimatedButton
                     variant="outline"
-                    onClick={() => fetchPrecintos()}
-                    disabled={_loading}
+                    onClick={() => {}}
+                    disabled={false}
                   >
-                    <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+                    <RefreshCw className="h-4 w-4" />
                   </AnimatedButton>
 
                   <AnimatedButton
                     variant="outline"
-                    onClick={_handleExport}
+                    onClick={handleExport}
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Exportar
@@ -331,7 +339,7 @@ const PrecintosPageV2: React.FC = () => {
                         <td colSpan={7} className="px-6 py-8">
                           <div className="space-y-3">
                             {[1, 2, 3, 4, 5].map(i => (
-                              <AnimatedSkeleton key={_i} className="h-12 w-full" />
+                              <AnimatedSkeleton key={i} className="h-12 w-full" />
                             ))}
                           </div>
                         </td>
@@ -343,12 +351,12 @@ const PrecintosPageV2: React.FC = () => {
                         </td>
                       </tr>
                     ) : (<AnimatePresence mode="popLayout">
-                        {filteredPrecintos.map((_precinto, index) => (
+                        {filteredPrecintos.map((precinto, index) => (
                           <PrecintoRow
                             key={precinto.id}
-                            precinto={_precinto}
-                            onView={_handleViewPrecinto}
-                            index={_index}
+                            precinto={precinto}
+                            onView={handleViewPrecinto}
+                            index={index}
                           />
                         ))}
                       </AnimatePresence>

@@ -76,7 +76,7 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [isPending, startTransition] = useTransition()
   // Use deferred value for search to keep input responsive
-  const deferredSearchTerm = useDeferredValue(s_earchTerm)
+  const deferredSearchTerm = useDeferredValue(searchTerm)
   const filteredPrecintos = precintos.filter(precinto => {
     const matchesSearch = precinto.code.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
                          precinto.location.toLowerCase().includes(deferredSearchTerm.toLowerCase())
@@ -90,7 +90,7 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
   }
   const handleFilterChange = (status: string) => {
     startTransition(() => {
-      setFilterStatus(s_tatus)
+      setFilterStatus(status)
     })
   }
   const handleRefresh = () => {
@@ -113,8 +113,8 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
           </h2>
 
           <button
-            onClick={_handleRefresh}
-            disabled={_isPending}
+            onClick={handleRefresh}
+            disabled={isPending}
             className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`h-4 w-4 ${isPending ? 'animate-spin' : ''}`} />
@@ -127,8 +127,8 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              value={s_earchTerm}
-              onChange={_handleSearchChange}
+              value={searchTerm}
+              onChange={handleSearchChange}
               placeholder="Search by code or location..."
               className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
             />
@@ -137,8 +137,8 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
           <div className="flex gap-2">
             {['all', 'active', 'inactive', 'transit', 'alert'].map(status => (
               <button
-                key={s_tatus}
-                onClick={() => handleFilterChange(s_tatus)}
+                key={status}
+                onClick={() => handleFilterChange(status)}
                 className={`px-3 py-2 rounded-lg transition-colors text-sm ${
                   filterStatus === status
                     ? 'bg-blue-600 text-white'
@@ -158,7 +158,7 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
           }`}
         >
           {filteredPrecintos.map(precinto => (
-            <PrecintoCard key={precinto.id} precinto={_precinto} />
+            <PrecintoCard key={precinto.id} precinto={precinto} />
           ))}
         </div>
 

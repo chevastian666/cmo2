@@ -7,12 +7,12 @@ import { TIPOS_ALERTA} from '../../../types/monitoring'
 import { usuariosService} from '../../../services/usuarios.service'
 // shadcn/ui components
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Label} from '@/components/ui/label'
 import { Textarea} from '@/components/ui/textarea'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge} from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
 interface AlertaDetalleModalProps {
@@ -28,9 +28,9 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(_null)
-  const [mostrarAsignacion, setMostrarAsignacion] = useState(_false)
-  const [mostrarResolucion, setMostrarResolucion] = useState(_false)
+  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
+  const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
+  const [mostrarResolucion, setMostrarResolucion] = useState(false)
   const [nuevoComentario, setNuevoComentario] = useState('')
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
   const [notasAsignacion, setNotasAsignacion] = useState('')
@@ -38,7 +38,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   const [descripcionResolucion, setDescripcionResolucion] = useState('')
   const [accionesTomadas, setAccionesTomadas] = useState<string[]>([''])
   useEffect(() => {
-    if (_isOpen) {
+    if (isOpen) {
       cargarUsuarios()
     }
   }, [])
@@ -47,63 +47,64 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
       usuariosService.getActivos(),
       usuariosService.getCurrentUser()
     ])
-    setUsuarios(_users)
-    setUsuarioActual(_currentUser)
+    setUsuarios(users)
+    setUsuarioActual(currentUser)
   }
   const getIcon = (tipo: string) => {
-    switch (_tipo) {
-      case 'AAR': {
-  return <Clock className="h-6 w-6" />
-      case 'BBJ': {
-  return <Battery className="h-6 w-6" />
-      case 'DEM': {
-  return <Pause className="h-6 w-6" />
-      case 'DNR': {
-  return <Navigation className="h-6 w-6" />
-      case 'DTN': {
-  return <Shield className="h-6 w-6" />
-      case 'NPG': {
-  return <Radio className="h-6 w-6" />
-      case 'NPN': {
-  return <AlertTriangle className="h-6 w-6" />
-      case 'PTN': {
-  return <Package className="h-6 w-6" />
-      case 'SNA': {
-  return <Zap className="h-6 w-6" />
+    switch (tipo) {
+      case 'AAR':
+        return <Clock className="h-6 w-6" />
+      case 'BBJ':
+        return <Battery className="h-6 w-6" />
+      case 'DEM':
+        return <Pause className="h-6 w-6" />
+      case 'DNR':
+        return <Navigation className="h-6 w-6" />
+      case 'DTN':
+        return <Shield className="h-6 w-6" />
+      case 'NPG':
+        return <Radio className="h-6 w-6" />
+      case 'NPN':
+        return <AlertTriangle className="h-6 w-6" />
+      case 'PTN':
+        return <Package className="h-6 w-6" />
+      case 'SNA':
+        return <Zap className="h-6 w-6" />
       default: return <AlertTriangle className="h-6 w-6" />
     }
   }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'destructive'
-      case 'alta': {
-  return 'destructive'
-      case 'media': {
-  return 'secondary'
-      case 'baja': {
-  return 'outline'
-      default: return 'default'
+    switch (severidad) {
+      case 'critica':
+        return 'destructive'
+      case 'alta':
+        return 'destructive'
+      case 'media':
+        return 'secondary'
+      case 'baja':
+        return 'outline'
+      default:
+        return 'default'
     }
   }
   const handleAsignar = () => {
-    if (_usuarioSeleccionado) {
-      onAsignar(_usuarioSeleccionado, notasAsignacion)
-      setMostrarAsignacion(_false)
+    if (usuarioSeleccionado) {
+      onAsignar(usuarioSeleccionado, notasAsignacion)
+      setMostrarAsignacion(false)
       setUsuarioSeleccionado('')
       setNotasAsignacion('')
     }
   }
   const handleComentar = () => {
     if (nuevoComentario.trim()) {
-      onComentar(_nuevoComentario)
+      onComentar(nuevoComentario)
       setNuevoComentario('')
     }
   }
   const handleResolver = () => {
     if (descripcionResolucion.trim()) {
-      onResolver(_tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
-      setMostrarResolucion(_false)
+      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
+      setMostrarResolucion(false)
       setDescripcionResolucion('')
       setAccionesTomadas([''])
     }
@@ -114,13 +115,13 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   const actualizarAccion = (index: number, valor: string) => {
     const nuevasAcciones = [...accionesTomadas]
     nuevasAcciones[index] = valor
-    setAccionesTomadas(_nuevasAcciones)
+    setAccionesTomadas(nuevasAcciones)
   }
   const eliminarAccion = (index: number) => {
     setAccionesTomadas(accionesTomadas.filter((__, i) => i !== index))
   }
   return (
-    <Dialog open={_isOpen} onOpenChange={_onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">
@@ -228,8 +229,8 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                       <div className="space-y-2">
                         <Label htmlFor="usuario">Usuario</Label>
                         <Select
-                          value={_usuarioSeleccionado}
-                          onValueChange={s_etUsuarioSeleccionado}
+                          value={usuarioSeleccionado}
+                          onValueChange={setUsuarioSeleccionado}
                         >
                           <SelectTrigger id="usuario">
                             <SelectValue placeholder="Seleccionar usuario..." />
@@ -244,25 +245,25 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="notas">Notas de asignación (_opcional)</Label>
+                        <Label htmlFor="notas">Notas de asignación (opcional)</Label>
                         <Textarea
                           id="notas"
-                          value={_notasAsignacion}
-                          onChange={(_e) => setNotasAsignacion(e.target.value)}
+                          value={notasAsignacion}
+                          onChange={(e) => setNotasAsignacion(e.target.value)}
                           placeholder="Notas de asignación..."
                           rows={2}
                         />
                       </div>
                       <div className="flex space-x-2">
                         <Button
-                          onClick={_handleAsignar}
+                          onClick={handleAsignar}
                           disabled={!usuarioSeleccionado}
                         >
                           Asignar
                         </Button>
                         <Button
                           variant="outline"
-                          onClick={() => setMostrarAsignacion(_false)}
+                          onClick={() => setMostrarAsignacion(false)}
                         >
                           Cancelar
                         </Button>
@@ -270,7 +271,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     </div>
                   ) : (<Button
                       className="w-full"
-                      onClick={() => setMostrarAsignacion(_true)}
+                      onClick={() => setMostrarAsignacion(true)}
                     >
                       <User className="mr-2 h-4 w-4" />
                       Asignar Usuario
@@ -289,7 +290,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                 <div className="space-y-3 max-h-60 overflow-y-auto">
                   {alerta.comentarios.length === 0 ? (
                     <p className="text-muted-foreground">No hay comentarios aún</p>
-                  ) : (alerta.comentarios.map((_comentario) => (
+                  ) : (alerta.comentarios.map((comentario) => (
                       <div key={comentario.id} className="bg-muted rounded-lg p-3">
                         <div className="flex items-start space-x-3">
                           <img
@@ -320,15 +321,15 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                 {!alerta.resolucion && (<div className="mt-4 flex space-x-2">
                     <Input
                       type="text"
-                      value={_nuevoComentario}
-                      onChange={(_e) => setNuevoComentario(e.target.value)}
-                      onKeyPress={(_e) => e.key === 'Enter' && handleComentar()}
+                      value={nuevoComentario}
+                      onChange={(e) => setNuevoComentario(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleComentar()}
                       placeholder="Agregar comentario..."
                       className="flex-1"
                     />
                     <Button
                       size="icon"
-                      onClick={_handleComentar}
+                      onClick={handleComentar}
                       disabled={!nuevoComentario.trim()}
                     >
                       <MessageSquare className="h-4 w-4" />
@@ -348,7 +349,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {alerta.historial.map((_evento, index) => (
+                  {alerta.historial.map((evento, index) => (
                     <div key={evento.id} className="flex items-start space-x-3">
                       <div className={cn(
                         'w-2 h-2 rounded-full mt-1.5',
@@ -391,8 +392,8 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (<div className="mt-3">
                         <p className="text-sm text-muted-foreground mb-1">Acciones tomadas:</p>
                         <ul className="list-disc list-inside text-sm space-y-1">
-                          {alerta.resolucion.accionesTomadas.map((_accion, i) => (
-                            <li key={_i}>{_accion}</li>
+                          {alerta.resolucion.accionesTomadas.map((accion, i) => (
+                            <li key={i}>{accion}</li>
                           ))}
                         </ul>
                       </div>
@@ -411,7 +412,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
             ) : !mostrarResolucion && alerta.asignacion && (<Button
                 className="w-full"
                 variant="default"
-                onClick={() => setMostrarResolucion(_true)}
+                onClick={() => setMostrarResolucion(true)}
               >
                 <CheckCircle className="mr-2 h-4 w-4" />
                 Resolver Alerta
@@ -427,8 +428,8 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                   <div className="space-y-2">
                     <Label htmlFor="tipo-resolucion">Tipo de resolución</Label>
                     <Select
-                      value={_tipoResolucion}
-                      onValueChange={s_etTipoResolucion}
+                      value={tipoResolucion}
+                      onValueChange={setTipoResolucion}
                     >
                       <SelectTrigger id="tipo-resolucion">
                         <SelectValue />
@@ -445,24 +446,25 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     <Label htmlFor="descripcion">Descripción</Label>
                     <Textarea
                       id="descripcion"
-                      value={_descripcionResolucion}
-                      onChange={(_e) => setDescripcionResolucion(e.target.value)}
+                      value={descripcionResolucion}
+                      onChange={(e) => setDescripcionResolucion(e.target.value)}
                       placeholder="Descripción de la resolución..."
                       rows={3}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Acciones tomadas</Label>
-                    {accionesTomadas.map((_accion, index) => (<div key={_index} className="flex space-x-2">
+                    {accionesTomadas.map((accion, index) => (
+                      <div key={index} className="flex space-x-2">
                         <Input
-                          value={_accion}
-                          onChange={(_e) => actualizarAccion(_index, e.target.value)}
+                          value={accion}
+                          onChange={(e) => actualizarAccion(index, e.target.value)}
                           placeholder="Acción tomada..."
                         />
                         {accionesTomadas.length > 1 && (<Button
                             size="icon"
                             variant="ghost"
-                            onClick={() => eliminarAccion(_index)}
+                            onClick={() => eliminarAccion(index)}
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -472,7 +474,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     <Button
                       variant="link"
                       size="sm"
-                      onClick={_agregarAccion}
+                      onClick={agregarAccion}
                     >
                       + Agregar acción
                     </Button>
@@ -480,7 +482,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                   <div className="flex space-x-2">
                     <Button
                       className="flex-1"
-                      onClick={_handleResolver}
+                      onClick={handleResolver}
                       disabled={!descripcionResolucion.trim()}
                     >
                       Resolver
@@ -488,7 +490,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setMostrarResolucion(_false)
+                        setMostrarResolucion(false)
                         setDescripcionResolucion('')
                         setAccionesTomadas([''])
                       }}

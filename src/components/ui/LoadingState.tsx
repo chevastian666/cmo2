@@ -12,7 +12,7 @@ interface LoadingStateProps {
 }
 export const LoadingState: React.FC<LoadingStateProps> = ({
   variant = 'spinner', size = 'md', text, className, progress = 0, rows = 3
-}) => { /* TODO: Complete implementation */ }
+}) => {
   const sizeStyles = {
     sm: {
       container: 'py-4',
@@ -20,19 +20,19 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       dot: 'w-2 h-2',
       text: 'text-sm'
     },
-    md: { /* TODO: Complete implementation */ }
+    md: {
       container: 'py-8',
       spinner: 'w-8 h-8',
       dot: 'w-3 h-3',
       text: 'text-base'
     },
-    lg: { /* TODO: Complete implementation */ }
+    lg: {
       container: 'py-12',
       spinner: 'w-12 h-12',
       dot: 'w-4 h-4',
       text: 'text-lg'
     },
-    xl: { /* TODO: Complete implementation */ }
+    xl: {
       container: 'py-16',
       spinner: 'w-16 h-16',
       dot: 'w-5 h-5',
@@ -69,7 +69,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
             styles.dot,
             'bg-blue-500 rounded-full animate-pulse'
           )}
-          style={{ /* TODO: Complete implementation */ }
+          style={{
             animationDelay: `${i * 150}ms`
           }}
         />
@@ -108,16 +108,16 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       </div>
     </div>
   )
-  const renderLoader = () => { /* TODO: Complete implementation */ }
-    switch (variant) { /* TODO: Complete implementation */ }
-      case 'dots': { /* TODO: Complete implementation */ }
-  return renderDots()
-      case 'pulse': { /* TODO: Complete implementation */ }
-  return renderPulse()
-      case 'skeleton': { /* TODO: Complete implementation */ }
-  return renderSkeleton()
-      case 'progress': { /* TODO: Complete implementation */ }
-  return renderProgress()
+  const renderLoader = () => {
+    switch (variant) {
+      case 'dots':
+        return renderDots()
+      case 'pulse':
+        return renderPulse()
+      case 'skeleton':
+        return renderSkeleton()
+      case 'progress':
+        return renderProgress()
       default:
         return renderSpinner()
     }
@@ -146,7 +146,7 @@ interface LoadingOverlayProps {
 }
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   visible, text, variant = 'spinner', fullScreen = false, className
-}) => { /* TODO: Complete implementation */ }
+}) => {
   if (!visible) return null
   return (
     <div className={cn(
@@ -168,13 +168,13 @@ interface SkeletonProps {
 }
 export const Skeleton: React.FC<SkeletonProps> = ({
   className, variant = 'text', width, height, animation = 'pulse'
-}) => { /* TODO: Complete implementation */ }
-  const variantStyles = { /* TODO: Complete implementation */ }
+}) => {
+  const variantStyles = {
     text: 'rounded',
     circular: 'rounded-full',
     rectangular: 'rounded-lg'
   }
-  const animationStyles = { /* TODO: Complete implementation */ }
+  const animationStyles = {
     pulse: 'animate-pulse',
     wave: 'animate-shimmer',
     none: ''
@@ -187,7 +187,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         animationStyles[animation],
         className
       )}
-      style={{ /* TODO: Complete implementation */ }
+      style={{
         width: width || (variant === 'circular' ? '40px' : '100%'),
         height: height || (variant === 'text' ? '20px' : variant === 'circular' ? '40px' : '100px')
       }}

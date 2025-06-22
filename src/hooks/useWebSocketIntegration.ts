@@ -1,4 +1,4 @@
-import {_useEffect} from 'react'
+import { useEffect } from 'react'
 import { wsService} from '../services/websocket/WebSocketService'
 import { 
   usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../store'
@@ -8,67 +8,60 @@ export const useWebSocketIntegration = () => {
     // Connect WebSocket service
     wsService.connect()
     // Set up event handlers
-    wsService.on('onPrecintoUpdate', (_data) => {
-
+    wsService.on('onPrecintoUpdate', (data) => {
+      const { action, precinto } = data
       const store = usePrecintosStore.getState()
-      switch (_action) {
-        case 'update': {
-  store.updatePrecinto(precinto.id, precinto)
+      switch (action) {
+        case 'update':
+          store.updatePrecinto(precinto.id, precinto)
           break
-    }
-    case 'create':
+        case 'create':
           // Add new precinto if needed
           break
-    }
-    case 'delete':
+        case 'delete':
           store.removePrecinto(precinto.id)
           break
       }
     })
-    wsService.on('onTransitoUpdate', (_data) => {
-
+    wsService.on('onTransitoUpdate', (data) => {
+      const { action, transito } = data
       const store = useTransitosStore.getState()
-      switch (_action) {
-        case 'update': {
-  store.updateTransito(transito.id, transito)
+      switch (action) {
+        case 'update':
+          store.updateTransito(transito.id, transito)
           break
-    }
-    case 'create':
+        case 'create':
           // Add new transito if needed
           break
-    }
-    case 'delete':
+        case 'delete':
           store.removeTransito(transito.id)
           break
-    }
-    case 'precintado':
+        case 'precintado':
           // Remove from pending
           store.removeTransito(transito.id)
           break
       }
     })
-    wsService.on('onAlertaNueva', (_data) => {
-
+    wsService.on('onAlertaNueva', (data) => {
+      const { alerta } = data
       const store = useAlertasStore.getState()
-      store.addAlerta(_alerta)
+      store.addAlerta(alerta)
     })
-    wsService.on('onAlertaUpdate', (_data) => {
-
+    wsService.on('onAlertaUpdate', (data) => {
+      const { action, alerta, detalles } = data
       const store = useAlertasStore.getState()
-      switch (_action) {
-        case 'update': {
-  store.updateAlerta(alerta.id, alerta)
+      switch (action) {
+        case 'update':
+          store.updateAlerta(alerta.id, alerta)
           break
-    }
-    case 'atender':
+        case 'atender':
           store.atenderAlerta(alerta.id)
           break
-    }
-    case 'asignar':
+        case 'asignar':
           if (detalles?.asignacion) {
             // Update extended alert if it's cached
             const extendedAlerta = store.alertasExtendidas.get(alerta.id)
-            if (_extendedAlerta) {
+            if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 asignacion: detalles.asignacion,
                 historial: [...(extendedAlerta.historial || []), {
@@ -82,12 +75,11 @@ export const useWebSocketIntegration = () => {
             }
           }
           break
-    }
-    case 'comentar':
+        case 'comentar':
           if (detalles?.comentario) {
             // Update extended alert if it's cached
             const extendedAlerta = store.alertasExtendidas.get(alerta.id)
-            if (_extendedAlerta) {
+            if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 comentarios: [...(extendedAlerta.comentarios || []), detalles.comentario],
                 historial: [...(extendedAlerta.historial || []), {
@@ -101,12 +93,11 @@ export const useWebSocketIntegration = () => {
             }
           }
           break
-    }
-    case 'resolver':
+        case 'resolver':
           if (detalles?.resolucion) {
             // Update extended alert if it's cached
             const extendedAlerta = store.alertasExtendidas.get(alerta.id)
-            if (_extendedAlerta) {
+            if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 resolucion: detalles.resolucion,
                 historial: [...(extendedAlerta.historial || []), {
@@ -124,18 +115,18 @@ export const useWebSocketIntegration = () => {
           break
       }
     })
-    wsService.on('onSistemaUpdate', (_data) => {
+    wsService.on('onSistemaUpdate', (data) => {
       const store = useSystemStatusStore.getState()
-      store.updateSystemStatus(_data)
+      store.updateSystemStatus(data)
     })
-    wsService.on('onConnectionChange', (_data) => {
+    wsService.on('onConnectionChange', (data) => {
       console.log('WebSocket connection status:', data.status)
       if (data.message) {
         console.log('Message:', data.message)
       }
     })
-    wsService.on('onError', (__error) => {
-      console.error('WebSocket error:', _error)
+    wsService.on('onError', (error) => {
+      console.error('WebSocket error:', error)
     })
     // Cleanup on unmount
     return () => {

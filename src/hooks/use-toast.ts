@@ -74,8 +74,8 @@ const addToRemoveQueue = (toastId: string) => {
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "ADD_TOAST": {
-  return {
+    case "ADD_TOAST":
+      return {
         ...state,
         toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
       }
@@ -83,27 +83,27 @@ export const reducer = (state: State, action: Action): State => {
     case "UPDATE_TOAST":
       return {
         ...state,
-        toasts: state.toasts.map((_t) =>
+        toasts: state.toasts.map((t) =>
           t.id === action.toast.id ? { ...t, ...action.toast } : t
         ),
       }
 
     case "DISMISS_TOAST": {
-      const {_toastId} = action
+      const { toastId } = action
 
       // ! Side effects ! - This could be extracted into a dismissToast() action,
       // but I'll keep it here for simplicity
-      if (_toastId) {
-        addToRemoveQueue(_toastId)
+      if (toastId) {
+        addToRemoveQueue(toastId)
       } else {
-        state.toasts.forEach((_toast) => {
+        state.toasts.forEach((toast) => {
           addToRemoveQueue(toast.id)
         })
       }
 
       return {
         ...state,
-        toasts: state.toasts.map((_t) =>
+        toasts: state.toasts.map((t) =>
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
@@ -122,7 +122,7 @@ export const reducer = (state: State, action: Action): State => {
       }
       return {
         ...state,
-        toasts: state.toasts.filter((_t) => t.id !== action.toastId),
+        toasts: state.toasts.filter((t) => t.id !== action.toastId),
       }
   }
 }
@@ -132,9 +132,9 @@ const listeners: Array<(state: State) => void> = []
 let memoryState: State = { toasts: [] }
 
 function dispatch(action: Action) {
-  memoryState = reducer(_memoryState, action)
-  listeners.forEach((_listener) => {
-    listener(_memoryState)
+  memoryState = reducer(memoryState, action)
+  listeners.forEach((listener) => {
+    listener(memoryState)
   })
 }
 
@@ -152,7 +152,7 @@ function toast({ ...props }: Toast) {
 
   dispatch({
     type: "ADD_TOAST", toast: {
-      ...props, id, open: true, onOpenChange: (_open) => {
+      ...props, id, open: true, onOpenChange: (open) => {
         if (!open) dismiss()
       },
     },
