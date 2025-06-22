@@ -8,12 +8,14 @@ import { NotificationGroupItem } from './NotificationGroupItem';
 import { QuickActions } from './QuickActions';
 import type { NotificationFilter, NotificationType, NotificationPriority } from '@/types/notifications';
 
-interface NotificationCenterProps {}
+interface NotificationCenterProps {
+  className?: string;
+}
 
 const NotificationCenter: React.FC<NotificationCenterProps> = () => {
-  const [isOpen, setIsOpen] = useState(_false);
+  const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<NotificationFilter>({});
-  const [groupByType, setGroupByType] = useState(_true);
+  const [groupByType, setGroupByType] = useState(true);
   
   const {
     notifications,

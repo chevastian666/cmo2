@@ -3,7 +3,7 @@
  * Export data to Business Intelligence tools (_Tableau, PowerBI, etc.)
  * By Cheva
  */
-export interface BIConnection { /* TODO: Complete implementation */ }
+export interface BIConnection {
   id: string
   name: string
   type: 'tableau' | 'powerbi' | 'qlik' | 'looker' | 'metabase' | 'generic'
@@ -14,9 +14,9 @@ export interface BIConnection { /* TODO: Complete implementation */ }
   errorCount: number
   created: Date
 }
-export interface BIConnectionConfig { /* TODO: Complete implementation */ }
+export interface BIConnectionConfig {
   // Tableau Server/Online
-  tableau?: { /* TODO: Complete implementation */ }
+  tableau?: {
     server_url: string
     site_id?: string
     username: string
@@ -25,7 +25,7 @@ export interface BIConnectionConfig { /* TODO: Complete implementation */ }
     project_name?: string
   }
   // Power BI
-  powerbi?: { /* TODO: Complete implementation */ }
+  powerbi?: {
     tenant_id: string
     client_id: string
     client_secret?: string
@@ -35,7 +35,7 @@ export interface BIConnectionConfig { /* TODO: Complete implementation */ }
     password?: string
   }
   // QlikSense
-  qlik?: { /* TODO: Complete implementation */ }
+  qlik?: {
     server_url: string
     app_id: string
     certificate_path?: string
@@ -43,21 +43,21 @@ export interface BIConnectionConfig { /* TODO: Complete implementation */ }
     user_id: string
   }
   // Looker
-  looker?: { /* TODO: Complete implementation */ }
+  looker?: {
     base_url: string
     client_id: string
     client_secret: string
     project_id?: string
   }
   // Metabase
-  metabase?: { /* TODO: Complete implementation */ }
+  metabase?: {
     server_url: string
     username: string
     password: string
     database_id?: number
   }
   // Generic REST API
-  generic?: { /* TODO: Complete implementation */ }
+  generic?: {
     endpoint_url: string
     method: 'POST' | 'PUT' | 'PATCH'
     headers: Record<string, string>
@@ -65,12 +65,12 @@ export interface BIConnectionConfig { /* TODO: Complete implementation */ }
     auth_config: Record<string, string>
   }
 }
-export interface BIDataset { /* TODO: Complete implementation */ }
+export interface BIDataset {
   id: string
   name: string
   description: string
   source_query: string
-  refresh_schedule: { /* TODO: Complete implementation */ }
+  refresh_schedule: {
     enabled: boolean
     frequency: 'hourly' | 'daily' | 'weekly' | 'monthly'
     time?: string; // HH:MM format
@@ -83,23 +83,23 @@ export interface BIDataset { /* TODO: Complete implementation */ }
   created: Date
   lastUpdate?: Date
 }
-export interface BIDataMapping { /* TODO: Complete implementation */ }
+export interface BIDataMapping {
   source_field: string
   target_field: string
   data_type: 'string' | 'number' | 'date' | 'boolean' | 'json'
-  transformation?: { /* TODO: Complete implementation */ }
+  transformation?: {
     type: 'format' | 'calculation' | 'lookup' | 'aggregation'
     config: unknown
   }
   required: boolean
 }
-export interface BIDataFilter { /* TODO: Complete implementation */ }
+export interface BIDataFilter {
   field: string
   operator: '=' | '!=' | '>' | '<' | '>=' | '<=' | 'in' | 'not_in' | 'contains'
   value: unknown
   description: string
 }
-export interface BIExportJob { /* TODO: Complete implementation */ }
+export interface BIExportJob {
   id: string
   dataset_id: string
   connection_id: string
@@ -113,7 +113,7 @@ export interface BIExportJob { /* TODO: Complete implementation */ }
   file_path?: string
   file_size?: number
 }
-export interface BIExportResult { /* TODO: Complete implementation */ }
+export interface BIExportResult {
   success: boolean
   job_id: string
   records_exported: number
@@ -121,14 +121,14 @@ export interface BIExportResult { /* TODO: Complete implementation */ }
   error?: string
   metadata?: unknown
 }
-class BIExportService { /* TODO: Complete implementation */ }
+class BIExportService {
   private connections = new Map<string, BIConnection>()
   private datasets = new Map<string, BIDataset>()
   private jobs = new Map<string, BIExportJob>()
   private scheduledJobs = new Map<string, NodeJS.Timeout>()
   // Connection management
-  async createConnection(config: Omit<BIConnection, 'id' | 'created' | 'syncCount' | 'errorCount'>): Promise<BIConnection> { /* TODO: Complete implementation */ }
-    const connection: BIConnection = { /* TODO: Complete implementation */ }
+  async createConnection(config: Omit<BIConnection, 'id' | 'created' | 'syncCount' | 'errorCount'>): Promise<BIConnection> {
+    const connection: BIConnection = {
       ...config,
       id: this.generateId(),
       created: new Date(),
@@ -137,14 +137,14 @@ class BIExportService { /* TODO: Complete implementation */ }
     }
     // Test the connection
     const testResult = await this.testConnection(_connection)
-    if (!testResult.success) { /* TODO: Complete implementation */ }
+    if (!testResult.success) {
       throw new Error(`Connection test failed: ${testResult.error}`)
     }
     this.connections.set(connection.id, connection)
     this.saveConnections()
     return connection
   }
-  updateConnection(id: string, updates: Partial<BIConnection>): BIConnection | null { /* TODO: Complete implementation */ }
+  updateConnection(id: string, updates: Partial<BIConnection>): BIConnection | null {
     const connection = this.connections.get(_id)
     if (!connection) return null
     const updatedConnection = { ...connection, ...updates }
@@ -152,79 +152,79 @@ class BIExportService { /* TODO: Complete implementation */ }
     this.saveConnections()
     return updatedConnection
   }
-  deleteConnection(id: string): boolean { /* TODO: Complete implementation */ }
+  deleteConnection(id: string): boolean {
     const deleted = this.connections.delete(_id)
-    if (_deleted) { /* TODO: Complete implementation */ }
+    if (_deleted) {
       // Cancel any scheduled jobs for this connection
       this.cancelScheduledJobsForConnection(_id)
       this.saveConnections()
     }
     return deleted
   }
-  getConnection(id: string): BIConnection | null { /* TODO: Complete implementation */ }
+  getConnection(id: string): BIConnection | null {
     return this.connections.get(_id) || null
   }
-  getAllConnections(): BIConnection[] { /* TODO: Complete implementation */ }
+  getAllConnections(): BIConnection[] {
     return Array.from(this.connections.values())
   }
-  getActiveConnections(): BIConnection[] { /* TODO: Complete implementation */ }
+  getActiveConnections(): BIConnection[] {
     return this.getAllConnections().filter(conn => conn.active)
   }
   // Dataset management
-  createDataset(config: Omit<BIDataset, 'id' | 'created'>): BIDataset { /* TODO: Complete implementation */ }
-    const dataset: BIDataset = { /* TODO: Complete implementation */ }
+  createDataset(config: Omit<BIDataset, 'id' | 'created'>): BIDataset {
+    const dataset: BIDataset = {
       ...config,
       id: this.generateId(),
       created: new Date()
     }
     this.datasets.set(dataset.id, dataset)
     // Schedule if enabled
-    if (dataset.refresh_schedule.enabled) { /* TODO: Complete implementation */ }
+    if (dataset.refresh_schedule.enabled) {
       this.scheduleDatasetRefresh(_dataset)
     }
     this.saveDatasets()
     return dataset
   }
-  updateDataset(id: string, updates: Partial<BIDataset>): BIDataset | null { /* TODO: Complete implementation */ }
+  updateDataset(id: string, updates: Partial<BIDataset>): BIDataset | null {
     const dataset = this.datasets.get(_id)
     if (!dataset) return null
     const updatedDataset = { ...dataset, ...updates }
     this.datasets.set(_id, updatedDataset)
     // Update schedule
     this.cancelScheduledJob(_id)
-    if (updatedDataset.refresh_schedule.enabled && updatedDataset.active) { /* TODO: Complete implementation */ }
+    if (updatedDataset.refresh_schedule.enabled && updatedDataset.active) {
       this.scheduleDatasetRefresh(_updatedDataset)
     }
     this.saveDatasets()
     return updatedDataset
   }
-  deleteDataset(id: string): boolean { /* TODO: Complete implementation */ }
+  deleteDataset(id: string): boolean {
     const deleted = this.datasets.delete(_id)
-    if (_deleted) { /* TODO: Complete implementation */ }
+    if (_deleted) {
       this.cancelScheduledJob(_id)
       this.saveDatasets()
     }
     return deleted
   }
-  getDataset(id: string): BIDataset | null { /* TODO: Complete implementation */ }
+  getDataset(id: string): BIDataset | null {
     return this.datasets.get(_id) || null
   }
-  getAllDatasets(): BIDataset[] { /* TODO: Complete implementation */ }
+  getAllDatasets(): BIDataset[] {
     return Array.from(this.datasets.values())
   }
-  getActiveDatasets(): BIDataset[] { /* TODO: Complete implementation */ }
+  getActiveDatasets(): BIDataset[] {
     return this.getAllDatasets().filter(dataset => dataset.active)
   }
   // Export operations
-  async exportDataset(datasetId: string, connectionId?: string): Promise<BIExportResult> { /* TODO: Complete implementation */ }
+  async exportDataset(datasetId: string, connectionId?: string): Promise<BIExportResult> {
     const dataset = this.getDataset(_datasetId)
-    if (!dataset) { /* TODO: Complete implementation */ }
+    if (!dataset) {
       throw new Error('Dataset not found')
     }
     const connections = connectionId
       ? [this.getConnection(_connectionId)].filter(_Boolean) as BIConnection[]
       : dataset.connections.map(id => this.getConnection(_id)).filter(_Boolean) as BIConnection[]
-    if (connections.length === 0) { /* TODO: Complete implementation */ }
+    if (connections.length === 0) {
       throw new Error('No valid connections found')
     }
     const results = await Promise.allSettled(
@@ -232,24 +232,24 @@ class BIExportService { /* TODO: Complete implementation */ }
     )
     const successful = results.filter(result => result.status === 'fulfilled')
     const failed = results.filter(result => result.status === 'rejected')
-    if (successful.length === 0) { /* TODO: Complete implementation */ }
+    if (successful.length === 0) {
       throw new Error(`All exports failed: ${failed.map(f => (f as PromiseRejectedResult).reason).join(', ')}`)
     }
-    return { /* TODO: Complete implementation */ }
+    return {
       success: true,
       job_id: this.generateId(),
       records_exported: (successful[0] as PromiseFulfilledResult<BIExportResult>).value.records_exported,
       export_time: (successful[0] as PromiseFulfilledResult<BIExportResult>).value.export_time,
-      metadata: { /* TODO: Complete implementation */ }
+      metadata: {
         successful_connections: successful.length,
         failed_connections: failed.length
       }
     }
   }
-  private async exportToConnection(dataset: BIDataset, connection: BIConnection): Promise<BIExportResult> { /* TODO: Complete implementation */ }
+  private async exportToConnection(dataset: BIDataset, connection: BIConnection): Promise<BIExportResult> {
     const startTime = Date.now()
     // Create export job
-    const job: BIExportJob = { /* TODO: Complete implementation */ }
+    const job: BIExportJob = {
       id: this.generateId(),
       dataset_id: dataset.id,
       connection_id: connection.id,
@@ -260,7 +260,7 @@ class BIExportService { /* TODO: Complete implementation */ }
       export_format: this.getExportFormat(connection.type)
     }
     this.jobs.set(job.id, job)
-    try { /* TODO: Complete implementation */ }
+    try {
       // Fetch data using dataset query
       const data = await this.fetchDatasetData(_dataset)
       job.records_processed = data.length
@@ -276,13 +276,13 @@ class BIExportService { /* TODO: Complete implementation */ }
       connection.lastSync = new Date()
       this.updateConnection(connection.id, connection)
       const exportTime = Date.now() - startTime
-      return { /* TODO: Complete implementation */ }
+      return {
         success: true,
         job_id: job.id,
         records_exported: job.records_exported,
         export_time: exportTime
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       job.status = 'failed'
       job.error_message = (error as Error).message
       job.completed_at = new Date()
@@ -290,14 +290,14 @@ class BIExportService { /* TODO: Complete implementation */ }
       connection.errorCount++
       this.updateConnection(connection.id, connection)
       throw error
-    } finally { /* TODO: Complete implementation */ }
+    } finally {
       this.jobs.set(job.id, job)
     }
   }
   // BI Tool specific exports
-  private async exportToBITool(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
-    switch (connection.type) { /* TODO: Complete implementation */ }
-      case 'tableau': { /* TODO: Complete implementation */ }
+  private async exportToBITool(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
+    switch (connection.type) {
+      case 'tableau': {
   await this.exportToTableau(_connection, data, dataset)
       }
         break
@@ -330,7 +330,7 @@ class BIExportService { /* TODO: Complete implementation */ }
         throw new Error(`Unsupported BI tool: ${connection.type}`)
     }
   }
-  private async exportToTableau(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToTableau(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.tableau!
     // Mock implementation - in real scenario, use Tableau REST API
     console.log(`Exporting ${data.length} records to Tableau Server: ${config.server_url}`)
@@ -342,7 +342,7 @@ class BIExportService { /* TODO: Complete implementation */ }
     // 3. Upload data
     // 4. Refresh extracts if needed
   }
-  private async exportToPowerBI(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToPowerBI(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.powerbi!
     console.log(`Exporting ${data.length} records to Power BI workspace: ${config.workspace_id}`)
     await this.simulateAPICall(800 + Math.random() * 1500)
@@ -351,7 +351,7 @@ class BIExportService { /* TODO: Complete implementation */ }
     // 2. Push data to dataset using REST API
     // 3. Trigger dataset refresh
   }
-  private async exportToQlik(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToQlik(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.qlik!
     console.log(`Exporting ${data.length} records to QlikSense app: ${config.app_id}`)
     await this.simulateAPICall(1200 + Math.random() * 1800)
@@ -360,7 +360,7 @@ class BIExportService { /* TODO: Complete implementation */ }
     // 2. Load data into app
     // 3. Create or update data model
   }
-  private async exportToLooker(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToLooker(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.looker!
     console.log(`Exporting ${data.length} records to Looker: ${config.base_url}`)
     await this.simulateAPICall(900 + Math.random() * 1600)
@@ -369,7 +369,7 @@ class BIExportService { /* TODO: Complete implementation */ }
     // 2. Create or update connection
     // 3. Upload data to database
   }
-  private async exportToMetabase(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToMetabase(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.metabase!
     console.log(`Exporting ${data.length} records to Metabase: ${config.server_url}`)
     await this.simulateAPICall(700 + Math.random() * 1300)
@@ -378,12 +378,12 @@ class BIExportService { /* TODO: Complete implementation */ }
     // 2. Upload data to configured database
     // 3. Sync database schema if needed
   }
-  private async exportToGeneric(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> { /* TODO: Complete implementation */ }
+  private async exportToGeneric(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.generic!
     const headers = { ...config.headers }
     // Add authentication headers
-    switch (config.auth_type) { /* TODO: Complete implementation */ }
-      case 'basic': { /* TODO: Complete implementation */ }
+    switch (config.auth_type) {
+      case 'basic': {
         const credentials = btoa(`${config.auth_config.username}:${config.auth_config.password}`)
         headers['Authorization'] = `Basic ${_credentials}`
       }
@@ -398,32 +398,32 @@ class BIExportService { /* TODO: Complete implementation */ }
         headers[config.auth_config.header] = config.auth_config.key
         break
     }
-    const response = await fetch(config.endpoint_url, { /* TODO: Complete implementation */ }
+    const response = await fetch(config.endpoint_url, {
       method: config.method,
-      headers: { /* TODO: Complete implementation */ }
+      headers: {
         'Content-Type': 'application/json',
         ...headers
       },
-      body: JSON.stringify({ /* TODO: Complete implementation */ }
+      body: JSON.stringify({
         dataset: dataset.name,
         data: data,
-        metadata: { /* TODO: Complete implementation */ }
+        metadata: {
           export_time: new Date().toISOString(),
           record_count: data.length
         }
       })
     })
-    if (!response.ok) { /* TODO: Complete implementation */ }
+    if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
   }
   // Data processing
-  private async fetchDatasetData(dataset: BIDataset): Promise<any[]> { /* TODO: Complete implementation */ }
+  private async fetchDatasetData(dataset: BIDataset): Promise<any[]> {
     // Mock data fetching - in real implementation, execute the dataset query
     const mockData = []
     const recordCount = 100 + Math.floor(Math.random() * 900)
-    for (let i = 0; i < recordCount; i++) { /* TODO: Complete implementation */ }
-      mockData.push({ /* TODO: Complete implementation */ }
+    for (let i = 0; i < recordCount; i++) {
+      mockData.push({
         id: i + 1,
         timestamp: new Date(Date.now() - Math.random() * 86400000 * 30).toISOString(),
         alert_count: Math.floor(Math.random() * 10),
@@ -436,18 +436,18 @@ class BIExportService { /* TODO: Complete implementation */ }
     }
     // Apply filters
     let filteredData = mockData
-    if (dataset.filters) { /* TODO: Complete implementation */ }
+    if (dataset.filters) {
       filteredData = this.applyFilters(_mockData, dataset.filters)
     }
     return filteredData
   }
-  private transformData(data: unknown[], mappings: BIDataMapping[]): unknown[] { /* TODO: Complete implementation */ }
-    return data.map(record => { /* TODO: Complete implementation */ }
+  private transformData(data: unknown[], mappings: BIDataMapping[]): unknown[] {
+    return data.map(record => {
       const transformed: unknown = {}
-      mappings.forEach(mapping => { /* TODO: Complete implementation */ }
+      mappings.forEach(mapping => {
         let value = record[mapping.source_field]
         // Apply transformation if specified
-        if (mapping.transformation) { /* TODO: Complete implementation */ }
+        if (mapping.transformation) {
           value = this.applyTransformation(_value, mapping.transformation)
         }
         // Convert data type
@@ -457,74 +457,74 @@ class BIExportService { /* TODO: Complete implementation */ }
       return transformed
     })
   }
-  private applyFilters(data: unknown[], filters: BIDataFilter[]): unknown[] { /* TODO: Complete implementation */ }
-    return data.filter(record => { /* TODO: Complete implementation */ }
-      return filters.every(filter => { /* TODO: Complete implementation */ }
+  private applyFilters(data: unknown[], filters: BIDataFilter[]): unknown[] {
+    return data.filter(record => {
+      return filters.every(filter => {
         const value = record[filter.field]
-        switch (filter.operator) { /* TODO: Complete implementation */ }
-          case '=': { /* TODO: Complete implementation */ }
+        switch (filter.operator) {
+          case '=': {
   return value === filter.value
-          case '!=': { /* TODO: Complete implementation */ }
+          case '!=': {
   return value !== filter.value
-          case '>': { /* TODO: Complete implementation */ }
+          case '>': {
   return value > filter.value
-          case '<': { /* TODO: Complete implementation */ }
+          case '<': {
   return value < filter.value
-          case '>=': { /* TODO: Complete implementation */ }
+          case '>=': {
   return value >= filter.value
-          case '<=': { /* TODO: Complete implementation */ }
+          case '<=': {
   return value <= filter.value
-          case 'in': { /* TODO: Complete implementation */ }
+          case 'in': {
   return Array.isArray(filter.value) && filter.value.includes(_value)
-          case 'not_in': { /* TODO: Complete implementation */ }
+          case 'not_in': {
   return Array.isArray(filter.value) && !filter.value.includes(_value)
-          case 'contains': { /* TODO: Complete implementation */ }
+          case 'contains': {
   return String(_value).includes(String(filter.value))
           default: return true
         }
       })
     })
   }
-  private applyTransformation(value: unknown, transformation: unknown): unknown { /* TODO: Complete implementation */ }
-    switch (transformation.type) { /* TODO: Complete implementation */ }
-      case 'format': { /* TODO: Complete implementation */ }
-  if (transformation.config.type === 'date') { /* TODO: Complete implementation */ }
+  private applyTransformation(value: unknown, transformation: unknown): unknown {
+    switch (transformation.type) {
+      case 'format': {
+  if (transformation.config.type === 'date') {
           return new Date(_value).toLocaleDateString(transformation.config.locale)
         }
         return value
       case 'calculation':
         // Simple calculation example
-        if (transformation.config.operation === 'multiply') { /* TODO: Complete implementation */ }
+        if (transformation.config.operation === 'multiply') {
           return value * transformation.config.factor
         }
         return value
-      case 'lookup': { /* TODO: Complete implementation */ }
+      case 'lookup': {
         const lookup = transformation.config.mapping
         return lookup[value] || value
       default:
         return value
     }
   }
-  private convertDataType(value: unknown, targetType: string): unknown { /* TODO: Complete implementation */ }
-    switch (_targetType) { /* TODO: Complete implementation */ }
-      case 'string': { /* TODO: Complete implementation */ }
+  private convertDataType(value: unknown, targetType: string): unknown {
+    switch (_targetType) {
+      case 'string': {
   return String(_value)
-      case 'number': { /* TODO: Complete implementation */ }
+      case 'number': {
   return Number(_value) || 0
-      case 'date': { /* TODO: Complete implementation */ }
+      case 'date': {
   return new Date(_value).toISOString()
-      case 'boolean': { /* TODO: Complete implementation */ }
+      case 'boolean': {
   return Boolean(_value)
-      case 'json': { /* TODO: Complete implementation */ }
+      case 'json': {
   return typeof value === 'object' ? value : JSON.parse(String(_value))
       default:
         return value
     }
   }
   // Connection testing
-  async testConnection(connection: BIConnection): Promise<{ success: boolean; error?: string }> { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
-      switch (connection.type) { /* TODO: Complete implementation */ }
+  async testConnection(connection: BIConnection): Promise<{ success: boolean; error?: string }> {
+    try {
+      switch (connection.type) {
         case 'tableau':
           return await this.testTableauConnection(connection.config.tableau!)
         case 'powerbi':
@@ -534,38 +534,38 @@ class BIExportService { /* TODO: Complete implementation */ }
         default:
           return { success: true }; // Mock success for other types
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       return { success: false, error: (error as Error).message }
     }
   }
-  private async testTableauConnection(config: unknown): Promise<{ success: boolean; error?: string }> { /* TODO: Complete implementation */ }
+  private async testTableauConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
     // Mock test - in real implementation, try to sign in to Tableau Server
     await this.simulateAPICall(500 + Math.random() * 1000)
     return { success: true }
   }
-  private async testPowerBIConnection(config: unknown): Promise<{ success: boolean; error?: string }> { /* TODO: Complete implementation */ }
+  private async testPowerBIConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
     // Mock test - in real implementation, try to get OAuth token
     await this.simulateAPICall(400 + Math.random() * 800)
     return { success: true }
   }
-  private async testGenericConnection(config: unknown): Promise<{ success: boolean; error?: string }> { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
-      const response = await fetch(config.endpoint_url, { /* TODO: Complete implementation */ }
+  private async testGenericConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await fetch(config.endpoint_url, {
         method: 'HEAD',
         headers: config.headers
       })
       return { success: response.ok }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       return { success: false, error: (error as Error).message }
     }
   }
   // Scheduling
-  private scheduleDatasetRefresh(dataset: BIDataset): void { /* TODO: Complete implementation */ }
+  private scheduleDatasetRefresh(dataset: BIDataset): void {
     if (!dataset.refresh_schedule.enabled) return
     const schedule = dataset.refresh_schedule
     let interval: number
-    switch (schedule.frequency) { /* TODO: Complete implementation */ }
-      case 'hourly': { /* TODO: Complete implementation */ }
+    switch (schedule.frequency) {
+      case 'hourly': {
   interval = 60 * 60 * 1000; // 1 hour
       }
         break
@@ -587,39 +587,39 @@ class BIExportService { /* TODO: Complete implementation */ }
       default:
         return
     }
-    const timeoutId = setInterval(async () => { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
+    const timeoutId = setInterval(async () => {
+      try {
         await this.exportDataset(dataset.id)
         console.log(`Scheduled export completed for dataset: ${dataset.name}`)
-      } catch (_error) { /* TODO: Complete implementation */ }
+      } catch (_error) {
         console.error(`Scheduled export failed for dataset ${dataset.name}:`, error)
       }
     }, interval)
     this.scheduledJobs.set(dataset.id, timeoutId)
   }
-  private cancelScheduledJob(datasetId: string): void { /* TODO: Complete implementation */ }
+  private cancelScheduledJob(datasetId: string): void {
     const timeoutId = this.scheduledJobs.get(_datasetId)
-    if (_timeoutId) { /* TODO: Complete implementation */ }
+    if (_timeoutId) {
       clearInterval(_timeoutId)
       this.scheduledJobs.delete(_datasetId)
     }
   }
-  private cancelScheduledJobsForConnection(connectionId: string): void { /* TODO: Complete implementation */ }
+  private cancelScheduledJobsForConnection(connectionId: string): void {
     this.getAllDatasets()
       .filter(dataset => dataset.connections.includes(_connectionId))
       .forEach(dataset => this.cancelScheduledJob(dataset.id))
   }
   // Job management
-  getExportJobs(limit = 50): BIExportJob[] { /* TODO: Complete implementation */ }
+  getExportJobs(limit = 50): BIExportJob[] {
     return Array.from(this.jobs.values())
       .sort((_a, b) => b.started_at.getTime() - a.started_at.getTime())
       .slice(0, limit)
   }
-  getExportJob(id: string): BIExportJob | null { /* TODO: Complete implementation */ }
+  getExportJob(id: string): BIExportJob | null {
     return this.jobs.get(_id) || null
   }
   // Statistics
-  getExportStats(): { /* TODO: Complete implementation */ }
+  getExportStats(): {
     total_connections: number
     active_connections: number
     total_datasets: number
@@ -628,9 +628,9 @@ class BIExportService { /* TODO: Complete implementation */ }
     successful_jobs: number
     failed_jobs: number
     total_records_exported: number
-  } { /* TODO: Complete implementation */ }
+  } {
     const jobs = Array.from(this.jobs.values())
-    return { /* TODO: Complete implementation */ }
+    return {
       total_connections: this.connections.size,
       active_connections: this.getActiveConnections().length,
       total_datasets: this.datasets.size,
@@ -642,109 +642,109 @@ class BIExportService { /* TODO: Complete implementation */ }
     }
   }
   // Helper methods
-  private getExportFormat(biType: string): 'json' | 'csv' | 'parquet' | 'direct' { /* TODO: Complete implementation */ }
-    switch (_biType) { /* TODO: Complete implementation */ }
-      case 'tableau': { /* TODO: Complete implementation */ }
+  private getExportFormat(biType: string): 'json' | 'csv' | 'parquet' | 'direct' {
+    switch (_biType) {
+      case 'tableau': {
   case 'qlik':
         return 'csv'
-      case 'powerbi': { /* TODO: Complete implementation */ }
+      case 'powerbi': {
   case 'looker':
         return 'json'
-      case 'metabase': { /* TODO: Complete implementation */ }
+      case 'metabase': {
   return 'direct'
       default:
         return 'json'
     }
   }
-  private async simulateAPICall(delay: number): Promise<void> { /* TODO: Complete implementation */ }
+  private async simulateAPICall(delay: number): Promise<void> {
     return new Promise(resolve => setTimeout(_resolve, delay))
   }
-  private generateId(): string { /* TODO: Complete implementation */ }
+  private generateId(): string {
     return `bi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
   // Persistence
-  private saveConnections(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  private saveConnections(): void {
+    try {
       const connectionsArray = Array.from(this.connections.values())
       // Remove sensitive data before saving
-      const sanitized = connectionsArray.map(conn => ({ /* TODO: Complete implementation */ }
+      const sanitized = connectionsArray.map(conn => ({
         ...conn,
         config: this.sanitizeConfig(conn.config)
       }))
       localStorage.setItem('cmo_bi_connections', JSON.stringify(s_anitized))
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       console.error('Failed to save BI connections:', error)
     }
   }
-  private saveDatasets(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  private saveDatasets(): void {
+    try {
       const datasetsArray = Array.from(this.datasets.values())
       localStorage.setItem('cmo_bi_datasets', JSON.stringify(_datasetsArray))
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       console.error('Failed to save BI datasets:', error)
     }
   }
-  private sanitizeConfig(config: BIConnectionConfig): BIConnectionConfig { /* TODO: Complete implementation */ }
+  private sanitizeConfig(config: BIConnectionConfig): BIConnectionConfig {
     const sanitized = JSON.parse(JSON.stringify(_config))
     // Remove sensitive fields
-    if (sanitized.tableau) { /* TODO: Complete implementation */ }
+    if (sanitized.tableau) {
       sanitized.tableau.password = sanitized.tableau.password ? '***' : undefined
       sanitized.tableau.personal_access_token = sanitized.tableau.personal_access_token ? '***' : undefined
     }
-    if (sanitized.powerbi) { /* TODO: Complete implementation */ }
+    if (sanitized.powerbi) {
       sanitized.powerbi.client_secret = sanitized.powerbi.client_secret ? '***' : undefined
       sanitized.powerbi.password = sanitized.powerbi.password ? '***' : undefined
     }
-    if (sanitized.looker) { /* TODO: Complete implementation */ }
+    if (sanitized.looker) {
       sanitized.looker.client_secret = sanitized.looker.client_secret ? '***' : undefined
     }
-    if (sanitized.metabase) { /* TODO: Complete implementation */ }
+    if (sanitized.metabase) {
       sanitized.metabase.password = sanitized.metabase.password ? '***' : undefined
     }
     return sanitized
   }
-  loadConnections(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  loadConnections(): void {
+    try {
       const stored = localStorage.getItem('cmo_bi_connections')
-      if (s_tored) { /* TODO: Complete implementation */ }
+      if (s_tored) {
         const connectionsArray: BIConnection[] = JSON.parse(s_tored)
         this.connections.clear()
-        connectionsArray.forEach(connection => { /* TODO: Complete implementation */ }
+        connectionsArray.forEach(connection => {
           connection.created = new Date(connection.created)
-          if (connection.lastSync) { /* TODO: Complete implementation */ }
+          if (connection.lastSync) {
             connection.lastSync = new Date(connection.lastSync)
           }
           this.connections.set(connection.id, connection)
         })
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       console.error('Failed to load BI connections:', error)
     }
   }
-  loadDatasets(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  loadDatasets(): void {
+    try {
       const stored = localStorage.getItem('cmo_bi_datasets')
-      if (s_tored) { /* TODO: Complete implementation */ }
+      if (s_tored) {
         const datasetsArray: BIDataset[] = JSON.parse(s_tored)
         this.datasets.clear()
-        datasetsArray.forEach(dataset => { /* TODO: Complete implementation */ }
+        datasetsArray.forEach(dataset => {
           dataset.created = new Date(dataset.created)
-          if (dataset.lastUpdate) { /* TODO: Complete implementation */ }
+          if (dataset.lastUpdate) {
             dataset.lastUpdate = new Date(dataset.lastUpdate)
           }
           this.datasets.set(dataset.id, dataset)
           // Restore schedules for active datasets
-          if (dataset.active && dataset.refresh_schedule.enabled) { /* TODO: Complete implementation */ }
+          if (dataset.active && dataset.refresh_schedule.enabled) {
             this.scheduleDatasetRefresh(_dataset)
           }
         })
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (_error) {
       console.error('Failed to load BI datasets:', error)
     }
   }
   // Cleanup
-  cleanup(): void { /* TODO: Complete implementation */ }
+  cleanup(): void {
     this.scheduledJobs.forEach(timeoutId => clearInterval(_timeoutId))
     this.scheduledJobs.clear()
   }

@@ -3,22 +3,22 @@
  * Express.js server with OpenAPI specification
  * By Cheva
  */
-export interface APIEndpoint { /* TODO: Complete implementation */ }
+export interface APIEndpoint {
   id: string
   path: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
   description: string
   parameters?: APIParameter[]
   responses: APIResponse[]
-  authentication: 'none' | 'api_key' | 'bearer' | 'basic'
-  rateLimit?: { /* TODO: Complete implementation */ }
+  authentication: 'none' | 'apikey)' | 'bearer' | 'basic'
+  rateLimit?: {
     requests: number
     window: number; // seconds
   }
   tags: string[]
   enabled: boolean
 }
-export interface APIParameter { /* TODO: Complete implementation */ }
+export interface APIParameter {
   name: string
   in: 'query' | 'path' | 'header' | 'body'
   type: 'string' | 'number' | 'boolean' | 'array' | 'object'
@@ -27,68 +27,68 @@ export interface APIParameter { /* TODO: Complete implementation */ }
   example?: unknown
   enum?: string[]
 }
-export interface APIResponse { /* TODO: Complete implementation */ }
+export interface APIResponse {
   status: number
   description: string
   example?: unknown
   schema?: unknown
 }
-export interface APIConfig { /* TODO: Complete implementation */ }
+export interface APIConfig {
   baseUrl: string
   version: string
   title: string
   description: string
   port: number
-  cors: { /* TODO: Complete implementation */ }
+  cors: {
     enabled: boolean
     origins: string[]
   }
-  authentication: { /* TODO: Complete implementation */ }
-    apiKey: { /* TODO: Complete implementation */ }
+  authentication: {
+    apiKey: {
       enabled: boolean
       key: string
       header: string
     }
-    bearer: { /* TODO: Complete implementation */ }
+    bearer: {
       enabled: boolean
       secret: string
     }
   }
-  rateLimit: { /* TODO: Complete implementation */ }
+  rateLimit: {
     enabled: boolean
     requests: number
     window: number
   }
   logging: boolean
 }
-class RestAPIService { /* TODO: Complete implementation */ }
-  private __config: APIConfig
+class RestAPIService {
+  private config: APIConfig
   private endpoints = new Map<string, APIEndpoint>()
   private server: unknown = null
   private requestStats = new Map<string, { count: number; lastReset: number }>()
-  constructor() { /* TODO: Complete implementation */ }
-    this.config = { /* TODO: Complete implementation */ }
+  constructor() {
+    this.config = {
       baseUrl: 'http://localhost:3001',
       version: '1.0.0',
       title: 'CMO REST API',
       description: 'API para integración con el sistema CMO (Centro de Monitoreo de Operaciones)',
       port: 3001,
-      cors: { /* TODO: Complete implementation */ }
+      cors: {
         enabled: true,
         origins: ['*']
       },
-      authentication: { /* TODO: Complete implementation */ }
-        apiKey: { /* TODO: Complete implementation */ }
+      authentication: {
+        apiKey: {
           enabled: true,
           key: 'cmo-api-key-2024',
           header: 'X-API-Key'
         },
-        bearer: { /* TODO: Complete implementation */ }
+        bearer: {
           enabled: false,
           secret: ''
         }
       },
-      rateLimit: { /* TODO: Complete implementation */ }
+      rateLimit: {
         enabled: true,
         requests: 100,
         window: 3600 // 1 hour
@@ -98,16 +98,16 @@ class RestAPIService { /* TODO: Complete implementation */ }
     this.initializeDefaultEndpoints()
   }
   // Configuration
-  updateConfig(updates: Partial<APIConfig>): void { /* TODO: Complete implementation */ }
+  updateConfig(updates: Partial<APIConfig>): void {
     this.config = { ...this.config, ...updates }
     this.saveConfig()
   }
-  getConfig(): APIConfig { /* TODO: Complete implementation */ }
+  getConfig(): APIConfig {
     return this.config
   }
   // Endpoints management
-  addEndpoint(endpoint: Omit<APIEndpoint, 'id'>): APIEndpoint { /* TODO: Complete implementation */ }
-    const newEndpoint: APIEndpoint = { /* TODO: Complete implementation */ }
+  addEndpoint(endpoint: Omit<APIEndpoint, 'id'>): APIEndpoint {
+    const newEndpoint: APIEndpoint = {
       ...endpoint,
       id: this.generateId()
     }
@@ -115,60 +115,60 @@ class RestAPIService { /* TODO: Complete implementation */ }
     this.saveEndpoints()
     return newEndpoint
   }
-  updateEndpoint(id: string, updates: Partial<APIEndpoint>): APIEndpoint | null { /* TODO: Complete implementation */ }
-    const endpoint = this.endpoints.get(_id)
+  updateEndpoint(id: string, updates: Partial<APIEndpoint>): APIEndpoint | null {
+    const endpoint = this.endpoints.get(id))
     if (!endpoint) return null
     const updatedEndpoint = { ...endpoint, ...updates }
-    this.endpoints.set(_id, updatedEndpoint)
+    this.endpoints.set(id), updatedEndpoint)
     this.saveEndpoints()
     return updatedEndpoint
   }
-  deleteEndpoint(id: string): boolean { /* TODO: Complete implementation */ }
-    const deleted = this.endpoints.delete(_id)
-    if (_deleted) { /* TODO: Complete implementation */ }
+  deleteEndpoint(id: string): boolean {
+    const deleted = this.endpoints.delete(id))
+    if (deleted)) {
       this.saveEndpoints()
     }
     return deleted
   }
-  getEndpoint(id: string): APIEndpoint | null { /* TODO: Complete implementation */ }
-    return this.endpoints.get(_id) || null
+  getEndpoint(id: string): APIEndpoint | null {
+    return this.endpoints.get(id)) || null
   }
-  getAllEndpoints(): APIEndpoint[] { /* TODO: Complete implementation */ }
+  getAllEndpoints(): APIEndpoint[] {
     return Array.from(this.endpoints.values())
   }
-  getEnabledEndpoints(): APIEndpoint[] { /* TODO: Complete implementation */ }
+  getEnabledEndpoints(): APIEndpoint[] {
     return this.getAllEndpoints().filter(endpoint => endpoint.enabled)
   }
   // OpenAPI/Swagger specification generation
-  generateOpenAPISpec(): unknown { /* TODO: Complete implementation */ }
-    const spec = { /* TODO: Complete implementation */ }
+  generateOpenAPISpec(): unknown {
+    const spec = {
       openapi: '3.0.0',
-      info: { /* TODO: Complete implementation */ }
+      info: {
         title: this.config.title,
         description: this.config.description,
         version: this.config.version,
-        contact: { /* TODO: Complete implementation */ }
+        contact: {
           name: 'CMO Support',
           email: 'support@cmo.com'
         }
       },
       servers: [
-        { /* TODO: Complete implementation */ }
+        {
           url: this.config.baseUrl,
           description: 'CMO API Server'
         }
       ],
-      components: { /* TODO: Complete implementation */ }
-        securitySchemes: { /* TODO: Complete implementation */ }
-          ...(this.config.authentication.apiKey.enabled && { /* TODO: Complete implementation */ }
-            ApiKeyAuth: { /* TODO: Complete implementation */ }
+      components: {
+        securitySchemes: {
+          ...(this.config.authentication.apiKey.enabled && {
+            ApiKeyAuth: {
               type: 'apiKey',
               in: 'header',
               name: this.config.authentication.apiKey.header
             }
           }),
-          ...(this.config.authentication.bearer.enabled && { /* TODO: Complete implementation */ }
-            BearerAuth: { /* TODO: Complete implementation */ }
+          ...(this.config.authentication.bearer.enabled && {
+            BearerAuth: {
               type: 'http',
               scheme: 'bearer'
             }
@@ -180,18 +180,18 @@ class RestAPIService { /* TODO: Complete implementation */ }
       tags: this.generateTags()
     }
     // Generate paths from endpoints
-    this.getEnabledEndpoints().forEach(endpoint => { /* TODO: Complete implementation */ }
+    this.getEnabledEndpoints().forEach(endpoint => {
       const path = endpoint.path
-      if (!spec.paths[path]) { /* TODO: Complete implementation */ }
+      if (!spec.paths[path]) {
         spec.paths[path] = {}
       }
-      spec.paths[path][endpoint.method.toLowerCase()] = { /* TODO: Complete implementation */ }
+      spec.paths[path][endpoint.method.toLowerCase()] = {
         summary: endpoint.description,
         description: endpoint.description,
         tags: endpoint.tags,
         parameters: this.formatParameters(endpoint.parameters || []),
         responses: this.formatResponses(endpoint.responses),
-        ...(endpoint.authentication !== 'none' && { /* TODO: Complete implementation */ }
+        ...(endpoint.authentication !== 'none' && {
           security: this.formatSecurity(endpoint.authentication)
         })
       }
@@ -199,110 +199,110 @@ class RestAPIService { /* TODO: Complete implementation */ }
     return spec
   }
   // Mock server functionality
-  async startMockServer(): Promise<void> { /* TODO: Complete implementation */ }
-    if (this.server) { /* TODO: Complete implementation */ }
+  async startMockServer(): Promise<void> {
+    if (this.server) {
       console.warn('Mock server is already running')
       return
     }
     // Create simple mock server
-    this.server = { /* TODO: Complete implementation */ }
-      listen: (port: number, callback: () => void) => { /* TODO: Complete implementation */ }
-        console.log(`Mock API server would start on port ${_port}`)
+    this.server = {
+      listen: (port: number, callback: () => void) => {
+        console.log(`Mock API server would start on port ${port}`)
         callback()
       },
-      close: (callback: () => void) => { /* TODO: Complete implementation */ }
+      close: (callback: () => void) => {
         console.log('Mock API server stopped')
         callback()
       }
     }
-    return new Promise((_resolve) => { /* TODO: Complete implementation */ }
-      this.server.listen(this.config.port, () => { /* TODO: Complete implementation */ }
+    return new Promise((resolve) => {
+      this.server.listen(this.config.port, () => {
         console.log(`CMO REST API server started on port ${this.config.port}`)
         console.log(`API Documentation: ${this.config.baseUrl}/docs`)
         resolve()
       })
     })
   }
-  async stopMockServer(): Promise<void> { /* TODO: Complete implementation */ }
-    if (!this.server) { /* TODO: Complete implementation */ }
+  async stopMockServer(): Promise<void> {
+    if (!this.server) {
       console.warn('Mock server is not running')
       return
     }
-    return new Promise((_resolve) => { /* TODO: Complete implementation */ }
-      this.server.close(() => { /* TODO: Complete implementation */ }
+    return new Promise((resolve) => {
+      this.server.close(() => {
         this.server = null
         resolve()
       })
     })
   }
   // Request handling (_mock)
-  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> { /* TODO: Complete implementation */ }
-    const endpoint = this.findEndpoint(_path, method)
-    if (!endpoint) { /* TODO: Complete implementation */ }
-      return { /* TODO: Complete implementation */ }
+  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> {
+    const endpoint = this.findEndpoint(path), method)
+    if (!endpoint) {
+      return {
         status: 404,
         data: { error: 'Endpoint not found' }
       }
     }
-    if (!endpoint.enabled) { /* TODO: Complete implementation */ }
-      return { /* TODO: Complete implementation */ }
+    if (!endpoint.enabled) {
+      return {
         status: 503,
         data: { error: 'Endpoint is disabled' }
       }
     }
     // Check authentication
-    if (endpoint.authentication !== 'none') { /* TODO: Complete implementation */ }
+    if (endpoint.authentication !== 'none') {
       const authResult = this.checkAuthentication(endpoint.authentication, headers)
-      if (!authResult.valid) { /* TODO: Complete implementation */ }
-        return { /* TODO: Complete implementation */ }
+      if (!authResult.valid) {
+        return {
           status: 401,
           data: { error: authResult.error }
         }
       }
     }
     // Check rate limiting
-    if (endpoint.rateLimit || this.config.rateLimit.enabled) { /* TODO: Complete implementation */ }
+    if (endpoint.rateLimit || this.config.rateLimit.enabled) {
       const rateLimitResult = this.checkRateLimit(endpoint.id, endpoint.rateLimit)
-      if (!rateLimitResult.allowed) { /* TODO: Complete implementation */ }
-        return { /* TODO: Complete implementation */ }
+      if (!rateLimitResult.allowed) {
+        return {
           status: 429,
           data: { error: 'Rate limit exceeded' }
         }
       }
     }
     // Generate mock response based on endpoint configuration
-    return this.generateMockResponse(_endpoint, params)
+    return this.generateMockResponse(endpoint), params)
   }
   // Data export functionality
-  async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: unknown = {}): Promise<string> { /* TODO: Complete implementation */ }
-    const data = await this.getExportData(_filters)
-    switch (_format) { /* TODO: Complete implementation */ }
-      case 'csv': { /* TODO: Complete implementation */ }
-  return this.convertToCSV(_data)
-      case 'xml': { /* TODO: Complete implementation */ }
-  return this.convertToXML(_data)
+  async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: unknown = {}): Promise<string> {
+    const data = await this.getExportData(filters))
+    switch (format)) {
+      case 'csv': {
+  return this.convertToCSV(data))
+      case 'xml': {
+  return this.convertToXML(data))
       default:
-        return JSON.stringify(_data, null, 2)
+        return JSON.stringify(data), null, 2)
     }
   }
   // Statistics and monitoring
-  getAPIStats(): { /* TODO: Complete implementation */ }
+  getAPIStats(): {
     totalEndpoints: number
     enabledEndpoints: number
     totalRequests: number
     requestsByEndpoint: Record<string, number>
     uptime: number
-  } { /* TODO: Complete implementation */ }
+  } {
     const totalRequests = Array.from(this.requestStats.values())
-      .reduce((s_um, stat) => sum + stat.count, 0)
+      .reduce((sum), stat) => sum + stat.count, 0)
     const requestsByEndpoint: Record<string, number> = {}
-    this.requestStats.forEach((s_tat, endpointId) => { /* TODO: Complete implementation */ }
-      const endpoint = this.endpoints.get(_endpointId)
-      if (_endpoint) { /* TODO: Complete implementation */ }
+    this.requestStats.forEach((stat), endpointId) => {
+      const endpoint = this.endpoints.get(endpoint)Id)
+      if (endpoint)) {
         requestsByEndpoint[endpoint.path] = stat.count
       }
     })
-    return { /* TODO: Complete implementation */ }
+    return {
       totalEndpoints: this.endpoints.size,
       enabledEndpoints: this.getEnabledEndpoints().length,
       totalRequests,
@@ -312,9 +312,9 @@ class RestAPIService { /* TODO: Complete implementation */ }
   }
   private startTime = Date.now()
   // Private helper methods
-  private initializeDefaultEndpoints(): void { /* TODO: Complete implementation */ }
+  private initializeDefaultEndpoints(): void {
     const defaultEndpoints: Omit<APIEndpoint, 'id'>[] = [
-      { /* TODO: Complete implementation */ }
+      {
         path: '/api/v1/alerts',
         method: 'GET',
         description: 'Obtener lista de alertas',
@@ -329,11 +329,11 @@ class RestAPIService { /* TODO: Complete implementation */ }
           { status: 401, description: 'No autorizado' },
           { status: 500, description: 'Error interno del servidor' }
         ],
-        authentication: 'api_key',
+        authentication: 'apikey)',
         tags: ['Alertas'],
         enabled: true
       },
-      { /* TODO: Complete implementation */ }
+      {
         path: '/api/v1/transits',
         method: 'GET',
         description: 'Obtener lista de tránsitos',
@@ -345,42 +345,42 @@ class RestAPIService { /* TODO: Complete implementation */ }
         responses: [
           { status: 200, description: 'Lista de tránsitos', example: { transits: [], total: 0 } }
         ],
-        authentication: 'api_key',
+        authentication: 'apikey)',
         tags: ['Tránsitos'],
         enabled: true
       },
-      { /* TODO: Complete implementation */ }
+      {
         path: '/api/v1/precintos',
         method: 'GET',
         description: 'Obtener lista de precintos',
         responses: [
           { status: 200, description: 'Lista de precintos', example: { precintos: [], total: 0 } }
         ],
-        authentication: 'api_key',
+        authentication: 'apikey)',
         tags: ['Precintos'],
         enabled: true
       },
-      { /* TODO: Complete implementation */ }
+      {
         path: '/api/v1/statistics',
         method: 'GET',
         description: 'Obtener estadísticas del sistema',
         responses: [
           { status: 200, description: 'Estadísticas del sistema' }
         ],
-        authentication: 'api_key',
+        authentication: 'apikey)',
         tags: ['Estadísticas'],
         enabled: true
       }
     ]
-    defaultEndpoints.forEach(endpoint => { /* TODO: Complete implementation */ }
-      this.addEndpoint(_endpoint)
+    defaultEndpoints.forEach(endpoint => {
+      this.addEndpoint(endpoint))
     })
   }
-  private generateSchemas(): unknown { /* TODO: Complete implementation */ }
-    return { /* TODO: Complete implementation */ }
-      Alert: { /* TODO: Complete implementation */ }
+  private generateSchemas(): unknown {
+    return {
+      Alert: {
         type: 'object',
-        properties: { /* TODO: Complete implementation */ }
+        properties: {
           id: { type: 'string' },
           title: { type: 'string' },
           message: { type: 'string' },
@@ -390,9 +390,9 @@ class RestAPIService { /* TODO: Complete implementation */ }
           source: { type: 'string' }
         }
       },
-      Transit: { /* TODO: Complete implementation */ }
+      Transit: {
         type: 'object',
-        properties: { /* TODO: Complete implementation */ }
+        properties: {
           id: { type: 'string' },
           origin: { type: 'string' },
           destination: { type: 'string' },
@@ -401,9 +401,9 @@ class RestAPIService { /* TODO: Complete implementation */ }
           arrival: { type: 'string', format: 'date-time' }
         }
       },
-      Precinto: { /* TODO: Complete implementation */ }
+      Precinto: {
         type: 'object',
-        properties: { /* TODO: Complete implementation */ }
+        properties: {
           id: { type: 'string' },
           serial: { type: 'string' },
           status: { type: 'string' },
@@ -413,37 +413,37 @@ class RestAPIService { /* TODO: Complete implementation */ }
       }
     }
   }
-  private generateTags(): unknown[] { /* TODO: Complete implementation */ }
+  private generateTags(): unknown[] {
     const tags = new Set<string>()
-    this.getEnabledEndpoints().forEach(endpoint => { /* TODO: Complete implementation */ }
-      endpoint.tags.forEach(tag => tags.add(_tag))
+    this.getEnabledEndpoints().forEach(endpoint => {
+      endpoint.tags.forEach(tag => tags.add(tag)))
     })
-    return Array.from(_tags).map(tag => ({ /* TODO: Complete implementation */ }
+    return Array.from(tag)s).map(tag => ({
       name: tag,
-      description: `Operaciones relacionadas con ${_tag}`
+      description: `Operaciones relacionadas con ${tag)}`
     }))
   }
-  private formatParameters(parameters: APIParameter[]): unknown[] { /* TODO: Complete implementation */ }
-    return parameters.map(param => ({ /* TODO: Complete implementation */ }
+  private formatParameters(parameters: APIParameter[]): unknown[] {
+    return parameters.map(param => ({
       name: param.name,
       in: param.in,
       required: param.required,
       description: param.description,
-      schema: { /* TODO: Complete implementation */ }
+      schema: {
         type: param.type,
         ...(param.enum && { enum: param.enum }),
         ...(param.example && { example: param.example })
       }
     }))
   }
-  private formatResponses(responses: APIResponse[]): unknown { /* TODO: Complete implementation */ }
+  private formatResponses(responses: APIResponse[]): unknown {
     const formatted: unknown = {}
-    responses.forEach(response => { /* TODO: Complete implementation */ }
-      formatted[response.status] = { /* TODO: Complete implementation */ }
+    responses.forEach(response => {
+      formatted[response.status] = {
         description: response.description,
-        ...(response.example && { /* TODO: Complete implementation */ }
-          content: { /* TODO: Complete implementation */ }
-            'application/json': { /* TODO: Complete implementation */ }
+        ...(response.example && {
+          content: {
+            'application/json': {
               example: response.example
             }
           }
@@ -452,9 +452,9 @@ class RestAPIService { /* TODO: Complete implementation */ }
     })
     return formatted
   }
-  private formatSecurity(authType: string): unknown[] { /* TODO: Complete implementation */ }
-    switch (_authType) { /* TODO: Complete implementation */ }
-      case 'api_key':
+  private formatSecurity(authType: string): unknown[] {
+    switch (authType)) {
+      case 'apikey)':
         return [{ ApiKeyAuth: [] }]
       case 'bearer':
         return [{ BearerAuth: [] }]
@@ -462,95 +462,95 @@ class RestAPIService { /* TODO: Complete implementation */ }
         return []
     }
   }
-  private findEndpoint(path: string, method: string): APIEndpoint | null { /* TODO: Complete implementation */ }
+  private findEndpoint(path: string, method: string): APIEndpoint | null {
     return this.getEnabledEndpoints().find(
       endpoint => endpoint.path === path && endpoint.method === method.toUpperCase()
     ) || null
   }
-  private checkAuthentication(authType: string, headers: unknown): { valid: boolean; error?: string } { /* TODO: Complete implementation */ }
-    switch (_authType) { /* TODO: Complete implementation */ }
-      case 'api_key': { /* TODO: Complete implementation */ }
+  private checkAuthentication(authType: string, headers: unknown): { valid: boolean; error?: string } {
+    switch (authType)) {
+      case 'apikey)': {
         const apiKey = headers[this.config.authentication.apiKey.header.toLowerCase()]
-        if (!apiKey || apiKey !== this.config.authentication.apiKey.key) { /* TODO: Complete implementation */ }
+        if (!apiKey || apiKey !== this.config.authentication.apiKey.key) {
           return { valid: false, error: 'Invalid API key' }
         }
       }
         break
     }
-    case 'bearer': { /* TODO: Complete implementation */ }
+    case 'bearer': {
         const authorization = headers.authorization
-        if (!authorization || !authorization.startsWith('Bearer ')) { /* TODO: Complete implementation */ }
+        if (!authorization || !authorization.startsWith('Bearer ')) {
           return { valid: false, error: 'Invalid bearer token' }
         }
         break
     }
     return { valid: true }
   }
-  private checkRateLimit(endpointId: string, endpointLimit?: { requests: number; window: number }): { allowed: boolean } { /* TODO: Complete implementation */ }
+  private checkRateLimit(endpointId: string, endpointLimit?: { requests: number; window: number }): { allowed: boolean } {
     const limit = endpointLimit || this.config.rateLimit
     const now = Date.now()
     const windowStart = now - (limit.window * 1000)
-    let stats = this.requestStats.get(_endpointId)
-    if (!stats || stats.lastReset < windowStart) { /* TODO: Complete implementation */ }
+    let stats = this.requestStats.get(endpoint)Id)
+    if (!stats || stats.lastReset < windowStart) {
       stats = { count: 0, lastReset: now }
-      this.requestStats.set(_endpointId, stats)
+      this.requestStats.set(endpoint)Id, stats)
     }
-    if (stats.count >= limit.requests) { /* TODO: Complete implementation */ }
+    if (stats.count >= limit.requests) {
       return { allowed: false }
     }
     stats.count++
     return { allowed: true }
   }
-  private generateMockResponse(endpoint: APIEndpoint, params: unknown): unknown { /* TODO: Complete implementation */ }
+  private generateMockResponse(endpoint: APIEndpoint, params: unknown): unknown {
     // Generate mock data based on endpoint path
-    switch (endpoint.path) { /* TODO: Complete implementation */ }
-      case '/api/v1/alerts': { /* TODO: Complete implementation */ }
-  return { /* TODO: Complete implementation */ }
+    switch (endpoint.path) {
+      case '/api/v1/alerts': {
+  return {
           status: 200,
-          data: { /* TODO: Complete implementation */ }
+          data: {
             alerts: this.generateMockAlerts(params.limit || 10),
             total: 150,
             page: Math.floor((params.offset || 0) / (params.limit || 10)) + 1
           }
         }
       case '/api/v1/transits':
-        return { /* TODO: Complete implementation */ }
+        return {
           status: 200,
-          data: { /* TODO: Complete implementation */ }
+          data: {
             transits: this.generateMockTransits(params.limit || 10),
             total: 75
           }
         }
       case '/api/v1/precintos':
-        return { /* TODO: Complete implementation */ }
+        return {
           status: 200,
-          data: { /* TODO: Complete implementation */ }
+          data: {
             precintos: this.generateMockPrecintos(params.limit || 10),
             total: 200
           }
         }
       case '/api/v1/statistics':
-        return { /* TODO: Complete implementation */ }
+        return {
           status: 200,
-          data: { /* TODO: Complete implementation */ }
+          data: {
             alerts: { total: 150, active: 23, resolved: 127 },
             transits: { total: 75, inProgress: 15, completed: 60 },
             precintos: { total: 200, active: 180, violated: 5, inactive: 15 }
           }
         }
       default:
-        return { /* TODO: Complete implementation */ }
+        return {
           status: 200,
           data: { message: 'Mock response', timestamp: new Date().toISOString() }
         }
     }
   }
-  private generateMockAlerts(count: number): unknown[] { /* TODO: Complete implementation */ }
+  private generateMockAlerts(count: number): unknown[] {
     const alerts = []
     const priorities = ['low', 'medium', 'high', 'critical']
     const statuses = ['active', 'resolved', 'acknowledged']
-    for (let i = 0; i < count; i++) { /* TODO: Complete implementation */ }
-      alerts.push({ /* TODO: Complete implementation */ }
+    for (let i = 0; i < count; i++) {
+      alerts.push({
         id: `alert_${i + 1}`,
         title: `Alerta ${i + 1}`,
         message: `Descripción de la alerta ${i + 1}`,
@@ -562,14 +562,14 @@ class RestAPIService { /* TODO: Complete implementation */ }
     }
     return alerts
   }
-  private generateMockTransits(count: number): unknown[] { /* TODO: Complete implementation */ }
+  private generateMockTransits(count: number): unknown[] {
     const transits = []
     const origins = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago']
     const destinations = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago']
-    for (let i = 0; i < count; i++) { /* TODO: Complete implementation */ }
+    for (let i = 0; i < count; i++) {
       const departure = new Date(Date.now() - Math.random() * 86400000)
       const arrival = new Date(departure.getTime() + Math.random() * 86400000)
-      transits.push({ /* TODO: Complete implementation */ }
+      transits.push({
         id: `transit_${i + 1}`,
         origin: origins[Math.floor(Math.random() * origins.length)],
         destination: destinations[Math.floor(Math.random() * destinations.length)],
@@ -580,11 +580,11 @@ class RestAPIService { /* TODO: Complete implementation */ }
     }
     return transits
   }
-  private generateMockPrecintos(count: number): unknown[] { /* TODO: Complete implementation */ }
+  private generateMockPrecintos(count: number): unknown[] {
     const precintos = []
     const statuses = ['active', 'inactive', 'violated']
-    for (let i = 0; i < count; i++) { /* TODO: Complete implementation */ }
-      precintos.push({ /* TODO: Complete implementation */ }
+    for (let i = 0; i < count; i++) {
+      precintos.push({
         id: `precinto_${i + 1}`,
         serial: `PRE${String(i + 1).padStart(6, '0')}`,
         status: statuses[Math.floor(Math.random() * statuses.length)],
@@ -594,7 +594,7 @@ class RestAPIService { /* TODO: Complete implementation */ }
     }
     return precintos
   }
-  private async getExportData(filters: unknown): Promise<any[]> { /* TODO: Complete implementation */ }
+  private async getExportData(filters: unknown): Promise<any[]> {
     // Mock export data - in real implementation, this would fetch from database
     return [
       { id: 1, type: 'alert', data: 'Sample alert data' },
@@ -602,71 +602,71 @@ class RestAPIService { /* TODO: Complete implementation */ }
       { id: 3, type: 'precinto', data: 'Sample precinto data' }
     ]
   }
-  private convertToCSV(data: unknown[]): string { /* TODO: Complete implementation */ }
+  private convertToCSV(data: unknown[]): string {
     if (data.length === 0) return ''
     const headers = Object.keys(data[0])
     const csvRows = [headers.join(',')]
-    data.forEach(row => { /* TODO: Complete implementation */ }
-      const values = headers.map(header => { /* TODO: Complete implementation */ }
+    data.forEach(row => {
+      const values = headers.map(header => {
         const value = row[header]
-        return typeof value === 'string' ? `"${_value}"` : value
+        return typeof value === 'string' ? `"${value)}"` : value
       })
       csvRows.push(values.join(','))
     })
     return csvRows.join('\n')
   }
-  private convertToXML(data: unknown[]): string { /* TODO: Complete implementation */ }
+  private convertToXML(data: unknown[]): string {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<data>\n'
-    data.forEach(item => { /* TODO: Complete implementation */ }
+    data.forEach(item => {
       xml += '  <item>\n'
-      Object.entries(_item).forEach(([key, value]) => { /* TODO: Complete implementation */ }
-        xml += `    <${_key}>${_value}</${_key}>\n`
+      Object.entries(item)).forEach(([key, value]) => {
+        xml += `    <${key)}>${value)}</${key)}>\n`
       })
       xml += '  </item>\n'
     })
     xml += '</data>'
     return xml
   }
-  private generateId(): string { /* TODO: Complete implementation */ }
+  private generateId(): string {
     return `api_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
   // Persistence
-  private saveConfig(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  private saveConfig(): void {
+    try {
       localStorage.setItem('cmo_api_config', JSON.stringify(this.config))
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error)) {
       console.error('Failed to save API config:', error)
     }
   }
-  private saveEndpoints(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  private saveEndpoints(): void {
+    try {
       const endpointsArray = Array.from(this.endpoints.values())
-      localStorage.setItem('cmo_api_endpoints', JSON.stringify(_endpointsArray))
-    } catch (_error) { /* TODO: Complete implementation */ }
+      localStorage.setItem('cmo_apiendpoint)s', JSON.stringify(endpoint)sArray))
+    } catch (error)) {
       console.error('Failed to save API endpoints:', error)
     }
   }
-  loadConfig(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  loadConfig(): void {
+    try {
       const stored = localStorage.getItem('cmo_api_config')
-      if (s_tored) { /* TODO: Complete implementation */ }
-        this.config = { ...this.config, ...JSON.parse(s_tored) }
+      if (stored)) {
+        this.config = { ...this.config, ...JSON.parse(stored)) }
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error)) {
       console.error('Failed to load API config:', error)
     }
   }
-  loadEndpoints(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
-      const stored = localStorage.getItem('cmo_api_endpoints')
-      if (s_tored) { /* TODO: Complete implementation */ }
-        const endpointsArray: APIEndpoint[] = JSON.parse(s_tored)
+  loadEndpoints(): void {
+    try {
+      const stored = localStorage.getItem('cmo_apiendpoint)s')
+      if (stored)) {
+        const endpointsArray: APIEndpoint[] = JSON.parse(stored))
         this.endpoints.clear()
-        endpointsArray.forEach(endpoint => { /* TODO: Complete implementation */ }
+        endpointsArray.forEach(endpoint => {
           this.endpoints.set(endpoint.id, endpoint)
         })
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error)) {
       console.error('Failed to load API endpoints:', error)
     }
   }
