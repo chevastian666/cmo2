@@ -31,23 +31,23 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
   } = useNotificationStore();
 
   const filteredNotifications = groupByType 
-    ? getGroupedNotifications(_filter)
-    : getNotificationsByFilter(_filter);
+    ? getGroupedNotifications(filter)
+    : getNotificationsByFilter(filter);
 
   // Auto-close after marking all as read
   useEffect(() => {
     if (isOpen && unreadCount === 0) {
-      const timer = setTimeout(() => setIsOpen(_false), 2000);
-      return () => clearTimeout(_timer);
+      const timer = setTimeout(() => setIsOpen(false), 2000);
+      return () => clearTimeout(timer);
     }
   }, [unreadCount, isOpen]);
 
   const handleFilterChange = (newFilter: NotificationFilter) => {
-    setFilter(_newFilter);
+    setFilter(newFilter);
   };
 
   const handleQuickAction = (action: string) => {
-    switch (_action) {
+    switch (action) {
       case 'markAllRead':
         markAllAsRead();
         break;
@@ -86,7 +86,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setIsOpen(_false)}
+              onClick={() => setIsOpen(false)}
             />
 
             {/* Panel */}
@@ -102,7 +102,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-white">Notificaciones</h2>
                   <button
-                    onClick={() => setIsOpen(_false)}
+                    onClick={() => setIsOpen(false)}
                     className="p-1 hover:bg-gray-700 rounded transition-colors"
                   >
                     <X className="h-5 w-5 text-gray-400" />
@@ -110,8 +110,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                 </div>
 
                 <QuickActions 
-                  onAction={_handleQuickAction}
-                  groupByType={_groupByType}
+                  onAction={handleQuickAction}
+                  groupByType={groupByType}
                   hasNotifications={notifications.length > 0}
                 />
               </div>
@@ -119,8 +119,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
               {/* Filters */}
               <div className="p-4 border-b border-gray-700">
                 <NotificationFilters 
-                  filter={_filter}
-                  onChange={_handleFilterChange}
+                  filter={filter}
+                  onChange={handleFilterChange}
                 />
               </div>
 
@@ -138,11 +138,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       groups.map(group => (
                         <NotificationGroupItem
                           key={group.id}
-                          group={_group}
-                          onAcknowledge={_acknowledgeNotification}
-                          onSnooze={s_noozeNotification}
-                          onDismiss={_dismissNotification}
-                          onMarkAsRead={_markAsRead}
+                          group={group}
+                          onAcknowledge={acknowledgeNotification}
+                          onSnooze={snoozeNotification}
+                          onDismiss={dismissNotification}
+                          onMarkAsRead={markAsRead}
                         />
                       ))
                     ) : (
@@ -150,11 +150,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       filteredNotifications.map(notification => (
                         <NotificationItem
                           key={notification.id}
-                          notification={_notification}
-                          onAcknowledge={_acknowledgeNotification}
-                          onSnooze={s_noozeNotification}
-                          onDismiss={_dismissNotification}
-                          onMarkAsRead={_markAsRead}
+                          notification={notification}
+                          onAcknowledge={acknowledgeNotification}
+                          onSnooze={snoozeNotification}
+                          onDismiss={dismissNotification}
+                          onMarkAsRead={markAsRead}
                         />
                       ))
                     )}

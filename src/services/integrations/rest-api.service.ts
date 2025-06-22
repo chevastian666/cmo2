@@ -10,7 +10,7 @@ export interface APIEndpoint {
   description: string
   parameters?: APIParameter[]
   responses: APIResponse[]
-  authentication: 'none' | 'apikey)' | 'bearer' | 'basic'
+  authentication: 'none' | 'api_key' | 'bearer' | 'basic'
   rateLimit?: {
     requests: number
     window: number; // seconds
@@ -116,22 +116,22 @@ class RestAPIService {
     return newEndpoint
   }
   updateEndpoint(id: string, updates: Partial<APIEndpoint>): APIEndpoint | null {
-    const endpoint = this.endpoints.get(id))
+    const endpoint = this.endpoints.get(id)
     if (!endpoint) return null
     const updatedEndpoint = { ...endpoint, ...updates }
-    this.endpoints.set(id), updatedEndpoint)
+    this.endpoints.set(id, updatedEndpoint)
     this.saveEndpoints()
     return updatedEndpoint
   }
   deleteEndpoint(id: string): boolean {
-    const deleted = this.endpoints.delete(id))
-    if (deleted)) {
+    const deleted = this.endpoints.delete(id)
+    if (deleted) {
       this.saveEndpoints()
     }
     return deleted
   }
   getEndpoint(id: string): APIEndpoint | null {
-    return this.endpoints.get(id)) || null
+    return this.endpoints.get(id) || null
   }
   getAllEndpoints(): APIEndpoint[] {
     return Array.from(this.endpoints.values())
@@ -237,7 +237,7 @@ class RestAPIService {
   }
   // Request handling (_mock)
   async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> {
-    const endpoint = this.findEndpoint(path), method)
+    const endpoint = this.findEndpoint(path, method)
     if (!endpoint) {
       return {
         status: 404,
@@ -271,18 +271,20 @@ class RestAPIService {
       }
     }
     // Generate mock response based on endpoint configuration
-    return this.generateMockResponse(endpoint), params)
+    return this.generateMockResponse(endpoint, params)
   }
   // Data export functionality
   async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: unknown = {}): Promise<string> {
-    const data = await this.getExportData(filters))
-    switch (format)) {
+    const data = await this.getExportData(filters)
+    switch (format) {
       case 'csv': {
-  return this.convertToCSV(data))
+        return this.convertToCSV(data)
+      }
       case 'xml': {
-  return this.convertToXML(data))
+        return this.convertToXML(data)
+      }
       default:
-        return JSON.stringify(data), null, 2)
+        return JSON.stringify(data, null, 2)
     }
   }
   // Statistics and monitoring
@@ -294,11 +296,11 @@ class RestAPIService {
     uptime: number
   } {
     const totalRequests = Array.from(this.requestStats.values())
-      .reduce((sum), stat) => sum + stat.count, 0)
+      .reduce((sum, stat) => sum + stat.count, 0)
     const requestsByEndpoint: Record<string, number> = {}
-    this.requestStats.forEach((stat), endpointId) => {
-      const endpoint = this.endpoints.get(endpoint)Id)
-      if (endpoint)) {
+    this.requestStats.forEach((stat, endpointId) => {
+      const endpoint = this.endpoints.get(endpointId)
+      if (endpoint) {
         requestsByEndpoint[endpoint.path] = stat.count
       }
     })
@@ -329,7 +331,7 @@ class RestAPIService {
           { status: 401, description: 'No autorizado' },
           { status: 500, description: 'Error interno del servidor' }
         ],
-        authentication: 'apikey)',
+        authentication: 'api_key',
         tags: ['Alertas'],
         enabled: true
       },
@@ -345,7 +347,7 @@ class RestAPIService {
         responses: [
           { status: 200, description: 'Lista de tránsitos', example: { transits: [], total: 0 } }
         ],
-        authentication: 'apikey)',
+        authentication: 'api_key',
         tags: ['Tránsitos'],
         enabled: true
       },
@@ -356,7 +358,7 @@ class RestAPIService {
         responses: [
           { status: 200, description: 'Lista de precintos', example: { precintos: [], total: 0 } }
         ],
-        authentication: 'apikey)',
+        authentication: 'api_key',
         tags: ['Precintos'],
         enabled: true
       },
@@ -367,13 +369,13 @@ class RestAPIService {
         responses: [
           { status: 200, description: 'Estadísticas del sistema' }
         ],
-        authentication: 'apikey)',
+        authentication: 'api_key',
         tags: ['Estadísticas'],
         enabled: true
       }
     ]
     defaultEndpoints.forEach(endpoint => {
-      this.addEndpoint(endpoint))
+      this.addEndpoint(endpoint)
     })
   }
   private generateSchemas(): unknown {
@@ -416,11 +418,11 @@ class RestAPIService {
   private generateTags(): unknown[] {
     const tags = new Set<string>()
     this.getEnabledEndpoints().forEach(endpoint => {
-      endpoint.tags.forEach(tag => tags.add(tag)))
+      endpoint.tags.forEach(tag => tags.add(tag))
     })
-    return Array.from(tag)s).map(tag => ({
+    return Array.from(tags).map(tag => ({
       name: tag,
-      description: `Operaciones relacionadas con ${tag)}`
+      description: `Operaciones relacionadas con ${tag}`
     }))
   }
   private formatParameters(parameters: APIParameter[]): unknown[] {
@@ -453,8 +455,8 @@ class RestAPIService {
     return formatted
   }
   private formatSecurity(authType: string): unknown[] {
-    switch (authType)) {
-      case 'apikey)':
+    switch (authType) {
+      case 'api_key':
         return [{ ApiKeyAuth: [] }]
       case 'bearer':
         return [{ BearerAuth: [] }]
@@ -468,21 +470,21 @@ class RestAPIService {
     ) || null
   }
   private checkAuthentication(authType: string, headers: unknown): { valid: boolean; error?: string } {
-    switch (authType)) {
-      case 'apikey)': {
+    switch (authType) {
+      case 'api_key': {
         const apiKey = headers[this.config.authentication.apiKey.header.toLowerCase()]
         if (!apiKey || apiKey !== this.config.authentication.apiKey.key) {
           return { valid: false, error: 'Invalid API key' }
         }
-      }
         break
-    }
-    case 'bearer': {
+      }
+      case 'bearer': {
         const authorization = headers.authorization
         if (!authorization || !authorization.startsWith('Bearer ')) {
           return { valid: false, error: 'Invalid bearer token' }
         }
         break
+      }
     }
     return { valid: true }
   }
@@ -490,10 +492,10 @@ class RestAPIService {
     const limit = endpointLimit || this.config.rateLimit
     const now = Date.now()
     const windowStart = now - (limit.window * 1000)
-    let stats = this.requestStats.get(endpoint)Id)
+    let stats = this.requestStats.get(endpointId)
     if (!stats || stats.lastReset < windowStart) {
       stats = { count: 0, lastReset: now }
-      this.requestStats.set(endpoint)Id, stats)
+      this.requestStats.set(endpointId, stats)
     }
     if (stats.count >= limit.requests) {
       return { allowed: false }
@@ -505,7 +507,7 @@ class RestAPIService {
     // Generate mock data based on endpoint path
     switch (endpoint.path) {
       case '/api/v1/alerts': {
-  return {
+        return {
           status: 200,
           data: {
             alerts: this.generateMockAlerts(params.limit || 10),
@@ -513,6 +515,7 @@ class RestAPIService {
             page: Math.floor((params.offset || 0) / (params.limit || 10)) + 1
           }
         }
+      }
       case '/api/v1/transits':
         return {
           status: 200,
@@ -609,7 +612,7 @@ class RestAPIService {
     data.forEach(row => {
       const values = headers.map(header => {
         const value = row[header]
-        return typeof value === 'string' ? `"${value)}"` : value
+        return typeof value === 'string' ? `"${value}"` : value
       })
       csvRows.push(values.join(','))
     })
@@ -619,8 +622,8 @@ class RestAPIService {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<data>\n'
     data.forEach(item => {
       xml += '  <item>\n'
-      Object.entries(item)).forEach(([key, value]) => {
-        xml += `    <${key)}>${value)}</${key)}>\n`
+      Object.entries(item).forEach(([key, value]) => {
+        xml += `    <${key}>${value}</${key}>\n`
       })
       xml += '  </item>\n'
     })
@@ -634,39 +637,39 @@ class RestAPIService {
   private saveConfig(): void {
     try {
       localStorage.setItem('cmo_api_config', JSON.stringify(this.config))
-    } catch (error)) {
+    } catch (error) {
       console.error('Failed to save API config:', error)
     }
   }
   private saveEndpoints(): void {
     try {
       const endpointsArray = Array.from(this.endpoints.values())
-      localStorage.setItem('cmo_apiendpoint)s', JSON.stringify(endpoint)sArray))
-    } catch (error)) {
+      localStorage.setItem('cmo_api_endpoints', JSON.stringify(endpointsArray))
+    } catch (error) {
       console.error('Failed to save API endpoints:', error)
     }
   }
   loadConfig(): void {
     try {
       const stored = localStorage.getItem('cmo_api_config')
-      if (stored)) {
-        this.config = { ...this.config, ...JSON.parse(stored)) }
+      if (stored) {
+        this.config = { ...this.config, ...JSON.parse(stored) }
       }
-    } catch (error)) {
+    } catch (error) {
       console.error('Failed to load API config:', error)
     }
   }
   loadEndpoints(): void {
     try {
-      const stored = localStorage.getItem('cmo_apiendpoint)s')
-      if (stored)) {
-        const endpointsArray: APIEndpoint[] = JSON.parse(stored))
+      const stored = localStorage.getItem('cmo_api_endpoints')
+      if (stored) {
+        const endpointsArray: APIEndpoint[] = JSON.parse(stored)
         this.endpoints.clear()
         endpointsArray.forEach(endpoint => {
           this.endpoints.set(endpoint.id, endpoint)
         })
       }
-    } catch (error)) {
+    } catch (error) {
       console.error('Failed to load API endpoints:', error)
     }
   }

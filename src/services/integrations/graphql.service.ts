@@ -637,7 +637,7 @@ class GraphQLService {
   private formatType(field: GraphQLField): string {
     let type = field.type
     if (field.list) {
-      type = `[${_type}]`
+      type = `[${type}]`
     }
     if (!field.nullable) {
       type += '!'

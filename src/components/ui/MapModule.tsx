@@ -4,7 +4,7 @@ import { cn} from '../../utils/utils'
 import { Card} from './Card'
 import {_MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map'
 import type { MapFilters} from './map/MapHeader'
-export interface MapMarker { /* TODO: Complete implementation */ }
+export interface MapMarker {
   id: string
   lat: number
   lng: number
@@ -14,14 +14,14 @@ export interface MapMarker { /* TODO: Complete implementation */ }
   metadata?: Record<string, unknown>
   direction?: number
 }
-export interface MapRoute { /* TODO: Complete implementation */ }
+export interface MapRoute {
   id: string
   points: Array<{ lat: number; lng: number }>
   color?: string
   style?: 'solid' | 'dashed' | 'dotted' | 'animated'
   animated?: boolean
 }
-interface MapModuleProps { /* TODO: Complete implementation */ }
+interface MapModuleProps {
   markers?: MapMarker[]
   routes?: MapRoute[]
   center?: { lat: number; lng: number }
@@ -30,6 +30,7 @@ interface MapModuleProps { /* TODO: Complete implementation */ }
   height?: string
   showControls?: boolean
   showLegend?: boolean
+}
   onMarkerClick?: (marker: MapMarker) => void
   variant?: 'default' | 'fullscreen' | 'compact'
   useDetailedIcons?: boolean
