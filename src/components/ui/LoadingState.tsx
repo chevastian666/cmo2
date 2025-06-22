@@ -2,19 +2,19 @@
 import React from 'react'
 import { cn} from '../../utils/utils'
 type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton' | 'progress'
-interface LoadingStateProps { /* TODO: Complete implementation */ }
+interface LoadingStateProps {
   variant?: LoadingVariant
   size?: 'sm' | 'md' | 'lg' | 'xl'
   text?: string
   className?: string
-  progress?: number; // For progress variant
-  rows?: number; // For skeleton variant
+  progress?: number // For progress variant
+  rows?: number // For skeleton variant
 }
-export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete implementation */ }
+export const LoadingState: React.FC<LoadingStateProps> = ({
   variant = 'spinner', size = 'md', text, className, progress = 0, rows = 3
 }) => { /* TODO: Complete implementation */ }
-  const sizeStyles = { /* TODO: Complete implementation */ }
-    sm: { /* TODO: Complete implementation */ }
+  const sizeStyles = {
+    sm: {
       container: 'py-4',
       spinner: 'w-6 h-6',
       dot: 'w-2 h-2',
@@ -137,14 +137,14 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete im
     </div>
   )
 }
-interface LoadingOverlayProps { /* TODO: Complete implementation */ }
+interface LoadingOverlayProps {
   visible: boolean
   text?: string
   variant?: LoadingVariant
   fullScreen?: boolean
   className?: string
 }
-export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ /* TODO: Complete implementation */ }
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   visible, text, variant = 'spinner', fullScreen = false, className
 }) => { /* TODO: Complete implementation */ }
   if (!visible) return null
@@ -159,14 +159,14 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ /* TODO: Complet
     </div>
   )
 }
-interface SkeletonProps { /* TODO: Complete implementation */ }
+interface SkeletonProps {
   className?: string
   variant?: 'text' | 'circular' | 'rectangular'
   width?: string | number
   height?: string | number
   animation?: 'pulse' | 'wave' | 'none'
 }
-export const Skeleton: React.FC<SkeletonProps> = ({ /* TODO: Complete implementation */ }
+export const Skeleton: React.FC<SkeletonProps> = ({
   className, variant = 'text', width, height, animation = 'pulse'
 }) => { /* TODO: Complete implementation */ }
   const variantStyles = { /* TODO: Complete implementation */ }

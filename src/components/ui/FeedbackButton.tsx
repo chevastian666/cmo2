@@ -9,7 +9,7 @@ import {_Loader2, Check, X} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
 import { toast} from '@/hooks/use-toast'
-export interface FeedbackButtonProps extends ButtonProps { /* TODO: Complete implementation */ }
+export interface FeedbackButtonProps extends ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
   loadingText?: string
   successText?: string
@@ -25,7 +25,7 @@ export interface FeedbackButtonProps extends ButtonProps { /* TODO: Complete imp
   toastErrorMessage?: string
 }
 type ButtonState = 'idle' | 'loading' | 'success' | 'error'
-export const FeedbackButton: React.FC<FeedbackButtonProps> = ({ /* TODO: Complete implementation */ }
+export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
   children, onClick, loadingText, successText, errorText, showSuccessIcon = true, showErrorIcon = true, successDuration = 2000, onSuccess, onError, disabled, className, variant = 'default', size = 'default', showToastOnSuccess = false, showToastOnError = true, toastSuccessMessage, toastErrorMessage, ...props
 }) => { /* TODO: Complete implementation */ }
   const [state, setState] = useState<ButtonState>('idle')

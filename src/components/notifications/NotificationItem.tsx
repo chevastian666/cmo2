@@ -5,21 +5,22 @@
  */
 import React, { useState } from 'react'
 import { motion} from 'framer-motion'
-import { /* TODO: Complete implementation */ }
-  Clock, MapPin, User, Eye, EyeOff, AlertTriangle, Info, XCircle, Volume2, VolumeX} from 'lucide-react'
+import {
+  Clock, MapPin, User, Eye, EyeOff, AlertTriangle, Info, XCircle, Volume2, VolumeX
+} from 'lucide-react'
 import type { Notification} from '../../types/notifications'
 import { QuickActions} from './QuickActions'
 import { formatDistanceToNow} from 'date-fns'
 import { es} from 'date-fns/locale'
-interface NotificationItemProps { /* TODO: Complete implementation */ }
+interface NotificationItemProps {
   notification: Notification
   isSelected: boolean
   onSelect: (selected: boolean) => void
   onAction: (action: string, payload?: unknown) => void
   expanded?: boolean
 }
-const priorityConfig = { /* TODO: Complete implementation */ }
-  low: { /* TODO: Complete implementation */ }
+const priorityConfig = {
+  low: {
     color: 'text-gray-400',
     bg: 'bg-gray-700',
     icon: Info
@@ -40,8 +41,8 @@ const priorityConfig = { /* TODO: Complete implementation */ }
     icon: XCircle
   }
 }
-const statusConfig = { /* TODO: Complete implementation */ }
-  unread: { /* TODO: Complete implementation */ }
+const statusConfig = {
+  unread: {
     color: 'text-blue-400',
     bg: 'bg-blue-900',
     label: 'Sin leer'
