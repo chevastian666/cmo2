@@ -28,7 +28,7 @@ export const _usePrecintoEventos = (precintoId: string, limit = 50) => {
   })
 }
 export const _useActivarPrecinto = () => {
-  const _queryClient = useQueryClient()
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: precintosService.activar, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PRECINTOS] })
@@ -37,7 +37,7 @@ export const _useActivarPrecinto = () => {
   })
 }
 export const _useDesactivarPrecinto = () => {
-  const _queryClient = useQueryClient()
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, motivo }: { id: string; motivo?: string }) => 
       precintosService.desactivar(id, motivo),

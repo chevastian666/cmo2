@@ -15,19 +15,19 @@ import { ProtectedRoute} from './components/ProtectedRoute'
 import './utils/clearDashboardLayout'
 // Lazy load heavy components
 // const _ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })))
-const _ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'))
-const _ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })))
-const _PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })))
-const _TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'))
-const _PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })))
-const _ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })))
-const _AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'))
-const _DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })))
-const _DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })))
-const _ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })))
-// const _TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })))
-const _TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
-const _CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
+const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'))
+const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })))
+const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })))
+const TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'))
+const PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })))
+const ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })))
+const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'))
+const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })))
+const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })))
+const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })))
+// const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })))
+const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
+const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
 // const _LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'))
 const _BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
 const _CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
@@ -64,7 +64,7 @@ import { Toaster} from '@/components/ui/toaster'
 import GlobalErrorBoundary from './components/GlobalErrorBoundary'
 // import TreemapDirect from './features/analytics/components/TreemapDirect'
 import './App.css'
-const _queryClient = new QueryClient({
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5000,
@@ -114,7 +114,7 @@ function App() {
     // Initialize stores and fetch initial data
     initializeStores()
     // Set up auto-refresh intervals (as fallback)
-    const _cleanup = setupAutoRefresh()
+    const cleanup = setupAutoRefresh()
     return () => {
       unsubscribers.forEach(unsub => unsub())
       cleanup?.()
