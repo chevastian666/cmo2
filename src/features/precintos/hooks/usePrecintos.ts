@@ -1,33 +1,33 @@
 import { useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
 import { precintosService} from '../../../services/precintos.service'
 import { QUERY_KEYS} from '../../../config'
-export const _usePrecintos = (filters?: PrecintoFilters) => {
+export const usePrecintos = (filters?: PrecintoFilters) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.PRECINTOS, filters], queryFn: () => precintosService.getAll(__filters),
+    queryKey: [QUERY_KEYS.PRECINTOS, filters], queryFn: () => precintosService.getAll(filters),
     refetchInterval: 5000,
   })
 }
-export const _usePrecinto = (id: string) => {
+export const usePrecinto = (id: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.PRECINTOS, id], queryFn: () => precintosService.getById(__id),
+    queryKey: [QUERY_KEYS.PRECINTOS, id], queryFn: () => precintosService.getById(id),
     enabled: !!id,
   })
 }
-export const _usePrecintosActivos = () => {
+export const usePrecintosActivos = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.PRECINTOS, 'activos'],
     queryFn: precintosService.getActivos,
     refetchInterval: 5000,
   })
 }
-export const _usePrecintoEventos = (precintoId: string, limit = 50) => {
+export const usePrecintoEventos = (precintoId: string, limit = 50) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.EVENTOS, precintoId, limit], queryFn: () => precintosService.getEventos(_precintoId, limit),
+    queryKey: [QUERY_KEYS.EVENTOS, precintoId, limit], queryFn: () => precintosService.getEventos(precintoId, limit),
     refetchInterval: 10000,
     enabled: !!precintoId,
   })
 }
-export const _useActivarPrecinto = () => {
+export const useActivarPrecinto = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: precintosService.activar, onSuccess: () => {
@@ -36,7 +36,7 @@ export const _useActivarPrecinto = () => {
     },
   })
 }
-export const _useDesactivarPrecinto = () => {
+export const useDesactivarPrecinto = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, motivo }: { id: string; motivo?: string }) => 

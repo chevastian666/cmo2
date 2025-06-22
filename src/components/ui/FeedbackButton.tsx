@@ -33,7 +33,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({ /* TODO: Complet
     if (!onClick || state !== 'idle') return
     setState('loading')
     try { /* TODO: Complete implementation */ }
-      await onClick(_e)
+      await onClick(e)
       setState('success')
       if (showToastOnSuccess && toastSuccessMessage) { /* TODO: Complete implementation */ }
         toast({ /* TODO: Complete implementation */ }
@@ -107,10 +107,10 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({ /* TODO: Complet
     >
       <Button
         {...props}
-        onClick={_handleClick}
+        onClick={handleClick}
         disabled={disabled || state !== 'idle'}
         variant={getButtonVariant()}
-        size={s_ize}
+        size={size}
         className={cn(
           'transition-all duration-200',
           state === 'success' && 'bg-green-600 hover:bg-green-700',
@@ -134,7 +134,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({ /* TODO: Complet
   )
 }
 // Preset configurations for common use cases
-export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
+export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     loadingText="Guardando..."
     successText="Guardado"
@@ -145,7 +145,7 @@ export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'suc
     Guardar
   </FeedbackButton>
 )
-export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
+export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     variant="destructive"
     loadingText="Eliminando..."
@@ -157,7 +157,7 @@ export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
     Eliminar
   </FeedbackButton>
 )
-export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
+export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     loadingText="Enviando..."
     successText="Enviado"
@@ -168,7 +168,7 @@ export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
     Enviar
   </FeedbackButton>
 )
-export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
+export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     variant="outline"
     loadingText="Actualizando..."

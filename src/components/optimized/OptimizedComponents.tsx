@@ -22,20 +22,20 @@ export const OptimizedTableRow = memo<{ /* TODO: Complete implementation */ }
   data, columns, onClick, selected = false, className
 }) => { /* TODO: Complete implementation */ }
   const handleClick = useCallback(() => { /* TODO: Complete implementation */ }
-    if (_onClick) { /* TODO: Complete implementation */ }
-      onClick(_data)
+    if (onClick) { /* TODO: Complete implementation */ }
+      onClick(data)
     }
   }, [data])
   return (
     <tr
-      onClick={_handleClick}
+      onClick={handleClick}
       className={cn(
         "border-b border-gray-700 hover:bg-gray-800 transition-colors cursor-pointer",
         selected && "bg-blue-900 hover:bg-blue-800",
         className
       )}
     >
-      {columns.map((_column) => (
+      {columns.map((column) => (
         <td
           key={column.key}
           className="px-4 py-3 text-sm text-gray-300"
@@ -75,7 +75,7 @@ export const OptimizedCard = memo<{ /* TODO: Complete implementation */ }
 }) => { /* TODO: Complete implementation */ }
   return (
     <div
-      onClick={_onClick}
+      onClick={onClick}
       className={cn(
         "bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors",
         onClick && "cursor-pointer",
@@ -84,10 +84,10 @@ export const OptimizedCard = memo<{ /* TODO: Complete implementation */ }
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-400">{_title}</p>
-          <p className="mt-2 text-3xl font-semibold text-white">{_value}</p>
+          <p className="text-sm font-medium text-gray-400">{title}</p>
+          <p className="mt-2 text-3xl font-semibold text-white">{value}</p>
           {subtitle && (
-            <p className="mt-1 text-sm text-gray-500">{s_ubtitle}</p>
+            <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
           )}
           {trend && (
             <div className={cn(
@@ -101,7 +101,7 @@ export const OptimizedCard = memo<{ /* TODO: Complete implementation */ }
         </div>
         {icon && (
           <div className="ml-4 text-gray-400">
-            {_icon}
+            {icon}
           </div>
         )}
       </div>
@@ -130,7 +130,7 @@ export const OptimizedListItem = memo<{ /* TODO: Complete implementation */ }
   }
   return (
     <div
-      onClick={_onClick}
+      onClick={onClick}
       className={cn(
         "flex items-center px-4 py-3 hover:bg-gray-800 transition-colors",
         onClick && "cursor-pointer",
@@ -145,22 +145,22 @@ export const OptimizedListItem = memo<{ /* TODO: Complete implementation */ }
       )}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-white truncate">
-          {_primary}
+          {primary}
         </p>
         {secondary && (
           <p className="text-sm text-gray-400 truncate">
-            {s_econdary}
+            {secondary}
           </p>
         )}
       </div>
       {meta && (
         <div className="ml-4 text-sm text-gray-500">
-          {_meta}
+          {meta}
         </div>
       )}
       {actions && (
         <div className="ml-4 flex items-center space-x-2">
-          {_actions}
+          {actions}
         </div>
       )}
     </div>
@@ -179,13 +179,13 @@ export const OptimizedGridCell = memo<{ /* TODO: Complete implementation */ }
   value, type = 'text', format, render, align = 'left', className
 }) => { /* TODO: Complete implementation */ }
   const formattedValue = useMemo(() => { /* TODO: Complete implementation */ }
-    if (_render) return render(_value)
-    if (_format) return format(_value)
-    switch (_type) { /* TODO: Complete implementation */ }
+    if (render) return render(value)
+    if (format) return format(value)
+    switch (type) { /* TODO: Complete implementation */ }
       case 'number': { /* TODO: Complete implementation */ }
   return typeof value === 'number' ? value.toLocaleString() : value
       case 'date': { /* TODO: Complete implementation */ }
-  return value ? new Date(_value).toLocaleString() : ''
+  return value ? new Date(value).toLocaleString() : ''
       case 'boolean': { /* TODO: Complete implementation */ }
   return value ? '✓' : '✗'
       default:
@@ -199,7 +199,7 @@ export const OptimizedGridCell = memo<{ /* TODO: Complete implementation */ }
       align === 'right' && "text-right",
       className
     )}>
-      {_formattedValue}
+      {formattedValue}
     </div>
   )
 })

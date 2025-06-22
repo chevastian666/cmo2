@@ -62,9 +62,9 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete im
     </svg>
   )
   const renderDots = () => (<div className="flex items-center gap-1">
-      {[0, 1, 2].map((_i) => (
+      {[0, 1, 2].map((i) => (
         <div
-          key={_i}
+          key={i}
           className={cn(
             styles.dot,
             'bg-blue-500 rounded-full animate-pulse'
@@ -85,7 +85,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete im
   const renderSkeleton = () => (
     <div className="w-full max-w-md space-y-3">
       {Array.from({ length: rows }).map((__, i) => (
-        <div key={_i} className="space-y-2">
+        <div key={i} className="space-y-2">
           <div className="h-4 bg-gray-700 rounded animate-pulse" style={{ width: `${100 - i * 15}%` }} />
           {i === 0 && (
             <div className="h-3 bg-gray-700 rounded animate-pulse w-3/4" />
@@ -98,18 +98,18 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete im
     <div className="w-full max-w-xs">
       <div className="flex justify-between text-sm text-gray-400 mb-2">
         <span>Cargando...</span>
-        <span>{_progress}%</span>
+        <span>{progress}%</span>
       </div>
       <div className="w-full bg-gray-700 rounded-full h-2">
         <div
           className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-          style={{ width: `${_progress}%` }}
+          style={{ width: `${progress}%` }}
         />
       </div>
     </div>
   )
   const renderLoader = () => { /* TODO: Complete implementation */ }
-    switch (_variant) { /* TODO: Complete implementation */ }
+    switch (variant) { /* TODO: Complete implementation */ }
       case 'dots': { /* TODO: Complete implementation */ }
   return renderDots()
       case 'pulse': { /* TODO: Complete implementation */ }
@@ -131,7 +131,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({ /* TODO: Complete im
       {renderLoader()}
       {text && (
         <p className={cn('text-gray-400 mt-4', styles.text)}>
-          {_text}
+          {text}
         </p>
       )}
     </div>
@@ -155,7 +155,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ /* TODO: Complet
       fullScreen && 'fixed',
       className
     )}>
-      <LoadingState variant={_variant} text={_text} size="lg" />
+      <LoadingState variant={variant} text={text} size="lg" />
     </div>
   )
 }

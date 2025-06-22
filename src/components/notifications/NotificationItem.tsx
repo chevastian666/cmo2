@@ -75,33 +75,33 @@ const statusConfig = { /* TODO: Complete implementation */ }
 export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Complete implementation */ }
   notification, isSelected, onSelect, onAction, expanded = false
 }) => { /* TODO: Complete implementation */ }
-  const [showDetails, setShowDetails] = useState(_false)
-  const [isPlaying, setIsPlaying] = useState(_false)
+  const [showDetails, setShowDetails] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const priority = priorityConfig[notification.priority]
   const status = statusConfig[notification.status]
   const PriorityIcon = priority.icon
   const handlePlaySound = async () => { /* TODO: Complete implementation */ }
     if (notification.sound && !isPlaying) { /* TODO: Complete implementation */ }
       try { /* TODO: Complete implementation */ }
-        setIsPlaying(_true)
+        setIsPlaying(true)
         const audio = new Audio(notification.sound.url)
         audio.volume = notification.sound.volume || 0.5
         await audio.play()
-        setTimeout(() => setIsPlaying(_false), notification.sound.duration)
+        setTimeout(() => setIsPlaying(false), notification.sound.duration)
       } catch (_error) { /* TODO: Complete implementation */ }
         console.error('Failed to play notification sound:', error)
-        setIsPlaying(_false)
+        setIsPlaying(false)
       }
     }
   }
   const formatTimestamp = (date: Date) => { /* TODO: Complete implementation */ }
-    return formatDistanceToNow(_date, { /* TODO: Complete implementation */ }
+    return formatDistanceToNow(date, { /* TODO: Complete implementation */ }
       addSuffix: true,
       locale: es
     })
   }
   const getTypeIcon = (type: string) => { /* TODO: Complete implementation */ }
-    switch (_type) { /* TODO: Complete implementation */ }
+    switch (type) { /* TODO: Complete implementation */ }
       case 'alert': { /* TODO: Complete implementation */ }
   return '🚨'
       case 'transit': { /* TODO: Complete implementation */ }
@@ -133,8 +133,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
           <div className="flex-shrink-0 mt-1">
             <input
               type="checkbox"
-              checked={_isSelected}
-              onChange={(_e) => onSelect(e.target.checked)}
+              checked={isSelected}
+              onChange={(e) => onSelect(e.target.checked)}
               className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
             />
           </div>
@@ -283,9 +283,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ /* TODO: Com
                 )}
                 {/* Quick Actions */}
                 <QuickActions
-                  notification={_notification}
-                  onAction={_onAction}
-                  compact={_true}
+                  notification={notification}
+                  onAction={onAction}
+                  compact={true}
                 />
               </div>
             </div>

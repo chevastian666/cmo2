@@ -87,8 +87,8 @@ export interface GraphQLError {
 class GraphQLService {
   private config: GraphQLConfig
   private schema: GraphQLSchema
-  private resolvers = new Map<string, Function>()
-  private subscriptions = new Map<string, Set<Function>>()
+  private resolvers = new Map<string, (...args: unknown[]) => unknown>()
+  private subscriptions = new Map<string, Set<(...args: unknown[]) => unknown>>()
   constructor() {
     this.config = {
       endpoint: '/graphql',
@@ -200,7 +200,7 @@ class GraphQLService {
     }
   }
   // Introspection
-  async introspectSchema(): Promise<any> {
+  async introspectSchema(): Promise<unknown> {
     return {
       __schema: {
         types: this.schema.types.map(type => ({
@@ -224,7 +224,7 @@ class GraphQLService {
     }
   }
   // Subscription management
-  subscribe(operationName: string, callback: Function): () => void {
+  subscribe(operationName: string, callback: (...args: unknown[]) => unknown): () => void {
     if (!this.subscriptions.has(operationName)) {
       this.subscriptions.set(operationName, new Set())
     }
@@ -247,10 +247,10 @@ class GraphQLService {
     }
   }
   // Resolver management
-  addResolver(name: string, resolver: Function): void {
+  addResolver(name: string, resolver: (...args: unknown[]) => unknown): void {
     this.resolvers.set(name, resolver)
   }
-  getResolver(name: string): Function | null {
+  getResolver(name: string): ((...args: unknown[]) => unknown) | null {
     return this.resolvers.get(name) || null
   }
   // Private methods
@@ -465,7 +465,7 @@ class GraphQLService {
     this.addResolver('subscribeTransitUpdated', this.mockSubscribeTransitUpdated.bind(this))
   }
   // Mock resolvers
-  private async mockResolveAlerts(args: unknown): Promise<any[]> {
+  private async mockResolveAlerts(args: unknown): Promise<unknown[]> {
     const alerts = []
     const limit = Math.min(args.limit || 10, 100)
     for (let i = 0; i < limit; i++) {
@@ -482,7 +482,7 @@ class GraphQLService {
     }
     return alerts
   }
-  private async mockResolveAlert(args: unknown): Promise<any> {
+  private async mockResolveAlert(args: unknown): Promise<unknown> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -494,7 +494,7 @@ class GraphQLService {
       metadata: { detailed: true }
     }
   }
-  private async mockResolveTransits(args: unknown): Promise<any[]> {
+  private async mockResolveTransits(args: unknown): Promise<unknown[]> {
     const transits = []
     const limit = 10
     for (let i = 0; i < limit; i++) {
@@ -518,7 +518,7 @@ class GraphQLService {
     }
     return transits
   }
-  private async mockResolvePrecintos(args: unknown): Promise<any[]> {
+  private async mockResolvePrecintos(args: unknown): Promise<unknown[]> {
     const precintos = []
     const limit = 20
     for (let i = 0; i < limit; i++) {
@@ -537,7 +537,7 @@ class GraphQLService {
     }
     return precintos
   }
-  private async mockResolveStatistics(): Promise<any> {
+  private async mockResolveStatistics(): Promise<unknown> {
     return {
       alerts: {
         total: 150,
@@ -561,7 +561,7 @@ class GraphQLService {
       lastUpdated: new Date().toISOString()
     }
   }
-  private async mockAcknowledgeAlert(args: unknown): Promise<any> {
+  private async mockAcknowledgeAlert(args: unknown): Promise<unknown> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -572,7 +572,7 @@ class GraphQLService {
       source: 'CMO'
     }
   }
-  private async mockResolveAlertMutation(args: unknown): Promise<any> {
+  private async mockResolveAlertMutation(args: unknown): Promise<unknown> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -583,7 +583,7 @@ class GraphQLService {
       source: 'CMO'
     }
   }
-  private async mockUpdateTransitStatus(args: unknown): Promise<any> {
+  private async mockUpdateTransitStatus(args: unknown): Promise<unknown> {
     return {
       id: args.id,
       origin: 'Montevideo',
@@ -690,7 +690,7 @@ class GraphQLService {
     }
     return { valid: true }
   }
-  private async resolveQuery(parsedQuery: unknown, variables: unknown, context: unknown): Promise<any> {
+  private async resolveQuery(parsedQuery: unknown, variables: unknown, context: unknown): Promise<unknown> {
     // Simplified query resolution - in real implementation, use proper GraphQL execution
     const queryName = this.extractQueryName(parsedQuery.query)
     const resolver = this.getResolver(queryName)
