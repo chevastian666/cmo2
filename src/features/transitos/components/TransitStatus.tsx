@@ -1,5 +1,5 @@
 import React from 'react'
-import {CheckCircle, Truck, AlertTriangle} from 'lucide-react'
+import {_CheckCircle, Truck, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface TransitStatusProps {
   estado: 'en_viaje' | 'desprecintado' | 'con_alerta'
@@ -7,7 +7,7 @@ interface TransitStatusProps {
 
 export const TransitStatus: React.FC<TransitStatusProps> = ({ estado }) => {
   const getStatusConfig = () => {
-    switch (estado) {
+    switch (_estado) {
       case 'en_viaje': {
   return {
           icon: <Truck className="h-4 w-4" />,

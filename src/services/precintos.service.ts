@@ -15,7 +15,7 @@ export const precintosService = {
     try {
       // In development, return mock data
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
+        return Array.from({ length: 20 }, (__, i) => generateMockPrecinto(_i))
       }
       
       // Use unified API service
@@ -24,14 +24,14 @@ export const precintosService = {
     } catch {
       console.error('Error fetching precintos:', _error)
       // Fallback to mock data
-      return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
+      return Array.from({ length: 20 }, (__, i) => generateMockPrecinto(_i))
     }
   },
 
   getById: async (id: string): Promise<Precinto> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockPrecinto(parseInt(id) || 1)
+        return generateMockPrecinto(parseInt(_id) || 1)
       }
       
       // For now, get all and find by id
@@ -41,7 +41,7 @@ export const precintosService = {
       return precinto
     } catch {
       console.error('Error fetching precinto:', _error)
-      return generateMockPrecinto(parseInt(id) || 1)
+      return generateMockPrecinto(parseInt(_id) || 1)
     }
   },
 
@@ -66,21 +66,21 @@ export const precintosService = {
             asignadoA: pa.asignadoTransito,
             eventos: []
           }))
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
+        return Array.from({ length: 10 }, (__, i) => generateMockPrecinto(_i))
       }
       
       const response = await unifiedAPIService.getPrecintosActivos(10)
       return response
     } catch {
       console.error('Error fetching precintos activos:', _error)
-      return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
+      return Array.from({ length: 10 }, (__, i) => generateMockPrecinto(_i))
     }
   },
 
@@ -88,8 +88,8 @@ export const precintosService = {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Return mock events
-        return Array.from({ length: Math.min(limit, 10) }, (_, i) => ({
-          id: `EVT-${i}`,
+        return Array.from({ length: Math.min(_limit, 10) }, (__, i) => ({
+          id: `EVT-${_i}`,
           tipo: ['apertura', 'cierre', 'movimiento', 'alerta'][Math.floor(Math.random() * 4)] as unknown,
           timestamp: Date.now() - i * 3600000,
           descripcion: 'Evento de prueba',

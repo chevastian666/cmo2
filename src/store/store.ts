@@ -31,11 +31,11 @@ export const usePrecintosStore = create<PrecintosStore>()(
     subscribeWithSelector(
       persist(
         immer(
-          logger(createPrecintosSlice)
+          logger(_createPrecintosSlice)
         ),
         {
           name: 'precintos-storage',
-          partialize: (state) => ({ 
+          partialize: (s_tate) => ({ 
             precintos: state.precintos,
             precintosActivos: state.precintosActivos,
             filters: state.filters
@@ -61,10 +61,10 @@ export const useTransitosStore = create<TransitosStore>()(
   devtools(
     subscribeWithSelector(
       persist(
-        immer(createTransitosSlice),
+        immer(_createTransitosSlice),
         {
           name: 'transitos-storage',
-          partialize: (state) => ({ 
+          partialize: (s_tate) => ({ 
             transitos: state.transitos,
             transitosPendientes: state.transitosPendientes,
             filters: state.filters
@@ -84,10 +84,10 @@ export const useAlertasStore = create<AlertasStore>()(
   devtools(
     subscribeWithSelector(
       persist(
-        immer(createAlertasSlice),
+        immer(_createAlertasSlice),
         {
           name: 'alertas-storage',
-          partialize: (state) => ({ 
+          partialize: (s_tate) => ({ 
             alertas: state.alertas,
             alertasActivas: state.alertasActivas,
             filter: state.filter 
@@ -106,7 +106,7 @@ export const useAlertasStore = create<AlertasStore>()(
 export const useSystemStatusStore = create<SystemStatusStore>()(
   devtools(
     subscribeWithSelector(
-      immer(createSystemStatusSlice)
+      immer(_createSystemStatusSlice)
     ),
     { 
       name: 'SystemStatusStore',
@@ -117,23 +117,23 @@ export const useSystemStatusStore = create<SystemStatusStore>()(
 // Store selectors for optimization
 export const storeSelectors = {
   // Precintos selectors
-  usePrecintosActivos: () => usePrecintosStore((state) => state.precintosActivos),
-  usePrecintosStats: () => usePrecintosStore((state) => state.precintosStats),
-  useFilteredPrecintos: () => usePrecintosStore((state) => state.filteredPrecintos),
+  usePrecintosActivos: () => usePrecintosStore((s_tate) => state.precintosActivos),
+  usePrecintosStats: () => usePrecintosStore((s_tate) => state.precintosStats),
+  useFilteredPrecintos: () => usePrecintosStore((s_tate) => state.filteredPrecintos),
   
   // Transitos selectors
-  useTransitosEnCurso: () => useTransitosStore((state) => state.transitosEnCurso),
-  useTransitosStats: () => useTransitosStore((state) => state.transitosStats),
-  useFilteredTransitos: () => useTransitosStore((state) => state.filteredTransitos),
+  useTransitosEnCurso: () => useTransitosStore((s_tate) => state.transitosEnCurso),
+  useTransitosStats: () => useTransitosStore((s_tate) => state.transitosStats),
+  useFilteredTransitos: () => useTransitosStore((s_tate) => state.filteredTransitos),
   
   // Alertas selectors
-  useAlertasCriticas: () => useAlertasStore((state) => state.alertasCriticas),
-  useAlertasStats: () => useAlertasStore((state) => state.alertasStats),
-  useFilteredAlertas: () => useAlertasStore((state) => state.filteredAlertas),
+  useAlertasCriticas: () => useAlertasStore((s_tate) => state.alertasCriticas),
+  useAlertasStats: () => useAlertasStore((s_tate) => state.alertasStats),
+  useFilteredAlertas: () => useAlertasStore((s_tate) => state.filteredAlertas),
   
   // System selectors
-  useSystemHealth: () => useSystemStatusStore((state) => state.systemHealth),
-  useIsSystemOverloaded: () => useSystemStatusStore((state) => state.isSystemOverloaded),
+  useSystemHealth: () => useSystemStatusStore((s_tate) => state.systemHealth),
+  useIsSystemOverloaded: () => useSystemStatusStore((s_tate) => state.isSystemOverloaded),
 }
 // Función helper para inicializar todos los stores
 export const initializeStores = async () => {
@@ -157,8 +157,8 @@ export const setupRealtimeUpdates = () => {
   }
   
   // In production, establish WebSocket connection here
-  // ws.on('precinto:update', (data) => usePrecintosStore.getState().updatePrecinto(data.id, data))
-  // ws.on('alerta:new', (data) => useAlertasStore.getState().addAlerta(data))
+  // ws.on('precinto:update', (_data) => usePrecintosStore.getState().updatePrecinto(data.id, data))
+  // ws.on('alerta:new', (_data) => useAlertasStore.getState().addAlerta(_data))
   // etc.
   
   // For now, use polling
@@ -199,7 +199,7 @@ export const setupAutoRefresh = () => {
   )
   // Return cleanup function
   return () => {
-    intervals.forEach(interval => clearInterval(interval))
+    intervals.forEach(interval => clearInterval(_interval))
   }
 }
 // Export dashboard store
@@ -207,10 +207,10 @@ export { useDashboardStore } from './dashboardStore'
 // Cross-store subscriptions for reactive updates
 const setupStoreSubscriptions = () => {
   // Update system status when alerts count changes
-  useAlertasStore.subscribe((state) => state.alertasActivas.length,
-    (count) => {
+  useAlertasStore.subscribe((s_tate) => state.alertasActivas.length,
+    (_count) => {
       const currentStats = useSystemStatusStore.getState().estadisticas
-      if (currentStats) {
+      if (_currentStats) {
         useSystemStatusStore.getState().updateSystemStatus({
           estadisticas: {
             ...currentStats,
@@ -221,8 +221,8 @@ const setupStoreSubscriptions = () => {
     }
   )
   // Update alerts when precinto status changes to critical
-  usePrecintosStore.subscribe((state) => state.precintosActivos,
-    (precintos) => {
+  usePrecintosStore.subscribe((s_tate) => state.precintosActivos,
+    (_precintos) => {
       const criticosNuevos = precintos.filter(p => p.estado === 3)
       // In a real app, this would create new alerts
       console.log('Precintos críticos:', criticosNuevos.length)

@@ -21,8 +21,8 @@ const TYPE_LABELS = {
 export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   maxHistory = 50, syncEnabled = true, position = 'bottom-right', hotkeys = true
 }) => {
-  const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(_null)
+  const searchInputRef = useRef<HTMLInputElement>(_null)
   // Position classes
   const positionClasses = {
     'top-right': 'top-20 right-4',
@@ -34,12 +34,12 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   const handleEntryClick = async (entry: ClipboardEntry) => {
     await pasteFromHistory(entry.id)
     setShowToast({ message: 'Copiado al portapapeles', type: 'success' })
-    setTimeout(() => setShowToast(null), 2000)
+    setTimeout(() => setShowToast(_null), 2000)
   }
   // Format timestamp
   const formatTimestamp = (date: Date) => {
     const now = new Date()
-    const timestamp = new Date(date)
+    const timestamp = new Date(_date)
     const diff = now.getTime() - timestamp.getTime()
     if (diff < 60000) return 'Hace un momento'
     if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} min`
@@ -96,7 +96,7 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                   Portapapeles Inteligente
                 </h3>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsOpen(_false)}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   <XMarkIcon className="w-5 h-5" />
@@ -107,10 +107,10 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
               <div className="relative">
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  ref={searchInputRef}
+                  ref={s_earchInputRef}
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={s_earchQuery}
+                  onChange={(_e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar en historial..."
                   className="w-full pl-10 pr-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -118,9 +118,9 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
 
               {/* Type Filter */}
               <div className="flex gap-2 mt-3 overflow-x-auto">
-                {(['all', 'precinto', 'alerta', 'reporte', 'datos', 'custom'] as const).map((type) => (<button
-                    key={type}
-                    onClick={() => setSelectedType(type)}
+                {(['all', 'precinto', 'alerta', 'reporte', 'datos', 'custom'] as const).map((_type) => (<button
+                    key={_type}
+                    onClick={() => setSelectedType(_type)}
                     className={cn(
                       'px-3 py-1 rounded-full text-sm whitespace-nowrap transition-colors',
                       selectedType === type
@@ -143,10 +143,10 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                   <p className="text-sm mt-1">Los elementos copiados aparecerán aquí</p>
                 </div>
               ) : (<div className="divide-y divide-gray-800">
-                  {history.map((entry) => (<motion.div
+                  {history.map((_entry) => (<motion.div
                       key={entry.id}
                       className="p-4 hover:bg-gray-800 cursor-pointer transition-colors"
-                      onClick={() => handleEntryClick(entry)}
+                      onClick={() => handleEntryClick(_entry)}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
@@ -173,12 +173,12 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                           
                           {entry.tags.length > 0 && (
                             <div className="flex gap-1 mt-2">
-                              {entry.tags.slice(0, 3).map((tag, idx) => (
+                              {entry.tags.slice(0, 3).map((_tag, idx) => (
                                 <span
-                                  key={idx}
+                                  key={_idx}
                                   className="text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded-full"
                                 >
-                                  {tag}
+                                  {_tag}
                                 </span>
                               ))}
                               {entry.tags.length > 3 && (
@@ -191,7 +191,7 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                         </div>
                         
                         <button
-                          onClick={(e) => {
+                          onClick={(_e) => {
                             e.stopPropagation()
                             removeEntry(entry.id)
                           }}
@@ -210,7 +210,7 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
             {history.length > 0 && (
               <div className="bg-gray-800 p-3 border-t border-gray-700 flex items-center justify-between">
                 <span className="text-sm text-gray-400">
-                  {history.length} / {maxHistory} elementos
+                  {history.length} / {_maxHistory} elementos
                 </span>
                 
                 <div className="flex items-center gap-2">

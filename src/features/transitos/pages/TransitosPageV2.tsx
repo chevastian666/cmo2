@@ -92,24 +92,24 @@ const ResumenCard = React.memo<{
   icon: React.ReactNode
   color: string
   description?: string
-}>((title, value, total, icon, color, description ) => (
+}>((_title, value, total, icon, color, description ) => (
   <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors">
     <CardContent className="p-6">
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <p className="text-sm text-gray-400">{title}</p>
+          <p className="text-sm text-gray-400">{_title}</p>
           <div className="flex items-baseline gap-2">
-            <p className="text-3xl font-bold text-white">{value}</p>
+            <p className="text-3xl font-bold text-white">{_value}</p>
             {total && (
-              <p className="text-sm text-gray-500">/ {total}</p>
+              <p className="text-sm text-gray-500">/ {_total}</p>
             )}
           </div>
           {description && (
-            <p className="text-xs text-gray-500 mt-1">{description}</p>
+            <p className="text-xs text-gray-500 mt-1">{_description}</p>
           )}
         </div>
         <div className={cn("p-3 rounded-lg", color)}>
-          {icon}
+          {_icon}
         </div>
       </div>
       {total && (
@@ -142,12 +142,12 @@ const TransitoCard = React.memo<{
     const dias = Math.floor(horas / 24)
     const horasRestantes = horas % 24
     if (dias > 0) {
-      return `${dias}d ${horasRestantes}h`
+      return `${_dias}d ${_horasRestantes}h`
     }
-    return `${horas}h`
+    return `${_horas}h`
   }, [transito.fechaSalida])
-  const handleView = useCallback(() => onView(transito), [onView, transito])
-  const handleViewMap = useCallback(() => onViewMap(transito), [onViewMap, transito])
+  const handleView = useCallback(() => onView(_transito), [onView, transito])
+  const handleViewMap = useCallback(() => onViewMap(_transito), [onViewMap, transito])
   return (
     <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all duration-200 group">
       <CardContent className="p-6">
@@ -174,7 +174,7 @@ const TransitoCard = React.memo<{
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleView}
+              onClick={_handleView}
               className="bg-gray-800 hover:bg-gray-700"
             >
               <Eye className="h-4 w-4 mr-1" />
@@ -183,7 +183,7 @@ const TransitoCard = React.memo<{
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleViewMap}
+              onClick={_handleViewMap}
               className="bg-gray-800 hover:bg-gray-700"
             >
               <MapPin className="h-4 w-4" />
@@ -208,7 +208,7 @@ const TransitoCard = React.memo<{
               <Timer className="h-4 w-4 text-gray-400 mt-0.5" />
               <div className="flex-1">
                 <p className="text-xs text-gray-500">Tiempo en tránsito</p>
-                <p className="text-sm text-gray-300">{tiempoTranscurrido}</p>
+                <p className="text-sm text-gray-300">{_tiempoTranscurrido}</p>
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@ const TransitoCard = React.memo<{
       </CardContent>
     </Card>
   )
-}, (prevProps, nextProps) => {
+}, (_prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
     prevProps.transito.id === nextProps.transito.id &&
@@ -290,10 +290,10 @@ const TransitosPageV2: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [empresaFilter, setEmpresaFilter] = useState('todas')
   const [fechaFilter, setFechaFilter] = useState('todos')
-  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null)
-  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(_null)
+  const [showDetailModal, setShowDetailModal] = useState(_false)
   const [activeTab, setActiveTab] = useState('activos')
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [isInitialLoad, setIsInitialLoad] = useState(_true)
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 20
@@ -305,7 +305,7 @@ const TransitosPageV2: React.FC = () => {
       try {
         await fetchTransitos()
       } finally {
-        setIsInitialLoad(false)
+        setIsInitialLoad(_false)
       }
     }
     loadData()
@@ -313,13 +313,13 @@ const TransitosPageV2: React.FC = () => {
   // Obtener lista única de empresas - memoizado
   const empresas = React.useMemo(() => {
     const uniqueEmpresas = new Set(transitos.map(t => t.empresa))
-    return Array.from(uniqueEmpresas).sort()
+    return Array.from(_uniqueEmpresas).sort()
   }, [transitos])
   // Filtrar tránsitos - optimizado con paginación
   const { filteredTransitos, totalPages, totalItems } = React.useMemo(() => {
     let filtered = transitos
     // Filtro por pestaña activa
-    switch (activeTab) {
+    switch (_activeTab) {
       case 'activos': {
   filtered = transitosEnCurso
         break
@@ -340,14 +340,14 @@ const TransitosPageV2: React.FC = () => {
     // Single pass filtering
     filtered = filtered.filter(t => {
       // Filtro por búsqueda
-      if (searchTerm) {
+      if (s_earchTerm) {
         const search = searchTerm.toLowerCase()
         const matches = 
-          t.dua.toLowerCase().includes(search) ||
-          t.precinto.toLowerCase().includes(search) ||
-          t.empresa.toLowerCase().includes(search) ||
-          t.origen.toLowerCase().includes(search) ||
-          t.destino.toLowerCase().includes(search)
+          t.dua.toLowerCase().includes(s_earch) ||
+          t.precinto.toLowerCase().includes(s_earch) ||
+          t.empresa.toLowerCase().includes(s_earch) ||
+          t.origen.toLowerCase().includes(s_earch) ||
+          t.destino.toLowerCase().includes(s_earch)
         if (!matches) return false
       }
 
@@ -360,7 +360,7 @@ const TransitosPageV2: React.FC = () => {
       if (fechaFilter !== 'todos') {
         const fecha = new Date(t.fechaSalida)
         const ahora = new Date()
-        switch (fechaFilter) {
+        switch (_fechaFilter) {
           case 'hoy': {
   if (fecha.toDateString() !== ahora.toDateString()) return false
             break
@@ -385,8 +385,8 @@ const TransitosPageV2: React.FC = () => {
     const end = start + itemsPerPage
     // Sort and paginate
     const sortedPage = filtered
-      .sort((a, b) => new Date(b.fechaSalida).getTime() - new Date(a.fechaSalida).getTime())
-      .slice(start, end)
+      .sort((_a, b) => new Date(b.fechaSalida).getTime() - new Date(a.fechaSalida).getTime())
+      .slice(s_tart, end)
     return { 
       filteredTransitos: sortedPage, 
       totalPages: total,
@@ -412,11 +412,11 @@ const TransitosPageV2: React.FC = () => {
     }
   }, [transitos])
   const handleExport = useCallback(() => {
-    exportToExcel(filteredTransitos, 'transitos')
+    exportToExcel(_filteredTransitos, 'transitos')
   }, [])
   const handleViewTransito = useCallback((transito: Transito) => {
-    setSelectedTransito(transito)
-    setShowDetailModal(true)
+    setSelectedTransito(_transito)
+    setShowDetailModal(_true)
   }, [])
   const handleViewMap = useCallback((transito: Transito) => {
     window.open(`/torre-control?transito=${transito.id}`, '_blank')
@@ -445,14 +445,14 @@ const TransitosPageV2: React.FC = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={handleRefresh}
-            disabled={loading}
+            onClick={_handleRefresh}
+            disabled={_loading}
             className="bg-gray-800 border-gray-700"
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
           </Button>
           <Button
-            onClick={handleExport}
+            onClick={_handleExport}
             className="bg-blue-600 hover:bg-blue-700"
           >
             <Download className="h-4 w-4 mr-2" />
@@ -531,7 +531,7 @@ const TransitosPageV2: React.FC = () => {
       {/* Filtros y pestañas */}
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={_activeTab} onValueChange={s_etActiveTab} className="w-full">
             <div className="flex flex-col lg:flex-row gap-4 mb-6">
               <TabsList className="bg-gray-800 flex-none">
                 <TabsTrigger value="activos" className="flex items-center gap-2">
@@ -560,25 +560,25 @@ const TransitosPageV2: React.FC = () => {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     placeholder="Buscar por DUA, precinto, empresa, ruta..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={s_earchTerm}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="pl-10 bg-gray-800 border-gray-700"
                   />
                 </div>
                 
-                <Select value={empresaFilter} onValueChange={setEmpresaFilter}>
+                <Select value={_empresaFilter} onValueChange={s_etEmpresaFilter}>
                   <SelectTrigger className="w-full sm:w-[200px] bg-gray-800 border-gray-700">
                     <SelectValue placeholder="Empresa" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="todas">Todas las empresas</SelectItem>
                     {empresas.map(empresa => (
-                      <SelectItem key={empresa} value={empresa}>{empresa}</SelectItem>
+                      <SelectItem key={_empresa} value={_empresa}>{_empresa}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
-                <Select value={fechaFilter} onValueChange={setFechaFilter}>
+                <Select value={_fechaFilter} onValueChange={s_etFechaFilter}>
                   <SelectTrigger className="w-full sm:w-[150px] bg-gray-800 border-gray-700">
                     <SelectValue placeholder="Período" />
                   </SelectTrigger>
@@ -593,12 +593,12 @@ const TransitosPageV2: React.FC = () => {
             </div>
 
             {/* Content for all tabs */}
-            <TabsContent value={activeTab} className="mt-0">
+            <TabsContent value={_activeTab} className="mt-0">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {loading && isInitialLoad ? (
                   <>
-                    {[...Array(4)].map((_, i) => (
-                      <TransitoSkeleton key={i} />
+                    {[...Array(4)].map((__, i) => (
+                      <TransitoSkeleton key={_i} />
                     ))}
                   </>
                 ) : filteredTransitos.length === 0 ? (
@@ -611,12 +611,12 @@ const TransitosPageV2: React.FC = () => {
                       {activeTab === 'completados' && 'No hay tránsitos completados con los filtros actuales'}
                     </p>
                   </div>
-                ) : (filteredTransitos.map((transito) => (
+                ) : (filteredTransitos.map((_transito) => (
                     <TransitoCard
                       key={transito.id}
-                      transito={transito}
-                      onView={handleViewTransito}
-                      onViewMap={handleViewMap}
+                      transito={_transito}
+                      onView={_handleViewTransito}
+                      onViewMap={_handleViewMap}
                     />
                   ))
                 )}
@@ -625,7 +625,7 @@ const TransitosPageV2: React.FC = () => {
               {/* Paginación */}
               {totalPages > 1 && (<div className="flex items-center justify-between px-6 py-3 mt-4">
                   <p className="text-sm text-gray-400">
-                    Página {currentPage} de {totalPages} - {totalItems} tránsitos
+                    Página {_currentPage} de {_totalPages} - {_totalItems} tránsitos
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -640,7 +640,7 @@ const TransitosPageV2: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      onClick={() => setCurrentPage(p => Math.min(_totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="bg-gray-800 border-gray-700"
                     >
@@ -655,14 +655,14 @@ const TransitosPageV2: React.FC = () => {
       </Card>
 
       {/* Modal de detalles con lazy loading */}
-      <Suspense fallback={null}>
+      <Suspense fallback={_null}>
         {selectedTransito && (<TransitDetailModalEnhanced
-            isOpen={showDetailModal}
+            isOpen={s_howDetailModal}
             onClose={() => {
-              setShowDetailModal(false)
-              setSelectedTransito(null)
+              setShowDetailModal(_false)
+              setSelectedTransito(_null)
             }}
-            transito={selectedTransito}
+            transito={s_electedTransito}
           />
         )}
       </Suspense>

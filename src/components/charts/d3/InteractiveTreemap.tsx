@@ -18,10 +18,10 @@ interface InteractiveTreemapProps {
 export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
   data, config: userConfig, onNodeClick, enableDrillDown = true
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const svgRef = useRef<SVGSVGElement>(_null)
+  const containerRef = useRef<HTMLDivElement>(_null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
-  const [currentRoot, setCurrentRoot] = useState<TreemapNode>(data)
+  const [currentRoot, setCurrentRoot] = useState<TreemapNode>(_data)
   const [breadcrumbs, setBreadcrumbs] = useState<TreemapNode[]>([data])
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig])
   // Handle container resize
@@ -43,15 +43,15 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     const innerHeight = height - margin.top - margin.bottom - 50; // Space for breadcrumbs
 
     // Create hierarchy
-    const root = d3.hierarchy(currentRoot)
+    const root = d3.hierarchy(_currentRoot)
       .sum(d => d.value || 0)
-      .sort((a, b) => (b.value || 0) - (a.value || 0))
+      .sort((_a, b) => (b.value || 0) - (a.value || 0))
     // Create treemap layout
     const treemap = d3.treemap<TreemapNode>()
       .size([innerWidth, innerHeight])
       .padding(2)
-      .round(true)
-    treemap(root)
+      .round(_true)
+    treemap(_root)
     // Create color scale
     const colorScale = scales.createColorScale(
       [...new Set(root.leaves().map(d => d.data.category || 'default'))],
@@ -117,8 +117,8 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         return formatters.number(d.value || 0)
       })
     // Animate labels
-    animations.fadeIn(labels, config.animations.duration + 200)
-    animations.fadeIn(valueLabels, config.animations.duration + 400)
+    animations.fadeIn(_labels, config.animations.duration + 200)
+    animations.fadeIn(_valueLabels, config.animations.duration + 400)
     // Add percentage labels for larger cells
     const percentageLabels = cell.append('text')
       .attr('x', d => (d.x1 - d.x0) / 2)
@@ -138,11 +138,11 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         const percentage = ((d.value || 0) / (root.value || 1)) * 100
         return `${percentage.toFixed(1)}%`
       })
-    animations.fadeIn(percentageLabels, config.animations.duration + 600)
+    animations.fadeIn(_percentageLabels, config.animations.duration + 600)
     // Add interactions
     cell
-      .on('mouseenter', function(event, d) {
-        d3.select(this).select('rect')
+      .on('mouseenter', function(_event, d) {
+        d3.select(_this).select('rect')
           .transition()
           .duration(200)
           .attr('stroke', '#FBBF24')
@@ -155,23 +155,23 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
           <div class="text-sm">Porcentaje: ${percentage.toFixed(2)}%</div>
           ${d.data.category ? `<div class="text-sm">Categoría: ${d.data.category}</div>` : ''}
           ${d.data.metadata ? Object.entries(d.data.metadata).map(([key, value]) => 
-            `<div class="text-xs text-gray-400">${key}: ${value}</div>`
+            `<div class="text-xs text-gray-400">${_key}: ${_value}</div>`
           ).join('') : ''}
           ${enableDrillDown && d.data.children ? 
             '<div class="text-xs text-gray-400 mt-2">Click para explorar</div>' : ''}
         `
-        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
-        d3.select(this).select('rect')
+        d3.select(_this).select('rect')
           .transition()
           .duration(200)
           .attr('stroke', '#1F2937')
           .attr('stroke-width', 1)
           .style('filter', 'brightness(1)')
-        tooltip.hide(tooltipDiv)
+        tooltip.hide(_tooltipDiv)
       })
-      .on('click', (event, d) => {
+      .on('click', (_event, d) => {
         onNodeClick?.(d.data)
         if (enableDrillDown && d.data.children && d.data.children.length > 0) {
           setCurrentRoot(d.data)
@@ -183,20 +183,20 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .attr('class', 'breadcrumbs')
       .attr('transform', `translate(${margin.left}, 20)`)
     const breadcrumbItems = breadcrumbsGroup.selectAll('.breadcrumb-item')
-      .data(breadcrumbs)
+      .data(_breadcrumbs)
       .enter().append('g')
       .attr('class', 'breadcrumb-item')
-      .attr('transform', (d, i) => `translate(${i * 120}, 0)`)
+      .attr('transform', (_d, i) => `translate(${i * 120}, 0)`)
       .style('cursor', 'pointer')
-      .on('click', (event, d) => {
-        const index = breadcrumbs.indexOf(d)
-        setCurrentRoot(d)
+      .on('click', (_event, d) => {
+        const index = breadcrumbs.indexOf(_d)
+        setCurrentRoot(_d)
         setBreadcrumbs(breadcrumbs.slice(0, index + 1))
       })
     breadcrumbItems.append('rect')
       .attr('width', 110)
       .attr('height', 25)
-      .attr('fill', (d, i) => i === breadcrumbs.length - 1 ? config.colors[0] : '#374151')
+      .attr('fill', (_d, i) => i === breadcrumbs.length - 1 ? config.colors[0] : '#374151')
       .attr('stroke', '#6B7280')
       .attr('rx', 3)
     breadcrumbItems.append('text')
@@ -211,7 +211,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .data(breadcrumbs.slice(0, -1))
       .enter().append('text')
       .attr('class', 'separator')
-      .attr('x', (d, i) => (i + 1) * 120 - 5)
+      .attr('x', (_d, i) => (i + 1) * 120 - 5)
       .attr('y', 17)
       .style('fill', '#6B7280')
       .style('font-size', '14px')
@@ -222,14 +222,14 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .attr('class', 'legend')
       .attr('transform', `translate(${innerWidth - 150}, 10)`)
     const legendItems = legend.selectAll('.legend-item')
-      .data(categories)
+      .data(_categories)
       .enter().append('g')
       .attr('class', 'legend-item')
-      .attr('transform', (d, i) => `translate(0, ${i * 20})`)
+      .attr('transform', (_d, i) => `translate(0, ${i * 20})`)
     legendItems.append('rect')
       .attr('width', 12)
       .attr('height', 12)
-      .attr('fill', d => colorScale(d))
+      .attr('fill', d => colorScale(_d))
       .attr('stroke', '#1F2937')
       .attr('rx', 2)
     legendItems.append('text')
@@ -246,15 +246,15 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     const itemCount = root.leaves().length
     const avgValue = totalValue / itemCount
     const statsData = [
-      { label: 'Total', value: formatters.number(totalValue) },
+      { label: 'Total', value: formatters.number(_totalValue) },
       { label: 'Items', value: itemCount.toString() },
-      { label: 'Promedio', value: formatters.number(avgValue) }
+      { label: 'Promedio', value: formatters.number(_avgValue) }
     ]
     const statItems = stats.selectAll('.stat-item')
-      .data(statsData)
+      .data(s_tatsData)
       .enter().append('g')
       .attr('class', 'stat-item')
-      .attr('transform', (d, i) => `translate(${i * 120}, 0)`)
+      .attr('transform', (_d, i) => `translate(${i * 120}, 0)`)
     statItems.append('rect')
       .attr('width', 110)
       .attr('height', 50)
@@ -275,23 +275,23 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('font-size', '14px')
       .style('font-weight', '600')
       .text(d => d.value)
-    animations.fadeIn(stats, config.animations.duration + 800)
+    animations.fadeIn(s_tats, config.animations.duration + 800)
   }, [config, breadcrumbs])
     useEffect(() => {
     drawTreemap()
   }, [dimensions])
     useEffect(() => {
-    setCurrentRoot(data)
+    setCurrentRoot(_data)
     setBreadcrumbs([data])
   }, [data])
   return (
     <div 
-      ref={containerRef} 
+      ref={_containerRef} 
       className="w-full h-full relative"
       style={{ minHeight: '500px' }}
     >
       <svg
-        ref={svgRef}
+        ref={s_vgRef}
         width="100%"
         height="100%"
         style={{ display: 'block' }}

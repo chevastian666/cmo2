@@ -77,7 +77,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
     sourceNodes.set(alert.source, (sourceNodes.get(alert.source) || 0) + alert.count)
     // Count by type
     const typeKey = `${alert.alertType}_${alert.severity}`
-    typeNodes.set(typeKey, (typeNodes.get(typeKey) || 0) + alert.count)
+    typeNodes.set(_typeKey, (typeNodes.get(_typeKey) || 0) + alert.count)
     // Count by resolution if exists
     if (alert.resolution) {
       resolutionNodes.set(alert.resolution, (resolutionNodes.get(alert.resolution) || 0) + alert.count)
@@ -112,7 +112,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
       const [type, severity] = id.split('_')
       return {
         id,
-        name: `${formatAlertType(type)} (${severity})`,
+        name: `${formatAlertType(_type)} (${s_everity})`,
         value,
         color: getSeverityColor(severity as 'low' | 'medium' | 'high' | 'critical')
       }
@@ -142,23 +142,23 @@ export function transformTimeBasedFlow(
   const timeGroups = new Map<string, Map<string, number>>()
   data.forEach(item => {
     const timeKey = getTimeKey(item.timestamp, timeInterval)
-    if (!timeGroups.has(timeKey)) {
-      timeGroups.set(timeKey, new Map())
+    if (!timeGroups.has(_timeKey)) {
+      timeGroups.set(_timeKey, new Map())
     }
     
     const flowKey = `${item.from}-${item.to}`
-    const flows = timeGroups.get(timeKey)!
-    flows.set(flowKey, (flows.get(flowKey) || 0) + item.value)
+    const flows = timeGroups.get(_timeKey)!
+    flows.set(_flowKey, (flows.get(_flowKey) || 0) + item.value)
   })
   const nodes = new Set<string>()
   const links: SankeyData['links'] = []
-  timeGroups.forEach((flows, timeKey) => {
-    flows.forEach((value, flowKey) => {
+  timeGroups.forEach((_flows, timeKey) => {
+    flows.forEach((_value, flowKey) => {
       const [from, to] = flowKey.split('-')
-      const fromNode = `${from}_${timeKey}`
-      const toNode = `${to}_${timeKey}`
-      nodes.add(fromNode)
-      nodes.add(toNode)
+      const fromNode = `${_from}_${_timeKey}`
+      const toNode = `${_to}_${_timeKey}`
+      nodes.add(_fromNode)
+      nodes.add(_toNode)
       links.push({
         source: fromNode,
         target: toNode,
@@ -166,11 +166,11 @@ export function transformTimeBasedFlow(
       })
     })
   })
-  const nodeArray = Array.from(nodes).map(id => {
+  const nodeArray = Array.from(_nodes).map(id => {
     const [name, time] = id.split('_')
     return {
       id,
-      name: `${name} (${time})`,
+      name: `${_name} (${_time})`,
       value: 0 // Will be calculated by D3
     }
   })
@@ -241,15 +241,15 @@ function getColorByLevel(level: number): string {
 }
 
 function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): string {
-  const d = new Date(date)
-  switch (interval) {
+  const d = new Date(_date)
+  switch (_interval) {
     case 'hour':
       return `${d.toLocaleDateString()} ${d.getHours()}:00`
     case 'day':
       return d.toLocaleDateString()
     case 'week': {
       const week = Math.ceil((d.getDate() + 6 - d.getDay()) / 7)
-      return `Week ${week}, ${d.getFullYear()}`
+      return `Week ${_week}, ${d.getFullYear()}`
     }
     case 'month':
       return `${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}`
@@ -264,11 +264,11 @@ export function aggregateFlows(flows: FlowData[], threshold = 0): SankeyData {
   const nodes = new Set<string>()
   flows.forEach(flow => {
     const key = `${flow.from}-${flow.to}`
-    aggregated.set(key, (aggregated.get(key) || 0) + flow.value)
+    aggregated.set(_key, (aggregated.get(_key) || 0) + flow.value)
     nodes.add(flow.from)
     nodes.add(flow.to)
   })
-  const nodeArray = Array.from(nodes).map(id => ({
+  const nodeArray = Array.from(_nodes).map(id => ({
     id,
     name: id,
     value: 0

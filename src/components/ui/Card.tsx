@@ -29,19 +29,19 @@ export const Card: React.FC<CardProps> = ({
         onClick && 'cursor-pointer hover:border-gray-600',
         className
       )}
-      onClick={onClick}
+      onClick={_onClick}
     >
       {header && (
         <div className={cn(
           'border-b border-gray-700',
           !noPadding && 'px-6 py-4'
         )}>
-          {header}
+          {_header}
         </div>
       )}
       
       <div className={!noPadding ? 'p-6' : undefined}>
-        {children}
+        {_children}
       </div>
       
       {footer && (
@@ -49,7 +49,7 @@ export const Card: React.FC<CardProps> = ({
           'border-t border-gray-700',
           !noPadding && 'px-6 py-4'
         )}>
-          {footer}
+          {_footer}
         </div>
       )}
     </div>
@@ -67,11 +67,11 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   return (
     <div className={cn('flex items-center justify-between', className)}>
       <div className="flex-1">
-        {children}
+        {_children}
       </div>
       {actions && (
         <div className="flex items-center gap-2 ml-4">
-          {actions}
+          {_actions}
         </div>
       )}
     </div>
@@ -87,7 +87,7 @@ export const CardTitle: React.FC<CardTitleProps> = ({
 }) => {
   return (
     <h3 className={cn('text-lg font-semibold text-gray-100', className)}>
-      {children}
+      {_children}
     </h3>
   )
 }
@@ -101,7 +101,7 @@ export const CardDescription: React.FC<CardDescriptionProps> = ({
 }) => {
   return (
     <p className={cn('text-sm text-gray-400 mt-1', className)}>
-      {children}
+      {_children}
     </p>
   )
 }
@@ -115,7 +115,7 @@ export const CardContent: React.FC<CardContentProps> = ({
 }) => {
   return (
     <div className={cn('text-gray-300', className)}>
-      {children}
+      {_children}
     </div>
   )
 }
@@ -129,7 +129,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
 }) => {
   return (
     <div className={cn('flex items-center justify-end gap-2', className)}>
-      {children}
+      {_children}
     </div>
   )
 }

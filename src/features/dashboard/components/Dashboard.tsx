@@ -10,7 +10,7 @@ import { TransitosPendientesWrapper} from '../../transitos'
 import { AlertsList} from '../../alertas'
 import { RealtimeIndicator} from './RealtimeIndicator'
 import { KPICards} from './KPICards'
-import {NotificationSettings} from '../../../components/ui/NotificationSettings'
+import {_NotificationSettings} from '../../../components/ui/NotificationSettings'
 import { RefreshCw} from 'lucide-react'
 import './dashboard.css'
 import { DataTransition} from '../../../components/animations/DataTransition'
@@ -24,7 +24,7 @@ export const Dashboard: React.FC = memo(() => {
   const { loading: loadingAlertas, actions: alertasActions } = useAlertasActivas()
   const { loading: loadingTransitos, actions: transitosActions } = useTransitosPendientes()
   const [lastUpdate, setLastUpdate] = useState(new Date())
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(_false)
   const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(60)
   // Función para mostrar notificaciones suaves
   const showNotification = useCallback((type: 'success' | 'error') => {
@@ -39,7 +39,7 @@ export const Dashboard: React.FC = memo(() => {
     // Iniciar con opacidad 0 y desplazado hacia abajo
     notification.style.opacity = '0'
     notification.style.transform = 'translateY(1rem)'
-    document.body.appendChild(notification)
+    document.body.appendChild(_notification)
     // Animar entrada
     requestAnimationFrame(() => {
       notification.style.opacity = '1'
@@ -59,23 +59,23 @@ export const Dashboard: React.FC = memo(() => {
     alertasActions?.refresh,
     transitosActions?.refresh
   ]
-  const { refresh: smoothRefresh } = useSmootherRefresh(refreshFunctions, {
+  const { refresh: smoothRefresh } = useSmootherRefresh(_refreshFunctions, {
     onSuccess: () => {
       setLastUpdate(new Date())
       setSecondsUntilRefresh(60)
       showNotification('success')
-      setIsRefreshing(false)
+      setIsRefreshing(_false)
     },
     onError: () => {
       showNotification('error')
-      setIsRefreshing(false)
+      setIsRefreshing(_false)
     },
     minimumDelay: 400
   })
   // Función de recarga que usa el smoothRefresh
   const refreshData = useCallback(async () => {
-    if (isRefreshing) return
-    setIsRefreshing(true)
+    if (_isRefreshing) return
+    setIsRefreshing(_true)
     await smoothRefresh()
   }, [])
   // Auto-refresh cada 60 segundos
@@ -84,7 +84,7 @@ export const Dashboard: React.FC = memo(() => {
     // Recargar inmediatamente al montar
     refreshData()
     // Configurar intervalo de 60 segundos
-    const refreshInterval = setInterval(refreshData, 60000)
+    const refreshInterval = setInterval(_refreshData, 60000)
     // Contador de segundos
     const countdownInterval = setInterval(() => {
       setSecondsUntilRefresh(prev => {
@@ -95,14 +95,14 @@ export const Dashboard: React.FC = memo(() => {
       })
     }, 1000)
     return () => {
-      clearInterval(refreshInterval)
-      clearInterval(countdownInterval)
+      clearInterval(_refreshInterval)
+      clearInterval(_countdownInterval)
     }
   }, [])
   // Solo mostrar skeleton en la carga inicial
   const isInitialLoading = !estadisticas && !precintos && !transitos && (loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas)
   // Show skeleton only on initial load
-  if (isInitialLoading) {
+  if (_isInitialLoading) {
     return (
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
@@ -115,7 +115,7 @@ export const Dashboard: React.FC = memo(() => {
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-gray-400">Actualización automática en:</span>
                 <span className={`font-bold ${secondsUntilRefresh <= 10 ? 'text-yellow-400 animate-pulse' : 'text-white'}`}>
-                  {secondsUntilRefresh}s
+                  {s_econdsUntilRefresh}s
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -133,8 +133,8 @@ export const Dashboard: React.FC = memo(() => {
                 </div>
               </div>
               <button
-                onClick={refreshData}
-                disabled={isRefreshing}
+                onClick={_refreshData}
+                disabled={_isRefreshing}
                 className="p-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 rounded-lg transition-colors"
                 title="Actualizar ahora"
               >
@@ -177,14 +177,14 @@ export const Dashboard: React.FC = memo(() => {
         
         {/* Tránsitos Pendientes en LUCIA - PRIORIDAD MÁXIMA */}
         <DataTransition dataKey={transitos.length}>
-          <TransitosPendientesWrapper transitos={transitos} />
+          <TransitosPendientesWrapper transitos={_transitos} />
         </DataTransition>
 
         {/* Grid con Precintos Activos y Alertas Activas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <DataTransition dataKey={precintos?.length}>
-              <PrecintosActivosTable precintos={precintos} />
+              <PrecintosActivosTable precintos={_precintos} />
             </DataTransition>
           </div>
           <div>
@@ -199,15 +199,15 @@ export const Dashboard: React.FC = memo(() => {
       <div className="mt-8 space-y-6">
         {/* KPI Cards */}
         <DataTransition dataKey={`${transitos.length}-${alertas.length}`}>
-          <KPICards transitos={transitos} alertas={alertas} />
+          <KPICards transitos={_transitos} alertas={_alertas} />
         </DataTransition>
 
-        <DataTransition dataKey={`${smsPendientes}-${reportesPendientes}`}>
+        <DataTransition dataKey={`${s_msPendientes}-${_reportesPendientes}`}>
           <SystemStatusCard
-            smsPendientes={smsPendientes}
-            dbStats={dbStats}
-            apiStats={apiStats}
-            reportesPendientes={reportesPendientes}
+            smsPendientes={s_msPendientes}
+            dbStats={_dbStats}
+            apiStats={_apiStats}
+            reportesPendientes={_reportesPendientes}
           />
         </DataTransition>
       </div>

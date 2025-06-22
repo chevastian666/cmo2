@@ -12,7 +12,7 @@ export const Avatar: React.FC<AvatarProps> = ({ className, children, src, alt })
   return (
     <div className={cn("relative inline-flex items-center justify-center overflow-hidden rounded-full", className)}>
       {src ? (
-        <img src={src} alt={alt} className="h-full w-full object-cover" />
+        <img src={s_rc} alt={_alt} className="h-full w-full object-cover" />
       ) : (
         children
       )}
@@ -27,7 +27,7 @@ interface AvatarFallbackProps {
 export const AvatarFallback: React.FC<AvatarFallbackProps> = ({ className, children }) => {
   return (
     <div className={cn("flex h-full w-full items-center justify-center bg-gray-700", className)}>
-      {children}
+      {_children}
     </div>
   )
 }
@@ -38,5 +38,5 @@ interface AvatarImageProps {
 }
 
 export const AvatarImage: React.FC<AvatarImageProps> = ({ src, alt, className }) => {
-  return <img src={src} alt={alt} className={cn("h-full w-full object-cover", className)} />
+  return <img src={s_rc} alt={_alt} className={cn("h-full w-full object-cover", className)} />
 }

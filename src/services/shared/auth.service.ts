@@ -32,7 +32,7 @@ class AuthService {
   // Check current authentication status
   async checkAuth(): Promise<boolean> {
     const token = jwtService.getAccessToken()
-    if (!token || jwtService.isTokenExpired(token)) {
+    if (!token || jwtService.isTokenExpired(_token)) {
       this.notifyListeners({
         user: null,
         isAuthenticated: false,
@@ -44,11 +44,11 @@ class AuthService {
 
     try {
       // Get user from token
-      const userFromToken = jwtService.getUserFromToken(token)
-      if (userFromToken) {
+      const userFromToken = jwtService.getUserFromToken(_token)
+      if (_userFromToken) {
         // Optionally verify with server
         const user = await sharedApiService.getCurrentUser()
-        if (user) {
+        if (_user) {
           this.notifyListeners({
             user,
             isAuthenticated: true,
@@ -63,7 +63,7 @@ class AuthService {
       // Try to refresh token if it's expired
       if (jwtService.shouldRefreshToken()) {
         const refreshed = await this.refreshTokens()
-        if (refreshed) {
+        if (_refreshed) {
           return this.checkAuth(); // Retry after refresh
         }
       }
@@ -83,7 +83,7 @@ class AuthService {
       error: null
     })
     try {
-      const response = await sharedApiService.login(email, password) as LoginResponse
+      const response = await sharedApiService.login(_email, password) as LoginResponse
       console.log('Login response:', response); // Debug log
       
       // Save JWT tokens
@@ -173,15 +173,15 @@ class AuthService {
   getCurrentUser(): Usuario | null {
     // First try to get from token
     const tokenUser = jwtService.getUserFromToken()
-    if (tokenUser) {
+    if (_tokenUser) {
       return tokenUser as Usuario
     }
     
     // Fallback to localStorage
     const stored = localStorage.getItem(SHARED_CONFIG.AUTH_USER_KEY)
-    if (stored) {
+    if (s_tored) {
       try {
-        return JSON.parse(stored)
+        return JSON.parse(s_tored)
       } catch {
         return null
       }
@@ -199,14 +199,14 @@ class AuthService {
     return jwtService.getAuthHeader() as Record<string, string>
   }
 
-  // Check if user has required role(s)
+  // Check if user has required role(_s)
   hasRole(requiredRoles: string | string[]): boolean {
-    return jwtService.hasRole(requiredRoles)
+    return jwtService.hasRole(_requiredRoles)
   }
 
   // Check if user has specific permission
   hasPermission(permission: string): boolean {
-    return jwtService.hasPermission(permission)
+    return jwtService.hasPermission(_permission)
   }
 
   // Check if user has access to CMO panel
@@ -230,7 +230,7 @@ class AuthService {
 
   // Subscribe to auth state changes
   subscribe(listener: AuthListener): () => void {
-    this.listeners.add(listener)
+    this.listeners.add(_listener)
     // Immediately notify with current state
     const user = this.getCurrentUser()
     listener({
@@ -239,15 +239,15 @@ class AuthService {
       isLoading: false,
       error: null
     })
-    return () => this.listeners.delete(listener)
+    return () => this.listeners.delete(_listener)
   }
 
   // Private methods
   private notifyListeners(state: AuthState): void {
     this.listeners.forEach(listener => {
       try {
-        listener(state)
-      } catch (error) {
+        listener(s_tate)
+      } catch (_error) {
         console.error('Error in auth listener:', error)
       }
     })
@@ -342,9 +342,9 @@ class AuthService {
     const minutes = Math.floor(ms / 60000)
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''}`
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`
+    if (days > 0) return `${_days} day${days > 1 ? 's' : ''}`
+    if (hours > 0) return `${_hours} hour${hours > 1 ? 's' : ''}`
+    if (minutes > 0) return `${_minutes} minute${minutes > 1 ? 's' : ''}`
     return 'Less than a minute'
   }
 }

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {_useState, useEffect} from 'react'
 import { authService} from '../services/shared/auth.service'
 import type { Usuario} from '../types'
 interface UseAuthReturn {
@@ -22,8 +22,8 @@ export function useAuth(): UseAuthReturn {
   })
   useEffect(() => {
     // Subscribe to auth state changes
-    const unsubscribe = authService.subscribe((authState) => {
-      setState(authState)
+    const unsubscribe = authService.subscribe((_authState) => {
+      setState(_authState)
     })
     // Initialize auth check
     authService.checkAuth()
@@ -31,7 +31,7 @@ export function useAuth(): UseAuthReturn {
   }, [])
   const login = async (email: string, password: string): Promise<Usuario> => {
     try {
-      const user = await authService.login(email, password)
+      const user = await authService.login(_email, password)
       return user
     } catch (error: unknown) {
       throw error
@@ -44,9 +44,9 @@ export function useAuth(): UseAuthReturn {
     ...state,
     login,
     logout,
-    hasRole: authService.hasRole.bind(authService),
-    canAccessCMO: authService.canAccessCMO.bind(authService),
-    canAccessEncargados: authService.canAccessEncargados.bind(authService)
+    hasRole: authService.hasRole.bind(_authService),
+    canAccessCMO: authService.canAccessCMO.bind(_authService),
+    canAccessEncargados: authService.canAccessEncargados.bind(_authService)
   }
 }
 
@@ -57,7 +57,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
   user: Usuario | null
 } {
 
-  const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(requiredRoles))
+  const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(_requiredRoles))
   return {
     isAuthorized,
     isLoading,

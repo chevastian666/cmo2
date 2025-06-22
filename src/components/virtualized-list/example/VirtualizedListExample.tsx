@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { VirtualizedAlertList} from '../VirtualizedAlertList'
-import {Search, Filter, AlertTriangle} from 'lucide-react'
+import {_Search, Filter, AlertTriangle} from 'lucide-react'
 import type { Alert, AlertFilters} from '../types/alerts'
 // Mock data generator
 function generateMockAlerts(count: number, startId: number = 0): Alert[] {
@@ -13,10 +13,10 @@ function generateMockAlerts(count: number, startId: number = 0): Alert[] {
     'Mendoza, Argentina',
     'La Plata, Argentina'
   ]
-  return Array.from({ length: count }, (_, i) => {
+  return Array.from({ length: count }, (__, i) => {
     const id = startId + i
     return {
-      id: `alert-${id}`,
+      id: `alert-${_id}`,
       timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
       severity: severities[Math.floor(Math.random() * severities.length)],
       precintoId: `PRECINTO-${1000 + Math.floor(Math.random() * 9000)}`,
@@ -26,7 +26,7 @@ function generateMockAlerts(count: number, startId: number = 0): Alert[] {
         lng: -58.3816 + (Math.random() - 0.5) * 2,
         address: locations[Math.floor(Math.random() * locations.length)]
       },
-      message: `Alerta de prueba #${id}: ${generateRandomMessage()}`,
+      message: `Alerta de prueba #${_id}: ${generateRandomMessage()}`,
       status: statuses[Math.floor(Math.random() * statuses.length)],
       assignedTo: Math.random() > 0.5 ? `Operador ${Math.floor(Math.random() * 10)}` : undefined
     }
@@ -50,17 +50,17 @@ function generateRandomMessage(): string {
 }
 
 export const VirtualizedListExample: React.FC = () => {
-  const [filters, setFilters] = useState<AlertFilters>(_)
-  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState<AlertFilters>(__)
+  const [showFilters, setShowFilters] = useState(_false)
   // Mock API call
   const loadMoreAlerts = useCallback(async (page: number) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(_resolve, 500))
     const pageSize = 50
     const totalAlerts = 100000; // Simulate 100k alerts
     const hasMore = (page + 1) * pageSize < totalAlerts
     return {
-      alerts: generateMockAlerts(pageSize, page * pageSize),
+      alerts: generateMockAlerts(_pageSize, page * pageSize),
       hasMore,
       total: totalAlerts
     }
@@ -95,7 +95,7 @@ export const VirtualizedListExample: React.FC = () => {
             type="text"
             placeholder="Buscar por precinto, vehículo, mensaje..."
             className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
-            onChange={(e) => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
+            onChange={(_e) => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
           />
         </div>
 
@@ -109,11 +109,11 @@ export const VirtualizedListExample: React.FC = () => {
                 </label>
                 <div className="space-y-2">
                   {['critical', 'high', 'medium', 'low'].map(severity => (
-                    <label key={severity} className="flex items-center gap-2">
+                    <label key={s_everity} className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         className="rounded border-gray-600 text-blue-600 focus:ring-blue-500"
-                        onChange={(e) => {
+                        onChange={(_e) => {
                           const current = filters.severity || []
                           if (e.target.checked) {
                             setFilters(prev => ({ 
@@ -128,7 +128,7 @@ export const VirtualizedListExample: React.FC = () => {
                           }
                         }}
                       />
-                      <span className="text-sm text-gray-300 capitalize">{severity}</span>
+                      <span className="text-sm text-gray-300 capitalize">{s_everity}</span>
                     </label>
                   ))}
                 </div>
@@ -141,11 +141,11 @@ export const VirtualizedListExample: React.FC = () => {
                 </label>
                 <div className="space-y-2">
                   {['active', 'acknowledged', 'resolved'].map(status => (
-                    <label key={status} className="flex items-center gap-2">
+                    <label key={s_tatus} className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         className="rounded border-gray-600 text-blue-600 focus:ring-blue-500"
-                        onChange={(e) => {
+                        onChange={(_e) => {
                           const current = filters.status || []
                           if (e.target.checked) {
                             setFilters(prev => ({ 
@@ -160,7 +160,7 @@ export const VirtualizedListExample: React.FC = () => {
                           }
                         }}
                       />
-                      <span className="text-sm text-gray-300 capitalize">{status}</span>
+                      <span className="text-sm text-gray-300 capitalize">{s_tatus}</span>
                     </label>
                   ))}
                 </div>
@@ -169,7 +169,7 @@ export const VirtualizedListExample: React.FC = () => {
               {/* Clear filters */}
               <div className="flex items-end">
                 <button
-                  onClick={() => setFilters(_)}
+                  onClick={() => setFilters(__)}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
                 >
                   Limpiar filtros
@@ -187,9 +187,9 @@ export const VirtualizedListExample: React.FC = () => {
           itemHeight={100} // Approximate height
           containerHeight={window.innerHeight - 200} // Adjust based on header height
           overscan={5}
-          onItemClick={handleAlertClick}
-          onLoadMore={loadMoreAlerts}
-          filters={filters}
+          onItemClick={_handleAlertClick}
+          onLoadMore={_loadMoreAlerts}
+          filters={_filters}
           className="h-full"
         />
       </div>

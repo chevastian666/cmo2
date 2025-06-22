@@ -38,7 +38,7 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
                       (Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 ||
                       precinto.eslinga.estado === 'violada'
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={_isOpen} onOpenChange={_onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">
@@ -196,13 +196,13 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
           </p>
           <Button
             variant="secondary"
-            onClick={onClose}
+            onClick={_onClose}
           >
             Cancelar
           </Button>
           <Button
             variant={hasWarnings ? "destructive" : "default"}
-            onClick={onConfirm}
+            onClick={_onConfirm}
           >
             <CheckCircle className="mr-2 h-4 w-4" />
             Confirmar Armado

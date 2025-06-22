@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react'
 import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
 import { Progress} from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
@@ -30,16 +30,16 @@ const KPICard: React.FC<{
   trend?: number
   subtitle?: string
   onClick?: () => void
-}> = (title, value, icon, color, trend, subtitle, onClick ) => (
+}> = (_title, value, icon, color, trend, subtitle, onClick ) => (
   <AnimatedCard 
     className={cn("relative overflow-hidden cursor-pointer", onClick && "hover:shadow-lg")}
     whileHover={{ scale: 1.02, y: -2 }}
     whileTap={onClick ? { scale: 0.98 } : {}}
-    onClick={onClick}
+    onClick={_onClick}
   >
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg", color)}
           animate={{
@@ -52,7 +52,7 @@ const KPICard: React.FC<{
             repeatType: "reverse"
           }}
         >
-          {icon}
+          {_icon}
         </motion.div>
       </div>
     </CardHeader>
@@ -65,10 +65,10 @@ const KPICard: React.FC<{
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            {value}
+            {_value}
           </motion.div>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+            <p className="text-sm text-gray-500 mt-1">{s_ubtitle}</p>
           )}
         </div>
         {trend !== undefined && (
@@ -76,7 +76,7 @@ const KPICard: React.FC<{
             variant={trend > 0 ? "danger" : "success"}
             className="mb-1"
           >
-            {trend > 0 ? '+' : ''}{Math.abs(trend)}%
+            {trend > 0 ? '+' : ''}{Math.abs(_trend)}%
           </AnimatedBadge>
         )}
       </div>
@@ -107,7 +107,7 @@ const AlertRow: React.FC<{
   index: number
 }> = ({ alerta, onVerificar, index }) => {
   const getSeveridadInfo = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica':
         return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true }
       case 'alta':
@@ -136,11 +136,11 @@ const AlertRow: React.FC<{
 
   return (
     <motion.tr
-      variants={fadeInUp}
+      variants={_fadeInUp}
       initial="initial"
       animate="animate"
       exit="exit"
-      custom={index}
+      custom={_index}
       className={cn(
         "border-b border-gray-700 transition-all duration-200 group",
         alerta.atendida ? "opacity-60" : "hover:bg-gray-800/50",
@@ -228,7 +228,7 @@ const AlertRow: React.FC<{
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center justify-end">
           {!alerta.atendida ? (<VerificarButton
-              onClick={() => onVerificar(alerta)}
+              onClick={() => onVerificar(_alerta)}
               variant="gradient"
               size="md"
             />
@@ -258,24 +258,24 @@ const StatCard: React.FC<{
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div className={cn("p-1.5 rounded", color)}>
-            {icon}
+            {_icon}
           </div>
-          <span className="text-sm text-gray-400">{label}</span>
+          <span className="text-sm text-gray-400">{_label}</span>
         </div>
-        <span className="text-lg font-semibold">{value}</span>
+        <span className="text-lg font-semibold">{_value}</span>
       </div>
-      <Progress value={percentage} className="h-2" />
+      <Progress value={_percentage} className="h-2" />
       <p className="text-xs text-gray-500 mt-1">{percentage.toFixed(1)}% del total</p>
     </AnimatedDiv>
   )
 }
 const AlertasPageV2: React.FC = () => {
 
-  const [showHistorialModal, setShowHistorialModal] = useState(false)
-  const [showVerificarModal, setShowVerificarModal] = useState(false)
+  const [showHistorialModal, setShowHistorialModal] = useState(_false)
+  const [showVerificarModal, setShowVerificarModal] = useState(_false)
   const [selectedTab, setSelectedTab] = useState('todas')
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(_null)
     useEffect(() => {
     fetchAlertas()
     fetchAlertasActivas()
@@ -283,7 +283,7 @@ const AlertasPageV2: React.FC = () => {
     const interval = setInterval(() => {
       fetchAlertasActivas()
     }, 30000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [])
   // Estadísticas calculadas
   const stats = React.useMemo(() => {
@@ -316,7 +316,7 @@ const AlertasPageV2: React.FC = () => {
   const filteredAlertas = React.useMemo(() => {
     let filtered = [...alertas]
     // Filtro por tab
-    switch (selectedTab) {
+    switch (s_electedTab) {
       case 'activas': {
   filtered = filtered.filter(a => !a.atendida)
         break
@@ -335,7 +335,7 @@ const AlertasPageV2: React.FC = () => {
     }
     
     // Filtro por búsqueda
-    if (searchTerm) {
+    if (s_earchTerm) {
       filtered = filtered.filter(a => 
         a.precintoId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         a.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -352,18 +352,18 @@ const AlertasPageV2: React.FC = () => {
     }
     
     // Ordenar por fecha descendente
-    filtered.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    filtered.sort((_a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
     return filtered
-  }, [alertas, filter])
+  }, [filter])
   const handleVerificarAlerta = (alerta: Alerta) => {
-    setSelectedAlerta(alerta)
-    setShowVerificarModal(true)
+    setSelectedAlerta(_alerta)
+    setShowVerificarModal(_true)
   }
   const handleVerificarSuccess = async () => {
-    if (selectedAlerta) {
+    if (s_electedAlerta) {
       await atenderAlerta(selectedAlerta.id)
-      setShowVerificarModal(false)
-      setSelectedAlerta(null)
+      setShowVerificarModal(_false)
+      setSelectedAlerta(_null)
       fetchAlertasActivas()
     }
   }
@@ -376,7 +376,7 @@ const AlertasPageV2: React.FC = () => {
           action={
             <AnimatedButton
               variant="danger"
-              onClick={() => setShowHistorialModal(true)}
+              onClick={() => setShowHistorialModal(_true)}
               className="flex items-center gap-2"
             >
               <History className="h-5 w-5" />
@@ -494,8 +494,8 @@ const AlertasPageV2: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Input
                     placeholder="Buscar alertas..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={s_earchTerm}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="w-64 bg-gray-800 border-gray-700"
                     icon={<Filter className="h-4 w-4 text-gray-400" />}
                   />
@@ -506,7 +506,7 @@ const AlertasPageV2: React.FC = () => {
                       fetchAlertas()
                       fetchAlertasActivas()
                     }}
-                    disabled={loading}
+                    disabled={_loading}
                   >
                     <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                   </AnimatedButton>
@@ -514,7 +514,7 @@ const AlertasPageV2: React.FC = () => {
               </div>
             </CardHeader>
             
-            <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+            <Tabs value={s_electedTab} onValueChange={s_etSelectedTab} className="w-full">
               <TabsList className="grid w-full grid-cols-5 bg-gray-800">
                 <TabsTrigger value="todas">
                   Todas ({alertas.length})
@@ -533,7 +533,7 @@ const AlertasPageV2: React.FC = () => {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value={selectedTab} className="mt-0">
+              <TabsContent value={s_electedTab} className="mt-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -564,7 +564,7 @@ const AlertasPageV2: React.FC = () => {
                           <td colSpan={6} className="px-6 py-8">
                             <div className="space-y-3">
                               {[1, 2, 3, 4, 5].map(i => (
-                                <AnimatedSkeleton key={i} className="h-16 w-full" />
+                                <AnimatedSkeleton key={_i} className="h-16 w-full" />
                               ))}
                             </div>
                           </td>
@@ -583,12 +583,12 @@ const AlertasPageV2: React.FC = () => {
                           </td>
                         </tr>
                       ) : (<AnimatePresence mode="popLayout">
-                          {filteredAlertas.map((alerta, index) => (
+                          {filteredAlertas.map((_alerta, index) => (
                             <AlertRow
                               key={alerta.id}
-                              alerta={alerta}
-                              onVerificar={handleVerificarAlerta}
-                              index={index}
+                              alerta={_alerta}
+                              onVerificar={_handleVerificarAlerta}
+                              index={_index}
                             />
                           ))}
                         </AnimatePresence>
@@ -604,19 +604,19 @@ const AlertasPageV2: React.FC = () => {
 
       {/* Modal de historial */}
       <HistorialAlertasCriticasModal
-        isOpen={showHistorialModal}
-        onClose={() => setShowHistorialModal(false)}
+        isOpen={s_howHistorialModal}
+        onClose={() => setShowHistorialModal(_false)}
       />
 
       {/* Modal de verificar */}
       {selectedAlerta && (<VerificarAlertaModalV2
-          isOpen={showVerificarModal}
+          isOpen={s_howVerificarModal}
           onClose={() => {
-            setShowVerificarModal(false)
-            setSelectedAlerta(null)
+            setShowVerificarModal(_false)
+            setSelectedAlerta(_null)
           }}
-          alerta={selectedAlerta}
-          onSuccess={handleVerificarSuccess}
+          alerta={s_electedAlerta}
+          onSuccess={_handleVerificarSuccess}
         />
       )}
     </PageTransition>

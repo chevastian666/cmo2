@@ -40,7 +40,7 @@ export const monitoringApi = {
   },
 
   atenderAlerta: async (id: string): Promise<void> => {
-    await api.patch(`/alertas/${id}/atender`)
+    await api.patch(`/alertas/${_id}/atender`)
   },
 
   // Puntos de Control

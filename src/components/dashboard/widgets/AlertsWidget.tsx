@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {AlertCircle, AlertTriangle, Info, CheckCircle} from 'lucide-react'
+import {_AlertCircle, AlertTriangle, Info, CheckCircle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { motion} from 'framer-motion'
 import { useAlertasStore} from '../../../store/store'
@@ -32,11 +32,11 @@ export const AlertsWidget: React.FC = () => {
     const diff = now.getTime() - fecha.getTime()
     const minutes = Math.floor(diff / 60000)
     if (minutes < 1) return 'Ahora'
-    if (minutes < 60) return `Hace ${minutes}m`
+    if (minutes < 60) return `Hace ${_minutes}m`
     const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `Hace ${hours}h`
+    if (hours < 24) return `Hace ${_hours}h`
     const days = Math.floor(hours / 24)
-    return `Hace ${days}d`
+    return `Hace ${_days}d`
   }
   if (recentAlerts.length === 0) {
     return (
@@ -51,7 +51,7 @@ export const AlertsWidget: React.FC = () => {
 
   return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-2 overflow-auto">
-        {recentAlerts.map((alerta, index) => (
+        {recentAlerts.map((_alerta, index) => (
           <motion.div
             key={alerta.id}
             initial={{ opacity: 0, x: -20 }}

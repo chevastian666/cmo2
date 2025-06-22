@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react'
+import {_Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { asmrSoundService, useASMRSound} from '../services/soundService'
 interface MicrointeractionsConfig {
@@ -12,7 +12,7 @@ interface MicrointeractionsConfig {
 }
 
 export const MicrointeractionsSettings: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(_false)
   const { config: soundConfig } = useASMRSound()
   const [_config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
@@ -26,8 +26,8 @@ export const MicrointeractionsSettings: React.FC = () => {
 
   useEffect(() => {
     const saved = localStorage.getItem('microinteractions-config')
-    if (saved) {
-      const parsed = JSON.parse(saved)
+    if (s_aved) {
+      const parsed = JSON.parse(s_aved)
       setConfig(prev => ({ ...prev, ...parsed }))
     }
 
@@ -43,8 +43,8 @@ export const MicrointeractionsSettings: React.FC = () => {
   // Save config changes
   const updateConfig = (updates: Partial<MicrointeractionsConfig>) => {
     const newConfig = { ..._config, ...updates }
-    setConfig(newConfig)
-    localStorage.setItem('microinteractions-config', JSON.stringify(newConfig))
+    setConfig(_newConfig)
+    localStorage.setItem('microinteractions-config', JSON.stringify(_newConfig))
     // Update sound service
     if ('soundsEnabled' in updates) {
       asmrSoundService.setEnabled(updates.soundsEnabled!)
@@ -54,18 +54,18 @@ export const MicrointeractionsSettings: React.FC = () => {
     }
   }
   const handleToggle = () => {
-    if (isOpen) {
+    if (_isOpen) {
       playClose()
-      setIsOpen(false)
+      setIsOpen(_false)
     } else {
       playOpen()
-      setIsOpen(true)
+      setIsOpen(_true)
     }
   }
   return (<>
       {/* Settings Button */}
       <button
-        onClick={handleToggle}
+        onClick={_handleToggle}
         onMouseEnter={() => playHover()}
         className="fixed bottom-4 right-4 p-3 bg-gray-800 hover:bg-gray-700 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
         title="Configuración de microinteracciones"
@@ -78,7 +78,7 @@ export const MicrointeractionsSettings: React.FC = () => {
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/50 z-50"
-            onClick={handleToggle}
+            onClick={_handleToggle}
           />
 
           {/* Panel */}
@@ -90,7 +90,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                 <h3 className="font-semibold text-white">Microinteracciones</h3>
               </div>
               <button
-                onClick={handleToggle}
+                onClick={_handleToggle}
                 className="p-1 hover:bg-gray-800 rounded transition-colors"
               >
                 <X className="h-4 w-4 text-gray-400" />
@@ -106,7 +106,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={config.animationsEnabled && !config.reducedMotion}
-                    onChange={(e) => updateConfig({ animationsEnabled: e.target.checked })}
+                    onChange={(_e) => updateConfig({ animationsEnabled: e.target.checked })}
                     disabled={config.reducedMotion}
                     className="toggle-checkbox"
                   />
@@ -118,7 +118,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                     <div className="flex gap-2">
                       {(['low', 'medium', 'high'] as const).map(level => (
                         <button
-                          key={level}
+                          key={_level}
                           onClick={() => updateConfig({ animationIntensity: level })}
                           className={cn(
                             'px-3 py-1 text-xs rounded transition-colors',
@@ -141,7 +141,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={config.particlesEnabled && !config.reducedMotion}
-                  onChange={(e) => updateConfig({ particlesEnabled: e.target.checked })}
+                  onChange={(_e) => updateConfig({ particlesEnabled: e.target.checked })}
                   disabled={config.reducedMotion}
                   className="toggle-checkbox"
                 />
@@ -157,7 +157,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={config.soundsEnabled}
-                    onChange={(e) => updateConfig({ soundsEnabled: e.target.checked })}
+                    onChange={(_e) => updateConfig({ soundsEnabled: e.target.checked })}
                     className="toggle-checkbox"
                   />
                 </label>
@@ -169,7 +169,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                       min="0"
                       max="100"
                       value={config.soundVolume * 100}
-                      onChange={(e) => updateConfig({ soundVolume: Number(e.target.value) / 100 })}
+                      onChange={(_e) => updateConfig({ soundVolume: Number(e.target.value) / 100 })}
                       className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                     />
                     <div className="text-xs text-gray-500 text-right">{Math.round(config.soundVolume * 100)}%</div>

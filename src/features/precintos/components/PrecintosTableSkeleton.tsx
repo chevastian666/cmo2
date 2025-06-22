@@ -53,8 +53,8 @@ export const PrecintosTableSkeleton: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[...Array(5)].map((_, index) => (
-              <TableRow key={index} className="border-gray-700">
+            {[...Array(5)].map((__, index) => (
+              <TableRow key={_index} className="border-gray-700">
                 <TableCell>
                   <Skeleton className="h-4 w-4" />
                 </TableCell>

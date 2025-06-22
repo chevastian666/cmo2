@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react'
+import {_ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react'
 import { cn} from '@/lib/utils'
 import { Button} from '@/components/ui/button'
 import { PrecintoStatusBadge} from './PrecintoStatusBadge'
@@ -30,19 +30,19 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
     if (field === sortField) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(_field)
+      setSortField(__field)
       setSortDirection('asc')
     }
   }
-  const _sortedPrecintos = [...precintos].sort((a, b) => {
+  const _sortedPrecintos = [...precintos].sort((_a, b) => {
     let aValue = a[sortField]
     let bValue = b[sortField]
     if (aValue === undefined) aValue = ''
     if (bValue === undefined) bValue = ''
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortDirection === 'asc' 
-        ? aValue.localeCompare(_bValue)
-        : bValue.localeCompare(_aValue)
+        ? aValue.localeCompare(__bValue)
+        : bValue.localeCompare(__aValue)
     }
 
     if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
@@ -61,16 +61,16 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
       <ChevronDown className="h-4 w-4" />
   }
   const _SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (<th 
-      onClick={() => handleSort(_field)}
+      onClick={() => handleSort(__field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
     >
       <div className="flex items-center gap-1">
-        {children}
-        <SortIcon field={field} />
+        {_children}
+        <SortIcon field={_field} />
       </div>
     </th>
   )
-  if (_loading) {
+  if (__loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-8 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
@@ -112,14 +112,14 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {paginatedPrecintos.map((_precinto) => (
+            {paginatedPrecintos.map((__precinto) => (
               <tr key={precinto.id} className={cn(
                 "hover:bg-gray-700/50 transition-colors",
                 precinto.status === PrecintoStatus.ROTO && "bg-red-900/20 hover:bg-red-900/30"
               )}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <PrecintoStatusBadge status={precinto.status} size="sm" showText={false} />
+                    <PrecintoStatusBadge status={precinto.status} size="sm" showText={_false} />
                     {precinto.status === PrecintoStatus.ROTO && (
                       <span className="text-xs font-bold text-red-400 uppercase tracking-wide animate-pulse">
                         ROTO
@@ -165,7 +165,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewDetail(_precinto)}
+                      onClick={() => onViewDetail(__precinto)}
                       title="Ver detalle"
                       aria-label={`Ver detalle del precinto ${precinto.codigo}`}
                     >
@@ -174,7 +174,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     {precinto.gps && (<Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onViewMap(_precinto)}
+                        onClick={() => onViewMap(__precinto)}
                         title="Ver en mapa"
                         aria-label={`Ver ubicación del precinto ${precinto.codigo} en el mapa`}
                       >
@@ -184,7 +184,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onSendCommand(_precinto)}
+                      onClick={() => onSendCommand(__precinto)}
                       title="Enviar comando"
                       aria-label={`Enviar comando al precinto ${precinto.codigo}`}
                     >
@@ -193,7 +193,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewHistory(_precinto)}
+                      onClick={() => onViewHistory(__precinto)}
                       title="Ver historial"
                       aria-label={`Ver historial del precinto ${precinto.codigo}`}
                     >
@@ -202,7 +202,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (<Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onMarkAsBroken(_precinto)}
+                        onClick={() => onMarkAsBroken(__precinto)}
                         title="Marcar como roto"
                       >
                         <XCircle className="h-4 w-4 text-orange-400" />
@@ -231,23 +231,23 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
             Anterior
           </Button>
           <div className="flex gap-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
+            {Array.from({ length: totalPages }, (__, i) => i + 1)
               .filter(page => 
                 page === 1 || 
                 page === totalPages || 
                 Math.abs(page - currentPage) <= 1
               )
-              .map((page, index, array) => (
-                <Fragment key={page}>
+              .map((_page, index, array) => (
+                <Fragment key={_page}>
                   {index > 0 && array[index - 1] !== page - 1 && (
                     <span className="px-2 py-1 text-muted-foreground">...</span>
                   )}
                   <Button
                     size="sm"
                     variant={page === currentPage ? "default" : "secondary"}
-                    onClick={() => setCurrentPage(_page)}
+                    onClick={() => setCurrentPage(__page)}
                   >
-                    {page}
+                    {_page}
                   </Button>
                 </Fragment>
               ))}
@@ -255,7 +255,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            onClick={() => setCurrentPage(Math.min(_totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
           >
             Siguiente

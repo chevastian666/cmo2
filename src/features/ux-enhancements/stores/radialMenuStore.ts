@@ -12,32 +12,32 @@ interface RadialMenuStore {
 }
 
 export const useRadialMenuStore = create<RadialMenuStore>()(persist(
-    (set, get) => ({
+    (s_et, get) => ({
       settings: {
         favoriteActions: [], customOrder: undefined, defaultSize: 'medium', animationSpeed: 1, hapticFeedback: true
-      }, userPermissions: [], updateSettings: (newSettings) => {
-        set((state) => ({
+      }, userPermissions: [], updateSettings: (_newSettings) => {
+        set((s_tate) => ({
           settings: { ...state.settings, ...newSettings }
         }))
       },
 
-      setUserPermissions: (permissions) => {
+      setUserPermissions: (_permissions) => {
         set({ userPermissions: permissions })
       },
 
-      canUseAction: (requiredPermissions) => {
+      canUseAction: (_requiredPermissions) => {
         if (requiredPermissions.length === 0) return true
-        return requiredPermissions.some(perm => userPermissions.includes(perm))
+        return requiredPermissions.some(perm => userPermissions.includes(_perm))
       },
 
-      toggleFavorite: (actionId) => {
-        set((state) => {
+      toggleFavorite: (_actionId) => {
+        set((s_tate) => {
           const favorites = [...state.settings.favoriteActions]
-          const index = favorites.indexOf(actionId)
+          const index = favorites.indexOf(_actionId)
           if (index > -1) {
-            favorites.splice(index, 1)
+            favorites.splice(_index, 1)
           } else {
-            favorites.push(actionId)
+            favorites.push(_actionId)
           }
 
           return {
@@ -46,15 +46,15 @@ export const useRadialMenuStore = create<RadialMenuStore>()(persist(
         })
       },
 
-      reorderActions: (actionIds) => {
-        set((state) => ({
+      reorderActions: (_actionIds) => {
+        set((s_tate) => ({
           settings: { ...state.settings, customOrder: actionIds }
         }))
       }
     }),
     {
       name: 'radial-menu-settings',
-      partialize: (state) => ({ settings: state.settings })
+      partialize: (s_tate) => ({ settings: state.settings })
     }
   )
 )

@@ -18,7 +18,7 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={onClose}
+        onClick={_onClose}
       />
 
       {/* Modal */}
@@ -34,7 +34,7 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                 </h2>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5 text-gray-400" />
@@ -57,12 +57,12 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                   <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
                     <div 
                       className="bg-blue-600 h-full transition-all duration-300"
-                      style={{ width: `${progressPercentage}%` }}
+                      style={{ width: `${_progressPercentage}%` }}
                     />
                   </div>
                   <div className="flex justify-between mt-2 text-xs text-gray-400">
                     <span>{transito.origen}</span>
-                    <span>{progressPercentage}%</span>
+                    <span>{_progressPercentage}%</span>
                     <span>{transito.destino}</span>
                   </div>
                 </div>
@@ -166,10 +166,10 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                       Alertas Activas
                     </h3>
                     <div className="space-y-2">
-                      {transito.alertas.map((alerta, index) => (
-                        <div key={index} className="bg-red-900/20 border border-red-800 rounded-lg p-3 flex items-start space-x-3">
+                      {transito.alertas.map((_alerta, index) => (
+                        <div key={_index} className="bg-red-900/20 border border-red-800 rounded-lg p-3 flex items-start space-x-3">
                           <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0" />
-                          <p className="text-sm text-red-300">{alerta}</p>
+                          <p className="text-sm text-red-300">{_alerta}</p>
                         </div>
                       ))}
                     </div>
@@ -198,7 +198,7 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                   Última actualización: {new Date().toLocaleString()}
                 </div>
                 <button
-                  onClick={onClose}
+                  onClick={_onClose}
                   className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   Cerrar

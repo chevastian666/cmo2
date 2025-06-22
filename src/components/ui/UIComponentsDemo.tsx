@@ -60,7 +60,7 @@ export const UIComponentsDemo: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-100 mb-8">UI Components Demo</h1>
         
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
           <TabsList className="mb-8">
             <TabsTrigger value="tabs">Tabs</TabsTrigger>
             <TabsTrigger value="alerts">Alerts</TabsTrigger>
@@ -99,13 +99,13 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="alerts">
             <div className="space-y-6">
               <AlertsPanel
-                alerts={sampleAlerts}
+                alerts={s_ampleAlerts}
                 title="Panel de Alertas"
-                onAlertClick={(alert) => console.log('Alert clicked:', alert)}
+                onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
               />
               
               <AlertsPanel
-                alerts={sampleAlerts}
+                alerts={s_ampleAlerts}
                 variant="compact"
                 title="Panel Compacto"
                 maxHeight="200px"
@@ -122,8 +122,8 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="transit">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <TransitCard
-                transit={sampleTransit}
-                onClick={(t) => console.log('Transit clicked:', t)}
+                transit={s_ampleTransit}
+                onClick={(_t) => console.log('Transit clicked:', t)}
               />
               
               <TransitCard
@@ -194,9 +194,9 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="map">
             <div className="space-y-6">
               <MapModule
-                markers={sampleMarkers}
+                markers={s_ampleMarkers}
                 height="500px"
-                onMarkerClick={(marker) => console.log('Marker clicked:', marker)}
+                onMarkerClick={(_marker) => console.log('Marker clicked:', marker)}
               />
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -204,14 +204,14 @@ export const UIComponentsDemo: React.FC = () => {
                   markers={sampleMarkers.slice(0, 2)}
                   variant="compact"
                   height="300px"
-                  showControls={false}
+                  showControls={_false}
                 />
                 
                 <MapModule
                   markers={[sampleMarkers[2]]}
                   variant="compact"
                   height="300px"
-                  showLegend={false}
+                  showLegend={_false}
                 />
               </div>
             </div>

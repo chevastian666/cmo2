@@ -3,7 +3,7 @@ import { alertasService} from '../../../services/alertas.service'
 import { QUERY_KEYS} from '../../../config'
 export const useAlertas = (filters?: AlertaFilters) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ALERTAS, filters], queryFn: () => alertasService.getAll(filters),
+    queryKey: [QUERY_KEYS.ALERTAS, filters], queryFn: () => alertasService.getAll(_filters),
     refetchInterval: 5000,
   })
 }
@@ -16,7 +16,7 @@ export const useAlertasActivas = () => {
 }
 export const useAlerta = (id: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ALERTAS, id], queryFn: () => alertasService.getById(id),
+    queryKey: [QUERY_KEYS.ALERTAS, id], queryFn: () => alertasService.getById(_id),
     enabled: !!id,
   })
 }
@@ -24,7 +24,7 @@ export const useAtenderAlerta = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, observaciones }: { id: string; observaciones?: string }) => 
-      alertasService.atender(id, observaciones),
+      alertasService.atender(_id, observaciones),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ALERTAS] })
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ESTADISTICAS] })
@@ -42,7 +42,7 @@ export const useCrearAlerta = () => {
 }
 export const useHistoricoAlertas = (horas = 24) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ALERTAS, 'historico', horas], queryFn: () => alertasService.getEstadisticas(horas),
+    queryKey: [QUERY_KEYS.ALERTAS, 'historico', horas], queryFn: () => alertasService.getEstadisticas(_horas),
     refetchInterval: 60000,
   })
 }

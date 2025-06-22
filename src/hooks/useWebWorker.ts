@@ -14,42 +14,42 @@ interface UseWebWorkerOptions {
 
 export function useWebWorker<T>(workerPath: string, options: UseWebWorkerOptions = {}) {
 
-  const workerRef = useRef<Worker | null>(null)
-  const proxyRef = useRef<T | null>(null)
-  const [isReady, setIsReady] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const workerRef = useRef<Worker | null>(_null)
+  const proxyRef = useRef<T | null>(_null)
+  const [isReady, setIsReady] = useState(_false)
+  const [error, setError] = useState<Error | null>(_null)
     useEffect(() => {
     let mounted = true
     const initWorker = async () => {
       try {
         // Create worker
         const worker = new Worker(
-          new URL(workerPath, import.meta.url),
+          new URL(_workerPath, import.meta.url),
           { type: 'module' }
         )
         // Handle worker errors
-        worker.onerror = (event) => {
+        worker.onerror = (_event) => {
           const error = new Error(`Worker error: ${event.message}`)
-          setError(error)
-          if (onError) onError(error)
-          if (fallbackToMainThread) {
+          setError(_error)
+          if (_onError) onError(_error)
+          if (_fallbackToMainThread) {
             console.warn('Worker failed, falling back to main thread')
           }
         }
         // Create Comlink proxy
-        const proxy = Comlink.wrap<T>(worker)
-        if (mounted) {
+        const proxy = Comlink.wrap<T>(_worker)
+        if (_mounted) {
           workerRef.current = worker
           proxyRef.current = proxy
-          setIsReady(true)
+          setIsReady(_true)
         }
-      } catch (err) {
+      } catch (_err) {
         const error = err as Error
-        setError(error)
-        if (onError) onError(error)
-        if (fallbackToMainThread) {
+        setError(_error)
+        if (_onError) onError(_error)
+        if (_fallbackToMainThread) {
           console.warn('Failed to create worker, falling back to main thread')
-          setIsReady(true)
+          setIsReady(_true)
         }
       }
     }
@@ -68,13 +68,13 @@ export function useWebWorker<T>(workerPath: string, options: UseWebWorkerOptions
       workerRef.current.terminate()
       workerRef.current = null
       proxyRef.current = null
-      setIsReady(false)
+      setIsReady(_false)
     }
   }, [])
   const restart = useCallback(() => {
     terminate()
     // Re-trigger effect
-    setError(null)
+    setError(_null)
   }, [terminate])
   return {
     proxy: proxyRef.current,
@@ -89,31 +89,31 @@ export function useWebWorker<T>(workerPath: string, options: UseWebWorkerOptions
 export function useDataProcessor() {
 
   const processLargeDataset = useCallback(async <T extends Record<string, unknown>>(
-    _data: T[], options?: Parameters<typeof proxy.processLargeDataset>[1]) => {
+    __data: T[], options?: Parameters<typeof proxy.processLargeDataset>[1]) => {
     if (!proxy) {
       throw new Error('Data processor not ready')
     }
-    return proxy.processLargeDataset(data, options || {})
+    return proxy.processLargeDataset(_data, options || {})
   }, [proxy])
   const calculateStatistics = useCallback(async (values: number[]) => {
     if (!proxy) {
       throw new Error('Data processor not ready')
     }
-    return proxy.calculateStatistics(values)
+    return proxy.calculateStatistics(_values)
   }, [proxy])
   const aggregateTimeSeries = useCallback(async (
     data: Parameters<typeof proxy.aggregateTimeSeries>[0], interval: Parameters<typeof proxy.aggregateTimeSeries>[1], aggregationType?: Parameters<typeof proxy.aggregateTimeSeries>[2]) => {
     if (!proxy) {
       throw new Error('Data processor not ready')
     }
-    return proxy.aggregateTimeSeries(data, interval, aggregationType)
+    return proxy.aggregateTimeSeries(_data, interval, aggregationType)
   }, [proxy])
   const detectAnomalies = useCallback(async (
     values: number[], threshold?: number) => {
     if (!proxy) {
       throw new Error('Data processor not ready')
     }
-    return proxy.detectAnomalies(values, threshold)
+    return proxy.detectAnomalies(_values, threshold)
   }, [proxy])
   return {
     isReady,

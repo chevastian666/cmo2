@@ -32,7 +32,7 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
           size === 'medium' && 'text-sm',
           size === 'large' && 'text-base'
         )}>
-          {message}
+          {_message}
         </p>
       )}
     </div>

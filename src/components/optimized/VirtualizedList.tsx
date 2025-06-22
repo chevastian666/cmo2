@@ -31,13 +31,13 @@ const Row = memo(({ data, index, style }: unknown) => {
   const item = items[index]
   if (!item) {
     return (
-      <div style={style} className="flex items-center justify-center">
+      <div style={s_tyle} className="flex items-center justify-center">
         <div className="animate-pulse bg-gray-700 h-16 w-full rounded-lg" />
       </div>
     )
   }
   
-  return <div style={style}>{renderItem(item, index, style)}</div>
+  return <div style={s_tyle}>{renderItem(_item, index, style)}</div>
 })
 Row.displayName = 'VirtualizedRow'
 export function VirtualizedList<T>({
@@ -51,12 +51,12 @@ export function VirtualizedList<T>({
   width = '100%',
   height = '100%'
 }: VirtualizedListProps<T>) {
-  const listRef = useRef<List>(null)
+  const listRef = useRef<List>(_null)
   const itemCount = hasNextPage ? items.length + 1 : items.length
   // Get item size - supports both fixed and variable heights
   const getItemSize = useCallback((index: number) => {
     if (typeof itemHeight === 'function') {
-      return itemHeight(index)
+      return itemHeight(_index)
     }
     return itemHeight
   }, [])
@@ -67,8 +67,8 @@ export function VirtualizedList<T>({
   }), [items, renderItem])
   // Handle scroll events with throttling
   const handleScroll = useCallback(({ scrollOffset }: { scrollOffset: number }) => {
-    if (onScroll) {
-      onScroll(scrollOffset)
+    if (_onScroll) {
+      onScroll(s_crollOffset)
     }
   }, [])
   // Reset scroll position when items change significantly
@@ -77,35 +77,35 @@ export function VirtualizedList<T>({
   }, [])
   // Scroll to specific item
   const scrollToItem = useCallback((index: number, align: 'start' | 'center' | 'end' = 'start') => {
-    listRef.current?.scrollToItem(index, align)
+    listRef.current?.scrollToItem(_index, align)
   }, [])
   // Inner list component
   const InnerList = useCallback(({ height, width }: { height: number; width: number }) => {
     if (loadMore && hasNextPage) {
       return (<InfiniteLoader
-          isItemLoaded={isItemLoaded}
-          itemCount={itemCount}
-          loadMoreItems={loadMore}
-          threshold={threshold}
+          isItemLoaded={_isItemLoaded}
+          itemCount={_itemCount}
+          loadMoreItems={_loadMore}
+          threshold={_threshold}
         >
-          {(onItemsRendered, ref ) => (<List
-              ref={(list) => {
-                ref(list)
+          {(_onItemsRendered, ref ) => (<List
+              ref={(_list) => {
+                ref(_list)
                 // @ts-expect-error - Complex type inference
                 listRef.current = list
               }}
-              height={height}
-              width={width}
-              itemCount={itemCount}
-              itemSize={getItemSize}
-              itemData={itemData}
-              onScroll={handleScroll}
-              overscanCount={overscan}
-              estimatedItemSize={estimatedItemSize}
-              initialScrollOffset={initialScrollOffset}
+              height={_height}
+              width={_width}
+              itemCount={_itemCount}
+              itemSize={_getItemSize}
+              itemData={_itemData}
+              onScroll={_handleScroll}
+              overscanCount={_overscan}
+              estimatedItemSize={_estimatedItemSize}
+              initialScrollOffset={_initialScrollOffset}
               className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
             >
-              {Row}
+              {_Row}
             </List>
           )}
         </InfiniteLoader>
@@ -114,27 +114,27 @@ export function VirtualizedList<T>({
 
     return (
       <List
-        ref={listRef}
-        height={height}
-        width={width}
-        itemCount={itemCount}
-        itemSize={getItemSize}
-        itemData={itemData}
-        onScroll={handleScroll}
-        overscanCount={overscan}
-        estimatedItemSize={estimatedItemSize}
-        initialScrollOffset={initialScrollOffset}
+        ref={_listRef}
+        height={_height}
+        width={_width}
+        itemCount={_itemCount}
+        itemSize={_getItemSize}
+        itemData={_itemData}
+        onScroll={_handleScroll}
+        overscanCount={_overscan}
+        estimatedItemSize={_estimatedItemSize}
+        initialScrollOffset={_initialScrollOffset}
         className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
       >
-        {Row}
+        {_Row}
       </List>
     )
   }, [overscan, threshold])
   return (
     <div className={cn("w-full h-full", className)} style={{ width, height }}>
       <AutoSizer>
-        {(height, width ) => (
-          <InnerList height={height} width={width} />
+        {(_height, width ) => (
+          <InnerList height={_height} width={_width} />
         )}
       </AutoSizer>
     </div>
@@ -148,8 +148,8 @@ export const VirtualizedListUtils = {
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
     if (!context) return 80
-    context.font = `${fontSize}px sans-serif`
-    const metrics = context.measureText(content)
+    context.font = `${_fontSize}px sans-serif`
+    const metrics = context.measureText(_content)
     const lines = Math.ceil(metrics.width / maxWidth)
     return Math.max(80, lines * (fontSize * 1.5) + 40); // padding
   },
@@ -157,7 +157,7 @@ export const VirtualizedListUtils = {
   // Create index map for quick lookups
   createIndexMap: <T extends { id: string }>(items: T[]): Map<string, number> => {
     const map = new Map<string, number>()
-    items.forEach((item, index) => {
+    items.forEach((_item, index) => {
       map.set(item.id, index)
     })
     return map

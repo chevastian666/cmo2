@@ -34,14 +34,14 @@ const statusConfig = {
 export const AlertListItem = memo<AlertListItemProps>(({
   alert, index, style, onClick, isHighlighted, isScrolling, onHeightChange
 }) => {
-  const itemRef = useRef<HTMLDivElement>(null)
+  const itemRef = useRef<HTMLDivElement>(_null)
   const StatusIcon = statusConfig[alert.status].icon
   // Measure height on mount and updates
 
   useEffect(() => {
     if (itemRef.current && onHeightChange) {
       const height = itemRef.current.getBoundingClientRect().height
-      onHeightChange(height)
+      onHeightChange(_height)
     }
   }, [alert])
   // Format timestamp
@@ -50,13 +50,13 @@ export const AlertListItem = memo<AlertListItemProps>(({
     const diff = now.getTime() - date.getTime()
     const minutes = Math.floor(diff / 60000)
     if (minutes < 1) return 'Hace un momento'
-    if (minutes < 60) return `Hace ${minutes} min`
+    if (minutes < 60) return `Hace ${_minutes} min`
     if (minutes < 1440) return `Hace ${Math.floor(minutes / 60)} hr`
     return date.toLocaleDateString()
   }
   return (
     <div
-      ref={itemRef}
+      ref={_itemRef}
       className={cn(
         'px-4 py-3 border-l-4 cursor-pointer transition-all duration-200',
         config.bg,
@@ -65,8 +65,8 @@ export const AlertListItem = memo<AlertListItemProps>(({
         isHighlighted && 'ring-2 ring-blue-500 ring-offset-2 ring-offset-gray-900',
         isScrolling && 'pointer-events-none'
       )}
-      style={style}
-      onClick={onClick}
+      style={s_tyle}
+      onClick={_onClick}
       role="listitem"
       aria-posinset={index + 1}
       tabIndex={0}
@@ -128,7 +128,7 @@ export const AlertListItem = memo<AlertListItemProps>(({
       </div>
     </div>
   )
-}, (prevProps, nextProps) => {
+}, (_prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
     prevProps.alert.id === nextProps.alert.id &&

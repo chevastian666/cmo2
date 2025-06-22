@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Activity, Menu, X, User, LogOut, Settings, ChevronDown} from 'lucide-react'
+import {_Activity, Menu, X, User, LogOut, Settings, ChevronDown} from 'lucide-react'
 import { Link, useLocation} from 'react-router-dom'
 import { cn} from '../../../utils/utils'
 import { APP_CONFIG} from '../../../config'
@@ -7,7 +7,7 @@ import { ConnectionStatus} from './ConnectionStatus'
 import { RealtimeNotifications} from './RealtimeNotifications'
 import { AlarmSummary} from './AlarmSummary'
 import { useAlertasActivas} from '../../../store/hooks'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { useConnectionStatus} from '../../../hooks/useSharedState'
 import { PanelSwitcher} from '../../../components/PanelSwitcher'
 import { NotificationButton} from '../../../components/notifications/NotificationButton'
@@ -17,8 +17,8 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   console.log('Layout: Rendering with children:', children)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(_false)
+  const [userMenuOpen, setUserMenuOpen] = useState(_false)
   const location = useLocation()
   const connectionStatus = useConnectionStatus()
   const userInfo = useUserInfo()
@@ -40,7 +40,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
               <div className="hidden sm:block">
-                <ConnectionStatus status={connectionStatus} />
+                <ConnectionStatus status={_connectionStatus} />
               </div>
               
               {/* Alarm Summary - Hidden on mobile to save space */}
@@ -80,7 +80,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {userMenuOpen && (<>
                     <div
                       className="fixed inset-0 z-10"
-                      onClick={() => setUserMenuOpen(false)}
+                      onClick={() => setUserMenuOpen(_false)}
                     />
                     <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg border border-gray-700 z-20">
                       <div className="py-1">
@@ -120,7 +120,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (<div 
             className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => setSidebarOpen(_false)}
           />
         )}
         
@@ -289,7 +289,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </aside>
 
         <main className="flex-1 p-4 sm:p-6">
-          {children}
+          {_children}
         </main>
       </div>
       

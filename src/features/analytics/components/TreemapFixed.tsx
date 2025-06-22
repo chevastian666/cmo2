@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
-import {Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react'
+import {_Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react'
 const TreemapFixed: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview')
   // Datos de ejemplo para visualización
@@ -36,7 +36,7 @@ const TreemapFixed: React.FC = () => {
     const sizeClass = sizes[index % sizes.length]
     return (
       <div
-        className={`${sizeClass} relative rounded-lg p-4 text-white transition-all hover:scale-105 hover:shadow-xl cursor-pointer`}
+        className={`${s_izeClass} relative rounded-lg p-4 text-white transition-all hover:scale-105 hover:shadow-xl cursor-pointer`}
         style={{ backgroundColor: item.color }}
       >
         <div className="flex flex-col justify-between h-full">
@@ -120,7 +120,7 @@ const TreemapFixed: React.FC = () => {
       </div>
 
       {/* Treemap Visualization */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={_activeTab} onValueChange={s_etActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">General</TabsTrigger>
           <TabsTrigger value="precintos">Precintos</TabsTrigger>
@@ -162,8 +162,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.precintos.map((item, index) => (
-                  <TreemapBlock key={index} item={item} index={index} />
+                {mockData.precintos.map((_item, index) => (
+                  <TreemapBlock key={_index} item={_item} index={_index} />
                 ))}
               </div>
             </CardContent>
@@ -177,8 +177,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.transitos.map((item, index) => (
-                  <TreemapBlock key={index} item={item} index={index} />
+                {mockData.transitos.map((_item, index) => (
+                  <TreemapBlock key={_index} item={_item} index={_index} />
                 ))}
               </div>
             </CardContent>
@@ -192,8 +192,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.alertas.map((item, index) => (
-                  <TreemapBlock key={index} item={item} index={index} />
+                {mockData.alertas.map((_item, index) => (
+                  <TreemapBlock key={_index} item={_item} index={_index} />
                 ))}
               </div>
             </CardContent>

@@ -1,11 +1,11 @@
-import {useState, useEffect} from 'react'
+import {_useState, useEffect} from 'react'
 import { sharedStateService} from '../services/shared/sharedState.service'
 // Hook to subscribe to entire shared state
 export function useSharedState() {
   const [state, setState] = useState(sharedStateService.getState())
   useEffect(() => {
     // Subscribe to state changes
-    const unsubscribe = sharedStateService.subscribe((updates) => {
+    const unsubscribe = sharedStateService.subscribe((_updates) => {
       setState(prevState => ({ ...prevState, ...updates }))
     })
     // Get current state
@@ -19,10 +19,10 @@ export function useSharedState() {
 export function useSharedStateKey<K extends keyof ReturnType<typeof sharedStateService.getState>>(
   key: K
 ): ReturnType<typeof sharedStateService.getState>[K] {
-  const [value, setValue] = useState(sharedStateService.getStateValue(key))
+  const [value, setValue] = useState(sharedStateService.getStateValue(_key))
   useEffect(() => {
-    const unsubscribe = sharedStateService.subscribeToKey(key, (newValue) => {
-      setValue(newValue)
+    const unsubscribe = sharedStateService.subscribeToKey(_key, (_newValue) => {
+      setValue(_newValue)
     })
     return unsubscribe
   }, [key])
@@ -64,7 +64,7 @@ export function useCMOMessages() {
   return {
     messages,
     unreadCount,
-    markAsRead: sharedStateService.markCMOMessageAsRead.bind(sharedStateService)
+    markAsRead: sharedStateService.markCMOMessageAsRead.bind(s_haredStateService)
   }
 }
 
@@ -73,7 +73,7 @@ export function useSharedTransitos() {
   const transitos = useTransitosPendientes()
   return {
     transitos,
-    refresh: sharedStateService.refreshTransitos.bind(sharedStateService)
+    refresh: sharedStateService.refreshTransitos.bind(s_haredStateService)
   }
 }
 
@@ -81,7 +81,7 @@ export function useSharedPrecintos() {
   const precintos = usePrecintosActivos()
   return {
     precintos,
-    refresh: sharedStateService.refreshPrecintos.bind(sharedStateService)
+    refresh: sharedStateService.refreshPrecintos.bind(s_haredStateService)
   }
 }
 
@@ -91,6 +91,6 @@ export function useSharedAlertas() {
   return {
     alertas,
     recientes,
-    refresh: sharedStateService.refreshAlertas.bind(sharedStateService)
+    refresh: sharedStateService.refreshAlertas.bind(s_haredStateService)
   }
 }

@@ -31,7 +31,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
 }) => {
   const [ripples, setRipples] = useState<Ripple[]>([])
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled) return
+    if (_disabled) return
     const rect = e.currentTarget.getBoundingClientRect()
     const size = Math.max(rect.width, rect.height) * 2
     const x = e.clientX - rect.left - size / 2
@@ -51,9 +51,9 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
   return (
     <div
       className={cn('relative overflow-hidden', className)}
-      onClick={handleClick}
+      onClick={_handleClick}
     >
-      {children}
+      {_children}
       <AnimatePresence>
         {ripples.map(ripple => (
           <motion.span

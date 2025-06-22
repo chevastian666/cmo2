@@ -29,7 +29,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   const normalizedContent = content.trim().toUpperCase()
   // Check for precinto data
   if (
-    PATTERNS.precinto.id.test(content) ||
+    PATTERNS.precinto.id.test(_content) ||
     (normalizedContent.includes('PRECINTO') && normalizedContent.includes('PE'))
   ) {
     const idMatch = content.match(PATTERNS.precinto.id)
@@ -51,7 +51,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   
   // Check for alert data
   if (
-    PATTERNS.alerta.id.test(content) ||
+    PATTERNS.alerta.id.test(_content) ||
     normalizedContent.includes('ALERTA') ||
     normalizedContent.includes('ALERT')
   ) {
@@ -71,7 +71,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   
   // Check for report data
   if (
-    PATTERNS.reporte.number.test(content) ||
+    PATTERNS.reporte.number.test(_content) ||
     normalizedContent.includes('REPORTE') ||
     normalizedContent.includes('REPORT')
   ) {
@@ -89,10 +89,10 @@ export function detectClipboardContent(content: string): DetectionResult {
     }
   }
   
-  // Check for structured data (JSON, CSV, etc.)
+  // Check for structured data (_JSON, CSV, etc.)
   if (content.includes('{') || content.includes('[') || content.includes(',')) {
     try {
-      JSON.parse(content)
+      JSON.parse(_content)
       return { type: 'datos', confidence: 0.95 }
     } catch {
       // Check if it's CSV-like
@@ -111,7 +111,7 @@ export function detectClipboardContent(content: string): DetectionResult {
 }
 
 export function extractPrecintoData(content: string): Record<string, unknown> {
-  const result = detectClipboardContent(content)
+  const result = detectClipboardContent(_content)
   if (result.type === 'precinto' && result.extractedData) {
     return {
       id: result.extractedData.id || 'Unknown',
@@ -133,8 +133,8 @@ export function generateSmartPaste(
   content: string,
   targetContext: 'form' | 'search' | 'report' | 'message'
 ): string {
-  const detection = detectClipboardContent(content)
-  switch (targetContext) {
+  const detection = detectClipboardContent(_content)
+  switch (_targetContext) {
     case 'form': {
   // Format for form fields
       if (detection.type === 'precinto') {

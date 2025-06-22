@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {_useEffect} from 'react'
 import { sharedStateService} from '../services/shared/sharedState.service'
 import { authService} from '../services/shared/auth.service'
 import {
@@ -16,23 +16,23 @@ export function useSharedIntegration() {
     // Subscribe to shared state changes and update local stores
     const unsubscribers: (() => void)[] = []
     // Sync Transitos
-    unsubscribers.push(sharedStateService.subscribeToKey('transitosPendientes', (transitos) => {
-        useTransitosStore.getState().setTransitosPendientes(transitos)
+    unsubscribers.push(sharedStateService.subscribeToKey('transitosPendientes', (_transitos) => {
+        useTransitosStore.getState().setTransitosPendientes(_transitos)
       })
     )
     // Sync Precintos
-    unsubscribers.push(sharedStateService.subscribeToKey('precintosActivos', (precintos) => {
-        usePrecintosStore.getState().setPrecintosActivos(precintos)
+    unsubscribers.push(sharedStateService.subscribeToKey('precintosActivos', (_precintos) => {
+        usePrecintosStore.getState().setPrecintosActivos(_precintos)
       })
     )
     // Sync Alertas
-    unsubscribers.push(sharedStateService.subscribeToKey('alertasActivas', (alertas) => {
-        useAlertasStore.getState().setAlertasActivas(alertas)
+    unsubscribers.push(sharedStateService.subscribeToKey('alertasActivas', (_alertas) => {
+        useAlertasStore.getState().setAlertasActivas(_alertas)
       })
     )
     // Sync System Status
-    unsubscribers.push(sharedStateService.subscribeToKey('systemStatus', (status) => {
-        if (status) {
+    unsubscribers.push(sharedStateService.subscribeToKey('systemStatus', (s_tatus) => {
+        if (s_tatus) {
           useSystemStatusStore.getState().updateSystemStatus({
             smsPendientes: status.smsPendientes || 0,
             dbStats: status.dbStats || { memoriaUsada: 0, discoUsado: 0 },

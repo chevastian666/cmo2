@@ -21,9 +21,9 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
     dua: '',
     destino: ''
   })
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(_false)
   useEffect(() => {
-    if (transito) {
+    if (_transito) {
       setFormData({
         dua: transito.dua || '',
         destino: transito.destino || ''
@@ -34,7 +34,7 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
     e.preventDefault()
     if (!transito) return
     try {
-      setLoading(true)
+      setLoading(_true)
       // Call the update service
       await transitosService.updateTransito(transito.id, {
         dua: formData.dua,
@@ -52,18 +52,18 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'
       )
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   if (!transito) return null
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={_isOpen} onOpenChange={_onClose}>
       <DialogContent className="max-w-2xl bg-gray-800 border-gray-700">
         <DialogHeader>
           <DialogTitle>Editar Tránsito</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={_handleSubmit} className="space-y-6">
           {/* Transit Info Display */}
           <Card className="bg-gray-900 border-gray-700">
             <div className="p-4 space-y-3">
@@ -110,7 +110,7 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
                 type="text"
                 id="dua"
                 value={formData.dua}
-                onChange={(e) => setFormData({ ...formData, dua: e.target.value })}
+                onChange={(_e) => setFormData({ ...formData, dua: e.target.value })}
                 className="bg-gray-700 border-gray-600"
                 placeholder="Ingrese el DUA"
                 required
@@ -124,7 +124,7 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
                 type="text"
                 id="destino"
                 value={formData.destino}
-                onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
+                onChange={(_e) => setFormData({ ...formData, destino: e.target.value })}
                 className="bg-gray-700 border-gray-600"
                 placeholder="Ingrese el destino"
                 required
@@ -137,14 +137,14 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
             <Button
               type="button"
               variant="ghost"
-              onClick={onClose}
-              disabled={loading}
+              onClick={_onClose}
+              disabled={_loading}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              disabled={loading}
+              disabled={_loading}
               className="bg-blue-600 hover:bg-blue-700"
             >
               {loading ? (

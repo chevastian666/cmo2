@@ -12,7 +12,7 @@ interface ToggleGroupContextValue {
   onValueChange: (value: string) => void
 }
 
-const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(undefined)
+const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(_undefined)
 interface ToggleGroupProps {
   value: string
   onValueChange: (value: string) => void
@@ -26,7 +26,7 @@ export const ToggleGroup: React.FC<ToggleGroupProps> = ({
   return (
     <ToggleGroupContext.Provider value={{ value, onValueChange }}>
       <div className={cn('inline-flex rounded-md shadow-sm', className)} role="group">
-        {children}
+        {_children}
       </div>
     </ToggleGroupContext.Provider>
   )
@@ -41,7 +41,7 @@ interface ToggleGroupItemProps {
 export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
   value, className, children, disabled = false
 }) => {
-  const context = useContext(ToggleGroupContext)
+  const context = useContext(_ToggleGroupContext)
   if (!context) {
     throw new Error('ToggleGroupItem must be used within ToggleGroup')
   }
@@ -50,8 +50,8 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
   const isSelected = selectedValue === value
   return (<button
       type="button"
-      disabled={disabled}
-      onClick={() => !disabled && onValueChange(value)}
+      disabled={_disabled}
+      onClick={() => !disabled && onValueChange(_value)}
       className={cn(
         'px-4 py-2 text-sm font-medium transition-all',
         'focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500',
@@ -64,7 +64,7 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
         className
       )}
     >
-      {children}
+      {_children}
     </button>
   )
 }

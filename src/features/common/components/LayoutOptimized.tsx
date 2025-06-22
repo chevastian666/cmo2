@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react'
-import {Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react'
+import {_Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react'
 import { Link, useLocation} from 'react-router-dom'
 import { cn} from '../../../utils/utils'
 import { APP_CONFIG} from '../../../config'
@@ -13,24 +13,24 @@ import { RealtimeNotifications} from './RealtimeNotifications'
 import { AlarmSummary} from './AlarmSummary'
 import { Sidebar} from './Sidebar'
 import { useAlertasActivas} from '../../../store/hooks'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { useConnectionStatus} from '../../../hooks/useSharedState'
 import { PanelSwitcher} from '../../../components/PanelSwitcher'
-import {MicrointeractionsSettings} from '../../microinteractions'
+import {_MicrointeractionsSettings} from '../../microinteractions'
 import { BreadcrumbNav} from '@/components/ui/BreadcrumbNav'
 interface LayoutProps {
   children: React.ReactNode
 }
 
 export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(_false)
+  const [userMenuOpen, setUserMenuOpen] = useState(_false)
   const location = useLocation()
   const connectionStatus = useConnectionStatus()
   const userInfo = useUserInfo()
   return (<div className="min-h-screen bg-gray-950 text-gray-100">
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={s_idebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
       
       {/* Main content area */}
       <div className="lg:pl-64 transition-all duration-300">
@@ -59,7 +59,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
               <div className="flex items-center space-x-2 sm:space-x-4">
                 {/* Connection status */}
                 <div className="hidden sm:block">
-                  <ConnectionStatus status={connectionStatus} />
+                  <ConnectionStatus status={_connectionStatus} />
                 </div>
                 
                 {/* Alarm summary */}
@@ -79,7 +79,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                     <>
                       <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse" />
                       <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center">
-                        <span className="text-xs text-white font-bold">{alertCount}</span>
+                        <span className="text-xs text-white font-bold">{_alertCount}</span>
                       </span>
                     </>
                   )}
@@ -110,7 +110,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                   {userMenuOpen && (<>
                       <div
                         className="fixed inset-0 z-10"
-                        onClick={() => setUserMenuOpen(false)}
+                        onClick={() => setUserMenuOpen(_false)}
                       />
                       <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-xl border border-gray-700 z-20">
                         <div className="p-3 border-b border-gray-700">
@@ -121,7 +121,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                           <Link
                             to="/perfil"
                             className="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
-                            onClick={() => setUserMenuOpen(false)}
+                            onClick={() => setUserMenuOpen(_false)}
                           >
                             <User className="h-4 w-4" />
                             Mi Perfil
@@ -129,7 +129,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                           <Link
                             to="/configuracion"
                             className="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
-                            onClick={() => setUserMenuOpen(false)}
+                            onClick={() => setUserMenuOpen(_false)}
                           >
                             <Settings className="h-4 w-4" />
                             Configuración
@@ -137,7 +137,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                           <hr className="my-2 border-gray-700" />
                           <button
                             onClick={() => {
-                              setUserMenuOpen(false)
+                              setUserMenuOpen(_false)
                               logout()
                             }}
                             className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
@@ -159,7 +159,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
         <main className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
             <BreadcrumbNav />
-            {children}
+            {_children}
           </div>
         </main>
       </div>

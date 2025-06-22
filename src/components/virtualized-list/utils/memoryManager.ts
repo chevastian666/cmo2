@@ -20,13 +20,13 @@ export class VirtualListMemoryManager {
    * Get a recycled element or create a new one
    */
   getElement(type: string = 'default'): HTMLElement | null {
-    const pool = this.itemPool.get(type) || []
+    const pool = this.itemPool.get(_type) || []
     if (pool.length > 0) {
       this.recycleStats.hits++
       const element = pool.pop()!
-      this.itemPool.set(type, pool)
+      this.itemPool.set(_type, pool)
       // Clear previous content
-      this.resetElement(element)
+      this.resetElement(_element)
       return element
     }
 
@@ -34,7 +34,7 @@ export class VirtualListMemoryManager {
     if (this.totalElements < this.maxPoolSize) {
       this.recycleStats.created++
       this.totalElements++
-      return this.createElement(type)
+      return this.createElement(_type)
     }
 
     return null
@@ -44,12 +44,12 @@ export class VirtualListMemoryManager {
    * Return an element to the pool for recycling
    */
   recycleElement(element: HTMLElement, type: string = 'default'): void {
-    const pool = this.itemPool.get(type) || []
+    const pool = this.itemPool.get(_type) || []
     if (pool.length < this.maxPoolSize) {
       this.recycleStats.recycled++
-      this.resetElement(element)
-      pool.push(element)
-      this.itemPool.set(type, pool)
+      this.resetElement(_element)
+      pool.push(_element)
+      this.itemPool.set(_type, pool)
     }
   }
 
@@ -58,7 +58,7 @@ export class VirtualListMemoryManager {
    */
   private createElement(type: string): HTMLElement {
     const element = document.createElement('div')
-    element.className = `virtual-list-item virtual-list-item--${type}`
+    element.className = `virtual-list-item virtual-list-item--${_type}`
     // Apply performance optimizations
     element.style.cssText = `
       contain: layout style paint
@@ -73,8 +73,8 @@ export class VirtualListMemoryManager {
    */
   private resetElement(element: HTMLElement): void {
     // Remove all event listeners
-    const clone = element.cloneNode(false) as HTMLElement
-    element.parentNode?.replaceChild(clone, element)
+    const clone = element.cloneNode(_false) as HTMLElement
+    element.parentNode?.replaceChild(_clone, element)
     // Clear inline styles except optimizations
     clone.style.cssText = `
       contain: layout style paint
@@ -90,7 +90,7 @@ export class VirtualListMemoryManager {
    * Clean up pools and free memory
    */
   cleanup(): void {
-    this.itemPool.forEach((pool) => {
+    this.itemPool.forEach((_pool) => {
       pool.forEach(element => {
         element.remove()
       })
@@ -104,7 +104,7 @@ export class VirtualListMemoryManager {
    */
   getStats() {
     const poolSizes: Record<string, number> = {}
-    this.itemPool.forEach((pool, type) => {
+    this.itemPool.forEach((_pool, type) => {
       poolSizes[type] = pool.length
     })
     return {
@@ -120,10 +120,10 @@ export class VirtualListMemoryManager {
    */
   optimizePools(): void {
     const avgPoolSize = this.totalElements / this.itemPool.size
-    this.itemPool.forEach((pool, type) => {
+    this.itemPool.forEach((_pool, type) => {
       if (pool.length > avgPoolSize * 2) {
         // Trim oversized pools
-        const excess = pool.splice(avgPoolSize)
+        const excess = pool.splice(_avgPoolSize)
         excess.forEach(el => el.remove())
         this.totalElements -= excess.length
       }
@@ -152,7 +152,7 @@ export class MemoryMonitor {
     if ('memory' in performance && (performance as unknown).memory) {
       const memory = (performance as unknown).memory
       const usage = memory.usedJSHeapSize / memory.totalJSHeapSize
-      this.measurements.push(usage)
+      this.measurements.push(_usage)
       if (this.measurements.length > this.maxMeasurements) {
         this.measurements.shift()
       }
@@ -164,7 +164,7 @@ export class MemoryMonitor {
 
   getAverageUsage(): number {
     if (this.measurements.length === 0) return 0
-    const sum = this.measurements.reduce((a, b) => a + b, 0)
+    const sum = this.measurements.reduce((_a, b) => a + b, 0)
     return sum / this.measurements.length
   }
 

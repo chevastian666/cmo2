@@ -32,15 +32,15 @@ const snoozeOptions: SnoozeOption[] = [
 export const QuickActions: React.FC<QuickActionsProps> = ({
   notification, onAction, compact = false, disabled = false
 }) => {
-  const [showSnoozeOptions, setShowSnoozeOptions] = useState(false)
-  const [showMoreActions, setShowMoreActions] = useState(false)
+  const [showSnoozeOptions, setShowSnoozeOptions] = useState(_false)
+  const [showMoreActions, setShowMoreActions] = useState(_false)
   const handleAcknowledge = () => {
     onAction('acknowledge')
   }
   const handleSnooze = (duration: number) => {
     const snoozedUntil = new Date(Date.now() + duration * 60 * 1000)
     onAction('snooze', { snoozedUntil, duration })
-    setShowSnoozeOptions(false)
+    setShowSnoozeOptions(_false)
   }
   const handleEscalate = () => {
     onAction('escalate')
@@ -58,14 +58,14 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
   const canSnooze = !notification || (notification.status !== 'acknowledged' && notification.status !== 'dismissed')
   const canEscalate = !notification || notification.priority !== 'low'
   const isUnread = notification?.status === 'unread'
-  if (compact) {
+  if (_compact) {
     return (
       <div className="flex items-center space-x-1">
         {/* Acknowledge */}
         {canAcknowledge && (
           <button
-            onClick={handleAcknowledge}
-            disabled={disabled}
+            onClick={_handleAcknowledge}
+            disabled={_disabled}
             className="p-1 text-gray-400 hover:text-green-400 transition-colors disabled:opacity-50"
             title="Confirmar"
           >
@@ -77,7 +77,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         {canSnooze && (<div className="relative">
             <button
               onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
-              disabled={disabled}
+              disabled={_disabled}
               className="p-1 text-gray-400 hover:text-yellow-400 transition-colors disabled:opacity-50"
               title="Posponer"
             >
@@ -91,7 +91,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
                   className="absolute right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-10 min-w-max"
                 >
-                  {snoozeOptions.map((option) => (<button
+                  {snoozeOptions.map((_option) => (<button
                       key={option.duration}
                       onClick={() => handleSnooze(option.duration)}
                       className="block w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
@@ -109,7 +109,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         <div className="relative">
           <button
             onClick={() => setShowMoreActions(!showMoreActions)}
-            disabled={disabled}
+            disabled={_disabled}
             className="p-1 text-gray-400 hover:text-white transition-colors disabled:opacity-50"
             title="Más acciones"
           >
@@ -126,7 +126,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               >
                 {isUnread && (
                   <button
-                    onClick={handleMarkRead}
+                    onClick={_handleMarkRead}
                     className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
                   >
                     <Eye className="w-4 h-4" />
@@ -136,7 +136,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
                 {canEscalate && (
                   <button
-                    onClick={handleEscalate}
+                    onClick={_handleEscalate}
                     className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
                   >
                     <ArrowUp className="w-4 h-4" />
@@ -145,7 +145,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                 )}
 
                 <button
-                  onClick={handleArchive}
+                  onClick={_handleArchive}
                   className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700"
                 >
                   <Archive className="w-4 h-4" />
@@ -153,7 +153,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                 </button>
 
                 <button
-                  onClick={handleDismiss}
+                  onClick={_handleDismiss}
                   className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-b-lg"
                 >
                   <X className="w-4 h-4" />
@@ -173,8 +173,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
       {/* Primary Actions */}
       {canAcknowledge && (
         <button
-          onClick={handleAcknowledge}
-          disabled={disabled}
+          onClick={_handleAcknowledge}
+          disabled={_disabled}
           className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <CheckCircle className="w-4 h-4" />
@@ -186,7 +186,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
       {canSnooze && (<div className="relative">
           <button
             onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
-            disabled={disabled}
+            disabled={_disabled}
             className="flex items-center space-x-2 px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Clock className="w-4 h-4" />
@@ -203,7 +203,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                 <div className="p-2">
                   <div className="text-xs text-gray-400 mb-2">Posponer por:</div>
                   <div className="grid grid-cols-2 gap-1">
-                    {snoozeOptions.map((option) => (<button
+                    {snoozeOptions.map((_option) => (<button
                         key={option.duration}
                         onClick={() => handleSnooze(option.duration)}
                         className="px-2 py-1 text-sm text-gray-300 hover:bg-gray-700 rounded"
@@ -222,8 +222,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
       {/* Secondary Actions */}
       {isUnread && (
         <button
-          onClick={handleMarkRead}
-          disabled={disabled}
+          onClick={_handleMarkRead}
+          disabled={_disabled}
           className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Eye className="w-4 h-4" />
@@ -233,8 +233,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
       {canEscalate && (
         <button
-          onClick={handleEscalate}
-          disabled={disabled}
+          onClick={_handleEscalate}
+          disabled={_disabled}
           className="flex items-center space-x-2 px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ArrowUp className="w-4 h-4" />
@@ -244,8 +244,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
       {/* Archive */}
       <button
-        onClick={handleArchive}
-        disabled={disabled}
+        onClick={_handleArchive}
+        disabled={_disabled}
         className="flex items-center space-x-2 px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Archive className="w-4 h-4" />
@@ -254,8 +254,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
       {/* Dismiss */}
       <button
-        onClick={handleDismiss}
-        disabled={disabled}
+        onClick={_handleDismiss}
+        disabled={_disabled}
         className="flex items-center space-x-2 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <X className="w-4 h-4" />

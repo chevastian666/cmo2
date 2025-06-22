@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react'
+import {_useState, useCallback} from 'react'
 import { usePolling, useAutoReconnect} from '../../../hooks/usePolling'
 import type { MapMarker, MapRoute} from '../../../components/ui/MapModule'
 import type { TransitInfo} from '../../../components/ui/TransitCard'
@@ -20,13 +20,13 @@ const alertasService = {
  * Hook para integrar polling con el MapModule
  */
 export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: MapRoute[] = []) {
-  const [markers, setMarkers] = useState<MapMarker[]>(initialMarkers)
-  const [routes] = useState<MapRoute[]>(initialRoutes)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [markers, setMarkers] = useState<MapMarker[]>(_initialMarkers)
+  const [routes] = useState<MapRoute[]>(_initialRoutes)
+  const [isLoading, setIsLoading] = useState(_false)
+  const [error, setError] = useState<Error | null>(_null)
   const fetchMapData = useCallback(async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(_true)
       // Obtener tránsitos activos
       const transitos = await transitosService.getTransitos()
       // Convertir tránsitos a markers
@@ -46,16 +46,16 @@ export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: M
         direction: transito.direction || 0
       }))
       // Actualizar solo si hay cambios
-      if (JSON.stringify(newMarkers) !== JSON.stringify(markers)) {
-        setMarkers(newMarkers)
+      if (JSON.stringify(_newMarkers) !== JSON.stringify(_markers)) {
+        setMarkers(_newMarkers)
       }
 
-      setError(null)
+      setError(_null)
     } catch {
       setError(_err as Error)
       console.error('Error fetching map data:', _err)
     } finally {
-      setIsLoading(false)
+      setIsLoading(_false)
     }
   }, [markers])
   // Configurar polling
@@ -80,15 +80,15 @@ export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: M
  * Hook para integrar polling con TransitCard
  */
 export function useTransitPolling(transitId: string) {
-  const [transit, setTransit] = useState<TransitInfo | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [transit, setTransit] = useState<TransitInfo | null>(_null)
+  const [isLoading, setIsLoading] = useState(_false)
+  const [error, setError] = useState<Error | null>(_null)
   const fetchTransitData = useCallback(async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(_true)
       const transitos = await transitosService.getTransitos()
       const foundTransit = transitos.find((t: unknown) => t.id === transitId)
-      if (foundTransit) {
+      if (_foundTransit) {
         // Mapear a TransitInfo
         const transitInfo: TransitInfo = {
           id: foundTransit.id,
@@ -112,21 +112,21 @@ export function useTransitPolling(transitId: string) {
             eslingas: foundTransit.eslingas
           }
         }
-        setTransit(transitInfo)
+        setTransit(_transitInfo)
       }
       
-      setError(null)
+      setError(_null)
     } catch {
       setError(_err as Error)
       console.error('Error fetching transit data:', _err)
     } finally {
-      setIsLoading(false)
+      setIsLoading(_false)
     }
   }, [])
   // Polling con intervalo más corto para datos específicos
-  usePolling(fetchTransitData, {
+  usePolling(_fetchTransitData, {
     interval: 30000, // 30 segundos para actualizaciones más frecuentes
-    enabled: true, immediateFirstCall: true, onError: (_err) => setError(_err)
+    enabled: true, immediateFirstCall: true, onError: (__err) => setError(__err)
   })
   return {
     transit,
@@ -140,9 +140,9 @@ export function useTransitPolling(transitId: string) {
  */
 export function useAlertsPolling() {
   const [alerts, setAlerts] = useState<Alert[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
-  const [hasNewCriticalAlert, setHasNewCriticalAlert] = useState(false)
+  const [isLoading, setIsLoading] = useState(_false)
+  const [error, setError] = useState<Error | null>(_null)
+  const [hasNewCriticalAlert, setHasNewCriticalAlert] = useState(_false)
   const fetchAlerts = useCallback(async () => {
     try {
       const data = await alertasService.getActivas()
@@ -172,12 +172,12 @@ export function useAlertsPolling() {
         (alert.severity === 'critical' || alert.severity === 'high') &&
         !oldCriticalIds.has(alert.id)
     )
-    if (hasCritical) {
-      setHasNewCriticalAlert(true)
-      setTimeout(() => setHasNewCriticalAlert(false), 5000)
+    if (_hasCritical) {
+      setHasNewCriticalAlert(_true)
+      setTimeout(() => setHasNewCriticalAlert(_false), 5000)
     }
 
-    setAlerts(newAlerts)
+    setAlerts(_newAlerts)
   }, [alerts])
   // Polling con detección de cambios
 
@@ -193,7 +193,7 @@ export function useAlertsPolling() {
   const acknowledgeAlert = useCallback(async (alertId: string) => {
     try {
       // Llamar API para marcar como atendida
-      // await alertasService.acknowledge(alertId)
+      // await alertasService.acknowledge(_alertId)
       // Actualizar estado local inmediatamente
       setAlerts(prev => prev.map(alert => 
         alert.id === alertId 
@@ -220,17 +220,17 @@ export function useAlertsPolling() {
  * Hook global para manejar todo el polling de la aplicación
  */
 export function useGlobalPolling() {
-  const [isPollingActive, setIsPollingActive] = useState(true)
+  const [isPollingActive, setIsPollingActive] = useState(_true)
   // Pausar polling cuando la pestaña no está visible
   
     useCallback(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         console.log('Tab hidden, pausing polling...')
-        setIsPollingActive(false)
+        setIsPollingActive(_false)
       } else {
         console.log('Tab visible, resuming polling...')
-        setIsPollingActive(true)
+        setIsPollingActive(_true)
       }
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)

@@ -15,7 +15,7 @@ const mockDepositos: Deposito[] = [
   {
     id: '1614',
     codigo: 1614,
-    nombre: 'RILCOMAR S.A. (MERCADERIA)',
+    nombre: 'RILCOMAR S.A. (_MERCADERIA)',
     alias: 'Rilcomar',
     lat: -34.903126989445354,
     lng: -56.21238728500628,
@@ -875,7 +875,7 @@ const mockDepositos: Deposito[] = [
   {
     id: '1601',
     codigo: 1601,
-    nombre: 'BOMPORT S.A. (MERCADERIAS)',
+    nombre: 'BOMPORT S.A. (_MERCADERIAS)',
     alias: 'Bomport',
     lat: -34.89253410069958,
     lng: -56.196237930060455,
@@ -1295,7 +1295,7 @@ const mockDepositos: Deposito[] = [
   {
     id: '1607',
     codigo: 1607,
-    nombre: 'DEPOSITOS MONTEVIDEO S.A. (MERCADERIA)',
+    nombre: 'DEPOSITOS MONTEVIDEO S.A. (_MERCADERIA)',
     alias: 'Depositos Montevideo',
     lat: -34.90364053933463,
     lng: -56.209244801369515,
@@ -1515,7 +1515,7 @@ const mockDepositos: Deposito[] = [
   {
     id: '1842',
     codigo: 1842,
-    nombre: 'MITRACONT S.A.(MERCADERIAS)',
+    nombre: 'MITRACONT S.A.(_MERCADERIAS)',
     alias: 'Mitracont',
     lat: -34.841413843681245,
     lng: -56.27896509544606,
@@ -2753,7 +2753,7 @@ const mockDepositos: Deposito[] = [
     precintosActivos: 45
   }
 ]
-export const useDepositosStore = create<DepositosState>((set) => ({
+export const useDepositosStore = create<DepositosState>((s_et) => ({
   depositos: [], loading: false, error: null, fetchDepositos: async () => {
     set({ loading: true })
     // Simulate API call
@@ -2762,28 +2762,28 @@ export const useDepositosStore = create<DepositosState>((set) => ({
     }, 500)
   },
   
-  addDeposito: (deposito) => {
+  addDeposito: (_deposito) => {
     const newDeposito: Deposito = {
       ...deposito,
       id: Date.now().toString(),
       transitosActivos: 0,
       precintosActivos: 0
     }
-    set((state) => ({
+    set((s_tate) => ({
       depositos: [...state.depositos, newDeposito]
     }))
   },
   
-  updateDeposito: (id, updates) => {
-    set((state) => ({
+  updateDeposito: (_id, updates) => {
+    set((s_tate) => ({
       depositos: state.depositos.map(d => 
         d.id === id ? { ...d, ...updates } : d
       )
     }))
   },
   
-  deleteDeposito: (id) => {
-    set((state) => ({
+  deleteDeposito: (_id) => {
+    set((s_tate) => ({
       depositos: state.depositos.filter(d => d.id !== id)
     }))
   }

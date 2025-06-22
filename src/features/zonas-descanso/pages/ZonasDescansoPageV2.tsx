@@ -25,15 +25,15 @@ export const ZonasDescansoPageV2: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedView, setSelectedView] = useState<'list' | 'map'>('list')
   const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set(['Ruta 1']))
-  const [highlightedZone, setHighlightedZone] = useState<string | null>(null)
+  const [highlightedZone, setHighlightedZone] = useState<string | null>(_null)
   // Filter zones based on search term
   const filteredData = useMemo(() => {
     if (!searchTerm) return zonasDescansoData
     const lowerSearchTerm = searchTerm.toLowerCase()
     return zonasDescansoData.map(rutaData => {
       const filteredZonas = rutaData.zonas.filter(zona => 
-        zona.ubicacion.toLowerCase().includes(lowerSearchTerm) ||
-        rutaData.ruta.toLowerCase().includes(lowerSearchTerm)
+        zona.ubicacion.toLowerCase().includes(_lowerSearchTerm) ||
+        rutaData.ruta.toLowerCase().includes(_lowerSearchTerm)
       )
       return {
         ...rutaData,
@@ -43,8 +43,8 @@ export const ZonasDescansoPageV2: React.FC = () => {
   }, [])
   // Calculate stats
   const stats = useMemo(() => {
-    const totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
-    const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+    const totalZonas = zonasDescansoData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
+    const filteredZonas = filteredData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
     const totalRutas = zonasDescansoData.length
     const departamentos = new Set(
       zonasDescansoData.flatMap(ruta => 
@@ -62,22 +62,22 @@ export const ZonasDescansoPageV2: React.FC = () => {
     }
   }, [])
   const toggleRoute = (ruta: string) => {
-    const newExpanded = new Set(expandedRoutes)
-    if (newExpanded.has(ruta)) {
-      newExpanded.delete(ruta)
+    const newExpanded = new Set(_expandedRoutes)
+    if (newExpanded.has(_ruta)) {
+      newExpanded.delete(_ruta)
     } else {
-      newExpanded.add(ruta)
+      newExpanded.add(_ruta)
     }
-    setExpandedRoutes(newExpanded)
+    setExpandedRoutes(_newExpanded)
   }
   const exportData = () => {
 
     const csv = [
       Object.keys(data[0]).join(','),
-      ...data.map(row => Object.values(row).map(v => `"${v}"`).join(','))
+      ...data.map(row => Object.values(_row).map(v => `"${_v}"`).join(','))
     ].join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
-    const url = URL.createObjectURL(blob)
+    const url = URL.createObjectURL(_blob)
     const a = document.createElement('a')
     a.href = url
     a.download = 'zonas-descanso.csv'
@@ -92,7 +92,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
           action={
             <AnimatedButton
               variant="outline"
-              onClick={exportData}
+              onClick={_exportData}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -158,8 +158,8 @@ export const ZonasDescansoPageV2: React.FC = () => {
                   <Input
                     type="text"
                     placeholder="Buscar por ruta, ubicación o departamento..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={s_earchTerm}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="pl-10"
                   />
                 </div>
@@ -209,15 +209,15 @@ export const ZonasDescansoPageV2: React.FC = () => {
         <AnimatedSection delay={0.3}>
           {selectedView === 'list' ? (
             <RutasListView 
-              data={filteredData}
-              expandedRoutes={expandedRoutes}
-              onToggleRoute={toggleRoute}
-              highlightedZone={highlightedZone}
-              onHighlightZone={setHighlightedZone}
-              searchTerm={searchTerm}
+              data={_filteredData}
+              expandedRoutes={_expandedRoutes}
+              onToggleRoute={_toggleRoute}
+              highlightedZone={_highlightedZone}
+              onHighlightZone={s_etHighlightedZone}
+              searchTerm={s_earchTerm}
             />
           ) : (
-            <MapView data={filteredData} />
+            <MapView data={_filteredData} />
           )}
         </AnimatedSection>
       </div>
@@ -231,23 +231,23 @@ const StatsCard: React.FC<{
   icon: React.ReactNode
   color: string
   subtitle?: string
-}> = (title, value, icon, color, subtitle ) => (
+}> = (_title, value, icon, color, subtitle ) => (
   <AnimatedCard whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg bg-gray-800", color)}
           whileHover={{ rotate: 15 }}
         >
-          {icon}
+          {_icon}
         </motion.div>
       </div>
     </CardHeader>
     <CardContent>
-      <div className="text-3xl font-bold">{value}</div>
+      <div className="text-3xl font-bold">{_value}</div>
       {subtitle && (
-        <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+        <p className="text-sm text-gray-500 mt-1">{s_ubtitle}</p>
       )}
     </CardContent>
   </AnimatedCard>
@@ -267,7 +267,7 @@ const RutasListView: React.FC<{
         <CardContent className="py-12 text-center">
           <MapPin className="h-12 w-12 text-gray-600 mx-auto mb-4" />
           <p className="text-gray-400">
-            No se encontraron zonas de descanso que coincidan con "{searchTerm}"
+            No se encontraron zonas de descanso que coincidan con "{s_earchTerm}"
           </p>
         </CardContent>
       </Card>
@@ -275,12 +275,12 @@ const RutasListView: React.FC<{
   }
 
   return (<motion.div
-      variants={staggerContainer}
+      variants={s_taggerContainer}
       initial="hidden"
       animate="visible"
       className="space-y-4"
     >
-      {data.map((rutaData, index) => (<motion.div key={rutaData.ruta} variants={staggerItem}>
+      {data.map((_rutaData, index) => (<motion.div key={rutaData.ruta} variants={s_taggerItem}>
           <AnimatedCard 
             className="overflow-hidden"
             whileHover={{ scale: 1.01 }}
@@ -325,11 +325,11 @@ const RutasListView: React.FC<{
                   <Separator />
                   <div className="p-4">
                     <AnimatedList className="space-y-3">
-                      {rutaData.zonas.map((zona, zoneIndex) => (<AnimatedListItem
+                      {rutaData.zonas.map((_zona, zoneIndex) => (<AnimatedListItem
                           key={zona.ubicacion}
-                          index={zoneIndex}
+                          index={_zoneIndex}
                           onMouseEnter={() => onHighlightZone(zona.ubicacion)}
-                          onMouseLeave={() => onHighlightZone(null)}
+                          onMouseLeave={() => onHighlightZone(_null)}
                         >
                           <motion.div
                             className={cn(
@@ -384,7 +384,7 @@ const RutasListView: React.FC<{
                               <AnimatedButton
                                 variant="ghost"
                                 size="sm"
-                                onClick={(e) => {
+                                onClick={(_e) => {
                                   e.stopPropagation()
                                   window.open(zona.maps, '_blank')
                                 }}
@@ -418,10 +418,10 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
     try {
       // Try to extract from query parameter
       const queryMatch = mapsUrl.match(/query=([^,]+),([^,&]+)/)
-      if (queryMatch) {
+      if (_queryMatch) {
         const lat = parseFloat(queryMatch[1])
         const lng = parseFloat(queryMatch[2])
-        if (!isNaN(lat) && !isNaN(lng)) {
+        if (!isNaN(_lat) && !isNaN(_lng)) {
           return { lat, lng }
         }
       }
@@ -442,8 +442,8 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
         'Colonia': { lat: -34.4626, lng: -57.8400 }
       }
       // Find matching location
-      for (const [location, coords] of Object.entries(locationMap)) {
-        if (mapsUrl.includes(location) || ubicacion.includes(location)) {
+      for (const [location, coords] of Object.entries(_locationMap)) {
+        if (mapsUrl.includes(_location) || ubicacion.includes(_location)) {
           return coords
         }
       }
@@ -456,13 +456,13 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
     }
   }
   // Convert zones to map markers
-  const markers: MapMarker[] = allZones.map((zona, index) => {
+  const markers: MapMarker[] = allZones.map((_zona, index) => {
     const coords = extractCoordinates(zona.maps, zona.ubicacion)
     const hasAncap = zona.ubicacion.toLowerCase().includes('ancap')
     const hasParador = zona.ubicacion.toLowerCase().includes('parador')
     const hasBalanza = zona.ubicacion.toLowerCase().includes('balanza')
     return {
-      id: `zona-${index}`,
+      id: `zona-${_index}`,
       position: coords || { lat: -32.5228, lng: -55.7658 },
       title: zona.ubicacion,
       type: 'zona',
@@ -521,13 +521,13 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
     }
   ]
   return (<InteractiveMap
-      markers={markers}
-      routes={routes}
+      markers={_markers}
+      routes={_routes}
       height="600px"
-      showControls={true}
-      showLegend={true}
-      showSearch={true}
-      onMarkerClick={(marker) => {
+      showControls={_true}
+      showLegend={_true}
+      showSearch={_true}
+      onMarkerClick={(_marker) => {
         if (marker.data?.mapsUrl) {
           window.open(marker.data.mapsUrl, 'blank')
         }

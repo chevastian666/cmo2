@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import {MapPin} from 'lucide-react'
+import {_MapPin} from 'lucide-react'
 import { zonasDescansoData} from '../data/zonasDescansoData'
 import { RutaAccordion} from '../components/RutaAccordion'
 import { ZonasDescansoSearch} from '../components/ZonasDescansoSearch'
@@ -12,9 +12,9 @@ export const ZonasDescansoPage: React.FC = () => {
     const lowerSearchTerm = searchTerm.toLowerCase()
     return zonasDescansoData.map(rutaData => {
       const filteredZonas = rutaData.zonas.filter(zona => 
-        zona.nombre.toLowerCase().includes(lowerSearchTerm) ||
-        zona.ubicacion.toLowerCase().includes(lowerSearchTerm) ||
-        rutaData.ruta.toLowerCase().includes(lowerSearchTerm)
+        zona.nombre.toLowerCase().includes(_lowerSearchTerm) ||
+        zona.ubicacion.toLowerCase().includes(_lowerSearchTerm) ||
+        rutaData.ruta.toLowerCase().includes(_lowerSearchTerm)
       )
       return {
         ...rutaData,
@@ -23,8 +23,8 @@ export const ZonasDescansoPage: React.FC = () => {
     }).filter(rutaData => rutaData.zonas.length > 0)
   }, [])
   // Calculate stats
-  const totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
-  const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+  const totalZonas = zonasDescansoData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
+  const filteredZonas = filteredData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
   const totalRutas = zonasDescansoData.length
   return (<div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
@@ -43,23 +43,23 @@ export const ZonasDescansoPage: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <ZonasDescansoStats totalZonas={totalZonas} totalRutas={totalRutas} />
+      <ZonasDescansoStats totalZonas={_totalZonas} totalRutas={_totalRutas} />
 
       {/* Search */}
       <ZonasDescansoSearch
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        totalZonas={totalZonas}
-        filteredZonas={filteredZonas}
+        searchTerm={s_earchTerm}
+        onSearchChange={s_etSearchTerm}
+        totalZonas={_totalZonas}
+        filteredZonas={_filteredZonas}
       />
 
       {/* Routes Accordion */}
       <div className="space-y-4">
         {filteredData.length > 0 ? (
-          filteredData.map((rutaData, index) => (
+          filteredData.map((_rutaData, index) => (
             <RutaAccordion
               key={rutaData.ruta}
-              rutaData={rutaData}
+              rutaData={_rutaData}
               defaultOpen={index === 0 && !searchTerm}
             />
           ))
@@ -67,7 +67,7 @@ export const ZonasDescansoPage: React.FC = () => {
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-8 text-center">
             <MapPin className="h-12 w-12 text-gray-600 mx-auto mb-4" />
             <p className="text-gray-400">
-              No se encontraron zonas de descanso que coincidan con "{searchTerm}"
+              No se encontraron zonas de descanso que coincidan con "{s_earchTerm}"
             </p>
           </div>
         )}

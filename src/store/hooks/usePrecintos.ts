@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {_useEffect} from 'react'
 import { usePrecintosStore} from '../store'
 export const usePrecintos = () => {
   const store = usePrecintosStore()
@@ -38,8 +38,8 @@ export const usePrecintosActivos = () => {
   }
 }
 export const usePrecinto = (id: string) => {
-  const precintos = usePrecintosStore((state) => state.precintos)
-  const precinto = precintos.find((p) => p.id === id)
+  const precintos = usePrecintosStore((s_tate) => state.precintos)
+  const precinto = precintos.find((_p) => p.id === id)
   return {
     precinto,
     found: !!precinto,

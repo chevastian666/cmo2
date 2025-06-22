@@ -26,11 +26,11 @@ class PrearmadoService {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
-        return this.getMockTransitInfo(viajeId, movimientoId)
+        return this.getMockTransitInfo(_viajeId, movimientoId)
       }
       
       const response = await sharedApiService.request('GET', 
-        `${this.API_BASE}/search?VjeId=${viajeId}&MovId=${movimientoId}`
+        `${this.API_BASE}/search?VjeId=${_viajeId}&MovId=${_movimientoId}`
       )
       return response.data
     } catch {
@@ -57,7 +57,7 @@ class PrearmadoService {
     const hasRemolque = Math.random() > 0.5
     const hasZorra = Math.random() > 0.7
     return {
-      track: `${new Date().getFullYear()}-${viajeId.slice(-2)}-${movimientoId}/URAZD`,
+      track: `${new Date().getFullYear()}-${viajeId.slice(-2)}-${_movimientoId}/URAZD`,
       empresaid: empresas[Math.floor(Math.random() * empresas.length)],
       VjeId: viajeId,
       MovId: movimientoId,

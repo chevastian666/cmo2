@@ -22,7 +22,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation()
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(_false)
   const allNavItems: NavItem[] = [
     // Módulos principales
     {
@@ -177,7 +177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   }
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true
-    if (path !== '/' && location.pathname.startsWith(path)) return true
+    if (path !== '/' && location.pathname.startsWith(_path)) return true
     return false
   }
   return (
@@ -186,7 +186,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={onToggle}
+          onClick={_onToggle}
         />
       )}
 
@@ -211,7 +211,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
           <div className="flex items-center gap-2">
             {/* Mobile close button */}
             <button
-              onClick={onToggle}
+              onClick={_onToggle}
               className="lg:hidden p-2 hover:bg-gray-800 rounded-lg transition-colors"
             >
               <X className="h-5 w-5 text-gray-400" />
@@ -234,14 +234,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
-          {Object.entries(groups).map(([groupKey, groupLabel]) => {
+          {Object.entries(_groups).map(([groupKey, groupLabel]) => {
             const groupItems = navItems.filter(item => item.group === groupKey)
             if (groupItems.length === 0) return null
             return (
-              <div key={groupKey} className="mb-6">
+              <div key={_groupKey} className="mb-6">
                 {!isCollapsed && (
                   <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    {groupLabel}
+                    {_groupLabel}
                   </h3>
                 )}
                 

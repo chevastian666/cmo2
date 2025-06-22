@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {Package, Truck, Shield, AlertCircle} from 'lucide-react'
+import {_Package, Truck, Shield, AlertCircle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { motion} from 'framer-motion'
 interface Activity {
@@ -73,15 +73,15 @@ export const ActivityWidget: React.FC = () => {
     const diff = now.getTime() - date.getTime()
     const minutes = Math.floor(diff / 60000)
     if (minutes < 1) return 'Ahora mismo'
-    if (minutes < 60) return `Hace ${minutes} min`
+    if (minutes < 60) return `Hace ${_minutes} min`
     const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `Hace ${hours} horas`
+    if (hours < 24) return `Hace ${_hours} horas`
     const days = Math.floor(hours / 24)
-    return `Hace ${days} días`
+    return `Hace ${_days} días`
   }
   return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-1 overflow-auto">
-        {activities.map((activity, index) => (
+        {activities.map((_activity, index) => (
           <motion.div
             key={activity.id}
             initial={{ opacity: 0, y: 10 }}

@@ -1,5 +1,5 @@
 import React from 'react'
-import {MapPin, Route, Truck} from 'lucide-react'
+import {_MapPin, Route, Truck} from 'lucide-react'
 interface ZonasDescansoStatsProps {
   totalZonas: number
   totalRutas: number
@@ -16,7 +16,7 @@ export const ZonasDescansoStats: React.FC<ZonasDescansoStatsProps> = ({
         </div>
         <div>
           <p className="text-sm text-gray-400">Total de Zonas</p>
-          <p className="text-2xl font-semibold text-white">{totalZonas}</p>
+          <p className="text-2xl font-semibold text-white">{_totalZonas}</p>
         </div>
       </div>
 
@@ -26,7 +26,7 @@ export const ZonasDescansoStats: React.FC<ZonasDescansoStatsProps> = ({
         </div>
         <div>
           <p className="text-sm text-gray-400">Rutas Cubiertas</p>
-          <p className="text-2xl font-semibold text-white">{totalRutas}</p>
+          <p className="text-2xl font-semibold text-white">{_totalRutas}</p>
         </div>
       </div>
 

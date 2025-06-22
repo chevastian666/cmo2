@@ -27,7 +27,7 @@ const VerificarAlertaModalV2 = lazy(() =>
 )
 // Static helper functions outside component to avoid recreating
 const getSeveridadInfo = (severidad: string) => {
-  switch (severidad) {
+  switch (s_everidad) {
     case 'critica':
       return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true }
     case 'alta':
@@ -41,7 +41,7 @@ const getSeveridadInfo = (severidad: string) => {
   }
 }
 const getTipoInfo = (tipo: string) => {
-  switch (tipo) {
+  switch (_tipo) {
     case 'violacion':
       return { color: 'destructive', icon: <Shield className="h-5 w-5" /> }
     case 'bateria_baja':
@@ -62,9 +62,9 @@ const getTipoInfo = (tipo: string) => {
 const matchesSearch = (alerta: Alerta, searchTerm: string): boolean => {
   const search = searchTerm.toLowerCase()
   return (
-    alerta.precintoId.toLowerCase().includes(search) ||
-    alerta.descripcion.toLowerCase().includes(search) ||
-    alerta.tipo.toLowerCase().includes(search)
+    alerta.precintoId.toLowerCase().includes(s_earch) ||
+    alerta.descripcion.toLowerCase().includes(s_earch) ||
+    alerta.tipo.toLowerCase().includes(s_earch)
   )
 }
 // Loading skeleton mejorado
@@ -108,30 +108,30 @@ const KPICard = React.memo<{
   trend?: number
   subtitle?: string
   onClick?: () => void
-}>((title, value, icon, color, trend, subtitle, onClick ) => (
+}>((_title, value, icon, color, trend, subtitle, onClick ) => (
   <Card 
     className={cn("relative overflow-hidden cursor-pointer transition-all hover:shadow-lg", onClick && "hover:scale-[1.02]")}
-    onClick={onClick}
+    onClick={_onClick}
   >
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
         <div className={cn("p-2 rounded-lg", color)}>
-          {icon}
+          {_icon}
         </div>
       </div>
     </CardHeader>
     <CardContent>
       <div className="flex items-end justify-between">
         <div>
-          <div className="text-3xl font-bold">{value}</div>
+          <div className="text-3xl font-bold">{_value}</div>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+            <p className="text-sm text-gray-500 mt-1">{s_ubtitle}</p>
           )}
         </div>
         {trend !== undefined && (
           <Badge variant={trend > 0 ? "danger" : "success"} className="mb-1">
-            {trend > 0 ? '+' : ''}{Math.abs(trend)}%
+            {trend > 0 ? '+' : ''}{Math.abs(_trend)}%
           </Badge>
         )}
       </div>
@@ -187,7 +187,7 @@ const AlertRow = React.memo<{
         <div className="text-sm">
           <p>{new Date(alerta.fecha).toLocaleString()}</p>
           <p className="text-xs text-gray-500">
-            Hace {timeAgo} min
+            Hace {_timeAgo} min
           </p>
         </div>
       </td>
@@ -217,7 +217,7 @@ const AlertRow = React.memo<{
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center justify-end">
           {!alerta.atendida ? (<VerificarButton
-              onClick={() => onVerificar(alerta)}
+              onClick={() => onVerificar(_alerta)}
               variant="minimal"
               size="sm"
             />
@@ -232,7 +232,7 @@ const AlertRow = React.memo<{
       </td>
     </tr>
   )
-}, (prevProps, nextProps) => {
+}, (_prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
     prevProps.alerta.id === nextProps.alerta.id &&
@@ -249,12 +249,12 @@ const AlertasPageV2: React.FC = () => {
   const fetchAlertas = useAlertasStore(state => state.fetchAlertas)
   const fetchAlertasActivas = useAlertasStore(state => state.fetchAlertasActivas)
   const atenderAlerta = useAlertasStore(state => state.atenderAlerta)
-  const [showHistorialModal, setShowHistorialModal] = useState(false)
-  const [showVerificarModal, setShowVerificarModal] = useState(false)
+  const [showHistorialModal, setShowHistorialModal] = useState(_false)
+  const [showVerificarModal, setShowVerificarModal] = useState(_false)
   const [selectedTab, setSelectedTab] = useState('todas')
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(_null)
+  const [isInitialLoad, setIsInitialLoad] = useState(_true)
   // Estado local para paginación
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 20
@@ -269,7 +269,7 @@ const AlertasPageV2: React.FC = () => {
           fetchAlertasActivas()
         ])
       } finally {
-        setIsInitialLoad(false)
+        setIsInitialLoad(_false)
       }
     }
     loadData()
@@ -343,7 +343,7 @@ const AlertasPageV2: React.FC = () => {
       }
       
       // Search filter
-      if (searchTerm && !matchesSearch(a, searchTerm)) {
+      if (searchTerm && !matchesSearch(_a, searchTerm)) {
         return false
       }
       
@@ -355,13 +355,13 @@ const AlertasPageV2: React.FC = () => {
     const end = start + itemsPerPage
     // Sort only the visible portion for better performance
     const sortedPage = filtered
-      .sort((a, b) => {
+      .sort((_a, b) => {
         // Cache date values to avoid repeated parsing
         const dateA = new Date(a.fecha).getTime()
         const dateB = new Date(b.fecha).getTime()
         return dateB - dateA
       })
-      .slice(start, end)
+      .slice(s_tart, end)
     return { 
       filteredAlertas: sortedPage, 
       totalPages: total,
@@ -369,14 +369,14 @@ const AlertasPageV2: React.FC = () => {
     }
   }, [alertas])
   const handleVerificarAlerta = useCallback((alerta: Alerta) => {
-    setSelectedAlerta(alerta)
-    setShowVerificarModal(true)
+    setSelectedAlerta(_alerta)
+    setShowVerificarModal(_true)
   }, [])
   const handleVerificarSuccess = useCallback(async () => {
-    if (selectedAlerta) {
+    if (s_electedAlerta) {
       await atenderAlerta(selectedAlerta.id)
-      setShowVerificarModal(false)
-      setSelectedAlerta(null)
+      setShowVerificarModal(_false)
+      setSelectedAlerta(_null)
       fetchAlertasActivas()
     }
   }, [])
@@ -405,15 +405,15 @@ const AlertasPageV2: React.FC = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={handleRefresh}
-            disabled={loading}
+            onClick={_handleRefresh}
+            disabled={_loading}
             className="bg-gray-800 border-gray-700"
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
           </Button>
           <Button
             variant="outline"
-            onClick={() => setShowHistorialModal(true)}
+            onClick={() => setShowHistorialModal(_true)}
             className="bg-gray-800 border-gray-700"
           >
             <History className="h-4 w-4 mr-2" />
@@ -463,7 +463,7 @@ const AlertasPageV2: React.FC = () => {
             <div>
               <CardTitle>Lista de Alertas</CardTitle>
               <CardDescription>
-                {totalItems} alertas encontradas - Mostrando {filteredAlertas.length}
+                {_totalItems} alertas encontradas - Mostrando {filteredAlertas.length}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -471,8 +471,8 @@ const AlertasPageV2: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Buscar alertas..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={s_earchTerm}
+                  onChange={(_e) => setSearchTerm(e.target.value)}
                   className="pl-10 w-64 bg-gray-800 border-gray-700"
                 />
               </div>
@@ -480,7 +480,7 @@ const AlertasPageV2: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+          <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
             <TabsList className="w-full justify-start bg-gray-800/50 p-0 h-auto rounded-none">
               <TabsTrigger value="todas" className="rounded-none data-[state=active]:bg-gray-700">
                 Todas
@@ -500,7 +500,7 @@ const AlertasPageV2: React.FC = () => {
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value={selectedTab} className="mt-0">
+            <TabsContent value={s_electedTab} className="mt-0">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -528,8 +528,8 @@ const AlertasPageV2: React.FC = () => {
                   <tbody className="divide-y divide-gray-700">
                     {loading && isInitialLoad ? (
                       <>
-                        {[...Array(5)].map((_, i) => (
-                          <AlertSkeleton key={i} />
+                        {[...Array(5)].map((__, i) => (
+                          <AlertSkeleton key={_i} />
                         ))}
                       </>
                     ) : filteredAlertas.length === 0 ? (
@@ -541,12 +541,12 @@ const AlertasPageV2: React.FC = () => {
                           </div>
                         </td>
                       </tr>
-                    ) : (filteredAlertas.map((alerta, index) => (
+                    ) : (filteredAlertas.map((_alerta, index) => (
                         <AlertRow
                           key={alerta.id}
-                          alerta={alerta}
-                          onVerificar={handleVerificarAlerta}
-                          index={index}
+                          alerta={_alerta}
+                          onVerificar={_handleVerificarAlerta}
+                          index={_index}
                         />
                       ))
                     )}
@@ -557,7 +557,7 @@ const AlertasPageV2: React.FC = () => {
               {/* Paginación */}
               {totalPages > 1 && (<div className="flex items-center justify-between px-6 py-3 border-t border-gray-700">
                   <p className="text-sm text-gray-400">
-                    Página {currentPage} de {totalPages}
+                    Página {_currentPage} de {_totalPages}
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -572,7 +572,7 @@ const AlertasPageV2: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      onClick={() => setCurrentPage(p => Math.min(_totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="bg-gray-800 border-gray-700"
                     >
@@ -587,20 +587,20 @@ const AlertasPageV2: React.FC = () => {
       </Card>
 
       {/* Modals con lazy loading */}
-      <Suspense fallback={null}>
+      <Suspense fallback={_null}>
         <HistorialAlertasCriticasModal
-          isOpen={showHistorialModal}
-          onClose={() => setShowHistorialModal(false)}
+          isOpen={s_howHistorialModal}
+          onClose={() => setShowHistorialModal(_false)}
         />
 
         {selectedAlerta && (<VerificarAlertaModalV2
-            isOpen={showVerificarModal}
+            isOpen={s_howVerificarModal}
             onClose={() => {
-              setShowVerificarModal(false)
-              setSelectedAlerta(null)
+              setShowVerificarModal(_false)
+              setSelectedAlerta(_null)
             }}
-            alerta={selectedAlerta}
-            onSuccess={handleVerificarSuccess}
+            alerta={s_electedAlerta}
+            onSuccess={_handleVerificarSuccess}
           />
         )}
       </Suspense>

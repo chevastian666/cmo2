@@ -27,7 +27,7 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
     return 'bg-green-500'
   }
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={_isOpen} onOpenChange={_onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3">
@@ -171,12 +171,12 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
         <DialogFooter>
           <Button
             variant="secondary"
-            onClick={onClose}
+            onClick={_onClose}
           >
             Cerrar
           </Button>
           <Button
-            onClick={onEdit}
+            onClick={_onEdit}
           >
             Editar
           </Button>

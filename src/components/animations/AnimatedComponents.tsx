@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {fadeVariants, scaleVariants, slideUpVariants, slideDownVariants, hoverScaleVariants, hoverLiftVariants, staggerContainer, staggerItem, modalVariants, overlayVariants} from './AnimationPresets'
+import {_fadeVariants, scaleVariants, slideUpVariants, slideDownVariants, hoverScaleVariants, hoverLiftVariants, staggerContainer, staggerItem, modalVariants, overlayVariants} from './AnimationPresets'
 import { tokenClasses} from '../../styles/useDesignTokens'
 // ==========================================
 // COMPONENTES BASE ANIMADOS
@@ -19,59 +19,59 @@ interface AnimatedDivProps {
 }
 
 // Div con fade animation
-export const FadeDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+export const FadeDiv: React.FC<AnimatedDivProps> = (_children, className = "", ...props 
 ) => (
   <motion.div
-    variants={fadeVariants}
+    variants={_fadeVariants}
     initial="hidden"
     animate="visible"
     exit="exit"
-    className={className}
+    className={_className}
     {...props}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 // Div con scale animation
-export const ScaleDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+export const ScaleDiv: React.FC<AnimatedDivProps> = (_children, className = "", ...props 
 ) => (
   <motion.div
-    variants={scaleVariants}
+    variants={s_caleVariants}
     initial="hidden"
     animate="visible"
     exit="exit"
-    className={className}
+    className={_className}
     {...props}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 // Div con slide up animation
-export const SlideUpDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+export const SlideUpDiv: React.FC<AnimatedDivProps> = (_children, className = "", ...props 
 ) => (
   <motion.div
-    variants={slideUpVariants}
+    variants={s_lideUpVariants}
     initial="hidden"
     animate="visible"
     exit="exit"
-    className={className}
+    className={_className}
     {...props}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 // Div con slide down animation
-export const SlideDownDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+export const SlideDownDiv: React.FC<AnimatedDivProps> = (_children, className = "", ...props 
 ) => (
   <motion.div
-    variants={slideDownVariants}
+    variants={s_lideDownVariants}
     initial="hidden"
     animate="visible"
     exit="exit"
-    className={className}
+    className={_className}
     {...props}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 // ==========================================
@@ -89,19 +89,19 @@ interface AnimatedCardProps {
 export const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
   children, className = "", hover = true, onClick 
 }) => {
-  const baseClasses = `${tokenClasses.components.card} ${className}`
+  const baseClasses = `${tokenClasses.components.card} ${_className}`
   return (
     <motion.div
-      className={baseClasses}
+      className={_baseClasses}
       variants={hover ? hoverLiftVariants : scaleVariants}
       initial={hover ? "initial" : "hidden"}
       animate={hover ? "initial" : "visible"}
       whileHover={hover ? "hover" : undefined}
       whileTap={hover ? "tap" : undefined}
-      onClick={onClick}
+      onClick={_onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
-      {children}
+      {_children}
     </motion.div>
   )
 }
@@ -123,18 +123,18 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     danger: tokenClasses.components.button.danger,
     ghost: tokenClasses.components.button.ghost
   }
-  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${className}`
+  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${_className}`
   return (
     <motion.button
-      className={baseClasses}
-      variants={hoverScaleVariants}
+      className={_baseClasses}
+      variants={_hoverScaleVariants}
       initial="initial"
       whileHover={!disabled ? "hover" : undefined}
       whileTap={!disabled ? "tap" : undefined}
-      onClick={onClick}
-      disabled={disabled}
+      onClick={_onClick}
+      disabled={_disabled}
     >
-      {children}
+      {_children}
     </motion.button>
   )
 }
@@ -147,15 +147,15 @@ interface AnimatedListProps {
   className?: string
 }
 
-export const AnimatedList: React.FC<AnimatedListProps> = (children, className = "" 
+export const AnimatedList: React.FC<AnimatedListProps> = (_children, className = "" 
 ) => (
   <motion.div
-    variants={staggerContainer}
+    variants={s_taggerContainer}
     initial="hidden"
     animate="visible"
-    className={className}
+    className={_className}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 interface AnimatedListItemProps {
@@ -163,13 +163,13 @@ interface AnimatedListItemProps {
   className?: string
 }
 
-export const AnimatedListItem: React.FC<AnimatedListItemProps> = (children, className = "" 
+export const AnimatedListItem: React.FC<AnimatedListItemProps> = (_children, className = "" 
 ) => (
   <motion.div
-    variants={staggerItem}
-    className={className}
+    variants={s_taggerItem}
+    className={_className}
   >
-    {children}
+    {_children}
   </motion.div>
 )
 // ==========================================
@@ -191,12 +191,12 @@ export const AnimatedModal: React.FC<AnimatedModalProps> = ({
         <>
           {/* Overlay */}
           <motion.div
-            variants={overlayVariants}
+            variants={_overlayVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             className="fixed inset-0 bg-black/50 z-40"
-            onClick={onClose}
+            onClick={_onClose}
           />
           
           {/* Modal */}
@@ -207,14 +207,14 @@ export const AnimatedModal: React.FC<AnimatedModalProps> = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              variants={modalVariants}
+              variants={_modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`${tokenClasses.components.modal.content} ${className}`}
-              onClick={(e) => e.stopPropagation()}
+              className={`${tokenClasses.components.modal.content} ${_className}`}
+              onClick={(_e) => e.stopPropagation()}
             >
-              {children}
+              {_children}
             </motion.div>
           </motion.div>
         </>
@@ -237,10 +237,10 @@ export const AnimatedBadge: React.FC<AnimatedBadgeProps> = ({
   children, variant = 'gray', pulse = false, className = "" 
 }) => {
   const variantClasses = tokenClasses.components.badge[variant]
-  const baseClasses = `${tokenClasses.components.badge.base} ${variantClasses} ${className}`
+  const baseClasses = `${tokenClasses.components.badge.base} ${_variantClasses} ${_className}`
   return (
     <motion.span
-      className={baseClasses}
+      className={_baseClasses}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ 
         scale: 1, 
@@ -258,7 +258,7 @@ export const AnimatedBadge: React.FC<AnimatedBadgeProps> = ({
       }}
       transition={{ type: "spring", stiffness: 500, damping: 15 }}
     >
-      {children}
+      {_children}
     </motion.span>
   )
 }
@@ -281,7 +281,7 @@ export const AnimatedSpinner: React.FC<AnimatedSpinnerProps> = ({
   }
   return (
     <motion.div
-      className={`${sizeClasses[size]} ${className}`}
+      className={`${sizeClasses[size]} ${_className}`}
       animate={{ rotate: 360 }}
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
     >
@@ -327,7 +327,7 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
   }
   return (
     <motion.div
-      className={`bg-gray-700 ${variantClasses[variant]} ${className}`}
+      className={`bg-gray-700 ${variantClasses[variant]} ${_className}`}
       animate={{
         opacity: [0.5, 0.8, 0.5]
       }}
@@ -358,10 +358,10 @@ export const AnimatedDiv: React.FC<AnimatedDivProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className={className}
+      className={_className}
       {...props}
     >
-      {children}
+      {_children}
     </motion.div>
   )
 }
@@ -379,11 +379,11 @@ export const AnimatedProgress: React.FC<AnimatedProgressProps> = ({
   value, className = "", color = "bg-blue-500"
 }) => {
   return (
-    <div className={`w-full bg-gray-700 rounded-full h-2 overflow-hidden ${className}`}>
+    <div className={`w-full bg-gray-700 rounded-full h-2 overflow-hidden ${_className}`}>
       <motion.div
-        className={`h-full ${color}`}
+        className={`h-full ${_color}`}
         initial={{ width: 0 }}
-        animate={{ width: `${value}%` }}
+        animate={{ width: `${_value}%` }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       />
     </div>

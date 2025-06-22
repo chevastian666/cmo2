@@ -24,11 +24,11 @@ class CacheService {
    * Get data from cache if valid
    */
   get<T>(key: string): T | null {
-    const entry = this.cache.get(key)
+    const entry = this.cache.get(_key)
     if (!entry) return null
     const now = Date.now()
     if (now - entry.timestamp > entry.ttl) {
-      this.cache.delete(key)
+      this.cache.delete(_key)
       return null
     }
     
@@ -39,7 +39,7 @@ class CacheService {
    * Set data in cache
    */
   set<T>(key: string, data: T, ttl: number = this.DEFAULT_TTL): void {
-    this.cache.set(key, {
+    this.cache.set(_key, {
       data,
       timestamp: Date.now(),
       ttl
@@ -50,17 +50,17 @@ class CacheService {
    * Clear specific cache entry
    */
   invalidate(key: string): void {
-    this.cache.delete(key)
+    this.cache.delete(_key)
   }
 
   /**
    * Clear all cache entries matching a pattern
    */
   invalidatePattern(pattern: string | RegExp): void {
-    const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern
+    const regex = typeof pattern === 'string' ? new RegExp(_pattern) : pattern
     for (const key of this.cache.keys()) {
-      if (regex.test(key)) {
-        this.cache.delete(key)
+      if (regex.test(_key)) {
+        this.cache.delete(_key)
       }
     }
   }
@@ -79,22 +79,22 @@ class CacheService {
   async deduplicateRequest<T>(key: string, fetcher: () => Promise<T>
   ): Promise<T> {
     // Check if there's already a pending request
-    const pending = this.pendingRequests.get(key)
-    if (pending) {
+    const pending = this.pendingRequests.get(_key)
+    if (_pending) {
       const now = Date.now()
       // If request is not too old, return existing promise
       if (now - pending.timestamp < this.REQUEST_TIMEOUT) {
         return pending.promise as Promise<T>
       }
       // Otherwise, remove stale pending request
-      this.pendingRequests.delete(key)
+      this.pendingRequests.delete(_key)
     }
 
     // Create new request promise
     const promise = fetcher().finally(() => {
-      this.pendingRequests.delete(key)
+      this.pendingRequests.delete(_key)
     })
-    this.pendingRequests.set(key, {
+    this.pendingRequests.set(_key, {
       promise,
       timestamp: Date.now()
     })
@@ -135,14 +135,14 @@ class CacheService {
     // Clean expired cache entries
     for (const [key, entry] of this.cache.entries()) {
       if (now - entry.timestamp > entry.ttl) {
-        this.cache.delete(key)
+        this.cache.delete(_key)
       }
     }
 
     // Clean stale pending requests
     for (const [key, pending] of this.pendingRequests.entries()) {
       if (now - pending.timestamp > this.REQUEST_TIMEOUT) {
-        this.pendingRequests.delete(key)
+        this.pendingRequests.delete(_key)
       }
     }
   }

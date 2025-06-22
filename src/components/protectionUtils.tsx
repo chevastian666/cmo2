@@ -19,7 +19,7 @@ export type Permission = 'view' | 'create' | 'edit' | 'delete' | 'admin'
 // HOC variant for more flexibility
 export function withProtection<P extends object>(Component: React.ComponentType<P>, section: Section, permission: Permission = 'view') {
   return (props: P) => (
-    <ProtectedRoute section={section} permission={permission}>
+    <ProtectedRoute section={s_ection} permission={_permission}>
       <Component {...props} />
     </ProtectedRoute>
   )

@@ -6,19 +6,19 @@ import { FormularioCamionero} from './FormularioCamionero'
 import type { FiltrosCamionero, Nacionalidad} from '../types'
 import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT} from '../types'
 export const ListaCamioneros: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamionero>(_FILTROS_CAMIONERO_DEFAULT)
-  const [mostrarFormulario, setMostrarFormulario] = useState(_false)
-  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(_null)
+  const [filtros, setFiltros] = useState<FiltrosCamionero>(__FILTROS_CAMIONERO_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(__false)
+  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(__null)
   useEffect(() => {
-    fetchCamioneros(_filtros)
+    fetchCamioneros(__filtros)
   }, [filtros])
   const _handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamionero>) => {
     setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
   }
-  if (_camioneroSeleccionado) {
+  if (__camioneroSeleccionado) {
     return (<FichaCamionero 
-        documento={camioneroSeleccionado} 
-        onClose={() => setCamioneroSeleccionado(_null)} 
+        documento={_camioneroSeleccionado} 
+        onClose={() => setCamioneroSeleccionado(__null)} 
       />
     )
   }
@@ -36,7 +36,7 @@ export const ListaCamioneros: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setMostrarFormulario(_true)}
+          onClick={() => setMostrarFormulario(__true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
@@ -54,7 +54,7 @@ export const ListaCamioneros: React.FC = () => {
               <input
                 type="text"
                 value={filtros.busqueda}
-                onChange={(_e) => handleFiltrosChange({ busqueda: e.target.value })}
+                onChange={(__e) => handleFiltrosChange({ busqueda: e.target.value })}
                 placeholder="Buscar por nombre, apellido o documento..."
                 className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -63,13 +63,13 @@ export const ListaCamioneros: React.FC = () => {
             {/* Filtro por nacionalidad */}
             <select
               value={filtros.nacionalidad}
-              onChange={(_e) => handleFiltrosChange({ nacionalidad: e.target.value as Nacionalidad | '' })}
+              onChange={(__e) => handleFiltrosChange({ nacionalidad: e.target.value as Nacionalidad | '' })}
               className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todas las nacionalidades</option>
-              {Object.entries(_NACIONALIDADES).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
+              {Object.entries(__NACIONALIDADES).map(([key, label]) => (
+                <option key={_key} value={_key}>
+                  {_label}
                 </option>
               ))}
             </select>
@@ -79,7 +79,7 @@ export const ListaCamioneros: React.FC = () => {
               <input
                 type="checkbox"
                 checked={filtros.conTransitosRecientes}
-                onChange={(_e) => handleFiltrosChange({ conTransitosRecientes: e.target.checked })}
+                onChange={(__e) => handleFiltrosChange({ conTransitosRecientes: e.target.checked })}
                 className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
               />
               <span className="text-sm text-gray-300">Con tránsitos recientes</span>
@@ -176,7 +176,7 @@ export const ListaCamioneros: React.FC = () => {
       )}
 
       {/* Modal de formulario */}
-      {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(_false)} />
+      {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(__false)} />
       )}
     </div>
   )

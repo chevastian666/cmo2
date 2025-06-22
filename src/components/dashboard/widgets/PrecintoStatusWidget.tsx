@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {Shield, Battery, Thermometer, Signal} from 'lucide-react'
+import {_Shield, Battery, Thermometer, Signal} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { motion} from 'framer-motion'
 import { usePrecintosStore} from '../../../store/store'
@@ -59,7 +59,7 @@ export const PrecintoStatusWidget: React.FC = () => {
   return (<div className="h-full flex flex-col">
       {/* Estadísticas Grid */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        {statusItems.map((item, index) => (
+        {statusItems.map((_item, index) => (
           <motion.div
             key={item.label}
             initial={{ opacity: 0, y: 10 }}
@@ -88,7 +88,7 @@ export const PrecintoStatusWidget: React.FC = () => {
       {precintoCriticos.length > 0 && (<>
           <div className="text-xs text-gray-400 mb-2">Requieren atención:</div>
           <div className="flex-1 space-y-2 overflow-auto">
-            {precintoCriticos.map((precinto, index) => (
+            {precintoCriticos.map((_precinto, index) => (
               <motion.div
                 key={precinto.id}
                 initial={{ opacity: 0, x: -10 }}

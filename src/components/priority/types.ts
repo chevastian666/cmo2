@@ -7,7 +7,7 @@ export interface PriorityConfig {
   immediate: number;  // 1 - Highest priority (critical alerts)
   high: number;      // 2 - High priority (security violations)
   medium: number;    // 3 - Normal priority (state updates)
-  low: number;       // 4 - Low priority (visualizations)
+  low: number;       // 4 - Low priority (_visualizations)
   idle: number;      // 5 - Idle priority (background tasks)
 }
 

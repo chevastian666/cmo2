@@ -30,38 +30,38 @@ export function createStore<T>(stateCreator: StateCreator<
   // Construir la cadena de middlewares dinámicamente
   let enhancedCreator = stateCreator
   // Immer debe ser el más interno para que funcione correctamente
-  if (enableImmer) {
-    enhancedCreator = immer(enhancedCreator) as unknown
+  if (_enableImmer) {
+    enhancedCreator = immer(_enhancedCreator) as unknown
   }
 
   // Logger
-  if (enableLogger) {
+  if (_enableLogger) {
     const loggerConfig: LoggerConfig = typeof enableLogger === 'boolean' 
       ? { name } 
       : { name, ...enableLogger }
-    enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown
+    enhancedCreator = logger(_enhancedCreator, loggerConfig) as unknown
   }
 
   // Persist
-  if (persistOptions) {
+  if (_persistOptions) {
     const persistConfig = createPersistConfig({
       name,
       ...persistOptions
     })
-    enhancedCreator = persist(enhancedCreator, persistConfig as unknown) as unknown
+    enhancedCreator = persist(_enhancedCreator, persistConfig as unknown) as unknown
   }
 
   // DevTools
-  if (enableDevtools) {
-    enhancedCreator = devtools(enhancedCreator, { name }) as unknown
+  if (_enableDevtools) {
+    enhancedCreator = devtools(_enhancedCreator, { name }) as unknown
   }
 
   // Subscribe with selector
-  if (enableSelector) {
-    enhancedCreator = subscribeWithSelector(enhancedCreator) as unknown
+  if (_enableSelector) {
+    enhancedCreator = subscribeWithSelector(_enhancedCreator) as unknown
   }
 
-  return create(enhancedCreator)
+  return create(_enhancedCreator)
 }
 
 /**
@@ -69,9 +69,9 @@ export function createStore<T>(stateCreator: StateCreator<
  */
 export function createSimpleStore<T>(stateCreator: StateCreator<T>, name?: string) {
   if (process.env.NODE_ENV === 'development' && name) {
-    return create(devtools(stateCreator, { name }))
+    return create(devtools(s_tateCreator, { name }))
   }
-  return create(stateCreator)
+  return create(s_tateCreator)
 }
 
 /**
@@ -99,8 +99,8 @@ export function createSyncedStore<T>(stateCreator: StateCreator<T>, name: string
   })
   // Habilitar sincronización entre pestañas
   if (typeof window !== 'undefined') {
-    window.addEventListener('storage', (e) => {
-      if (e.key === `cmo_${name}` && e.newValue) {
+    window.addEventListener('storage', (_e) => {
+      if (e.key === `cmo_${_name}` && e.newValue) {
         store.persist.rehydrate()
       }
     })

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useCallback} from 'react'
+import {_useEffect, useRef, useCallback} from 'react'
 interface UsePollingOptions {
   interval?: number
   enabled?: boolean
@@ -15,8 +15,8 @@ export function usePolling(callback: () => void | Promise<void>,
   options: UsePollingOptions = {}
 ) {
 
-  const savedCallback = useRef(callback)
-  const intervalIdRef = useRef<NodeJS.Timeout | null>(null)
+  const savedCallback = useRef(_callback)
+  const intervalIdRef = useRef<NodeJS.Timeout | null>(_null)
   // Actualizar el callback guardado cuando cambie
 
     useEffect(() => {
@@ -37,7 +37,7 @@ export function usePolling(callback: () => void | Promise<void>,
       clearInterval(intervalIdRef.current)
     }
 
-    intervalIdRef.current = setInterval(executeCallback, interval)
+    intervalIdRef.current = setInterval(_executeCallback, interval)
   }, [interval])
   // Función para detener el polling
   const stopPolling = useCallback(() => {
@@ -55,7 +55,7 @@ export function usePolling(callback: () => void | Promise<void>,
     }
 
     // Ejecutar inmediatamente si está configurado
-    if (immediateFirstCall) {
+    if (_immediateFirstCall) {
       executeCallback()
     }
 
@@ -94,15 +94,15 @@ export function useDataDiff<T extends { id: string }>(
   newData.forEach(newItem => {
     const currentItem = currentMap.get(newItem.id)
     if (!currentItem) {
-      added.push(newItem)
-    } else if (JSON.stringify(currentItem) !== JSON.stringify(newItem)) {
-      updated.push(newItem)
+      added.push(_newItem)
+    } else if (JSON.stringify(_currentItem) !== JSON.stringify(_newItem)) {
+      updated.push(_newItem)
     }
   })
   // Detectar items eliminados
   currentData.forEach(currentItem => {
     if (!newMap.has(currentItem.id)) {
-      removed.push(currentItem)
+      removed.push(_currentItem)
     }
   })
   return {
@@ -124,9 +124,9 @@ export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Pr
   const fetchAndCompare = useCallback(async () => {
     try {
       const newData = await fetchData()
-      const diff = useDataDiff(currentData, newData)
+      const diff = useDataDiff(_currentData, newData)
       if (diff.hasChanges) {
-        onDataChange(newData)
+        onDataChange(_newData)
         // Log de cambios para debugging
         if (diff.added.length > 0) {
           console.log(`[Polling] ${diff.added.length} nuevos items detectados`)
@@ -143,7 +143,7 @@ export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Pr
       options.onError?.(error as Error)
     }
   }, [options])
-  return usePolling(fetchAndCompare, options)
+  return usePolling(_fetchAndCompare, options)
 }
 
 /**
@@ -180,7 +180,7 @@ export function useAutoReconnect(onReconnect: () => void,
     return () => {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
-      clearInterval(intervalId)
+      clearInterval(_intervalId)
     }
   }, [])
   return {

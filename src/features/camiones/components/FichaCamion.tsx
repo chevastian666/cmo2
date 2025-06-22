@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { ArrowLeft, Truck, Route, AlertCircle, Download, Camera, Activity} from 'lucide-react'
 import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { exportToCSV} from '../../../utils/export'
 import { notificationService} from '../../../services/shared/notification.service'
 import { ESTADOS_CAMION} from '../types'
@@ -14,7 +14,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamion(matricula)
+    selectCamion(_matricula)
     return () => clearSelection()
   }, [matricula])
   const handleExportarHistorial = () => {
@@ -33,7 +33,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
       Camionero: t.camionero?.nombre || 'No registrado',
       Documento: t.camionero?.documento || '-'
     }))
-    exportToCSV(datos, `historial_${matricula}_${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(_datos, `historial_${_matricula}_${new Date().toISOString().split('T')[0]}`)
     notificationService.success('Éxito', 'Historial exportado correctamente')
   }
   const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-gray-400" />
@@ -70,7 +70,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
         </div>
         
         <button
-          onClick={handleExportarHistorial}
+          onClick={_handleExportarHistorial}
           className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
         >
           <Download className="h-4 w-4" />
@@ -107,7 +107,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                     <input 
                       type="file" 
                       accept="image/*"
-                      onChange={handleFotoChange}
+                      onChange={_handleFotoChange}
                       className="hidden" 
                     />
                   </label>
@@ -147,7 +147,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                   </label>
                   <textarea
                     value={camionSeleccionado.observaciones || ''}
-                    onChange={(e) => updateCamion(matricula, { observaciones: e.target.value })}
+                    onChange={(_e) => updateCamion(_matricula, { observaciones: e.target.value })}
                     placeholder="Agregar observaciones..."
                     className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={4}
@@ -198,8 +198,8 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                   <div>
                     <p className="text-sm text-gray-400 mb-2">Rutas frecuentes</p>
                     <div className="space-y-2">
-                      {estadisticasCamion.rutasFrecuentes.slice(0, 3).map((ruta, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                      {estadisticasCamion.rutasFrecuentes.slice(0, 3).map((_ruta, idx) => (
+                        <div key={_idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                           <div className="flex items-center gap-2">
                             <Route className="h-4 w-4 text-gray-500" />
                             <span className="text-sm text-white">
@@ -246,7 +246,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                       </tr>
                     </thead>
                     <tbody>
-                      {transitosCamion.map((transito) => (
+                      {transitosCamion.map((_transito) => (
                         <tr key={transito.id} className="border-b border-gray-800 hover:bg-gray-800/50">
                           <td className="py-3 px-4">
                             <div className="text-sm text-white">

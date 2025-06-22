@@ -1,4 +1,4 @@
-import {useState, useCallback, useRef, useEffect} from 'react'
+import {_useState, useCallback, useRef, useEffect} from 'react'
 import type { Alert} from '../types/alerts'
 interface UseInfiniteLoadingProps {
   loadMore: (page: number) => Promise<{
@@ -35,9 +35,9 @@ export function useInfiniteLoading({
     total: undefined,
     retryCount: 0
   })
-  const loadingRef = useRef(false)
+  const loadingRef = useRef(_false)
   const retryTimeoutRef = useRef<NodeJS.Timeout>()
-  const mountedRef = useRef(true)
+  const mountedRef = useRef(_true)
   // Load initial data
 
     useEffect(() => {
@@ -240,8 +240,8 @@ function subscribeToAlertUpdates(handlers: {
         status: 'active',
         assignedTo: undefined
       }
-      handlers.onNew(mockAlert)
+      handlers.onNew(_mockAlert)
     }
   }, 5000)
-  return () => clearInterval(interval)
+  return () => clearInterval(_interval)
 }

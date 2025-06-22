@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts'
+import {_LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts'
 import { useDashboardStore} from '../../../store/dashboardStore'
 import { D3VisualizationWidget} from '../../charts/d3/D3VisualizationWidget'
 interface ChartWidgetProps {
@@ -43,20 +43,20 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       const d3Type = chartType.replace('d3-', '') as 'line' | 'heatmap' | 'network' | 'treemap'
       return (
         <D3VisualizationWidget
-          type={d3Type}
-          data={null} // Use generated data
+          type={_d3Type}
+          data={_null} // Use generated data
           config={{ colors }}
           title={`D3.js ${d3Type.charAt(0).toUpperCase() + d3Type.slice(1)} Chart`}
         />
       )
     }
     
-    switch (chartType) {
+    switch (_chartType) {
       case 'line':
         return (
-          <LineChart data={chartData}>
+          <LineChart data={_chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey={xAxisKey} stroke="#9CA3AF" />
+            <XAxis dataKey={_xAxisKey} stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip
               contentStyle={{
@@ -67,7 +67,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
             />
             <Line
               type="monotone"
-              dataKey={dataKey}
+              dataKey={_dataKey}
               stroke={colors[0]}
               strokeWidth={2}
               dot={{ fill: colors[0], r: 4 }}
@@ -85,9 +85,9 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         )
       case 'bar':
         return (
-          <BarChart data={chartData}>
+          <BarChart data={_chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey={xAxisKey} stroke="#9CA3AF" />
+            <XAxis dataKey={_xAxisKey} stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip
               contentStyle={{
@@ -96,15 +96,15 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
                 borderRadius: '0.5rem'
               }}
             />
-            <Bar dataKey={dataKey} fill={colors[0]} radius={[4, 4, 0, 0]} />
+            <Bar dataKey={_dataKey} fill={colors[0]} radius={[4, 4, 0, 0]} />
             <Bar dataKey="value2" fill={colors[1]} radius={[4, 4, 0, 0]} />
           </BarChart>
         )
       case 'area':
         return (
-          <AreaChart data={chartData}>
+          <AreaChart data={_chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey={xAxisKey} stroke="#9CA3AF" />
+            <XAxis dataKey={_xAxisKey} stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip
               contentStyle={{
@@ -115,7 +115,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
             />
             <Area
               type="monotone"
-              dataKey={dataKey}
+              dataKey={_dataKey}
               stroke={colors[0]}
               fill={colors[0]}
               fillOpacity={0.3}
@@ -132,17 +132,17 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       case 'pie':
         return (<PieChart>
             <Pie
-              data={pieData}
+              data={_pieData}
               cx="50%"
               cy="50%"
-              labelLine={false}
+              labelLine={_false}
               label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
               outerRadius="80%"
               fill="#8884d8"
               dataKey="value"
             >
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              {pieData.map((_entry, index) => (
+                <Cell key={`cell-${_index}`} fill={colors[index % colors.length]} />
               ))}
             </Pie>
             <Tooltip

@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react'
 import { Palette, Upload, Save, RotateCcw, Eye} from 'lucide-react'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Label} from '@/components/ui/label'
@@ -21,13 +21,13 @@ export const TenantCustomization: React.FC = () => {
   const [customization, setCustomization] = useState<TCustomization>(
     currentTenant?.customization || {} as TCustomization
   )
-  const [loading, setLoading] = useState(false)
-  const [previewMode, setPreviewMode] = useState(false)
+  const [loading, setLoading] = useState(_false)
+  const [previewMode, setPreviewMode] = useState(_false)
   const canWhiteLabel = checkFeature('whiteLabeling')
   const handleSave = async () => {
-    setLoading(true)
+    setLoading(_true)
     try {
-      await updateTenantCustomization(customization)
+      await updateTenantCustomization(_customization)
       toast({
         title: 'Customization saved',
         description: 'Your branding changes have been applied successfully.'
@@ -41,11 +41,11 @@ export const TenantCustomization: React.FC = () => {
         variant: 'destructive'
       })
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handleReset = () => {
-    if (currentTenant) {
+    if (_currentTenant) {
       setCustomization(currentTenant.customization)
       applyTheme(currentTenant.customization.branding)
     }
@@ -74,7 +74,7 @@ export const TenantCustomization: React.FC = () => {
       if (!styleEl) {
         styleEl = document.createElement('style')
         styleEl.id = 'tenant-custom-styles'
-        document.head.appendChild(styleEl)
+        document.head.appendChild(s_tyleEl)
       }
       styleEl.textContent = branding.customCss
     }
@@ -94,7 +94,7 @@ export const TenantCustomization: React.FC = () => {
         }
       }))
     }
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(_file)
   }
   if (!canWhiteLabel) {
     return (
@@ -134,15 +134,15 @@ export const TenantCustomization: React.FC = () => {
           </Button>
           <Button
             variant="outline"
-            onClick={handleReset}
-            disabled={loading}
+            onClick={_handleReset}
+            disabled={_loading}
           >
             <RotateCcw className="h-4 w-4 mr-2" />
             Reset
           </Button>
           <Button
-            onClick={handleSave}
-            disabled={loading}
+            onClick={_handleSave}
+            disabled={_loading}
           >
             <Save className="h-4 w-4 mr-2" />
             Save Changes
@@ -185,7 +185,7 @@ export const TenantCustomization: React.FC = () => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={handleLogoUpload}
+                    onChange={_handleLogoUpload}
                     className="max-w-xs"
                   />
                 </div>
@@ -200,7 +200,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Primary Color</Label>
                   <ColorPicker
                     value={customization.branding?.primaryColor || '#1e40af'}
-                    onChange={(color) => setCustomization(prev => ({
+                    onChange={(_color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,
@@ -214,7 +214,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Secondary Color</Label>
                   <ColorPicker
                     value={customization.branding?.secondaryColor || '#3b82f6'}
-                    onChange={(color) => setCustomization(prev => ({
+                    onChange={(_color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,
@@ -228,7 +228,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Accent Color</Label>
                   <ColorPicker
                     value={customization.branding?.accentColor || '#60a5fa'}
-                    onChange={(color) => setCustomization(prev => ({
+                    onChange={(_color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,
@@ -249,7 +249,7 @@ export const TenantCustomization: React.FC = () => {
                 </div>
                 <Switch
                   checked={customization.branding?.darkMode ?? true}
-                  onCheckedChange={(checked) => setCustomization(prev => ({
+                  onCheckedChange={(_checked) => setCustomization(prev => ({
                     ...prev,
                     branding: {
                       ...prev.branding,
@@ -265,7 +265,7 @@ export const TenantCustomization: React.FC = () => {
                 <Textarea
                   placeholder="/* Add custom styles here */"
                   value={customization.branding?.customCss || ''}
-                  onChange={(e) => setCustomization(prev => ({
+                  onChange={(_e) => setCustomization(prev => ({
                     ...prev,
                     branding: {
                       ...prev.branding,
@@ -297,7 +297,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>From Name</Label>
                   <Input
                     value={customization.emails?.fromName || ''}
-                    onChange={(e) => setCustomization(prev => ({
+                    onChange={(_e) => setCustomization(prev => ({
                       ...prev,
                       emails: {
                         ...prev.emails,
@@ -313,7 +313,7 @@ export const TenantCustomization: React.FC = () => {
                   <Input
                     type="email"
                     value={customization.emails?.fromEmail || ''}
-                    onChange={(e) => setCustomization(prev => ({
+                    onChange={(_e) => setCustomization(prev => ({
                       ...prev,
                       emails: {
                         ...prev.emails,
@@ -329,7 +329,7 @@ export const TenantCustomization: React.FC = () => {
                 <Label>Email Footer</Label>
                 <Textarea
                   value={customization.emails?.footer || ''}
-                  onChange={(e) => setCustomization(prev => ({
+                  onChange={(_e) => setCustomization(prev => ({
                     ...prev,
                     emails: {
                       ...prev.emails,

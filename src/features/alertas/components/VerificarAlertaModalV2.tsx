@@ -144,31 +144,31 @@ const COMANDOS_RAPIDOS = [
 export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
   alerta, isOpen, onClose, onSuccess
 }) => {
-  const [verificando, setVerificando] = useState(false)
+  const [verificando, setVerificando] = useState(_false)
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('')
   const [observaciones, setObservaciones] = useState('')
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
+  const [sendingCommand, setSendingCommand] = useState<string | null>(_null)
   const getIcon = (tipo: string) => {
     const iconClass = "h-6 w-6"
-    switch (tipo) {
+    switch (_tipo) {
       case 'violacion':
-        return <Shield className={iconClass} />
+        return <Shield className={_iconClass} />
       case 'bateria_baja':
-        return <Battery className={iconClass} />
+        return <Battery className={_iconClass} />
       case 'fuera_de_ruta':
-        return <MapPin className={iconClass} />
+        return <MapPin className={_iconClass} />
       case 'temperatura':
-        return <Thermometer className={iconClass} />
+        return <Thermometer className={_iconClass} />
       case 'sin_signal':
-        return <Radio className={iconClass} />
+        return <Radio className={_iconClass} />
       case 'intrusion':
-        return <Package className={iconClass} />
+        return <Package className={_iconClass} />
       default:
-        return <AlertTriangle className={iconClass} />
+        return <AlertTriangle className={_iconClass} />
     }
   }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'destructive'
       case 'alta': {
@@ -182,7 +182,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-900/20'
       case 'alta': {
@@ -206,10 +206,10 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
       return
     }
 
-    setVerificando(true)
+    setVerificando(_true)
     try {
       // Aquí iría la llamada a la API real
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simular API call
+      await new Promise(resolve => setTimeout(_resolve, 1000)); // Simular API call
       
       notificationService.success(`Alerta ${alerta.precintoId} verificada correctamente`)
       // Log para desarrollo
@@ -219,7 +219,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
         observaciones,
         timestamp: new Date().toISOString()
       })
-      if (onSuccess) {
+      if (_onSuccess) {
         onSuccess()
       }
       onClose()
@@ -227,25 +227,25 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
       notificationService.error('Error al verificar la alerta')
       console.error('Error verifying alert:', _error)
     } finally {
-      setVerificando(false)
+      setVerificando(_false)
     }
   }
   const handleSendCommand = async (commandId: string) => {
     try {
-      setSendingCommand(commandId)
+      setSendingCommand(_commandId)
       // TODO: Implement command sending logic
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.precintoId}`)
+      await new Promise(resolve => setTimeout(_resolve, 1000)); // Simulate API call
+      notificationService.success(`Comando "${_commandId}" enviado al precinto ${alerta.precintoId}`)
     } catch {
       notificationService.error('Error al enviar el comando')
     } finally {
-      setSendingCommand(null)
+      setSendingCommand(_null)
     }
   }
   // Obtener las opciones según el tipo de alerta
   const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || OPCIONES_RESPUESTA.violacion
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={_isOpen} onOpenChange={_onClose}>
       <DialogContent className="sm:max-w-2xl bg-gray-800 border-gray-700">
         <DialogHeader>
           <div className="flex items-center gap-3">
@@ -331,14 +331,14 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
               Motivo de Respuesta <span className="text-red-400">*</span>
             </Label>
             <Select
-              value={motivoSeleccionado}
-              onValueChange={setMotivoSeleccionado}
+              value={_motivoSeleccionado}
+              onValueChange={s_etMotivoSeleccionado}
             >
               <SelectTrigger className="bg-gray-700 border-gray-600">
                 <SelectValue placeholder="Seleccione un motivo..." />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700">
-                {opcionesRespuesta.map((opcion) => (
+                {opcionesRespuesta.map((_opcion) => (
                   <SelectItem 
                     key={opcion.id} 
                     value={opcion.id.toString()}
@@ -356,8 +356,8 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
             <Label htmlFor="observaciones">Observaciones</Label>
             <Textarea
               id="observaciones"
-              value={observaciones}
-              onChange={(e) => setObservaciones(e.target.value)}
+              value={_observaciones}
+              onChange={(_e) => setObservaciones(e.target.value)}
               placeholder="Agregar observaciones adicionales..."
               className="bg-gray-700 border-gray-600 placeholder-gray-400"
               rows={3}
@@ -368,7 +368,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
           <div className="space-y-2">
             <Label>Comandos Rápidos</Label>
             <div className="grid grid-cols-2 gap-2">
-              {COMANDOS_RAPIDOS.map((comando) => {
+              {COMANDOS_RAPIDOS.map((_comando) => {
                 const Icon = comando.icon
                 return (<Button
                     key={comando.id}
@@ -407,7 +407,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button
-              onClick={handleVerificar}
+              onClick={_handleVerificar}
               disabled={verificando || alerta.atendida || !motivoSeleccionado}
               className={cn(
                 "flex-1",
@@ -431,7 +431,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
             
             <Button
               variant="secondary"
-              onClick={onClose}
+              onClick={_onClose}
             >
               Cancelar
             </Button>

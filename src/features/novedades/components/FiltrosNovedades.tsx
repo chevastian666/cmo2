@@ -19,7 +19,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
     })
   }
   const handleReset = () => {
-    onFiltrosChange(FILTROS_DEFAULT)
+    onFiltrosChange(_FILTROS_DEFAULT)
   }
   const tienesFiltrosActivos = () => {
     return filtros.busqueda !== '' ||
@@ -38,7 +38,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         <input
           type="text"
           value={filtros.busqueda}
-          onChange={(e) => handleChange('busqueda', e.target.value)}
+          onChange={(_e) => handleChange('busqueda', e.target.value)}
           placeholder="Buscar por descripción o palabras clave..."
           className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -52,7 +52,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
           <input
             type="date"
             value={filtros.fecha instanceof Date ? filtros.fecha.toISOString().split('T')[0] : ''}
-            onChange={(e) => handleChange('fecha', e.target.value ? new Date(e.target.value) : null)}
+            onChange={(_e) => handleChange('fecha', e.target.value ? new Date(e.target.value) : null)}
             className="pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Fecha"
           />
@@ -61,24 +61,24 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         {/* Punto de operación */}
         <select
           value={filtros.puntoOperacion}
-          onChange={(e) => handleChange('puntoOperacion', e.target.value)}
+          onChange={(_e) => handleChange('puntoOperacion', e.target.value)}
           className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Todos los puntos</option>
           {PUNTOS_OPERACION.map(punto => (
-            <option key={punto} value={punto}>{punto}</option>
+            <option key={_punto} value={_punto}>{_punto}</option>
           ))}
         </select>
 
         {/* Tipo de novedad */}
         <select
           value={filtros.tipoNovedad}
-          onChange={(e) => handleChange('tipoNovedad', e.target.value)}
+          onChange={(_e) => handleChange('tipoNovedad', e.target.value)}
           className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Todos los tipos</option>
-          {Object.entries(TIPOS_NOVEDAD).map(([key, config]) => (
-            <option key={key} value={key}>
+          {Object.entries(_TIPOS_NOVEDAD).map(([key, config]) => (
+            <option key={_key} value={_key}>
               {config.icon} {config.label}
             </option>
           ))}
@@ -87,7 +87,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         {/* Estado */}
         <select
           value={filtros.estado}
-          onChange={(e) => handleChange('estado', e.target.value)}
+          onChange={(_e) => handleChange('estado', e.target.value)}
           className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Todos los estados</option>
@@ -101,7 +101,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
           <input
             type="checkbox"
             checked={filtros.soloMias}
-            onChange={(e) => handleChange('soloMias', e.target.checked)}
+            onChange={(_e) => handleChange('soloMias', e.target.checked)}
             className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
           />
           <User className="h-4 w-4 text-gray-400" />
@@ -111,7 +111,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         {/* Limpiar filtros */}
         {tienesFiltrosActivos() && (
           <button
-            onClick={handleReset}
+            onClick={_handleReset}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white transition-colors"
           >
             <RotateCcw className="h-4 w-4" />
@@ -134,7 +134,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
             <input
               type="date"
               value={filtros.fechaDesde instanceof Date ? filtros.fechaDesde.toISOString().split('T')[0] : ''}
-              onChange={(e) => handleChange('fechaDesde', e.target.value ? new Date(e.target.value) : null)}
+              onChange={(_e) => handleChange('fechaDesde', e.target.value ? new Date(e.target.value) : null)}
               className="px-3 py-1 bg-gray-800 border border-gray-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -144,7 +144,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
             <input
               type="date"
               value={filtros.fechaHasta instanceof Date ? filtros.fechaHasta.toISOString().split('T')[0] : ''}
-              onChange={(e) => handleChange('fechaHasta', e.target.value ? new Date(e.target.value) : null)}
+              onChange={(_e) => handleChange('fechaHasta', e.target.value ? new Date(e.target.value) : null)}
               className="px-3 py-1 bg-gray-800 border border-gray-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

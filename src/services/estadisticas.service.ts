@@ -55,7 +55,7 @@ export const estadisticasService = {
             },
             reportesPendientes: 0 // TODO: obtener de API
           }
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }

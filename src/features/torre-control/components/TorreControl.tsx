@@ -8,7 +8,7 @@ import { Truck, AlertTriangle, CheckCircle, XCircle, Filter, Activity} from 'luc
 import { cn} from '../../../utils/utils'
 import { TransitoRow} from './TransitoRow'
 import { TransitoDetailModal} from './TransitoDetailModal'
-import {TorreControlFilters} from './TorreControlFilters'
+import {_TorreControlFilters} from './TorreControlFilters'
 import { TorreControlHeader} from './TorreControlHeader'
 import { CongestionPanel} from '../../prediccion'
 import { notificationService} from '../../../services/shared/notification.service'
@@ -21,11 +21,11 @@ interface TorreControlProps {
 
 export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   const [transitos, setTransitos] = useState<TransitoTorreControl[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
-  const [showFilters, setShowFilters] = useState(false)
-  const [showCongestionPanel] = useState(true)
+  const [loading, setLoading] = useState(_true)
+  const [error, setError] = useState<string | null>(_null)
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(_null)
+  const [showFilters, setShowFilters] = useState(_false)
+  const [showCongestionPanel] = useState(_true)
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [lastCongestionNotification, setLastCongestionNotification] = useState<string[]>([])
   const [filters, setFilters] = useState({
@@ -36,10 +36,10 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   // Fetch transitos data from API
   const fetchTransitos = useCallback(async () => {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(_true)
+      setError(_null)
       const data = await torreControlService.getTransitosEnRuta()
-      setTransitos(data)
+      setTransitos(_data)
       setLastUpdate(new Date())
       // Mock data fallback (remove this when API is ready)
       if (data.length === 0) {
@@ -142,21 +142,21 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
           progreso: 60
         }
         ]
-        setTransitos(mockData)
+        setTransitos(_mockData)
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Error al cargar los tránsitos')
       console.error('Error fetching transitos:', err)
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }, [])
   // Auto-refresh every 10 seconds
 
     useEffect(() => {
     fetchTransitos()
-    const interval = setInterval(fetchTransitos, 10000)
-    return () => clearInterval(interval)
+    const interval = setInterval(_fetchTransitos, 10000)
+    return () => clearInterval(_interval)
   }, [])
   // Filter transitos
   const filteredTransitos = transitos.filter(transito => {
@@ -172,17 +172,17 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
     return true
   })
   // Sort by ETA
-  const sortedTransitos = [...filteredTransitos].sort((a, b) => 
+  const sortedTransitos = [...filteredTransitos].sort((_a, b) => 
     a.eta.getTime() - b.eta.getTime()
   )
   const handleTransitoClick = (transito: TransitoTorreControl) => {
-    setSelectedTransito(transito)
+    setSelectedTransito(_transito)
   }
   const handleCloseModal = () => {
-    setSelectedTransito(null)
+    setSelectedTransito(_null)
   }
   const getSemaforoIcon = (semaforo: EstadoSemaforo) => {
-    switch (semaforo) {
+    switch (s_emaforo) {
       case 'verde': {
   return <CheckCircle className="h-6 w-6 text-green-500" />
       case 'amarillo': {
@@ -198,7 +198,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       const criticas = congestions.filter(c => c.severidad === 'critica')
       const nuevasCriticas = criticas.filter(c => {
         const key = `${c.destino}-${c.ventanaInicio.getTime()}`
-        return !prev.includes(key)
+        return !prev.includes(_key)
       })
       if (nuevasCriticas.length > 0) {
         // Notificar cada congestión crítica nueva
@@ -229,19 +229,19 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <TorreControlHeader 
-          lastUpdate={lastUpdate}
+          lastUpdate={_lastUpdate}
           transitosCount={sortedTransitos.length}
-          onRefresh={fetchTransitos}
+          onRefresh={_fetchTransitos}
           onToggleFilters={() => setShowFilters(!showFilters)}
-          showFilters={showFilters}
+          showFilters={s_howFilters}
         />
 
         {/* Congestion Alert Bar */}
         <div className="bg-gray-900 border-b border-gray-800 px-4 py-2">
           <CongestionPanel
-            transitos={transitos}
+            transitos={_transitos}
             variant="compact"
-            onCongestionDetected={handleCongestionDetected}
+            onCongestionDetected={_handleCongestionDetected}
           />
         </div>
 
@@ -250,8 +250,8 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
           <div className="border-b border-gray-800">
             <div className="max-w-full mx-auto px-4 py-4">
               <TorreControlFilters
-                filters={filters}
-                onFiltersChange={setFilters}
+                filters={_filters}
+                onFiltersChange={s_etFilters}
                 origenOptions={[...new Set(transitos.map(t => t.origen))]}
                 destinoOptions={[...new Set(transitos.map(t => t.destino))]}
               />
@@ -273,9 +273,9 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <p className="text-red-400 text-lg">{error}</p>
+              <p className="text-red-400 text-lg">{_error}</p>
               <button
-                onClick={fetchTransitos}
+                onClick={_fetchTransitos}
                 className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
               >
                 Reintentar
@@ -341,11 +341,11 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {sortedTransitos.map((transito, index) => (<TransitoRow
+                {sortedTransitos.map((_transito, index) => (<TransitoRow
                     key={transito.id}
-                    transito={transito}
-                    index={index}
-                    onClick={() => handleTransitoClick(transito)}
+                    transito={_transito}
+                    index={_index}
+                    onClick={() => handleTransitoClick(_transito)}
                   />
                 ))}
               </tbody>
@@ -360,9 +360,9 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       {/* Congestion Sidebar */}
       {showCongestionPanel && (
         <CongestionPanel
-          transitos={transitos}
+          transitos={_transitos}
           variant="sidebar"
-          onCongestionDetected={handleCongestionDetected}
+          onCongestionDetected={_handleCongestionDetected}
           className="shadow-xl"
         />
       )}
@@ -370,9 +370,9 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       {/* Detail Modal */}
       {selectedTransito && (
         <TransitoDetailModal
-          transito={selectedTransito}
+          transito={s_electedTransito}
           isOpen={!!selectedTransito}
-          onClose={handleCloseModal}
+          onClose={_handleCloseModal}
         />
       )}
     </div>

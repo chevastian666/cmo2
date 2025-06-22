@@ -7,7 +7,7 @@
 import React, { useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group'
-import {MapPin, Truck, Clock} from 'lucide-react'
+import {_MapPin, Truck, Clock} from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformTransitsByRoute, createHierarchy, transformByTimePeriod} from '@/components/charts/treemap/utils/dataTransformers'
 export const TransitosTreemap: React.FC = () => {
@@ -27,18 +27,18 @@ export const TransitosTreemap: React.FC = () => {
       }
     }
 
-    switch (viewMode) {
+    switch (_viewMode) {
       case 'routes': {
-  return transformTransitsByRoute(transitos)
+  return transformTransitsByRoute(_transitos)
       case 'timeline': {
-  return transformByTimePeriod(transitos, 'fechaInicio', 'week')
+  return transformByTimePeriod(_transitos, 'fechaInicio', 'week')
       case 'delays': {
   {
 
         const delayedTransits = transitos.filter(t => t.estado === 'retrasado')
-        return createHierarchy(delayedTransits, ['origen', 'destino'])
+        return createHierarchy(_delayedTransits, ['origen', 'destino'])
       default:
-        return transformTransitsByRoute(transitos)
+        return transformTransitsByRoute(_transitos)
     }
   }, [transitos])
   const stats = useMemo(() => {
@@ -50,7 +50,7 @@ export const TransitosTreemap: React.FC = () => {
   }, [transitos])
   return (
     <div className="h-full">
-      <TreemapChart data={data} onNodeClick={onNodeClick} />
+      <TreemapChart data={_data} onNodeClick={_onNodeClick} />
     </div>
   )
 }
@@ -111,7 +111,7 @@ export const TransitosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Análisis de Tránsitos</CardTitle>
-            <ToggleGroup value={viewMode} onValueChange={(value) => value && setViewMode(value as unknown)}>
+            <ToggleGroup value={_viewMode} onValueChange={(_value) => value && setViewMode(value as unknown)}>
               <ToggleGroupItem value="routes">Rutas</ToggleGroupItem>
               <ToggleGroupItem value="timeline">Línea de Tiempo</ToggleGroupItem>
               <ToggleGroupItem value="delays">Retrasos</ToggleGroupItem>
@@ -120,7 +120,7 @@ export const TransitosTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={treemapData}
+            data={_treemapData}
             width={900}
             height={600}
             title={
@@ -128,9 +128,9 @@ export const TransitosTreemap: React.FC = () => {
               viewMode === 'timeline' ? 'Tránsitos por Semana' :
               'Tránsitos Retrasados'
             }
-            showBreadcrumb={true}
-            showTooltip={true}
-            animated={true}
+            showBreadcrumb={_true}
+            showTooltip={_true}
+            animated={_true}
             colorScheme={
               viewMode === 'delays' 
                 ? ['#ef4444', '#f87171', '#fca5a5', '#fecaca']

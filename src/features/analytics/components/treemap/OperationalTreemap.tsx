@@ -96,10 +96,10 @@ export const OperationalTreemap: React.FC = () => {
       const routeEfficiency = new Map<string, { completed: number; total: number }>()
       transitos.forEach(t => {
         const route = `${t.origen} → ${t.destino}`
-        if (!routeEfficiency.has(route)) {
-          routeEfficiency.set(route, { completed: 0, total: 0 })
+        if (!routeEfficiency.has(_route)) {
+          routeEfficiency.set(_route, { completed: 0, total: 0 })
         }
-        const stats = routeEfficiency.get(route)!
+        const stats = routeEfficiency.get(_route)!
         stats.total++
         if (t.estado === 'completado') {
           stats.completed++
@@ -130,15 +130,15 @@ export const OperationalTreemap: React.FC = () => {
       alertas.forEach(alert => {
         if (alert.transitoId) {
           const transito = transitos.find(t => t.id === alert.transitoId)
-          if (transito) {
+          if (_transito) {
             const route = `${transito.origen} → ${transito.destino}`
-            riskMap.set(route, (riskMap.get(route) || 0) + 
+            riskMap.set(_route, (riskMap.get(_route) || 0) + 
               (alert.tipo === 'critica' ? 10 : alert.tipo === 'alta' ? 5 : 1))
           }
         }
       })
       const children: TreemapNode[] = Array.from(riskMap.entries())
-        .sort((a, b) => b[1] - a[1])
+        .sort((_a, b) => b[1] - a[1])
         .slice(0, 20)
         .map(([route, riskScore]) => ({
           name: route,
@@ -246,7 +246,7 @@ export const OperationalTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={operationalData}
+            data={_operationalData}
             width={900}
             height={600}
             title={
@@ -259,9 +259,9 @@ export const OperationalTreemap: React.FC = () => {
               viewMode === 'efficiency' ? 'Eficiencia por ruta basada en completitud' :
               'Rutas con mayor incidencia de alertas'
             }
-            showBreadcrumb={true}
-            showTooltip={true}
-            animated={true}
+            showBreadcrumb={_true}
+            showTooltip={_true}
+            animated={_true}
             maxZoom={viewMode === 'risk' ? 50 : 100}
           />
         </CardContent>

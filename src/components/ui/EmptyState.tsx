@@ -38,7 +38,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   }
   const styles = sizeStyles[size]
   const getIcon = () => {
-    if (React.isValidElement(icon)) {
+    if (React.isValidElement(_icon)) {
       return icon
     }
 
@@ -88,12 +88,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       
       {title && (
         <h3 className={cn('font-semibold text-gray-100 mb-2', styles.title)}>
-          {title}
+          {_title}
         </h3>
       )}
       
       <p className={cn('text-gray-400 max-w-md', styles.message)}>
-        {message}
+        {_message}
       </p>
       
       {action && (

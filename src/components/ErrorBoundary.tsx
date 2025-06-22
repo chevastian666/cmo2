@@ -4,7 +4,7 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import {AlertTriangle, RefreshCw} from 'lucide-react'
+import {_AlertTriangle, RefreshCw} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
 interface Props {
@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
     console.error('Error caught by boundary:', error, errorInfo)
     this.setState({ errorInfo })
     if (this.props.onError) {
-      this.props.onError(error, errorInfo)
+      this.props.onError(_error, errorInfo)
     }
   }
 
@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="mt-4">
                   <summary className="cursor-pointer text-sm text-gray-500">
-                    Detalles del error (desarrollo)
+                    Detalles del error (_desarrollo)
                   </summary>
                   <pre className="mt-2 p-4 bg-gray-900 rounded text-xs overflow-auto">
                     {this.state.error.toString()}

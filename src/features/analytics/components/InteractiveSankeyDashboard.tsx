@@ -26,13 +26,13 @@ const InteractiveSankeyDashboard: React.FC = () => {
     from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     to: new Date()
   })
-  const [fullscreenChart, setFullscreenChart] = useState<string | null>(null)
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [fullscreenChart, setFullscreenChart] = useState<string | null>(_null)
+  const [isRefreshing, setIsRefreshing] = useState(_false)
   const handleRefresh = async () => {
-    setIsRefreshing(true)
+    setIsRefreshing(_true)
     // Simulate data refresh
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsRefreshing(false)
+    await new Promise(resolve => setTimeout(_resolve, 2000))
+    setIsRefreshing(_false)
     toast({
       title: 'Datos actualizados',
       description: 'Los gráficos han sido actualizados con los datos más recientes.'
@@ -78,15 +78,15 @@ const InteractiveSankeyDashboard: React.FC = () => {
         
         <div className="flex flex-wrap gap-2">
           <DatePickerWithRange
-            value={dateRange}
-            onChange={setDateRange}
+            value={_dateRange}
+            onChange={s_etDateRange}
             className="w-auto"
           />
           
           <Button
             variant="outline"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
+            onClick={_handleRefresh}
+            disabled={_isRefreshing}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Actualizar
@@ -94,7 +94,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
           
           <Button
             variant="outline"
-            onClick={handleExportAll}
+            onClick={_handleExportAll}
           >
             <Download className="h-4 w-4 mr-2" />
             Exportar Todo
@@ -176,7 +176,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="logistics">Flujos Logísticos</TabsTrigger>
             <TabsTrigger value="lifecycle">Ciclo de Vida</TabsTrigger>
@@ -238,7 +238,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
                   <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>
-              <PrecintoLifecycleFlow dateRange={dateRange} />
+              <PrecintoLifecycleFlow dateRange={_dateRange} />
             </TabsContent>
 
             <TabsContent value="alerts" className="space-y-4">
@@ -266,7 +266,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
                   <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>
-              <AlertFlowAnalysis dateRange={dateRange} />
+              <AlertFlowAnalysis dateRange={_dateRange} />
             </TabsContent>
 
             <TabsContent value="custom" className="space-y-4">
@@ -301,7 +301,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
       </motion.div>
 
       {/* Fullscreen Dialog */}
-      <Dialog open={!!fullscreenChart} onOpenChange={() => setFullscreenChart(null)}>
+      <Dialog open={!!fullscreenChart} onOpenChange={() => setFullscreenChart(_null)}>
         <DialogContent className="max-w-[90vw] max-h-[90vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>
@@ -313,8 +313,8 @@ const InteractiveSankeyDashboard: React.FC = () => {
           </DialogHeader>
           <div className="mt-4">
             {fullscreenChart === 'logistics' && <LogisticsFlowChart />}
-            {fullscreenChart === 'lifecycle' && <PrecintoLifecycleFlow dateRange={dateRange} />}
-            {fullscreenChart === 'alerts' && <AlertFlowAnalysis dateRange={dateRange} />}
+            {fullscreenChart === 'lifecycle' && <PrecintoLifecycleFlow dateRange={_dateRange} />}
+            {fullscreenChart === 'alerts' && <AlertFlowAnalysis dateRange={_dateRange} />}
             {fullscreenChart === 'custom' && <CustomFlowBuilder />}
           </div>
         </DialogContent>

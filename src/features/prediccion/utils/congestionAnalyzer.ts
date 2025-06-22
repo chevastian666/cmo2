@@ -18,11 +18,11 @@ export class CongestionAnalyzer {
       this.config.destinosMonitoreados.includes(t.destino)
     )
     // Agrupar por destino
-    const porDestino = this.agruparPorDestino(transitosActivos)
+    const porDestino = this.agruparPorDestino(_transitosActivos)
     // Analizar cada destino
     const analisis: CongestionAnalysis[] = []
-    for (const [destino, camiones] of Object.entries(porDestino)) {
-      const congestionesEnDestino = this.detectarCongestionesEnDestino(destino, camiones)
+    for (const [destino, camiones] of Object.entries(_porDestino)) {
+      const congestionesEnDestino = this.detectarCongestionesEnDestino(_destino, camiones)
       analisis.push(...congestionesEnDestino)
     }
 
@@ -31,7 +31,7 @@ export class CongestionAnalyzer {
       analisis.push(...this.generarCongestionesSimuladas())
     }
 
-    return analisis.sort((a, b) => a.ventanaInicio.getTime() - b.ventanaInicio.getTime())
+    return analisis.sort((_a, b) => a.ventanaInicio.getTime() - b.ventanaInicio.getTime())
   }
 
   /**
@@ -48,7 +48,7 @@ export class CongestionAnalyzer {
     )
     // Crear slots de hora
     const proyeccion: ProyeccionPorHora[] = []
-    const horaActual = new Date(ahora)
+    const horaActual = new Date(_ahora)
     horaActual.setMinutes(0, 0, 0)
     for (let i = 0; i <= this.config.horasProyeccion; i++) {
       const horaInicio = new Date(horaActual.getTime() + i * 60 * 60 * 1000)
@@ -56,13 +56,13 @@ export class CongestionAnalyzer {
       const transitosEnHora = transitosActivos.filter(t => 
         t.eta >= horaInicio && t.eta < horaFin
       )
-      const porDestino = this.agruparPorDestino(transitosEnHora)
+      const porDestino = this.agruparPorDestino(_transitosEnHora)
       proyeccion.push({
         hora: horaInicio.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' }),
-        destinos: Object.entries(porDestino).map(([nombre, camiones]) => ({
+        destinos: Object.entries(_porDestino).map(([nombre, camiones]) => ({
           nombre,
           cantidad: camiones.length,
-          camiones: camiones.map(t => this.transitoACamion(t))
+          camiones: camiones.map(t => this.transitoACamion(_t))
         }))
       })
     }
@@ -71,11 +71,11 @@ export class CongestionAnalyzer {
   }
 
   private agruparPorDestino(transitos: TransitoTorreControl[]): Record<string, TransitoTorreControl[]> {
-    return transitos.reduce((acc, transito) => {
+    return transitos.reduce((_acc, transito) => {
       if (!acc[transito.destino]) {
         acc[transito.destino] = []
       }
-      acc[transito.destino].push(transito)
+      acc[transito.destino].push(_transito)
       return acc
     }, {} as Record<string, TransitoTorreControl[]>)
   }
@@ -86,7 +86,7 @@ export class CongestionAnalyzer {
     }
 
     // Ordenar por ETA
-    const ordenados = [...transitos].sort((a, b) => a.eta.getTime() - b.eta.getTime())
+    const ordenados = [...transitos].sort((_a, b) => a.eta.getTime() - b.eta.getTime())
     const congestions: CongestionAnalysis[] = []
     // Buscar grupos de camiones en ventanas de tiempo
     for (let i = 0; i < ordenados.length; i++) {
@@ -108,7 +108,7 @@ export class CongestionAnalyzer {
             destino,
             ventanaInicio,
             ventanaFin,
-            camiones: camionesEnVentana.map(t => this.transitoACamion(t)),
+            camiones: camionesEnVentana.map(t => this.transitoACamion(_t)),
             severidad: this.calcularSeveridad(camionesEnVentana.length),
             cantidadCamiones: camionesEnVentana.length
           })

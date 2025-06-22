@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import {useEffect, lazy, Suspense} from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import { LayoutOptimized} from './features/common'
@@ -29,31 +29,31 @@ const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m 
 const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
 const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
 // const _LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'))
-const _BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
-const _CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
-const _DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })))
-const _AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })))
-const _CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })))
-const _ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })))
-const _RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })))
-const _SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })))
-const _ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'))
-const _InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'))
-const _DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'))
-const _InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'))
-const _AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'))
-const _SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'))
-// const _SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'))
-const _AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'))
-// const _TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'))
-const _TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'))
-const _TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'))
-const _TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'))
-const _TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'))
-const _D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })))
-const _NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })))
-const _PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })))
-const _IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })))
+const BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
+const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
+const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })))
+const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })))
+const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })))
+const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })))
+const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })))
+const SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })))
+const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'))
+const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'))
+const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'))
+const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'))
+const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'))
+const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'))
+// const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'))
+const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'))
+// const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'))
+const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'))
+const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'))
+const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'))
+const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'))
+const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })))
+const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })))
+const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })))
+const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })))
 import { initializeStores, setupAutoRefresh} from './store'
 import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedIntegration'
 import { useWebSocket} from './hooks/useWebSocket'
@@ -74,6 +74,9 @@ const queryClient = new QueryClient({
   },
 })
 function App() {
+  // Mock authentication functions - in real app these would come from auth service
+  const isAuthenticated = true; // Mock authentication state
+  const canAccessCMO = () => true; // Mock authorization check
 
   // Initialize shared services integration
   useSharedIntegration()
@@ -95,20 +98,20 @@ function App() {
     // Set up notification handlers for real-time events
     const unsubscribers: (() => void)[] = []
     // New alert notifications
-    unsubscribers.push(sharedWebSocketService.onAlertNew((__data) => {
-        notificationService.newAlert(_data.alert || _data)
+    unsubscribers.push(sharedWebSocketService.onAlertNew((data) => {
+        notificationService.newAlert(data.alert || data)
       })
     )
     // Transit delay notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (__data) => {
-        if (_data.status === 'delayed') {
-          notificationService.transitDelayed(_data.transit)
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data) => {
+        if (data.status === 'delayed') {
+          notificationService.transitDelayed(data.transit)
         }
       })
     )
     // CMO message notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (__data) => {
-        notificationService.cmoMessage(_data.message || _data)
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data) => {
+        notificationService.cmoMessage(data.message || data)
       })
     )
     // Initialize stores and fetch initial data

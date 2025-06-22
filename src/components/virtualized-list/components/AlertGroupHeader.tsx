@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import {ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react'
+import {_ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { GroupingOptions} from '../types/virtualization'
 interface AlertGroupHeaderProps {
@@ -16,7 +16,7 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
   groupKey, groupValue, count, isExpanded, onToggle, groupBy, style
 }) => {
   const getIcon = () => {
-    switch (groupBy) {
+    switch (_groupBy) {
       case 'timestamp': {
   return <Calendar className="h-4 w-4" />
       case 'severity': {
@@ -28,15 +28,15 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
     }
   }
   const getGroupLabel = () => {
-    switch (groupBy) {
+    switch (_groupBy) {
       case 'timestamp': {
-  return formatDateGroup(groupValue)
+  return formatDateGroup(_groupValue)
       case 'severity': {
-  return formatSeverityGroup(groupValue)
+  return formatSeverityGroup(_groupValue)
       case 'location': {
   return groupValue
       case 'status': {
-  return formatStatusGroup(groupValue)
+  return formatStatusGroup(_groupValue)
       default:
         return groupValue
     }
@@ -44,11 +44,11 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
   return (
     <div
       className="sticky top-0 z-10 bg-gray-800 border-b border-gray-700 px-4 py-2 cursor-pointer hover:bg-gray-750"
-      style={style}
-      onClick={onToggle}
+      style={s_tyle}
+      onClick={_onToggle}
       role="button"
-      aria-expanded={isExpanded}
-      aria-controls={`group-${groupKey}`}
+      aria-expanded={_isExpanded}
+      aria-controls={`group-${_groupKey}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
           </span>
           
           <span className="text-sm text-gray-500">
-            ({count} alerta{count !== 1 ? 's' : ''})
+            ({_count} alerta{count !== 1 ? 's' : ''})
           </span>
         </div>
         
@@ -87,12 +87,12 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
 AlertGroupHeader.displayName = 'AlertGroupHeader'
 // Helper functions
 function formatDateGroup(dateStr: string): string {
-  const date = new Date(dateStr)
+  const date = new Date(_dateStr)
   const now = new Date()
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
   if (diffDays === 0) return 'Hoy'
   if (diffDays === 1) return 'Ayer'
-  if (diffDays < 7) return `Hace ${diffDays} días`
+  if (diffDays < 7) return `Hace ${_diffDays} días`
   return date.toLocaleDateString('es-AR', { 
     weekday: 'long', 
     year: 'numeric', 

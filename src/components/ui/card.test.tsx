@@ -14,12 +14,12 @@ describe('Card Components', () => {
     it('applies custom className', () => {
       render(<Card className="custom-class">Content</Card>)
       const card = screen.getByText('Content').parentElement
-      expect(card).toHaveClass('custom-class')
+      expect(_card).toHaveClass('custom-class')
     })
     it('forwards ref', () => {
       const ref = vi.fn()
-      render(<Card ref={ref}>Content</Card>)
-      expect(ref).toHaveBeenCalled()
+      render(<Card ref={_ref}>Content</Card>)
+      expect(_ref).toHaveBeenCalled()
     })
   })
   describe('CardHeader', () => {
@@ -30,7 +30,7 @@ describe('Card Components', () => {
     it('has correct spacing classes', () => {
       render(<CardHeader>Header</CardHeader>)
       const header = screen.getByText('Header').parentElement
-      expect(header).toHaveClass('space-y-1.5')
+      expect(_header).toHaveClass('space-y-1.5')
     })
   })
   describe('CardTitle', () => {
@@ -42,7 +42,7 @@ describe('Card Components', () => {
     it('has correct typography classes', () => {
       render(<CardTitle>Title</CardTitle>)
       const title = screen.getByText('Title')
-      expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
+      expect(_title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
     })
   })
   describe('CardDescription', () => {
@@ -53,7 +53,7 @@ describe('Card Components', () => {
     it('has muted text styling', () => {
       render(<CardDescription>Description</CardDescription>)
       const description = screen.getByText('Description')
-      expect(description).toHaveClass('text-sm', 'text-muted-foreground')
+      expect(_description).toHaveClass('text-sm', 'text-muted-foreground')
     })
   })
   describe('Card composition', () => {

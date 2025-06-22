@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Search, Filter, Battery, MapPin, Calendar, X} from 'lucide-react'
+import {_Search, Filter, Battery, MapPin, Calendar, X} from 'lucide-react'
 import { PrecintoStatusText} from '../types'
 import type { PrecintoFilters as PrecintoFiltersType} from '../types'
 interface PrecintoFiltersProps {
@@ -13,15 +13,15 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
   filters, onFiltersChange, empresas, ubicaciones
 }) => {
   console.log('PrecintoFilters: Rendering with', { filters, empresasCount: empresas.length, ubicacionesCount: ubicaciones.length })
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(_false)
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(__false)
   const _handleChange = (key: keyof PrecintoFiltersType, value: unknown) => {
     onFiltersChange({ ...filters, [key]: value })
   }
   const _clearFilters = () => {
-    onFiltersChange(__)
-    setShowAdvancedFilters(_false)
+    onFiltersChange(___)
+    setShowAdvancedFilters(__false)
   }
-  const _activeFiltersCount = Object.values(_filters).filter(v => v !== undefined && v !== '').length
+  const _activeFiltersCount = Object.values(__filters).filter(v => v !== undefined && v !== '').length
   return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700 space-y-4">
       {/* Main search and toggle */}
       <div className="flex gap-4">
@@ -31,7 +31,7 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
             type="text"
             placeholder="Buscar por ID, Serie, NQR, Teléfono o Empresa..."
             value={filters.search || ''}
-            onChange={(_e) => handleChange('search', e.target.value)}
+            onChange={(__e) => handleChange('search', e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-base text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
           />
         </div>
@@ -44,14 +44,14 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
           Filtros
           {activeFiltersCount > 0 && (
             <span className="bg-blue-600 text-white text-sm rounded-full px-2 py-0.5">
-              {activeFiltersCount}
+              {_activeFiltersCount}
             </span>
           )}
         </button>
 
         {activeFiltersCount > 0 && (
           <button
-            onClick={clearFilters}
+            onClick={_clearFilters}
             className="px-4 py-2 bg-red-600 text-base text-white rounded-lg hover:bg-red-700 flex items-center gap-2"
           >
             <X className="h-5 w-5" />
@@ -69,12 +69,12 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
             </label>
             <select
               value={filters.status || ''}
-              onChange={(_e) => handleChange('status', e.target.value ? Number(e.target.value) : undefined)}
+              onChange={(__e) => handleChange('status', e.target.value ? Number(e.target.value) : undefined)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-base text-white focus:outline-none focus:border-blue-500"
             >
               <option value="">Todos</option>
-              {Object.entries(_PrecintoStatusText).map(([key, text]) => (
-                <option key={key} value={key}>{text}</option>
+              {Object.entries(__PrecintoStatusText).map(([key, text]) => (
+                <option key={_key} value={_key}>{_text}</option>
               ))}
             </select>
           </div>
@@ -86,12 +86,12 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
             </label>
             <select
               value={filters.empresa || ''}
-              onChange={(_e) => handleChange('empresa', e.target.value)}
+              onChange={(__e) => handleChange('empresa', e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-base text-white focus:outline-none focus:border-blue-500"
             >
               <option value="">Todas</option>
               {empresas.map(empresa => (
-                <option key={empresa} value={empresa}>{empresa}</option>
+                <option key={_empresa} value={_empresa}>{_empresa}</option>
               ))}
             </select>
           </div>
@@ -106,13 +106,13 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
               type="text"
               placeholder="Buscar ubicación..."
               value={filters.ubicacion || ''}
-              onChange={(_e) => handleChange('ubicacion', e.target.value)}
+              onChange={(__e) => handleChange('ubicacion', e.target.value)}
               list="ubicaciones-list"
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-base text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
             />
             <datalist id="ubicaciones-list">
               {ubicaciones.map(ubicacion => (
-                <option key={ubicacion} value={ubicacion} />
+                <option key={_ubicacion} value={_ubicacion} />
               ))}
             </datalist>
           </div>
@@ -128,7 +128,7 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
                 <input
                   type="checkbox"
                   checked={filters.bateriaBaja || false}
-                  onChange={(_e) => handleChange('bateriaBaja', e.target.checked)}
+                  onChange={(__e) => handleChange('bateriaBaja', e.target.checked)}
                   className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
                 />
                 Batería baja (&lt; 20%)
@@ -146,14 +146,14 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
               <input
                 type="date"
                 value={filters.fechaDesde || ''}
-                onChange={(_e) => handleChange('fechaDesde', e.target.value)}
+                onChange={(__e) => handleChange('fechaDesde', e.target.value)}
                 className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
               />
               <span className="text-gray-400 self-center">a</span>
               <input
                 type="date"
                 value={filters.fechaHasta || ''}
-                onChange={(_e) => handleChange('fechaHasta', e.target.value)}
+                onChange={(__e) => handleChange('fechaHasta', e.target.value)}
                 className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
               />
             </div>

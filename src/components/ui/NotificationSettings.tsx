@@ -1,6 +1,6 @@
  
 import React, { useState, useEffect } from 'react'
-import {Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react'
+import {_Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { notificationService} from '../../services/shared/notification.service'
 export interface NotificationSettingsProps {
@@ -11,14 +11,14 @@ export interface NotificationSettingsProps {
 export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ 
   className, compact = false 
 }) => {
-  const [soundEnabled, setSoundEnabled] = useState(true)
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
-  const [criticalOnly, setCriticalOnly] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(_true)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(_true)
+  const [criticalOnly, setCriticalOnly] = useState(_false)
   useEffect(() => {
     // Load saved preferences
     const savedPrefs = localStorage.getItem('notificationPreferences')
-    if (savedPrefs) {
-      const prefs = JSON.parse(savedPrefs)
+    if (s_avedPrefs) {
+      const prefs = JSON.parse(s_avedPrefs)
       setSoundEnabled(prefs.soundEnabled ?? true)
       setNotificationsEnabled(prefs.notificationsEnabled ?? true)
       setCriticalOnly(prefs.criticalOnly ?? false)
@@ -37,29 +37,29 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
       criticalOnly,
       ...updates
     }
-    localStorage.setItem('notificationPreferences', JSON.stringify(prefs))
+    localStorage.setItem('notificationPreferences', JSON.stringify(_prefs))
   }
   const handleSoundToggle = () => {
     const newValue = !soundEnabled
-    setSoundEnabled(newValue)
-    notificationService.setSoundEnabled(newValue)
+    setSoundEnabled(_newValue)
+    notificationService.setSoundEnabled(_newValue)
     savePreferences({ soundEnabled: newValue })
   }
   const handleNotificationsToggle = () => {
     const newValue = !notificationsEnabled
-    setNotificationsEnabled(newValue)
+    setNotificationsEnabled(_newValue)
     savePreferences({ notificationsEnabled: newValue })
   }
   const handleCriticalOnlyToggle = () => {
     const newValue = !criticalOnly
-    setCriticalOnly(newValue)
+    setCriticalOnly(_newValue)
     savePreferences({ criticalOnly: newValue })
   }
-  if (compact) {
+  if (_compact) {
     return (
       <div className={cn('flex items-center gap-2', className)}>
         <button
-          onClick={handleSoundToggle}
+          onClick={_handleSoundToggle}
           className={cn(
             'p-2 rounded-lg transition-colors',
             soundEnabled 
@@ -72,7 +72,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
         </button>
         
         <button
-          onClick={handleNotificationsToggle}
+          onClick={_handleNotificationsToggle}
           className={cn(
             'p-2 rounded-lg transition-colors',
             notificationsEnabled 
@@ -103,7 +103,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
             </div>
           </div>
           <button
-            onClick={handleNotificationsToggle}
+            onClick={_handleNotificationsToggle}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
               notificationsEnabled ? 'bg-blue-600' : 'bg-gray-600'
@@ -127,7 +127,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
             </div>
           </div>
           <button
-            onClick={handleSoundToggle}
+            onClick={_handleSoundToggle}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
               soundEnabled ? 'bg-blue-600' : 'bg-gray-600'
@@ -151,7 +151,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
             </div>
           </div>
           <button
-            onClick={handleCriticalOnlyToggle}
+            onClick={_handleCriticalOnlyToggle}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
               criticalOnly ? 'bg-blue-600' : 'bg-gray-600'

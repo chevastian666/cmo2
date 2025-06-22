@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate} from 'react-router-dom'
-import {Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react'
+import {_Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react'
 import { notificationService} from '../../../services/shared/notification.service'
 import { prearmadoService} from '../services/prearmado.service'
 interface PrearmadoFormData {
@@ -31,9 +31,9 @@ interface TransitInfo {
 
 export const PrearmadoPage: React.FC = () => {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [searchPerformed, setSearchPerformed] = useState(false)
-  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(null)
+  const [loading, setLoading] = useState(_false)
+  const [searchPerformed, setSearchPerformed] = useState(_false)
+  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(_null)
   const [formData, setFormData] = useState<PrearmadoFormData>({
     viajeId: '',
     movimientoId: ''
@@ -51,22 +51,22 @@ export const PrearmadoPage: React.FC = () => {
       return
     }
 
-    setLoading(true)
-    setSearchPerformed(true)
+    setLoading(_true)
+    setSearchPerformed(_true)
     try {
       const result = await prearmadoService.searchTransit(formData.viajeId, formData.movimientoId)
-      if (result) {
-        setTransitInfo(result)
+      if (_result) {
+        setTransitInfo(_result)
         notificationService.success('Tránsito encontrado', `Viaje ${formData.viajeId} - Movimiento ${formData.movimientoId}`)
       } else {
-        setTransitInfo(null)
+        setTransitInfo(_null)
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados')
       }
     } catch {
       notificationService.error('Error', 'Error al buscar la información del tránsito')
-      setTransitInfo(null)
+      setTransitInfo(_null)
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handlePrearm = () => {
@@ -125,7 +125,7 @@ export const PrearmadoPage: React.FC = () => {
 
       {/* Search Form */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-        <form onSubmit={handleSearch} className="space-y-4">
+        <form onSubmit={_handleSearch} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -134,10 +134,10 @@ export const PrearmadoPage: React.FC = () => {
               <input
                 type="text"
                 value={formData.viajeId}
-                onChange={(e) => handleInputChange('viajeId', e.target.value)}
+                onChange={(_e) => handleInputChange('viajeId', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Ej: 7592862"
-                disabled={loading}
+                disabled={_loading}
               />
             </div>
             <div>
@@ -147,17 +147,17 @@ export const PrearmadoPage: React.FC = () => {
               <input
                 type="text"
                 value={formData.movimientoId}
-                onChange={(e) => handleInputChange('movimientoId', e.target.value)}
+                onChange={(_e) => handleInputChange('movimientoId', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Ej: 2"
-                disabled={loading}
+                disabled={_loading}
               />
             </div>
           </div>
           
           <button
             type="submit"
-            disabled={loading}
+            disabled={_loading}
             className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
@@ -211,7 +211,7 @@ export const PrearmadoPage: React.FC = () => {
                       <p className="text-lg font-semibold text-white">{transitInfo.empresaid}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase">Precinto(s)</p>
+                      <p className="text-xs text-gray-400 uppercase">Precinto(_s)</p>
                       <p className="text-lg font-semibold text-white">
                         {Array.isArray(transitInfo.precintoid) 
                           ? transitInfo.precintoid.join(', ') 
@@ -299,7 +299,7 @@ export const PrearmadoPage: React.FC = () => {
                 {/* Action Button */}
                 <div className="flex justify-center pt-4">
                   <button
-                    onClick={handlePrearm}
+                    onClick={_handlePrearm}
                     className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center space-x-2 transition-colors"
                   >
                     <Package className="h-5 w-5" />

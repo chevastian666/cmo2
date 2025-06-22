@@ -26,7 +26,7 @@ export const TransitosPendientesWrapper: React.FC<TransitosPendientesWrapperProp
         </div>
       </div>
       <div className="p-4">
-        <TransitosPendientesTable transitos={transitos} />
+        <TransitosPendientesTable transitos={_transitos} />
       </div>
     </div>
   )

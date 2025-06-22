@@ -11,12 +11,12 @@ export const clearDashboardLayout = () => {
     'dashboard-layout-state'
   ]
   keysToRemove.forEach(key => {
-    localStorage.removeItem(key)
+    localStorage.removeItem(_key)
   })
   // Also clear any keys that might contain dashboard layout data
-  Object.keys(localStorage).forEach(key => {
+  Object.keys(_localStorage).forEach(key => {
     if (key.includes('dashboard') && key.includes('layout')) {
-      localStorage.removeItem(key)
+      localStorage.removeItem(_key)
     }
   })
   console.log('Dashboard layout cleared from localStorage')

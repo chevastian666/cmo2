@@ -1,6 +1,6 @@
  
 import React, { useEffect, useState } from 'react'
-import {Activity, Zap, Clock, TrendingUp} from 'lucide-react'
+import {_Activity, Zap, Clock, TrendingUp} from 'lucide-react'
 interface RenderMetric {
   id: string
   phase: 'mount' | 'update'
@@ -45,10 +45,10 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
         lastTime = currentTime
       }
       
-      rafId = requestAnimationFrame(measureFPS)
+      rafId = requestAnimationFrame(_measureFPS)
     }
-    rafId = requestAnimationFrame(measureFPS)
-    return () => cancelAnimationFrame(rafId)
+    rafId = requestAnimationFrame(_measureFPS)
+    return () => cancelAnimationFrame(_rafId)
   }, [])
   // Memory monitoring
 
@@ -60,8 +60,8 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
         setStats(prev => ({ ...prev, memoryUsage: usedMB }))
       }
     }
-    const interval = setInterval(measureMemory, 2000)
-    return () => clearInterval(interval)
+    const interval = setInterval(_measureMemory, 2000)
+    return () => clearInterval(_interval)
   }, [])
   // onRender callback removed - not currently used
   // Could be reactivated when wrapping components with React.Profiler
@@ -84,14 +84,14 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
             <span className="text-gray-400 flex items-center gap-1">
               <Zap className="h-3 w-3" /> FPS
             </span>
-            <span className={`font-mono ${fpsColor}`}>{stats.fps}</span>
+            <span className={`font-mono ${_fpsColor}`}>{stats.fps}</span>
           </div>
           
           <div className="flex items-center justify-between">
             <span className="text-gray-400 flex items-center gap-1">
               <Clock className="h-3 w-3" /> Avg Render
             </span>
-            <span className={`font-mono ${renderTimeColor}`}>
+            <span className={`font-mono ${_renderTimeColor}`}>
               {stats.avgRenderTime.toFixed(2)}ms
             </span>
           </div>
@@ -133,15 +133,15 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
           <TrendingUp className="h-3 w-3 text-gray-400" />
         </div>
         <div className="flex gap-px h-8">
-          {metrics.slice(-30).map((metric, i) => {
+          {metrics.slice(-30).map((_metric, i) => {
             const height = Math.min(100, (metric.actualDuration / 33) * 100)
             const color = metric.actualDuration <= 16 ? 'bg-green-500' :
                          metric.actualDuration <= 33 ? 'bg-yellow-500' : 'bg-red-500'
             return (
               <div
-                key={i}
-                className={`flex-1 ${color} opacity-70 transition-all`}
-                style={{ height: `${height}%`, alignSelf: 'flex-end' }}
+                key={_i}
+                className={`flex-1 ${_color} opacity-70 transition-all`}
+                style={{ height: `${_height}%`, alignSelf: 'flex-end' }}
                 title={`${metric.actualDuration.toFixed(2)}ms`}
               />
             )
@@ -161,8 +161,8 @@ interface ProfiledComponentProps {
 export const ProfiledComponent: React.FC<ProfiledComponentProps> = ({ 
   id, children, onRender 
 }) => {
-  return (<Profiler id={id} onRender={onRender || (() => {})}>
-      {children}
+  return (<Profiler id={_id} onRender={onRender || (() => {})}>
+      {_children}
     </Profiler>
   )
 }

@@ -15,21 +15,21 @@ interface DataTransitionProps {
 export const DataTransition: React.FC<DataTransitionProps> = ({ 
   children, dataKey, className = '' 
 }) => {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(_true)
    
   useEffect(() => {
     // Trigger re-animation when dataKey changes
     if (dataKey !== undefined) {
-      setIsVisible(false)
-      const timer = setTimeout(() => setIsVisible(true), 50)
-      return () => clearTimeout(timer)
+      setIsVisible(_false)
+      const timer = setTimeout(() => setIsVisible(_true), 50)
+      return () => clearTimeout(_timer)
     }
   }, [])
   return (
     <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
-          key={dataKey}
+          key={_dataKey}
           initial={{ opacity: 0.8 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0.8 }}
@@ -37,9 +37,9 @@ export const DataTransition: React.FC<DataTransitionProps> = ({
             duration: 0.3,
             ease: "easeInOut"
           }}
-          className={className}
+          className={_className}
         >
-          {children}
+          {_children}
         </motion.div>
       )}
     </AnimatePresence>
@@ -56,15 +56,15 @@ export const ListTransition: React.FC<ListTransitionProps> = ({
 }) => {
   return (
     <motion.div
-      initial={false}
+      initial={_false}
       animate={{ opacity: 1 }}
       transition={{ 
         duration: 0.4,
         ease: "easeOut"
       }}
-      className={className}
+      className={_className}
     >
-      {children}
+      {_children}
     </motion.div>
   )
 }

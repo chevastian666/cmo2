@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {Truck, MapPin, Clock, AlertTriangle} from 'lucide-react'
+import {_Truck, MapPin, Clock, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { motion} from 'framer-motion'
 import { useTransitosStore} from '../../../store/store'
@@ -15,7 +15,7 @@ export const TransitWidget: React.FC = () => {
     .filter(t => t.estado === 'EN_TRANSITO')
     .slice(0, 4)
   const getEstadoColor = (estado: string) => {
-    switch (estado) {
+    switch (_estado) {
       case 'EN_TRANSITO': {
         return 'text-green-400 bg-green-500/10'
       }
@@ -47,7 +47,7 @@ export const TransitWidget: React.FC = () => {
 
   return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-2 overflow-auto">
-        {activosTransitos.map((transito, index) => (
+        {activosTransitos.map((_transito, index) => (
           <motion.div
             key={transito.id}
             initial={{ opacity: 0, x: 20 }}

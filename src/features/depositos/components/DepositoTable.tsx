@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react'
+import {_MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react'
 import type { Deposito} from '../types'
 import { cn} from '../../../utils/utils'
 interface DepositoTableProps {
@@ -22,17 +22,17 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field)
+      setSortField(_field)
       setSortOrder('asc')
     }
   }
-  const sortedDepositos = [...depositos].sort((a, b) => {
+  const sortedDepositos = [...depositos].sort((_a, b) => {
     const aValue = a[sortField]
     const bValue = b[sortField]
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortOrder === 'asc' 
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue)
+        ? aValue.localeCompare(_bValue)
+        : bValue.localeCompare(_aValue)
     }
     
     if (typeof aValue === 'number' && typeof bValue === 'number') {
@@ -46,7 +46,7 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
     currentPage * itemsPerPage
   )
   const totalPages = Math.ceil(sortedDepositos.length / itemsPerPage)
-  if (loading) {
+  if (_loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-8">
         <div className="flex items-center justify-center">
@@ -121,7 +121,7 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {paginatedDepositos.map((deposito) => (
+            {paginatedDepositos.map((_deposito) => (
               <tr key={deposito.id} className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-sm font-medium text-white">{deposito.codigo}</span>
@@ -166,14 +166,14 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   <div className="flex items-center justify-end gap-2">
                     <button
-                      onClick={() => onView(deposito)}
+                      onClick={() => onView(_deposito)}
                       className="p-1 hover:bg-gray-600 rounded transition-colors"
                       title="Ver detalles"
                     >
                       <Eye className="h-4 w-4 text-gray-400" />
                     </button>
                     <button
-                      onClick={() => onEdit(deposito)}
+                      onClick={() => onEdit(_deposito)}
                       className="p-1 hover:bg-gray-600 rounded transition-colors"
                       title="Editar"
                     >
@@ -204,10 +204,10 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
               >
                 Anterior
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              {Array.from({ length: totalPages }, (__, i) => i + 1).map(page => (
                 <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
+                  key={_page}
+                  onClick={() => setCurrentPage(_page)}
                   className={cn(
                     "px-3 py-1 rounded",
                     currentPage === page
@@ -215,11 +215,11 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
                       : "bg-gray-700 text-white hover:bg-gray-600"
                   )}
                 >
-                  {page}
+                  {_page}
                 </button>
               ))}
               <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                onClick={() => setCurrentPage(p => Math.min(_totalPages, p + 1))}
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >

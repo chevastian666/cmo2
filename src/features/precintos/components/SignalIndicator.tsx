@@ -1,5 +1,5 @@
 import React from 'react'
-import {Wifi, WifiOff} from 'lucide-react'
+import {_Wifi, WifiOff} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface SignalIndicatorProps {
   strength?: number
@@ -41,7 +41,7 @@ export const SignalIndicator: React.FC<SignalIndicatorProps> = ({
           size === 'md' && 'text-sm',
           size === 'lg' && 'text-base'
         )}>
-          {strength}%
+          {s_trength}%
         </span>
       )}
     </div>

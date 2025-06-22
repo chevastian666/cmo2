@@ -19,7 +19,7 @@ interface State {
 
 export class GlobalErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props)
+    super(_props)
     this.state = { hasError: false }
   }
 

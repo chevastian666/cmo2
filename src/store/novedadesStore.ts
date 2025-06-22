@@ -120,17 +120,17 @@ interface NovedadesState {
   calcularEstadisticas: () => void
 }
 
-export const useNovedadesStore = create<NovedadesState>((set, get) => ({
+export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
   novedades: [], estadisticas: {
     totalDia: 0, porTipo: {} as Record<TipoNovedad, number>, porPunto: {} as Record<string, number>, pendientes: 0, resueltas: 0, enSeguimiento: 0
-  }, loading: false, error: null, fetchNovedades: async (filtros) => {
+  }, loading: false, error: null, fetchNovedades: async (_filtros) => {
     set({ loading: true })
     try {
       // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(_resolve, 500))
       let novedadesFiltradas = [...mockNovedades]
       // Aplicar filtros si existen
-      if (filtros) {
+      if (_filtros) {
         if (filtros.fecha) {
           novedadesFiltradas = novedadesFiltradas.filter(n => 
             n.fecha.toDateString() === filtros.fecha!.toDateString()
@@ -151,7 +151,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     }
   },
 
-  crearNovedad: async (data) => {
+  crearNovedad: async (_data) => {
     try {
       const nuevaNovedad: Novedad = {
         id: Date.now().toString(),
@@ -175,7 +175,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     }
   },
 
-  editarNovedad: async (id, data) => {
+  editarNovedad: async (_id, data) => {
     try {
       
       set({
@@ -198,7 +198,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     }
   },
 
-  marcarResuelta: async (id, comentario) => {
+  marcarResuelta: async (_id, comentario) => {
     try {
       
       set({
@@ -225,7 +225,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     }
   },
 
-  agregarSeguimiento: async (id, comentario) => {
+  agregarSeguimiento: async (_id, comentario) => {
     try {
       
       const nuevoSeguimiento = {
@@ -261,11 +261,11 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
     )
     const estadisticas: EstadisticasNovedades = {
       totalDia: novedadesHoy.length,
-      porTipo: novedadesHoy.reduce((acc, n) => {
+      porTipo: novedadesHoy.reduce((_acc, n) => {
         acc[n.tipoNovedad] = (acc[n.tipoNovedad] || 0) + 1
         return acc
       }, {} as Record<string, number>),
-      porPunto: novedadesHoy.reduce((acc, n) => {
+      porPunto: novedadesHoy.reduce((_acc, n) => {
         acc[n.puntoOperacion] = (acc[n.puntoOperacion] || 0) + 1
         return acc
       }, {} as Record<string, number>),

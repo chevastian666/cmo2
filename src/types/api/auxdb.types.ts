@@ -1,5 +1,5 @@
 /**
- * Types for Auxiliary Database (_satoshi)
+ * Types for Auxiliary Database (__satoshi)
  * By Cheva
  */
 

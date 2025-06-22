@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'
+import {_Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import { notificationService} from '../../../services/shared/notification.service'
@@ -29,9 +29,9 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     descripcion: ''
   })
   const [archivos, setArchivos] = useState<File[]>([])
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>(_)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [loading, setLoading] = useState(_false)
+  const [errors, setErrors] = useState<Record<string, string>>(__)
+  const fileInputRef = useRef<HTMLInputElement>(_null)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     const validFiles = files.filter(file => {
@@ -52,7 +52,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     setArchivos(prev => [...prev, ...validFiles])
   }
   const removeFile = (index: number) => {
-    setArchivos(prev => prev.filter((_, i) => i !== index))
+    setArchivos(prev => prev.filter((__, i) => i !== index))
   }
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
@@ -66,13 +66,13 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
       newErrors.descripcion = 'La descripción debe tener al menos 10 caracteres'
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(_newErrors)
+    return Object.keys(_newErrors).length === 0
   }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateForm()) return
-    setLoading(true)
+    setLoading(_true)
     try {
       await onSubmit({
         ...formData,
@@ -86,15 +86,15 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
         descripcion: ''
       })
       setArchivos([])
-      setErrors(_)
+      setErrors(__)
       notificationService.success('Novedad registrada', 'La novedad se ha guardado correctamente')
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error al guardar', 'No se pudo registrar la novedad')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
-  return (<Card variant="elevated" className={className}>
+  return (<Card variant="elevated" className={_className}>
       <CardHeader>
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <FileText className="h-5 w-5 text-blue-500" />
@@ -103,7 +103,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
       </CardHeader>
       
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={_handleSubmit} className="space-y-4">
           {/* Fecha */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -113,10 +113,10 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             <input
               type="date"
               value={formData.fecha}
-              onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+              onChange={(_e) => setFormData({ ...formData, fecha: e.target.value })}
               max={new Date().toISOString().split('T')[0]}
               className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
+              disabled={_loading}
             />
           </div>
 
@@ -128,16 +128,16 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             </label>
             <select
               value={formData.puntoOperacion}
-              onChange={(e) => setFormData({ ...formData, puntoOperacion: e.target.value })}
+              onChange={(_e) => setFormData({ ...formData, puntoOperacion: e.target.value })}
               className={cn(
                 "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                 errors.puntoOperacion ? "border-red-500" : "border-gray-700"
               )}
-              disabled={loading}
+              disabled={_loading}
             >
               <option value="">Seleccionar punto...</option>
               {PUNTOS_OPERACION.map(punto => (
-                <option key={punto} value={punto}>{punto}</option>
+                <option key={_punto} value={_punto}>{_punto}</option>
               ))}
             </select>
             {errors.puntoOperacion && (
@@ -151,11 +151,11 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
               Tipo de novedad
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {Object.entries(TIPOS_NOVEDAD).map(([key, config]) => (<button
-                  key={key}
+              {Object.entries(_TIPOS_NOVEDAD).map(([key, config]) => (<button
+                  key={_key}
                   type="button"
                   onClick={() => setFormData({ ...formData, tipoNovedad: key as TipoNovedad })}
-                  disabled={loading}
+                  disabled={_loading}
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all",
                     formData.tipoNovedad === key
@@ -177,14 +177,14 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             </label>
             <textarea
               value={formData.descripcion}
-              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
+              onChange={(_e) => setFormData({ ...formData, descripcion: e.target.value })}
               rows={4}
               placeholder="Describa la novedad con el mayor detalle posible..."
               className={cn(
                 "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                 errors.descripcion ? "border-red-500" : "border-gray-700"
               )}
-              disabled={loading}
+              disabled={_loading}
             />
             {errors.descripcion && (
               <p className="text-red-400 text-sm mt-1">{errors.descripcion}</p>
@@ -198,23 +198,23 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <Paperclip className="inline h-4 w-4 mr-1" />
-              Archivos adjuntos (opcional)
+              Archivos adjuntos (_opcional)
             </label>
             
             <input
-              ref={fileInputRef}
+              ref={_fileInputRef}
               type="file"
               multiple
               accept="image/*,.pdf"
-              onChange={handleFileChange}
+              onChange={_handleFileChange}
               className="hidden"
-              disabled={loading}
+              disabled={_loading}
             />
             
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              disabled={loading}
+              disabled={_loading}
               className="w-full px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-gray-300 transition-colors flex items-center justify-center gap-2"
             >
               <Upload className="h-4 w-4" />
@@ -222,13 +222,13 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             </button>
             
             {archivos.length > 0 && (<div className="mt-2 space-y-1">
-                {archivos.map((file, index) => (<div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                {archivos.map((_file, index) => (<div key={_index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                     <span className="text-sm text-gray-300 truncate flex-1">
                       {file.name}
                     </span>
                     <button
                       type="button"
-                      onClick={() => removeFile(index)}
+                      onClick={() => removeFile(_index)}
                       className="ml-2 p-1 hover:bg-gray-700 rounded"
                     >
                       <X className="h-4 w-4 text-gray-400" />
@@ -242,7 +242,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
           {/* Botón guardar */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={_loading}
             className={cn(
               "w-full px-4 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2",
               loading

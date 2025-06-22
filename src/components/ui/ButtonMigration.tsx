@@ -76,11 +76,11 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
     )
     return (
       <ShadcnButton
-        ref={ref}
-        variant={mappedVariant}
-        size={mappedSize}
+        ref={_ref}
+        variant={_mappedVariant}
+        size={_mappedSize}
         disabled={disabled || loading}
-        className={customClasses}
+        className={_customClasses}
         {...props}
       >
         {loading ? (
@@ -91,7 +91,7 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             </span>
-            {children}
+            {_children}
           </>
         ) : (
           children
@@ -138,7 +138,7 @@ export const migrateButtonClass = (className: string): { variant?: string; size?
     !cls.startsWith('focus:') &&
     !cls.startsWith('transition')
   ).join(' ')
-  if (preservedClasses) {
+  if (_preservedClasses) {
     result.className = preservedClasses
   }
 

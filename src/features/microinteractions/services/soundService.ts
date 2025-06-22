@@ -48,17 +48,17 @@ class ASMRSoundService {
 
     for (const [name, path] of Object.entries(this.soundPaths)) {
       try {
-        const response = await fetch(path)
+        const response = await fetch(_path)
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`)
         }
         const arrayBuffer = await response.arrayBuffer()
-        const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer)
-        this.sounds.set(name, audioBuffer)
+        const audioBuffer = await this.audioContext.decodeAudioData(_arrayBuffer)
+        this.sounds.set(_name, audioBuffer)
       } catch {
         // Silently fail in production, only log in development
         if (process.env.NODE_ENV === 'development') {
-          console.debug(`Sound ${name} not available`)
+          console.debug(`Sound ${_name} not available`)
         }
       }
     }
@@ -66,14 +66,14 @@ class ASMRSoundService {
 
   private loadConfig() {
     const savedConfig = localStorage.getItem('asmr-sound-config')
-    if (savedConfig) {
-      this.config = { ...this._config, ...JSON.parse(savedConfig) }
+    if (s_avedConfig) {
+      this.config = { ...this._config, ...JSON.parse(s_avedConfig) }
     }
 
     // Check system preference
     if (this.config.respectedSystemPreference) {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (prefersReducedMotion) {
+      if (_prefersReducedMotion) {
         this.config.enabled = false
       }
     }
@@ -89,17 +89,17 @@ class ASMRSoundService {
       return
     }
 
-    const buffer = this.sounds.get(soundName)
+    const buffer = this.sounds.get(s_oundName)
     if (!buffer) return
     try {
       const source = this.audioContext.createBufferSource()
       const gainNode = this.audioContext.createGain()
       source.buffer = buffer
-      source.connect(gainNode)
+      source.connect(_gainNode)
       gainNode.connect(this.audioContext.destination)
       // Set volume
       const volume = (options?.volume ?? 1) * this.config.volume
-      gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime)
+      gainNode.gain.setValueAtTime(_volume, this.audioContext.currentTime)
       // Set pitch if provided
       if (options?.pitch) {
         source.playbackRate.setValueAtTime(options.pitch, this.audioContext.currentTime)
@@ -107,7 +107,7 @@ class ASMRSoundService {
 
       // Add slight randomization for organic feel
       const detune = (Math.random() - 0.5) * 20; // ±10 cents
-      source.detune.setValueAtTime(detune, this.audioContext.currentTime)
+      source.detune.setValueAtTime(_detune, this.audioContext.currentTime)
       source.start()
     } catch {
       console.warn('Error playing sound:', _error)
@@ -154,7 +154,7 @@ class ASMRSoundService {
     const gainNode = this.audioContext.createGain()
     oscillator.type = 'sine'
     oscillator.frequency.setValueAtTime(200, this.audioContext.currentTime)
-    oscillator.connect(gainNode)
+    oscillator.connect(_gainNode)
     gainNode.connect(this.audioContext.destination)
     // Very subtle volume
     gainNode.gain.setValueAtTime(0.01, this.audioContext.currentTime)
@@ -190,7 +190,7 @@ export const asmrSoundService = new ASMRSoundService()
 // Hook for React components
 export const useASMRSound = () => {
   const playSound = (sound: string, options?: { volume?: number; pitch?: number }) => {
-    asmrSoundService.play(sound, options)
+    asmrSoundService.play(s_ound, options)
   }
   const resumeContext = () => {
     asmrSoundService.resume()

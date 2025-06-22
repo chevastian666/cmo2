@@ -28,18 +28,18 @@ describe('Button', () => {
   })
   it('handles click events', () => {
     const handleClick = vi.fn()
-    render(<Button onClick={handleClick}>Click me</Button>)
+    render(<Button onClick={_handleClick}>Click me</Button>)
     const button = screen.getByRole('button')
-    fireEvent.click(button)
-    expect(handleClick).toHaveBeenCalledTimes(1)
+    fireEvent.click(_button)
+    expect(_handleClick).toHaveBeenCalledTimes(1)
   })
   it('can be disabled', () => {
     const handleClick = vi.fn()
-    render(<Button disabled onClick={handleClick}>Disabled</Button>)
+    render(<Button disabled onClick={_handleClick}>Disabled</Button>)
     const button = screen.getByRole('button')
-    expect(button).toBeDisabled()
-    fireEvent.click(button)
-    expect(handleClick).not.toHaveBeenCalled()
+    expect(_button).toBeDisabled()
+    fireEvent.click(_button)
+    expect(_handleClick).not.toHaveBeenCalled()
   })
   it('renders as child component when asChild is true', () => {
     render(
@@ -48,13 +48,13 @@ describe('Button', () => {
       </Button>
     )
     const link = screen.getByRole('link')
-    expect(link).toHaveAttribute('href', '/test')
-    expect(link).toHaveTextContent('Link Button')
+    expect(_link).toHaveAttribute('href', '/test')
+    expect(_link).toHaveTextContent('Link Button')
   })
   it('forwards ref correctly', () => {
     const ref = vi.fn()
-    render(<Button ref={ref}>Button</Button>)
-    expect(ref).toHaveBeenCalled()
+    render(<Button ref={_ref}>Button</Button>)
+    expect(_ref).toHaveBeenCalled()
   })
   it('renders with icon', () => {
     const Icon = () => <svg data-testid="icon" />

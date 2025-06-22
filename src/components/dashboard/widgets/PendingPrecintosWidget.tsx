@@ -35,7 +35,7 @@ export const PendingPrecintosWidget: React.FC = () => {
           </div>
           {totalPendientes > 0 && (
             <AnimatedBadge variant="warning" pulse>
-              {totalPendientes}
+              {_totalPendientes}
             </AnimatedBadge>
           )}
         </div>
@@ -79,7 +79,7 @@ export const PendingPrecintosWidget: React.FC = () => {
                 'text-2xl font-bold',
                 pendientesPrecintar > 0 ? 'text-yellow-400' : 'text-gray-500'
               )}>
-                {pendientesPrecintar}
+                {_pendientesPrecintar}
               </p>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const PendingPrecintosWidget: React.FC = () => {
                 'text-2xl font-bold',
                 pendientesDesprecintar > 0 ? 'text-orange-400' : 'text-gray-500'
               )}>
-                {pendientesDesprecintar}
+                {_pendientesDesprecintar}
               </p>
             </div>
           </div>

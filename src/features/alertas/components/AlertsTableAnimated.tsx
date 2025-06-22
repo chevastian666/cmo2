@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react'
+import {_AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react'
 import { format} from 'date-fns'
 import { Button} from '@/components/ui/button'
 import { cn} from '@/lib/utils'
@@ -20,7 +20,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
   alertas, loading, onViewDetail, onRespond, onVerify, onViewLocation
 }) => {
   const getSeverityIcon = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return <XCircle className="h-5 w-5 text-red-400" />
       case 'alta': {
@@ -32,7 +32,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
     }
   }
   const getSeverityColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-400/10 border-red-400/20'
       case 'alta': {
@@ -52,7 +52,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
     }
     return <AnimatedBadge variant="warning" pulse>Pendiente</AnimatedBadge>
   }
-  if (loading) {
+  if (_loading) {
     return (
       <motion.div 
         className="bg-gray-800 rounded-lg p-8 text-center"
@@ -88,27 +88,27 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
   const otherAlerts = alertas.filter(a => a.severidad !== 'critica' || a.atendida)
   return (<motion.div 
       className="space-y-4"
-      variants={staggerContainer}
+      variants={s_taggerContainer}
       initial="hidden"
       animate="visible"
     >
       {/* Alertas Críticas */}
       <AnimatePresence>
-        {criticalAlerts.map((alerta, index) => (
+        {criticalAlerts.map((_alerta, index) => (
           <motion.div
             key={alerta.id}
-            variants={staggerItem}
+            variants={s_taggerItem}
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, scale: 0.9 }}
-            custom={index}
+            custom={_index}
             className={cn(
               "bg-gray-800 rounded-lg border-2 overflow-hidden",
               getSeverityColor(alerta.severidad)
             )}
           >
             <motion.div
-              variants={alertCriticalVariants}
+              variants={_alertCriticalVariants}
               initial="initial"
               animate="animate"
               className="p-4"
@@ -134,7 +134,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <h4 className="font-semibold text-white">
                         {alerta.tipo.toUpperCase()} - {alerta.codigoPrecinto}
                       </h4>
-                      {getStatusBadge(alerta)}
+                      {getStatusBadge(_alerta)}
                       <AnimatedBadge variant="danger" pulse>
                         CRÍTICA
                       </AnimatedBadge>
@@ -179,7 +179,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewDetail(alerta)}
+                      onClick={() => onViewDetail(_alerta)}
                       aria-label="Ver detalle"
                     >
                       <Eye className="h-4 w-4" />
@@ -190,7 +190,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onViewLocation(alerta)}
+                        onClick={() => onViewLocation(_alerta)}
                         aria-label="Ver ubicación"
                       >
                         <MapPin className="h-4 w-4" />
@@ -202,7 +202,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="sm"
                         variant="default"
-                        onClick={() => onRespond(alerta)}
+                        onClick={() => onRespond(_alerta)}
                         className="bg-red-600 hover:bg-red-700"
                       >
                         Responder
@@ -214,7 +214,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => onVerify(alerta)}
+                        onClick={() => onVerify(_alerta)}
                       >
                         Verificar
                       </Button>
@@ -229,15 +229,15 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
 
       {/* Otras Alertas */}
       <AnimatePresence>
-        {otherAlerts.map((alerta, index) => (
+        {otherAlerts.map((_alerta, index) => (
           <motion.div
             key={alerta.id}
-            variants={staggerItem}
+            variants={s_taggerItem}
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, x: -20 }}
             whileHover={{ x: 5 }}
-            custom={index}
+            custom={_index}
             className={cn(
               "bg-gray-800 rounded-lg border p-4 transition-all",
               "hover:bg-gray-700/50",
@@ -259,7 +259,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <h4 className="font-semibold text-white">
                       {alerta.tipo.toUpperCase()} - {alerta.codigoPrecinto}
                     </h4>
-                    {getStatusBadge(alerta)}
+                    {getStatusBadge(_alerta)}
                   </div>
                   
                   <p className="text-gray-300 mb-2">{alerta.mensaje}</p>
@@ -301,7 +301,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => onViewDetail(alerta)}
+                    onClick={() => onViewDetail(_alerta)}
                     aria-label="Ver detalle"
                   >
                     <Eye className="h-4 w-4" />
@@ -312,7 +312,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewLocation(alerta)}
+                      onClick={() => onViewLocation(_alerta)}
                       aria-label="Ver ubicación"
                     >
                       <MapPin className="h-4 w-4" />
@@ -324,7 +324,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="sm"
                       variant="default"
-                      onClick={() => onRespond(alerta)}
+                      onClick={() => onRespond(_alerta)}
                     >
                       Responder
                     </Button>
@@ -335,7 +335,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onVerify(alerta)}
+                      onClick={() => onVerify(_alerta)}
                     >
                       Verificar
                     </Button>

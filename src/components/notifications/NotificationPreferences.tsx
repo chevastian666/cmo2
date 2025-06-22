@@ -85,17 +85,17 @@ const priorities: { key: NotificationPriority; label: string; color: string }[] 
 export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
   preferences, onSave, onTest, className = ''
 }) => {
-  const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences)
-  const [hasChanges, setHasChanges] = useState(false)
+  const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(_preferences)
+  const [hasChanges, setHasChanges] = useState(_false)
   const [activeTab, setActiveTab] = useState<'channels' | 'types' | 'sounds' | 'schedule'>('channels')
-  const [testingChannel, setTestingChannel] = useState<{ channel: NotificationChannel; type: NotificationType } | null>(null)
+  const [testingChannel, setTestingChannel] = useState<{ channel: NotificationChannel; type: NotificationType } | null>(_null)
     useEffect(() => {
-    setLocalPreferences(preferences)
-    setHasChanges(false)
+    setLocalPreferences(_preferences)
+    setHasChanges(_false)
   }, [preferences])
     useEffect(() => {
-    const isDifferent = JSON.stringify(localPreferences) !== JSON.stringify(preferences)
-    setHasChanges(isDifferent)
+    const isDifferent = JSON.stringify(_localPreferences) !== JSON.stringify(_preferences)
+    setHasChanges(_isDifferent)
   }, [preferences])
   const updatePreferences = (updates: Partial<NotificationPreferences>) => {
     setLocalPreferences(prev => ({ ...prev, ...updates }))
@@ -131,15 +131,15 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     }))
   }
   const handleSave = () => {
-    onSave(localPreferences)
-    setHasChanges(false)
+    onSave(_localPreferences)
+    setHasChanges(_false)
   }
   const handleTest = async (channel: NotificationChannel, type: NotificationType) => {
     setTestingChannel({ channel, type })
     try {
-      await onTest(channel, type)
+      await onTest(_channel, type)
     } finally {
-      setTimeout(() => setTestingChannel(null), 2000)
+      setTimeout(() => setTestingChannel(_null), 2000)
     }
   }
   const resetToDefaults = () => {
@@ -199,10 +199,10 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         customSounds: []
       }
     } as NotificationPreferences
-    setLocalPreferences(defaultPrefs)
+    setLocalPreferences(_defaultPrefs)
   }
   return (
-    <div className={`bg-gray-900 rounded-lg border border-gray-700 ${className}`}>
+    <div className={`bg-gray-900 rounded-lg border border-gray-700 ${_className}`}>
       {/* Header */}
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center justify-between mb-4">
@@ -221,7 +221,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             )}
             
             <button
-              onClick={resetToDefaults}
+              onClick={_resetToDefaults}
               className="px-3 py-2 text-sm bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
             >
               <RefreshCw className="w-4 h-4 mr-2 inline" />
@@ -229,7 +229,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             </button>
             
             <button
-              onClick={handleSave}
+              onClick={_handleSave}
               disabled={!hasChanges}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 hasChanges
@@ -249,7 +249,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <input
               type="checkbox"
               checked={localPreferences.enabled}
-              onChange={(e) => updatePreferences({ enabled: e.target.checked })}
+              onChange={(_e) => updatePreferences({ enabled: e.target.checked })}
               className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
             />
             <div className="flex items-center space-x-2">
@@ -262,7 +262,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <input
               type="checkbox"
               checked={localPreferences.doNotDisturb}
-              onChange={(e) => updatePreferences({ doNotDisturb: e.target.checked })}
+              onChange={(_e) => updatePreferences({ doNotDisturb: e.target.checked })}
               className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
             />
             <div className="flex items-center space-x-2">
@@ -281,8 +281,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             { key: 'types', label: 'Tipos', icon: Bell },
             { key: 'sounds', label: 'Sonidos', icon: Volume2 },
             { key: 'schedule', label: 'Horario', icon: Clock }
-          ].map((key, label, icon: Icon ) => (<button
-              key={key}
+          ].map((_key, label, icon: Icon ) => (<button
+              key={_key}
               onClick={() => setActiveTab(key as 'channels' | 'types' | 'sounds' | 'schedule')}
               className={`flex items-center space-x-2 py-4 border-b-2 transition-colors ${
                 activeTab === key
@@ -291,7 +291,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
               }`}
             >
               <Icon className="w-4 h-4" />
-              <span>{label}</span>
+              <span>{_label}</span>
             </button>
           ))}
         </div>
@@ -304,7 +304,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             {channels.map(({ key: channel, label, icon: Icon, description }) => {
               const channelPrefs = localPreferences.channels[channel]
               return (<motion.div
-                  key={channel}
+                  key={_channel}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-gray-800 rounded-lg p-4"
@@ -313,14 +313,14 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     <div className="flex items-center space-x-3">
                       <Icon className="w-5 h-5 text-blue-400" />
                       <div>
-                        <h3 className="font-medium text-white">{label}</h3>
-                        <p className="text-sm text-gray-400">{description}</p>
+                        <h3 className="font-medium text-white">{_label}</h3>
+                        <p className="text-sm text-gray-400">{_description}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-center space-x-3">
                       <button
-                        onClick={() => handleTest(channel, 'system')}
+                        onClick={() => handleTest(_channel, 'system')}
                         disabled={!channelPrefs.enabled || testingChannel?.channel === channel}
                         className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -335,8 +335,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                         <input
                           type="checkbox"
                           checked={channelPrefs.enabled}
-                          onChange={(e) =>
-                            updateChannelPreferences(channel, { enabled: e.target.checked })
+                          onChange={(_e) =>
+                            updateChannelPreferences(_channel, { enabled: e.target.checked })
                           }
                           className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
                         />
@@ -345,7 +345,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                   </div>
 
                   {channelPrefs.enabled && (<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                      {notificationTypes.map((type) => {
+                      {notificationTypes.map((_type) => {
                         const typePrefs = channelPrefs.types[type.key]
                         return (<div key={type.key} className="bg-gray-700 rounded p-3">
                             <div className="flex items-center justify-between mb-2">
@@ -359,8 +359,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                               <input
                                 type="checkbox"
                                 checked={typePrefs.enabled}
-                                onChange={(e) =>
-                                  updateTypePreferences(channel, type.key, {
+                                onChange={(_e) =>
+                                  updateTypePreferences(_channel, type.key, {
                                     enabled: e.target.checked
                                   })
                                 }
@@ -373,7 +373,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                                   Prioridades activas:
                                 </label>
                                 <div className="flex flex-wrap gap-1">
-                                  {priorities.map((priority) => (
+                                  {priorities.map((_priority) => (
                                     <label
                                       key={priority.key}
                                       className="flex items-center space-x-1"
@@ -381,11 +381,11 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                                       <input
                                         type="checkbox"
                                         checked={typePrefs.priority.includes(priority.key)}
-                                        onChange={(e) => {
+                                        onChange={(_e) => {
                                           const newPriorities = e.target.checked
                                             ? [...typePrefs.priority, priority.key]
                                             : typePrefs.priority.filter(p => p !== priority.key)
-                                          updateTypePreferences(channel, type.key, {
+                                          updateTypePreferences(_channel, type.key, {
                                             priority: newPriorities
                                           })
                                         }}
@@ -412,7 +412,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
 
         {/* Types Tab */}
         {activeTab === 'types' && (<div className="space-y-4">
-            {notificationTypes.map((type) => (<motion.div
+            {notificationTypes.map((_type) => (<motion.div
                 key={type.key}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -431,7 +431,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     const typePrefs = localPreferences.channels[channel].types[type.key]
                     const channelEnabled = localPreferences.channels[channel].enabled
                     return (<div
-                        key={channel}
+                        key={_channel}
                         className={`p-3 rounded border-2 transition-colors ${
                           channelEnabled && typePrefs.enabled
                             ? 'border-blue-500 bg-blue-900 bg-opacity-20'
@@ -441,15 +441,15 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-2">
                             <Icon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-white">{label}</span>
+                            <span className="text-sm text-white">{_label}</span>
                           </div>
                           
                           <input
                             type="checkbox"
                             checked={channelEnabled && typePrefs.enabled}
                             disabled={!channelEnabled}
-                            onChange={(e) =>
-                              updateTypePreferences(channel, type.key, {
+                            onChange={(_e) =>
+                              updateTypePreferences(_channel, type.key, {
                                 enabled: e.target.checked
                               })
                             }
@@ -486,7 +486,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                   <input
                     type="checkbox"
                     checked={localPreferences.sounds.enabled}
-                    onChange={(e) =>
+                    onChange={(_e) =>
                       updatePreferences({
                         sounds: { ...localPreferences.sounds, enabled: e.target.checked }
                       })
@@ -514,7 +514,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                       max="1"
                       step="0.1"
                       value={localPreferences.sounds.volume}
-                      onChange={(e) =>
+                      onChange={(_e) =>
                         updatePreferences({
                           sounds: {
                             ...localPreferences.sounds,
@@ -534,7 +534,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 <h3 className="font-medium text-white mb-4">Sonidos Disponibles</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {DEFAULT_SOUNDS.map((sound) => (
+                  {DEFAULT_SOUNDS.map((s_ound) => (
                     <div key={sound.id} className="bg-gray-700 rounded p-3">
                       <div className="flex items-center justify-between">
                         <div>
@@ -550,7 +550,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                               const audio = new Audio(sound.url)
                               audio.volume = localPreferences.sounds.volume
                               await audio.play()
-                            } catch (error) {
+                            } catch (_error) {
                               console.error('Failed to play sound:', error)
                             }
                           }}
@@ -581,7 +581,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 <input
                   type="checkbox"
                   checked={localPreferences.doNotDisturbSchedule?.enabled || false}
-                  onChange={(e) =>
+                  onChange={(_e) =>
                     updatePreferences({
                       doNotDisturbSchedule: {
                         ...localPreferences.doNotDisturbSchedule,
@@ -606,7 +606,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                       <input
                         type="time"
                         value={localPreferences.doNotDisturbSchedule.startTime}
-                        onChange={(e) =>
+                        onChange={(_e) =>
                           updatePreferences({
                             doNotDisturbSchedule: {
                               ...localPreferences.doNotDisturbSchedule!,
@@ -625,7 +625,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                       <input
                         type="time"
                         value={localPreferences.doNotDisturbSchedule.endTime}
-                        onChange={(e) =>
+                        onChange={(_e) =>
                           updatePreferences({
                             doNotDisturbSchedule: {
                               ...localPreferences.doNotDisturbSchedule!,
@@ -643,12 +643,12 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                       Días de la semana:
                     </label>
                     <div className="flex space-x-2">
-                      {['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'].map((day, index) => (
-                        <label key={day} className="flex flex-col items-center">
+                      {['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'].map((_day, index) => (
+                        <label key={_day} className="flex flex-col items-center">
                           <input
                             type="checkbox"
-                            checked={localPreferences.doNotDisturbSchedule!.days.includes(index)}
-                            onChange={(e) => {
+                            checked={localPreferences.doNotDisturbSchedule!.days.includes(_index)}
+                            onChange={(_e) => {
                               const days = e.target.checked
                                 ? [...localPreferences.doNotDisturbSchedule!.days, index]
                                 : localPreferences.doNotDisturbSchedule!.days.filter(d => d !== index)
@@ -661,7 +661,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                             }}
                             className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500 mb-1"
                           />
-                          <span className="text-xs text-gray-400">{day}</span>
+                          <span className="text-xs text-gray-400">{_day}</span>
                         </label>
                       ))}
                     </div>
@@ -679,7 +679,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                   <input
                     type="checkbox"
                     checked={localPreferences.grouping.enabled}
-                    onChange={(e) =>
+                    onChange={(_e) =>
                       updatePreferences({
                         grouping: { ...localPreferences.grouping, enabled: e.target.checked }
                       })
@@ -699,7 +699,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                         min="2"
                         max="20"
                         value={localPreferences.grouping.maxGroupSize}
-                        onChange={(e) =>
+                        onChange={(_e) =>
                           updatePreferences({
                             grouping: {
                               ...localPreferences.grouping,
@@ -713,14 +713,14 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     
                     <div>
                       <label className="block text-sm text-gray-400 mb-2">
-                        Auto-colapsar después de (min):
+                        Auto-colapsar después de (_min):
                       </label>
                       <input
                         type="number"
                         min="5"
                         max="120"
                         value={localPreferences.grouping.autoCollapseAfter}
-                        onChange={(e) =>
+                        onChange={(_e) =>
                           updatePreferences({
                             grouping: {
                               ...localPreferences.grouping,

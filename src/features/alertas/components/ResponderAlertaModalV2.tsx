@@ -3,7 +3,7 @@ import { Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog'
 import { Button} from '@/components/ui/button'
 import { Label} from '@/components/ui/label'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Textarea} from '@/components/ui/textarea'
 import { cn} from '@/lib/utils'
 import type { Alerta} from '../../../types'
@@ -99,8 +99,8 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
 }) => {
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('0')
   const [observaciones, setObservaciones] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
+  const [loading, setLoading] = useState(_false)
+  const [sendingCommand, setSendingCommand] = useState<string | null>(_null)
   useEffect(() => {
     if (!isOpen) {
       setMotivoSeleccionado('0')
@@ -115,33 +115,33 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
     }
 
     const opcionesAlerta = OPCIONES_RESPUESTA[alerta.tipo] || []
-    const motivoDescripcion = opcionesAlerta.find(o => o.id === Number(motivoSeleccionado))?.descripcion || ''
+    const motivoDescripcion = opcionesAlerta.find(o => o.id === Number(_motivoSeleccionado))?.descripcion || ''
     try {
-      setLoading(true)
-      await onRespond(alerta.id, Number(motivoSeleccionado), motivoDescripcion, observaciones)
+      setLoading(_true)
+      await onRespond(alerta.id, Number(_motivoSeleccionado), motivoDescripcion, observaciones)
       onClose()
     } catch {
       notificationService.error('Error al responder la alerta')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handleSendCommand = async (commandId: string) => {
     if (!alerta) return
     try {
-      setSendingCommand(commandId)
+      setSendingCommand(_commandId)
       // TODO: Implement command sending logic
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`)
+      await new Promise(resolve => setTimeout(_resolve, 1000)); // Simulate API call
+      notificationService.success(`Comando "${_commandId}" enviado al precinto ${alerta.codigoPrecinto}`)
     } catch {
       notificationService.error('Error al enviar el comando')
     } finally {
-      setSendingCommand(null)
+      setSendingCommand(_null)
     }
   }
   if (!alerta) return null
   const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || []
-  return (<Dialog open={isOpen} onOpenChange={onClose}>
+  return (<Dialog open={_isOpen} onOpenChange={_onClose}>
       <DialogContent className="max-w-2xl bg-gray-800 border-gray-700">
         <DialogHeader>
           <DialogTitle>Responder Alerta</DialogTitle>
@@ -150,7 +150,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
           </p>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={_handleSubmit} className="space-y-6">
           {/* Alert Info */}
           <div className="bg-gray-900 rounded-lg p-4 space-y-2">
             <div className="flex justify-between">
@@ -168,12 +168,12 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
             <Label htmlFor="motivo">
               Motivo de Respuesta <span className="text-red-400">*</span>
             </Label>
-            <Select value={motivoSeleccionado} onValueChange={setMotivoSeleccionado}>
+            <Select value={_motivoSeleccionado} onValueChange={s_etMotivoSeleccionado}>
               <SelectTrigger id="motivo" className="bg-gray-700 border-gray-600">
                 <SelectValue placeholder="Seleccione un motivo..." />
               </SelectTrigger>
               <SelectContent>
-                {opcionesRespuesta.map((opcion) => (
+                {opcionesRespuesta.map((_opcion) => (
                   <SelectItem key={opcion.id} value={opcion.id.toString()}>
                     {opcion.descripcion}
                   </SelectItem>
@@ -187,8 +187,8 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
             <Label htmlFor="observaciones">Observaciones</Label>
             <Textarea
               id="observaciones"
-              value={observaciones}
-              onChange={(e) => setObservaciones(e.target.value)}
+              value={_observaciones}
+              onChange={(_e) => setObservaciones(e.target.value)}
               rows={4}
               className="bg-gray-700 border-gray-600 placeholder-gray-400 resize-none"
               placeholder="Ingrese observaciones adicionales..."
@@ -199,7 +199,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
           <div className="space-y-3">
             <h3 className="text-sm font-medium text-gray-300">Comandos Rápidos</h3>
             <div className="grid grid-cols-2 gap-2">
-              {COMANDOS_RAPIDOS.map((comando) => {
+              {COMANDOS_RAPIDOS.map((_comando) => {
                 const Icon = comando.icon
                 return (<Button
                     key={comando.id}
@@ -229,8 +229,8 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
           <Button
             type="button"
             variant="ghost"
-            onClick={onClose}
-            disabled={loading}
+            onClick={_onClose}
+            disabled={_loading}
           >
             Cancelar
           </Button>

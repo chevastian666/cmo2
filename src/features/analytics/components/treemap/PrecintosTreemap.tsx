@@ -6,8 +6,8 @@
 
 import React, { useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
-import {Building, Package, TrendingUp} from 'lucide-react'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {_Building, Package, TrendingUp} from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
 export const PrecintosTreemap: React.FC = () => {
@@ -27,15 +27,15 @@ export const PrecintosTreemap: React.FC = () => {
       }
     }
 
-    switch (groupBy) {
+    switch (_groupBy) {
       case 'company': {
-  return transformPrecintosByCompany(precintos)
+  return transformPrecintosByCompany(_precintos)
       case 'type': {
-  return createHierarchy(precintos, ['tipo', 'estado'])
+  return createHierarchy(_precintos, ['tipo', 'estado'])
       case 'status': {
-  return createHierarchy(precintos, ['estado', 'tipo'])
+  return createHierarchy(_precintos, ['estado', 'tipo'])
       default:
-        return transformPrecintosByCompany(precintos)
+        return transformPrecintosByCompany(_precintos)
     }
   }, [])
   const stats = useMemo(() => {
@@ -89,7 +89,7 @@ export const PrecintosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Distribución de Precintos</CardTitle>
-            <Select value={groupBy} onValueChange={(value: unknown) => setGroupBy(value)}>
+            <Select value={_groupBy} onValueChange={(value: unknown) => setGroupBy(_value)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
@@ -103,15 +103,15 @@ export const PrecintosTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={treemapData}
+            data={_treemapData}
             width={900}
             height={600}
             title={`Agrupado por ${groupBy === 'company' ? 'Empresa' : groupBy === 'type' ? 'Tipo' : 'Estado'}`}
             subtitle="Click para hacer zoom • Click derecho para detalles"
-            showBreadcrumb={true}
-            showTooltip={true}
-            animated={true}
-            onNodeClick={(node, event) => {
+            showBreadcrumb={_true}
+            showTooltip={_true}
+            animated={_true}
+            onNodeClick={(_node, event) => {
               console.log('Node clicked:', node)
             }}
           />

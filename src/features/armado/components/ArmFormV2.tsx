@@ -9,7 +9,7 @@ import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Textarea} from '@/components/ui/textarea'
 import { Checkbox} from '@/components/ui/checkbox'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
 // Empresas con RUT
@@ -56,7 +56,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   data, onChange, disabled = false, precintoId, onSubmit 
 }) => {
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(_formSchema),
     defaultValues: {
       matricula: data.matricula || '',
       nombreConductor: data.nombreConductor || '',
@@ -73,9 +73,9 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   // Watch form changes and propagate to parent
   const watchedValues = form.watch()
   useEffect(() => {
-    Object.entries(watchedValues).forEach(([key, value]) => {
-      if (JSON.stringify(data[key as keyof FormData]) !== JSON.stringify(value)) {
-        onChange(key, value)
+    Object.entries(_watchedValues).forEach(([key, value]) => {
+      if (JSON.stringify(data[key as keyof FormData]) !== JSON.stringify(_value)) {
+        onChange(_key, value)
       }
     })
   }, [])
@@ -89,21 +89,21 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   // Auto-complete RUT when empresa is selected
   const selectedEmpresa = form.watch('empresa')
   useEffect(() => {
-    if (selectedEmpresa) {
+    if (s_electedEmpresa) {
       const empresa = EMPRESAS.find(e => e.nombre === selectedEmpresa)
-      if (empresa) {
+      if (_empresa) {
         form.setValue('rutEmpresa', empresa.rut)
       }
     }
   }, [form])
   const handleSubmit = (_data: FormData) => {
-    if (onSubmit) {
-      onSubmit(data)
+    if (_onSubmit) {
+      onSubmit(_data)
     }
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(_handleSubmit)} className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           <Truck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             {...field}
-                            disabled={disabled}
+                            disabled={_disabled}
                             placeholder="UY-1234"
                             className="pl-10"
                           />
@@ -151,7 +151,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             {...field}
-                            disabled={disabled}
+                            disabled={_disabled}
                             placeholder="Juan Pérez"
                             className="pl-10"
                           />
@@ -174,7 +174,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           <Input
                             {...field}
                             type="tel"
-                            disabled={disabled}
+                            disabled={_disabled}
                             placeholder="099 123 456"
                             className="pl-10"
                           />
@@ -201,7 +201,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={disabled}
+                        disabled={_disabled}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -209,7 +209,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {EMPRESAS.map((empresa) => (
+                          {EMPRESAS.map((_empresa) => (
                             <SelectItem key={empresa.rut} value={empresa.nombre}>
                               {empresa.nombre}
                             </SelectItem>
@@ -232,7 +232,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             {...field}
-                            disabled={disabled}
+                            disabled={_disabled}
                             placeholder="211234567890"
                             className="pl-10"
                             maxLength={12}
@@ -260,7 +260,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={disabled}
+                        disabled={_disabled}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -268,7 +268,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {ORIGENES_DESTINOS.map((location) => (
+                          {ORIGENES_DESTINOS.map((_location) => (
                             <SelectItem key={location.value} value={location.value}>
                               {location.label}
                             </SelectItem>
@@ -288,7 +288,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={disabled}
+                        disabled={_disabled}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -296,7 +296,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {ORIGENES_DESTINOS.map((location) => (
+                          {ORIGENES_DESTINOS.map((_location) => (
                             <SelectItem key={location.value} value={location.value}>
                               {location.label}
                             </SelectItem>
@@ -353,7 +353,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                                 <Checkbox
                                   checked={field.value}
                                   onCheckedChange={field.onChange}
-                                  disabled={disabled}
+                                  disabled={_disabled}
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
@@ -373,7 +373,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                                 <Checkbox
                                   checked={field.value}
                                   onCheckedChange={field.onChange}
-                                  disabled={disabled}
+                                  disabled={_disabled}
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
@@ -405,7 +405,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                     <FormControl>
                       <Textarea
                         {...field}
-                        disabled={disabled}
+                        disabled={_disabled}
                         placeholder="Observaciones adicionales..."
                         rows={3}
                         className="resize-none"
@@ -419,7 +419,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
 
             {onSubmit && (
               <div className="flex justify-end">
-                <Button type="submit" disabled={disabled}>
+                <Button type="submit" disabled={_disabled}>
                   Guardar Tránsito
                 </Button>
               </div>

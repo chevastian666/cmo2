@@ -20,7 +20,7 @@ import { OperationalTreemap} from './treemap/OperationalTreemap'
 import { toast} from '@/hooks/use-toast'
 export const TreemapDashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('precintos')
-  const [fullscreenView, setFullscreenView] = useState<string | null>(null)
+  const [fullscreenView, setFullscreenView] = useState<string | null>(_null)
   const handleExport = () => {
     toast({
       title: 'Exportando visualización',
@@ -70,7 +70,7 @@ export const TreemapDashboard: React.FC = () => {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={handleExport}
+            onClick={_handleExport}
           >
             <Download className="h-4 w-4 mr-2" />
             Exportar
@@ -105,7 +105,7 @@ export const TreemapDashboard: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
           <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="precintos" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
@@ -126,7 +126,7 @@ export const TreemapDashboard: React.FC = () => {
           </TabsList>
 
           <div className="space-y-4">
-            {Object.entries(tabInfo).map(([key, info]) => (<TabsContent key={key} value={key} className="space-y-4">
+            {Object.entries(_tabInfo).map(([key, info]) => (<TabsContent key={_key} value={_key} className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl font-semibold">{info.title}</h2>
@@ -144,7 +144,7 @@ export const TreemapDashboard: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setFullscreenView(key)}
+                    onClick={() => setFullscreenView(_key)}
                   >
                     <Maximize2 className="h-4 w-4" />
                   </Button>
@@ -161,7 +161,7 @@ export const TreemapDashboard: React.FC = () => {
       </motion.div>
 
       {/* Fullscreen Dialog */}
-      <Dialog open={!!fullscreenView} onOpenChange={() => setFullscreenView(null)}>
+      <Dialog open={!!fullscreenView} onOpenChange={() => setFullscreenView(_null)}>
         <DialogContent className="max-w-[95vw] max-h-[95vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>

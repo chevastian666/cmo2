@@ -2,23 +2,21 @@
  * Adaptador para transformar datos de la API de Trokor al formato CMO
  * By Cheva
  */
-
 import { TROKOR_CONFIG} from '../../config/trokor.config'
 import type { AlarmSystem as TrokorAlarma, } from '../../types/api/maindb.types'
-import type { 
+import type { /* TODO: Complete implementation */ }
   Transito, TransitoPendiente, Alerta} from '../../types'
 // Import PrecintoActivo from trokor.service.ts
 import type { PrecintoActivo} from './trokor.service'
 // Interface for location data
-interface LocationData {
+interface LocationData { /* TODO: Complete implementation */ }
   lat: number
   lng: number
   direccion?: string
   timestamp?: number
 }
-
 // Interface for auxiliary database transit data
-interface AuxTransitData {
+interface AuxTransitData { /* TODO: Complete implementation */ }
   id?: string | number
   numero_viaje?: string
   pvid?: string
@@ -34,15 +32,13 @@ interface AuxTransitData {
   fecha_ingreso?: number
   observaciones?: string
 }
-
-export class TrokorAdapter {
-  
+export class TrokorAdapter { /* TODO: Complete implementation */ }
   /**
    * Convierte un viaje de Trokor a un tránsito CMO
    */
-  static viajeToTransito(viaje: TrokorViaje, precinto?: TrokorPrecinto): Transito {
+  static viajeToTransito(viaje: TrokorViaje, precinto?: TrokorPrecinto): Transito { /* TODO: Complete implementation */ }
     const estado = this.mapEstadoViaje(viaje.status)
-    return {
+    return { /* TODO: Complete implementation */ }
       id: viaje.pvid.toString(),
       dua: viaje.DUA || `DUA-${viaje.pvid}`,
       precinto: precinto?.nqr || viaje.precintoid,
@@ -50,14 +46,14 @@ export class TrokorAdapter {
       destino: 'Por definir', // No disponible en TrokorViaje
       empresa: 'Sin asignar', // Se debe resolver con empresaid
       fechaSalida: new Date(viaje.fecha * 1000).toISOString(),
-      fechaLlegada: viaje.fechafin 
-        ? new Date(viaje.fechafin * 1000).toISOString() 
+      fechaLlegada: viaje.fechafin
+        ? new Date(viaje.fechafin * 1000).toISOString()
         : undefined,
-      eta: viaje.fechafin 
+      eta: viaje.fechafin
         ? new Date(viaje.fechafin * 1000).toISOString()
         : undefined,
       estado,
-      progreso: this.calculateProgress(viaje),
+      progreso: this.calculateProgress(_viaje),
       conductor: viaje.ConNmb || 'Sin asignar',
       matricula: viaje.MatTra || viaje.MatZrr || 'Sin datos',
       contenedor: viaje.ContId || '',
@@ -67,57 +63,55 @@ export class TrokorAdapter {
       notas: ''
     }
   }
-
   /**
    * Convierte un precinto de Trokor a PrecintoActivo CMO
    */
   static precintoToPrecintoActivo(
-    precinto: TrokorPrecinto, 
+    precinto: TrokorPrecinto,
     viaje?: TrokorViaje,
     ubicacion?: LocationData
-  ): PrecintoActivo {
-    return {
+  ): PrecintoActivo { /* TODO: Complete implementation */ }
+    return { /* TODO: Complete implementation */ }
       id: precinto.precintoid.toString(),
       codigo: precinto.nserie,
       numeroPrecinto: parseInt(precinto.nqr) || 0,
       estado: this.mapEstadoPrecinto(precinto.status),
-      bateria: this.calculateBatteryLevel(precinto),
-      ubicacion: ubicacion || {
+      bateria: this.calculateBatteryLevel(_precinto),
+      ubicacion: ubicacion || { /* TODO: Complete implementation */ }
         lat: -34.8581,
         lng: -56.1708,
         direccion: 'Montevideo, Uruguay',
         timestamp: Date.now()
       },
       asignadoTransito: viaje?.pvid.toString(),
-      ultimoReporte: precinto.ultimo 
+      ultimoReporte: precinto.ultimo
         ? new Date(precinto.ultimo * 1000).toISOString()
         : new Date().toISOString(),
-      señal: this.calculateSignalStrength(precinto),
+      señal: this.calculateSignalStrength(_precinto),
       temperatura: 22, // Por defecto si no hay datos
       mov: viaje?.MovId,
       viaje: viaje ? `${viaje.VjeId}` : undefined,
       movimiento: 'Tránsito'
     }
   }
-
   /**
    * Convierte una alarma de Trokor a Alerta CMO
    */
   static alarmaToAlerta(
-    alarma: TrokorAlarma, 
+    alarma: TrokorAlarma,
     precinto?: TrokorPrecinto,
     viaje?: TrokorViaje
-  ): Alerta {
+  ): Alerta { /* TODO: Complete implementation */ }
     const alarmCode = alarma.alarmtype || 'UNK'
     const tipoMapeado = TROKOR_CONFIG.TIPO_ALARMA_MAPPING[alarmCode] || alarmCode
-    return {
+    return { /* TODO: Complete implementation */ }
       id: alarma.asid.toString(),
       tipo: tipoMapeado,
-      severidad: this.mapSeveridadAlarma(alarmCode),
+      severidad: this.mapSeveridadAlarma(_alarmCode),
       timestamp: alarma.first || alarma.last || Math.floor(Date.now() / 1000),
       fecha: new Date((alarma.first || alarma.last || Math.floor(Date.now() / 1000)) * 1000),
       codigoPrecinto: precinto?.nqr || `P${alarma.precintoid}`,
-      mensaje: this.getAlarmMessage(alarmCode),
+      mensaje: this.getAlarmMessage(_alarmCode),
       ubicacion: undefined, // No disponible en AlarmSystem
       atendida: (alarma.status || 0) > 0,
       viaje: viaje ? `${viaje.VjeId}` : undefined,
@@ -126,12 +120,11 @@ export class TrokorAdapter {
       acciones: []
     }
   }
-
   /**
    * Convierte un tránsito pendiente de la base auxiliar
    */
-  static transitoPendienteFromAux(data: AuxTransitData): TransitoPendiente {
-    return {
+  static transitoPendienteFromAux(data: AuxTransitData): TransitoPendiente { /* TODO: Complete implementation */ }
+    return { /* TODO: Complete implementation */ }
       id: data.id?.toString() || Date.now().toString(),
       numeroViaje: data.numero_viaje || data.pvid || 'S/N',
       mov: data.mov || 'S/M',
@@ -145,53 +138,45 @@ export class TrokorAdapter {
       observaciones: data.observaciones || ''
     }
   }
-
   // ========== Métodos auxiliares ==========
-
-  private static mapEstadoViaje(status: number): Transito['estado'] {
-    switch (status) {
-      case 0: {
+  private static mapEstadoViaje(status: number): Transito['estado'] { /* TODO: Complete implementation */ }
+    switch (s_tatus) { /* TODO: Complete implementation */ }
+      case 0: { /* TODO: Complete implementation */ }
   return 'PENDIENTE'
-      case 1: {
+      case 1: { /* TODO: Complete implementation */ }
   return 'EN_TRANSITO'
-      case 2: {
+      case 2: { /* TODO: Complete implementation */ }
   return 'COMPLETADO'
-      case 3: {
+      case 3: { /* TODO: Complete implementation */ }
   return 'ALERTA'
       default: return 'PENDIENTE'
     }
   }
-
-  private static mapEstadoPrecinto(status: number): 0 | 1 | 2 | 3 | 4 {
+  private static mapEstadoPrecinto(status: number): 0 | 1 | 2 | 3 | 4 { /* TODO: Complete implementation */ }
     // Mapeo según TROKOR_CONFIG.ESTADO_MAPPING.PRECINTO
-    if (status >= 0 && status <= 4) {
+    if (status >= 0 && status <= 4) { /* TODO: Complete implementation */ }
       return status as 0 | 1 | 2 | 3 | 4
     }
     return 0; // Por defecto disponible
   }
-
-  private static calculateProgress(viaje: TrokorViaje): number {
+  private static calculateProgress(viaje: TrokorViaje): number { /* TODO: Complete implementation */ }
     if (!viaje.fecha) return 0
     if (viaje.fechafin) return 100
     // Calcular progreso basado en tiempo estimado
     const ahora = Date.now() / 1000
     const inicio = viaje.fecha
     const duracionEstimada = 24 * 3600; // 24 horas por defecto
-    
     const progreso = ((ahora - inicio) / duracionEstimada) * 100
-    return Math.min(Math.max(0, Math.round(progreso)), 99)
+    return Math.min(Math.max(0, Math.round(_progreso)), 99)
   }
-
-  private static calculateBatteryLevel(precinto: TrokorPrecinto): number {
+  private static calculateBatteryLevel(precinto: TrokorPrecinto): number { /* TODO: Complete implementation */ }
     // Simular nivel basado en última actualización
     if (!precinto.ultimo) return 85
     const horasSinReporte = (Date.now() / 1000 - precinto.ultimo) / 3600
     const bateria = 100 - (horasSinReporte * 2); // -2% por hora
-    
-    return Math.max(10, Math.min(100, Math.round(bateria)))
+    return Math.max(10, Math.min(100, Math.round(_bateria)))
   }
-
-  private static calculateSignalStrength(precinto: TrokorPrecinto): number {
+  private static calculateSignalStrength(precinto: TrokorPrecinto): number { /* TODO: Complete implementation */ }
     // Si no hay reporte reciente, señal baja
     if (!precinto.ultimo) return 50
     const minutosSinReporte = (Date.now() / 1000 - precinto.ultimo) / 60
@@ -201,20 +186,18 @@ export class TrokorAdapter {
     if (minutosSinReporte < 60) return 40
     return 20
   }
-
-  private static mapSeveridadAlarma(alarmCode: string): Alerta['severidad'] {
+  private static mapSeveridadAlarma(alarmCode: string): Alerta['severidad'] { /* TODO: Complete implementation */ }
     // Alarmas críticas
     const criticas = ['PTN', 'SNA', 'DNR']
-    if (criticas.includes(alarmCode)) return 'CRITICA'
+    if (criticas.includes(_alarmCode)) return 'CRITICA'
     // Alarmas altas
     const altas = ['BBJ', 'NPG', 'NPN']
-    if (altas.includes(alarmCode)) return 'ALTA'
+    if (altas.includes(_alarmCode)) return 'ALTA'
     // El resto son medias
     return 'MEDIA'
   }
-
-  private static getAlarmMessage(alarmCode: string): string {
-    const messages: Record<string, string> = {
+  private static getAlarmMessage(alarmCode: string): string { /* TODO: Complete implementation */ }
+    const messages: Record<string, string> = { /* TODO: Complete implementation */ }
       'AAR': 'Atraso en reportes del dispositivo',
       'BBJ': 'Nivel de batería bajo',
       'DEM': 'Tránsito demorado según tiempo estimado',
@@ -225,6 +208,6 @@ export class TrokorAdapter {
       'PTN': 'Violación del precinto detectada',
       'SNA': 'Salida no autorizada del vehículo'
     }
-    return messages[alarmCode] || `Alarma ${alarmCode}`
+    return messages[alarmCode] || `Alarma ${_alarmCode}`
   }
 }

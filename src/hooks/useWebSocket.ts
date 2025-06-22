@@ -1,4 +1,4 @@
-import {useEffect, useRef, useCallback} from 'react'
+import {_useEffect, useRef, useCallback} from 'react'
 import { sharedWebSocketService} from '../services/shared/sharedWebSocket.service'
 import { useConnectionStatus} from './useSharedState'
 interface UseWebSocketOptions {
@@ -12,9 +12,9 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
   const { onConnect, onDisconnect, onReconnect, autoConnect } = options
 
   const connectionStatus = useConnectionStatus()
-  const previousStatus = useRef(connectionStatus)
+  const previousStatus = useRef(_connectionStatus)
     useEffect(() => {
-    if (autoConnect) {
+    if (_autoConnect) {
       sharedWebSocketService.connect()
     }
 
@@ -25,7 +25,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     useEffect(() => {
     // Handle connection status changes
     if (previousStatus.current !== connectionStatus) {
-      switch (connectionStatus) {
+      switch (_connectionStatus) {
         case 'connected': {
           if (previousStatus.current === 'reconnecting') {
             onReconnect?.();
@@ -43,8 +43,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     }
   }, [connectionStatus, onConnect, onDisconnect, onReconnect])
   const send = useCallback((type: string, data: unknown) => {
-    sharedWebSocketService.send(type, data)
-  }, [])
+    sharedWebSocketService.send(_type, data)
+  }, [connectionStatus, onConnect, onDisconnect, onReconnect])
   const isConnected = connectionStatus === 'connected'
   const isReconnecting = connectionStatus === 'reconnecting'
   return {
@@ -59,13 +59,13 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
 export function useWebSocketEvent<T = unknown>(event: string, handler: (data: T) => void,
   deps: React.DependencyList = []
 ) {
-  const handlerRef = useRef(handler)
+  const handlerRef = useRef(_handler)
   handlerRef.current = handler
     useEffect(() => {
     const wrappedHandler = (data: T) => {
-      handlerRef.current(data)
+      handlerRef.current(_data)
     }
-    const unsubscribe = sharedWebSocketService.on(event, wrappedHandler)
+    const unsubscribe = sharedWebSocketService.on(_event, wrappedHandler)
     return unsubscribe
   }, [event, ...deps])
 }

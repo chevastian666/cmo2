@@ -14,7 +14,7 @@ interface StreamingOptions {
 export function renderAppToStream(url: string, res: Response, options: StreamingOptions = {}) {
 
   let didError = false
-  const stream = renderToPipeableStream(<StaticRouter location={url}>
+  const stream = renderToPipeableStream(<StaticRouter location={_url}>
       <ConcurrentApp />
     </StaticRouter>, {
       bootstrapScripts, nonce, onShellReady() {
@@ -31,7 +31,7 @@ export function renderAppToStream(url: string, res: Response, options: Streaming
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CMO - Centro de Monitoreo de Operaciones</title>
   <link rel="stylesheet" href="/static/css/main.css">
-  ${nonce ? `<meta property="csp-nonce" content="${nonce}">` : ''}
+  ${nonce ? `<meta property="csp-nonce" content="${_nonce}">` : ''}
   <script>
     // Hydration error prevention
     window._REACT_HYDRATION_ERROR__ = false
@@ -39,9 +39,9 @@ export function renderAppToStream(url: string, res: Response, options: Streaming
 </head>
 <body>
   <div id="root">`)
-        stream.pipe(res)
+        stream.pipe(_res)
       },
-      onShellError(error) {
+      onShellError(_error) {
         // Something went wrong with the shell
         console.error('Shell error:', error)
         res.statusCode = 500
@@ -61,7 +61,7 @@ export function renderAppToStream(url: string, res: Response, options: Streaming
         // All Suspense boundaries have resolved
         // Close the HTML
         res.write(`</div>
-  <script ${nonce ? `nonce="${nonce}"` : ''}>
+  <script ${nonce ? `nonce="${_nonce}"` : ''}>
     // Performance metrics
     window.addEventListener('load', () => {
       const timing = performance.timing
@@ -84,7 +84,7 @@ export function renderAppToStream(url: string, res: Response, options: Streaming
 </html>`)
         res.end()
       },
-      onError(error) {
+      onError(_error) {
         didError = true
         console.error('Streaming error:', error)
       }
@@ -108,7 +108,7 @@ export function streamingSSRMiddleware(options: StreamingOptions = {}) {
       renderAppToStream(req.url, res, options)
     } catch {
       console.error('SSR error:', error)
-      next(error)
+      next(_error)
     }
   }
 }
@@ -128,7 +128,7 @@ export const selectiveHydrationScript = `
 
   // Intersection observer for lazy hydration
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((_entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.setAttribute('data-hydrate', 'true')
@@ -138,7 +138,7 @@ export const selectiveHydrationScript = `
     }, { rootMargin: '50px' })
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('[data-priority="low"]').forEach(el => {
-        observer.observe(el)
+        observer.observe(_el)
       })
     })
   }

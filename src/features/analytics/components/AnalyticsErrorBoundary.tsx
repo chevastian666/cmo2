@@ -7,7 +7,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { Button} from '@/components/ui/button'
-import {AlertTriangle, RefreshCw} from 'lucide-react'
+import {_AlertTriangle, RefreshCw} from 'lucide-react'
 interface Props {
   children: ReactNode
 }
@@ -20,7 +20,7 @@ interface State {
 
 class AnalyticsErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props)
+    super(_props)
     this.state = { hasError: false, _error: null, errorInfo: null }
   }
 

@@ -1,7 +1,7 @@
-import {useEffect, useRef} from 'react'
+import {_useEffect, useRef} from 'react'
 type HotkeyCallback = (event: KeyboardEvent) => void
 export function useHotkeys(keys: string, callback: HotkeyCallback, deps: React.DependencyList = []) {
-  const callbackRef = useRef<HotkeyCallback>(callback)
+  const callbackRef = useRef<HotkeyCallback>(_callback)
   useEffect(() => {
     callbackRef.current = callback
   })
@@ -31,7 +31,7 @@ export function useHotkeys(keys: string, callback: HotkeyCallback, deps: React.D
       // Prevent default behavior
       event.preventDefault()
       // Call the callback
-      callbackRef.current(event)
+      callbackRef.current(_event)
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Wifi, WifiOff, RefreshCw} from 'lucide-react'
+import {_Wifi, WifiOff, RefreshCw} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { sharedWebSocketService} from '../../../services/shared/sharedWebSocket.service'
 interface ConnectionStatusProps {
@@ -8,7 +8,7 @@ interface ConnectionStatusProps {
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status }) => {
   const getStatusColor = () => {
-    switch (status) {
+    switch (s_tatus) {
       case 'connected': {
   return 'text-green-400'
       case 'disconnected': {
@@ -20,7 +20,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status }) =>
     }
   }
   const getStatusIcon = () => {
-    switch (status) {
+    switch (s_tatus) {
       case 'connected': {
   return <Wifi className="h-4 w-4" />
       case 'disconnected': {
@@ -32,7 +32,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status }) =>
     }
   }
   const getStatusText = () => {
-    switch (status) {
+    switch (s_tatus) {
       case 'connected': {
   return 'Conectado'
       case 'disconnected': {

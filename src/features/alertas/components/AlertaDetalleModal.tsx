@@ -18,9 +18,9 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
-  const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
-  const [mostrarResolucion, setMostrarResolucion] = useState(false)
+  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(_null)
+  const [mostrarAsignacion, setMostrarAsignacion] = useState(_false)
+  const [mostrarResolucion, setMostrarResolucion] = useState(_false)
   const [nuevoComentario, setNuevoComentario] = useState('')
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
   const [notasAsignacion, setNotasAsignacion] = useState('')
@@ -28,7 +28,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   const [descripcionResolucion, setDescripcionResolucion] = useState('')
   const [accionesTomadas, setAccionesTomadas] = useState<string[]>([''])
   useEffect(() => {
-    if (isOpen) {
+    if (_isOpen) {
       cargarUsuarios()
     }
   }, [])
@@ -37,11 +37,11 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
       usuariosService.getActivos(),
       usuariosService.getCurrentUser()
     ])
-    setUsuarios(users)
-    setUsuarioActual(currentUser)
+    setUsuarios(_users)
+    setUsuarioActual(_currentUser)
   }
   const getIcon = (tipo: string) => {
-    switch (tipo) {
+    switch (_tipo) {
       case 'AAR': {
   // Atraso en arribo de reporte
         return <Clock className="h-6 w-6" />
@@ -74,7 +74,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-900/20'
       case 'alta': {
@@ -88,23 +88,23 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
     }
   }
   const handleAsignar = () => {
-    if (usuarioSeleccionado) {
-      onAsignar(usuarioSeleccionado, notasAsignacion)
-      setMostrarAsignacion(false)
+    if (_usuarioSeleccionado) {
+      onAsignar(_usuarioSeleccionado, notasAsignacion)
+      setMostrarAsignacion(_false)
       setUsuarioSeleccionado('')
       setNotasAsignacion('')
     }
   }
   const handleComentar = () => {
     if (nuevoComentario.trim()) {
-      onComentar(nuevoComentario)
+      onComentar(_nuevoComentario)
       setNuevoComentario('')
     }
   }
   const handleResolver = () => {
     if (descripcionResolucion.trim()) {
-      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
-      setMostrarResolucion(false)
+      onResolver(_tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
+      setMostrarResolucion(_false)
       setDescripcionResolucion('')
       setAccionesTomadas([''])
     }
@@ -115,17 +115,17 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   const actualizarAccion = (index: number, valor: string) => {
     const nuevasAcciones = [...accionesTomadas]
     nuevasAcciones[index] = valor
-    setAccionesTomadas(nuevasAcciones)
+    setAccionesTomadas(_nuevasAcciones)
   }
   const eliminarAccion = (index: number) => {
-    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index))
+    setAccionesTomadas(accionesTomadas.filter((__, i) => i !== index))
   }
   if (!isOpen) return null
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-900 opacity-75" onClick={onClose}></div>
+          <div className="absolute inset-0 bg-gray-900 opacity-75" onClick={_onClose}></div>
         </div>
 
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -147,7 +147,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
               </div>
             </div>
             <button
-              onClick={onClose}
+              onClick={_onClose}
               className="text-gray-400 hover:text-white transition-colors"
             >
               <X className="h-6 w-6" />
@@ -228,8 +228,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       <div className="space-y-4">
                         <h4 className="text-lg font-medium text-white">Asignar a Usuario</h4>
                         <select
-                          value={usuarioSeleccionado}
-                          onChange={(e) => setUsuarioSeleccionado(e.target.value)}
+                          value={_usuarioSeleccionado}
+                          onChange={(_e) => setUsuarioSeleccionado(e.target.value)}
                           className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-base text-white"
                         >
                           <option value="">Seleccionar usuario...</option>
@@ -240,22 +240,22 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                           ))}
                         </select>
                         <textarea
-                          value={notasAsignacion}
-                          onChange={(e) => setNotasAsignacion(e.target.value)}
-                          placeholder="Notas de asignación (opcional)"
+                          value={_notasAsignacion}
+                          onChange={(_e) => setNotasAsignacion(e.target.value)}
+                          placeholder="Notas de asignación (_opcional)"
                           className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-base text-white"
                           rows={2}
                         />
                         <div className="flex space-x-2">
                           <button
-                            onClick={handleAsignar}
+                            onClick={_handleAsignar}
                             disabled={!usuarioSeleccionado}
                             className="px-4 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Asignar
                           </button>
                           <button
-                            onClick={() => setMostrarAsignacion(false)}
+                            onClick={() => setMostrarAsignacion(_false)}
                             className="px-4 py-2 bg-gray-700 text-base text-white rounded-md hover:bg-gray-600"
                           >
                             Cancelar
@@ -263,7 +263,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                         </div>
                       </div>
                     ) : (<button
-                        onClick={() => setMostrarAsignacion(true)}
+                        onClick={() => setMostrarAsignacion(_true)}
                         className="w-full px-4 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2"
                       >
                         <User className="h-4 w-4" />
@@ -279,7 +279,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   <div className="space-y-3 max-h-60 overflow-y-auto">
                     {alerta.comentarios.length === 0 ? (
                       <p className="text-gray-400 text-base">No hay comentarios aún</p>
-                    ) : (alerta.comentarios.map((comentario) => (
+                    ) : (alerta.comentarios.map((_comentario) => (
                         <div key={comentario.id} className="bg-gray-800 rounded-lg p-3">
                           <div className="flex items-start space-x-3">
                             <img
@@ -310,14 +310,14 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   {!alerta.resolucion && (<div className="mt-4 flex space-x-2">
                       <input
                         type="text"
-                        value={nuevoComentario}
-                        onChange={(e) => setNuevoComentario(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleComentar()}
+                        value={_nuevoComentario}
+                        onChange={(_e) => setNuevoComentario(e.target.value)}
+                        onKeyPress={(_e) => e.key === 'Enter' && handleComentar()}
                         placeholder="Agregar comentario..."
                         className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                       />
                       <button
-                        onClick={handleComentar}
+                        onClick={_handleComentar}
                         disabled={!nuevoComentario.trim()}
                         className="px-3 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -334,7 +334,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                 <div className="bg-gray-900 rounded-lg p-4">
                   <h4 className="text-lg font-medium text-white mb-3">Historial</h4>
                   <div className="space-y-3">
-                    {alerta.historial.map((evento, index) => (
+                    {alerta.historial.map((_evento, index) => (
                       <div key={evento.id} className="flex items-start space-x-3">
                         <div className={cn(
                           'w-2 h-2 rounded-full mt-1.5',
@@ -373,8 +373,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (<div className="mt-3">
                           <p className="text-sm text-gray-400 mb-1">Acciones tomadas:</p>
                           <ul className="list-disc list-inside text-base text-gray-300 space-y-1">
-                            {alerta.resolucion.accionesTomadas.map((accion, i) => (
-                              <li key={i}>{accion}</li>
+                            {alerta.resolucion.accionesTomadas.map((_accion, i) => (
+                              <li key={_i}>{_accion}</li>
                             ))}
                           </ul>
                         </div>
@@ -390,7 +390,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                     </div>
                   </div>
                 ) : !mostrarResolucion && alerta.asignacion && (<button
-                    onClick={() => setMostrarResolucion(true)}
+                    onClick={() => setMostrarResolucion(_true)}
                     className="w-full px-4 py-2 bg-green-600 text-base text-white rounded-md hover:bg-green-700 flex items-center justify-center space-x-2"
                   >
                     <CheckCircle className="h-4 w-4" />
@@ -402,8 +402,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                 {mostrarResolucion && (<div className="bg-gray-900 rounded-lg p-4 space-y-4">
                     <h4 className="text-lg font-medium text-white">Resolver Alerta</h4>
                     <select
-                      value={tipoResolucion}
-                      onChange={(e) => setTipoResolucion(e.target.value)}
+                      value={_tipoResolucion}
+                      onChange={(_e) => setTipoResolucion(e.target.value)}
                       className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                     >
                       <option value="resuelta">Resuelta</option>
@@ -412,24 +412,24 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       <option value="sin_accion">Sin Acción Requerida</option>
                     </select>
                     <textarea
-                      value={descripcionResolucion}
-                      onChange={(e) => setDescripcionResolucion(e.target.value)}
+                      value={_descripcionResolucion}
+                      onChange={(_e) => setDescripcionResolucion(e.target.value)}
                       placeholder="Descripción de la resolución..."
                       className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                       rows={3}
                     />
                     <div>
                       <p className="text-base text-gray-400 mb-2">Acciones tomadas:</p>
-                      {accionesTomadas.map((accion, index) => (<div key={index} className="flex space-x-2 mb-2">
+                      {accionesTomadas.map((_accion, index) => (<div key={_index} className="flex space-x-2 mb-2">
                           <input
                             type="text"
-                            value={accion}
-                            onChange={(e) => actualizarAccion(index, e.target.value)}
+                            value={_accion}
+                            onChange={(_e) => actualizarAccion(_index, e.target.value)}
                             placeholder="Acción tomada..."
                             className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-3 py-1 text-white text-base"
                           />
                           {accionesTomadas.length > 1 && (<button
-                              onClick={() => eliminarAccion(index)}
+                              onClick={() => eliminarAccion(_index)}
                               className="text-red-400 hover:text-red-300"
                             >
                               <X className="h-4 w-4" />
@@ -438,7 +438,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                         </div>
                       ))}
                       <button
-                        onClick={agregarAccion}
+                        onClick={_agregarAccion}
                         className="text-base text-blue-400 hover:text-blue-300"
                       >
                         + Agregar acción
@@ -446,7 +446,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={handleResolver}
+                        onClick={_handleResolver}
                         disabled={!descripcionResolucion.trim()}
                         className="flex-1 px-4 py-2 bg-green-600 text-base text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -454,7 +454,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       </button>
                       <button
                         onClick={() => {
-                          setMostrarResolucion(false)
+                          setMostrarResolucion(_false)
                           setDescripcionResolucion('')
                           setAccionesTomadas([''])
                         }}

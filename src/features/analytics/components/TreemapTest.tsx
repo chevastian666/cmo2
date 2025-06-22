@@ -41,7 +41,7 @@ const TreemapTest: React.FC = () => {
         </CardHeader>
         <CardContent>
           <SimpleTreemap
-            data={testData}
+            data={_testData}
             width={800}
             height={400}
           />
@@ -56,12 +56,12 @@ const TreemapTest: React.FC = () => {
           <TreemapErrorBoundary>
             <div style={{ width: '100%', height: '500px' }}>
               <InteractiveTreemap
-                data={testData}
+                data={_testData}
                 width={800}
                 height={500}
-                animated={false}
-                showBreadcrumb={true}
-                showTooltip={true}
+                animated={_false}
+                showBreadcrumb={_true}
+                showTooltip={_true}
               />
             </div>
           </TreemapErrorBoundary>

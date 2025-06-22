@@ -84,7 +84,7 @@ export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> =
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={onClose}
+        onClick={_onClose}
       />
 
       {/* Modal */}
@@ -100,7 +100,7 @@ export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> =
                 </h2>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5 text-gray-400" />
@@ -404,13 +404,13 @@ export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> =
               </p>
               <div className="flex space-x-3">
                 <button
-                  onClick={onClose}
+                  onClick={_onClose}
                   className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
-                  onClick={onConfirm}
+                  onClick={_onConfirm}
                   className={cn(
                     "px-6 py-2 rounded-lg font-medium transition-colors",
                     "flex items-center space-x-2",

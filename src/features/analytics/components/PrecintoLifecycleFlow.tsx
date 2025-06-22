@@ -7,7 +7,7 @@
 import React, { useMemo } from 'react'
 import { Card, CardContent} from '@/components/ui/card'
 import { Badge} from '@/components/ui/badge'
-import {Package, CheckCircle, XCircle, Zap, TrendingDown} from 'lucide-react'
+import {_Package, CheckCircle, XCircle, Zap, TrendingDown} from 'lucide-react'
 import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
 import { transformPrecintoLifecycle} from '@/components/charts/sankey/utils/dataTransformers'
 import type { PrecintoFlow} from '@/components/charts/types/sankey.types'
@@ -52,7 +52,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
     return stages
   }, [])
   const chartData = useMemo(() => {
-    return transformPrecintoLifecycle(lifecycleData)
+    return transformPrecintoLifecycle(_lifecycleData)
   }, [])
   // Calculate conversion rates
   const conversionRates = useMemo(() => {
@@ -86,7 +86,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
   return (<div className="space-y-6">
       {/* Stage Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        {lifecycleData.map((stage) => (
+        {lifecycleData.map((s_tage) => (
           <Card key={stage.stage} className="relative overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
@@ -116,18 +116,18 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
         <CardContent className="p-6">
           <div className="bg-gray-900 rounded-lg p-6 min-h-[400px] flex items-center justify-center">
             <SankeyChart
-              data={chartData}
+              data={_chartData}
               width={900}
               height={400}
               margin={{ top: 20, right: 120, bottom: 20, left: 120 }}
               nodeWidth={30}
               nodePadding={40}
-              animated={true}
-              interactive={true}
-              showLabels={true}
-              showValues={true}
+              animated={_true}
+              interactive={_true}
+              showLabels={_true}
+              showValues={_true}
               colors={['#6b7280', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444']}
-              valueFormat={(v) => `${v} precintos`}
+              valueFormat={(_v) => `${_v} precintos`}
             />
           </div>
         </CardContent>
@@ -138,7 +138,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
         <CardContent className="p-6">
           <h3 className="text-lg font-semibold mb-4">Tasas de Conversión</h3>
           <div className="space-y-3">
-            {conversionRates.map((rate) => (
+            {conversionRates.map((_rate) => (
               <div key={`${rate.from}-${rate.to}`} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-400 capitalize">

@@ -63,7 +63,7 @@ class ModoTvService {
           return a.puntoOperacion === this.configuracion.puntoOperacion
         })
         // Ordenar por tiempo de arribo
-        .sort((a, b) => a.minutosRestantes - b.minutosRestantes)
+        .sort((_a, b) => a.minutosRestantes - b.minutosRestantes)
         .slice(0, limite)
       return arribos
     } catch {
@@ -139,13 +139,13 @@ class ModoTvService {
           const horaEstimada = new Date(t.eta)
           const minutosRetraso = Math.floor((ahora.getTime() - horaEstimada.getTime()) / 60000)
           if (minutosRetraso > 60) {
-            problema = `Retraso de ${minutosRetraso} minutos`
+            problema = `Retraso de ${_minutosRetraso} minutos`
             nivel = minutosRetraso > 120 ? 'critico' : 'alto'
             tiempoEnProblema = minutosRetraso
           }
         }
         
-        if (problema) {
+        if (_problema) {
           criticos.push({
             id: t.id,
             matricula: t.matricula,
@@ -161,7 +161,7 @@ class ModoTvService {
       })
       // Ordenar por nivel de criticidad y limitar
       return criticos
-        .sort((a, b) => {
+        .sort((_a, b) => {
           const niveles = { bajo: 0, medio: 1, alto: 2, critico: 3 }
           return niveles[b.nivel] - niveles[a.nivel]
         })

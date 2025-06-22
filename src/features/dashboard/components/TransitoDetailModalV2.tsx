@@ -45,12 +45,12 @@ interface TransitoDetailModalProps {
 export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
   transitoId, isOpen, onClose
 }) => {
-  const [showFullImage, setShowFullImage] = useState(false)
+  const [showFullImage, setShowFullImage] = useState(_false)
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
   const [selectedTime, setSelectedTime] = useState<Date>(new Date())
-  const [isPlayingTimeline, setIsPlayingTimeline] = useState(false)
-  const playIntervalRef = useRef<NodeJS.Timeout | null>(null)
-  const [transito, setTransito] = useState<TransitoDashboard | null>(null)
+  const [isPlayingTimeline, setIsPlayingTimeline] = useState(_false)
+  const playIntervalRef = useRef<NodeJS.Timeout | null>(_null)
+  const [transito, setTransito] = useState<TransitoDashboard | null>(_null)
   // Fetch transit data based on transitoId
 
   useEffect(() => {
@@ -82,31 +82,31 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
         bateria: 85,
         temperatura: -18
       }
-      setTransito(mockTransito)
+      setTransito(_mockTransito)
       setTimelinePosition(mockTransito.progreso)
     }
   }, [])
   const handleTimelineChange = (value: number[]) => {
     const newPosition = value[0]
-    setTimelinePosition(newPosition)
+    setTimelinePosition(_newPosition)
     if (!transito) return
     // Calculate the time based on position
     const totalDuration = transito.eta.getTime() - transito.fechaSalida.getTime()
     const currentDuration = (totalDuration * newPosition) / 100
     const currentTime = new Date(transito.fechaSalida.getTime() + currentDuration)
-    setSelectedTime(currentTime)
+    setSelectedTime(_currentTime)
   }
   const togglePlayTimeline = () => {
-    if (isPlayingTimeline) {
+    if (_isPlayingTimeline) {
       // Stop playing
       if (playIntervalRef.current) {
         clearInterval(playIntervalRef.current)
         playIntervalRef.current = null
       }
-      setIsPlayingTimeline(false)
+      setIsPlayingTimeline(_false)
     } else {
       // Start playing
-      setIsPlayingTimeline(true)
+      setIsPlayingTimeline(_true)
       let currentPos = timelinePosition
       playIntervalRef.current = setInterval(() => {
         currentPos += 2; // Move 2% each interval
@@ -138,11 +138,11 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
     const duration = transito.eta.getTime() - transito.fechaSalida.getTime()
     const hours = Math.floor(duration / (1000 * 60 * 60))
     const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
-    return `${hours}h ${minutes}m`
+    return `${_hours}h ${_minutes}m`
   }
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={onClose}>
+      <Dialog open={_isOpen} onOpenChange={_onClose}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
           <DialogHeader className="border-b border-gray-700 p-4 sm:p-6">
             <div className="flex items-center gap-4">
@@ -369,7 +369,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                           src={transito.fotoPrecintado} 
                           alt="Precinto colocado"
                           className="w-full h-48 object-cover rounded-lg cursor-pointer transition-transform hover:scale-[1.02]"
-                          onClick={() => setShowFullImage(true)}
+                          onClick={() => setShowFullImage(_true)}
                         />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center pointer-events-none">
                           <Maximize2 className="h-8 w-8 text-white" />
@@ -379,7 +379,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={(e) => {
+                            onClick={(_e) => {
                               e.stopPropagation()
                               // Download functionality
                               const link = document.createElement('a')
@@ -473,7 +473,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                                 <div className="flex items-center gap-3">
                                   <Button
                                     size="icon"
-                                    onClick={togglePlayTimeline}
+                                    onClick={_togglePlayTimeline}
                                     className="bg-blue-600 hover:bg-blue-700"
                                     title={isPlayingTimeline ? 'Pausar' : 'Reproducir'}
                                   >
@@ -487,7 +487,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                                   <div className="flex-1 relative">
                                     <Slider
                                       value={[timelinePosition]}
-                                      onValueChange={handleTimelineChange}
+                                      onValueChange={_handleTimelineChange}
                                       max={100}
                                       step={1}
                                       className="w-full"
@@ -496,7 +496,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                                     {/* Timeline markers */}
                                     <div className="absolute -bottom-6 left-0 right-0 flex justify-between text-xs text-gray-500">
                                       <span>Inicio</span>
-                                      <span>{Math.round(timelinePosition)}%</span>
+                                      <span>{Math.round(_timelinePosition)}%</span>
                                       <span>Fin</span>
                                     </div>
                                   </div>
@@ -559,7 +559,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
       </Dialog>
 
       {/* Full Image Modal */}
-      <Dialog open={showFullImage} onOpenChange={setShowFullImage}>
+      <Dialog open={s_howFullImage} onOpenChange={s_etShowFullImage}>
         <DialogContent className="max-w-5xl p-0 bg-black/90">
           <div className="relative">
             <img 
@@ -574,7 +574,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                   <p className="text-sm text-gray-300">Viaje {transito.numeroViaje}</p>
                 </div>
                 <Button
-                  onClick={(e) => {
+                  onClick={(_e) => {
                     e.stopPropagation()
                     const link = document.createElement('a')
                     link.href = transito.fotoPrecintado!

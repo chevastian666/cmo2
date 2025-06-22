@@ -1,7 +1,7 @@
 import React from 'react'
 import { formatTime24h} from '../../../utils/formatters'
 import type { Precinto} from '../../../types/monitoring'
-import {Battery, MapPin, Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react'
+import {_Battery, MapPin, Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { DataTable} from '../../../components/DataTable'
 interface PrecintosTableProps {
@@ -10,7 +10,7 @@ interface PrecintosTableProps {
 
 export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => {
   const _getEstadoColor = (estado: Precinto['estado']) => {
-    switch (_estado) {
+    switch (__estado) {
       case 'SAL': {
   return 'text-blue-400 bg-blue-900/20'
       case 'LLE': {
@@ -30,7 +30,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       sortable: true,
       filterable: true,
       filterType: 'number',
-      accessor: (_item) => (
+      accessor: (__item) => (
         <div className="flex items-center space-x-3">
           <span className="font-medium text-white">{item.numeroPrecinto}</span>
           <div className="flex items-center">
@@ -49,7 +49,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       header: 'Viaje / MOV',
       sortable: true,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (__item) => (
         <div>
           <span className="font-medium text-white">{item.numeroViaje}</span>
           <span className="text-cyan-400 ml-2">/ {item.mov}</span>
@@ -69,7 +69,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
         { value: 'CFM', label: 'CFM - Confirmado' },
         { value: 'CNP', label: 'CNP - Cancelado No Precintado' }
       ],
-      accessor: (_item) => (
+      accessor: (__item) => (
         <span className={cn(
           "inline-flex px-2 py-1 text-xs font-medium rounded-full",
           getEstadoColor(item.estado)
@@ -83,7 +83,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       header: 'Ubicación',
       sortable: false,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (__item) => (
         <div className="flex items-center text-sm">
           <MapPin className="h-4 w-4 mr-1" />
           {item.ubicacionActual.direccion || 
@@ -95,7 +95,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       key: 'sensores',
       header: 'Sensores',
       sortable: false,
-      accessor: (_item) => (
+      accessor: (__item) => (
         <div className="flex items-center space-x-3 text-sm">
           <div className="flex items-center">
             <Radio className={cn(
@@ -135,12 +135,12 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       key: 'fechaUltimaLectura',
       header: 'Última Lectura',
       sortable: true,
-      accessor: (_item) => formatTime24h(item.fechaUltimaLectura)
+      accessor: (__item) => formatTime24h(item.fechaUltimaLectura)
     }
   ]
   const _handleExport = (_data: Precinto[], format: 'csv' | 'json') => {
     const _timestamp = new Date().toISOString().split('T')[0]
-    const _filename = `precintos-activos-${timestamp}`
+    const _filename = `precintos-activos-${_timestamp}`
     if (format === 'csv') {
       const _headers = ['Precinto', 'Viaje', 'MOV', 'Estado', 'Ubicación', 'GPS', 'Eslinga', 'Batería', 'Última Lectura']
       const _rows = data.map(p => [
@@ -154,30 +154,30 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
         `${p.bateria}%`,
         new Date(p.fechaUltimaLectura * 1000).toLocaleString('es-UY')
       ])
-      const _csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
+      const _csv = [headers, ...rows.map(row => row.map(cell => `"${_cell}"`))].
         map(row => row.join(',')).join('\n')
       const _blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const _link = document.createElement('a')
-      link.href = URL.createObjectURL(_blob)
-      link.download = `${filename}.csv`
+      link.href = URL.createObjectURL(__blob)
+      link.download = `${_filename}.csv`
       link.click()
     } else {
-      const _jsonData = JSON.stringify(_data, null, 2)
+      const _jsonData = JSON.stringify(__data, null, 2)
       const _blob = new Blob([jsonData], { type: 'application/json' })
       const _link = document.createElement('a')
-      link.href = URL.createObjectURL(_blob)
-      link.download = `${filename}.json`
+      link.href = URL.createObjectURL(__blob)
+      link.download = `${_filename}.json`
       link.click()
     }
   }
   return (
     <DataTable
-      data={precintos}
-      columns={columns}
+      data={_precintos}
+      columns={_columns}
       searchKeys={['codigo', 'numeroViaje']}
       searchPlaceholder="Buscar por código o viaje..."
       title="Precintos Activos"
-      onExport={handleExport}
+      onExport={_handleExport}
       emptyMessage="No hay precintos activos"
       defaultItemsPerPage={25}
       itemsPerPageOptions={[10, 25, 50, 100]}

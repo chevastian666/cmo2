@@ -1,5 +1,5 @@
 import React from 'react'
-import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react'
+import {_X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react'
 import { 
   Card, CardHeader, CardContent, StatusBadge, InfoRow, InfoGrid, InfoSection, Badge, BadgeGroup, Tabs, MapModule, LoadingState} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
@@ -47,7 +47,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -73,7 +73,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
                 </BadgeGroup>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5 text-gray-400" />
@@ -84,9 +84,9 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
           {/* Tabs */}
           <div className="border-b border-gray-700">
             <Tabs
-              tabs={tabs}
-              activeTab={activeTab}
-              onChange={setActiveTab}
+              tabs={_tabs}
+              activeTab={_activeTab}
+              onChange={s_etActiveTab}
             />
           </div>
 
@@ -157,8 +157,8 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
                       <MapModule
                         center={[precinto.ubicacionActual.lat, precinto.ubicacionActual.lng]}
                         zoom={13}
-                        markers={mapMarkers}
-                        route={mapRoute}
+                        markers={_mapMarkers}
+                        route={_mapRoute}
                         showControls
                         showLegend
                       />

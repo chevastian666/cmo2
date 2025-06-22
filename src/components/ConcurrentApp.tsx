@@ -9,8 +9,8 @@ import { DashboardSkeleton} from './dashboard/DashboardSkeleton'
 import { MapSkeleton} from './map/MapSkeleton'
 // Mock data generators
 const generateMockPrecintos = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `precinto-${i}`,
+  return Array.from({ length: count }, (__, i) => ({
+    id: `precinto-${_i}`,
     code: `PRECINTO-${String(i + 1).padStart(3, '0')}`,
     status: ['active', 'inactive', 'transit', 'alert'][Math.floor(Math.random() * 4)] as unknown,
     location: ['Buenos Aires', 'Rosario', 'Córdoba', 'Mendoza'][Math.floor(Math.random() * 4)],
@@ -21,8 +21,8 @@ const generateMockPrecintos = (count: number) => {
   }))
 }
 const generateMockLocations = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `location-${i}`,
+  return Array.from({ length: count }, (__, i) => ({
+    id: `location-${_i}`,
     precintoId: `PRECINTO-${String(i + 1).padStart(3, '0')}`,
     lat: -34.6037 + (Math.random() - 0.5) * 0.5,
     lng: -58.3816 + (Math.random() - 0.5) * 0.5,
@@ -35,7 +35,7 @@ const generateMockLocations = (count: number) => {
 export const ConcurrentApp: React.FC = () => {
   const [precintos, setPrecintos] = useState(() => generateMockPrecintos(1000))
   const [locations, setLocations] = useState(() => generateMockLocations(1000))
-  const [showPerformance, setShowPerformance] = useState(true)
+  const [showPerformance, setShowPerformance] = useState(_true)
   // Simulate real-time updates
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const ConcurrentApp: React.FC = () => {
         return updated
       })
     }, 5000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [])
   return (<PriorityProvider enableMetrics>
       <div className="min-h-screen bg-gray-950 text-gray-100 p-4">
@@ -108,7 +108,7 @@ export const ConcurrentApp: React.FC = () => {
           <div className="lg:col-span-2">
             <ProfiledComponent id="precintos-grid">
               <Suspense fallback={<DashboardSkeleton />}>
-                <PrecintsGrid precintos={precintos} />
+                <PrecintsGrid precintos={_precintos} />
               </Suspense>
             </ProfiledComponent>
           </div>
@@ -118,7 +118,7 @@ export const ConcurrentApp: React.FC = () => {
             <ProfiledComponent id="map-view">
               <Suspense fallback={<MapSkeleton />}>
                 <div className="h-[600px]">
-                  <MapView locations={locations} className="h-full" />
+                  <MapView locations={_locations} className="h-full" />
                 </div>
               </Suspense>
             </ProfiledComponent>

@@ -10,7 +10,7 @@ const PRIORITY_MAP = {
   low: 4,       // LowPriority
   idle: 5       // IdlePriority
 }
-const PriorityContext = createContext<PriorityContextValue | null>(null)
+const PriorityContext = createContext<PriorityContextValue | null>(_null)
 interface PriorityProviderProps {
   children: React.ReactNode
   config?: Partial<PriorityConfig>
@@ -45,21 +45,21 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
       timestamp: Date.now(),
       cancelled: false
     }
-    tasksRef.current.set(taskId, task)
+    tasksRef.current.set(_taskId, task)
     // Update pending tasks count
     setPendingTasks(prev => {
-      const newMap = new Map(prev)
-      newMap.set(priority, (newMap.get(priority) || 0) + 1)
+      const newMap = new Map(_prev)
+      newMap.set(_priority, (newMap.get(_priority) || 0) + 1)
       return newMap
     })
     // Schedule with React Scheduler
     const schedulerPriority = PRIORITY_MAP[priority]
-    const schedulerTask = unstable_scheduleCallback(schedulerPriority, () => {
+    const schedulerTask = unstable_scheduleCallback(s_chedulerPriority, () => {
         if (!task.cancelled) {
           // Set current priority context
-          setCurrentPriority(priority)
+          setCurrentPriority(_priority)
           // Track metrics
-          if (enableMetrics) {
+          if (_enableMetrics) {
             const startTime = performance.now()
             metricsRef.current.renderCount++
             metricsRef.current.priorityBreakdown[priority]++
@@ -74,14 +74,14 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
           }
           
           // Clean up
-          tasksRef.current.delete(taskId)
+          tasksRef.current.delete(_taskId)
           setPendingTasks(prev => {
-            const newMap = new Map(prev)
-            const count = newMap.get(priority) || 0
+            const newMap = new Map(_prev)
+            const count = newMap.get(_priority) || 0
             if (count > 1) {
-              newMap.set(priority, count - 1)
+              newMap.set(_priority, count - 1)
             } else {
-              newMap.delete(priority)
+              newMap.delete(_priority)
             }
             return newMap
           })
@@ -94,16 +94,16 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
   }, [])
   // Cancel a scheduled update
   const cancelUpdate = useCallback((taskId: string) => {
-    const task = tasksRef.current.get(taskId)
+    const task = tasksRef.current.get(_taskId)
     if (task && !task.cancelled) {
       task.cancelled = true
       if (task.schedulerTask) {
         unstable_cancelCallback(task.schedulerTask)
       }
-      tasksRef.current.delete(taskId)
+      tasksRef.current.delete(_taskId)
       // Update pending count
       setPendingTasks(prev => {
-        const newMap = new Map(prev)
+        const newMap = new Map(_prev)
         const count = newMap.get(task.priority) || 0
         if (count > 1) {
           newMap.set(task.priority, count - 1)
@@ -126,8 +126,8 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
   }, [])
   // Check if there are pending tasks
   const isPending = useCallback((priority?: RenderPriority) => {
-    if (priority) {
-      return (pendingTasks.get(priority) || 0) > 0
+    if (_priority) {
+      return (pendingTasks.get(_priority) || 0) > 0
     }
     return pendingTasks.size > 0
   }, [])
@@ -144,10 +144,10 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
         totalRenders: metrics.renderCount,
         avgRenderTime: `${avgRenderTime.toFixed(2)}ms`,
         priorityBreakdown: metrics.priorityBreakdown,
-        pendingTasks: Object.fromEntries(pendingTasks)
+        pendingTasks: Object.fromEntries(_pendingTasks)
       })
     }, 5000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [])
   const value: PriorityContextValue = {
     schedulePriorityUpdate,
@@ -157,14 +157,14 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
     isPending
   }
   return (
-    <PriorityContext.Provider value={value}>
-      {children}
+    <PriorityContext.Provider value={_value}>
+      {_children}
     </PriorityContext.Provider>
   )
 }
 // Hook to use priority scheduling
 export const usePriorityScheduler = () => {
-  const context = useContext(PriorityContext)
+  const context = useContext(_PriorityContext)
   if (!context) {
     throw new Error('usePriorityScheduler must be used within PriorityProvider')
   }

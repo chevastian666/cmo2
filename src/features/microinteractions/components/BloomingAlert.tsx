@@ -12,32 +12,32 @@ interface BloomingAlertProps {
 export const BloomingAlert: React.FC<BloomingAlertProps> = ({
   children, status, onBloomComplete, className, show = true
 }) => {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(_false)
   useEffect(() => {
-    if (show) {
-      setIsVisible(true)
+    if (s_how) {
+      setIsVisible(_true)
       const timer = setTimeout(() => {
         onBloomComplete?.()
       }, 600)
-      return () => clearTimeout(timer)
+      return () => clearTimeout(_timer)
     } else {
-      setIsVisible(false)
+      setIsVisible(_false)
     }
   }, [show])
   if (!isVisible) return null
   return (
     <div className={cn('bloom-container', className)}>
       <div className="flower-petals">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(8)].map((__, i) => (
           <div
-            key={i}
-            className={cn('petal', `petal-${status}`)}
+            key={_i}
+            className={cn('petal', `petal-${s_tatus}`)}
             style={{ '--rotation': `${i * 45}deg` } as React.CSSProperties}
           />
         ))}
       </div>
       <div className={cn('flower-center bloom-enter', className)}>
-        {children}
+        {_children}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ColumnDef} from '@tanstack/react-table'
-import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, Wifi, MapPin, AlertTriangle, CheckCircle} from 'lucide-react'
+import {_MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, Wifi, MapPin, AlertTriangle, CheckCircle} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Badge} from '@/components/ui/badge'
 import { Checkbox} from '@/components/ui/checkbox'
@@ -77,21 +77,21 @@ interface PrecintosTableProps {
 }
 
 export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = false }) => {
-  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(_null)
+  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(__null)
   const columns: ColumnDef<Precinto>[] = [
     {
       id: 'select',
       header: (table ) => (
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(_value) => table.toggleAllPageRowsSelected(!!value)}
+          onCheckedChange={(__value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
       ),
       cell: (row ) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(_value) => row.toggleSelected(!!value)}
+          onCheckedChange={(__value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
       ),
@@ -133,7 +133,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
           <Badge variant={variant as unknown}>
             {estado === 'ACTIVO' && <CheckCircle className="mr-1 h-3 w-3" />}
             {estado === 'ALERTA' && <AlertTriangle className="mr-1 h-3 w-3" />}
-            {estado}
+            {_estado}
           </Badge>
         )
       },
@@ -161,7 +161,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
                   bateria >= 60 ? "text-green-500" :
                   bateria >= 30 ? "text-yellow-500" : "text-red-500"
                 )} />
-                <span>{bateria}%</span>
+                <span>{_bateria}%</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80">
@@ -183,10 +183,10 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
                             bateria >= 60 ? "bg-green-500" :
                             bateria >= 30 ? "bg-yellow-500" : "bg-red-500"
                           )}
-                          style={{ width: `${bateria}%` }}
+                          style={{ width: `${_bateria}%` }}
                         />
                       </div>
-                      <span className="text-sm font-medium">{bateria}%</span>
+                      <span className="text-sm font-medium">{_bateria}%</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 items-center gap-4">
@@ -307,7 +307,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         const _minutos = Math.floor(diff / 1000 / 60)
         let tiempo = ''
         if (minutos < 60) {
-          tiempo = `Hace ${minutos} min`
+          tiempo = `Hace ${_minutos} min`
         } else if (minutos < 1440) {
           tiempo = `Hace ${Math.floor(minutos / 60)} horas`
         } else {
@@ -315,7 +315,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         }
         
         return (
-          <span className="text-sm text-gray-400">{tiempo}</span>
+          <span className="text-sm text-gray-400">{_tiempo}</span>
         )
       },
     },
@@ -333,7 +333,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setSelectedPrecinto(_precinto)}>
+              <DropdownMenuItem onClick={() => setSelectedPrecinto(__precinto)}>
                 <Eye className="mr-2 h-4 w-4" />
                 Ver detalles
               </DropdownMenuItem>
@@ -352,7 +352,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       },
     },
   ]
-  if (_loading) {
+  if (__loading) {
     return <PrecintosTableSkeleton />
   }
 
@@ -366,11 +366,11 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       </div>
       
       <DataTableV2
-        columns={columns}
-        data={mockPrecintos}
+        columns={_columns}
+        data={_mockPrecintos}
         searchPlaceholder="Buscar precintos..."
-        showColumnVisibility={true}
-        showPagination={true}
+        showColumnVisibility={_true}
+        showPagination={_true}
         pageSize={10}
       />
     </div>

@@ -9,7 +9,7 @@ class PrecintosService {
       // In development, return mock data
       if (import.meta.env.DEV) {
         console.log('PrecintosService: DEV mode, returning mock data')
-        return this.getMockPrecintos(filters)
+        return this.getMockPrecintos(_filters)
       }
       
       const params = new URLSearchParams()
@@ -24,7 +24,7 @@ class PrecintosService {
       return response.data
     } catch {
       console.error('Error fetching precintos:', error)
-      return this.getMockPrecintos(filters)
+      return this.getMockPrecintos(_filters)
     }
   }
 
@@ -35,7 +35,7 @@ class PrecintosService {
         return precintos.find(p => p.id === id) || null
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`)
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/${_id}`)
       return response.data
     } catch {
       console.error('Error fetching precinto:', error)
@@ -46,11 +46,11 @@ class PrecintosService {
   async updatePrecinto(id: string, data: Partial<Precinto>): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(_resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data)
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${_id}`, data)
       return response.data.success
     } catch {
       console.error('Error updating precinto:', error)
@@ -61,11 +61,11 @@ class PrecintosService {
   async assignPrecinto(id: string, empresaId: string, ubicacion: string): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(_resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('POST', `${this.API_BASE}/${id}/assign`, {
+      const response = await sharedApiService.request('POST', `${this.API_BASE}/${_id}/assign`, {
         empresaId,
         ubicacion
       })
@@ -79,11 +79,11 @@ class PrecintosService {
   async sendCommand(id: string, command: string, params?: unknown): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(_resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('POST', `${this.API_BASE}/${id}/command`, {
+      const response = await sharedApiService.request('POST', `${this.API_BASE}/${_id}/command`, {
         command,
         params
       })
@@ -139,7 +139,7 @@ class PrecintosService {
         status,
         bateria,
         ultimoReporte: this.generateTimeAgo(),
-        inicioReporte: this.generateTimeAgo(true),
+        inicioReporte: this.generateTimeAgo(_true),
         ubicacion: hasUbicacion ? ubicaciones[Math.floor(Math.random() * ubicaciones.length)] : undefined,
         eslinga: Math.random() > 0.5,
         asignadoTransito: status === PrecintoStatus.ARMADO ? `TR-${Math.floor(Math.random() * 9999).toString().padStart(5, '0')}` : undefined,
@@ -161,11 +161,11 @@ class PrecintosService {
     if (filters?.search) {
       const search = filters.search.toLowerCase()
       filtered = filtered.filter(p => 
-        p.id.includes(search) ||
-        p.nserie.toLowerCase().includes(search) ||
-        p.nqr.includes(search) ||
-        p.telefono.includes(search) ||
-        p.empresa?.toLowerCase().includes(search)
+        p.id.includes(s_earch) ||
+        p.nserie.toLowerCase().includes(s_earch) ||
+        p.nqr.includes(s_earch) ||
+        p.telefono.includes(s_earch) ||
+        p.empresa?.toLowerCase().includes(s_earch)
       )
     }
 
@@ -200,7 +200,7 @@ class PrecintosService {
     for (let i = ranges.length - 1; i >= 0; i--) {
       const value = Math.floor(randomMinutes / ranges[i])
       if (value > 0) {
-        return `${value} ${units[i]}${value > 1 ? 's' : ''}`
+        return `${_value} ${units[i]}${value > 1 ? 's' : ''}`
       }
     }
     
@@ -208,7 +208,7 @@ class PrecintosService {
   }
 
   async exportToCSV(filters?: PrecintoFilters): Promise<string> {
-    const precintos = await this.getPrecintos(filters)
+    const precintos = await this.getPrecintos(_filters)
     const headers = [
       'ID',
       'N° Serie',
@@ -237,7 +237,7 @@ class PrecintosService {
     ])
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ...rows.map(row => row.map(cell => `"${_cell}"`).join(','))
     ].join('\n')
     return csv
   }

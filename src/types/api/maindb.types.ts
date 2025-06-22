@@ -1,5 +1,5 @@
 /**
- * Types for Main Database (_trokor)
+ * Types for Main Database (__trokor)
  * By Cheva
  */
 

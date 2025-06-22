@@ -33,10 +33,10 @@ const TIPOS_BITACORA = {
   mantenimiento: { label: 'Mantenimiento', icon: Shield, color: 'text-orange-400 bg-orange-900/20' }
 } as const
 export const BitacoraOperacional: React.FC = () => {
-  const [showNuevaEntrada, setShowNuevaEntrada] = useState(false)
+  const [showNuevaEntrada, setShowNuevaEntrada] = useState(_false)
   const [filtroTipo, setFiltroTipo] = useState<string>('todos')
   const [filtroBusqueda, setFiltroBusqueda] = useState('')
-  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(null)
+  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(_null)
   const [fechaSeleccionada] = useState(new Date())
   const userInfo = useUserInfo()
     useEffect(() => {
@@ -49,14 +49,14 @@ export const BitacoraOperacional: React.FC = () => {
       if (filtroBusqueda && !n.descripcion.toLowerCase().includes(filtroBusqueda.toLowerCase())) return false
       return true
     })
-    const grouped = filtered.reduce((acc, novedad) => {
+    const grouped = filtered.reduce((_acc, novedad) => {
       const fecha = new Date(novedad.fecha).toLocaleDateString('es-UY')
       if (!acc[fecha]) acc[fecha] = []
-      acc[fecha].push(novedad)
+      acc[fecha].push(_novedad)
       return acc
     }, {} as Record<string, Novedad[]>)
     // Ordenar por fecha más reciente
-    return Object.entries(grouped).sort(([a], [b]) => {
+    return Object.entries(_grouped).sort(([a], [b]) => {
       const dateA = new Date(a.split('/').reverse().join('-'))
       const dateB = new Date(b.split('/').reverse().join('-'))
       return dateB.getTime() - dateA.getTime()
@@ -70,9 +70,9 @@ export const BitacoraOperacional: React.FC = () => {
         puntoOperacion: userInfo.office || 'CMO Central',
         tipoNovedad: data.tipo
       })
-      setShowNuevaEntrada(false)
+      setShowNuevaEntrada(_false)
       notificationService.success('Entrada registrada', 'La entrada se ha agregado a la bitácora')
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo registrar la entrada')
     }
   }
@@ -85,7 +85,7 @@ export const BitacoraOperacional: React.FC = () => {
       'Punto Operación': n.puntoOperacion,
       Estado: n.estado
     }))
-    exportToCSV(datos, `bitacora_${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(_datos, `bitacora_${new Date().toISOString().split('T')[0]}`)
     notificationService.success('Exportación completada', 'La bitácora ha sido exportada')
   }
   return (<div className="min-h-screen bg-gray-950">
@@ -104,14 +104,14 @@ export const BitacoraOperacional: React.FC = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={handleExportar}
+                onClick={_handleExportar}
                 className="bg-gray-800 border-gray-700 hover:bg-gray-700"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
               <Button 
-                onClick={() => setShowNuevaEntrada(true)}
+                onClick={() => setShowNuevaEntrada(_true)}
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700"
               >
@@ -157,22 +157,22 @@ export const BitacoraOperacional: React.FC = () => {
                   <Label className="text-xs text-gray-400">Buscar</Label>
                   <Input
                     placeholder="Buscar en bitácora..."
-                    value={filtroBusqueda}
-                    onChange={(e) => setFiltroBusqueda(e.target.value)}
+                    value={_filtroBusqueda}
+                    onChange={(_e) => setFiltroBusqueda(e.target.value)}
                     className="mt-1 bg-gray-800 border-gray-700"
                   />
                 </div>
                 
                 <div>
                   <Label className="text-xs text-gray-400">Tipo de entrada</Label>
-                  <Select value={filtroTipo} onValueChange={setFiltroTipo}>
+                  <Select value={_filtroTipo} onValueChange={s_etFiltroTipo}>
                     <SelectTrigger className="mt-1 bg-gray-800 border-gray-700">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="todos">Todas las entradas</SelectItem>
-                      {Object.entries(TIPOS_BITACORA).map(([key, tipo]) => (
-                        <SelectItem key={key} value={key}>
+                      {Object.entries(_TIPOS_BITACORA).map(([key, tipo]) => (
+                        <SelectItem key={_key} value={_key}>
                           <div className="flex items-center gap-2">
                             <tipo.icon className="h-4 w-4" />
                             {tipo.label}
@@ -193,8 +193,8 @@ export const BitacoraOperacional: React.FC = () => {
               <CardContent>
                 {loading ? (
                   <div className="space-y-3">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="flex justify-between items-center">
+                    {Array.from({ length: 3 }).map((__, i) => (
+                      <div key={_i} className="flex justify-between items-center">
                         <Skeleton variant="text" width="80px" height="12px" />
                         <Skeleton variant="text" width="30px" height="14px" />
                       </div>
@@ -235,8 +235,8 @@ export const BitacoraOperacional: React.FC = () => {
                 {loading ? (
                   // Skeleton Loader
                   <>
-                    {Array.from({ length: 2 }).map((_, dateIndex) => (
-                      <div key={dateIndex} className="space-y-4">
+                    {Array.from({ length: 2 }).map((__, dateIndex) => (
+                      <div key={_dateIndex} className="space-y-4">
                         {/* Skeleton de fecha */}
                         <div className="flex items-center gap-4 sticky top-0 bg-gray-950 py-2 z-10">
                           <div className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-lg">
@@ -248,8 +248,8 @@ export const BitacoraOperacional: React.FC = () => {
                         
                         {/* Skeleton de entradas */}
                         <div className="space-y-3">
-                          {Array.from({ length: 3 }).map((_, entryIndex) => (
-                            <Card key={entryIndex} className="bg-gray-900 border-gray-800">
+                          {Array.from({ length: 3 }).map((__, entryIndex) => (
+                            <Card key={_entryIndex} className="bg-gray-900 border-gray-800">
                               <CardContent className="p-4">
                                 <div className="flex items-start gap-4">
                                   <div className="flex flex-col items-center">
@@ -288,19 +288,19 @@ export const BitacoraOperacional: React.FC = () => {
                       <p className="text-gray-400">No hay entradas en la bitácora</p>
                     </CardContent>
                   </Card>
-                ) : (entradasPorFecha.map(([fecha, entradas]) => (<div key={fecha} className="space-y-4">
+                ) : (entradasPorFecha.map(([fecha, entradas]) => (<div key={_fecha} className="space-y-4">
                       {/* Separador de Fecha */}
                       <div className="flex items-center gap-4 sticky top-0 bg-gray-950 py-2 z-10">
                         <div className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-lg">
                           <Calendar className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm font-medium text-white">{fecha}</span>
+                          <span className="text-sm font-medium text-white">{_fecha}</span>
                         </div>
                         <div className="flex-1 h-px bg-gray-800" />
                       </div>
 
                       {/* Entradas del día */}
                       <div className="space-y-3">
-                        {entradas.map((entrada) => {
+                        {entradas.map((_entrada) => {
                           const tipoConfig = TIPOS_BITACORA[entrada.tipoNovedad as keyof typeof TIPOS_BITACORA] || TIPOS_BITACORA.evento
                           const Icon = tipoConfig.icon
                           return (
@@ -315,7 +315,7 @@ export const BitacoraOperacional: React.FC = () => {
                                   "bg-gray-900 border-gray-800 hover:border-gray-700 transition-all cursor-pointer",
                                   entrada.destacado && "border-l-4 border-l-yellow-500"
                                 )}
-                                onClick={() => setEntradaSeleccionada(entrada)}
+                                onClick={() => setEntradaSeleccionada(_entrada)}
                               >
                                 <CardContent className="p-4">
                                   <div className="flex items-start gap-4">
@@ -388,7 +388,7 @@ export const BitacoraOperacional: React.FC = () => {
       </div>
 
       {/* Modal Nueva Entrada */}
-      <Dialog open={showNuevaEntrada} onOpenChange={setShowNuevaEntrada}>
+      <Dialog open={s_howNuevaEntrada} onOpenChange={s_etShowNuevaEntrada}>
         <DialogContent className="bg-gray-900 border-gray-800 max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-white">Nueva Entrada en Bitácora</DialogTitle>
@@ -397,7 +397,7 @@ export const BitacoraOperacional: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={(e) => {
+          <form onSubmit={(_e) => {
             e.preventDefault()
             const formData = new FormData(e.currentTarget)
             handleCrearEntrada({
@@ -415,8 +415,8 @@ export const BitacoraOperacional: React.FC = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(TIPOS_BITACORA).map(([key, tipo]) => (
-                        <SelectItem key={key} value={key}>
+                      {Object.entries(_TIPOS_BITACORA).map(([key, tipo]) => (
+                        <SelectItem key={_key} value={_key}>
                           <div className="flex items-center gap-2">
                             <tipo.icon className="h-4 w-4" />
                             {tipo.label}
@@ -464,7 +464,7 @@ export const BitacoraOperacional: React.FC = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => setShowNuevaEntrada(false)}
+                onClick={() => setShowNuevaEntrada(_false)}
                 className="bg-gray-800 border-gray-700"
               >
                 Cancelar
@@ -479,7 +479,7 @@ export const BitacoraOperacional: React.FC = () => {
 
       {/* Modal Detalle de Entrada */}
       <AnimatePresence>
-        {entradaSeleccionada && (<Dialog open={!!entradaSeleccionada} onOpenChange={() => setEntradaSeleccionada(null)}>
+        {entradaSeleccionada && (<Dialog open={!!entradaSeleccionada} onOpenChange={() => setEntradaSeleccionada(_null)}>
             <DialogContent className="bg-gray-900 border-gray-800 max-w-3xl">
               <DialogHeader>
                 <DialogTitle className="text-white">Detalle de Entrada</DialogTitle>
@@ -545,13 +545,13 @@ export const BitacoraOperacional: React.FC = () => {
                 )}
 
                 {/* Agregar seguimiento */}
-                {entradaSeleccionada.estado === 'activa' && (<form onSubmit={async (e) => {
+                {entradaSeleccionada.estado === 'activa' && (<form onSubmit={async (_e) => {
                     e.preventDefault()
                     const formData = new FormData(e.currentTarget)
                     const comentario = formData.get('comentario') as string
-                    if (comentario) {
+                    if (_comentario) {
                       await agregarSeguimiento(entradaSeleccionada.id, comentario)
-                      setEntradaSeleccionada(null)
+                      setEntradaSeleccionada(_null)
                       notificationService.success('Seguimiento agregado', 'El comentario ha sido registrado')
                     }
                   }}>

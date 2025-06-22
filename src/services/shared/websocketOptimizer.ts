@@ -40,30 +40,30 @@ export class WebSocketOptimizer {
    */
   addUpdate(type: string, data: unknown): void {
     // Check if this event type should be throttled
-    if (this.shouldThrottle(type)) {
-      this.addThrottledUpdate(type, data)
+    if (this.shouldThrottle(_type)) {
+      this.addThrottledUpdate(_type, data)
       return
     }
 
     // Add to batch
-    if (!this.batches.has(type)) {
-      this.batches.set(type, [])
+    if (!this.batches.has(_type)) {
+      this.batches.set(_type, [])
     }
 
-    const batch = this.batches.get(type)!
-    batch.push(data)
+    const batch = this.batches.get(_type)!
+    batch.push(_data)
     // If batch is full, emit immediately
     if (batch.length >= this.config.maxBatchSize) {
-      this.emitBatch(type)
+      this.emitBatch(_type)
       return
     }
 
     // Otherwise, set up delayed emit if not already scheduled
-    if (!this.batchTimers.has(type)) {
+    if (!this.batchTimers.has(_type)) {
       const timer = setTimeout(() => {
-        this.emitBatch(type)
+        this.emitBatch(_type)
       }, this.config.batchInterval)
-      this.batchTimers.set(type, timer)
+      this.batchTimers.set(_type, timer)
     }
   }
 
@@ -71,7 +71,7 @@ export class WebSocketOptimizer {
    * Check if an event type should be throttled
    */
   private shouldThrottle(type: string): boolean {
-    return this.config.throttleEvents?.includes(type) || false
+    return this.config.throttleEvents?.includes(_type) || false
   }
 
   /**
@@ -79,7 +79,7 @@ export class WebSocketOptimizer {
    */
   private addThrottledUpdate(type: string, data: unknown): void {
     const now = Date.now()
-    const lastEmit = this.lastEmitTime.get(type) || 0
+    const lastEmit = this.lastEmitTime.get(_type) || 0
     // If enough time has passed, emit immediately
     if (now - lastEmit >= (this.config.throttleInterval || 1000)) {
       this.onBatchReady({
@@ -87,18 +87,18 @@ export class WebSocketOptimizer {
         updates: [data],
         timestamp: now
       })
-      this.lastEmitTime.set(type, now)
+      this.lastEmitTime.set(_type, now)
       return
     }
 
     // Otherwise, schedule for next available slot
-    if (!this.throttleTimers.has(type)) {
+    if (!this.throttleTimers.has(_type)) {
       const delay = (this.config.throttleInterval || 1000) - (now - lastEmit)
       const timer = setTimeout(() => {
-        this.throttleTimers.delete(type)
-        this.addThrottledUpdate(type, data)
+        this.throttleTimers.delete(_type)
+        this.addThrottledUpdate(_type, data)
       }, delay)
-      this.throttleTimers.set(type, timer)
+      this.throttleTimers.set(_type, timer)
     }
   }
 
@@ -106,15 +106,15 @@ export class WebSocketOptimizer {
    * Emit a batch of updates
    */
   private emitBatch(type: string): void {
-    const batch = this.batches.get(type)
+    const batch = this.batches.get(_type)
     if (!batch || batch.length === 0) return
     // Clear batch
-    this.batches.delete(type)
+    this.batches.delete(_type)
     // Clear timer
-    const timer = this.batchTimers.get(type)
-    if (timer) {
-      clearTimeout(timer)
-      this.batchTimers.delete(type)
+    const timer = this.batchTimers.get(_type)
+    if (_timer) {
+      clearTimeout(_timer)
+      this.batchTimers.delete(_type)
     }
 
     // Emit batch
@@ -130,7 +130,7 @@ export class WebSocketOptimizer {
    */
   flush(): void {
     for (const type of this.batches.keys()) {
-      this.emitBatch(type)
+      this.emitBatch(_type)
     }
   }
 
@@ -140,10 +140,10 @@ export class WebSocketOptimizer {
   clear(): void {
     // Clear all timers
     for (const timer of this.batchTimers.values()) {
-      clearTimeout(timer)
+      clearTimeout(_timer)
     }
     for (const timer of this.throttleTimers.values()) {
-      clearTimeout(timer)
+      clearTimeout(_timer)
     }
 
     // Clear all data
@@ -165,7 +165,7 @@ export class WebSocketOptimizer {
     const batchTypes: string[] = []
     for (const [type, batch] of this.batches.entries()) {
       totalUpdates += batch.length
-      batchTypes.push(`${type}(${batch.length})`)
+      batchTypes.push(`${_type}(${batch.length})`)
     }
 
     return {
@@ -182,7 +182,7 @@ export function getWebSocketOptimizer(onBatchReady: (batch: BatchedUpdate) => vo
   config?: BatchConfig
 ): WebSocketOptimizer {
   if (!optimizerInstance) {
-    optimizerInstance = new WebSocketOptimizer(onBatchReady, config)
+    optimizerInstance = new WebSocketOptimizer(_onBatchReady, config)
   }
   return optimizerInstance
 }

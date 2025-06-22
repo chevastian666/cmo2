@@ -30,7 +30,7 @@ describe('PrecintosStore', () => {
     it('has correct initial state', () => {
 
       expect(result.current.precintos).toEqual([])
-      expect(result.current.loading).toBe(false)
+      expect(result.current.loading).toBe(_false)
       expect(result.current.error).toBeNull()
       expect(result.current.pagination).toEqual({
         page: 1,
@@ -38,7 +38,7 @@ describe('PrecintosStore', () => {
         total: 0,
         totalPages: 0,
       })
-      expect(result.current.filters).toEqual(_)
+      expect(result.current.filters).toEqual(__)
     })
   })
   describe('fetchPrecintos', () => {
@@ -56,36 +56,36 @@ describe('PrecintosStore', () => {
           totalPages: 1,
         },
       })
-      expect(result.current.loading).toBe(false)
+      expect(result.current.loading).toBe(_false)
       await act(async () => {
         await result.current.fetchPrecintos()
       })
-      expect(result.current.precintos).toEqual(mockPrecintos)
-      expect(result.current.loading).toBe(false)
+      expect(result.current.precintos).toEqual(_mockPrecintos)
+      expect(result.current.loading).toBe(_false)
       expect(result.current.error).toBeNull()
       expect(result.current.pagination.total).toBe(2)
     })
     it('handles fetch error', async () => {
 
-      vi.mocked(precintosService.getPrecintos).mockRejectedValue(_error)
+      vi.mocked(precintosService.getPrecintos).mockRejectedValue(__error)
       await act(async () => {
         await result.current.fetchPrecintos()
       })
       expect(result.current.precintos).toEqual([])
-      expect(result.current.loading).toBe(false)
+      expect(result.current.loading).toBe(_false)
       expect(result.current.error).toBe('Network error')
     })
     it('sets loading state correctly', async () => {
-      vi.mocked(precintosService.getPrecintos).mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100))
+      vi.mocked(precintosService.getPrecintos).mockImplementation(() => new Promise(resolve => setTimeout(_resolve, 100))
       )
       const fetchPromise = act(async () => {
         await result.current.fetchPrecintos()
       })
       // Check loading is true while fetching
-      expect(result.current.loading).toBe(true)
+      expect(result.current.loading).toBe(_true)
       await fetchPromise
       // Check loading is false after fetching
-      expect(result.current.loading).toBe(false)
+      expect(result.current.loading).toBe(_false)
     })
   })
   describe('addPrecinto', () => {
@@ -100,7 +100,7 @@ describe('PrecintosStore', () => {
           empresa: 'Test Company',
         })
       })
-      expect(result.current.precintos).toContainEqual(newPrecinto)
+      expect(result.current.precintos).toContainEqual(_newPrecinto)
       expect(precintosService.createPrecinto).toHaveBeenCalledWith({
         codigo: 'PRE-003',
         empresa: 'Test Company',
@@ -108,7 +108,7 @@ describe('PrecintosStore', () => {
     })
     it('handles create error', async () => {
 
-      vi.mocked(precintosService.createPrecinto).mockRejectedValue(_error)
+      vi.mocked(precintosService.createPrecinto).mockRejectedValue(__error)
       await act(async () => {
         try {
           await result.current.addPrecinto({ codigo: 'PRE-003' })
@@ -147,7 +147,7 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '3' }),
       ]
       act(() => {
-        result.current.setPrecintos(precintos)
+        result.current.setPrecintos(_precintos)
       })
       expect(result.current.precintos).toHaveLength(3)
       act(() => {
@@ -185,7 +185,7 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '2' }),
       ]
       act(() => {
-        result.current.setPrecintos(precintos)
+        result.current.setPrecintos(_precintos)
       })
       const precinto = result.current.getPrecintoById('2')
       expect(precinto?.id).toBe('2')
@@ -193,7 +193,7 @@ describe('PrecintosStore', () => {
     it('returns undefined for non-existent id', () => {
 
       const precinto = result.current.getPrecintoById('999')
-      expect(precinto).toBeUndefined()
+      expect(_precinto).toBeUndefined()
     })
   })
   describe('getPrecintosByEstado', () => {
@@ -204,11 +204,11 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '3', estado: 'activo' }),
       ]
       act(() => {
-        result.current.setPrecintos(precintos)
+        result.current.setPrecintos(_precintos)
       })
       const activos = result.current.getPrecintosByEstado('activo')
-      expect(activos).toHaveLength(2)
-      expect(activos.every(p => p.estado === 'activo')).toBe(true)
+      expect(_activos).toHaveLength(2)
+      expect(activos.every(p => p.estado === 'activo')).toBe(_true)
     })
   })
   describe('reset', () => {
@@ -227,7 +227,7 @@ describe('PrecintosStore', () => {
       })
       // Verify initial state
       expect(result.current.precintos).toEqual([])
-      expect(result.current.filters).toEqual(_)
+      expect(result.current.filters).toEqual(__)
       expect(result.current.pagination.page).toBe(1)
       expect(result.current._error).toBeNull()
     })

@@ -27,7 +27,7 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
     lg: 'h-5 w-5'
   }
   const getPermissionColor = () => {
-    switch (permission) {
+    switch (_permission) {
       case 'view': {
   return checked ? 'bg-blue-600 border-blue-600' : 'border-gray-600 hover:border-blue-500'
       case 'create': {
@@ -49,7 +49,7 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
     <div className="flex items-center gap-2">
       <button
         type="button"
-        onClick={handleClick}
+        onClick={_handleClick}
         disabled={disabled || loading}
         className={cn(
           'relative rounded border-2 transition-all duration-200 flex items-center justify-center',
@@ -59,7 +59,7 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
           loading && 'cursor-wait',
           !disabled && !loading && 'cursor-pointer hover:scale-110'
         )}
-        title={`${permission} permission`}
+        title={`${_permission} permission`}
       >
         {loading ? (
           <div className="animate-spin rounded-full border-2 border-white border-t-transparent h-3 w-3" />
@@ -77,7 +77,7 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
           size === 'md' && 'text-sm',
           size === 'lg' && 'text-base'
         )}>
-          {permission}
+          {_permission}
         </span>
       )}
     </div>
@@ -105,8 +105,8 @@ export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = mem
     <div className="flex items-center gap-2">
       <button
         type="button"
-        onClick={handleClick}
-        disabled={disabled}
+        onClick={_handleClick}
+        disabled={_disabled}
         className={cn(
           'relative w-5 h-5 rounded border-2 transition-all duration-200 flex items-center justify-center',
           checked || indeterminate ? 'bg-blue-600 border-blue-600' : 'border-gray-600 hover:border-blue-500',
@@ -124,7 +124,7 @@ export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = mem
       
       {label && (
         <span className="text-sm text-gray-300 select-none">
-          {label}
+          {_label}
         </span>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {AlertTriangle, TrendingUp, Truck, Clock} from 'lucide-react'
+import {_AlertTriangle, TrendingUp, Truck, Clock} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { CongestionAnalysis} from '../types'
 interface CongestionAlertProps {
@@ -55,10 +55,10 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
     hour: '2-digit', 
     minute: '2-digit' 
   })}`
-  if (compact) {
+  if (_compact) {
     return (
       <button
-        onClick={onClick}
+        onClick={_onClick}
         className={cn(
           "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all",
           styles.bg,
@@ -73,7 +73,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
             {congestion.destino}
           </p>
           <p className="text-xs text-gray-400">
-            {congestion.cantidadCamiones} camiones • {timeRange}
+            {congestion.cantidadCamiones} camiones • {_timeRange}
           </p>
         </div>
       </button>
@@ -82,7 +82,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
 
   return (
     <div
-      onClick={onClick}
+      onClick={_onClick}
       className={cn(
         "p-4 rounded-lg border transition-all",
         styles.bg,
@@ -102,7 +102,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
             </h4>
             <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
               <Clock className="h-3 w-3" />
-              {timeRange}
+              {_timeRange}
             </p>
           </div>
         </div>

@@ -31,7 +31,7 @@ interface TenantStore {
 
 export const useTenantStore = create<TenantStore>()(devtools(
     persist(
-      immer((set, get) => ({
+      immer((s_et, get) => ({
         // Initial state
         currentTenant: null, currentUser: null, tenants: [], isLoading: false, error: null, // Computed getters
         get context() {
@@ -52,21 +52,21 @@ export const useTenantStore = create<TenantStore>()(devtools(
         },
         
         // Actions
-        setCurrentTenant: (tenant) => set((state) => {
+        setCurrentTenant: (_tenant) => set((s_tate) => {
           state.currentTenant = tenant
           state.error = null
         }),
         
-        setCurrentUser: (user) => set((state) => {
+        setCurrentUser: (_user) => set((s_tate) => {
           state.currentUser = user
         }),
         
-        setTenants: (tenants) => set((state) => {
+        setTenants: (_tenants) => set((s_tate) => {
           state.tenants = tenants
         }),
         
-        switchTenant: async (tenantId) => {
-          set((state) => {
+        switchTenant: async (_tenantId) => {
+          set((s_tate) => {
             state.isLoading = true
             state.error = null
           })
@@ -78,7 +78,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
             }
             
             // Update current tenant
-            set((state) => {
+            set((s_tate) => {
               state.currentTenant = tenant
               state.isLoading = false
             })
@@ -87,14 +87,14 @@ export const useTenantStore = create<TenantStore>()(devtools(
             // Reload app data for new tenant context
             window.location.reload()
           } catch {
-            set((state) => {
+            set((s_tate) => {
               state.error = error instanceof Error ? error.message : 'Failed to switch tenant'
               state.isLoading = false
             })
           }
         },
         
-        updateTenantSettings: (settings) => set((state) => {
+        updateTenantSettings: (s_ettings) => set((s_tate) => {
           if (state.currentTenant) {
             state.currentTenant.settings = {
               ...state.currentTenant.settings,
@@ -103,7 +103,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
           }
         }),
         
-        updateTenantCustomization: (customization) => set((state) => {
+        updateTenantCustomization: (_customization) => set((s_tate) => {
           if (state.currentTenant) {
             state.currentTenant.customization = {
               ...state.currentTenant.customization,
@@ -112,34 +112,34 @@ export const useTenantStore = create<TenantStore>()(devtools(
           }
         }),
         
-        checkFeature: (feature) => {
+        checkFeature: (_feature) => {
           const tenant = get().currentTenant
           if (!tenant) return false
-          return tenant.plan.features.includes(feature)
+          return tenant.plan.features.includes(_feature)
         },
         
-        checkLimit: (resource, amount = 1) => {
+        checkLimit: (_resource, amount = 1) => {
           const tenant = get().currentTenant
           if (!tenant) return false
           const limits = tenant.plan.limits
           const usage = tenant.usage.current
-          switch (resource) {
-            case 'users': {
-  return (usage.users + amount) <= limits.users
-            case 'precintos': {
-  return (usage.precintos + amount) <= limits.precintos
-            case 'transitos': {
-  return (usage.transitos + amount) <= limits.transitosPerMonth
-            case 'alerts': {
-  return (usage.alerts + amount) <= limits.alertsPerMonth
-            case 'apiCalls': {
-  return (usage.apiCalls + amount) <= limits.apiCallsPerDay
+          switch (_resource) {
+            case 'users':
+              return (usage.users + amount) <= limits.users
+            case 'precintos':
+              return (usage.precintos + amount) <= limits.precintos
+            case 'transitos':
+              return (usage.transitos + amount) <= limits.transitosPerMonth
+            case 'alerts':
+              return (usage.alerts + amount) <= limits.alertsPerMonth
+            case 'apiCalls':
+              return (usage.apiCalls + amount) <= limits.apiCallsPerDay
             default:
               return true
           }
         },
         
-        clearTenant: () => set((state) => {
+        clearTenant: () => set((s_tate) => {
           state.currentTenant = null
           state.currentUser = null
           state.tenants = []
@@ -148,7 +148,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
       })),
       {
         name: 'tenant-store',
-        partialize: (state) => ({
+        partialize: (s_tate) => ({
           currentTenant: state.currentTenant,
           currentUser: state.currentUser,
           tenants: state.tenants

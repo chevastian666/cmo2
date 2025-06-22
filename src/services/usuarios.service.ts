@@ -45,17 +45,17 @@ const mockUsuarios: Usuario[] = [
 export const usuariosService = {
   getAll: async (): Promise<Usuario[]> => {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(_resolve, 500))
     return mockUsuarios
   },
 
   getActivos: async (): Promise<Usuario[]> => {
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(_resolve, 500))
     return mockUsuarios.filter(u => u.activo)
   },
 
   getById: async (id: string): Promise<Usuario | null> => {
-    await new Promise(resolve => setTimeout(resolve, 300))
+    await new Promise(resolve => setTimeout(_resolve, 300))
     return mockUsuarios.find(u => u.id === id) || null
   },
 

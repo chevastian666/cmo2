@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Bell, X, Check, Clock, AlertTriangle } from 'lucide-react'
-import { useNotificationStore } from '@/store/notificationStore'
-import { NotificationItem } from './NotificationItem'
-import { NotificationFilters } from './NotificationFilters'
-import { NotificationGroupItem } from './NotificationGroupItem'
-import { QuickActions } from './QuickActions'
-import type { NotificationFilter, NotificationType, NotificationPriority } from '@/types/notifications'
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, X, Check, Clock, AlertTriangle } from 'lucide-react';
+import { useNotificationStore } from '@/store/notificationStore';
+import { NotificationItem } from './NotificationItem';
+import { NotificationFilters } from './NotificationFilters';
+import { NotificationGroupItem } from './NotificationGroupItem';
+import { QuickActions } from './QuickActions';
+import type { NotificationFilter, NotificationType, NotificationPriority } from '@/types/notifications';
+
 interface NotificationCenterProps {}
 
 const NotificationCenter: React.FC<NotificationCenterProps> = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [filter, setFilter] = useState<NotificationFilter>({})
-  const [groupByType, setGroupByType] = useState(true)
+  const [isOpen, setIsOpen] = useState(_false);
+  const [filter, setFilter] = useState<NotificationFilter>({});
+  const [groupByType, setGroupByType] = useState(_true);
+  
   const {
     notifications,
     groups,
@@ -24,35 +26,38 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
     dismissNotification,
     getNotificationsByFilter,
     getGroupedNotifications
-  } = useNotificationStore()
+  } = useNotificationStore();
+
   const filteredNotifications = groupByType 
-    ? getGroupedNotifications(filter)
-    : getNotificationsByFilter(filter)
+    ? getGroupedNotifications(_filter)
+    : getNotificationsByFilter(_filter);
+
   // Auto-close after marking all as read
   useEffect(() => {
     if (isOpen && unreadCount === 0) {
-      const timer = setTimeout(() => setIsOpen(false), 2000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setIsOpen(_false), 2000);
+      return () => clearTimeout(_timer);
     }
-  }, [])
+  }, [unreadCount, isOpen]);
+
   const handleFilterChange = (newFilter: NotificationFilter) => {
-    setFilter(newFilter)
-  }
+    setFilter(_newFilter);
+  };
+
   const handleQuickAction = (action: string) => {
-    switch (action) {
-      case 'markAllRead': {
-  markAllAsRead()
-        break
+    switch (_action) {
+      case 'markAllRead':
+        markAllAsRead();
+        break;
+      case 'clearAll':
+        notifications.forEach(n => dismissNotification(n.id));
+        break;
+      case 'toggleGroup':
+        setGroupByType(!groupByType);
+        break;
     }
-    case 'clearAll':
-        notifications.forEach(n => dismissNotification(n.id))
-        break
-    }
-    case 'toggleGroup':
-        setGroupByType(!groupByType)
-        break
-    }
-  }
+  };
+
   return (
     <>
       {/* Notification Button */}
@@ -79,7 +84,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsOpen(_false)}
             />
 
             {/* Panel */}
@@ -95,7 +100,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-white">Notificaciones</h2>
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setIsOpen(_false)}
                     className="p-1 hover:bg-gray-700 rounded transition-colors"
                   >
                     <X className="h-5 w-5 text-gray-400" />
@@ -103,8 +108,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                 </div>
 
                 <QuickActions 
-                  onAction={handleQuickAction}
-                  groupByType={groupByType}
+                  onAction={_handleQuickAction}
+                  groupByType={_groupByType}
                   hasNotifications={notifications.length > 0}
                 />
               </div>
@@ -112,8 +117,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
               {/* Filters */}
               <div className="p-4 border-b border-gray-700">
                 <NotificationFilters 
-                  filter={filter}
-                  onChange={handleFilterChange}
+                  filter={_filter}
+                  onChange={_handleFilterChange}
                 />
               </div>
 
@@ -131,11 +136,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       groups.map(group => (
                         <NotificationGroupItem
                           key={group.id}
-                          group={group}
-                          onAcknowledge={acknowledgeNotification}
-                          onSnooze={snoozeNotification}
-                          onDismiss={dismissNotification}
-                          onMarkAsRead={markAsRead}
+                          group={_group}
+                          onAcknowledge={_acknowledgeNotification}
+                          onSnooze={s_noozeNotification}
+                          onDismiss={_dismissNotification}
+                          onMarkAsRead={_markAsRead}
                         />
                       ))
                     ) : (
@@ -143,11 +148,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       filteredNotifications.map(notification => (
                         <NotificationItem
                           key={notification.id}
-                          notification={notification}
-                          onAcknowledge={acknowledgeNotification}
-                          onSnooze={snoozeNotification}
-                          onDismiss={dismissNotification}
-                          onMarkAsRead={markAsRead}
+                          notification={_notification}
+                          onAcknowledge={_acknowledgeNotification}
+                          onSnooze={s_noozeNotification}
+                          onDismiss={_dismissNotification}
+                          onMarkAsRead={_markAsRead}
                         />
                       ))
                     )}
@@ -159,6 +164,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
         )}
       </AnimatePresence>
     </>
-  )
-}
-export default NotificationCenter
+  );
+};
+
+export default NotificationCenter;

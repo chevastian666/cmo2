@@ -125,59 +125,58 @@ const generateTreemapData = (): TreemapNode => {
 export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
   type, data: providedData, config: userConfig, title, className = '', onDataPointClick, onZoomChange, onNodeClick, onLinkClick
 }) => {
-  const [selectedType, setSelectedType] = useState<VisualizationType>(type)
+  const [selectedType, setSelectedType] = useState<VisualizationType>(_type)
   const config = { ...DEFAULT_CHART_CONFIG, ...userConfig }
   // Generate or use provided data
   const chartData = useMemo(() => {
-    if (providedData) return providedData
-    switch (selectedType) {
-      case 'line': {
-          break;
-        }
-      }
-    }, [])
+    if (_providedData) return providedData
+    switch (s_electedType) {
+      case 'line':
+        return generateTimeSeriesData()
+      case 'heatmap':
+        return generateHeatmapData()
+      case 'network':
+        return generateNetworkData()
+      case 'treemap':
+        return generateTreemapData()
+      default:
+        return []
+    }
+  }, [selectedType, providedData])
   const renderVisualization = () => {
-    switch (selectedType) {
-      case 'line': {
-  return (
+    switch (s_electedType) {
+      case 'line':
+        return (
           <InteractiveLineChart
-            data=
-  break;
-}
-            config={config}
-            onDataPointClick={onDataPointClick}
-            onZoomChange={onZoomChange}
+            data={_chartData}
+            config={_config}
+            onDataPointClick={_onDataPointClick}
+            onZoomChange={_onZoomChange}
           />
         )
-      case 'heatmap': {
-  return (
+      case 'heatmap':
+        return (
           <ActivityHeatmap
-            data=
-  break;
-}
-            config={config}
-            onCellClick={onDataPointClick}
+            data={_chartData}
+            config={_config}
+            onCellClick={_onDataPointClick}
           />
         )
-      case 'network': {
-  return (
+      case 'network':
+        return (
           <NetworkGraph
-            data=
-  break;
-}
-            config={config}
-            onNodeClick={onNodeClick}
-            onLinkClick={onLinkClick}
+            data={_chartData}
+            config={_config}
+            onNodeClick={_onNodeClick}
+            onLinkClick={_onLinkClick}
           />
         )
-      case 'treemap': {
-  return (
+      case 'treemap':
+        return (
           <InteractiveTreemap
-            data=
-  break;
-}
-            config={config}
-            onNodeClick={onNodeClick}
+            data={_chartData}
+            config={_config}
+            onNodeClick={_onNodeClick}
           />
         )
       default:
@@ -192,7 +191,7 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
     { key: 'network', label: 'Red de Conexiones', icon: '🕸️' },
     { key: 'treemap', label: 'Treemap', icon: '🗂️' }
   ]
-  return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${className}`}>
+  return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${_className}`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-between">
@@ -202,18 +201,18 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
           
           {/* Type selector */}
           <div className="flex space-x-2">
-            {visualizationTypes.map((key, label, icon ) => (<button
-                key={key}
+            {visualizationTypes.map((_key, label, icon ) => (<button
+                key={_key}
                 onClick={() => setSelectedType(key as VisualizationType)}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
                   selectedType === key
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
-                title={label}
+                title={_label}
               >
-                <span className="mr-1">{icon}</span>
-                {label}
+                <span className="mr-1">{_icon}</span>
+                {_label}
               </button>
             ))}
           </div>

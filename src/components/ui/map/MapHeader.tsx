@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react'
+import {_Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { DESPACHANTES} from '../../../constants/locations'
 export interface MapFilters {
@@ -36,16 +36,16 @@ const MapHeader: React.FC<MapHeaderProps> = ({
   availableDespachantes = DESPACHANTES.slice(0, 6),
   className
 }) => {
-  const [showFilters, setShowFilters] = useState(false)
-  const [filters, setFilters] = useState<MapFilters>(defaultFilters)
+  const [showFilters, setShowFilters] = useState(_false)
+  const [filters, setFilters] = useState<MapFilters>(_defaultFilters)
   const handleFilterChange = (key: keyof MapFilters, value: unknown) => {
     const newFilters = { ...filters, [key]: value }
-    setFilters(newFilters)
-    onFilterChange?.(newFilters)
+    setFilters(_newFilters)
+    onFilterChange?.(_newFilters)
   }
   const handleClearFilters = () => {
-    setFilters(defaultFilters)
-    onFilterChange?.(defaultFilters)
+    setFilters(_defaultFilters)
+    onFilterChange?.(_defaultFilters)
   }
   const hasActiveFilters = filters.searchTerm || filters.selectedDespachante || !filters.showInactive
   return (
@@ -56,8 +56,8 @@ const MapHeader: React.FC<MapHeaderProps> = ({
           <div className="flex items-center gap-3">
             <Map className="h-6 w-6 text-blue-500" />
             <div>
-              <h2 className="text-lg font-semibold text-white">{title}</h2>
-              <p className="text-sm text-gray-400">{subtitle}</p>
+              <h2 className="text-lg font-semibold text-white">{_title}</h2>
+              <p className="text-sm text-gray-400">{s_ubtitle}</p>
             </div>
           </div>
 
@@ -68,7 +68,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
               <input
                 type="text"
                 value={filters.searchTerm}
-                onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
+                onChange={(_e) => handleFilterChange('searchTerm', e.target.value)}
                 placeholder="Buscar matrícula..."
                 className="pl-9 pr-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
               />
@@ -108,12 +108,12 @@ const MapHeader: React.FC<MapHeaderProps> = ({
                 </label>
                 <select
                   value={filters.selectedDespachante}
-                  onChange={(e) => handleFilterChange('selectedDespachante', e.target.value)}
+                  onChange={(_e) => handleFilterChange('selectedDespachante', e.target.value)}
                   className="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Todos los despachantes</option>
                   {availableDespachantes.map(desp => (
-                    <option key={desp} value={desp}>{desp}</option>
+                    <option key={_desp} value={_desp}>{_desp}</option>
                   ))}
                 </select>
               </div>
@@ -124,7 +124,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
                   <input
                     type="checkbox"
                     checked={filters.showRoutes}
-                    onChange={(e) => handleFilterChange('showRoutes', e.target.checked)}
+                    onChange={(_e) => handleFilterChange('showRoutes', e.target.checked)}
                     className="w-4 h-4 text-blue-600 bg-gray-900 border-gray-600 rounded focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-300">Mostrar rutas proyectadas</span>
@@ -134,7 +134,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
                   <input
                     type="checkbox"
                     checked={filters.showAlerts}
-                    onChange={(e) => handleFilterChange('showAlerts', e.target.checked)}
+                    onChange={(_e) => handleFilterChange('showAlerts', e.target.checked)}
                     className="w-4 h-4 text-blue-600 bg-gray-900 border-gray-600 rounded focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-300">Mostrar alertas</span>
@@ -146,7 +146,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
                   <input
                     type="checkbox"
                     checked={filters.showInactive}
-                    onChange={(e) => handleFilterChange('showInactive', e.target.checked)}
+                    onChange={(_e) => handleFilterChange('showInactive', e.target.checked)}
                     className="w-4 h-4 text-blue-600 bg-gray-900 border-gray-600 rounded focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-300">Mostrar inactivos</span>
@@ -154,7 +154,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 
                 {hasActiveFilters && (
                   <button
-                    onClick={handleClearFilters}
+                    onClick={_handleClearFilters}
                     className="text-xs text-gray-400 hover:text-white flex items-center gap-1"
                   >
                     <X className="h-3 w-3" />

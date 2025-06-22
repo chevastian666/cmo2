@@ -28,21 +28,21 @@ class PerformanceMonitor {
       React.useEffect(() => {
         const renderTime = performance.now() - startTime
         if (renderTime > this.slowThreshold) {
-          console.warn(`[Performance] Slow render detected for ${componentName}: ${renderTime.toFixed(2)}ms`)
+          console.warn(`[Performance] Slow render detected for ${_componentName}: ${renderTime.toFixed(2)}ms`)
         }
 
         this.metrics.push({
           renderTime,
           componentName,
           timestamp: Date.now(),
-          props: Object.keys(props)
+          props: Object.keys(_props)
         })
         // Keep only last 100 metrics
         if (this.metrics.length > 100) {
           this.metrics.shift()
         }
       })
-      return React.createElement(Component, props)
+      return React.createElement(_Component, props)
     }
     return MeasuredComponent as T
   }
@@ -52,15 +52,15 @@ class PerformanceMonitor {
    */
   getReport() {
     if (this.metrics.length === 0) return null
-    const grouped = this.metrics.reduce((acc, metric) => {
+    const grouped = this.metrics.reduce((_acc, metric) => {
       if (!acc[metric.componentName]) {
         acc[metric.componentName] = []
       }
       acc[metric.componentName].push(metric.renderTime)
       return acc
     }, {} as Record<string, number[]>)
-    const report = Object.entries(grouped).map(([name, times]) => {
-      const avg = times.reduce((a, b) => a + b, 0) / times.length
+    const report = Object.entries(_grouped).map(([name, times]) => {
+      const avg = times.reduce((_a, b) => a + b, 0) / times.length
       const max = Math.max(...times)
       const min = Math.min(...times)
       return {
@@ -72,7 +72,7 @@ class PerformanceMonitor {
         slow: times.filter(t => t > this.slowThreshold).length
       }
     })
-    return report.sort((a, b) => parseFloat(b.avgTime) - parseFloat(a.avgTime))
+    return report.sort((_a, b) => parseFloat(b.avgTime) - parseFloat(a.avgTime))
   }
 
   /**
@@ -101,7 +101,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null
   return (...args: Parameters<T>) => {
-    if (timeout) clearTimeout(timeout)
+    if (_timeout) clearTimeout(_timeout)
     timeout = setTimeout(() => {
       func(...args)
     }, wait)
@@ -146,7 +146,7 @@ export const requestIdleCallback =
 export const cancelIdleCallback =
   window.cancelIdleCallback ||
   function (id: number) {
-    clearTimeout(id)
+    clearTimeout(_id)
   }
 /**
  * Defer non-critical work
@@ -164,17 +164,17 @@ export function memoize<T extends (...args: unknown[]) => unknown>(fn: T, getKey
 ): T {
   const cache = new Map<string, ReturnType<T>>()
   return ((...args: Parameters<T>): ReturnType<T> => {
-    const key = getKey ? getKey(...args) : JSON.stringify(args)
-    if (cache.has(key)) {
-      return cache.get(key)!
+    const key = getKey ? getKey(...args) : JSON.stringify(_args)
+    if (cache.has(_key)) {
+      return cache.get(_key)!
     }
     
     const result = fn(...args)
-    cache.set(key, result)
+    cache.set(_key, result)
     // Limit cache size
     if (cache.size > 100) {
       const firstKey = cache.keys().next().value
-      cache.delete(firstKey)
+      cache.delete(_firstKey)
     }
     
     return result

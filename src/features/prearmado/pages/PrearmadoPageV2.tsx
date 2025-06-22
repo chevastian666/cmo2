@@ -9,7 +9,7 @@ import { useNavigate} from 'react-router-dom'
 import { Package, Search, AlertCircle, CheckCircle, MapPin, Truck, User, FileText, Phone, Calendar, ChevronRight, ExternalLink, Copy, Hash, Shield, Building, Route, CreditCard} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
 import { Label} from '@/components/ui/label'
 import { 
@@ -47,10 +47,10 @@ interface TransitInfo {
 
 export const PrearmadoPageV2: React.FC = () => {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [searchPerformed, setSearchPerformed] = useState(false)
-  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(null)
-  const [copiedField, setCopiedField] = useState<string | null>(null)
+  const [loading, setLoading] = useState(_false)
+  const [searchPerformed, setSearchPerformed] = useState(_false)
+  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(_null)
+  const [copiedField, setCopiedField] = useState<string | null>(_null)
   const [formData, setFormData] = useState<PrearmadoFormData>({
     viajeId: '',
     movimientoId: ''
@@ -68,22 +68,22 @@ export const PrearmadoPageV2: React.FC = () => {
       return
     }
 
-    setLoading(true)
-    setSearchPerformed(true)
+    setLoading(_true)
+    setSearchPerformed(_true)
     try {
       const result = await prearmadoService.searchTransit(formData.viajeId, formData.movimientoId)
-      if (result) {
-        setTransitInfo(result)
+      if (_result) {
+        setTransitInfo(_result)
         notificationService.success('Tránsito encontrado', `Viaje ${formData.viajeId} - Movimiento ${formData.movimientoId}`)
       } else {
-        setTransitInfo(null)
+        setTransitInfo(_null)
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados')
       }
     } catch {
       notificationService.error('Error', 'Error al buscar la información del tránsito')
-      setTransitInfo(null)
+      setTransitInfo(_null)
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handlePrearm = () => {
@@ -107,10 +107,10 @@ export const PrearmadoPageV2: React.FC = () => {
   }
   const handleCopy = async (value: string, field: string) => {
     try {
-      await navigator.clipboard.writeText(value)
-      setCopiedField(field)
+      await navigator.clipboard.writeText(_value)
+      setCopiedField(_field)
       notificationService.success('Copiado', 'Texto copiado al portapapeles')
-      setTimeout(() => setCopiedField(null), 2000)
+      setTimeout(() => setCopiedField(_null), 2000)
     } catch {
       notificationService.error('Error', 'No se pudo copiar el texto')
     }
@@ -157,30 +157,30 @@ export const PrearmadoPageV2: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSearch} className="space-y-4">
+              <form onSubmit={_handleSearch} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+                  <motion.div variants={_fadeInUp} initial="hidden" animate="visible">
                     <Label htmlFor="viajeId">ID de Viaje</Label>
                     <Input
                       id="viajeId"
                       type="text"
                       value={formData.viajeId}
-                      onChange={(e) => handleInputChange('viajeId', e.target.value)}
+                      onChange={(_e) => handleInputChange('viajeId', e.target.value)}
                       placeholder="Ej: 7592862"
-                      disabled={loading}
+                      disabled={_loading}
                       className="mt-1"
                     />
                   </motion.div>
                   
-                  <motion.div variants={fadeInUp} initial="hidden" animate="visible" custom={1}>
+                  <motion.div variants={_fadeInUp} initial="hidden" animate="visible" custom={1}>
                     <Label htmlFor="movimientoId">ID de Movimiento</Label>
                     <Input
                       id="movimientoId"
                       type="text"
                       value={formData.movimientoId}
-                      onChange={(e) => handleInputChange('movimientoId', e.target.value)}
+                      onChange={(_e) => handleInputChange('movimientoId', e.target.value)}
                       placeholder="Ej: 2"
-                      disabled={loading}
+                      disabled={_loading}
                       className="mt-1"
                     />
                   </motion.div>
@@ -188,7 +188,7 @@ export const PrearmadoPageV2: React.FC = () => {
                 
                 <AnimatedButton
                   type="submit"
-                  disabled={loading}
+                  disabled={_loading}
                   className="w-full"
                   size="lg"
                   whileHover={{ scale: 1.02 }}
@@ -216,13 +216,13 @@ export const PrearmadoPageV2: React.FC = () => {
           {searchPerformed && !loading && (<AnimatedSection delay={0.2}>
               {transitInfo ? (
                 <motion.div
-                  variants={staggerContainer}
+                  variants={s_taggerContainer}
                   initial="hidden"
                   animate="visible"
                   className="space-y-6"
                 >
                   {/* Success Alert */}
-                  <motion.div variants={staggerItem}>
+                  <motion.div variants={s_taggerItem}>
                     <Alert className="border-green-600 bg-green-900/20">
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       <AlertTitle>Información del Tránsito Encontrada</AlertTitle>
@@ -236,7 +236,7 @@ export const PrearmadoPageV2: React.FC = () => {
                   <AnimatedGrid className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Trip Data */}
                     <AnimatedCard
-                      variants={staggerItem}
+                      variants={s_taggerItem}
                       whileHover={{ y: -4 }}
                       className="lg:col-span-2"
                     >
@@ -275,7 +275,7 @@ export const PrearmadoPageV2: React.FC = () => {
                             icon={<Building className="h-4 w-4" />}
                           />
                           <InfoField
-                            label="Precinto(s)"
+                            label="Precinto(_s)"
                             value={Array.isArray(transitInfo.precintoid) 
                               ? transitInfo.precintoid.join(', ') 
                               : transitInfo.precintoid}
@@ -306,7 +306,7 @@ export const PrearmadoPageV2: React.FC = () => {
                     </AnimatedCard>
 
                     {/* Vehicle Data */}
-                    <AnimatedCard variants={staggerItem} whileHover={{ y: -4 }}>
+                    <AnimatedCard variants={s_taggerItem} whileHover={{ y: -4 }}>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <Truck className="h-5 w-5 text-blue-500" />
@@ -338,7 +338,7 @@ export const PrearmadoPageV2: React.FC = () => {
                     </AnimatedCard>
 
                     {/* Driver Data */}
-                    <AnimatedCard variants={staggerItem} whileHover={{ y: -4 }}>
+                    <AnimatedCard variants={s_taggerItem} whileHover={{ y: -4 }}>
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <User className="h-5 w-5 text-blue-500" />
@@ -370,11 +370,11 @@ export const PrearmadoPageV2: React.FC = () => {
 
                   {/* Action Button */}
                   <motion.div 
-                    variants={staggerItem}
+                    variants={s_taggerItem}
                     className="flex justify-center pt-4"
                   >
                     <AnimatedButton
-                      onClick={handlePrearm}
+                      onClick={_handlePrearm}
                       size="lg"
                       className="bg-green-600 hover:bg-green-700"
                       whileHover={{ scale: 1.05 }}
@@ -449,20 +449,20 @@ const InfoField: React.FC<{
   icon?: React.ReactNode
   onCopy?: () => void
   isCopied?: boolean
-}> = (label, value, subtitle, icon, onCopy, isCopied ) => (
+}> = (_label, value, subtitle, icon, onCopy, isCopied ) => (
   <div className="space-y-1">
-    <p className="text-xs text-gray-500 uppercase tracking-wider">{label}</p>
+    <p className="text-xs text-gray-500 uppercase tracking-wider">{_label}</p>
     <div className="flex items-center gap-2">
-      {icon && <span className="text-gray-400">{icon}</span>}
+      {icon && <span className="text-gray-400">{_icon}</span>}
       <p className="text-lg font-semibold text-white">
-        {value}
+        {_value}
         {subtitle && (
-          <span className="text-sm text-gray-400 ml-2">({subtitle})</span>
+          <span className="text-sm text-gray-400 ml-2">({s_ubtitle})</span>
         )}
       </p>
       {onCopy && (
         <motion.button
-          onClick={onCopy}
+          onClick={_onCopy}
           className="ml-auto p-1 hover:bg-gray-700 rounded transition-colors"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}

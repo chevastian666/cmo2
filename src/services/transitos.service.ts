@@ -17,35 +17,35 @@ export const transitosService = {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         console.log('Using mock data for transitos in development mode')
-        return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
+        return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
       }
 
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
           return await trokorService.getTransitosPendientes({ limit: 25 })
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
+        return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
       }
       
       const response = await unifiedAPIService.getTransitosPendientesLucia(25)
       return response
     } catch {
       console.error('Error fetching transitos pendientes:', _error)
-      return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
+      return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
     }
   },
 
   getAll: async (filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 20 }, (_, i) => generateMockTransito(i))
+        return Array.from({ length: 20 }, (__, i) => generateMockTransito(_i))
       }
       
       // Map filters to API params
@@ -76,14 +76,14 @@ export const transitosService = {
       }))
     } catch {
       console.error('Error fetching all transitos:', _error)
-      return Array.from({ length: 20 }, (_, i) => generateMockTransito(i))
+      return Array.from({ length: 20 }, (__, i) => generateMockTransito(_i))
     }
   },
 
   getById: async (id: string): Promise<TransitoPendiente> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockTransito(parseInt(id) || 1)
+        return generateMockTransito(parseInt(_id) || 1)
       }
       
       // For now, get all and find by id
@@ -93,7 +93,7 @@ export const transitosService = {
       return transito
     } catch {
       console.error('Error fetching transito:', _error)
-      return generateMockTransito(parseInt(id) || 1)
+      return generateMockTransito(parseInt(_id) || 1)
     }
   },
 

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {_useEffect, useState} from 'react'
 import { useAlertasStore} from '../store'
 import type { AlertaExtendida} from '../../types'
 export const useAlertas = () => {
@@ -47,8 +47,8 @@ export const useAlertasActivas = () => {
   }
 }
 export const useAlerta = (id: string) => {
-  const alertas = useAlertasStore((state) => state.alertas)
-  const alerta = alertas.find((a) => a.id === id)
+  const alertas = useAlertasStore((s_tate) => state.alertas)
+  const alerta = alertas.find((_a) => a.id === id)
   return {
     alerta,
     found: !!alerta,
@@ -56,31 +56,31 @@ export const useAlerta = (id: string) => {
 }
 export const useAlertaExtendida = (id: string) => {
   const store = useAlertasStore()
-  const [alertaExtendida, setAlertaExtendida] = useState<AlertaExtendida | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [alertaExtendida, setAlertaExtendida] = useState<AlertaExtendida | null>(_null)
+  const [loading, setLoading] = useState(_true)
   useEffect(() => {
     const fetchAlerta = async () => {
-      setLoading(true)
+      setLoading(_true)
       try {
 
-        setAlertaExtendida(_data)
+        setAlertaExtendida(__data)
       } catch {
         console.error('Error fetching extended alert:', _error)
       } finally {
-        setLoading(false)
+        setLoading(_false)
       }
     }
-    if (id) {
+    if (_id) {
       fetchAlerta()
     }
   }, [id])
   // Subscribe to updates
 
   useEffect(() => {
-    const unsubscribe = useAlertasStore.subscribe((state) => {
-      const updated = state.alertasExtendidas.get(id)
+    const unsubscribe = useAlertasStore.subscribe((s_tate) => {
+      const updated = state.alertasExtendidas.get(_id)
       if (updated && updated !== alertaExtendida) {
-        setAlertaExtendida(updated)
+        setAlertaExtendida(_updated)
       }
     })
     return unsubscribe
@@ -89,13 +89,13 @@ export const useAlertaExtendida = (id: string) => {
     alerta: alertaExtendida,
     loading,
     actions: {
-      asignar: (usuarioId: string, notas?: string) => store.asignarAlerta(id, usuarioId, notas),
-      comentar: (mensaje: string) => store.comentarAlerta(id, mensaje),
+      asignar: (usuarioId: string, notas?: string) => store.asignarAlerta(_id, usuarioId, notas),
+      comentar: (mensaje: string) => store.comentarAlerta(_id, mensaje),
       resolver: (tipo: string, descripcion: string, acciones?: string[]) => 
-        store.resolverAlerta(id, tipo, descripcion, acciones),
+        store.resolverAlerta(_id, tipo, descripcion, acciones),
       refresh: async () => {
 
-        setAlertaExtendida(_data)
+        setAlertaExtendida(__data)
       }
     }
   }

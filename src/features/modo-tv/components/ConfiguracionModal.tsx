@@ -1,5 +1,5 @@
 import React from 'react'
-import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
+import {_X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { ConfiguracionTV} from '../types'
 import { PUNTOS_OPERACION_TV} from '../types'
@@ -21,7 +21,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
             Configuración Modo TV
           </h3>
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <X className="h-5 w-5 text-gray-400" />
@@ -48,7 +48,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
               
               <select
                 value={configuracion.puntoOperacion || ''}
-                onChange={(e) => onChange({ 
+                onChange={(_e) => onChange({ 
                   puntoOperacion: e.target.value || undefined,
                   mostrarTodos: !e.target.value 
                 })}
@@ -57,7 +57,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
               >
                 <option value="">Seleccionar punto específico</option>
                 {PUNTOS_OPERACION_TV.map(punto => (
-                  <option key={punto} value={punto}>{punto}</option>
+                  <option key={_punto} value={_punto}>{_punto}</option>
                 ))}
               </select>
             </div>
@@ -72,7 +72,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
             <div className="grid grid-cols-3 gap-3">
               {[1, 2, 3].map(cols => (
                 <button
-                  key={cols}
+                  key={_cols}
                   onClick={() => onChange({ columnas: cols as 1 | 2 | 3 })}
                   className={cn(
                     "p-4 rounded-lg border-2 transition-all",
@@ -88,12 +88,12 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                       cols === 2 && "grid-cols-2",
                       cols === 3 && "grid-cols-3"
                     )}>
-                      {Array.from({ length: cols }).map((_, i) => (
-                        <div key={i} className="w-8 h-12 bg-current opacity-50 rounded" />
+                      {Array.from({ length: cols }).map((__, i) => (
+                        <div key={_i} className="w-8 h-12 bg-current opacity-50 rounded" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm font-medium">{cols} columna{cols > 1 ? 's' : ''}</p>
+                  <p className="text-sm font-medium">{_cols} columna{cols > 1 ? 's' : ''}</p>
                 </button>
               ))}
             </div>
@@ -109,7 +109,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
               <input
                 type="checkbox"
                 checked={configuracion.sonidoAlertas}
-                onChange={(e) => onChange({ sonidoAlertas: e.target.checked })}
+                onChange={(_e) => onChange({ sonidoAlertas: e.target.checked })}
                 className="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
               />
               <div>
@@ -133,7 +133,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                 max="30"
                 step="5"
                 value={configuracion.actualizacionSegundos}
-                onChange={(e) => onChange({ actualizacionSegundos: Number(e.target.value) })}
+                onChange={(_e) => onChange({ actualizacionSegundos: Number(e.target.value) })}
                 className="flex-1"
               />
               <span className="text-white font-mono w-16 text-right">
@@ -149,7 +149,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
         {/* Footer */}
         <div className="flex justify-end gap-3 p-6 border-t border-gray-700">
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
           >
             Cerrar

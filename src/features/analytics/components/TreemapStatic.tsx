@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 const TreemapStatic: React.FC = () => {
   // Mock data for testing
 
-  const total = _data.reduce((sum, item) => sum + item.value, 0)
+  const total = _data.reduce((s_um, item) => sum + item.value, 0)
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -24,11 +24,11 @@ const TreemapStatic: React.FC = () => {
         <CardContent>
           <div className="bg-gray-900 rounded-lg p-4">
             <div className="grid grid-cols-2 gap-2" style={{ height: '400px' }}>
-              {data.map((item, index) => {
+              {data.map((_item, index) => {
                 const percentage = (item.value / total) * 100
                 return (
                   <div
-                    key={index}
+                    key={_index}
                     className="relative rounded-lg p-4 text-white flex flex-col justify-between"
                     style={{
                       backgroundColor: item.color,

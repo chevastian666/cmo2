@@ -25,7 +25,7 @@ const statusColors = {
 export const ParticleTrail: React.FC<ParticleTrailProps> = ({
   x, y, isMoving, speed, status, className
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(_null)
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>()
   const prevPosRef = useRef({ x, y })
@@ -37,8 +37,8 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
     return {
       x,
       y,
-      vx: Math.cos(angle) * velocity,
-      vy: Math.sin(angle) * velocity,
+      vx: Math.cos(_angle) * velocity,
+      vy: Math.sin(_angle) * velocity,
       life,
       maxLife: life,
       size: Math.random() * 3 + 2,
@@ -77,13 +77,13 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
           const t = i / steps
           const px = prevPosRef.current.x + dx * t
           const py = prevPosRef.current.y + dy * t
-          particlesRef.current.push(createParticle(px, py))
+          particlesRef.current.push(createParticle(_px, py))
         }
         prevPosRef.current = { x, y }
       }
     }
 
-    animationRef.current = requestAnimationFrame(updateParticles)
+    animationRef.current = requestAnimationFrame(_updateParticles)
   }, [x, y])
     useEffect(() => {
     const canvas = canvasRef.current
@@ -106,7 +106,7 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
   }, [])
   return (
     <canvas
-      ref={canvasRef}
+      ref={_canvasRef}
       className={cn(
         'fixed inset-0 pointer-events-none z-10',
         className

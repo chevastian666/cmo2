@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import {X, Truck, Camera, AlertCircle} from 'lucide-react'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_X, Truck, Camera, AlertCircle} from 'lucide-react'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { ESTADOS_CAMION} from '../types'
 import type { EstadoCamion} from '../types'
 interface FormularioCamionProps {
@@ -15,8 +15,8 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
     estado: 'normal' as EstadoCamion,
     foto: null as File | null
   })
-  const [errors, setErrors] = useState<Record<string, string>>(_)
-  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>(__)
+  const [loading, setLoading] = useState(_false)
   const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
@@ -25,7 +25,7 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
   }
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
+    if (_file) {
       handleChange('foto', file)
     }
   }
@@ -37,13 +37,13 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       newErrors.matricula = 'La matrícula debe tener al menos 6 caracteres'
     }
     
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(_newErrors)
+    return Object.keys(_newErrors).length === 0
   }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    setLoading(true)
+    setLoading(_true)
     try {
       await createCamion({
         matricula: formData.matricula.toUpperCase().trim(),
@@ -58,7 +58,7 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
     } catch {
       setErrors({ general: 'Error al registrar el camión' })
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   return (
@@ -71,14 +71,14 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
             Registrar Camión
           </h3>
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <X className="h-5 w-5 text-gray-400" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={_handleSubmit} className="p-6 space-y-4">
           {errors.general && (
             <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
@@ -94,10 +94,10 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
             <input
               type="text"
               value={formData.matricula}
-              onChange={(e) => handleChange('matricula', e.target.value)}
+              onChange={(_e) => handleChange('matricula', e.target.value)}
               placeholder="Ej: ABC 1234"
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
+              disabled={_loading}
             />
             {errors.matricula && (
               <p className="mt-1 text-sm text-red-500">{errors.matricula}</p>
@@ -111,12 +111,12 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
             </label>
             <select
               value={formData.estado}
-              onChange={(e) => handleChange('estado', e.target.value)}
+              onChange={(_e) => handleChange('estado', e.target.value)}
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
+              disabled={_loading}
             >
-              {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
-                <option key={key} value={key}>
+              {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
+                <option key={_key} value={_key}>
                   {config.icon} {config.label}
                 </option>
               ))}
@@ -126,7 +126,7 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
           {/* Foto */}
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
-              Fotografía (opcional)
+              Fotografía (_opcional)
             </label>
             <div className="flex items-center gap-4">
               <label className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-400 hover:border-gray-600 cursor-pointer transition-colors flex items-center justify-center gap-2">
@@ -137,9 +137,9 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleFotoChange}
+                  onChange={_handleFotoChange}
                   className="hidden"
-                  disabled={loading}
+                  disabled={_loading}
                 />
               </label>
             </div>
@@ -148,15 +148,15 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
           {/* Observaciones */}
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
-              Observaciones (opcional)
+              Observaciones (_opcional)
             </label>
             <textarea
               value={formData.observaciones}
-              onChange={(e) => handleChange('observaciones', e.target.value)}
+              onChange={(_e) => handleChange('observaciones', e.target.value)}
               placeholder="Ej: Camión refrigerado, mantenimiento al día..."
               rows={3}
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              disabled={loading}
+              disabled={_loading}
             />
           </div>
 
@@ -164,16 +164,16 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
           <div className="flex gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
+              onClick={_onClose}
               className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
-              disabled={loading}
+              disabled={_loading}
             >
               Cancelar
             </button>
             <button
               type="submit"
               className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
+              disabled={_loading}
             >
               {loading ? 'Registrando...' : 'Registrar'}
             </button>

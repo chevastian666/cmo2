@@ -116,12 +116,12 @@ class TrokorService {
       console.warn('API Key de Trokor no configurada')
     }
     
-    const url = new URL(buildTrokorUrl(endpoint))
+    const url = new URL(buildTrokorUrl(_endpoint))
     // Agregar parámetros de query
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
+    if (_params) {
+      Object.entries(_params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          url.searchParams.append(key, value.toString())
+          url.searchParams.append(_key, value.toString())
         }
       })
     }
@@ -130,7 +130,7 @@ class TrokorService {
       const response = await fetch(url.toString(), {
         method,
         headers: getTrokorHeaders(),
-        body: body ? JSON.stringify(body) : undefined
+        body: body ? JSON.stringify(_body) : undefined
       })
       if (!response.ok) {
         const error = await response.text()
@@ -139,7 +139,7 @@ class TrokorService {
       }
       
       return await response.json()
-    } catch (error) {
+    } catch (_error) {
       console.error('Error en petición a Trokor:', error)
       throw error
     }
@@ -154,10 +154,10 @@ class TrokorService {
     limit?: number
     offset?: number
   }): Promise<TransitoPendiente[]> {
-    const cacheKey = `trokor:transitos-pendientes:${JSON.stringify(params)}`
+    const cacheKey = `trokor:transitos-pendientes:${JSON.stringify(_params)}`
     // Verificar caché
-    const cached = cacheService.get<TransitoPendiente[]>(cacheKey)
-    if (cached) return cached
+    const cached = cacheService.get<TransitoPendiente[]>(_cacheKey)
+    if (_cached) return cached
     try {
       const response = await this.request<TrokorViajeData[]>(
         'GET',
@@ -166,9 +166,9 @@ class TrokorService {
         params
       )
       // Transformar datos usando el adaptador
-      const transitos = response.map(data => TrokorAdapter.transitoPendienteFromAux(data))
+      const transitos = response.map(data => TrokorAdapter.transitoPendienteFromAux(_data))
       // Cachear por 30 segundos
-      cacheService.set(cacheKey, transitos, 30000)
+      cacheService.set(_cacheKey, transitos, 30000)
       return transitos
     } catch {
       notificationService.error('Error al cargar tránsitos', 'No se pudo conectar con Trokor')
@@ -192,7 +192,7 @@ class TrokorService {
         status: params?.estado ? this.mapEstadoToTrokor(params.estado) : undefined
       })
       // Transformar cada viaje
-      const transitos = await Promise.all(response.data.map(async (viaje) => {
+      const transitos = await Promise.all(response.data.map(async (_viaje) => {
           // Intentar obtener el precinto asociado
           let precinto = null
           if (viaje.precintoid) {
@@ -206,14 +206,14 @@ class TrokorService {
             }
           }
           
-          return TrokorAdapter.viajeToTransito(viaje, precinto)
+          return TrokorAdapter.viajeToTransito(_viaje, precinto)
         })
       )
       return {
         data: transitos,
         total: response.total
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error al obtener tránsitos:', error)
       return { data: [], total: 0 }
     }
@@ -225,9 +225,9 @@ class TrokorService {
    * Obtiene precintos activos
    */
   async getPrecintosActivos(limit: number = 50): Promise<PrecintoActivo[]> {
-    const cacheKey = `trokor:precintos-activos:${limit}`
-    const cached = cacheService.get<PrecintoActivo[]>(cacheKey)
-    if (cached) return cached
+    const cacheKey = `trokor:precintos-activos:${_limit}`
+    const cached = cacheService.get<PrecintoActivo[]>(_cacheKey)
+    if (_cached) return cached
     try {
       // Estados 1 (en tránsito) y 3 (con alerta) se consideran activos
       const response = await this.request<TrokorApiResponse<TrokorPrecintoData[]>>('GET', TROKOR_CONFIG.ENDPOINTS.PRECINTOS_ACTIVOS, undefined, {
@@ -235,7 +235,7 @@ class TrokorService {
         status: '1,3' // En tránsito o con alerta
       })
       // Obtener información adicional para cada precinto
-      const precintosActivos = await Promise.all(response.data.map(async (precinto) => {
+      const precintosActivos = await Promise.all(response.data.map(async (_precinto) => {
           // Intentar obtener el viaje asociado
           let viaje = null
           try {
@@ -246,7 +246,7 @@ class TrokorService {
               { precintoid: precinto.nqr, limit: 1 }
             )
             viaje = viajesResponse[0]
-          } catch (e) {
+          } catch (_e) {
             console.warn(`No se encontró viaje para precinto ${precinto.nqr}`)
           }
           
@@ -257,17 +257,17 @@ class TrokorService {
               'GET',
               TROKOR_CONFIG.ENDPOINTS.UBICACION_BY_PRECINTO(precinto.precintoid)
             )
-          } catch (e) {
+          } catch (_e) {
             // Sin ubicación disponible
           }
 
-          return TrokorAdapter.precintoToPrecintoActivo(precinto, viaje, ubicacion)
+          return TrokorAdapter.precintoToPrecintoActivo(_precinto, viaje, ubicacion)
         })
       )
       // Cachear por 15 segundos
-      cacheService.set(cacheKey, precintosActivos, 15000)
+      cacheService.set(_cacheKey, precintosActivos, 15000)
       return precintosActivos
-    } catch (error) {
+    } catch (_error) {
       console.error('Error al obtener precintos activos:', error)
       notificationService.error('Error al cargar precintos', 'No se pudo conectar con Trokor')
       return []
@@ -283,13 +283,13 @@ class TrokorService {
     page?: number
     limit?: number
   }): Promise<Alerta[]> {
-    const cacheKey = `trokor:alertas-activas:${JSON.stringify(params)}`
-    const cached = cacheService.get<Alerta[]>(cacheKey)
-    if (cached) return cached
+    const cacheKey = `trokor:alertas-activas:${JSON.stringify(_params)}`
+    const cached = cacheService.get<Alerta[]>(_cacheKey)
+    if (_cached) return cached
     try {
       const response = await this.request<TrokorApiResponse<TrokorAlarmaData[]>>('GET', TROKOR_CONFIG.ENDPOINTS.ALARMAS_ACTIVAS, undefined, params)
       // Transformar cada alarma
-      const alertas = await Promise.all(response.data.map(async (alarma) => {
+      const alertas = await Promise.all(response.data.map(async (_alarma) => {
           // Obtener información del precinto y viaje
           let precinto = null
           let viaje = null
@@ -302,7 +302,7 @@ class TrokorService {
                 { precintoid: alarma.precintoid, limit: 1 }
               )
               precinto = precintoResponse[0]
-              if (precinto) {
+              if (_precinto) {
                 // Buscar viaje asociado
                 const viajeResponse = await this.request<TrokorViajeData[]>(
                   'GET',
@@ -312,18 +312,18 @@ class TrokorService {
                 )
                 viaje = viajeResponse[0]
               }
-            } catch (e) {
+            } catch (_e) {
               console.warn(`Error obteniendo datos para alarma ${alarma.asid}`)
             }
           }
           
-          return TrokorAdapter.alarmaToAlerta(alarma, precinto, viaje)
+          return TrokorAdapter.alarmaToAlerta(_alarma, precinto, viaje)
         })
       )
       // Cachear por 10 segundos (las alertas son críticas)
-      cacheService.set(cacheKey, alertas, 10000)
+      cacheService.set(_cacheKey, alertas, 10000)
       return alertas
-    } catch (error) {
+    } catch (_error) {
       console.error('Error al obtener alertas:', error)
       notificationService.error('Error al cargar alertas', 'No se pudo conectar con Trokor')
       return []
@@ -342,13 +342,13 @@ class TrokorService {
     try {
       await this.request(
         'POST',
-        TROKOR_CONFIG.ENDPOINTS.ALARMA_VERIFICAR(alertaId),
+        TROKOR_CONFIG.ENDPOINTS.ALARMA_VERIFICAR(_alertaId),
         datos
       )
       // Limpiar caché de alertas
       cacheService.invalidatePattern('trokor:alertas')
       notificationService.success('Alerta verificada', 'La alerta ha sido procesada correctamente')
-    } catch (error) {
+    } catch (_error) {
       console.error('Error al verificar alerta:', error)
       throw new Error('No se pudo verificar la alerta')
     }
@@ -361,8 +361,8 @@ class TrokorService {
    */
   async getEstadisticas(): Promise<EstadisticasMonitoreo> {
     const cacheKey = 'trokor:estadisticas'
-    const cached = cacheService.get<EstadisticasMonitoreo>(cacheKey)
-    if (cached) return cached
+    const cached = cacheService.get<EstadisticasMonitoreo>(_cacheKey)
+    if (_cached) return cached
     try {
       const response = await this.request<TrokorStatisticsData>(
         'GET',
@@ -378,9 +378,9 @@ class TrokorService {
         precintosConBateriaBaja: response.precintos_bateria_baja || 0
       }
       // Cachear por 1 minuto
-      cacheService.set(cacheKey, estadisticas, 60000)
+      cacheService.set(_cacheKey, estadisticas, 60000)
       return estadisticas
-    } catch (error) {
+    } catch (_error) {
       console.error('Error al obtener estadísticas:', error)
       // Devolver valores por defecto
       return {
@@ -417,7 +417,7 @@ class TrokorService {
     try {
       await this.request('GET', TROKOR_CONFIG.ENDPOINTS.SYSTEM_HEALTH)
       return true
-    } catch (error) {
+    } catch (_error) {
       return false
     }
   }

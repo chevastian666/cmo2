@@ -9,7 +9,7 @@ import type { VirtualizedAlertListProps} from './types/virtualization'
 export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   alerts: initialAlerts, itemHeight = 80, containerHeight, overscan = 5, onItemClick, onLoadMore, groupingOptions, filters: initialFilters, className
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(_null)
   const lastRenderTime = useRef(0)
   // Infinite loading
   const { items: loadedAlerts, hasMore } = useInfiniteLoading({
@@ -21,7 +21,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
 
   // Virtualization
 
-        checkLoadMore(scrollTop, scrollHeight, clientHeight)
+        checkLoadMore(s_crollTop, scrollHeight, clientHeight)
       }
     }
   })
@@ -40,20 +40,20 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
         console.warn('Performance degradation detected:', metrics)
       }
     }, 5000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [])
   // Render item with memoization
   const renderItem = useCallback((item: Alert, index: number, style: React.CSSProperties) => {
-    const isHighlighted = highlightedIndices.has(index)
+    const isHighlighted = highlightedIndices.has(_index)
     return (<AlertListItem
         key={item.id}
-        alert={item}
-        index={index}
-        style={style}
-        onClick={() => onItemClick?.(item, index)}
-        isHighlighted={isHighlighted}
-        isScrolling={isScrolling}
-        onHeightChange={(height) => updateItemHeight(index, height)}
+        alert={_item}
+        index={_index}
+        style={s_tyle}
+        onClick={() => onItemClick?.(_item, index)}
+        isHighlighted={_isHighlighted}
+        isScrolling={_isScrolling}
+        onHeightChange={(_height) => updateItemHeight(_index, height)}
       />
     )
   }, [])
@@ -147,26 +147,26 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
       {/* Filter summary */}
       {filterCount > 0 && (
         <div className="absolute top-2 left-2 z-10 bg-blue-600 text-white text-sm px-3 py-1 rounded-full">
-          {filterCount} filtro{filterCount > 1 ? 's' : ''} activo{filterCount > 1 ? 's' : ''}
+          {_filterCount} filtro{filterCount > 1 ? 's' : ''} activo{filterCount > 1 ? 's' : ''}
         </div>
       )}
 
       {/* Virtual list container */}
       <div
         {...containerProps}
-        ref={containerRef}
+        ref={_containerRef}
         className={cn(
           'overflow-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800',
           isScrolling && 'scroll-smooth'
         )}
-        onKeyDown={handleKeyDown}
+        onKeyDown={_handleKeyDown}
         tabIndex={0}
         role="list"
         aria-label="Lista de alertas"
         aria-rowcount={filteredAlerts.length}
       >
         <div {...scrollerProps}>
-          {visibleItems.map(({ item, index, style }) => renderItem(item, index, style))}
+          {visibleItems.map(({ item, index, style }) => renderItem(_item, index, style))}
         </div>
 
         {/* Loading more indicator */}
@@ -179,7 +179,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
         {/* End of list */}
         {!hasMore && filteredAlerts.length > 0 && (
           <div className="absolute bottom-0 left-0 right-0 p-4 text-center text-gray-500 text-sm">
-            Fin de la lista • {filteredAlerts.length} alertas{total && ` de ${total}`}
+            Fin de la lista • {filteredAlerts.length} alertas{total && ` de ${_total}`}
           </div>
         )}
       </div>
@@ -187,4 +187,4 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   )
 }
 // Export memoized version
-export default memo(VirtualizedAlertList)
+export default memo(_VirtualizedAlertList)

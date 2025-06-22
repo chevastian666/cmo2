@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react'
 import { Truck, Download} from 'lucide-react'
 import { TransitTable} from '../components/TransitTable'
-import {TransitFilters} from '../components/TransitFilters'
+import {_TransitFilters} from '../components/TransitFilters'
 import { EditTransitoModal} from '../components/EditTransitoModal'
 import { notificationService} from '../../../services/shared/notification.service'
 import { transitosService} from '../services/transitos.service'
@@ -14,10 +14,10 @@ import type { Transito} from '../types'
 export const TransitosPage: React.FC = () => {
   const [transitos, setTransitos] = useState<Transito[]>([])
   const [totalTransitos, setTotalTransitos] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null)
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
+  const [loading, setLoading] = useState(_true)
+  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(_null)
+  const [showDetailModal, setShowDetailModal] = useState(_false)
+  const [showEditModal, setShowEditModal] = useState(_false)
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
@@ -35,14 +35,14 @@ export const TransitosPage: React.FC = () => {
     searchText: ''
   })
   // Debounce timer for filters
-  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(null)
+  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(_null)
   // Load transitos with server-side pagination
   const loadTransitos = async () => {
     try {
-      setLoading(true)
+      setLoading(_true)
       // Build filters object for API
       const apiFilters: Record<string, unknown> = {}
-      Object.entries(filters).forEach(([key, value]) => {
+      Object.entries(_filters).forEach(([key, value]) => {
         if (value && value !== '') {
           apiFilters[key] = value
         }
@@ -60,7 +60,7 @@ export const TransitosPage: React.FC = () => {
       console.error('Error loading transitos:', _error)
       notificationService.error('Error', 'No se pudieron cargar los tránsitos')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   // Load data on mount and when pagination/sort changes
@@ -71,8 +71,8 @@ export const TransitosPage: React.FC = () => {
   // Debounced filter loading
 
   useEffect(() => {
-    if (filterDebounce) {
-      clearTimeout(filterDebounce)
+    if (_filterDebounce) {
+      clearTimeout(_filterDebounce)
     }
     
     const timeout = setTimeout(() => {
@@ -80,38 +80,38 @@ export const TransitosPage: React.FC = () => {
       loadTransitos()
     }, 500); // 500ms debounce
     
-    setFilterDebounce(timeout)
+    setFilterDebounce(_timeout)
     return () => {
-      if (timeout) clearTimeout(timeout)
+      if (_timeout) clearTimeout(_timeout)
     }
   }, [filters])
   // Auto-refresh every 30 seconds
 
   useEffect(() => {
-    const interval = setInterval(loadTransitos, 30000)
-    return () => clearInterval(interval)
+    const interval = setInterval(_loadTransitos, 30000)
+    return () => clearInterval(_interval)
   }, [filters])
   const handleFilterChange = (newFilters: typeof filters) => {
-    setFilters(newFilters)
+    setFilters(_newFilters)
   }
   const handleSort = (field: string) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field)
+      setSortField(_field)
       setSortOrder('asc')
     }
   }
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setCurrentPage(_page)
   }
   const handleItemsPerPageChange = (items: number) => {
-    setItemsPerPage(items)
+    setItemsPerPage(_items)
     setCurrentPage(1); // Reset to first page
   }
   const handleViewDetail = (transito: Transito) => {
-    setSelectedTransito(transito)
-    setShowDetailModal(true)
+    setSelectedTransito(_transito)
+    setShowDetailModal(_true)
   }
   const handleViewMap = (transito: Transito) => {
     // Open map in new tab or modal
@@ -127,12 +127,12 @@ export const TransitosPage: React.FC = () => {
     }
   }
   const handleEdit = (transito: Transito) => {
-    setSelectedTransito(transito)
-    setShowEditModal(true)
+    setSelectedTransito(_transito)
+    setShowEditModal(_true)
   }
   const handleExport = () => {
-    const csvContent = generateCSV(transitos)
-    downloadCSV(csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`)
+    const csvContent = generateCSV(_transitos)
+    downloadCSV(_csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`)
   }
   const generateCSV = (_data: Transito[]) => {
     const headers = ['DUA', 'Precinto', 'Estado', 'Fecha Salida', 'ETA', 'Origen', 'Destino', 'Empresa', 'Encargado']
@@ -152,7 +152,7 @@ export const TransitosPage: React.FC = () => {
   const downloadCSV = (content: string, filename: string) => {
     const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement('a')
-    link.href = URL.createObjectURL(blob)
+    link.href = URL.createObjectURL(_blob)
     link.download = filename
     link.click()
   }
@@ -170,7 +170,7 @@ export const TransitosPage: React.FC = () => {
         </div>
         
         <button
-          onClick={handleExport}
+          onClick={_handleExport}
           className="px-3 py-2 sm:px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-sm sm:text-base self-start sm:self-auto"
         >
           <Download className="h-4 w-4" />
@@ -181,49 +181,49 @@ export const TransitosPage: React.FC = () => {
 
       {/* Filters */}
       <TransitFilters 
-        filters={filters}
-        onChange={handleFilterChange}
-        transitos={transitos}
+        filters={_filters}
+        onChange={_handleFilterChange}
+        transitos={_transitos}
       />
 
       {/* Table */}
       <TransitTable
-        transitos={transitos}
-        loading={loading}
-        currentPage={currentPage}
-        totalItems={totalTransitos}
-        itemsPerPage={itemsPerPage}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        onPageChange={handlePageChange}
-        onItemsPerPageChange={handleItemsPerPageChange}
-        onSort={handleSort}
-        onViewDetail={handleViewDetail}
-        onViewMap={handleViewMap}
-        onMarkDesprecintado={handleMarkDesprecintado}
-        onEdit={handleEdit}
+        transitos={_transitos}
+        loading={_loading}
+        currentPage={_currentPage}
+        totalItems={_totalTransitos}
+        itemsPerPage={_itemsPerPage}
+        sortField={s_ortField}
+        sortOrder={s_ortOrder}
+        onPageChange={_handlePageChange}
+        onItemsPerPageChange={_handleItemsPerPageChange}
+        onSort={_handleSort}
+        onViewDetail={_handleViewDetail}
+        onViewMap={_handleViewMap}
+        onMarkDesprecintado={_handleMarkDesprecintado}
+        onEdit={_handleEdit}
       />
 
       {/* Detail Modal */}
       {selectedTransito && (
         <TransitDetailModal
-          isOpen={showDetailModal}
+          isOpen={s_howDetailModal}
           onClose={() => {
-            setShowDetailModal(false)
-            setSelectedTransito(null)
+            setShowDetailModal(_false)
+            setSelectedTransito(_null)
           }}
-          transito={selectedTransito}
+          transito={s_electedTransito}
         />
       )}
 
       {/* Edit Modal */}
       <EditTransitoModal
-        isOpen={showEditModal}
+        isOpen={s_howEditModal}
         onClose={() => {
-          setShowEditModal(false)
-          setSelectedTransito(null)
+          setShowEditModal(_false)
+          setSelectedTransito(_null)
         }}
-        transito={selectedTransito}
+        transito={s_electedTransito}
         onSuccess={() => {
           loadTransitos(); // Reload data after successful edit
         }}

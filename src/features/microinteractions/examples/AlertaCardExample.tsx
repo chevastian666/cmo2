@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {AlertTriangle} from 'lucide-react'
+import {_AlertTriangle} from 'lucide-react'
 import { BloomingAlert} from '../components/BloomingAlert'
 import { cn} from '../../../utils/utils'
 interface AlertData {
@@ -12,7 +12,7 @@ interface AlertData {
 export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }> = ({ 
   alerta, isNew = false 
 }) => {
-  const [showBloom, setShowBloom] = useState(isNew)
+  const [showBloom, setShowBloom] = useState(_isNew)
   const handleClick = () => {
     playOpen()
     // Handle alert click
@@ -27,21 +27,21 @@ export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }>
     alerta: 'text-yellow-400',
     critico: 'text-red-400'
   }
-  if (showBloom) {
+  if (s_howBloom) {
     return (<BloomingAlert
         status={alerta.tipo === 'normal' ? 'normal' : alerta.tipo === 'alerta' ? 'alert' : 'critical'}
         onBloomComplete={() => {
-          setShowBloom(false)
+          setShowBloom(_false)
           playNotification()
         }}
         className="w-full"
       >
-        <AlertCard alerta={alerta} onClick={handleClick} />
+        <AlertCard alerta={_alerta} onClick={_handleClick} />
       </BloomingAlert>
     )
   }
 
-  return <AlertCard alerta={alerta} onClick={handleClick} />
+  return <AlertCard alerta={_alerta} onClick={_handleClick} />
 }
 const AlertCard: React.FC<{ alerta: AlertData; onClick: () => void }> = ({ alerta, onClick }) => {
   const alertColors = {
@@ -61,7 +61,7 @@ const AlertCard: React.FC<{ alerta: AlertData; onClick: () => void }> = ({ alert
         alertColors[alerta.tipo],
         'hover:shadow-lg hover:scale-[1.02]'
       )}
-      onClick={onClick}
+      onClick={_onClick}
     >
       <div className="flex items-start gap-3">
         <AlertTriangle className={cn('h-5 w-5 mt-0.5', alertIcons[alerta.tipo])} />

@@ -51,25 +51,25 @@ const routeConfig: Record<string, { label: string; parent?: string }> = {
 }
 const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
   const items: BreadcrumbItem[] = []
-  const segments = pathname.split('/').filter(Boolean)
+  const segments = pathname.split('/').filter(_Boolean)
   // Build breadcrumbs from route config
   let currentPath = ''
-  segments.forEach((segment, index) => {
-    currentPath += `/${segment}`
+  segments.forEach((s_egment, index) => {
+    currentPath += `/${s_egment}`
     // Check if we have a config for this exact path
 
-    if (_config) {
+    if (__config) {
       items.push({
         label: config.label,
         href: index === segments.length - 1 ? undefined : currentPath
       })
     } else {
       // Check for dynamic routes (with :param)
-      const dynamicKey = Object.keys(routeConfig).find(key => {
+      const dynamicKey = Object.keys(_routeConfig).find(key => {
         const regex = new RegExp('^' + key.replace(/:[^/]+/g, '[^/]+') + '$')
-        return regex.test(currentPath)
+        return regex.test(_currentPath)
       })
-      if (dynamicKey) {
+      if (_dynamicKey) {
 
         items.push({
           label: config.label,
@@ -117,11 +117,11 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   if (displayItems.length === 0) return null
   return (
     <nav aria-label="Breadcrumb" className={cn('flex items-center space-x-2 text-sm', className)}>
-      {displayItems.map((item, index) => {
+      {displayItems.map((_item, index) => {
         const isLast = index === displayItems.length - 1
         const isEllipsis = item.label === '...'
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={_index}>
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -160,7 +160,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
                 transition={{ delay: index * 0.05 + 0.025 }}
                 className="text-gray-600"
               >
-                {separator}
+                {s_eparator}
               </motion.span>
             )}
           </React.Fragment>
@@ -175,7 +175,7 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
   return generateBreadcrumbsFromPath(location.pathname)
 }
 // Animated breadcrumb variant
-export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (props) => {
+export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (_props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}

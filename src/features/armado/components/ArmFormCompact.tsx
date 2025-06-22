@@ -68,7 +68,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
   }, [data.rutEmpresa])
   const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const value = e.target.value
-    onChange(field, value)
+    onChange(_field, value)
   }
   const handleCheckboxChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange('tipoEslinga', {
@@ -94,7 +94,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               type="text"
               value={data.matricula || ''}
               onChange={handleInputChange('matricula')}
-              disabled={disabled}
+              disabled={_disabled}
               placeholder="UY-1234"
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
@@ -114,7 +114,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               type="text"
               value={data.nombreConductor || ''}
               onChange={handleInputChange('nombreConductor')}
-              disabled={disabled}
+              disabled={_disabled}
               placeholder="Juan Pérez"
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
@@ -134,7 +134,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               type="tel"
               value={data.telefonoConductor || ''}
               onChange={handleInputChange('telefonoConductor')}
-              disabled={disabled}
+              disabled={_disabled}
               placeholder="099 123 456"
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
@@ -156,7 +156,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
             <select
               value={data.empresa || ''}
               onChange={handleInputChange('empresa')}
-              disabled={disabled}
+              disabled={_disabled}
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
                 "text-sm text-white",
@@ -166,7 +166,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               required
             >
               <option value="">Seleccionar empresa...</option>
-              {EMPRESAS.map((empresa) => (
+              {EMPRESAS.map((_empresa) => (
                 <option key={empresa.rut} value={empresa.nombre}>
                   {empresa.nombre}
                 </option>
@@ -182,7 +182,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               type="text"
               value={data.rutEmpresa || ''}
               onChange={handleInputChange('rutEmpresa')}
-              disabled={disabled}
+              disabled={_disabled}
               placeholder="211234567890"
               maxLength={12}
               className={cn(
@@ -205,7 +205,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
             <select
               value={data.origen || ''}
               onChange={handleInputChange('origen')}
-              disabled={disabled}
+              disabled={_disabled}
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
                 "text-sm text-white",
@@ -215,9 +215,9 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               required
             >
               <option value="">Seleccionar origen...</option>
-              {ORIGENES_DESTINOS.map((lugar) => (
-                <option key={lugar} value={lugar}>
-                  {lugar}
+              {ORIGENES_DESTINOS.map((_lugar) => (
+                <option key={_lugar} value={_lugar}>
+                  {_lugar}
                 </option>
               ))}
             </select>
@@ -230,7 +230,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
             <select
               value={data.destino || ''}
               onChange={handleInputChange('destino')}
-              disabled={disabled}
+              disabled={_disabled}
               className={cn(
                 "w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded",
                 "text-sm text-white",
@@ -240,9 +240,9 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
               required
             >
               <option value="">Seleccionar destino...</option>
-              {ORIGENES_DESTINOS.map((lugar) => (
-                <option key={lugar} value={lugar}>
-                  {lugar}
+              {ORIGENES_DESTINOS.map((_lugar) => (
+                <option key={_lugar} value={_lugar}>
+                  {_lugar}
                 </option>
               ))}
             </select>
@@ -281,7 +281,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="checkbox"
                   checked={data.tipoEslinga?.larga || false}
                   onChange={handleCheckboxChange('larga')}
-                  disabled={disabled}
+                  disabled={_disabled}
                   className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                 />
                 <span className="ml-2 text-sm text-gray-300">Larga</span>
@@ -291,7 +291,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="checkbox"
                   checked={data.tipoEslinga?.corta || false}
                   onChange={handleCheckboxChange('corta')}
-                  disabled={disabled}
+                  disabled={_disabled}
                   className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                 />
                 <span className="ml-2 text-sm text-gray-300">Corta</span>
@@ -308,7 +308,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
           <textarea
             value={data.observaciones || ''}
             onChange={handleInputChange('observaciones')}
-            disabled={disabled}
+            disabled={_disabled}
             placeholder="Observaciones adicionales..."
             rows={2}
             className={cn(

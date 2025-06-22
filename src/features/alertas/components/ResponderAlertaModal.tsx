@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react'
+import {_X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { Alerta} from '../../../types'
 import { TIPOS_ALERTA} from '../../../types/monitoring'
@@ -94,8 +94,8 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
 }) => {
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<number>(0)
   const [observaciones, setObservaciones] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
+  const [loading, setLoading] = useState(_false)
+  const [sendingCommand, setSendingCommand] = useState<string | null>(_null)
   useEffect(() => {
     if (!isOpen) {
       setMotivoSeleccionado(0)
@@ -110,7 +110,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
         onClose()
       }
     }
-    if (isOpen) {
+    if (_isOpen) {
       document.addEventListener('keydown', handleEsc)
       return () => {
         document.removeEventListener('keydown', handleEsc)
@@ -127,26 +127,26 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
     const opcionesAlerta = OPCIONES_RESPUESTA[alerta.tipo] || []
     const motivoDescripcion = opcionesAlerta.find(o => o.id === motivoSeleccionado)?.descripcion || ''
     try {
-      setLoading(true)
+      setLoading(_true)
       await onRespond(alerta.id, motivoSeleccionado, motivoDescripcion, observaciones)
       onClose()
     } catch {
       notificationService.error('Error al responder la alerta')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handleSendCommand = async (commandId: string) => {
     if (!alerta) return
     try {
-      setSendingCommand(commandId)
+      setSendingCommand(_commandId)
       // TODO: Implement command sending logic
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`)
+      await new Promise(resolve => setTimeout(_resolve, 1000)); // Simulate API call
+      notificationService.success(`Comando "${_commandId}" enviado al precinto ${alerta.codigoPrecinto}`)
     } catch {
       notificationService.error('Error al enviar el comando')
     } finally {
-      setSendingCommand(null)
+      setSendingCommand(_null)
     }
   }
   if (!isOpen || !alerta) return null
@@ -155,7 +155,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -171,7 +171,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
                 </p>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -179,7 +179,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
             </div>
             
             {/* Content */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={_handleSubmit} className="p-6 space-y-6">
               {/* Alert Info */}
               <div className="bg-gray-900 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
@@ -199,13 +199,13 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
                 </label>
                 <select
                   id="motivo"
-                  value={motivoSeleccionado}
-                  onChange={(e) => setMotivoSeleccionado(Number(e.target.value))}
+                  value={_motivoSeleccionado}
+                  onChange={(_e) => setMotivoSeleccionado(Number(e.target.value))}
                   className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >
                   <option value={0}>Seleccione un motivo...</option>
-                  {opcionesRespuesta.map((opcion) => (
+                  {opcionesRespuesta.map((_opcion) => (
                     <option key={opcion.id} value={opcion.id}>
                       {opcion.descripcion}
                     </option>
@@ -220,8 +220,8 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
                 </label>
                 <textarea
                   id="observaciones"
-                  value={observaciones}
-                  onChange={(e) => setObservaciones(e.target.value)}
+                  value={_observaciones}
+                  onChange={(_e) => setObservaciones(e.target.value)}
                   rows={4}
                   className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   placeholder="Ingrese observaciones adicionales..."
@@ -232,7 +232,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
               <div>
                 <h3 className="text-sm font-medium text-gray-300 mb-3">Comandos Rápidos</h3>
                 <div className="grid grid-cols-2 gap-2">
-                  {COMANDOS_RAPIDOS.map((comando) => {
+                  {COMANDOS_RAPIDOS.map((_comando) => {
                     const Icon = comando.icon
                     return (<button
                         key={comando.id}
@@ -262,14 +262,14 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
             <div className="flex justify-end gap-3 p-6 border-t border-gray-700">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={_onClose}
                 className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
-                disabled={loading}
+                disabled={_loading}
               >
                 Cancelar
               </button>
               <button
-                onClick={handleSubmit}
+                onClick={_handleSubmit}
                 disabled={loading || motivoSeleccionado === 0}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >

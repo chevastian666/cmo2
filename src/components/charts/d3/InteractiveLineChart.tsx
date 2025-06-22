@@ -18,8 +18,8 @@ interface InteractiveLineChartProps {
 export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
   data, config: userConfig, onDataPointClick, onZoomChange
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const svgRef = useRef<SVGSVGElement>(_null)
+  const containerRef = useRef<HTMLDivElement>(_null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig])
   // Handle container resize
@@ -41,11 +41,11 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     const innerHeight = height - margin.top - margin.bottom
     // Create scales
     const xScale = scales.createTimeScale(
-      d3.extent(data, d => d.date) as [Date, Date],
+      d3.extent(_data, d => d.date) as [Date, Date],
       [0, innerWidth]
     )
     const yScale = scales.createLinearScale(
-      d3.extent(data, d => d.value) as [number, number],
+      d3.extent(_data, d => d.value) as [number, number],
       [innerHeight, 0]
     )
     // Create zoom behavior
@@ -53,7 +53,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .scaleExtent([1, 10])
       .extent([[0, 0], [width, height]])
       .on('zoom', handleZoom)
-    svg.call(zoom)
+    svg.call(_zoom)
     // Create main group
     const g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
@@ -72,20 +72,20 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     // Create area generator for fill
     const area = d3.area<TimeSeriesData>()
       .x(d => xScale(d.date))
-      .y0(innerHeight)
+      .y0(_innerHeight)
       .y1(d => yScale(d.value))
       .curve(d3.curveMonotoneX)
     // Add grid lines
     const xGrid = g.append('g')
       .attr('class', 'grid')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(xScale)
+      .attr('transform', `translate(0,${_innerHeight})`)
+      .call(d3.axisBottom(_xScale)
         .tickSize(-innerHeight)
         .tickFormat(() => '')
       )
     const yGrid = g.append('g')
       .attr('class', 'grid')
-      .call(d3.axisLeft(yScale)
+      .call(d3.axisLeft(_yScale)
         .tickSize(-innerWidth)
         .tickFormat(() => '')
       )
@@ -113,14 +113,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('stop-opacity', 0)
     // Add area with animation
     const areaPath = g.append('path')
-      .datum(data)
+      .datum(_data)
       .attr('fill', 'url(#area-gradient)')
       .attr('clip-path', 'url(#clip)')
       .attr('d', area)
-    animations.fadeIn(areaPath, config.animations.duration)
+    animations.fadeIn(_areaPath, config.animations.duration)
     // Add line with animation
     const linePath = g.append('path')
-      .datum(data)
+      .datum(_data)
       .attr('fill', 'none')
       .attr('stroke', config.colors[0])
       .attr('stroke-width', 2)
@@ -128,14 +128,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('d', line)
     const totalLength = (linePath.node() as SVGPathElement).getTotalLength()
     linePath
-      .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+      .attr('stroke-dasharray', `${_totalLength} ${_totalLength}`)
       .attr('stroke-dashoffset', totalLength)
       .transition()
       .duration(config.animations.duration)
       .attr('stroke-dashoffset', 0)
     // Add data points
     const dots = g.selectAll('.dot')
-      .data(data)
+      .data(_data)
       .enter().append('circle')
       .attr('class', 'dot')
       .attr('clip-path', 'url(#clip)')
@@ -147,15 +147,15 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('stroke-width', 2)
     // Animate dots appearance
     dots.transition()
-      .delay((d, i) => i * 50)
+      .delay((_d, i) => i * 50)
       .duration(300)
       .attr('r', 4)
     // Create tooltip
     const tooltipDiv = tooltip.create(containerRef.current!)
     // Add hover interactions
     dots
-      .on('mouseenter', function(event, d) {
-        d3.select(this)
+      .on('mouseenter', function(_event, d) {
+        d3.select(_this)
           .transition()
           .duration(200)
           .attr('r', 6)
@@ -165,30 +165,30 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
           <div class="text-sm mt-1">Valor: ${formatters.number(d.value)}</div>
           ${d.category ? `<div class="text-sm">Categoría: ${d.category}</div>` : ''}
           ${d.metadata ? Object.entries(d.metadata).map(([key, value]) => 
-            `<div class="text-xs text-gray-400">${key}: ${value}</div>`
+            `<div class="text-xs text-gray-400">${_key}: ${_value}</div>`
           ).join('') : ''}
         `
-        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
-        d3.select(this)
+        d3.select(_this)
           .transition()
           .duration(200)
           .attr('r', 4)
           .attr('stroke-width', 2)
-        tooltip.hide(tooltipDiv)
+        tooltip.hide(_tooltipDiv)
       })
-      .on('click', (event, d) => {
-        onDataPointClick?.(d)
+      .on('click', (_event, d) => {
+        onDataPointClick?.(_d)
       })
     // Add axes
     const xAxis = g.append('g')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(xScale)
+      .attr('transform', `translate(0,${_innerHeight})`)
+      .call(d3.axisBottom(_xScale)
         .tickFormat(formatters.shortDate)
       )
     const yAxis = g.append('g')
-      .call(d3.axisLeft(yScale)
+      .call(d3.axisLeft(_yScale)
         .tickFormat(formatters.number)
       )
     // Style axes
@@ -219,8 +219,8 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     function handleZoom(event: d3.D3ZoomEvent<SVGSVGElement, unknown>) {
       const { transform } = event
       // Update scales
-      const newXScale = transform.rescaleX(xScale)
-      const newYScale = transform.rescaleY(yScale)
+      const newXScale = transform.rescaleX(_xScale)
+      const newYScale = transform.rescaleY(_yScale)
       // Update line and area
       const newLine = line.x(d => newXScale(d.date)).y(d => newYScale(d.value))
       const newArea = area.x(d => newXScale(d.date)).y1(d => newYScale(d.value))
@@ -231,14 +231,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         .attr('cx', d => newXScale(d.date))
         .attr('cy', d => newYScale(d.value))
       // Update axes
-      xAxis.call(d3.axisBottom(newXScale).tickFormat(formatters.shortDate))
-      yAxis.call(d3.axisLeft(newYScale).tickFormat(formatters.number))
+      xAxis.call(d3.axisBottom(_newXScale).tickFormat(formatters.shortDate))
+      yAxis.call(d3.axisLeft(_newYScale).tickFormat(formatters.number))
       // Update grid
-      xGrid.call(d3.axisBottom(newXScale)
+      xGrid.call(d3.axisBottom(_newXScale)
         .tickSize(-innerHeight)
         .tickFormat(() => '')
       )
-      yGrid.call(d3.axisLeft(newYScale)
+      yGrid.call(d3.axisLeft(_newYScale)
         .tickSize(-innerWidth)
         .tickFormat(() => '')
       )
@@ -271,7 +271,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .style('font-size', '10px')
       .text('Reset')
     // Show reset button on zoom
-    svg.on('zoom.reset', (event) => {
+    svg.on('zoom.reset', (_event) => {
       const isZoomed = event.transform.k !== 1 || event.transform.x !== 0 || event.transform.y !== 0
       resetButton.transition()
         .duration(200)
@@ -283,12 +283,12 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
   }, [dimensions])
   return (
     <div 
-      ref={containerRef} 
+      ref={_containerRef} 
       className="w-full h-full relative"
       style={{ minHeight: '300px' }}
     >
       <svg
-        ref={svgRef}
+        ref={s_vgRef}
         width="100%"
         height="100%"
         style={{ display: 'block' }}

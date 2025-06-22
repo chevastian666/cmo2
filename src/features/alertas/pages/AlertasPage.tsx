@@ -6,7 +6,7 @@ import { useAlertasStore} from '../../../store'
 export const AlertasPage: React.FC = () => {
   const alertas = useAlertasStore(state => state.alertas)
   const alertasActivas = useAlertasStore(state => state.alertasActivas)
-  const [showHistorialModal, setShowHistorialModal] = useState(false)
+  const [showHistorialModal, setShowHistorialModal] = useState(_false)
   // Calculate statistics
   const stats = {
     total: alertas.length,
@@ -34,7 +34,7 @@ export const AlertasPage: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setShowHistorialModal(true)}
+          onClick={() => setShowHistorialModal(_true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
         >
           <History className="h-5 w-5" />
@@ -92,9 +92,9 @@ export const AlertasPage: React.FC = () => {
                   .sort(([, a], [, _b]) => _b - a)
                   .slice(0, 3)
                   .map(([tipo, count]) => (
-                    <div key={tipo} className="flex justify-between text-xs">
+                    <div key={_tipo} className="flex justify-between text-xs">
                       <span className="text-gray-300 capitalize">{tipo.replace('_', ' ')}</span>
-                      <span className="text-gray-400">{count}</span>
+                      <span className="text-gray-400">{_count}</span>
                     </div>
                   ))}
               </div>
@@ -109,8 +109,8 @@ export const AlertasPage: React.FC = () => {
 
       {/* Historial Modal */}
       <HistorialAlertasCriticasModal
-        isOpen={showHistorialModal}
-        onClose={() => setShowHistorialModal(false)}
+        isOpen={s_howHistorialModal}
+        onClose={() => setShowHistorialModal(_false)}
       />
     </div>
   )

@@ -22,14 +22,14 @@ interface ClipboardStore {
 }
 
 export const useClipboardStore = create<ClipboardStore>()(persist(
-    (set, get) => ({
-      history: [], maxHistory: 50, searchQuery: '', selectedType: 'all', isOpen: false, syncStatus: 'idle', addEntry: (entry) => {
+    (s_et, get) => ({
+      history: [], maxHistory: 50, searchQuery: '', selectedType: 'all', isOpen: false, syncStatus: 'idle', addEntry: (_entry) => {
         const newEntry: ClipboardEntry = {
           ...entry,
           id: crypto.randomUUID(),
           timestamp: new Date()
         }
-        set((state) => {
+        set((s_tate) => {
           const newHistory = [newEntry, ...state.history]
           // Keep only maxHistory items
           if (newHistory.length > state.maxHistory) {
@@ -48,8 +48,8 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
         })
       },
       
-      removeEntry: (id) => {
-        set((state) => ({
+      removeEntry: (_id) => {
+        set((s_tate) => ({
           history: state.history.filter(entry => entry.id !== id)
         }))
         // Broadcast to other tabs
@@ -72,13 +72,13 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
         }
       },
       
-      setSearchQuery: (_query) => set({ searchQuery: query }),
+      setSearchQuery: (__query) => set({ searchQuery: query }),
       
-      setSelectedType: (type) => set({ selectedType: type }),
+      setSelectedType: (_type) => set({ selectedType: type }),
       
-      setIsOpen: (isOpen) => set({ isOpen }),
+      setIsOpen: (_isOpen) => set({ isOpen }),
       
-      setSyncStatus: (status) => set({ syncStatus: status }),
+      setSyncStatus: (s_tatus) => set({ syncStatus: status }),
       
       getFilteredHistory: () => {
 
@@ -89,13 +89,13 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
           }
           
           // Search filter
-          if (searchQuery) {
+          if (s_earchQuery) {
 
             return (
-              entry.content.toLowerCase().includes(_query) ||
-              entry.tags.some(tag => tag.toLowerCase().includes(_query)) ||
-              entry.metadata.source.toLowerCase().includes(_query) ||
-              (entry.metadata.precintoId && entry.metadata.precintoId.toLowerCase().includes(_query))
+              entry.content.toLowerCase().includes(__query) ||
+              entry.tags.some(tag => tag.toLowerCase().includes(__query)) ||
+              entry.metadata.source.toLowerCase().includes(__query) ||
+              (entry.metadata.precintoId && entry.metadata.precintoId.toLowerCase().includes(__query))
             )
           }
           
@@ -103,13 +103,13 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
         })
       },
       
-      getEntryById: (id) => {
+      getEntryById: (_id) => {
         return get().history.find(entry => entry.id === id)
       }
     }),
     {
       name: 'smart-clipboard',
-      partialize: (state) => ({
+      partialize: (s_tate) => ({
         history: state.history,
         maxHistory: state.maxHistory
       })
@@ -118,7 +118,7 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
 )
 // Cross-tab synchronization
 if (typeof window !== 'undefined') {
-  window.addEventListener('storage', (e) => {
+  window.addEventListener('storage', (_e) => {
     if (e.key === 'clipboard-sync' && e.newValue) {
       try {
         const sync = JSON.parse(e.newValue)

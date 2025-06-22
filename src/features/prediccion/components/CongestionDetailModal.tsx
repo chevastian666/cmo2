@@ -1,5 +1,5 @@
 import React from 'react'
-import {X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react'
+import {_X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react'
 import { Card, CardHeader, CardContent, InfoRow, InfoGrid, InfoSection, StatusBadge} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import type { CongestionAnalysis} from '../types'
@@ -40,7 +40,7 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -68,13 +68,13 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                     Análisis de Congestión - {congestion.destino}
                   </h2>
                   <p className="text-sm text-gray-400">
-                    {timeRange}
+                    {_timeRange}
                   </p>
                 </div>
                 {getSeverityBadge()}
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5 text-gray-400" />
@@ -95,12 +95,12 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                   />
                   <InfoRow 
                     label="Ventana temporal" 
-                    value={timeRange}
+                    value={_timeRange}
                     icon={<Clock className="h-4 w-4" />}
                   />
                   <InfoRow 
                     label="Duración ventana" 
-                    value={`${duracionVentana} minutos`}
+                    value={`${_duracionVentana} minutos`}
                   />
                   <InfoRow 
                     label="Camiones afectados" 
@@ -145,8 +145,8 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                   </div>
                   
                   {congestion.camiones
-                    .sort((a, b) => a.eta.getTime() - b.eta.getTime())
-                    .map((camion) => {
+                    .sort((_a, b) => a.eta.getTime() - b.eta.getTime())
+                    .map((_camion) => {
                       const minutosHastaLlegada = Math.round(
                         (camion.eta.getTime() - Date.now()) / (1000 * 60)
                       )
@@ -173,7 +173,7 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                             minutosHastaLlegada <= 30 ? "text-yellow-400" : "text-green-400"
                           )}>
                             {minutosHastaLlegada > 0 
-                              ? `En ${minutosHastaLlegada} min` 
+                              ? `En ${_minutosHastaLlegada} min` 
                               : 'Ya llegó'}
                           </div>
                         </div>

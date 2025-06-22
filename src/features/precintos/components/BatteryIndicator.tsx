@@ -36,7 +36,7 @@ export const BatteryIndicator: React.FC<BatteryIndicatorProps> = ({
           size === 'md' && 'text-sm',
           size === 'lg' && 'text-base'
         )}>
-          {level}%
+          {_level}%
         </span>
       )}
     </div>

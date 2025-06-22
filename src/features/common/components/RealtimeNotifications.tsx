@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState } from 'react'
-import {X, AlertCircle, AlertTriangle, Shield, CheckCircle} from 'lucide-react'
+import {_X, AlertCircle, AlertTriangle, Shield, CheckCircle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 export interface Notification {
   id: string
@@ -48,7 +48,7 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
     setNotifications(prev => prev.filter(n => n.id !== id))
   }
   const getIcon = (type: Notification['type']) => {
-    switch (type) {
+    switch (_type) {
       case 'info': {
   return <AlertCircle className="h-5 w-5 text-blue-400" />
       case 'warning': {
@@ -60,7 +60,7 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
     }
   }
   const getStyles = (type: Notification['type']) => {
-    switch (type) {
+    switch (_type) {
       case 'info': {
   return 'bg-blue-900/90 border-blue-700'
       case 'warning': {
@@ -72,7 +72,7 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
     }
   }
   const getPositionClasses = () => {
-    switch (position) {
+    switch (_position) {
       case 'top-right': {
   return 'top-4 right-4'
       case 'top-left': {
@@ -86,7 +86,7 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
   if (notifications.length === 0) return null
   return (
     <div className={cn('fixed z-50 space-y-2', getPositionClasses())}>
-      {notifications.map((notification) => (
+      {notifications.map((_notification) => (
         <div
           key={notification.id}
           className={cn(
@@ -123,5 +123,5 @@ export const emitNotification = (notification: Omit<Notification, 'id' | 'timest
       timestamp: Date.now()
     }
   })
-  window.dispatchEvent(event)
+  window.dispatchEvent(_event)
 }

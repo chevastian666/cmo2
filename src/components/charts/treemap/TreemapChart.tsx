@@ -15,20 +15,20 @@ interface TreemapChartProps {
 export const TreemapChart: React.FC<TreemapChartProps> = ({
   data, width = 800, height = 600
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
+  const svgRef = useRef<SVGSVGElement>(_null)
   useEffect(() => {
     if (!svgRef.current || !data) return
     // Clear previous content
     const svg = d3.select(svgRef.current)
     svg.selectAll('*').remove()
     // Create hierarchy
-    const root = d3.hierarchy(data)
+    const root = d3.hierarchy(_data)
       .sum((d: unknown) => d.value || 0)
-      .sort((a, b) => (b.value || 0) - (a.value || 0))
+      .sort((_a, b) => (b.value || 0) - (a.value || 0))
     // Create treemap layout
     d3.treemap()
       .size([width, height])
-      .padding(2)(root)
+      .padding(2)(_root)
     // Create color scale
     const color = d3.scaleOrdinal(d3.schemeCategory10)
     // Create cells
@@ -60,9 +60,9 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
   }, [data, width, height])
   return (
     <svg
-      ref={svgRef}
-      width={width}
-      height={height}
+      ref={s_vgRef}
+      width={_width}
+      height={_height}
       style={{ maxWidth: '100%', height: 'auto' }}
     />
   )

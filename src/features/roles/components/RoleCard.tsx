@@ -29,14 +29,14 @@ export const RoleCard: React.FC<RoleCardProps> = ({
 }) => {
 
   const hasPermission = (section: Section, permission: Permission) => {
-    return permissions[role][section].includes(permission)
+    return permissions[role][section].includes(_permission)
   }
   const isPermissionDisabled = (section: Section, permission: Permission) => {
     if (permission === 'view') return false
-    return !hasPermission(section, 'view')
+    return !hasPermission(s_ection, 'view')
   }
   const getRoleColor = () => {
-    switch (role) {
+    switch (_role) {
       case 'God': {
   return 'border-purple-600 bg-purple-900/20'
       case 'Gerente': {
@@ -50,7 +50,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
     }
   }
   const getRoleIcon = () => {
-    switch (role) {
+    switch (_role) {
       case 'God': {
   return 'text-purple-500'
       case 'Gerente': {
@@ -69,7 +69,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
       getRoleColor()
     )}>
       <button
-        onClick={onToggleExpand}
+        onClick={_onToggleExpand}
         className="w-full px-4 py-3 flex items-center justify-between bg-gray-800 hover:bg-gray-700 transition-colors"
       >
         <div className="flex items-center gap-3">
@@ -88,18 +88,18 @@ export const RoleCard: React.FC<RoleCardProps> = ({
       {expanded && (
         <div className="p-4 space-y-3 bg-gray-900/50">
           {SECTIONS.map(section => (
-            <div key={section} className="bg-gray-800 rounded-lg p-3">
+            <div key={s_ection} className="bg-gray-800 rounded-lg p-3">
               <h4 className="text-sm font-medium text-white mb-2">
                 {SECTION_LABELS[section]}
               </h4>
               <div className="grid grid-cols-2 gap-2">
                 {PERMISSIONS.map(permission => (
                   <PermissionCheckbox
-                    key={permission}
-                    checked={hasPermission(section, permission)}
-                    onChange={() => togglePermission(role, section, permission)}
-                    permission={permission}
-                    disabled={isPermissionDisabled(section, permission)}
+                    key={_permission}
+                    checked={hasPermission(s_ection, permission)}
+                    onChange={() => togglePermission(_role, section, permission)}
+                    permission={_permission}
+                    disabled={isPermissionDisabled(s_ection, permission)}
                     showLabel
                     size="sm"
                   />

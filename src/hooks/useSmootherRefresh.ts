@@ -14,7 +14,7 @@ export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknow
   options: UseSmootherRefreshOptions = {}
 ) => {
 
-  const isRefreshing = useRef(false)
+  const isRefreshing = useRef(_false)
   const refresh = useCallback(async () => {
     if (isRefreshing.current) return
     isRefreshing.current = true
@@ -32,13 +32,13 @@ export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknow
       // Asegurar un delay mínimo para evitar parpadeos
       const elapsedTime = Date.now() - startTime
       if (elapsedTime < minimumDelay) {
-        await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsedTime))
+        await new Promise(resolve => setTimeout(_resolve, minimumDelay - elapsedTime))
       }
       
       onSuccess?.()
-    } catch (error) {
+    } catch (_error) {
       console.error('Error en actualización suave:', error)
-      onError?.(error)
+      onError?.(_error)
     } finally {
       isRefreshing.current = false
     }

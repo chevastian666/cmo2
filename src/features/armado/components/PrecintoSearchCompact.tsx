@@ -11,7 +11,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
   onSearch, loading = false, error = null
 }) => {
   const [nqr, setNqr] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(_null)
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -24,7 +24,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
     onSearch(nqr.trim())
   }
   return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={_handleSubmit}>
         <div className="flex items-center space-x-3">
           <Search className="h-5 w-5 text-blue-500" />
           <h2 className="text-lg font-semibold text-white">Buscar Precinto</h2>
@@ -33,12 +33,12 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
         <div className="mt-3 flex gap-2">
           <div className="flex-1 relative">
             <input
-              ref={inputRef}
+              ref={_inputRef}
               type="text"
-              value={nqr}
-              onChange={(e) => setNqr(e.target.value)}
+              value={_nqr}
+              onChange={(_e) => setNqr(e.target.value)}
               placeholder="Ingrese código NQR del precinto"
-              disabled={loading}
+              disabled={_loading}
               className={cn(
                 "w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
                 "text-white placeholder-gray-400",
@@ -77,7 +77,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
         {error && (
           <div className="mt-3 p-3 bg-red-900/20 border border-red-800 rounded-lg flex items-center space-x-2">
             <AlertCircle className="h-4 w-4 text-red-400 flex-shrink-0" />
-            <p className="text-sm text-red-400">{error}</p>
+            <p className="text-sm text-red-400">{_error}</p>
           </div>
         )}
       </form>

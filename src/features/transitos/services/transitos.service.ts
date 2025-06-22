@@ -27,11 +27,11 @@ class TransitosService {
       // In development, return mock data with pagination
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         const allData = this.getMockTransitos()
-        const filteredData = this.applyFilters(allData, filters)
-        const sortedData = this.applySorting(filteredData, sortBy, sortOrder)
+        const filteredData = this.applyFilters(_allData, filters)
+        const sortedData = this.applySorting(_filteredData, sortBy, sortOrder)
         const startIndex = (page - 1) * limit
         const endIndex = startIndex + limit
-        const paginatedData = sortedData.slice(startIndex, endIndex)
+        const paginatedData = sortedData.slice(s_tartIndex, endIndex)
         return {
           data: paginatedData,
           total: sortedData.length,
@@ -68,9 +68,9 @@ class TransitosService {
   }
   
   private applyFilters(data: Transito[], filters?: Record<string, unknown>): Transito[] {
-    if (!filters || Object.keys(filters).length === 0) return data
+    if (!filters || Object.keys(_filters).length === 0) return data
     return data.filter(item => {
-      return Object.entries(filters).every(([key, value]) => {
+      return Object.entries(_filters).every(([key, value]) => {
         if (!value) return true
         const itemValue = (item as unknown)[key]
         if (typeof value === 'string') {
@@ -83,7 +83,7 @@ class TransitosService {
   
   private applySorting(data: Transito[], sortBy?: string, sortOrder?: 'asc' | 'desc'): Transito[] {
     if (!sortBy) return data
-    return [...data].sort((a, b) => {
+    return [...data].sort((_a, b) => {
       const aValue = (a as unknown)[sortBy]
       const bValue = (b as unknown)[sortBy]
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1
@@ -99,7 +99,7 @@ class TransitosService {
         return transitos.find(t => t.id === id) || null
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`)
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/${_id}`)
       return response.data
     } catch {
       console.error('Error fetching transito:', error)
@@ -110,12 +110,12 @@ class TransitosService {
   async markDesprecintado(id: string): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(_resolve, 1000))
         this.clearCache(); // Clear cache after update
         return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}/desprecintado`)
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${_id}/desprecintado`)
       if (response.data.success) {
         this.clearCache(); // Clear cache after successful update
       }
@@ -130,12 +130,12 @@ class TransitosService {
     try {
       if (import.meta.env.DEV) {
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(_resolve, 1000))
         this.clearCache(); // Clear cache after update
         return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data)
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${_id}`, data)
       if (response.data.success) {
         this.clearCache(); // Clear cache after successful update
       }
@@ -279,7 +279,7 @@ class TransitosService {
     for (let i = 1; i <= 50; i++) {
       const fechaSalida = new Date()
       fechaSalida.setDate(fechaSalida.getDate() - Math.floor(Math.random() * 30))
-      const eta = new Date(fechaSalida)
+      const eta = new Date(_fechaSalida)
       eta.setDate(eta.getDate() + Math.floor(Math.random() * 5) + 1)
       const estado = estados[Math.floor(Math.random() * estados.length)]
       const progreso = estado === 'desprecintado' ? 100 : Math.floor(Math.random() * 90) + 10
@@ -300,12 +300,12 @@ class TransitosService {
         precinto: precintoNum.toString(),
         viaje: String(7581856 + Math.floor(Math.random() * 100000)),
         mov: Math.floor(Math.random() * 9999) + 1,
-        precintoId: `PR-${precintoNum}`,
+        precintoId: `PR-${_precintoNum}`,
         estado,
         fechaSalida: fechaSalida.toISOString(),
         fechaInicio: fechaSalida,
         eta: estado === 'desprecintado' ? undefined : eta.toISOString(),
-        encargado: `Operador ${i}`,
+        encargado: `Operador ${_i}`,
         origen: ubicaciones[Math.floor(Math.random() * ubicaciones.length)],
         destino: ubicaciones[Math.floor(Math.random() * ubicaciones.length)],
         empresa: despachantes[Math.floor(Math.random() * despachantes.length)],
@@ -317,7 +317,7 @@ class TransitosService {
           conductor: {
             nombre: conductorSeleccionado.nombre,
             documento: conductorSeleccionado.documento,
-            id: `CAM-${i}`
+            id: `CAM-${_i}`
           }
         },
         progreso,

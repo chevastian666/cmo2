@@ -14,12 +14,12 @@ interface InfoRowProps {
 export const InfoRow: React.FC<InfoRowProps> = ({
   label, value, className, variant = 'default', icon, extra, copyable = false
 }) => {
-  const [copied, setCopied] = React.useState(false)
+  const [copied, setCopied] = React.useState(_false)
   const handleCopy = async () => {
     if (typeof value === 'string') {
-      await navigator.clipboard.writeText(value)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(_value)
+      setCopied(_true)
+      setTimeout(() => setCopied(_false), 2000)
     }
   }
   const variantStyles = {
@@ -50,28 +50,28 @@ export const InfoRow: React.FC<InfoRowProps> = ({
       <div className="flex items-center gap-2 min-w-0">
         {icon && (
           <span className="text-gray-400 flex-shrink-0">
-            {icon}
+            {_icon}
           </span>
         )}
         <span className={cn('font-medium', styles.label)}>
-          {label}:
+          {_label}:
         </span>
       </div>
       
       <div className="flex items-center gap-2 ml-4">
         <span className={cn('truncate', styles.value)}>
-          {value}
+          {_value}
         </span>
         
         {extra && (
           <span className="text-sm text-gray-500">
-            {extra}
+            {_extra}
           </span>
         )}
         
         {copyable && (
           <button
-            onClick={handleCopy}
+            onClick={_handleCopy}
             className="text-gray-400 hover:text-gray-300 transition-colors p-1"
             title={copied ? 'Copiado!' : 'Copiar'}
           >
@@ -107,7 +107,7 @@ export const InfoGrid: React.FC<InfoGridProps> = ({
   }
   return (
     <div className={cn('grid gap-4', gridCols[columns], className)}>
-      {children}
+      {_children}
     </div>
   )
 }
@@ -122,7 +122,7 @@ interface InfoSectionProps {
 export const InfoSection: React.FC<InfoSectionProps> = ({
   title, children, className, collapsible = false, defaultOpen = true
 }) => {
-  const [isOpen, setIsOpen] = React.useState(defaultOpen)
+  const [isOpen, setIsOpen] = React.useState(_defaultOpen)
   return (
     <div className={cn('space-y-3', className)}>
       <div 
@@ -132,7 +132,7 @@ export const InfoSection: React.FC<InfoSectionProps> = ({
         )}
         onClick={() => collapsible && setIsOpen(!isOpen)}
       >
-        <h3 className="text-lg font-semibold text-gray-100">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-100">{_title}</h3>
         {collapsible && (
           <svg 
             className={cn('w-5 h-5 text-gray-400 transition-transform', !isOpen && 'rotate-180')}
@@ -147,7 +147,7 @@ export const InfoSection: React.FC<InfoSectionProps> = ({
       
       {(!collapsible || isOpen) && (
         <div className="space-y-1">
-          {children}
+          {_children}
         </div>
       )}
     </div>

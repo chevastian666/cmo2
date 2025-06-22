@@ -1,5 +1,5 @@
 import React from 'react'
-import {X, MapPin, Phone, Battery, Wifi, Link2, Calendar, Clock, AlertTriangle} from 'lucide-react'
+import {_X, MapPin, Phone, Battery, Wifi, Link2, Calendar, Clock, AlertTriangle} from 'lucide-react'
 import { PrecintoStatusBadge} from './PrecintoStatusBadge'
 import { BatteryIndicator} from './BatteryIndicator'
 import { SignalIndicator} from './SignalIndicator'
@@ -26,7 +26,7 @@ export const PrecintoDetailModal: React.FC<PrecintoDetailModalProps> = ({
             <p className="text-lg text-gray-400 mt-1">Serie: {precinto.nserie}</p>
           </div>
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
           >
             <X className="h-6 w-6 text-gray-400" />

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Activity} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 export const RealtimeIndicator: React.FC = () => {
-  const [isActive, setIsActive] = useState(false)
+  const [isActive, setIsActive] = useState(_false)
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
   useEffect(() => {
     // Listen for any store updates
     const handleUpdate = () => {
-      setIsActive(true)
+      setIsActive(_true)
       setLastUpdate(new Date())
       // Reset indicator after animation
-      setTimeout(() => setIsActive(false), 1000)
+      setTimeout(() => setIsActive(_false), 1000)
     }
     // Custom event for any real-time update
     window.addEventListener('realtime-update' as unknown, handleUpdate)

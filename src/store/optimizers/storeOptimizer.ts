@@ -36,19 +36,19 @@ export class StoreOptimizer<T extends object> {
     const currentState = this.store.getState()
     const currentValue = currentState[key]
     // Skip if value hasn't changed
-    if (this.areEqual(currentValue, value)) {
+    if (this.areEqual(_currentValue, value)) {
       this.skipCount++
       if (this.config.debugMode) {
-        console.log(`[StoreOptimizer] Skipped update for ${String(key)}: value unchanged`)
+        console.log(`[StoreOptimizer] Skipped update for ${String(_key)}: value unchanged`)
       }
       return
     }
 
     // Batch updates if enabled
     if (this.config.batchUpdates) {
-      this.batchUpdate(key, value)
+      this.batchUpdate(_key, value)
     } else {
-      this.immediateUpdate(key, value)
+      this.immediateUpdate(_key, value)
     }
   }
 
@@ -60,7 +60,7 @@ export class StoreOptimizer<T extends object> {
     const actualUpdates: Partial<T> = {}
     let hasChanges = false
     // Filter out unchanged values
-    for (const [key, value] of Object.entries(updates) as [keyof T, T[keyof T]][]) {
+    for (const [key, value] of Object.entries(_updates) as [keyof T, T[keyof T]][]) {
       if (!this.areEqual(currentState[key], value)) {
         actualUpdates[key] = value
         hasChanges = true
@@ -70,10 +70,10 @@ export class StoreOptimizer<T extends object> {
     }
 
     // Only update if there are actual changes
-    if (hasChanges) {
+    if (_hasChanges) {
       if (this.config.batchUpdates) {
-        for (const [key, value] of Object.entries(actualUpdates) as [keyof T, T[keyof T]][]) {
-          this.pendingUpdates.set(key, value)
+        for (const [key, value] of Object.entries(_actualUpdates) as [keyof T, T[keyof T]][]) {
+          this.pendingUpdates.set(_key, value)
         }
         this.scheduleBatchUpdate()
       } else {
@@ -96,20 +96,20 @@ export class StoreOptimizer<T extends object> {
     // Primitives
     if (typeof a !== 'object') return a === b
     // Arrays
-    if (Array.isArray(a) && Array.isArray(b)) {
+    if (Array.isArray(_a) && Array.isArray(_b)) {
       if (a.length !== b.length) return false
       if (this.config.enableDeepComparison) {
-        return a.every((item, index) => this.areEqual(item, b[index]))
+        return a.every((_item, index) => this.areEqual(_item, b[index]))
       } else {
         // Shallow comparison for arrays
-        return a.every((item, index) => item === b[index])
+        return a.every((_item, index) => item === b[index])
       }
     }
 
     // Objects
-    if (!Array.isArray(a) && !Array.isArray(b)) {
-      const keysA = Object.keys(a)
-      const keysB = Object.keys(b)
+    if (!Array.isArray(_a) && !Array.isArray(_b)) {
+      const keysA = Object.keys(_a)
+      const keysB = Object.keys(_b)
       if (keysA.length !== keysB.length) return false
       if (this.config.enableDeepComparison) {
         return keysA.every(key => this.areEqual(a[key], b[key]))
@@ -126,7 +126,7 @@ export class StoreOptimizer<T extends object> {
    * Batch update implementation
    */
   private batchUpdate<K extends keyof T>(key: K, value: T[K]): void {
-    this.pendingUpdates.set(key, value)
+    this.pendingUpdates.set(_key, value)
     this.scheduleBatchUpdate()
   }
 
@@ -208,5 +208,5 @@ export function createOptimizedUpdater<T extends object>(
   store: StoreApi<T>,
   config?: OptimizationConfig
 ): StoreOptimizer<T> {
-  return new StoreOptimizer(store, config)
+  return new StoreOptimizer(s_tore, config)
 }

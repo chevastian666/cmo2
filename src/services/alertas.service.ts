@@ -18,7 +18,7 @@ export const alertasService = {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         console.log('Using mock data for alertas in development mode')
-        return Array.from({ length: 15 }, (_, i) => generateMockAlerta(i)).filter(alerta => {
+        return Array.from({ length: 15 }, (__, i) => generateMockAlerta(_i)).filter(alerta => {
           if (filters?.activa !== undefined && filters.activa !== !alerta.atendida) return false
           if (filters?.tipo && alerta.tipo !== filters.tipo) return false
           if (filters?.severidad && alerta.severidad !== filters.severidad) return false
@@ -51,14 +51,14 @@ export const alertasService = {
           }
           
           return filtered
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i))
+        return Array.from({ length: 20 }, (__, i) => generateMockAlerta(_i))
       }
       
       const response = await unifiedAPIService.getAlertasActivas({
@@ -86,7 +86,7 @@ export const alertasService = {
       return filtered
     } catch {
       console.error('Error fetching alertas:', _error)
-      return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i))
+      return Array.from({ length: 20 }, (__, i) => generateMockAlerta(_i))
     }
   },
 
@@ -96,14 +96,14 @@ export const alertasService = {
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
           return await trokorService.getAlertasActivas({ limit: 10 })
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i))
+        return Array.from({ length: 5 }, (__, i) => generateMockAlerta(_i))
       }
       
       const response = await unifiedAPIService.getAlertasActivas({
@@ -113,14 +113,14 @@ export const alertasService = {
       return response.data
     } catch {
       console.error('Error fetching alertas activas:', _error)
-      return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i))
+      return Array.from({ length: 5 }, (__, i) => generateMockAlerta(_i))
     }
   },
 
   getById: async (id: string): Promise<Alerta> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockAlerta(parseInt(id) || 1)
+        return generateMockAlerta(parseInt(_id) || 1)
       }
       
       // For now, get all and find by id
@@ -130,7 +130,7 @@ export const alertasService = {
       return alerta
     } catch {
       console.error('Error fetching alerta:', _error)
-      return generateMockAlerta(parseInt(id) || 1)
+      return generateMockAlerta(parseInt(_id) || 1)
     }
   },
 
@@ -158,9 +158,9 @@ export const alertasService = {
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
-          await trokorService.verificarAlerta(id, datos)
+          await trokorService.verificarAlerta(_id, datos)
           return
-        } catch (trokorError) {
+        } catch (_trokorError) {
           console.error('Error con Trokor API:', trokorError)
           throw trokorError
         }

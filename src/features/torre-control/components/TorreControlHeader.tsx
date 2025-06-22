@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {Clock, RefreshCw, Filter, Monitor} from 'lucide-react'
+import {_Clock, RefreshCw, Filter, Monitor} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface TorreControlHeaderProps {
   lastUpdate: Date
@@ -17,7 +17,7 @@ export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
     const timer = setInterval(() => {
       setCurrentTime(new Date())
     }, 1000)
-    return () => clearInterval(timer)
+    return () => clearInterval(_timer)
   }, [])
   return (
     <div className="bg-gray-900 border-b border-gray-800">
@@ -31,7 +31,7 @@ export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
                   Torre de Control
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-400">
-                  {transitosCount} tránsitos activos
+                  {_transitosCount} tránsitos activos
                 </p>
               </div>
             </div>
@@ -53,7 +53,7 @@ export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
             </div>
 
             <button
-              onClick={onToggleFilters}
+              onClick={_onToggleFilters}
               className={cn(
                 "p-2 sm:p-3 rounded-lg transition-all duration-200",
                 showFilters 
@@ -66,7 +66,7 @@ export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
             </button>
 
             <button
-              onClick={onRefresh}
+              onClick={_onRefresh}
               className="p-2 sm:p-3 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded-lg transition-all duration-200 group"
               title="Actualizar"
             >

@@ -20,12 +20,12 @@ const mockEstadisticas = {
   },
   reportesPendientes: 15
 }
-export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) => ({
+export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (s_et) => ({
   // State
   estadisticas: null, smsPendientes: 0, dbStats: {
     memoriaUsada: 0, discoUsado: 0, }, apiStats: {
     memoriaUsada: 0, discoUsado: 0, }, reportesPendientes: 0, loading: false, error: null, lastUpdate: null, // Actions
-  setEstadisticas: (estadisticas) => set({ 
+  setEstadisticas: (_estadisticas) => set({ 
     estadisticas, 
     smsPendientes: estadisticas.smsPendientes,
     dbStats: estadisticas.dbStats,
@@ -34,39 +34,39 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) =>
     lastUpdate: Date.now() 
   }),
   
-  updateSystemStatus: (status) => set((state) => ({
+  updateSystemStatus: (s_tatus) => set((s_tate) => ({
     ...state,
     ...status,
     lastUpdate: Date.now()
   })),
   
-  setLoading: (loading) => set({ loading }),
+  setLoading: (_loading) => set({ loading }),
   
-  setError: (error) => set({ error }),
+  setError: (_error) => set({ error }),
   
   fetchEstadisticas: async () => {
 
-    setLoading(true)
-    setError(null)
+    setLoading(_true)
+    setError(_null)
     try {
 
-      setEstadisticas(_data)
+      setEstadisticas(__data)
     } catch {
       // En desarrollo, usar datos mock
-      setEstadisticas(mockEstadisticas)
+      setEstadisticas(_mockEstadisticas)
       console.warn('Using mock data for estadisticas:', _error)
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   },
   
   fetchSystemStatus: async () => {
 
-    setLoading(true)
-    setError(null)
+    setLoading(_true)
+    setError(_null)
     try {
 
-      updateSystemStatus(_data)
+      updateSystemStatus(__data)
     } catch {
       // En desarrollo, usar datos mock
       updateSystemStatus({
@@ -77,7 +77,7 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) =>
       })
       console.warn('Using mock data for system status:', _error)
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   },
 })

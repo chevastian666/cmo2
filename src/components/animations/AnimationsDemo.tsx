@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react'
+import {_Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react'
 import { 
   AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedModal, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton, AnimatedProgress, FadeDiv, ScaleDiv, SlideUpDiv, SlideDownDiv} from './AnimatedComponents'
 import {
@@ -9,16 +9,16 @@ import {
   rotateScaleVariants, pulseVariants, shakeVariants, glowVariants, hoverScaleVariants, hoverLiftVariants, alertCriticalVariants, transitMovingVariants, precintoActiveVariants} from './AnimationPresets'
 export const AnimationsDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basics')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(_false)
+  const [isPlaying, setIsPlaying] = useState(_true)
   const [progress, setProgress] = useState(0)
-  const [showGrid, setShowGrid] = useState(false)
+  const [showGrid, setShowGrid] = useState(_false)
   // Simulador de progreso
   React.useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => (prev >= 100 ? 0 : prev + 10))
     }, 1000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [])
   const tabs = [
     { id: 'basics', label: 'Básicas', icon: Layers },
@@ -62,7 +62,7 @@ export const AnimationsDemo: React.FC = () => {
         {/* Tabs */}
         <AnimatedSection delay={0.2}>
           <div className="flex gap-2 mb-6 overflow-x-auto">
-            {tabs.map((tab, index) => (<motion.button
+            {tabs.map((_tab, index) => (<motion.button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap ${
@@ -150,7 +150,7 @@ export const AnimationsDemo: React.FC = () => {
                 <AnimatePresence mode="wait">
                   {isPlaying && (
                     <motion.div
-                      variants={rotateScaleVariants}
+                      variants={_rotateScaleVariants}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
@@ -167,10 +167,10 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Stagger List</h4>
                 <AnimatedList className="space-y-2">
-                  {['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((item, index) => (
-                    <AnimatedListItem key={index}>
+                  {['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((_item, index) => (
+                    <AnimatedListItem key={_index}>
                       <div className="bg-gray-700 p-2 rounded">
-                        <span className="text-gray-300">{item}</span>
+                        <span className="text-gray-300">{_item}</span>
                       </div>
                     </AnimatedListItem>
                   ))}
@@ -186,7 +186,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Pulse Animation</h4>
                 <motion.div
-                  variants={pulseVariants}
+                  variants={_pulseVariants}
                   initial="initial"
                   animate="animate"
                   className="bg-blue-500 h-32 rounded-lg flex items-center justify-center"
@@ -199,7 +199,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Shake Animation</h4>
                 <motion.div
-                  variants={shakeVariants}
+                  variants={s_hakeVariants}
                   initial="initial"
                   animate={isPlaying ? "shake" : "initial"}
                   className="bg-red-500 h-32 rounded-lg flex items-center justify-center"
@@ -212,7 +212,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Glow Effect</h4>
                 <motion.div
-                  variants={glowVariants}
+                  variants={_glowVariants}
                   initial="initial"
                   animate="glow"
                   className="bg-gray-700 h-32 rounded-lg flex items-center justify-center"
@@ -225,8 +225,8 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Progress Bar</h4>
                 <div className="space-y-4">
-                  <AnimatedProgress value={progress} />
-                  <div className="text-center text-gray-400">{progress}%</div>
+                  <AnimatedProgress value={_progress} />
+                  <div className="text-center text-gray-400">{_progress}%</div>
                 </div>
               </AnimatedCard>
 
@@ -267,7 +267,7 @@ export const AnimationsDemo: React.FC = () => {
                 <h4 className="text-lg font-semibold text-white mb-4">Hover Scale</h4>
                 <motion.div
                   className="bg-blue-500 h-32 rounded-lg flex items-center justify-center cursor-pointer"
-                  variants={hoverScaleVariants}
+                  variants={_hoverScaleVariants}
                   initial="initial"
                   whileHover="hover"
                   whileTap="tap"
@@ -281,7 +281,7 @@ export const AnimationsDemo: React.FC = () => {
                 <h4 className="text-lg font-semibold text-white mb-4">Hover Lift</h4>
                 <motion.div
                   className="bg-green-500 h-32 rounded-lg flex items-center justify-center cursor-pointer"
-                  variants={hoverLiftVariants}
+                  variants={_hoverLiftVariants}
                   initial="initial"
                   whileHover="hover"
                   whileTap="tap"
@@ -336,7 +336,7 @@ export const AnimationsDemo: React.FC = () => {
                 <h4 className="text-lg font-semibold text-white mb-4">Modal Animation</h4>
                 <AnimatedButton
                   variant="primary"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(_true)}
                   className="w-full px-4 py-2"
                 >
                   Open Modal
@@ -362,12 +362,12 @@ export const AnimationsDemo: React.FC = () => {
                 
                 <AnimatePresence mode="wait">
                   {showGrid && (<AnimatedGrid className="grid grid-cols-3 gap-4">
-                      {[1, 2, 3, 4, 5, 6].map((item) => (
+                      {[1, 2, 3, 4, 5, 6].map((_item) => (
                         <div
-                          key={item}
+                          key={_item}
                           className="bg-gray-700 p-4 rounded-lg text-center"
                         >
-                          <span className="text-gray-300">Item {item}</span>
+                          <span className="text-gray-300">Item {_item}</span>
                         </div>
                       ))}
                     </AnimatedGrid>
@@ -412,7 +412,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Alerta Crítica</h4>
                 <motion.div
-                  variants={alertCriticalVariants}
+                  variants={_alertCriticalVariants}
                   initial="initial"
                   animate="animate"
                   className="bg-red-900/20 border-2 border-red-500 rounded-lg p-4"
@@ -431,7 +431,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Tránsito Activo</h4>
                 <motion.div
-                  variants={transitMovingVariants}
+                  variants={_transitMovingVariants}
                   initial="initial"
                   animate="animate"
                   className="bg-blue-900/20 border border-blue-500 rounded-lg p-4"
@@ -455,7 +455,7 @@ export const AnimationsDemo: React.FC = () => {
               <AnimatedCard>
                 <h4 className="text-lg font-semibold text-white mb-4">Precinto Activo</h4>
                 <motion.div
-                  variants={precintoActiveVariants}
+                  variants={_precintoActiveVariants}
                   initial="initial"
                   animate="animate"
                   className="bg-green-900/20 border border-green-500 rounded-lg p-4"
@@ -499,8 +499,8 @@ export const AnimationsDemo: React.FC = () => {
 
         {/* Modal */}
         <AnimatedModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={_isModalOpen}
+          onClose={() => setIsModalOpen(_false)}
           className="max-w-md w-full"
         >
           <div className="p-6">
@@ -511,14 +511,14 @@ export const AnimationsDemo: React.FC = () => {
             <div className="flex gap-3 justify-end">
               <AnimatedButton
                 variant="secondary"
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsModalOpen(_false)}
                 className="px-4 py-2"
               >
                 Cancelar
               </AnimatedButton>
               <AnimatedButton
                 variant="primary"
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsModalOpen(_false)}
                 className="px-4 py-2"
               >
                 Aceptar

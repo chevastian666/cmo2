@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react'
-import {Building2, Check, ChevronDown, Plus} from 'lucide-react'
+import {_Building2, Check, ChevronDown, Plus} from 'lucide-react'
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
 import { Button} from '@/components/ui/button'
@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
 import { cn} from '@/utils/utils'
 export const TenantSwitcher: React.FC = () => {
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(_false)
   if (!currentTenant) {
     return null
   }
@@ -28,7 +28,7 @@ export const TenantSwitcher: React.FC = () => {
     }
     return (
       <Badge variant={variants[status as keyof typeof variants] || 'default'} className="ml-2">
-        {status}
+        {s_tatus}
       </Badge>
     )
   }
@@ -44,7 +44,7 @@ export const TenantSwitcher: React.FC = () => {
         'px-2 py-0.5 text-xs rounded-full text-white',
         colors[planName as keyof typeof colors] || 'bg-gray-500'
       )}>
-        {planName}
+        {_planName}
       </span>
     )
   }
@@ -66,12 +66,12 @@ export const TenantSwitcher: React.FC = () => {
   }
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={_open} onOpenChange={s_etOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           className="w-full justify-between px-3 py-2 h-auto"
-          disabled={isLoading}
+          disabled={_isLoading}
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
@@ -96,7 +96,7 @@ export const TenantSwitcher: React.FC = () => {
         <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
         <DropdownMenuSeparator />
         
-        {tenants.map((tenant) => (<DropdownMenuItem
+        {tenants.map((_tenant) => (<DropdownMenuItem
             key={tenant.id}
             onClick={() => switchTenant(tenant.id)}
             disabled={tenant.status === 'suspended' || tenant.status === 'inactive'}

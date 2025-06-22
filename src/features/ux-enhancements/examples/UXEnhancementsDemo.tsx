@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { RadialMenu} from '../components/RadialMenu/RadialMenu'
 import { SmartClipboard} from '../components/SmartClipboard/SmartClipboard'
-import {LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline'
+import {_LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline'
 export const UXEnhancementsDemo: React.FC = () => {
-  const [radialMenuOpen, setRadialMenuOpen] = useState(false)
+  const [radialMenuOpen, setRadialMenuOpen] = useState(_false)
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
-  const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null)
+  const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(_null)
   // Simular datos de precintos
   const precintos = [
     { 
@@ -52,7 +52,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       action: (context: unknown) => {
         const alertId = Math.floor(Math.random() * 10000)
         console.log('Creando alerta para:', context.precintoId)
-        copyToClipboard(`ALERTA #${alertId}: Precinto ${context.precintoId} - SEVERIDAD: ALTA`, {
+        copyToClipboard(`ALERTA #${_alertId}: Precinto ${context.precintoId} - SEVERIDAD: ALTA`, {
           source: 'radial-menu',
           precintoId: context.precintoId,
           alertId: alertId.toString()
@@ -70,7 +70,7 @@ export const UXEnhancementsDemo: React.FC = () => {
         const reportNum = Math.floor(Math.random() * 1000)
         console.log('Generando reporte:', context.precintoId)
         copyToClipboard(
-          `REPORTE #${reportNum}\nFECHA: ${new Date().toLocaleDateString()}\nPRECINTO: ${context.precintoId}\nOPERADOR: Demo User`,
+          `REPORTE #${_reportNum}\nFECHA: ${new Date().toLocaleDateString()}\nPRECINTO: ${context.precintoId}\nOPERADOR: Demo User`,
           { source: 'radial-menu', precintoId: context.precintoId }
         )
       },
@@ -84,7 +84,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       icon: MapPinIcon,
       action: (context: unknown) => {
         const precinto = precintos.find(p => p.id === context.precintoId)
-        if (precinto) {
+        if (_precinto) {
           copyToClipboard(
             `UBICACION: ${context.precintoId}\nLATITUDE: ${precinto.location.lat}\nLONGITUDE: ${precinto.location.lng}`,
             { source: 'radial-menu', precintoId: context.precintoId }
@@ -122,9 +122,9 @@ export const UXEnhancementsDemo: React.FC = () => {
   // Manejar click derecho
   const handleContextMenu = (e: React.MouseEvent, precintoId: string) => {
     e.preventDefault()
-    setSelectedPrecinto(precintoId)
+    setSelectedPrecinto(_precintoId)
     setMenuPosition({ x: e.clientX, y: e.clientY })
-    setRadialMenuOpen(true)
+    setRadialMenuOpen(_true)
   }
   // Simular permisos del usuario
   React.useEffect(() => {
@@ -158,10 +158,10 @@ export const UXEnhancementsDemo: React.FC = () => {
 
         {/* Lista de Precintos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {precintos.map((precinto) => (<div
+          {precintos.map((_precinto) => (<div
               key={precinto.id}
               className="bg-gray-800 rounded-lg p-6 cursor-pointer hover:bg-gray-700 transition-colors"
-              onContextMenu={(e) => handleContextMenu(e, precinto.id)}
+              onContextMenu={(_e) => handleContextMenu(_e, precinto.id)}
             >
               <div className="flex items-center justify-between mb-4">
                 <TruckIcon className="w-8 h-8 text-blue-500" />
@@ -221,23 +221,23 @@ export const UXEnhancementsDemo: React.FC = () => {
 
       {/* Radial Menu */}
       <RadialMenu
-        actions={radialActions}
-        position={menuPosition}
-        isOpen={radialMenuOpen}
-        onClose={() => setRadialMenuOpen(false)}
+        actions={_radialActions}
+        position={_menuPosition}
+        isOpen={_radialMenuOpen}
+        onClose={() => setRadialMenuOpen(_false)}
         context={{ precintoId: selectedPrecinto }}
         size="medium"
         animationPreset="smooth"
-        customizable={true}
-        gestureEnabled={true}
+        customizable={_true}
+        gestureEnabled={_true}
       />
 
       {/* Smart Clipboard */}
       <SmartClipboard
         maxHistory={50}
-        syncEnabled={true}
+        syncEnabled={_true}
         position="bottom-right"
-        hotkeys={true}
+        hotkeys={_true}
       />
     </div>
   )

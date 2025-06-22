@@ -54,7 +54,7 @@ export class WebSocketService {
 
   send(message: unknown): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(message))
+      this.ws.send(JSON.stringify(_message))
     } else if (this.isSimulated) {
       console.log('Simulated send:', message)
     }
@@ -82,15 +82,15 @@ export class WebSocketService {
       // Mark connection as active for polling fallback
       window.localStorage.setItem('ws-connected', 'true')
     }
-    this.ws.onmessage = (event) => {
+    this.ws.onmessage = (_event) => {
       try {
         const message: WebSocketMessage = JSON.parse(event.data)
-        this.handleMessage(message)
+        this.handleMessage(_message)
       } catch {
         console.error('Failed to parse WebSocket message:', error)
       }
     }
-    this.ws.onerror = (error) => {
+    this.ws.onerror = (_error) => {
       console.error('WebSocket error:', error)
       this.eventHandlers.onError?.(new Error('WebSocket connection error'))
     }
@@ -103,27 +103,22 @@ export class WebSocketService {
 
   private handleMessage(message: WebSocketMessage): void {
     switch (message.type) {
-      case 'precinto_update': {
-  this.eventHandlers.onPrecintoUpdate?.(message.data as PrecintoUpdateData)
+      case 'precinto_update':
+        this.eventHandlers.onPrecintoUpdate?.(message.data as PrecintoUpdateData)
         break
-    }
-    case 'transito_update':
+      case 'transito_update':
         this.eventHandlers.onTransitoUpdate?.(message.data as TransitoUpdateData)
         break
-    }
-    case 'alerta_nueva':
+      case 'alerta_nueva':
         this.eventHandlers.onAlertaNueva?.(message.data as AlertaUpdateData)
         break
-    }
-    case 'alerta_update':
+      case 'alerta_update':
         this.eventHandlers.onAlertaUpdate?.(message.data as AlertaUpdateData)
         break
-    }
-    case 'sistema_update':
+      case 'sistema_update':
         this.eventHandlers.onSistemaUpdate?.(message.data as SistemaUpdateData)
         break
-    }
-    case 'heartbeat':
+      case 'heartbeat':
         // Heartbeat received, connection is alive
         break
     }
@@ -156,7 +151,7 @@ export class WebSocketService {
   }
 
   private notifyConnectionChange(data: ConnectionData): void {
-    this.eventHandlers.onConnectionChange?.(data)
+    this.eventHandlers.onConnectionChange?.(_data)
   }
 
   // Simulation methods for development

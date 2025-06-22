@@ -5,9 +5,9 @@
  */
 
 import React, { useState, useMemo } from 'react'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import { Button} from '@/components/ui/button'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { Download, TrendingUp, MapPin, Package, Truck, AlertCircle, RefreshCw} from 'lucide-react'
 import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
@@ -19,14 +19,14 @@ export const LogisticsFlowChart: React.FC = () => {
 
   const [timeRange, setTimeRange] = useState('week')
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(_false)
   // Transform transit data into logistics flows
   const routeFlows = useMemo(() => {
     const flowMap = new Map<string, any>()
     transitos.forEach(transito => {
       const key = `${transito.origen}-${transito.destino}`
-      if (!flowMap.has(key)) {
-        flowMap.set(key, {
+      if (!flowMap.has(_key)) {
+        flowMap.set(_key, {
           origin: transito.origen,
           destination: transito.destino,
           transitCount: 0,
@@ -36,7 +36,7 @@ export const LogisticsFlowChart: React.FC = () => {
         })
       }
       
-      const flow = flowMap.get(key)
+      const flow = flowMap.get(_key)
       flow.transitCount++
       flow.totalVolume += transito.carga?.peso || 0
       if (transito.estado === 'completado') {
@@ -78,13 +78,13 @@ export const LogisticsFlowChart: React.FC = () => {
   }, [])
   // Get appropriate data based on flow type
   const chartData = useMemo(() => {
-    switch (flowType) {
+    switch (_flowType) {
       case 'routes': {
-  return transformLogisticsFlow(routeFlows)
+  return transformLogisticsFlow(_routeFlows)
       case 'lifecycle': {
-  return transformPrecintoLifecycle(lifecycleData)
+  return transformPrecintoLifecycle(_lifecycleData)
       case 'alerts': {
-  return transformAlertFlow(alertFlowData)
+  return transformAlertFlow(_alertFlowData)
       case 'time': {
   // Mock time-based data
         const timeData = transitos.map(t => ({
@@ -93,14 +93,14 @@ export const LogisticsFlowChart: React.FC = () => {
           to: t.destino,
           value: 1
         }))
-        return transformTimeBasedFlow(timeData, timeRange as unknown)
+        return transformTimeBasedFlow(_timeData, timeRange as unknown)
       default:
         return { nodes: [], links: [] }
     }
-  }, [transitos])
+  }, [])
   // Calculate statistics
   const stats = useMemo(() => {
-    const totalFlow = chartData.links.reduce((sum, link) => sum + link.value, 0)
+    const totalFlow = chartData.links.reduce((s_um, link) => sum + link.value, 0)
     const avgFlow = chartData.links.length > 0 ? totalFlow / chartData.links.length : 0
     const maxFlow = Math.max(...chartData.links.map(l => l.value), 0)
     const minFlow = Math.min(...chartData.links.map(l => l.value), Infinity)
@@ -123,7 +123,7 @@ export const LogisticsFlowChart: React.FC = () => {
     const source = typeof link.source === 'object' ? link.source.name : link.source
     const target = typeof link.target === 'object' ? link.target.name : link.target
     toast({
-      title: `${source} → ${target}`,
+      title: `${s_ource} → ${_target}`,
       description: `Flujo: ${link.value?.toLocaleString() || 0}`
     })
   }
@@ -148,7 +148,7 @@ export const LogisticsFlowChart: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={handleExport}
+              onClick={_handleExport}
             >
               <Download className="h-4 w-4 mr-2" />
               Exportar
@@ -160,7 +160,7 @@ export const LogisticsFlowChart: React.FC = () => {
         <div className="space-y-6">
           {/* Controls */}
           <div className="flex flex-col md:flex-row gap-4">
-            <Tabs value={flowType} onValueChange={(v: unknown) => setFlowType(v)} className="flex-1">
+            <Tabs value={_flowType} onValueChange={(v: unknown) => setFlowType(_v)} className="flex-1">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="routes" className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
@@ -182,7 +182,7 @@ export const LogisticsFlowChart: React.FC = () => {
             </Tabs>
 
             {flowType === 'time' && (
-              <Select value={timeRange} onValueChange={setTimeRange}>
+              <Select value={_timeRange} onValueChange={s_etTimeRange}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -254,19 +254,19 @@ export const LogisticsFlowChart: React.FC = () => {
           <div className="bg-gray-900 rounded-lg p-6 min-h-[600px] flex items-center justify-center">
             {chartData.nodes.length > 0 && chartData.links.length > 0 ? (
               <SankeyChart
-                data={chartData}
+                data={_chartData}
                 width={1000}
                 height={600}
                 margin={{ top: 20, right: 150, bottom: 20, left: 150 }}
                 nodeWidth={20}
                 nodePadding={20}
-                animated={true}
-                interactive={true}
-                showLabels={true}
-                showValues={true}
+                animated={_true}
+                interactive={_true}
+                showLabels={_true}
+                showValues={_true}
                 labelPosition="outside"
-                onNodeClick={handleNodeClick}
-                onLinkClick={handleLinkClick}
+                onNodeClick={_handleNodeClick}
+                onLinkClick={_handleLinkClick}
                 colors={['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444']}
               />
             ) : (

@@ -1,16 +1,15 @@
- 
+
 /**
  * Button with enhanced visual feedback
  * By Cheva
  */
-
 import React, { useState } from 'react'
 import { Button, ButtonProps} from '@/components/ui/button'
-import {Loader2, Check, X} from 'lucide-react'
+import {_Loader2, Check, X} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
 import { toast} from '@/hooks/use-toast'
-export interface FeedbackButtonProps extends ButtonProps {
+export interface FeedbackButtonProps extends ButtonProps { /* TODO: Complete implementation */ }
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
   loadingText?: string
   successText?: string
@@ -25,50 +24,47 @@ export interface FeedbackButtonProps extends ButtonProps {
   toastSuccessMessage?: string
   toastErrorMessage?: string
 }
-
 type ButtonState = 'idle' | 'loading' | 'success' | 'error'
-export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
+export const FeedbackButton: React.FC<FeedbackButtonProps> = ({ /* TODO: Complete implementation */ }
   children, onClick, loadingText, successText, errorText, showSuccessIcon = true, showErrorIcon = true, successDuration = 2000, onSuccess, onError, disabled, className, variant = 'default', size = 'default', showToastOnSuccess = false, showToastOnError = true, toastSuccessMessage, toastErrorMessage, ...props
-}) => {
+}) => { /* TODO: Complete implementation */ }
   const [state, setState] = useState<ButtonState>('idle')
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => { /* TODO: Complete implementation */ }
     if (!onClick || state !== 'idle') return
     setState('loading')
-    try {
-      await onClick(e)
+    try { /* TODO: Complete implementation */ }
+      await onClick(_e)
       setState('success')
-      if (showToastOnSuccess && toastSuccessMessage) {
-        toast({
+      if (showToastOnSuccess && toastSuccessMessage) { /* TODO: Complete implementation */ }
+        toast({ /* TODO: Complete implementation */ }
           title: "Éxito",
           description: toastSuccessMessage,
           variant: "default"
         })
       }
-      
       onSuccess?.()
       // Reset to idle after success duration
-      setTimeout(() => {
+      setTimeout(() => { /* TODO: Complete implementation */ }
         setState('idle')
       }, successDuration)
-    } catch {
+    } catch { /* TODO: Complete implementation */ }
       setState('error')
-      if (showToastOnError) {
-        toast({
+      if (s_howToastOnError) { /* TODO: Complete implementation */ }
+        toast({ /* TODO: Complete implementation */ }
           title: "Error",
           description: toastErrorMessage || (error as Error).message || "Ha ocurrido un error",
           variant: "destructive"
         })
       }
-      
       onError?.(error as Error)
       // Reset to idle after error duration
-      setTimeout(() => {
+      setTimeout(() => { /* TODO: Complete implementation */ }
         setState('idle')
       }, 3000)
     }
   }
-  const getButtonContent = () => {
-    switch (state) {
+  const getButtonContent = () => { /* TODO: Complete implementation */ }
+    switch (s_tate) { /* TODO: Complete implementation */ }
       case 'loading':
         return (
           <>
@@ -94,11 +90,11 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
         return children
     }
   }
-  const getButtonVariant = () => {
-    switch (state) {
-      case 'success': {
+  const getButtonVariant = () => { /* TODO: Complete implementation */ }
+    switch (s_tate) { /* TODO: Complete implementation */ }
+      case 'success': { /* TODO: Complete implementation */ }
   return 'default'
-      case 'error': {
+      case 'error': { /* TODO: Complete implementation */ }
   return 'destructive'
       default:
         return variant
@@ -111,10 +107,10 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
     >
       <Button
         {...props}
-        onClick={handleClick}
+        onClick={_handleClick}
         disabled={disabled || state !== 'idle'}
         variant={getButtonVariant()}
-        size={size}
+        size={s_ize}
         className={cn(
           'transition-all duration-200',
           state === 'success' && 'bg-green-600 hover:bg-green-700',
@@ -123,7 +119,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
       >
         <AnimatePresence mode="wait">
           <motion.div
-            key={state}
+            key={s_tate}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -138,7 +134,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
   )
 }
 // Preset configurations for common use cases
-export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
+export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
   <FeedbackButton
     loadingText="Guardando..."
     successText="Guardado"
@@ -149,7 +145,7 @@ export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'suc
     Guardar
   </FeedbackButton>
 )
-export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
+export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
   <FeedbackButton
     variant="destructive"
     loadingText="Eliminando..."
@@ -161,7 +157,7 @@ export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
     Eliminar
   </FeedbackButton>
 )
-export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
+export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
   <FeedbackButton
     loadingText="Enviando..."
     successText="Enviado"
@@ -172,7 +168,7 @@ export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
     Enviar
   </FeedbackButton>
 )
-export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
+export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (_props) => (
   <FeedbackButton
     variant="outline"
     loadingText="Actualizando..."

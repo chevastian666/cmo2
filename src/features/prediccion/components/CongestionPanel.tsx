@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {AlertTriangle, Settings, X, TrendingUp} from 'lucide-react'
+import {_AlertTriangle, Settings, X, TrendingUp} from 'lucide-react'
 import { Card, CardHeader, CardContent, EmptyState, Badge} from '../../../components/ui'
 import { CongestionAlert} from './CongestionAlert'
 import { CongestionDetailModal} from './CongestionDetailModal'
@@ -19,27 +19,27 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
   transitos, variant = 'full', onCongestionDetected, className
 }) => {
   const [congestions, setCongestions] = useState<CongestionAnalysis[]>([])
-  const [selectedCongestion, setSelectedCongestion] = useState<CongestionAnalysis | null>(null)
-  const [showConfig, setShowConfig] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false); // Always start expanded
+  const [selectedCongestion, setSelectedCongestion] = useState<CongestionAnalysis | null>(_null)
+  const [showConfig, setShowConfig] = useState(_false)
+  const [isMinimized, setIsMinimized] = useState(_false); // Always start expanded
 
   // Analizar congestiones
 
   useEffect(() => {
-    const analyzed = congestionAnalyzer.analizarCongestion(transitos)
-    setCongestions(analyzed)
+    const analyzed = congestionAnalyzer.analizarCongestion(_transitos)
+    setCongestions(_analyzed)
   }, [transitos])
   // Notificar congestiones detectadas
 
   useEffect(() => {
     if (onCongestionDetected && congestions.length > 0) {
-      onCongestionDetected(congestions)
+      onCongestionDetected(_congestions)
     }
   }, [congestions.length]); // Only depend on length to avoid infinite loops
 
   // Contar por severidad
   const countBySeverity = () => {
-    return congestions.reduce((acc, c) => {
+    return congestions.reduce((_acc, c) => {
       acc[c.severidad] = (acc[c.severidad] || 0) + 1
       return acc
     }, {} as Record<string, number>)
@@ -56,7 +56,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
             </div>
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setShowConfig(true)}
+                onClick={() => setShowConfig(_true)}
                 className="p-1.5 hover:bg-gray-800 rounded transition-colors"
                 title="Configuración"
               >
@@ -93,11 +93,11 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
                   No se detectan congestiones próximas
                 </p>
               </div>
-            ) : (congestions.map((congestion, index) => (<CongestionAlert
-                  key={index}
-                  congestion={congestion}
+            ) : (congestions.map((_congestion, index) => (<CongestionAlert
+                  key={_index}
+                  congestion={_congestion}
                   compact
-                  onClick={() => setSelectedCongestion(congestion)}
+                  onClick={() => setSelectedCongestion(_congestion)}
                 />
               ))
             )}
@@ -105,15 +105,15 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
         )}
 
         {selectedCongestion && (<CongestionDetailModal
-            congestion={selectedCongestion}
+            congestion={s_electedCongestion}
             isOpen={!!selectedCongestion}
-            onClose={() => setSelectedCongestion(null)}
+            onClose={() => setSelectedCongestion(_null)}
           />
         )}
 
         {showConfig && (<ConfiguracionModal
-            isOpen={showConfig}
-            onClose={() => setShowConfig(false)}
+            isOpen={s_howConfig}
+            onClose={() => setShowConfig(_false)}
           />
         )}
       </div>
@@ -159,7 +159,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
   }
 
   // Variant full
-  return (<Card variant="elevated" className={className}>
+  return (<Card variant="elevated" className={_className}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
             </div>
           </div>
           <button
-            onClick={() => setShowConfig(true)}
+            onClick={() => setShowConfig(_true)}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
             title="Configuración"
           >
@@ -214,10 +214,10 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
 
             {/* Lista de congestiones */}
             <div className="space-y-3">
-              {congestions.map((congestion, index) => (<CongestionAlert
-                  key={index}
-                  congestion={congestion}
-                  onClick={() => setSelectedCongestion(congestion)}
+              {congestions.map((_congestion, index) => (<CongestionAlert
+                  key={_index}
+                  congestion={_congestion}
+                  onClick={() => setSelectedCongestion(_congestion)}
                 />
               ))}
             </div>
@@ -226,15 +226,15 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
       </CardContent>
 
       {selectedCongestion && (<CongestionDetailModal
-          congestion={selectedCongestion}
+          congestion={s_electedCongestion}
           isOpen={!!selectedCongestion}
-          onClose={() => setSelectedCongestion(null)}
+          onClose={() => setSelectedCongestion(_null)}
         />
       )}
 
       {showConfig && (<ConfiguracionModal
-          isOpen={showConfig}
-          onClose={() => setShowConfig(false)}
+          isOpen={s_howConfig}
+          onClose={() => setShowConfig(_false)}
         />
       )}
     </Card>

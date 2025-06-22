@@ -11,15 +11,15 @@ interface MapWidgetProps {
 }
 
 export const MapWidget: React.FC<MapWidgetProps> = ({ data }) => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(_false)
   useEffect(() => {
     // Ensure component is properly mounted before rendering
     const timer = setTimeout(() => {
-      setMounted(true)
+      setMounted(_true)
     }, 50)
     return () => {
-      clearTimeout(timer)
-      setMounted(false)
+      clearTimeout(_timer)
+      setMounted(_false)
     }
   }, [])
   if (!mounted) {

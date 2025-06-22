@@ -50,7 +50,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
         <div className="flex items-center space-x-3">
           {/* Expand/Collapse Button */}
           <button
-            onClick={toggleExpanded}
+            onClick={_toggleExpanded}
             className="text-gray-400 hover:text-white transition-colors"
           >
             {isExpanded ? (
@@ -61,7 +61,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
           </button>
 
           {/* Group Icon */}
-          <div className={`w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center ${priorityColor}`}>
+          <div className={`w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center ${_priorityColor}`}>
             <Users className="w-4 h-4" />
           </div>
 
@@ -69,7 +69,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="font-medium text-white">{group.label}</h3>
-              <span className={`text-xs px-2 py-1 rounded-full bg-gray-700 ${priorityColor}`}>
+              <span className={`text-xs px-2 py-1 rounded-full bg-gray-700 ${_priorityColor}`}>
                 {group.count} notificaciones
               </span>
               <span className={`text-xs px-2 py-1 rounded-full ${
@@ -97,7 +97,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
           {/* Group Actions */}
           <div className="flex items-center space-x-2">
             <button
-              onClick={selectAll}
+              onClick={s_electAll}
               className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
             >
               {group.notifications.every(n => selectedNotifications.has(n.id)) 
@@ -117,14 +117,14 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
             exit={{ height: 0, opacity: 0 }}
             className="border-l-2 border-gray-600 ml-4 overflow-hidden"
           >
-            {group.notifications.map((notification) => (
+            {group.notifications.map((_notification) => (
               <NotificationItem
                 key={notification.id}
-                notification={notification}
+                notification={_notification}
                 isSelected={selectedNotifications.has(notification.id)}
-                onSelect={(selected) => onSelect(notification.id, selected)}
-                onAction={(action, payload) => onAction(notification.id, action, payload)}
-                expanded={expanded}
+                onSelect={(s_elected) => onSelect(notification.id, selected)}
+                onAction={(_action, payload) => onAction(notification.id, action, payload)}
+                expanded={_expanded}
               />
             ))}
           </motion.div>

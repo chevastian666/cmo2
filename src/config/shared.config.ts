@@ -91,7 +91,7 @@ export const _SHARED_CONFIG = {
     CMO_MESSAGE_RESPONSE: 'cmo_message_response'
   },
   
-  // Time Thresholds (_seconds)
+  // Time Thresholds (__seconds)
   THRESHOLDS: {
     TRANSIT_WARNING: 1800,    // 30 minutes
     TRANSIT_CRITICAL: 3600,   // 1 hour
@@ -102,7 +102,7 @@ export const _SHARED_CONFIG = {
     TEMPERATURE_MAX: 50       // 50°C
   },
   
-  // Refresh Intervals (_milliseconds)
+  // Refresh Intervals (__milliseconds)
   REFRESH_INTERVALS: {
     DASHBOARD: 30000,      // 30 seconds
     TRANSITS: 60000,       // 1 minute
@@ -134,12 +134,12 @@ export const _getAuthHeaders = (): HeadersInit => {
   const _token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY)
   return {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` })
+    ...(token && { 'Authorization': `Bearer ${_token}` })
   }
 }
 // Helper to check if user has role
 export const _hasRole = (userRole: string, requiredRoles: string[]): boolean => {
-  return requiredRoles.includes(_userRole)
+  return requiredRoles.includes(__userRole)
 }
 // Helper to format API endpoint
 export const _formatApiEndpoint = (endpoint: string): string => {
@@ -148,5 +148,5 @@ export const _formatApiEndpoint = (endpoint: string): string => {
     return SHARED_CONFIG.API_BASE_URL
   }
   const _baseUrl = SHARED_CONFIG.API_BASE_URL
-  return endpoint.startsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`
+  return endpoint.startsWith('/') ? `${_baseUrl}${_endpoint}` : `${_baseUrl}/${_endpoint}`
 }

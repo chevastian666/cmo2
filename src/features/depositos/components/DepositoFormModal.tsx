@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {X, Save, Building2} from 'lucide-react'
+import {_X, Save, Building2} from 'lucide-react'
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types'
 import type { Deposito} from '../types'
 interface DepositoFormModalProps {
@@ -29,9 +29,9 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
     horaApertura: '',
     horaCierre: ''
   })
-  const [errors, setErrors] = useState<Record<string, string>>(_)
+  const [errors, setErrors] = useState<Record<string, string>>(__)
   useEffect(() => {
-    if (deposito) {
+    if (_deposito) {
       setFormData({
         codigo: deposito.codigo.toString(),
         nombre: deposito.nombre,
@@ -68,7 +68,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
         horaCierre: ''
       })
     }
-    setErrors(_)
+    setErrors(__)
   }, [deposito])
   const validate = () => {
     const newErrors: Record<string, string> = {}
@@ -88,8 +88,8 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
       newErrors.lng = 'La longitud debe ser un número válido'
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(_newErrors)
+    return Object.keys(_newErrors).length === 0
   }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -111,14 +111,14 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
       horaApertura: formData.horaApertura || undefined,
       horaCierre: formData.horaCierre || undefined
     }
-    onSave(_data)
+    onSave(__data)
   }
   if (!isOpen) return null
   return (<>
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -133,7 +133,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
               </h2>
             </div>
             <button
-              onClick={onClose}
+              onClick={_onClose}
               className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
             >
               <X className="h-5 w-5 text-gray-400" />
@@ -141,7 +141,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={_handleSubmit} className="p-6 space-y-6">
             {/* Basic Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -151,7 +151,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                 <input
                   type="number"
                   value={formData.codigo}
-                  onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, codigo: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.codigo && (
@@ -166,7 +166,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                 <input
                   type="text"
                   value={formData.alias}
-                  onChange={(e) => setFormData({ ...formData, alias: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, alias: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.alias && (
@@ -181,7 +181,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                 <input
                   type="text"
                   value={formData.nombre}
-                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, nombre: e.target.value })}
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.nombre && (
@@ -201,7 +201,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="text"
                     value={formData.lat}
-                    onChange={(e) => setFormData({ ...formData, lat: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, lat: e.target.value })}
                     placeholder="Ej: -34.903127"
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -217,7 +217,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="text"
                     value={formData.lng}
-                    onChange={(e) => setFormData({ ...formData, lng: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, lng: e.target.value })}
                     placeholder="Ej: -56.212387"
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -233,7 +233,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="text"
                     value={formData.direccion}
-                    onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, direccion: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -250,12 +250,12 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   </label>
                   <select
                     value={formData.tipo}
-                    onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, tipo: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar tipo</option>
                     {DEPOSITO_TIPOS.map(tipo => (
-                      <option key={tipo} value={tipo}>{tipo}</option>
+                      <option key={_tipo} value={_tipo}>{_tipo}</option>
                     ))}
                   </select>
                   {errors.tipo && (
@@ -269,12 +269,12 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   </label>
                   <select
                     value={formData.zona}
-                    onChange={(e) => setFormData({ ...formData, zona: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, zona: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar zona</option>
                     {DEPOSITO_ZONAS.map(zona => (
-                      <option key={zona} value={zona}>{zona}</option>
+                      <option key={_zona} value={_zona}>{_zona}</option>
                     ))}
                   </select>
                   {errors.zona && (
@@ -288,12 +288,12 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   </label>
                   <select
                     value={formData.padre}
-                    onChange={(e) => setFormData({ ...formData, padre: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, padre: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar padre</option>
                     {DEPOSITO_ZONAS.map(zona => (
-                      <option key={zona} value={zona}>{zona}</option>
+                      <option key={_zona} value={_zona}>{_zona}</option>
                     ))}
                   </select>
                   {errors.padre && (
@@ -308,7 +308,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="text"
                     value={formData.empresa}
-                    onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, empresa: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -326,7 +326,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="text"
                     value={formData.telefono}
-                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, telefono: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -337,7 +337,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   </label>
                   <select
                     value={formData.estado}
-                    onChange={(e) => setFormData({ ...formData, estado: e.target.value as 'activo' | 'inactivo' })}
+                    onChange={(_e) => setFormData({ ...formData, estado: e.target.value as 'activo' | 'inactivo' })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="activo">Activo</option>
@@ -352,7 +352,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="time"
                     value={formData.horaApertura}
-                    onChange={(e) => setFormData({ ...formData, horaApertura: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, horaApertura: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -364,7 +364,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   <input
                     type="time"
                     value={formData.horaCierre}
-                    onChange={(e) => setFormData({ ...formData, horaCierre: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, horaCierre: e.target.value })}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -384,7 +384,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                     min="0"
                     max="100"
                     value={formData.capacidad}
-                    onChange={(e) => setFormData({ ...formData, capacidad: parseInt(e.target.value) })}
+                    onChange={(_e) => setFormData({ ...formData, capacidad: parseInt(e.target.value) })}
                     className="flex-1"
                   />
                   <span className="text-white font-medium w-12 text-center">
@@ -408,13 +408,13 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
           <div className="sticky bottom-0 bg-gray-800 border-t border-gray-700 p-6 flex justify-end gap-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={_onClose}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
             >
               Cancelar
             </button>
             <button
-              onClick={handleSubmit}
+              onClick={_handleSubmit}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors flex items-center gap-2"
             >
               <Save className="h-4 w-4" />

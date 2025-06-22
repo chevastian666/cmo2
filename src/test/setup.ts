@@ -44,7 +44,7 @@ Object.defineProperty(navigator, 'geolocation', {
 })
 
 // Mock de Google Maps
-;(global as unknown).google = {
+;(global as any).google = {
   maps: {
     Map: vi.fn(() => ({
       setCenter: vi.fn(),
@@ -90,10 +90,10 @@ const localStorageMock: Storage = (function() {
       store = {}
     },
     get length() {
-      return Object.keys(_store).length
+      return Object.keys(store).length
     },
     key(index: number) {
-      const _keys = Object.keys(_store)
+      const keys = Object.keys(store)
       return keys[index] || null
     },
   }

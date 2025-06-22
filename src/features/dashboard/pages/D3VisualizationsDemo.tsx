@@ -9,9 +9,9 @@ import { D3VisualizationWidget} from '../../../components/charts/d3/D3Visualizat
 import { InteractiveLineChart, ActivityHeatmap, NetworkGraph, InteractiveTreemap} from '../../../components/charts/d3'
 import type { TimeSeriesData, HeatmapData, NetworkData, TreemapNode} from '../../../components/charts/d3'
 export const D3VisualizationsDemo: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<unknown>(null)
+  const [selectedData, setSelectedData] = useState<unknown>(_null)
   // Generate sample data
-  const timeSeriesData: TimeSeriesData[] = Array.from({ length: 30 }, (_, i) => {
+  const timeSeriesData: TimeSeriesData[] = Array.from({ length: 30 }, (__, i) => {
     const date = new Date()
     date.setDate(date.getDate() - (30 - i))
     return {
@@ -110,7 +110,7 @@ export const D3VisualizationsDemo: React.FC = () => {
     ]
   }
   const handleDataPointClick = (data: unknown) => {
-    setSelectedData(data)
+    setSelectedData(_data)
     console.log('Data point clicked:', data)
   }
   const handleZoomChange = (domain: [Date, Date]) => {
@@ -136,12 +136,12 @@ export const D3VisualizationsDemo: React.FC = () => {
           </h2>
           <D3VisualizationWidget
             type="line"
-            data={null} // Use generated data
+            data={_null} // Use generated data
             title="Visualización Interactiva Combinada"
-            onDataPointClick={handleDataPointClick}
-            onZoomChange={handleZoomChange}
-            onNodeClick={handleDataPointClick}
-            onLinkClick={handleDataPointClick}
+            onDataPointClick={_handleDataPointClick}
+            onZoomChange={_handleZoomChange}
+            onNodeClick={_handleDataPointClick}
+            onLinkClick={_handleDataPointClick}
           />
         </div>
 
@@ -160,9 +160,9 @@ export const D3VisualizationsDemo: React.FC = () => {
             <div className="p-4">
               <div className="h-80">
                 <InteractiveLineChart
-                  data={timeSeriesData}
-                  onDataPointClick={handleDataPointClick}
-                  onZoomChange={handleZoomChange}
+                  data={_timeSeriesData}
+                  onDataPointClick={_handleDataPointClick}
+                  onZoomChange={_handleZoomChange}
                 />
               </div>
             </div>
@@ -181,8 +181,8 @@ export const D3VisualizationsDemo: React.FC = () => {
             <div className="p-4">
               <div className="h-80">
                 <ActivityHeatmap
-                  data={heatmapData}
-                  onCellClick={handleDataPointClick}
+                  data={_heatmapData}
+                  onCellClick={_handleDataPointClick}
                 />
               </div>
             </div>
@@ -203,9 +203,9 @@ export const D3VisualizationsDemo: React.FC = () => {
             <div className="p-4">
               <div className="h-96">
                 <NetworkGraph
-                  data={networkData}
-                  onNodeClick={handleDataPointClick}
-                  onLinkClick={handleDataPointClick}
+                  data={_networkData}
+                  onNodeClick={_handleDataPointClick}
+                  onLinkClick={_handleDataPointClick}
                 />
               </div>
             </div>
@@ -226,9 +226,9 @@ export const D3VisualizationsDemo: React.FC = () => {
             <div className="p-4">
               <div className="h-96">
                 <InteractiveTreemap
-                  data={treemapData}
-                  onNodeClick={handleDataPointClick}
-                  enableDrillDown={true}
+                  data={_treemapData}
+                  onNodeClick={_handleDataPointClick}
+                  enableDrillDown={_true}
                 />
               </div>
             </div>
@@ -245,7 +245,7 @@ export const D3VisualizationsDemo: React.FC = () => {
             </div>
             <div className="p-4">
               <pre className="text-sm text-gray-300 bg-gray-900 p-4 rounded overflow-auto">
-                {JSON.stringify(selectedData, null, 2)}
+                {JSON.stringify(s_electedData, null, 2)}
               </pre>
             </div>
           </div>

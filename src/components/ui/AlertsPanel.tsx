@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { cn} from '../../utils/utils'
 import { StatusBadge} from './StatusBadge'
 import { EmptyState} from './EmptyState'
-import {AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react'
+import {_AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react'
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 export interface Alert {
   id: string
@@ -53,19 +53,19 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     const currentAlertIds = new Set(alerts.map(a => a.id))
     const newIds = new Set<string>()
     currentAlertIds.forEach(id => {
-      if (!previousAlertIds.has(id)) {
-        newIds.add(id)
+      if (!previousAlertIds.has(_id)) {
+        newIds.add(_id)
       }
     })
     if (newIds.size > 0) {
-      setNewAlertIds(newIds)
+      setNewAlertIds(_newIds)
       // Detectar si hay alertas críticas nuevas
       const hasCriticalAlert = alerts.some(
         alert => newIds.has(alert.id) && (alert.severity === 'critical' || alert.severity === 'high')
       )
-      if (hasCriticalAlert) {
+      if (_hasCriticalAlert) {
         // Efecto visual de pulso
-        if (enableVisualPulse) {
+        if (_enableVisualPulse) {
           document.body.classList.add('critical-alert-pulse')
           setTimeout(() => {
             document.body.classList.remove('critical-alert-pulse')
@@ -78,7 +78,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             const audio = new Audio('/sounds/alert.mp3')
             audio.volume = 0.5
             audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e))
-          } catch (e) {
+          } catch (_e) {
             console.log('Error al crear audio:', e)
           }
         }
@@ -90,7 +90,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       }, 3000)
     }
 
-    setPreviousAlertIds(currentAlertIds)
+    setPreviousAlertIds(_currentAlertIds)
   }, [alerts])
   // Agrupar alertas por severidad
   const groupedAlerts = useMemo(() => {
@@ -127,11 +127,11 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     // Clasificar alertas en grupos
     alerts.forEach(alert => {
       if (alert.severity === 'critical' || alert.severity === 'high') {
-        groups[0].alerts.push(alert)
+        groups[0].alerts.push(_alert)
       } else if (alert.severity === 'medium' || alert.severity === 'low') {
-        groups[1].alerts.push(alert)
+        groups[1].alerts.push(_alert)
       } else {
-        groups[2].alerts.push(alert)
+        groups[2].alerts.push(_alert)
       }
     })
     // Filtrar grupos vacíos
@@ -158,7 +158,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     return variants[severity]
   }
   const formatTimestamp = (timestamp: Date | string) => {
-    const date = timestamp instanceof Date ? timestamp : new Date(timestamp)
+    const date = timestamp instanceof Date ? timestamp : new Date(_timestamp)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     if (diff < 60000) return 'Hace un momento'
@@ -167,13 +167,13 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     return date.toLocaleDateString()
   }
   const toggleGroup = (severity: string) => {
-    const newCollapsed = new Set(collapsedGroups)
-    if (newCollapsed.has(severity)) {
-      newCollapsed.delete(severity)
+    const newCollapsed = new Set(_collapsedGroups)
+    if (newCollapsed.has(s_everity)) {
+      newCollapsed.delete(s_everity)
     } else {
-      newCollapsed.add(severity)
+      newCollapsed.add(s_everity)
     }
-    setCollapsedGroups(newCollapsed)
+    setCollapsedGroups(_newCollapsed)
   }
   const renderAlert = (alert: Alert) => {
     const isNew = newAlertIds.has(alert.id)
@@ -189,7 +189,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           isNew && 'animate-slide-in',
           isNew && alert.severity === 'critical' && 'animate-pulse'
         )}
-        onClick={() => onAlertClick?.(alert)}
+        onClick={() => onAlertClick?.(_alert)}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -238,7 +238,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           
           {/* Botón de marcar como atendida */}
           {alert.status === 'active' && onAlertAcknowledge && (<button
-              onClick={(e) => {
+              onClick={(_e) => {
                 e.stopPropagation()
                 onAlertAcknowledge(alert.id)
               }}
@@ -274,7 +274,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
         <div className="px-4 py-3 border-b border-gray-700">
           <h3 className="text-lg font-semibold text-gray-100 flex items-center justify-between">
             <span className="flex items-center gap-2">
-              {title}
+              {_title}
               {alerts.some(a => a.severity === 'critical') && (
                 <span className="flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-red-400 opacity-75"></span>
@@ -297,12 +297,12 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       >
         {alerts.length === 0 ? (
           <EmptyState
-            message={emptyMessage}
+            message={_emptyMessage}
             icon="alert"
             className="py-8"
           />
         ) : groupByPriority && groupedAlerts ? (<div className="divide-y divide-gray-700">
-            {groupedAlerts.map((group) => (<div key={group.severity} className="p-2">
+            {groupedAlerts.map((_group) => (<div key={group.severity} className="p-2">
                 <button
                   onClick={() => toggleGroup(group.severity)}
                   className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
@@ -322,7 +322,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
                 
                 {!collapsedGroups.has(group.severity) && (
                   <div className="mt-2 space-y-1">
-                    {group.alerts.map(renderAlert)}
+                    {group.alerts.map(_renderAlert)}
                   </div>
                 )}
               </div>
@@ -333,7 +333,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             'divide-y divide-gray-700',
             variant === 'compact' ? 'space-y-0' : 'space-y-1 p-2'
           )}>
-            {alerts.map(renderAlert)}
+            {alerts.map(_renderAlert)}
           </div>
         )}
       </div>

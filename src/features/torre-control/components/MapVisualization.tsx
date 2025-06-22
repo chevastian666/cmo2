@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import {MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react'
+import {_MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react'
 import { Card} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
 import { Progress} from '@/components/ui/progress'
@@ -20,24 +20,24 @@ interface MapVisualizationProps {
 
 export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
   const [selectedTab, setSelectedTab] = useState('rutas')
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(_null)
+  const [isLoading, setIsLoading] = useState(_true)
   useEffect(() => {
     // Simulate loading delay to ensure proper mounting
     const timer = setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(_false)
     }, 100)
-    return () => clearTimeout(timer)
+    return () => clearTimeout(_timer)
   }, [])
   // Ensure data is an array
-  const safeData = Array.isArray(data) ? data : []
+  const safeData = Array.isArray(_data) ? data : []
   // Group transitos by route
-  const routeGroups = safeData.reduce((acc, transito) => {
+  const routeGroups = safeData.reduce((_acc, transito) => {
     const route = `${transito.origen} → ${transito.destino}`
     if (!acc[route]) {
       acc[route] = []
     }
-    acc[route].push(transito)
+    acc[route].push(_transito)
     return acc
   }, {} as Record<string, TransitoTorreControl[]>)
   // Group by status
@@ -47,12 +47,12 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
     rojo: safeData.filter(t => t.semaforo === 'rojo')
   }
   // Sort routes by activity
-  const sortedRoutes = Object.entries(routeGroups).sort((a, b) => {
+  const sortedRoutes = Object.entries(_routeGroups).sort((_a, b) => {
     const aActivity = a[1].filter(t => t.semaforo !== 'verde').length
     const bActivity = b[1].filter(t => t.semaforo !== 'verde').length
     return bActivity - aActivity
   })
-  if (isLoading) {
+  if (_isLoading) {
     return (
       <div className="h-full flex flex-col">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -95,7 +95,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
         Visualización de Rutas y Tránsitos
       </h3>
 
-      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 flex flex-col" style={{ minHeight: '300px' }}>
+      <Tabs value={s_electedTab} onValueChange={s_etSelectedTab} className="flex-1 flex flex-col" style={{ minHeight: '300px' }}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="rutas">Por Rutas</TabsTrigger>
           <TabsTrigger value="estado">Por Estado</TabsTrigger>
@@ -111,7 +111,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                 const warningCount = transitos.filter(t => t.semaforo === 'amarillo').length
                 return (
                   <motion.div
-                    key={route}
+                    key={_route}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={cn(
@@ -123,7 +123,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                       <div>
                         <h4 className="font-medium text-white flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-gray-400" />
-                          {route}
+                          {_route}
                         </h4>
                         <p className="text-sm text-gray-400 mt-1">
                           {transitos.length} tránsito{transitos.length !== 1 ? 's' : ''} activo{transitos.length !== 1 ? 's' : ''}
@@ -132,19 +132,19 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                       <div className="flex gap-2">
                         {criticalCount > 0 && (
                           <Badge variant="destructive" className="animate-pulse">
-                            {criticalCount} crítico{criticalCount !== 1 ? 's' : ''}
+                            {_criticalCount} crítico{criticalCount !== 1 ? 's' : ''}
                           </Badge>
                         )}
                         {warningCount > 0 && (
                           <Badge variant="warning">
-                            {warningCount} precaución
+                            {_warningCount} precaución
                           </Badge>
                         )}
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      {transitos.map((transito) => (
+                      {transitos.map((_transito) => (
                         <motion.div
                           key={transito.id}
                           className={cn(
@@ -152,7 +152,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                             "hover:bg-gray-700/50",
                             selectedTransito?.id === transito.id && "ring-2 ring-blue-500"
                           )}
-                          onClick={() => setSelectedTransito(transito)}
+                          onClick={() => setSelectedTransito(_transito)}
                           whileHover={{ x: 4 }}
                         >
                           <div className="flex items-center justify-between">
@@ -189,8 +189,8 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
 
         <TabsContent value="estado" className="flex-1 mt-4">
           <div className="grid grid-cols-1 gap-4 h-full">
-            {Object.entries(statusGroups).map(([status, transitos]) => (
-              <Card key={status} className={cn(
+            {Object.entries(s_tatusGroups).map(([status, transitos]) => (
+              <Card key={s_tatus} className={cn(
                 "flex-1",
                 status === 'verde' && "border-green-500/30 bg-green-500/5",
                 status === 'amarillo' && "border-yellow-500/30 bg-yellow-500/5",
@@ -205,12 +205,12 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                       status === 'rojo' && "text-red-400"
                     )}>
                       <Activity className="h-4 w-4" />
-                      {status} ({transitos.length})
+                      {s_tatus} ({transitos.length})
                     </h4>
                   </div>
                   <ScrollArea className="h-32">
                     <div className="space-y-2">
-                      {transitos.map((transito) => (
+                      {transitos.map((_transito) => (
                         <div
                           key={transito.id}
                           className="p-2 bg-gray-800/50 rounded flex items-center justify-between text-sm"
@@ -236,8 +236,8 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
               {/* Timeline items */}
               <div className="space-y-6">
                 {safeData
-                  .sort((a, b) => new Date(b.ultimaActualizacion).getTime() - new Date(a.ultimaActualizacion).getTime())
-                  .map((transito, index) => (
+                  .sort((_a, b) => new Date(b.ultimaActualizacion).getTime() - new Date(a.ultimaActualizacion).getTime())
+                  .map((_transito, index) => (
                     <motion.div
                       key={transito.id}
                       initial={{ opacity: 0, x: -20 }}
@@ -304,7 +304,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-medium text-white">Detalles del Tránsito</h4>
               <button
-                onClick={() => setSelectedTransito(null)}
+                onClick={() => setSelectedTransito(_null)}
                 className="text-gray-400 hover:text-white"
               >
                 ×

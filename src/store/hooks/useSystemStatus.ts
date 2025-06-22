@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {_useEffect} from 'react'
 import { useSystemStatusStore} from '../store'
 export const useSystemStatus = () => {
   const store = useSystemStatusStore()
@@ -23,8 +23,8 @@ export const useSystemStatus = () => {
   }
 }
 export const useEstadisticas = () => {
-  const estadisticas = useSystemStatusStore((state) => state.estadisticas)
-  const loading = useSystemStatusStore((state) => state.loading)
+  const estadisticas = useSystemStatusStore((s_tate) => state.estadisticas)
+  const loading = useSystemStatusStore((s_tate) => state.loading)
   return {
     data: estadisticas,
     loading,

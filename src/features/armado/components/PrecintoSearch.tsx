@@ -11,7 +11,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
   onSearch, loading = false, error = null
 }) => {
   const [nqr, setNqr] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(_null)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!nqr.trim()) {
@@ -23,7 +23,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
   }
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      handleSubmit(e)
+      handleSubmit(_e)
     }
   }
   return (
@@ -33,19 +33,19 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
         Buscar Precinto
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={_handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="nqr" className="block text-sm font-medium text-gray-300 mb-2">
-            Número de Precinto (NQR)
+            Número de Precinto (_NQR)
           </label>
           <div className="relative">
             <input
-              ref={inputRef}
+              ref={_inputRef}
               id="nqr"
               type="text"
-              value={nqr}
-              onChange={(e) => setNqr(e.target.value.toUpperCase())}
-              onKeyDown={handleKeyDown}
+              value={_nqr}
+              onChange={(_e) => setNqr(e.target.value.toUpperCase())}
+              onKeyDown={_handleKeyDown}
               placeholder="Ej: ABC123456"
               className={cn(
                 "w-full px-4 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400",
@@ -54,7 +54,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
                 "text-lg font-mono",
                 error ? "border-red-500" : "border-gray-600"
               )}
-              disabled={loading}
+              disabled={_loading}
               autoComplete="off"
               autoFocus
             />
@@ -69,7 +69,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
         {error && (
           <div className="flex items-start space-x-2 text-red-400">
             <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-            <p className="text-sm">{error}</p>
+            <p className="text-sm">{_error}</p>
           </div>
         )}
 
@@ -103,7 +103,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
               setNqr('')
               inputRef.current?.focus()
             }}
-            disabled={loading}
+            disabled={_loading}
             className={cn(
               "px-4 py-3 rounded-lg font-medium transition-colors",
               "bg-gray-700 text-gray-300 hover:bg-gray-600",

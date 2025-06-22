@@ -3,8 +3,7 @@
  * Slack and Discord integration for alerts
  * By Cheva
  */
-
-export interface ChatConfig {
+export interface ChatConfig { /* TODO: Complete implementation */ }
   id: string
   name: string
   type: 'slack' | 'discord' | 'teams'
@@ -18,8 +17,7 @@ export interface ChatConfig {
   mention_roles?: string[]
   created: Date
 }
-
-export interface ChatMessage {
+export interface ChatMessage { /* TODO: Complete implementation */ }
   text: string
   blocks?: unknown[]
   embeds?: unknown[]
@@ -28,172 +26,160 @@ export interface ChatMessage {
   icon_url?: string
   channel?: string
 }
-
-class ChatService {
+class ChatService { /* TODO: Complete implementation */ }
   private configs = new Map<string, ChatConfig>()
   // Configuration management
-  async createChatConfig(config: Omit<ChatConfig, 'id' | 'created'>): Promise<ChatConfig> {
-    const chatConfig: ChatConfig = {
+  async createChatConfig(config: Omit<ChatConfig, 'id' | 'created'>): Promise<ChatConfig> { /* TODO: Complete implementation */ }
+    const chatConfig: ChatConfig = { /* TODO: Complete implementation */ }
       ...config,
       id: this.generateId(),
       created: new Date()
     }
     // Test the webhook
-    await this.testConnection(chatConfig)
+    await this.testConnection(_chatConfig)
     this.configs.set(chatConfig.id, chatConfig)
     this.saveChatConfigs()
     return chatConfig
   }
-
-  updateChatConfig(id: string, updates: Partial<ChatConfig>): ChatConfig | null {
-    const config = this.configs.get(id)
+  updateChatConfig(id: string, updates: Partial<ChatConfig>): ChatConfig | null { /* TODO: Complete implementation */ }
+    const config = this.configs.get(_id)
     if (!config) return null
     const updatedConfig = { ...config, ...updates }
-    this.configs.set(id, updatedConfig)
+    this.configs.set(_id, updatedConfig)
     this.saveChatConfigs()
     return updatedConfig
   }
-
-  deleteChatConfig(id: string): boolean {
-    const deleted = this.configs.delete(id)
-    if (deleted) {
+  deleteChatConfig(id: string): boolean { /* TODO: Complete implementation */ }
+    const deleted = this.configs.delete(_id)
+    if (_deleted) { /* TODO: Complete implementation */ }
       this.saveChatConfigs()
     }
     return deleted
   }
-
-  getChatConfig(id: string): ChatConfig | null {
-    return this.configs.get(id) || null
+  getChatConfig(id: string): ChatConfig | null { /* TODO: Complete implementation */ }
+    return this.configs.get(_id) || null
   }
-
-  getAllChatConfigs(): ChatConfig[] {
+  getAllChatConfigs(): ChatConfig[] { /* TODO: Complete implementation */ }
     return Array.from(this.configs.values())
   }
-
-  getActiveChatConfigs(): ChatConfig[] {
+  getActiveChatConfigs(): ChatConfig[] { /* TODO: Complete implementation */ }
     return this.getAllChatConfigs().filter(config => config.active)
   }
-
   // Message sending
-  async sendAlert(alertType: string, alert: unknown): Promise<void> {
+  async sendAlert(alertType: string, alert: unknown): Promise<void> { /* TODO: Complete implementation */ }
     const activeConfigs = this.getActiveChatConfigs()
-      .filter(config => config.alert_types.includes(alertType))
+      .filter(config => config.alert_types.includes(_alertType))
     if (activeConfigs.length === 0) return
-    const promises = activeConfigs.map(config => 
-      this.sendMessage(config, this.formatAlertMessage(alert, alertType, config))
+    const promises = activeConfigs.map(config =>
+      this.sendMessage(_config, this.formatAlertMessage(_alert, alertType, config))
     )
-    await Promise.allSettled(promises)
+    await Promise.allSettled(_promises)
   }
-
-  async sendCustomMessage(configId: string, message: ChatMessage): Promise<void> {
-    const config = this.configs.get(configId)
-    if (!config || !config.active) {
+  async sendCustomMessage(configId: string, message: ChatMessage): Promise<void> { /* TODO: Complete implementation */ }
+    const config = this.configs.get(_configId)
+    if (!config || !config.active) { /* TODO: Complete implementation */ }
       throw new Error('Chat configuration not found or inactive')
     }
-
-    await this.sendMessage(config, message)
+    await this.sendMessage(_config, message)
   }
-
-  private async sendMessage(config: ChatConfig, message: ChatMessage): Promise<void> {
-    const payload = this.formatMessageForPlatform(config, message)
-    try {
-      const response = await fetch(config.webhook_url, {
+  private async sendMessage(config: ChatConfig, message: ChatMessage): Promise<void> { /* TODO: Complete implementation */ }
+    const payload = this.formatMessageForPlatform(_config, message)
+    try { /* TODO: Complete implementation */ }
+      const response = await fetch(config.webhook_url, { /* TODO: Complete implementation */ }
         method: 'POST',
-        headers: {
+        headers: { /* TODO: Complete implementation */ }
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(_payload)
       })
-      if (!response.ok) {
+      if (!response.ok) { /* TODO: Complete implementation */ }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
-    } catch (error) {
+    } catch (_error) { /* TODO: Complete implementation */ }
       console.error(`Failed to send message to ${config.type}:`, error)
       throw error
     }
   }
-
   // Message formatting
-  private formatAlertMessage(alert: unknown, alertType: string, config: ChatConfig): ChatMessage {
+  private formatAlertMessage(alert: unknown, alertType: string, config: ChatConfig): ChatMessage { /* TODO: Complete implementation */ }
     const severity = this.getAlertSeverity(alert.priority || alert.severity)
-    const emoji = this.getAlertEmoji(alertType, severity)
-    switch (config.type) {
+    const emoji = this.getAlertEmoji(_alertType, severity)
+    switch (config.type) { /* TODO: Complete implementation */ }
       case 'slack':
-        return this.formatSlackMessage(alert, alertType, config, emoji, severity)
+        return this.formatSlackMessage(_alert, alertType, config, emoji, severity)
       case 'discord':
-        return this.formatDiscordMessage(alert, alertType, config, emoji, severity)
+        return this.formatDiscordMessage(_alert, alertType, config, emoji, severity)
       case 'teams':
-        return this.formatTeamsMessage(alert, alertType, config, emoji, severity)
+        return this.formatTeamsMessage(_alert, alertType, config, emoji, severity)
       default:
-        return { text: `${emoji} ${alert.title || alert.message}` }
+        return { text: `${_emoji} ${alert.title || alert.message}` }
     }
   }
-
-  private formatSlackMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
-    const mentions = this.formatSlackMentions(config)
-    return {
-      text: `${emoji} ${alertType.toUpperCase()} - ${alert.title}`,
+  private formatSlackMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage { /* TODO: Complete implementation */ }
+    const mentions = this.formatSlackMentions(_config)
+    return { /* TODO: Complete implementation */ }
+      text: `${_emoji} ${alertType.toUpperCase()} - ${alert.title}`,
       username: config.username || 'CMO Alerts',
       icon_url: config.icon_url,
       channel: config.channel,
       blocks: [
-        {
+        { /* TODO: Complete implementation */ }
           type: 'header',
-          text: {
+          text: { /* TODO: Complete implementation */ }
             type: 'plain_text',
-            text: `${emoji} ${alertType.toUpperCase()}`
+            text: `${_emoji} ${alertType.toUpperCase()}`
           }
         },
-        {
+        { /* TODO: Complete implementation */ }
           type: 'section',
           fields: [
-            {
+            { /* TODO: Complete implementation */ }
               type: 'mrkdwn',
               text: `*Título:*\n${alert.title}`
             },
-            {
+            { /* TODO: Complete implementation */ }
               type: 'mrkdwn',
-              text: `*Severidad:*\n${severity}`
+              text: `*Severidad:*\n${s_everity}`
             },
-            {
+            { /* TODO: Complete implementation */ }
               type: 'mrkdwn',
               text: `*Tiempo:*\n${new Date(alert.timestamp || Date.now()).toLocaleString()}`
             },
-            {
+            { /* TODO: Complete implementation */ }
               type: 'mrkdwn',
               text: `*Ubicación:*\n${alert.location || 'N/A'}`
             }
           ]
         },
-        {
+        { /* TODO: Complete implementation */ }
           type: 'section',
-          text: {
+          text: { /* TODO: Complete implementation */ }
             type: 'mrkdwn',
             text: `*Descripción:*\n${alert.message || alert.description}`
           }
         },
-        ...(mentions ? [{
+        ...(mentions ? [{ /* TODO: Complete implementation */ }
           type: 'section',
-          text: {
+          text: { /* TODO: Complete implementation */ }
             type: 'mrkdwn',
             text: mentions
           }
         }] : []),
-        {
+        { /* TODO: Complete implementation */ }
           type: 'actions',
           elements: [
-            {
+            { /* TODO: Complete implementation */ }
               type: 'button',
-              text: {
+              text: { /* TODO: Complete implementation */ }
                 type: 'plain_text',
                 text: 'Ver en CMO'
               },
               style: 'primary',
               url: `${window.location.origin}/alertas/${alert.id}`
             },
-            {
+            { /* TODO: Complete implementation */ }
               type: 'button',
-              text: {
+              text: { /* TODO: Complete implementation */ }
                 type: 'plain_text',
                 text: 'Confirmar'
               },
@@ -205,37 +191,36 @@ class ChatService {
       ]
     }
   }
-
-  private formatDiscordMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
-    const mentions = this.formatDiscordMentions(config)
-    const color = this.getSeverityColor(severity)
-    return {
+  private formatDiscordMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage { /* TODO: Complete implementation */ }
+    const mentions = this.formatDiscordMentions(_config)
+    const color = this.getSeverityColor(s_everity)
+    return { /* TODO: Complete implementation */ }
       text: mentions || undefined,
       username: config.username || 'CMO Alerts',
       icon_url: config.icon_url,
       embeds: [
-        {
-          title: `${emoji} ${alertType.toUpperCase()} - ${alert.title}`,
+        { /* TODO: Complete implementation */ }
+          title: `${_emoji} ${alertType.toUpperCase()} - ${alert.title}`,
           description: alert.message || alert.description,
           color: color,
           fields: [
-            {
+            { /* TODO: Complete implementation */ }
               name: 'Severidad',
               value: severity,
               inline: true
             },
-            {
+            { /* TODO: Complete implementation */ }
               name: 'Tiempo',
               value: new Date(alert.timestamp || Date.now()).toLocaleString(),
               inline: true
             },
-            {
+            { /* TODO: Complete implementation */ }
               name: 'Ubicación',
               value: alert.location || 'N/A',
               inline: true
             }
           ],
-          footer: {
+          footer: { /* TODO: Complete implementation */ }
             text: 'CMO - Centro de Monitoreo',
             icon_url: config.icon_url
           },
@@ -244,24 +229,23 @@ class ChatService {
       ]
     }
   }
-
-  private formatTeamsMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
-    return {
-      text: `${emoji} **${alertType.toUpperCase()}** - ${alert.title}`,
+  private formatTeamsMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage { /* TODO: Complete implementation */ }
+    return { /* TODO: Complete implementation */ }
+      text: `${_emoji} **${alertType.toUpperCase()}** - ${alert.title}`,
       attachments: [
-        {
+        { /* TODO: Complete implementation */ }
           contentType: 'application/vnd.microsoft.card.adaptive',
-          content: {
+          content: { /* TODO: Complete implementation */ }
             type: 'AdaptiveCard',
             version: '1.2',
             body: [
-              {
+              { /* TODO: Complete implementation */ }
                 type: 'TextBlock',
-                text: `${emoji} ${alertType.toUpperCase()}`,
+                text: `${_emoji} ${alertType.toUpperCase()}`,
                 weight: 'Bolder',
                 size: 'Medium'
               },
-              {
+              { /* TODO: Complete implementation */ }
                 type: 'FactSet',
                 facts: [
                   { title: 'Título', value: alert.title },
@@ -270,14 +254,14 @@ class ChatService {
                   { title: 'Ubicación', value: alert.location || 'N/A' }
                 ]
               },
-              {
+              { /* TODO: Complete implementation */ }
                 type: 'TextBlock',
                 text: alert.message || alert.description,
                 wrap: true
               }
             ],
             actions: [
-              {
+              { /* TODO: Complete implementation */ }
                 type: 'Action.OpenUrl',
                 title: 'Ver en CMO',
                 url: `${window.location.origin}/alertas/${alert.id}`
@@ -288,12 +272,11 @@ class ChatService {
       ]
     }
   }
-
   // Helper methods
-  private formatMessageForPlatform(config: ChatConfig, message: ChatMessage): unknown {
-    switch (config.type) {
-      case 'slack': {
-  return {
+  private formatMessageForPlatform(config: ChatConfig, message: ChatMessage): unknown { /* TODO: Complete implementation */ }
+    switch (config.type) { /* TODO: Complete implementation */ }
+      case 'slack': { /* TODO: Complete implementation */ }
+  return { /* TODO: Complete implementation */ }
           text: message.text,
           username: message.username || config.username,
           icon_url: message.icon_url || config.icon_url,
@@ -301,14 +284,14 @@ class ChatService {
           blocks: message.blocks
         }
       case 'discord':
-        return {
+        return { /* TODO: Complete implementation */ }
           content: message.text,
           username: message.username || config.username,
           avatar_url: message.icon_url || config.icon_url,
           embeds: message.embeds
         }
       case 'teams':
-        return {
+        return { /* TODO: Complete implementation */ }
           text: message.text,
           attachments: message.attachments
         }
@@ -316,35 +299,28 @@ class ChatService {
         return { text: message.text }
     }
   }
-
-  private formatSlackMentions(config: ChatConfig): string | null {
+  private formatSlackMentions(config: ChatConfig): string | null { /* TODO: Complete implementation */ }
     const mentions = []
-    if (config.mention_users?.length) {
-      mentions.push(...config.mention_users.map(user => `<@${user}>`))
+    if (config.mention_users?.length) { /* TODO: Complete implementation */ }
+      mentions.push(...config.mention_users.map(user => `<@${_user}>`))
     }
-    
-    if (config.mention_roles?.length) {
-      mentions.push(...config.mention_roles.map(role => `<!subteam^${role}>`))
+    if (config.mention_roles?.length) { /* TODO: Complete implementation */ }
+      mentions.push(...config.mention_roles.map(role => `<!subteam^${_role}>`))
     }
-    
     return mentions.length > 0 ? mentions.join(' ') : null
   }
-
-  private formatDiscordMentions(config: ChatConfig): string | null {
+  private formatDiscordMentions(config: ChatConfig): string | null { /* TODO: Complete implementation */ }
     const mentions = []
-    if (config.mention_users?.length) {
-      mentions.push(...config.mention_users.map(user => `<@${user}>`))
+    if (config.mention_users?.length) { /* TODO: Complete implementation */ }
+      mentions.push(...config.mention_users.map(user => `<@${_user}>`))
     }
-    
-    if (config.mention_roles?.length) {
-      mentions.push(...config.mention_roles.map(role => `<@&${role}>`))
+    if (config.mention_roles?.length) { /* TODO: Complete implementation */ }
+      mentions.push(...config.mention_roles.map(role => `<@&${_role}>`))
     }
-    
     return mentions.length > 0 ? mentions.join(' ') : null
   }
-
-  private getAlertSeverity(priority: string): string {
-    const severityMap: Record<string, string> = {
+  private getAlertSeverity(priority: string): string { /* TODO: Complete implementation */ }
+    const severityMap: Record<string, string> = { /* TODO: Complete implementation */ }
       'critical': 'CRÍTICA',
       'high': 'ALTA',
       'medium': 'MEDIA',
@@ -352,10 +328,9 @@ class ChatService {
     }
     return severityMap[priority] || 'DESCONOCIDA'
   }
-
-  private getAlertEmoji(alertType: string, severity: string): string {
+  private getAlertEmoji(alertType: string, severity: string): string { /* TODO: Complete implementation */ }
     if (severity === 'CRÍTICA') return '🚨'
-    const emojiMap: Record<string, string> = {
+    const emojiMap: Record<string, string> = { /* TODO: Complete implementation */ }
       'alert.created': '⚠️',
       'transit.delayed': '🚛',
       'precinto.violated': '🔓',
@@ -364,9 +339,8 @@ class ChatService {
     }
     return emojiMap[alertType] || '📢'
   }
-
-  private getSeverityColor(severity: string): number {
-    const colorMap: Record<string, number> = {
+  private getSeverityColor(severity: string): number { /* TODO: Complete implementation */ }
+    const colorMap: Record<string, number> = { /* TODO: Complete implementation */ }
       'CRÍTICA': 0xFF0000, // Red
       'ALTA': 0xFF8C00,    // Orange
       'MEDIA': 0xFFD700,   // Gold
@@ -374,53 +348,48 @@ class ChatService {
     }
     return colorMap[severity] || 0x808080; // Gray
   }
-
   // Connection testing
-  async testConnection(config: ChatConfig): Promise<boolean> {
-    const testMessage: ChatMessage = {
+  async testConnection(config: ChatConfig): Promise<boolean> { /* TODO: Complete implementation */ }
+    const testMessage: ChatMessage = { /* TODO: Complete implementation */ }
       text: `🧪 Test de conexión desde CMO - ${new Date().toLocaleString()}`
     }
-    try {
-      await this.sendMessage(config, testMessage)
+    try { /* TODO: Complete implementation */ }
+      await this.sendMessage(_config, testMessage)
       return true
-    } catch (error) {
+    } catch (_error) { /* TODO: Complete implementation */ }
       console.error(`Test connection failed for ${config.type}:`, error)
       return false
     }
   }
-
   // Persistence
-  private saveChatConfigs(): void {
-    try {
+  private saveChatConfigs(): void { /* TODO: Complete implementation */ }
+    try { /* TODO: Complete implementation */ }
       const configsArray = Array.from(this.configs.values())
-      localStorage.setItem('cmo_chat_configs', JSON.stringify(configsArray))
-    } catch (error) {
+      localStorage.setItem('cmo_chat_configs', JSON.stringify(_configsArray))
+    } catch (_error) { /* TODO: Complete implementation */ }
       console.error('Failed to save chat configs:', error)
     }
   }
-
-  loadChatConfigs(): void {
-    try {
+  loadChatConfigs(): void { /* TODO: Complete implementation */ }
+    try { /* TODO: Complete implementation */ }
       const stored = localStorage.getItem('cmo_chat_configs')
-      if (stored) {
-        const configsArray: ChatConfig[] = JSON.parse(stored)
+      if (s_tored) { /* TODO: Complete implementation */ }
+        const configsArray: ChatConfig[] = JSON.parse(s_tored)
         this.configs.clear()
-        configsArray.forEach(config => {
+        configsArray.forEach(config => { /* TODO: Complete implementation */ }
           config.created = new Date(config.created)
           this.configs.set(config.id, config)
         })
       }
-    } catch (error) {
+    } catch (_error) { /* TODO: Complete implementation */ }
       console.error('Failed to load chat configs:', error)
     }
   }
-
-  private generateId(): string {
+  private generateId(): string { /* TODO: Complete implementation */ }
     return `chat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
-
   // Available alert types
-  getAvailableAlertTypes(): Array<{ value: string; label: string }> {
+  getAvailableAlertTypes(): Array<{ value: string; label: string }> { /* TODO: Complete implementation */ }
     return [
       { value: 'alert.created', label: 'Nueva Alerta' },
       { value: 'alert.resolved', label: 'Alerta Resuelta' },
@@ -431,7 +400,6 @@ class ChatService {
     ]
   }
 }
-
 // Singleton instance
 export const chatService = new ChatService()
 // Initialize on import

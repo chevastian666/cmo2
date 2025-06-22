@@ -76,14 +76,14 @@ class CamionerosService {
 
   async getCamioneros(filtros?: FiltrosCamionero): Promise<Camionero[]> {
     let camioneros = Array.from(this.camioneros.values())
-    if (_filtros) {
-      // Filtrar por búsqueda (nombre, apellido o documento)
+    if (__filtros) {
+      // Filtrar por búsqueda (_nombre, apellido o documento)
       if (filtros.busqueda) {
         const _busqueda = filtros.busqueda.toLowerCase()
         camioneros = camioneros.filter(c => 
-          c.nombre.toLowerCase().includes(_busqueda) ||
-          c.apellido.toLowerCase().includes(_busqueda) ||
-          c.documento.toLowerCase().includes(_busqueda)
+          c.nombre.toLowerCase().includes(__busqueda) ||
+          c.apellido.toLowerCase().includes(__busqueda) ||
+          c.documento.toLowerCase().includes(__busqueda)
         )
       }
 
@@ -99,13 +99,13 @@ class CamionerosService {
       }
     }
 
-    return camioneros.sort((a, b) => 
+    return camioneros.sort((_a, b) => 
       b.fechaActualizacion.getTime() - a.fechaActualizacion.getTime()
     )
   }
 
   async getCamioneroByDocumento(documento: string): Promise<Camionero | null> {
-    return this.camioneros.get(_documento) || null
+    return this.camioneros.get(__documento) || null
   }
 
   async getCamioneroById(id: string): Promise<Camionero | null> {
@@ -132,7 +132,7 @@ class CamionerosService {
   }
 
   async getMatriculasFrecuentes(documento: string, limit: number = 5): Promise<MatriculaFrecuente[]> {
-    const _transitos = await this.getTransitosCamionero(documento, 100)
+    const _transitos = await this.getTransitosCamionero(_documento, 100)
     // Contar matrículas
     const _matriculaCount = new Map<string, { cantidad: number; ultimaFecha: Date }>()
     transitos.forEach(t => {
@@ -146,7 +146,7 @@ class CamionerosService {
     // Convertir a array y ordenar por frecuencia
     const matriculasFrecuentes: MatriculaFrecuente[] = []
     for (const [matricula, data] of matriculaCount.entries()) {
-      const _camion = await camionesService.getCamionByMatricula(_matricula)
+      const _camion = await camionesService.getCamionByMatricula(__matricula)
       matriculasFrecuentes.push({
         matricula,
         cantidadViajes: data.cantidad,
@@ -160,7 +160,7 @@ class CamionerosService {
     }
 
     return matriculasFrecuentes
-      .sort((a, b) => b.cantidadViajes - a.cantidadViajes)
+      .sort((_a, b) => b.cantidadViajes - a.cantidadViajes)
       .slice(0, limit)
   }
 
@@ -173,19 +173,19 @@ class CamionerosService {
     hace30Dias.setDate(hace30Dias.getDate() - 30)
     const _transitosRecientes = transitosCamionero.filter(t => t.fechaInicio > hace30Dias)
     // Obtener matrículas frecuentes
-    const _matriculasFrecuentes = await this.getMatriculasFrecuentes(_documento)
+    const _matriculasFrecuentes = await this.getMatriculasFrecuentes(__documento)
     // Contar rutas frecuentes
     const _rutasCount = new Map<string, number>()
     transitosCamionero.forEach(t => {
       const _ruta = `${t.origen}-${t.destino}`
-      rutasCount.set(ruta, (rutasCount.get(_ruta) || 0) + 1)
+      rutasCount.set(_ruta, (rutasCount.get(__ruta) || 0) + 1)
     })
     const _rutasFrecuentes = Array.from(rutasCount.entries())
       .map(([ruta, cantidad]) => {
         const [origen, destino] = ruta.split('-')
         return { origen, destino, cantidad }
       })
-      .sort((a, b) => b.cantidad - a.cantidad)
+      .sort((_a, b) => b.cantidad - a.cantidad)
       .slice(0, 5)
     return {
       totalTransitos: transitosCamionero.length,
@@ -207,7 +207,7 @@ class CamionerosService {
   }
 
   async updateCamionero(documento: string, data: Partial<Camionero>): Promise<Camionero | null> {
-    const _camionero = this.camioneros.get(_documento)
+    const _camionero = this.camioneros.get(__documento)
     if (!camionero) return null
     const _updated = {
       ...camionero,
@@ -215,7 +215,7 @@ class CamionerosService {
       documento: camionero.documento, // No permitir cambiar el documento
       fechaActualizacion: new Date()
     }
-    this.camioneros.set(documento, updated)
+    this.camioneros.set(_documento, updated)
     return updated
   }
 }

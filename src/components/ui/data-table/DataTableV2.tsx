@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react'
-import {ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table'
+import {_ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import {
   DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
 import { ChevronDown, Search, ChevronLeft, ChevronRight} from 'lucide-react'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -22,8 +22,8 @@ export function DataTableV2<TData, TValue>({
   columns, data, searchKey, searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(_)
-  const [rowSelection, setRowSelection] = useState(_)
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(__)
+  const [rowSelection, setRowSelection] = useState(__)
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
     data,
@@ -59,9 +59,9 @@ export function DataTableV2<TData, TValue>({
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
-              placeholder={searchPlaceholder}
+              placeholder={s_earchPlaceholder}
               value={globalFilter ?? ''}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              onChange={(_event) => setGlobalFilter(event.target.value)}
               className="pl-9 bg-gray-800 border-gray-700"
             />
           </div>
@@ -69,10 +69,10 @@ export function DataTableV2<TData, TValue>({
           {/* Column Filters */}
           {searchKey && (
             <Input
-              placeholder={`Filtrar por ${searchKey}...`}
-              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
-              onChange={(event) =>
-                table.getColumn(searchKey)?.setFilterValue(event.target.value)
+              placeholder={`Filtrar por ${s_earchKey}...`}
+              value={(table.getColumn(s_earchKey)?.getFilterValue() as string) ?? ''}
+              onChange={(_event) =>
+                table.getColumn(s_earchKey)?.setFilterValue(event.target.value)
               }
               className="max-w-sm bg-gray-800 border-gray-700"
             />
@@ -90,14 +90,14 @@ export function DataTableV2<TData, TValue>({
             <DropdownMenuContent align="end" className="w-48">
               {table
                 .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
+                .filter((_column) => column.getCanHide())
+                .map((_column) => {
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
+                      onCheckedChange={(_value) =>
                         column.toggleVisibility(!!value)
                       }
                     >
@@ -114,8 +114,8 @@ export function DataTableV2<TData, TValue>({
       <div className="rounded-md border border-gray-700">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (<TableRow key={headerGroup.id} className="border-gray-700">
-                {headerGroup.headers.map((header) => {
+            {table.getHeaderGroups().map((_headerGroup) => (<TableRow key={headerGroup.id} className="border-gray-700">
+                {headerGroup.headers.map((_header) => {
                   return (
                     <TableHead key={header.id} className="text-gray-300">
                       {header.isPlaceholder
@@ -132,13 +132,13 @@ export function DataTableV2<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((_row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   className="border-gray-700 hover:bg-gray-800/50"
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map((_cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -167,24 +167,24 @@ export function DataTableV2<TData, TValue>({
         <div className="flex items-center justify-between space-x-2 py-4">
           <div className="flex-1 text-sm text-gray-400">
             {table.getFilteredSelectedRowModel().rows.length} de{' '}
-            {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+            {table.getFilteredRowModel().rows.length} fila(_s) seleccionada(_s).
           </div>
           <div className="flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">
               <p className="text-sm font-medium text-gray-300">Filas por página</p>
               <Select
                 value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value) => {
-                  table.setPageSize(Number(value))
+                onValueChange={(_value) => {
+                  table.setPageSize(Number(_value))
                 }}
               >
                 <SelectTrigger className="h-8 w-[70px] bg-gray-800 border-gray-700">
                   <SelectValue placeholder={table.getState().pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent side="top">
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
-                      {pageSize}
+                  {[10, 20, 30, 40, 50].map((_pageSize) => (
+                    <SelectItem key={_pageSize} value={`${_pageSize}`}>
+                      {_pageSize}
                     </SelectItem>
                   ))}
                 </SelectContent>

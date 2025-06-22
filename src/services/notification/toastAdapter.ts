@@ -63,21 +63,21 @@ export class ToastNotificationAdapter {
 
   // Compatibility methods for existing notification service
   show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', options?: NotificationOptions) {
-    switch (type) {
+    switch (_type) {
       case 'success': {
-  this.success(message, undefined, options)
+  this.success(_message, undefined, options)
         break
     }
       case 'error': {
-        this.error(message, undefined, options)
+        this.error(_message, undefined, options)
         break
       }
       case 'warning': {
-        this.warning(message, undefined, options)
+        this.warning(_message, undefined, options)
         break
       }
       default:
-        this.info(message, undefined, options)
+        this.info(_message, undefined, options)
     }
   }
 

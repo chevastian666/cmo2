@@ -11,7 +11,7 @@ export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({
   status, size = 'md', showText = true 
 }) => {
   const _getStatusColor = () => {
-    switch (_status) {
+    switch (__status) {
       case PrecintoStatus.LISTO: {
   return 'bg-green-500 text-white'
       case PrecintoStatus.ARMADO: {
@@ -27,7 +27,7 @@ export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({
     }
   }
   const _getStatusIcon = () => {
-    switch (_status) {
+    switch (__status) {
       case PrecintoStatus.LISTO: {
   return (
           <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">

@@ -46,7 +46,7 @@ function calculateVariableHeightRange(scrollTop: number, containerHeight: number
   let offsetY = 0
   // Find start index
   for (let i = 0; i < itemCount; i++) {
-    const height = getItemHeight(i)
+    const height = getItemHeight(_i)
     if (accumulatedHeight + height > scrollTop) {
       startIndex = Math.max(0, i - overscan)
       break
@@ -57,7 +57,7 @@ function calculateVariableHeightRange(scrollTop: number, containerHeight: number
   // Calculate offset
   accumulatedHeight = 0
   for (let i = 0; i < startIndex; i++) {
-    accumulatedHeight += getItemHeight(i)
+    accumulatedHeight += getItemHeight(_i)
   }
   offsetY = accumulatedHeight
   // Find end index
@@ -68,7 +68,7 @@ function calculateVariableHeightRange(scrollTop: number, containerHeight: number
       endIndex = i
       break
     }
-    accumulatedHeight += getItemHeight(i)
+    accumulatedHeight += getItemHeight(_i)
   }
   endIndex = Math.min(itemCount - 1, endIndex + overscan)
   return { startIndex, endIndex, offsetY }
@@ -86,7 +86,7 @@ export function calculateTotalHeight(itemCount: number, itemHeight: number | ((i
 
   let totalHeight = 0
   for (let i = 0; i < itemCount; i++) {
-    const height = cachedHeights?.get(i) ?? itemHeight(i)
+    const height = cachedHeights?.get(_i) ?? itemHeight(_i)
     totalHeight += height
   }
   return totalHeight
@@ -105,10 +105,10 @@ export function findItemAtOffset(offset: number, itemCount: number, getItemHeigh
     // Calculate height up to mid
     accumulatedHeight = 0
     for (let i = 0; i < mid; i++) {
-      accumulatedHeight += getItemHeight(i)
+      accumulatedHeight += getItemHeight(_i)
     }
 
-    const midHeight = getItemHeight(mid)
+    const midHeight = getItemHeight(_mid)
     if (accumulatedHeight <= offset && offset < accumulatedHeight + midHeight) {
       return mid
     } else if (offset < accumulatedHeight) {
@@ -143,7 +143,7 @@ export function estimateScrollDestination(
 ): number {
   // Using physics formula for deceleration
   const distance = (velocity * velocity) / (2 * (1 - deceleration))
-  return currentScrollTop + distance * Math.sign(velocity)
+  return currentScrollTop + distance * Math.sign(_velocity)
 }
 
 /**
@@ -161,7 +161,7 @@ export function calculatePrefetchRange(
   }
 
   const visibleCount = visibleRange.endIndex - visibleRange.startIndex
-  const velocityFactor = Math.min(Math.abs(scrollVelocity) / 1000, 3)
+  const velocityFactor = Math.min(Math.abs(s_crollVelocity) / 1000, 3)
   const prefetchCount = Math.ceil(visibleCount * prefetchFactor * (1 + velocityFactor))
   if (scrollDirection === 'down') {
     const prefetchStart = visibleRange.startIndex
@@ -190,5 +190,5 @@ export function calculateSmoothScrollPosition(
   progress: number
 ): number {
   const distance = targetPosition - startPosition
-  return startPosition + distance * easeInOutQuad(progress)
+  return startPosition + distance * easeInOutQuad(_progress)
 }

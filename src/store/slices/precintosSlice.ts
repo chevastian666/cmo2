@@ -8,7 +8,7 @@ import type { StateCreator} from 'zustand'
 import type { PrecintosStore} from '../types'
 import { precintosService} from '../../services'
 import { generateMockPrecinto} from '../../utils/mockData'
-export const createPrecintosSlice: StateCreator<PrecintosStore> = (set) => ({
+export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
   // State
   precintos: [],
   precintosActivos: [],
@@ -21,7 +21,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set) => ({
     tipo: ''
   },
 
-  // Computed Properties (getters)
+  // Computed Properties (_getters)
   get filteredPrecintos() {
     
     return precintos.filter(precinto => {
@@ -46,84 +46,84 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set) => ({
   },
 
   // Actions with Immer patterns (handled by middleware)
-  setPrecintos: (precintos) => set((state) => {
+  setPrecintos: (_precintos) => set((s_tate) => {
     state.precintos = precintos
     state.lastUpdate = Date.now()
     state.error = null
   }),
   
-  setPrecintosActivos: (precintosActivos) => set((state) => {
+  setPrecintosActivos: (_precintosActivos) => set((s_tate) => {
     state.precintosActivos = precintosActivos
     state.lastUpdate = Date.now()
     state.error = null
   }),
   
-  updatePrecinto: (id, data) => set((state) => {
+  updatePrecinto: (_id, data) => set((s_tate) => {
     const updateItem = (item: unknown) => item.id === id ? { ...item, ...data } : item
-    state.precintos = state.precintos.map(updateItem)
-    state.precintosActivos = state.precintosActivos.map(updateItem)
+    state.precintos = state.precintos.map(_updateItem)
+    state.precintosActivos = state.precintosActivos.map(_updateItem)
     state.lastUpdate = Date.now()
   }),
   
-  removePrecinto: (id) => set((state) => {
+  removePrecinto: (_id) => set((s_tate) => {
     state.precintos = state.precintos.filter(p => p.id !== id)
     state.precintosActivos = state.precintosActivos.filter(p => p.id !== id)
     state.lastUpdate = Date.now()
   }),
 
-  setFilters: (filters) => set((state) => {
+  setFilters: (_filters) => set((s_tate) => {
     state.filters = { ...state.filters, ...filters }
   }),
 
-  clearFilters: () => set((state) => {
+  clearFilters: () => set((s_tate) => {
     state.filters = { search: '', estado: '', tipo: '' }
   }),
   
-  setLoading: (loading) => set({ loading }),
+  setLoading: (_loading) => set({ loading }),
   
-  setError: (error) => set({ error }),
+  setError: (_error) => set({ error }),
   
   // Async Actions
   fetchPrecintos: async () => {
 
-    setLoading(true)
-    setError(null)
+    setLoading(_true)
+    setError(_null)
     try {
       const data = await precintosService.getAll()
-      setPrecintos(data)
+      setPrecintos(_data)
       return data
     } catch {
       // En desarrollo, usar datos mock
-      const mockData = Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
-      setPrecintos(mockData)
+      const mockData = Array.from({ length: 20 }, (__, i) => generateMockPrecinto(_i))
+      setPrecintos(_mockData)
       console.warn('Using mock data for precintos:', _error)
       return mockData
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   },
   
   fetchPrecintosActivos: async () => {
 
-    setLoading(true)
-    setError(null)
+    setLoading(_true)
+    setError(_null)
     try {
       const data = await precintosService.getActivos()
-      setPrecintosActivos(data)
+      setPrecintosActivos(_data)
       return data
     } catch {
       // En desarrollo, usar datos mock
-      const mockData = Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
-      setPrecintosActivos(mockData)
+      const mockData = Array.from({ length: 10 }, (__, i) => generateMockPrecinto(_i))
+      setPrecintosActivos(_mockData)
       console.warn('Using mock data for precintos activos:', _error)
       return mockData
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   },
 
   // Batch operations
-  batchUpdatePrecintos: (updates: Array<{ id: string; data: unknown }>) => set((state) => {
+  batchUpdatePrecintos: (updates: Array<{ id: string; data: unknown }>) => set((s_tate) => {
     updates.forEach(({ id, data }) => {
       const index = state.precintos.findIndex(p => p.id === id)
       if (index !== -1) {
@@ -139,7 +139,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set) => ({
   }),
 
   // Reset store
-  reset: () => set((state) => {
+  reset: () => set((s_tate) => {
     state.precintos = []
     state.precintosActivos = []
     state.loading = false

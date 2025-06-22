@@ -6,7 +6,7 @@ import { TimelineNovedades} from './TimelineNovedades'
 import { FiltrosNovedadesComponent} from './FiltrosNovedades'
 import { ModalSeguimiento} from './ModalSeguimiento'
 import { ModalResolucion} from './ModalResolucion'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { notificationService} from '../../../services/shared/notification.service'
 import { exportToCSV} from '../../../utils/export'
 import type { Novedad, FiltrosNovedades} from '../types'
@@ -14,9 +14,9 @@ import { FILTROS_DEFAULT, TIPOS_NOVEDAD} from '../types'
 const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros'
 export const LibroNovedades: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
-    if (saved) {
-      const parsed = JSON.parse(saved)
+    const saved = localStorage.getItem(_STORAGE_KEY_FILTROS)
+    if (s_aved) {
+      const parsed = JSON.parse(s_aved)
       // Convertir strings de fecha a objetos Date
       return {
         ...parsed,
@@ -27,30 +27,30 @@ export const LibroNovedades: React.FC = () => {
     }
     return FILTROS_DEFAULT
   })
-  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null)
-  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null)
+  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(_null)
+  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(_null)
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   // Cargar novedades al montar y cuando cambien los filtros
 
   useEffect(() => {
-    fetchNovedades(filtros)
+    fetchNovedades(_filtros)
   }, [filtros])
   // Guardar filtros en localStorage
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
+    localStorage.setItem(_STORAGE_KEY_FILTROS, JSON.stringify(_filtros))
   }, [filtros])
   // Auto-refresh cada minuto
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchNovedades(filtros)
+      fetchNovedades(_filtros)
     }, 60000)
-    return () => clearInterval(interval)
+    return () => clearInterval(_interval)
   }, [filtros])
   const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(_data)
+    await crearNovedad(__data)
     // Si hay archivos, aquí se subirían
     if ((_data as unknown).archivos) {
       console.log('Archivos a subir:', (_data as unknown).archivos)
@@ -58,19 +58,19 @@ export const LibroNovedades: React.FC = () => {
   }
   const handleMarcarResuelta = async (novedadId: string, comentario?: string) => {
     try {
-      await marcarResuelta(novedadId, comentario)
+      await marcarResuelta(_novedadId, comentario)
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta')
-      setNovedadResolucion(null)
-    } catch (error) {
+      setNovedadResolucion(_null)
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta')
     }
   }
   const handleAgregarSeguimiento = async (novedadId: string, comentario: string) => {
     try {
-      await agregarSeguimiento(novedadId, comentario)
+      await agregarSeguimiento(_novedadId, comentario)
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente')
-      setNovedadSeguimiento(null)
-    } catch (error) {
+      setNovedadSeguimiento(_null)
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento')
     }
   }
@@ -87,7 +87,7 @@ export const LibroNovedades: React.FC = () => {
       'Comentario resolución': nov.resolucion?.comentario || '-',
       Seguimientos: nov.seguimientos?.length || 0
     }))
-    exportToCSV(datosExportar, `novedades_${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(_datosExportar, `novedades_${new Date().toISOString().split('T')[0]}`)
     notificationService.success('Exportación completada', 'Las novedades se han exportado correctamente')
   }
   // Filtrar novedades según usuario si está marcado "solo mías"
@@ -101,7 +101,7 @@ export const LibroNovedades: React.FC = () => {
         {/* Formulario de nueva novedad */}
         {canEdit && (
           <FormularioNovedad
-            onSubmit={handleCrearNovedad}
+            onSubmit={_handleCrearNovedad}
             puntoOperacionDefault={userInfo.puntoOperacion}
           />
         )}
@@ -141,13 +141,13 @@ export const LibroNovedades: React.FC = () => {
                 {Object.entries(estadisticas.porTipo).map(([tipo, cantidad]) => {
                   const config = TIPOS_NOVEDAD[tipo as keyof typeof TIPOS_NOVEDAD]
                   return (
-                    <div key={tipo} className="flex items-center justify-between">
+                    <div key={_tipo} className="flex items-center justify-between">
                       <span className="text-sm text-gray-300 flex items-center gap-2">
                         <span>{config.icon}</span>
                         {config.label}
                       </span>
                       <Badge variant={config.color as unknown} className="text-xs">
-                        {cantidad}
+                        {_cantidad}
                       </Badge>
                     </div>
                   )
@@ -170,7 +170,7 @@ export const LibroNovedades: React.FC = () => {
           </div>
           {novedadesFiltradas.length > 0 && (
             <button
-              onClick={handleExportar}
+              onClick={_handleExportar}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
             >
               <Download className="h-4 w-4" />
@@ -183,38 +183,38 @@ export const LibroNovedades: React.FC = () => {
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <FiltrosNovedadesComponent
-              filtros={filtros}
-              onFiltrosChange={setFiltros}
+              filtros={_filtros}
+              onFiltrosChange={s_etFiltros}
             />
           </CardContent>
         </Card>
 
         {/* Timeline de novedades */}
         <TimelineNovedades
-          novedades={novedadesFiltradas}
-          loading={loading}
+          novedades={_novedadesFiltradas}
+          loading={_loading}
           onMarcarResuelta={canEdit ? setNovedadResolucion : undefined}
           onAgregarSeguimiento={canEdit ? setNovedadSeguimiento : undefined}
-          onEditar={canEdit ? (nov) => console.log('Editar:', nov) : undefined}
-          onVerDetalles={(nov) => console.log('Ver detalles:', nov)}
-          canEdit={canEdit}
+          onEditar={canEdit ? (_nov) => console.log('Editar:', nov) : undefined}
+          onVerDetalles={(_nov) => console.log('Ver detalles:', nov)}
+          canEdit={_canEdit}
           userId={userInfo.id}
         />
       </div>
 
       {/* Modales */}
       <ModalSeguimiento
-        novedad={novedadSeguimiento}
+        novedad={_novedadSeguimiento}
         isOpen={!!novedadSeguimiento}
-        onClose={() => setNovedadSeguimiento(null)}
-        onSubmit={handleAgregarSeguimiento}
+        onClose={() => setNovedadSeguimiento(_null)}
+        onSubmit={_handleAgregarSeguimiento}
       />
 
       <ModalResolucion
-        novedad={novedadResolucion}
+        novedad={_novedadResolucion}
         isOpen={!!novedadResolucion}
-        onClose={() => setNovedadResolucion(null)}
-        onSubmit={handleMarcarResuelta}
+        onClose={() => setNovedadResolucion(_null)}
+        onSubmit={_handleMarcarResuelta}
       />
     </div>
   )

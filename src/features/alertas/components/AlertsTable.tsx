@@ -10,13 +10,13 @@ import { ResponderAlertaModal} from './ResponderAlertaModal'
 import { notificationService} from '../../../services/shared/notification.service'
 export const AlertsTable: React.FC = () => {
 
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(_null)
+  const [isModalOpen, setIsModalOpen] = useState(_false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(_null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(_false)
   const handleAlertClick = (alerta: Alerta) => {
     setSelectedAlertaId(alerta.id)
-    setIsModalOpen(true)
+    setIsModalOpen(_true)
   }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
     event.stopPropagation()
@@ -25,12 +25,12 @@ export const AlertsTable: React.FC = () => {
       return
     }
     
-    setSelectedAlertaForResponse(alerta)
-    setIsResponseModalOpen(true)
+    setSelectedAlertaForResponse(_alerta)
+    setIsResponseModalOpen(_true)
   }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId)
+      await actions.atenderAlerta(_alertaId)
       notificationService.success('Alerta respondida correctamente')
       // Log the response details (in a real app, this would be sent to the backend)
       console.log('Alert response:', {
@@ -47,11 +47,11 @@ export const AlertsTable: React.FC = () => {
     }
   }
   const closeModal = () => {
-    setIsModalOpen(false)
-    setSelectedAlertaId(null)
+    setIsModalOpen(_false)
+    setSelectedAlertaId(_null)
   }
   const getIcon = (tipo: string) => {
-    switch (tipo) {
+    switch (_tipo) {
       case 'AAR': {
   // Atraso en arribo de reporte
         return <Clock className="h-4 w-4" />
@@ -84,7 +84,7 @@ export const AlertsTable: React.FC = () => {
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-900/20'
       case 'alta': {
@@ -104,12 +104,12 @@ export const AlertsTable: React.FC = () => {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: Object.entries(TIPOS_ALERTA).map(([key, value]) => ({
+      filterOptions: Object.entries(_TIPOS_ALERTA).map(([key, value]) => ({
         value: key,
         label: value
       })),
       width: '120px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center space-x-2">
           <div className={cn('p-1.5 rounded', getSeveridadColor(item.severidad))}>
             {getIcon(item.tipo)}
@@ -123,7 +123,7 @@ export const AlertsTable: React.FC = () => {
       header: 'Precinto',
       sortable: true,
       filterable: true,
-      accessor: (item) => <span className="font-medium text-white">{item.codigoPrecinto}</span>
+      accessor: (_item) => <span className="font-medium text-white">{item.codigoPrecinto}</span>
     },
     {
       key: 'severidad',
@@ -138,7 +138,7 @@ export const AlertsTable: React.FC = () => {
         { value: 'baja', label: 'Baja' }
       ],
       width: '120px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <span className={cn(
           'inline-flex px-2 py-1 text-xs font-medium rounded-full',
           getSeveridadColor(item.severidad)
@@ -152,7 +152,7 @@ export const AlertsTable: React.FC = () => {
       header: 'Mensaje',
       sortable: false,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="max-w-md">
           <p className="text-sm text-gray-300 truncate">{item.mensaje}</p>
         </div>
@@ -162,9 +162,9 @@ export const AlertsTable: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (item) => (item.ubicacion ? (
+      accessor: (_item) => (item.ubicacion ? (
           <button
-            onClick={(e) => {
+            onClick={(_e) => {
               e.stopPropagation()
               // TODO: Implement map view functionality
               notificationService.info('Función de mapa próximamente')
@@ -183,7 +183,7 @@ export const AlertsTable: React.FC = () => {
       key: 'timestamp',
       header: 'Tiempo',
       sortable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="text-sm">
           <div className="text-gray-300">{formatTimeAgo(item.timestamp)}</div>
           <div className="text-xs text-gray-500">{formatDateTime(item.timestamp)}</div>
@@ -201,7 +201,7 @@ export const AlertsTable: React.FC = () => {
         { value: 'true', label: 'Atendida' }
       ],
       width: '100px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <span className={cn(
           'inline-flex px-2 py-1 text-xs font-medium rounded-full',
           item.atendida ? 'bg-green-900/20 text-green-400' : 'bg-red-900/20 text-red-400'
@@ -215,9 +215,9 @@ export const AlertsTable: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (item) => (<div className="flex items-center justify-center">
+      accessor: (_item) => (<div className="flex items-center justify-center">
           <button
-            onClick={(e) => handleVerificar(item, e)}
+            onClick={(_e) => handleVerificar(_item, e)}
             disabled={item.atendida}
             className={cn(
               'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
@@ -236,7 +236,7 @@ export const AlertsTable: React.FC = () => {
   ]
   const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `alertas-${timestamp}`
+    const filename = `alertas-${_timestamp}`
     if (format === 'csv') {
       const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
@@ -248,55 +248,55 @@ export const AlertsTable: React.FC = () => {
         new Date(a.timestamp * 1000).toLocaleString('es-UY'),
         a.atendida ? 'Atendida' : 'Activa'
       ])
-      const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
+      const csv = [headers, ...rows.map(row => row.map(cell => `"${_cell}"`))].
         map(row => row.join(',')).join('\n')
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = `${filename}.csv`
+      link.href = URL.createObjectURL(_blob)
+      link.download = `${_filename}.csv`
       link.click()
     } else {
-      const jsonData = JSON.stringify(_data, null, 2)
+      const jsonData = JSON.stringify(__data, null, 2)
       const blob = new Blob([jsonData], { type: 'application/json' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = `${filename}.json`
+      link.href = URL.createObjectURL(_blob)
+      link.download = `${_filename}.json`
       link.click()
     }
   }
-  if (loading) {
+  if (_loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-4">
         <div className="animate-pulse space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-gray-700 h-16 rounded"></div>
+          {[...Array(5)].map((__, i) => (
+            <div key={_i} className="bg-gray-700 h-16 rounded"></div>
           ))}
         </div>
       </div>
     )
   }
 
-  if (error) {
+  if (_error) {
     return (
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
-        <p className="text-red-400">Error cargando alertas: {error}</p>
+        <p className="text-red-400">Error cargando alertas: {_error}</p>
       </div>
     )
   }
 
   return (<>
       <DataTable
-        data={alertas}
-        columns={columns}
+        data={_alertas}
+        columns={_columns}
         searchKeys={['codigoPrecinto', 'mensaje']}
         searchPlaceholder="Buscar por precinto o mensaje..."
         title="Gestión de Alarmas"
-        onExport={handleExport}
-        onRowClick={handleAlertClick}
+        onExport={_handleExport}
+        onRowClick={_handleAlertClick}
         emptyMessage="No hay alarmas registradas"
         defaultItemsPerPage={25}
         itemsPerPageOptions={[10, 25, 50, 100]}
-        rowClassName={(item) => cn(
+        rowClassName={(_item) => cn(
           'cursor-pointer',
           !item.atendida && 'border-l-4',
           !item.atendida && getSeveridadColor(item.severidad).replace('text-', 'border-')
@@ -306,21 +306,21 @@ export const AlertsTable: React.FC = () => {
       {/* Alert Detail Modal */}
       {selectedAlertaId && (
         <AlertDetailModalWrapper
-          alertaId={selectedAlertaId}
-          isOpen={isModalOpen}
-          onClose={closeModal}
+          alertaId={s_electedAlertaId}
+          isOpen={_isModalOpen}
+          onClose={_closeModal}
         />
       )}
 
       {/* Response Modal */}
       <ResponderAlertaModal
-        alerta={selectedAlertaForResponse}
-        isOpen={isResponseModalOpen}
+        alerta={s_electedAlertaForResponse}
+        isOpen={_isResponseModalOpen}
         onClose={() => {
-          setIsResponseModalOpen(false)
-          setSelectedAlertaForResponse(null)
+          setIsResponseModalOpen(_false)
+          setSelectedAlertaForResponse(_null)
         }}
-        onRespond={handleResponderAlerta}
+        onRespond={_handleResponderAlerta}
       />
     </>
   )
@@ -338,9 +338,9 @@ const AlertDetailModalWrapper: React.FC<{
 
   return (
     <AlertaDetalleModal
-      alerta={alerta}
-      isOpen={isOpen}
-      onClose={onClose}
+      alerta={_alerta}
+      isOpen={_isOpen}
+      onClose={_onClose}
       onAsignar={actions.asignar}
       onComentar={actions.comentar}
       onResolver={actions.resolver}

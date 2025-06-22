@@ -24,35 +24,35 @@ export const _TROKOR_CONFIG = {
     // Precintos
     PRECINTOS: '/precintos',
     PRECINTOS_ACTIVOS: '/precintos/activos',
-    PRECINTO_BY_ID: (id: string) => `/precintos/${id}`,
-    PRECINTO_BY_NQR: (nqr: string) => `/precintos/nqr/${nqr}`,
-    PRECINTO_STATUS: (id: string) => `/precintos/${id}/status`,
-    PRECINTO_FINALIZAR: (id: string) => `/precintos/${id}/finalizar`,
+    PRECINTO_BY_ID: (id: string) => `/precintos/${_id}`,
+    PRECINTO_BY_NQR: (nqr: string) => `/precintos/nqr/${_nqr}`,
+    PRECINTO_STATUS: (id: string) => `/precintos/${_id}/status`,
+    PRECINTO_FINALIZAR: (id: string) => `/precintos/${_id}/finalizar`,
     
     // Viajes (Tránsitos)
     VIAJES: '/viajes',
-    VIAJE_BY_ID: (id: string) => `/viajes/${id}`,
+    VIAJE_BY_ID: (id: string) => `/viajes/${_id}`,
     VIAJES_PENDIENTES: '/viajes/pendientes',
-    VIAJE_PRECINTAR: (id: string) => `/viajes/${id}/precintar`,
+    VIAJE_PRECINTAR: (id: string) => `/viajes/${_id}/precintar`,
     
     // Alarmas
     ALARMAS: '/alarmas',
-    ALARMA_BY_ID: (id: string) => `/alarmas/${id}`,
+    ALARMA_BY_ID: (id: string) => `/alarmas/${_id}`,
     ALARMAS_ACTIVAS: '/alarmas/activas',
-    ALARMA_ATENDER: (id: string) => `/alarmas/${id}/atender`,
-    ALARMA_VERIFICAR: (id: string) => `/alarmas/${id}/verificar`,
+    ALARMA_ATENDER: (id: string) => `/alarmas/${_id}/atender`,
+    ALARMA_VERIFICAR: (id: string) => `/alarmas/${_id}/verificar`,
     
     // Empresas
     EMPRESAS: '/empresas',
-    EMPRESA_BY_ID: (id: string) => `/empresas/${id}`,
+    EMPRESA_BY_ID: (id: string) => `/empresas/${_id}`,
     
     // Usuarios
     USUARIOS: '/usuarios',
-    USUARIO_BY_ID: (id: string) => `/usuarios/${id}`,
+    USUARIO_BY_ID: (id: string) => `/usuarios/${_id}`,
     
     // Ubicaciones
     UBICACIONES: '/ubicaciones',
-    UBICACION_BY_PRECINTO: (precintoId: string) => `/ubicaciones/precinto/${precintoId}`,
+    UBICACION_BY_PRECINTO: (precintoId: string) => `/ubicaciones/precinto/${_precintoId}`,
     
     // Estadísticas
     ESTADISTICAS: '/estadisticas',
@@ -138,13 +138,13 @@ export const _getTrokorHeaders = (): HeadersInit => {
   }
   
   const _token = localStorage.getItem('trokor_token')
-  if (_token) {
-    headers['Authorization'] = `Bearer ${token}`
+  if (__token) {
+    headers['Authorization'] = `Bearer ${_token}`
   }
   
   return headers
 }
 // Helper para construir URLs completas
 export const _buildTrokorUrl = (endpoint: string, base: string = TROKOR_CONFIG.API_BASE): string => {
-  return `${base}${endpoint}`
+  return `${_base}${_endpoint}`
 }

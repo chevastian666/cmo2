@@ -6,10 +6,10 @@
  */
 
 import React, { useState } from 'react'
-import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, MapPin} from 'lucide-react'
+import {_Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, MapPin} from 'lucide-react'
 import { Card} from '@/components/ui/Card'
 import { Input} from '@/components/ui/input'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Separator} from '@/components/ui/separator'
 import { Switch} from '@/components/ui/switch'
 import { Label} from '@/components/ui/label'
@@ -84,13 +84,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   void _routes
   void _center
   void _mapType
-  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null)
-  const [showSidebar, setShowSidebar] = useState(true)
+  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(_null)
+  const [showSidebar, setShowSidebar] = useState(_true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
-  const [showTraffic, setShowTraffic] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  const [, setCurrentZoom] = useState(zoom)
+  const [showTraffic, setShowTraffic] = useState(_false)
+  const [isFullscreen, setIsFullscreen] = useState(_false)
+  const [, setCurrentZoom] = useState(_zoom)
   // Filter markers based on search and filter
   const filteredMarkers = markers.filter(marker => {
     const matchesSearch = !searchTerm || 
@@ -105,15 +105,15 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
     setCurrentZoom(prev => Math.max(prev - 1, 1))
   }
   const handleCenter = () => {
-    setCurrentZoom(zoom)
+    setCurrentZoom(_zoom)
   }
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen)
   }
   const handleMarkerClick = (marker: MapMarker) => {
-    setSelectedMarker(marker)
-    if (onMarkerClick) {
-      onMarkerClick(marker)
+    setSelectedMarker(_marker)
+    if (_onMarkerClick) {
+      onMarkerClick(_marker)
     }
   }
   return (
@@ -153,7 +153,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
               <AnimatedButton
                 size="sm"
                 variant="secondary"
-                onClick={handleZoomIn}
+                onClick={_handleZoomIn}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -162,7 +162,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
               <AnimatedButton
                 size="sm"
                 variant="secondary"
-                onClick={handleZoomOut}
+                onClick={_handleZoomOut}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -171,7 +171,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
               <AnimatedButton
                 size="sm"
                 variant="secondary"
-                onClick={handleCenter}
+                onClick={_handleCenter}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -180,7 +180,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
               <AnimatedButton
                 size="sm"
                 variant="secondary"
-                onClick={toggleFullscreen}
+                onClick={_toggleFullscreen}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -198,14 +198,14 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             >
               <p className="text-xs font-medium text-gray-300 mb-2">Leyenda</p>
               <div className="space-y-1">
-                {Object.entries(MARKER_CONFIGS).map(([type, config]) => (
-                  <div key={type} className="flex items-center gap-2">
+                {Object.entries(_MARKER_CONFIGS).map(([type, config]) => (
+                  <div key={_type} className="flex items-center gap-2">
                     <div 
                       className="w-3 h-3 rounded-full" 
                       style={{ backgroundColor: config.color }}
                     />
                     <span className="text-xs text-gray-400 capitalize">
-                      {config.icon} {type}
+                      {config.icon} {_type}
                     </span>
                   </div>
                 ))}
@@ -253,8 +253,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                           id="search"
                           type="text"
                           placeholder="Buscar en el mapa..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
+                          value={s_earchTerm}
+                          onChange={(_e) => setSearchTerm(e.target.value)}
                           className="pl-10"
                         />
                       </div>
@@ -264,7 +264,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                   {/* Filter */}
                   <div>
                     <Label htmlFor="filter">Filtrar por tipo</Label>
-                    <Select value={filterType} onValueChange={setFilterType}>
+                    <Select value={_filterType} onValueChange={s_etFilterType}>
                       <SelectTrigger id="filter" className="mt-1">
                         <SelectValue />
                       </SelectTrigger>
@@ -285,8 +285,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                       <Label htmlFor="traffic" className="text-sm">Mostrar tráfico</Label>
                       <Switch
                         id="traffic"
-                        checked={showTraffic}
-                        onCheckedChange={setShowTraffic}
+                        checked={s_howTraffic}
+                        onCheckedChange={s_etShowTraffic}
                         disabled
                       />
                     </div>
@@ -301,7 +301,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                     </h4>
                     <ScrollArea className="h-64">
                       <div className="space-y-2">
-                        {filteredMarkers.map((marker, index) => (
+                        {filteredMarkers.map((_marker, index) => (
                           <motion.div
                             key={marker.id}
                             initial={{ opacity: 0, x: 20 }}
@@ -311,7 +311,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                               "p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer",
                               selectedMarker?.id === marker.id && "ring-2 ring-blue-500"
                             )}
-                            onClick={() => handleMarkerClick(marker)}
+                            onClick={() => handleMarkerClick(_marker)}
                           >
                             <div className="flex items-start gap-3">
                               <div 

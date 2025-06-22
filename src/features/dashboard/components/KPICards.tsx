@@ -1,5 +1,5 @@
 import React from 'react'
-import {Truck, Package, AlertTriangle, Clock, CheckCircle, TrendingUp, TrendingDown, Minus} from 'lucide-react'
+import {_Truck, Package, AlertTriangle, Clock, CheckCircle, TrendingUp, TrendingDown, Minus} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { TransitoPendiente, Alerta} from '../../../types'
 interface KPICardsProps {
@@ -95,7 +95,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
     }
   ]
   const getTrendIcon = (trend: string) => {
-    switch (trend) {
+    switch (_trend) {
       case 'up': {
   return <TrendingUp className="h-4 w-4 text-red-400" />
       case 'down': {
@@ -107,9 +107,9 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
   return (<div className="space-y-6">
       {/* Main KPI Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-        {kpiData.map((kpi, index) => (
+        {kpiData.map((_kpi, index) => (
           <div
-            key={index}
+            key={_index}
             className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors"
           >
             <div className="flex items-start justify-between">

@@ -7,9 +7,9 @@
 import React, { useState, useMemo } from 'react'
 import { Plus, Search, Filter, Download, Building2, MapPin, Phone, Clock, Package, Edit2, Eye, X, Hash, Activity, Map} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Label} from '@/components/ui/label'
 import { Separator} from '@/components/ui/separator'
 import { Progress} from '@/components/ui/progress'
@@ -28,11 +28,11 @@ import { staggerItem, fadeInUp} from '@/components/animations/AnimationPresets'
 export const DepositosPageV2: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [showFilters, setShowFilters] = useState(false)
-  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null)
-  const [showDetail, setShowDetail] = useState(false)
-  const [showForm, setShowForm] = useState(false)
-  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null)
+  const [showFilters, setShowFilters] = useState(_false)
+  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(_null)
+  const [showDetail, setShowDetail] = useState(_false)
+  const [showForm, setShowForm] = useState(_false)
+  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(_null)
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
   const [selectedView, setSelectedView] = useState<'grid' | 'table' | 'map'>('table')
   const [filters, setFilters] = useState<DepositoFilters>({
@@ -45,24 +45,24 @@ export const DepositosPageV2: React.FC = () => {
       const matchesSearch = searchTerm === '' || 
         deposito.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         deposito.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deposito.codigo.toString().includes(searchTerm)
+        deposito.codigo.toString().includes(s_earchTerm)
       const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo
       const matchesZona = !filters.zona || deposito.zona === filters.zona
       const matchesPadre = !filters.padre || deposito.padre === filters.padre
       return matchesSearch && matchesTipo && matchesZona && matchesPadre
     })
   }, [depositos, filters])
-  const activeFiltersCount = Object.values(filters).filter(v => v !== '').length
+  const activeFiltersCount = Object.values(_filters).filter(v => v !== '').length
   const stats = useMemo(() => {
-    const totalTransitos = depositos.reduce((acc, d) => acc + d.transitosActivos, 0)
+    const totalTransitos = depositos.reduce((_acc, d) => acc + d.transitosActivos, 0)
     const activeDepositos = depositos.filter(d => d.estado === 'activo').length
-    const totalCapacity = depositos.reduce((acc, d) => acc + d.capacidad, 0)
+    const totalCapacity = depositos.reduce((_acc, d) => acc + d.capacidad, 0)
     const avgOccupancy = totalCapacity > 0 ? (totalTransitos / totalCapacity) * 100 : 0
     return {
       total: depositos.length,
       active: activeDepositos,
       transitos: totalTransitos,
-      avgOccupancy: Math.round(avgOccupancy)
+      avgOccupancy: Math.round(_avgOccupancy)
     }
   }, [depositos])
   const handleExport = () => {
@@ -78,36 +78,36 @@ export const DepositosPageV2: React.FC = () => {
       'Tránsitos Activos': d.transitosActivos,
       Estado: d.estado
     }))
-    exportToCSV(data, 'depositos')
+    exportToCSV(_data, 'depositos')
   }
   const handleView = (deposito: Deposito) => {
-    setSelectedDeposito(deposito)
-    setShowDetail(true)
+    setSelectedDeposito(_deposito)
+    setShowDetail(_true)
   }
   const handleEdit = (deposito: Deposito) => {
-    setEditingDeposito(deposito)
-    setShowForm(true)
+    setEditingDeposito(_deposito)
+    setShowForm(_true)
   }
   const handleAdd = () => {
-    setEditingDeposito(null)
-    setShowForm(true)
+    setEditingDeposito(_null)
+    setShowForm(_true)
   }
   const handleSave = (_data: Partial<Deposito>) => {
-    if (editingDeposito) {
+    if (_editingDeposito) {
       updateDeposito(editingDeposito.id, data)
     } else {
       addDeposito(data as Omit<Deposito, 'id'>)
     }
-    setShowForm(false)
+    setShowForm(_false)
   }
   const toggleRowExpand = (id: string) => {
-    const newExpanded = new Set(expandedRows)
-    if (newExpanded.has(id)) {
-      newExpanded.delete(id)
+    const newExpanded = new Set(_expandedRows)
+    if (newExpanded.has(_id)) {
+      newExpanded.delete(_id)
     } else {
-      newExpanded.add(id)
+      newExpanded.add(_id)
     }
-    setExpandedRows(newExpanded)
+    setExpandedRows(_newExpanded)
   }
   const clearFilters = () => {
     setFilters({ tipo: '', zona: '', padre: '' })
@@ -124,7 +124,7 @@ export const DepositosPageV2: React.FC = () => {
             <div className="flex items-center gap-2">
               <AnimatedButton
                 variant="outline"
-                onClick={handleExport}
+                onClick={_handleExport}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -132,7 +132,7 @@ export const DepositosPageV2: React.FC = () => {
                 Exportar
               </AnimatedButton>
               <AnimatedButton
-                onClick={handleAdd}
+                onClick={_handleAdd}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -187,14 +187,14 @@ export const DepositosPageV2: React.FC = () => {
                   <Input
                     type="text"
                     placeholder="Buscar por código, nombre o alias..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={s_earchTerm}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="pl-10"
                   />
                 </div>
                 
                 <div className="flex gap-2">
-                  <Select value={selectedView} onValueChange={(v: unknown) => setSelectedView(v)}>
+                  <Select value={s_electedView} onValueChange={(v: unknown) => setSelectedView(_v)}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
@@ -215,7 +215,7 @@ export const DepositosPageV2: React.FC = () => {
                     Filtros
                     {activeFiltersCount > 0 && (
                       <Badge className="ml-2 px-1.5 py-0.5 text-xs">
-                        {activeFiltersCount}
+                        {_activeFiltersCount}
                       </Badge>
                     )}
                   </AnimatedButton>
@@ -236,7 +236,7 @@ export const DepositosPageV2: React.FC = () => {
                         <Label htmlFor="tipo">Tipo</Label>
                         <Select 
                           value={filters.tipo} 
-                          onValueChange={(v) => setFilters(prev => ({ ...prev, tipo: v }))}
+                          onValueChange={(_v) => setFilters(prev => ({ ...prev, tipo: v }))}
                         >
                           <SelectTrigger id="tipo" className="mt-1">
                             <SelectValue placeholder="Todos los tipos" />
@@ -257,7 +257,7 @@ export const DepositosPageV2: React.FC = () => {
                         <Label htmlFor="zona">Zona</Label>
                         <Select 
                           value={filters.zona} 
-                          onValueChange={(v) => setFilters(prev => ({ ...prev, zona: v }))}
+                          onValueChange={(_v) => setFilters(prev => ({ ...prev, zona: v }))}
                         >
                           <SelectTrigger id="zona" className="mt-1">
                             <SelectValue placeholder="Todas las zonas" />
@@ -278,7 +278,7 @@ export const DepositosPageV2: React.FC = () => {
                         <Label htmlFor="padre">Padre</Label>
                         <Select 
                           value={filters.padre} 
-                          onValueChange={(v) => setFilters(prev => ({ ...prev, padre: v }))}
+                          onValueChange={(_v) => setFilters(prev => ({ ...prev, padre: v }))}
                         >
                           <SelectTrigger id="padre" className="mt-1">
                             <SelectValue placeholder="Todos los padres" />
@@ -286,7 +286,7 @@ export const DepositosPageV2: React.FC = () => {
                           <SelectContent>
                             <SelectItem value="">Todos los padres</SelectItem>
                             {Array.from(new Set(depositos.map(d => d.padre))).map(padre => (
-                              <SelectItem key={padre} value={padre}>{padre}</SelectItem>
+                              <SelectItem key={_padre} value={_padre}>{_padre}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -298,7 +298,7 @@ export const DepositosPageV2: React.FC = () => {
                         <AnimatedButton
                           variant="ghost"
                           size="sm"
-                          onClick={clearFilters}
+                          onClick={_clearFilters}
                         >
                           <X className="mr-2 h-4 w-4" />
                           Limpiar filtros
@@ -316,50 +316,50 @@ export const DepositosPageV2: React.FC = () => {
         <AnimatedSection delay={0.3}>
           {selectedView === 'table' && (
             <DepositosTable
-              depositos={filteredDepositos}
-              loading={loading}
-              onView={handleView}
-              onEdit={handleEdit}
-              expandedRows={expandedRows}
-              onToggleExpand={toggleRowExpand}
+              depositos={_filteredDepositos}
+              loading={_loading}
+              onView={_handleView}
+              onEdit={_handleEdit}
+              expandedRows={_expandedRows}
+              onToggleExpand={_toggleRowExpand}
             />
           )}
           
           {selectedView === 'grid' && (
             <DepositosGrid
-              depositos={filteredDepositos}
-              loading={loading}
-              onView={handleView}
-              onEdit={handleEdit}
+              depositos={_filteredDepositos}
+              loading={_loading}
+              onView={_handleView}
+              onEdit={_handleEdit}
             />
           )}
           
           {selectedView === 'map' && (
             <DepositosMap
-              depositos={filteredDepositos}
-              loading={loading}
-              onView={handleView}
+              depositos={_filteredDepositos}
+              loading={_loading}
+              onView={_handleView}
             />
           )}
         </AnimatedSection>
 
         {/* Modals */}
         {showDetail && selectedDeposito && (<DepositoDetailModal
-            deposito={selectedDeposito}
-            isOpen={showDetail}
-            onClose={() => setShowDetail(false)}
+            deposito={s_electedDeposito}
+            isOpen={s_howDetail}
+            onClose={() => setShowDetail(_false)}
             onEdit={() => {
-              setShowDetail(false)
-              handleEdit(selectedDeposito)
+              setShowDetail(_false)
+              handleEdit(s_electedDeposito)
             }}
           />
         )}
 
         {showForm && (<DepositoFormModal
-            deposito={editingDeposito}
-            isOpen={showForm}
-            onClose={() => setShowForm(false)}
-            onSave={handleSave}
+            deposito={_editingDeposito}
+            isOpen={s_howForm}
+            onClose={() => setShowForm(_false)}
+            onSave={_handleSave}
           />
         )}
       </div>
@@ -373,23 +373,23 @@ const StatsCard: React.FC<{
   icon: React.ReactNode
   color: string
   trend?: string
-}> = (title, value, icon, color, trend ) => (
+}> = (_title, value, icon, color, trend ) => (
   <AnimatedCard whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg bg-gray-800", color)}
           whileHover={{ rotate: 15 }}
         >
-          {icon}
+          {_icon}
         </motion.div>
       </div>
     </CardHeader>
     <CardContent>
-      <div className="text-3xl font-bold">{value}</div>
+      <div className="text-3xl font-bold">{_value}</div>
       {trend && (
-        <p className="text-sm text-gray-500 mt-1">{trend}</p>
+        <p className="text-sm text-gray-500 mt-1">{_trend}</p>
       )}
     </CardContent>
   </AnimatedCard>
@@ -403,7 +403,7 @@ const DepositosTable: React.FC<{
   expandedRows: Set<string>
   onToggleExpand: (id: string) => void
 }> = ({ depositos, loading, onView, onEdit, expandedRows, onToggleExpand }) => {
-  if (loading) {
+  if (_loading) {
     return (
       <Card>
         <CardContent className="p-8">
@@ -457,13 +457,13 @@ const DepositosTable: React.FC<{
             </thead>
             <tbody className="divide-y divide-gray-700">
               <AnimatePresence>
-                {depositos.map((deposito, index) => (<React.Fragment key={deposito.id}>
+                {depositos.map((_deposito, index) => (<React.Fragment key={deposito.id}>
                     <motion.tr
-                      variants={fadeInUp}
+                      variants={_fadeInUp}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      custom={index}
+                      custom={_index}
                       className="hover:bg-gray-800/50 transition-colors cursor-pointer"
                       onClick={() => onToggleExpand(deposito.id)}
                     >
@@ -525,11 +525,11 @@ const DepositosTable: React.FC<{
                         </AnimatedBadge>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2" onClick={(_e) => e.stopPropagation()}>
                           <AnimatedButton
                             variant="ghost"
                             size="sm"
-                            onClick={() => onView(deposito)}
+                            onClick={() => onView(_deposito)}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                           >
@@ -538,7 +538,7 @@ const DepositosTable: React.FC<{
                           <AnimatedButton
                             variant="ghost"
                             size="sm"
-                            onClick={() => onEdit(deposito)}
+                            onClick={() => onEdit(_deposito)}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                           >
@@ -618,24 +618,24 @@ const DepositosGrid: React.FC<{
   onView: (deposito: Deposito) => void
   onEdit: (deposito: Deposito) => void
 }> = ({ depositos, loading, onView, onEdit }) => {
-  if (loading) {
+  if (_loading) {
     return (
       <AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[...Array(6)].map((_, i) => (
-          <AnimatedSkeleton key={i} className="h-64" />
+        {[...Array(6)].map((__, i) => (
+          <AnimatedSkeleton key={_i} className="h-64" />
         ))}
       </AnimatedGrid>
     )
   }
 
   return (<AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {depositos.map((deposito, index) => (<AnimatedCard
+      {depositos.map((_deposito, index) => (<AnimatedCard
           key={deposito.id}
-          variants={staggerItem}
+          variants={s_taggerItem}
           whileHover={{ y: -8, scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="cursor-pointer"
-          onClick={() => onView(deposito)}
+          onClick={() => onView(_deposito)}
         >
           <CardHeader>
             <div className="flex items-start justify-between">
@@ -690,11 +690,11 @@ const DepositosGrid: React.FC<{
                 <MapPin className="h-4 w-4" />
                 <span>{deposito.padre}</span>
               </div>
-              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-1" onClick={(_e) => e.stopPropagation()}>
                 <AnimatedButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => onEdit(deposito)}
+                  onClick={() => onEdit(_deposito)}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -714,7 +714,7 @@ const DepositosMap: React.FC<{
   loading: boolean
   onView: (deposito: Deposito) => void
 }> = ({ depositos, loading, onView }) => {
-  if (loading) {
+  if (_loading) {
     return (
       <Card>
         <CardContent className="p-8">
@@ -747,14 +747,14 @@ const DepositosMap: React.FC<{
     }
   }))
   return (<InteractiveMap
-      markers={markers}
+      markers={_markers}
       height="600px"
-      showControls={true}
-      showLegend={true}
-      showSearch={true}
-      onMarkerClick={(marker) => {
+      showControls={_true}
+      showLegend={_true}
+      showSearch={_true}
+      onMarkerClick={(_marker) => {
         const deposito = depositos.find(d => d.id === marker.id)
-        if (deposito) onView(deposito)
+        if (_deposito) onView(_deposito)
       }}
     />
   )

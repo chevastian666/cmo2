@@ -5,7 +5,7 @@ import { KPICards} from './KPICards'
 import { RealtimeIndicator} from './RealtimeIndicator'
 import { 
   usePrecintosActivos, useTransitosPendientes, useAlertasActivas} from '../../../store/hooks'
-import {Package, Truck, AlertTriangle, Activity} from 'lucide-react'
+import {_Package, Truck, AlertTriangle, Activity} from 'lucide-react'
 export const DashboardRefactored: React.FC = () => {
   const { loading: precintosLoading } = usePrecintosActivos()
   const { loading: alertasLoading } = useAlertasActivas()
@@ -43,23 +43,23 @@ export const DashboardRefactored: React.FC = () => {
 
       {/* Navigation Tabs */}
       <Tabs
-        tabs={tabs}
-        activeTab={activeTab}
-        onChange={setActiveTab}
+        tabs={_tabs}
+        activeTab={_activeTab}
+        onChange={s_etActiveTab}
       />
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* KPI Cards */}
-          <KPICards transitos={transitos} alertas={alertas} />
+          <KPICards transitos={_transitos} alertas={_alertas} />
 
           {/* System Status */}
           <SystemStatusCard
-            smsPendientes={smsPendientes}
-            dbStats={dbStats}
-            apiStats={apiStats}
-            reportesPendientes={reportesPendientes}
+            smsPendientes={s_msPendientes}
+            dbStats={_dbStats}
+            apiStats={_apiStats}
+            reportesPendientes={_reportesPendientes}
           />
 
           {/* Main Content Grid */}
@@ -118,9 +118,9 @@ export const DashboardRefactored: React.FC = () => {
                 {alertasLoading ? (
                   <LoadingState variant="dots" />
                 ) : (<AlertsPanel
-                    alerts={alertItems}
+                    alerts={_alertItems}
                     variant="compact"
-                    onAlertClick={(alert) => console.log('Alert clicked:', alert)}
+                    onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
                   />
                 )}
               </CardContent>
@@ -177,8 +177,8 @@ export const DashboardRefactored: React.FC = () => {
       {activeTab === 'alerts' && (<Card>
           <CardContent>
             <AlertsPanel
-              alerts={alertItems}
-              onAlertClick={(alert) => console.log('Alert clicked:', alert)}
+              alerts={_alertItems}
+              onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
             />
           </CardContent>
         </Card>

@@ -10,7 +10,7 @@ export const useEstadisticas = () => {
 }
 export const useHistoricoLecturas = (horas = 24) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ESTADISTICAS, 'lecturas', horas], queryFn: () => estadisticasService.getHistoricoLecturas(horas),
+    queryKey: [QUERY_KEYS.ESTADISTICAS, 'lecturas', horas], queryFn: () => estadisticasService.getHistoricoLecturas(_horas),
     refetchInterval: 60000,
   })
 }

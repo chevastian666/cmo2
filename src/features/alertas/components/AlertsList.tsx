@@ -82,19 +82,19 @@ const ALARM_CODES: Record<string, AlarmCode> = {
 }
 export const AlertsList: React.FC = () => {
 
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(_null)
+  const [isModalOpen, setIsModalOpen] = useState(_false)
   const handleAlertClick = (alerta: Alerta) => {
-    setSelectedAlerta(alerta)
-    setIsModalOpen(true)
+    setSelectedAlerta(_alerta)
+    setIsModalOpen(_true)
   }
   const closeModal = () => {
-    setIsModalOpen(false)
-    setSelectedAlerta(null)
+    setIsModalOpen(_false)
+    setSelectedAlerta(_null)
   }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId)
+      await actions.atenderAlerta(_alertaId)
       notificationService.success('Alerta respondida correctamente')
       // Log the response details (in a real app, this would be sent to the backend)
       console.log('Alert response:', {
@@ -112,15 +112,15 @@ export const AlertsList: React.FC = () => {
   }
   const getIcon = (tipo: string) => {
     const alarm = ALARM_CODES[tipo]
-    if (alarm) return alarm.icon
+    if (_alarm) return alarm.icon
     // Default icon for unknown types
     return <AlertTriangle className="h-5 w-5" />
   }
   const getAlarmCode = (tipo: string) => {
-    return tipo; // The tipo is already the code (AAR, BBJ, etc.)
+    return tipo; // The tipo is already the code (_AAR, BBJ, etc.)
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-900/20 border-red-800'
       case 'alta': {
@@ -133,22 +133,22 @@ export const AlertsList: React.FC = () => {
         return 'text-gray-400 bg-gray-900/20 border-gray-800'
     }
   }
-  if (loading) {
+  if (_loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-4">
         <div className="animate-pulse space-y-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-gray-700 h-20 rounded"></div>
+          {[...Array(3)].map((__, i) => (
+            <div key={_i} className="bg-gray-700 h-20 rounded"></div>
           ))}
         </div>
       </div>
     )
   }
 
-  if (error) {
+  if (_error) {
     return (
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
-        <p className="text-red-400">Error cargando alertas: {error}</p>
+        <p className="text-red-400">Error cargando alertas: {_error}</p>
       </div>
     )
   }
@@ -179,9 +179,9 @@ export const AlertsList: React.FC = () => {
               <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>No hay alarmas activas</p>
             </div>
-          ) : (alertas.map((alerta) => (<div
+          ) : (alertas.map((_alerta) => (<div
                 key={alerta.id}
-                onClick={() => handleAlertClick(alerta)}
+                onClick={() => handleAlertClick(_alerta)}
                 className={cn(
                   'p-4 hover:bg-gray-700/50 cursor-pointer transition-colors',
                   'border-l-4',
@@ -237,10 +237,10 @@ export const AlertsList: React.FC = () => {
 
       {/* Response Modal */}
       <ResponderAlertaModal
-        alerta={selectedAlerta}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onRespond={handleResponderAlerta}
+        alerta={s_electedAlerta}
+        isOpen={_isModalOpen}
+        onClose={_closeModal}
+        onRespond={_handleResponderAlerta}
       />
     </>
   )

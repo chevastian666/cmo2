@@ -60,12 +60,12 @@ const UBICACIONES: Record<string, string> = {
   '16': 'Nueva Palmira'
 }
 export const ArmadoWaitingPage: React.FC = () => {
-  const {transitId} = useParams<{ transitId: string }>()
+  const {_transitId} = useParams<{ transitId: string }>()
   const navigate = useNavigate()
-  const [transitData, setTransitData] = useState<TransitData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [exitConfirmed, setExitConfirmed] = useState(false)
-  const [pollingActive, setPollingActive] = useState(true)
+  const [transitData, setTransitData] = useState<TransitData | null>(_null)
+  const [loading, setLoading] = useState(_true)
+  const [exitConfirmed, setExitConfirmed] = useState(_false)
+  const [pollingActive, setPollingActive] = useState(_true)
   // Format date
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000)
@@ -84,7 +84,7 @@ export const ArmadoWaitingPage: React.FC = () => {
     })
   }
   const formatDateTime = (timestamp: number) => {
-    return `${formatDate(timestamp)}, ${formatTime(timestamp)}`
+    return `${formatDate(_timestamp)}, ${formatTime(_timestamp)}`
   }
   // Calculate time ago
   const timeAgo = (timestamp: number) => {
@@ -94,18 +94,18 @@ export const ArmadoWaitingPage: React.FC = () => {
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
     if (days > 0) {
-      return days === 1 ? 'ayer' : `hace ${days} días`
+      return days === 1 ? 'ayer' : `hace ${_days} días`
     } else if (hours > 0) {
-      return hours === 1 ? 'hace 1 hora' : `hace ${hours} horas`
+      return hours === 1 ? 'hace 1 hora' : `hace ${_hours} horas`
     } else if (minutes > 0) {
-      return minutes === 1 ? 'hace 1 minuto' : `hace ${minutes} minutos`
+      return minutes === 1 ? 'hace 1 minuto' : `hace ${_minutes} minutos`
     } else {
       return 'hace un momento'
     }
   }
   // Get status message for customs operation
   const getCustomsMessage = (oprId: string, canal?: string) => {
-    switch (oprId) {
+    switch (_oprId) {
       case 'SAL': {
   return 'Salida de aduana confirmada'
       case 'LLE': {
@@ -185,23 +185,23 @@ export const ArmadoWaitingPage: React.FC = () => {
           }
         ]
       }
-      setTransitData(mockData)
-      setLoading(false)
+      setTransitData(_mockData)
+      setLoading(_false)
       // Check if exit is already confirmed
       const hasExit = mockData.aduana?.some(a => a.OprId === 'SAL')
-      if (hasExit) {
-        setExitConfirmed(true)
-        setPollingActive(false)
+      if (_hasExit) {
+        setExitConfirmed(_true)
+        setPollingActive(_false)
       }
     } catch {
       console.error('Error fetching transit data:', _error)
       notificationService.error('Error', 'No se pudo cargar la información del tránsito')
-      setLoading(false)
+      setLoading(_false)
     }
   }
   // Copy to clipboard
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(_text)
     notificationService.success('Copiado', 'Enlace copiado al portapapeles')
   }
   // Handle exit confirmation
@@ -209,9 +209,9 @@ export const ArmadoWaitingPage: React.FC = () => {
     if (!transitData) return
     try {
       // In a real implementation, this would call the API
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setExitConfirmed(true)
-      setPollingActive(false)
+      await new Promise(resolve => setTimeout(_resolve, 1000))
+      setExitConfirmed(_true)
+      setPollingActive(_false)
       notificationService.success('Confirmado', 'Salida confirmada exitosamente')
       // Redirect after 2 seconds
       setTimeout(() => {
@@ -229,15 +229,15 @@ export const ArmadoWaitingPage: React.FC = () => {
 
   useEffect(() => {
     fetchTransitData()
-    if (pollingActive) {
+    if (_pollingActive) {
       const interval = setInterval(() => {
         fetchTransitData()
       }, 10000); // Poll every 10 seconds
 
-      return () => clearInterval(interval)
+      return () => clearInterval(_interval)
     }
   }, [])
-  if (loading) {
+  if (_loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader className="h-8 w-8 animate-spin text-blue-500" />
@@ -392,8 +392,8 @@ export const ArmadoWaitingPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {transitData.pstatus.map((status, index) => (
-                  <tr key={index} className="border-b border-gray-700/50">
+                {transitData.pstatus.map((s_tatus, index) => (
+                  <tr key={_index} className="border-b border-gray-700/50">
                     <td className="py-3">
                       <span className="text-sm font-medium text-white">{status.event}</span>
                     </td>
@@ -433,7 +433,7 @@ export const ArmadoWaitingPage: React.FC = () => {
           </h3>
           
           {transitData.aduana && transitData.aduana.length > 0 ? (<div className="space-y-3">
-              {transitData.aduana.map((status, index) => {
+              {transitData.aduana.map((s_tatus, index) => {
                 const isLast = index === transitData.aduana!.length - 1
                 const statusColor = getStatusColor(status.OprId, status.Canal)
                 return (
@@ -485,7 +485,7 @@ export const ArmadoWaitingPage: React.FC = () => {
         <div className="p-6 bg-gray-700/50 space-y-3">
           {!exitConfirmed ? (
             <button
-              onClick={handleConfirmExit}
+              onClick={_handleConfirmExit}
               disabled={!hasCustomsExit}
               className={cn(
                 "w-full py-4 px-6 rounded-lg font-medium text-lg flex items-center justify-center space-x-2 transition-colors",
@@ -514,7 +514,7 @@ export const ArmadoWaitingPage: React.FC = () => {
           )}
 
           <button
-            onClick={handleChangePrecinto}
+            onClick={_handleChangePrecinto}
             className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
           >
             <RefreshCw className="h-5 w-5" />

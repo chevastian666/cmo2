@@ -6,22 +6,22 @@ import { FormularioCamion} from './FormularioCamion'
 import type { FiltrosCamion, EstadoCamion} from '../types'
 import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT} from '../types'
 export const ListaCamiones: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamion>(FILTROS_CAMION_DEFAULT)
-  const [mostrarFormulario, setMostrarFormulario] = useState(false)
-  const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null)
+  const [filtros, setFiltros] = useState<FiltrosCamion>(_FILTROS_CAMION_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(_false)
+  const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(_null)
   useEffect(() => {
-    fetchCamiones(filtros)
+    fetchCamiones(_filtros)
   }, [filtros])
   const handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamion>) => {
     setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
   }
   const handleEstadoChange = async (matricula: string, estado: EstadoCamion) => {
-    await updateEstadoCamion(matricula, estado)
+    await updateEstadoCamion(_matricula, estado)
   }
-  if (camionSeleccionado) {
+  if (_camionSeleccionado) {
     return (<FichaCamion 
-        matricula={camionSeleccionado} 
-        onClose={() => setCamionSeleccionado(null)} 
+        matricula={_camionSeleccionado} 
+        onClose={() => setCamionSeleccionado(_null)} 
       />
     )
   }
@@ -39,7 +39,7 @@ export const ListaCamiones: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setMostrarFormulario(true)}
+          onClick={() => setMostrarFormulario(_true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
@@ -57,7 +57,7 @@ export const ListaCamiones: React.FC = () => {
               <input
                 type="text"
                 value={filtros.busqueda}
-                onChange={(e) => handleFiltrosChange({ busqueda: e.target.value })}
+                onChange={(_e) => handleFiltrosChange({ busqueda: e.target.value })}
                 placeholder="Buscar por matrícula..."
                 className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -66,12 +66,12 @@ export const ListaCamiones: React.FC = () => {
             {/* Filtro por estado */}
             <select
               value={filtros.estado}
-              onChange={(e) => handleFiltrosChange({ estado: e.target.value as EstadoCamion | '' })}
+              onChange={(_e) => handleFiltrosChange({ estado: e.target.value as EstadoCamion | '' })}
               className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos los estados</option>
-              {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
-                <option key={key} value={key}>
+              {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
+                <option key={_key} value={_key}>
                   {config.icon} {config.label}
                 </option>
               ))}
@@ -82,7 +82,7 @@ export const ListaCamiones: React.FC = () => {
               <input
                 type="checkbox"
                 checked={filtros.conTransitosRecientes}
-                onChange={(e) => handleFiltrosChange({ conTransitosRecientes: e.target.checked })}
+                onChange={(_e) => handleFiltrosChange({ conTransitosRecientes: e.target.checked })}
                 className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
               />
               <span className="text-sm text-gray-300">Con tránsitos recientes</span>
@@ -156,15 +156,15 @@ export const ListaCamiones: React.FC = () => {
                   <div className="mt-3 flex gap-2">
                     <select
                       value={camion.estado}
-                      onChange={(e) => {
+                      onChange={(_e) => {
                         e.stopPropagation()
                         handleEstadoChange(camion.matricula, e.target.value as EstadoCamion)
                       }}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(_e) => e.stopPropagation()}
                       className="flex-1 px-2 py-1 text-xs bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
-                        <option key={key} value={key}>
+                      {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
+                        <option key={_key} value={_key}>
                           {config.label}
                         </option>
                       ))}
@@ -178,7 +178,7 @@ export const ListaCamiones: React.FC = () => {
       )}
 
       {/* Modal de formulario */}
-      {mostrarFormulario && (<FormularioCamion onClose={() => setMostrarFormulario(false)} />
+      {mostrarFormulario && (<FormularioCamion onClose={() => setMostrarFormulario(_false)} />
       )}
     </div>
   )

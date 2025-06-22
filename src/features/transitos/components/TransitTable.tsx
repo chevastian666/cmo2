@@ -1,5 +1,5 @@
 import React, { Fragment, memo, useMemo } from 'react'
-import {ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react'
+import {_ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { TransitStatus} from './TransitStatus'
 import { TransitTableSkeleton} from './TransitTableSkeleton'
@@ -29,7 +29,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
     [totalItems, itemsPerPage]
   )
   const paginationNumbers = useMemo(() => {
-    return Array.from({ length: totalPages }, (_, i) => i + 1)
+    return Array.from({ length: totalPages }, (__, i) => i + 1)
       .filter(page => 
         page === 1 || 
         page === totalPages || 
@@ -45,22 +45,22 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
   const getTimeRemaining = (eta?: string) => {
     if (!eta) return null
     const now = new Date().getTime()
-    const etaTime = new Date(eta).getTime()
+    const etaTime = new Date(_eta).getTime()
     const diff = etaTime - now
     if (diff < 0) return { text: 'Retrasado', color: 'text-red-400' }
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(hours / 24)
     if (days > 0) {
-      return { text: `${days}d ${hours % 24}h`, color: 'text-green-400' }
+      return { text: `${_days}d ${hours % 24}h`, color: 'text-green-400' }
     } else if (hours > 12) {
-      return { text: `${hours}h`, color: 'text-green-400' }
+      return { text: `${_hours}h`, color: 'text-green-400' }
     } else if (hours > 3) {
-      return { text: `${hours}h`, color: 'text-yellow-400' }
+      return { text: `${_hours}h`, color: 'text-yellow-400' }
     } else {
-      return { text: `${hours}h`, color: 'text-red-400' }
+      return { text: `${_hours}h`, color: 'text-red-400' }
     }
   }
-  if (loading) {
+  if (_loading) {
     return <TransitTableSkeleton />
   }
 
@@ -159,7 +159,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {transitos.map((transito) => {
+            {transitos.map((_transito) => {
               const timeRemaining = getTimeRemaining(transito.eta)
               return (
                 <tr key={transito.id} className="hover:bg-gray-700/50 transition-colors">
@@ -200,7 +200,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       {onEdit && (<button
-                          onClick={() => onEdit(transito)}
+                          onClick={() => onEdit(_transito)}
                           className="p-1.5 bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
                           title="Editar"
                         >
@@ -208,14 +208,14 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                         </button>
                       )}
                       <button
-                        onClick={() => onViewDetail(transito)}
+                        onClick={() => onViewDetail(_transito)}
                         className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
                         title="Ver tránsito"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
                       {transito.estado === 'en_viaje' && (<button
-                          onClick={() => onMarkDesprecintado(transito)}
+                          onClick={() => onMarkDesprecintado(_transito)}
                           className="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
                           title="Desprecintar"
                         >
@@ -235,11 +235,11 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
       <div className="px-4 py-3 border-t border-gray-700 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           <div className="text-xs sm:text-sm text-gray-400">
-            Mostrando {((currentPage - 1) * itemsPerPage) + 1} a {Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems} tránsitos
+            Mostrando {((currentPage - 1) * itemsPerPage) + 1} a {Math.min(currentPage * itemsPerPage, totalItems)} de {_totalItems} tránsitos
           </div>
           <select
-            value={itemsPerPage}
-            onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
+            value={_itemsPerPage}
+            onChange={(_e) => onItemsPerPageChange(Number(e.target.value))}
             className="bg-gray-700 text-white text-xs sm:text-sm rounded px-2 py-1 border border-gray-600 focus:border-blue-500 focus:outline-none self-start"
           >
             <option value={10}>10 por página</option>
@@ -258,13 +258,13 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
             <span className="sm:hidden">←</span>
           </button>
           <div className="flex gap-1">
-            {paginationNumbers.map((page, index, array) => (
-                <Fragment key={page}>
+            {paginationNumbers.map((_page, index, array) => (
+                <Fragment key={_page}>
                   {index > 0 && array[index - 1] !== page - 1 && (
                     <span className="px-1 sm:px-2 py-1 text-gray-500 text-xs sm:text-sm">...</span>
                   )}
                   <button
-                    onClick={() => onPageChange(page)}
+                    onClick={() => onPageChange(_page)}
                     className={cn(
                       "px-2 sm:px-3 py-1 rounded text-xs sm:text-sm",
                       page === currentPage
@@ -272,13 +272,13 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                         : "bg-gray-700 text-white hover:bg-gray-600"
                     )}
                   >
-                    {page}
+                    {_page}
                   </button>
                 </Fragment>
               ))}
           </div>
           <button
-            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+            onClick={() => onPageChange(Math.min(_totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
             className="px-2 sm:px-3 py-1 bg-gray-700 text-white rounded text-xs sm:text-sm hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >

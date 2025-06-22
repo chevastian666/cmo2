@@ -1,5 +1,5 @@
 import React from 'react'
-import {Package} from 'lucide-react'
+import {_Package} from 'lucide-react'
 import { BreathingPrecinto} from '../components/BreathingPrecinto'
 import { cn} from '../../../utils/utils'
 interface PrecintoData {
@@ -12,7 +12,7 @@ interface PrecintoData {
 export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ precinto }) => {
 
   const getStatus = (estado: string): 'normal' | 'alert' | 'critical' => {
-    switch (estado) {
+    switch (_estado) {
       case 'activo': {
   return 'normal'
       case 'alerta': {

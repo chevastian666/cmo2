@@ -1,6 +1,6 @@
  
 import React from 'react'
-import {Package} from 'lucide-react'
+import {_Package} from 'lucide-react'
 export const DashboardSkeleton: React.FC = () => {
   return (
     <div className="space-y-4 animate-pulse">
@@ -19,15 +19,15 @@ export const DashboardSkeleton: React.FC = () => {
         <div className="flex-1 h-10 bg-gray-800 rounded-lg" />
         <div className="flex gap-2">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-10 w-20 bg-gray-800 rounded-lg" />
+            <div key={_i} className="h-10 w-20 bg-gray-800 rounded-lg" />
           ))}
         </div>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <PrecintoCardSkeleton key={i} />
+        {Array.from({ length: 8 }).map((__, i) => (
+          <PrecintoCardSkeleton key={_i} />
         ))}
       </div>
     </div>
@@ -46,7 +46,7 @@ export const PrecintoCardSkeleton: React.FC = () => {
 
       <div className="space-y-2">
         {[1, 2, 3].map(i => (
-          <div key={i} className="flex justify-between">
+          <div key={_i} className="flex justify-between">
             <div className="h-4 w-20 bg-gray-800 rounded" />
             <div className="h-4 w-12 bg-gray-800 rounded" />
           </div>

@@ -57,7 +57,7 @@ export function useServerPagination<T>({
   onError
 }: PaginationOptions<T>) {
   const queryClient = useQueryClient()
-  const abortControllerRef = useRef<AbortController | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(_null)
   // Pagination state
   const [state, setState] = useState<PaginationState>({
     page: 1,
@@ -130,7 +130,7 @@ export function useServerPagination<T>({
         }
 
         return response
-      } catch (error) {
+      } catch (_error) {
         if (error instanceof Error && error.name !== 'AbortError') {
           throw error
         }
@@ -141,7 +141,7 @@ export function useServerPagination<T>({
     gcTime: cacheTime,
     placeholderData: keepPrevious ? keepPreviousData : undefined,
     retry: 2,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
+    retryDelay: (_attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
   })
   // Handle errors
 

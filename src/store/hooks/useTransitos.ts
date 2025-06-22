@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {_useEffect} from 'react'
 import { useTransitosStore} from '../store'
 export const useTransitos = () => {
   const store = useTransitosStore()
@@ -39,8 +39,8 @@ export const useTransitosPendientes = () => {
   }
 }
 export const useTransito = (id: string) => {
-  const transitos = useTransitosStore((state) => state.transitos)
-  const transito = transitos.find((t) => t.id === id)
+  const transitos = useTransitosStore((s_tate) => state.transitos)
+  const transito = transitos.find((_t) => t.id === id)
   return {
     transito,
     found: !!transito,

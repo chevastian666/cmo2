@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import {Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react'
+import {_Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react'
 import { ProximosArribos} from './ProximosArribos'
 import { AlertasActivas} from './AlertasActivas'
 import { TransitosCriticos} from './TransitosCriticos'
@@ -13,12 +13,12 @@ export const ModoTV: React.FC = () => {
   const [alertas, setAlertas] = useState<AlertaTV[]>([])
   const [criticos, setCriticos] = useState<TransitoCritico[]>([])
   const [configuracion, setConfiguracion] = useState<ConfiguracionTV>(modoTvService.getConfiguracion())
-  const [mostrarConfig, setMostrarConfig] = useState(false)
+  const [mostrarConfig, setMostrarConfig] = useState(_false)
   const [horaActual, setHoraActual] = useState(new Date())
-  const [fullscreen, setFullscreen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [fullscreen, setFullscreen] = useState(_false)
+  const containerRef = useRef<HTMLDivElement>(_null)
   const ultimasAlertasRef = useRef<Set<string>>(new Set())
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(_null)
   // Cargar datos
   const cargarDatos = async () => {
     try {
@@ -27,8 +27,8 @@ export const ModoTV: React.FC = () => {
         modoTvService.getAlertasActivas(),
         modoTvService.getTransitosCriticos()
       ])
-      setArribos(nuevosArribos)
-      setCriticos(nuevosCriticos)
+      setArribos(_nuevosArribos)
+      setCriticos(_nuevosCriticos)
       // Verificar nuevas alertas para sonido
       if (configuracion.sonidoAlertas) {
         nuevasAlertas.forEach(alerta => {
@@ -46,7 +46,7 @@ export const ModoTV: React.FC = () => {
       // Actualizar set de alertas
       ultimasAlertasRef.current.clear()
       nuevasAlertas.forEach(a => ultimasAlertasRef.current.add(a.id))
-      setAlertas(nuevasAlertas)
+      setAlertas(_nuevasAlertas)
     } catch {
       console.error('Error cargando datos:', _error)
     }
@@ -58,7 +58,7 @@ export const ModoTV: React.FC = () => {
     const intervalo = setInterval(() => {
       cargarDatos()
     }, configuracion.actualizacionSegundos * 1000)
-    return () => clearInterval(intervalo)
+    return () => clearInterval(_intervalo)
   }, [configuracion.actualizacionSegundos, configuracion.puntoOperacion])
   // Actualizar hora
 
@@ -66,21 +66,21 @@ export const ModoTV: React.FC = () => {
     const intervalo = setInterval(() => {
       setHoraActual(new Date())
     }, 1000)
-    return () => clearInterval(intervalo)
+    return () => clearInterval(_intervalo)
   }, [])
   // Manejo de fullscreen
   const toggleFullscreen = async () => {
     if (!fullscreen && containerRef.current) {
       try {
         await containerRef.current.requestFullscreen()
-        setFullscreen(true)
+        setFullscreen(_true)
       } catch {
         console.error('Error al entrar en fullscreen:', err)
       }
-    } else if (fullscreen) {
+    } else if (_fullscreen) {
       try {
         await document.exitFullscreen()
-        setFullscreen(false)
+        setFullscreen(_false)
       } catch {
         console.error('Error al salir de fullscreen:', err)
       }
@@ -97,12 +97,12 @@ export const ModoTV: React.FC = () => {
   }, [])
   const handleConfiguracionChange = (nuevaConfig: Partial<ConfiguracionTV>) => {
     const configActualizada = { ...configuracion, ...nuevaConfig }
-    setConfiguracion(configActualizada)
-    modoTvService.setConfiguracion(configActualizada)
+    setConfiguracion(_configActualizada)
+    modoTvService.setConfiguracion(_configActualizada)
   }
   return (
     <div 
-      ref={containerRef}
+      ref={_containerRef}
       className={cn(
         "min-h-screen bg-black text-white overflow-hidden",
         fullscreen && "fixed inset-0 z-50"
@@ -157,7 +157,7 @@ export const ModoTV: React.FC = () => {
               </button>
               
               <button
-                onClick={toggleFullscreen}
+                onClick={_toggleFullscreen}
                 className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
                 title="Pantalla completa"
               >
@@ -165,7 +165,7 @@ export const ModoTV: React.FC = () => {
               </button>
               
               <button
-                onClick={() => setMostrarConfig(true)}
+                onClick={() => setMostrarConfig(_true)}
                 className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
                 title="Configuración"
               >
@@ -189,7 +189,7 @@ export const ModoTV: React.FC = () => {
           configuracion.columnas === 1 && "h-full",
           configuracion.columnas > 1 && "row-span-2"
         )}>
-          <ProximosArribos arribos={arribos} />
+          <ProximosArribos arribos={_arribos} />
         </div>
 
         {/* Paneles secundarios */}
@@ -197,12 +197,12 @@ export const ModoTV: React.FC = () => {
           <div className="space-y-6">
             {/* Tránsitos críticos */}
             <div className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-              <TransitosCriticos criticos={criticos} />
+              <TransitosCriticos criticos={_criticos} />
             </div>
             
             {/* Alertas activas */}
             <div className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-              <AlertasActivas alertas={alertas} />
+              <AlertasActivas alertas={_alertas} />
             </div>
           </div>
         )}
@@ -230,16 +230,16 @@ export const ModoTV: React.FC = () => {
       </div>
 
       {/* Audio para alertas - Comentado hasta tener archivos de audio */}
-      {/* <audio ref={audioRef} preload="auto">
+      {/* <audio ref={_audioRef} preload="auto">
         <source src="/alert-sound.mp3" type="audio/mpeg" />
         <source src="/alert-sound.ogg" type="audio/ogg" />
       </audio> */}
 
       {/* Modal de configuración */}
       {mostrarConfig && (<ConfiguracionModal
-          configuracion={configuracion}
-          onClose={() => setMostrarConfig(false)}
-          onChange={handleConfiguracionChange}
+          configuracion={_configuracion}
+          onClose={() => setMostrarConfig(_false)}
+          onChange={_handleConfiguracionChange}
         />
       )}
     </div>

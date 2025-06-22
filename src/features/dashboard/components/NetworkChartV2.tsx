@@ -1,8 +1,8 @@
 import React from 'react'
 import { Area, AreaChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, } from 'recharts'
 import { format} from 'date-fns'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle, } from '@/components/ui/card'
-import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle, } from '@/components/ui/card'
+import {_ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart'
 interface NetworkChartProps {
   data: Array<{
     timestamp: number
@@ -33,17 +33,17 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
   }))
   return (<Card className="bg-gray-800 border-gray-700">
       <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
+        <CardTitle className="text-white">{_title}</CardTitle>
         <CardDescription className="text-gray-400">
           Últimas {data.length} lecturas
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[240px] w-full">
+        <ChartContainer config={_chartConfig} className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             {type === 'area' ? (
               <AreaChart
-                data={formattedData}
+                data={_formattedData}
                 margin={{
                   left: 12, right: 12, }}
               >
@@ -51,33 +51,33 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
                   dataKey="time"
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
+                  tickLine={_false}
+                  axisLine={_false}
                 />
                 <YAxis
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
+                  tickLine={_false}
+                  axisLine={_false}
+                  tickFormatter={(_value) => `${_value}`}
                 />
                 <ChartTooltip
-                  cursor={false}
+                  cursor={_false}
                   content={
                     <ChartTooltipContent 
                       hideLabel 
                       className="bg-gray-900 border-gray-700"
-                      formatter={(value, name) => (
+                      formatter={(_value, name) => (
                         <div className="flex items-center gap-2">
                           <div 
                             className="h-2 w-2 rounded-full" 
                             style={{ backgroundColor: chartConfig[name as keyof typeof chartConfig]?.color }}
                           />
                           <span className="text-gray-300">{chartConfig[name as keyof typeof chartConfig]?.label}:</span>
-                          <span className="font-bold text-white">{value}</span>
+                          <span className="font-bold text-white">{_value}</span>
                         </div>
                       )}
-                      labelFormatter={(label, payload) => (
+                      labelFormatter={(_label, payload) => (
                         <div className="text-xs text-gray-400">
                           {payload?.[0]?.payload?.fullDate || label}
                         </div>
@@ -86,30 +86,30 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
                   }
                 />
                 <defs>
-                  <linearGradient id={`fill${dataKey}`} x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id={`fill${_dataKey}`} x1="0" y1="0" x2="0" y2="1">
                     <stop
                       offset="5%"
-                      stopColor={color}
+                      stopColor={_color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="95%"
-                      stopColor={color}
+                      stopColor={_color}
                       stopOpacity={0.1}
                     />
                   </linearGradient>
                 </defs>
                 <Area
-                  dataKey={dataKey}
+                  dataKey={_dataKey}
                   type="monotone"
-                  fill={`url(#fill${dataKey})`}
+                  fill={`url(#fill${_dataKey})`}
                   fillOpacity={0.4}
-                  stroke={color}
+                  stroke={_color}
                   strokeWidth={2}
                 />
               </AreaChart>
             ) : (<LineChart
-                data={formattedData}
+                data={_formattedData}
                 margin={{
                   left: 12, right: 12, }}
               >
@@ -117,33 +117,33 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
                   dataKey="time"
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
+                  tickLine={_false}
+                  axisLine={_false}
                 />
                 <YAxis
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
+                  tickLine={_false}
+                  axisLine={_false}
+                  tickFormatter={(_value) => `${_value}`}
                 />
                 <ChartTooltip
-                  cursor={false}
+                  cursor={_false}
                   content={
                     <ChartTooltipContent 
                       hideLabel 
                       className="bg-gray-900 border-gray-700"
-                      formatter={(value, name) => (
+                      formatter={(_value, name) => (
                         <div className="flex items-center gap-2">
                           <div 
                             className="h-2 w-2 rounded-full" 
                             style={{ backgroundColor: chartConfig[name as keyof typeof chartConfig]?.color }}
                           />
                           <span className="text-gray-300">{chartConfig[name as keyof typeof chartConfig]?.label}:</span>
-                          <span className="font-bold text-white">{value}</span>
+                          <span className="font-bold text-white">{_value}</span>
                         </div>
                       )}
-                      labelFormatter={(label, payload) => (
+                      labelFormatter={(_label, payload) => (
                         <div className="text-xs text-gray-400">
                           {payload?.[0]?.payload?.fullDate || label}
                         </div>
@@ -152,11 +152,11 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
                   }
                 />
                 <Line
-                  dataKey={dataKey}
+                  dataKey={_dataKey}
                   type="monotone"
-                  stroke={color}
+                  stroke={_color}
                   strokeWidth={2}
-                  dot={false}
+                  dot={_false}
                 />
               </LineChart>
             )}

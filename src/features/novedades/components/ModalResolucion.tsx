@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {X, Check, CheckCircle} from 'lucide-react'
+import {_X, Check, CheckCircle} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import type { Novedad} from '../types'
@@ -14,11 +14,11 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
   novedad, isOpen, onClose, onSubmit
 }) => {
   const [comentario, setComentario] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(_false)
   if (!isOpen || !novedad) return null
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    setLoading(_true)
     try {
       await onSubmit(novedad.id, comentario.trim() || undefined)
       setComentario('')
@@ -26,7 +26,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
     } catch {
       // Error manejado en el componente padre
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   return (
@@ -34,7 +34,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -49,9 +49,9 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
                 </h2>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                disabled={loading}
+                disabled={_loading}
               >
                 <X className="h-5 w-5 text-gray-400" />
               </button>
@@ -59,7 +59,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
           </CardHeader>
 
           <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={_handleSubmit} className="space-y-4">
               {/* Info de la novedad */}
               <div className="p-3 bg-gray-800 rounded-lg">
                 <p className="text-sm text-gray-400 mb-1">Novedad:</p>
@@ -72,15 +72,15 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
               {/* Comentario opcional */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Comentario de resolución (opcional)
+                  Comentario de resolución (_opcional)
                 </label>
                 <textarea
-                  value={comentario}
-                  onChange={(e) => setComentario(e.target.value)}
+                  value={_comentario}
+                  onChange={(_e) => setComentario(e.target.value)}
                   rows={3}
                   placeholder="Describa cómo se resolvió la novedad..."
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                  disabled={loading}
+                  disabled={_loading}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Puede dejar este campo vacío si no es necesario agregar detalles
@@ -99,15 +99,15 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={onClose}
-                  disabled={loading}
+                  onClick={_onClose}
+                  disabled={_loading}
                   className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={_loading}
                   className={cn(
                     "flex-1 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2",
                     loading

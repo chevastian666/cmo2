@@ -22,13 +22,13 @@ interface CamionesState {
 }
 
 export const useCamionesStore = create<CamionesState>()(devtools(
-    (set, get) => ({
+    (s_et, get) => ({
       // Estado inicial
       camiones: [], camionSeleccionado: null, transitosCamion: [], estadisticasCamion: null, loading: false, error: null, // Acciones
       fetchCamiones: async (filtros?: FiltrosCamion) => {
         set({ loading: true, error: null })
         try {
-          const camiones = await camionesService.getCamiones(filtros)
+          const camiones = await camionesService.getCamiones(_filtros)
           set({ camiones, loading: false })
         } catch {
           set({ error: 'Error al cargar camiones', loading: false })
@@ -40,9 +40,9 @@ export const useCamionesStore = create<CamionesState>()(devtools(
         set({ loading: true, error: null })
         try {
           const [camion, transitos, estadisticas] = await Promise.all([
-            camionesService.getCamionByMatricula(matricula),
-            camionesService.getTransitosCamion(matricula),
-            camionesService.getEstadisticasCamion(matricula)
+            camionesService.getCamionByMatricula(_matricula),
+            camionesService.getTransitosCamion(_matricula),
+            camionesService.getEstadisticasCamion(_matricula)
           ])
           if (!camion) {
             throw new Error('Camión no encontrado')
@@ -60,10 +60,10 @@ export const useCamionesStore = create<CamionesState>()(devtools(
         }
       },
 
-      createCamion: async (_data) => {
+      createCamion: async (__data) => {
         set({ loading: true, error: null })
         try {
-          const nuevoCamion = await camionesService.createCamion(_data)
+          const nuevoCamion = await camionesService.createCamion(__data)
           set(state => ({
             camiones: [nuevoCamion, ...state.camiones],
             loading: false
@@ -75,10 +75,10 @@ export const useCamionesStore = create<CamionesState>()(devtools(
         }
       },
 
-      updateCamion: async (matricula, _data) => {
+      updateCamion: async (_matricula, _data) => {
         set({ loading: true, error: null })
         try {
-          const camionActualizado = await camionesService.updateCamion(matricula, _data)
+          const camionActualizado = await camionesService.updateCamion(_matricula, _data)
           if (!camionActualizado) {
             throw new Error('Camión no encontrado')
           }
@@ -99,9 +99,9 @@ export const useCamionesStore = create<CamionesState>()(devtools(
         }
       },
 
-      updateEstadoCamion: async (matricula, estado) => {
+      updateEstadoCamion: async (_matricula, estado) => {
         try {
-          await camionesService.updateEstadoCamion(matricula, estado)
+          await camionesService.updateEstadoCamion(_matricula, estado)
           set(state => ({
             camiones: state.camiones.map(c => 
               c.matricula === matricula ? { ...c, estado } : c
@@ -116,11 +116,11 @@ export const useCamionesStore = create<CamionesState>()(devtools(
         }
       },
 
-      uploadFotoCamion: async (matricula, foto) => {
+      uploadFotoCamion: async (_matricula, foto) => {
         set({ loading: true, error: null })
         try {
-          const urlFoto = await camionesService.uploadFotoCamion(matricula, foto)
-          await get().updateCamion(matricula, { foto: urlFoto })
+          const urlFoto = await camionesService.uploadFotoCamion(_matricula, foto)
+          await get().updateCamion(_matricula, { foto: urlFoto })
         } catch {
           set({ error: 'Error al subir foto', loading: false })
           notificationService.error('Error', 'No se pudo subir la foto')

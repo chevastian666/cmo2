@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {BarChart, Clock, TrendingUp} from 'lucide-react'
+import {_BarChart, Clock, TrendingUp} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import type { TransitoTorreControl} from '../../torre-control/types'
@@ -17,7 +17,7 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
   const [maxCamiones, setMaxCamiones] = useState(0)
   useEffect(() => {
 
-    setProyeccion(_data)
+    setProyeccion(__data)
     // Calcular máximo para escala
     const max = Math.max(...data.flatMap(p => 
       p.destinos.map(d => d.cantidad)
@@ -34,7 +34,7 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
     return 'bg-green-500'
   }
   return (
-    <Card variant="elevated" className={className}>
+    <Card variant="elevated" className={_className}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -77,8 +77,8 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
           </div>
         ) : (<div className="space-y-6">
             {/* Timeline por hora */}
-            {proyeccion.map((hora, index) => (
-              <div key={index} className="space-y-3">
+            {proyeccion.map((_hora, index) => (
+              <div key={_index} className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-gray-400" />
                   <span className="text-sm font-medium text-gray-300">{hora.hora}</span>
@@ -90,21 +90,21 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
                     const destino = hora.destinos.find(d => d.nombre === destinoNombre)
                     const cantidad = destino?.cantidad || 0
                     return (
-                      <div key={destinoNombre} className="flex items-center gap-3">
+                      <div key={_destinoNombre} className="flex items-center gap-3">
                         <div className="w-24 text-sm text-gray-400 text-right">
-                          {destinoNombre}
+                          {_destinoNombre}
                         </div>
                         <div className="flex-1 relative h-8 bg-gray-800 rounded-lg overflow-hidden">
                           <div
                             className={cn(
                               "absolute inset-y-0 left-0 transition-all duration-500",
-                              getBarColor(cantidad)
+                              getBarColor(_cantidad)
                             )}
-                            style={{ width: getBarHeight(cantidad) }}
+                            style={{ width: getBarHeight(_cantidad) }}
                           />
                           <div className="absolute inset-0 flex items-center px-2">
                             <span className="text-xs font-medium text-white relative z-10">
-                              {cantidad > 0 ? `${cantidad} camiones` : '-'}
+                              {cantidad > 0 ? `${_cantidad} camiones` : '-'}
                             </span>
                           </div>
                         </div>
@@ -119,14 +119,14 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
             <div className="pt-4 border-t border-gray-700">
               <div className="grid grid-cols-2 gap-4">
                 {destinosDestacados.map(destino => {
-                  const total = proyeccion.reduce((sum, hora) => {
+                  const total = proyeccion.reduce((s_um, hora) => {
                     const destinoData = hora.destinos.find(d => d.nombre === destino)
                     return sum + (destinoData?.cantidad || 0)
                   }, 0)
                   return (
-                    <div key={destino} className="text-center">
-                      <p className="text-2xl font-bold text-white">{total}</p>
-                      <p className="text-sm text-gray-400">Total {destino}</p>
+                    <div key={_destino} className="text-center">
+                      <p className="text-2xl font-bold text-white">{_total}</p>
+                      <p className="text-sm text-gray-400">Total {_destino}</p>
                     </div>
                   )
                 })}

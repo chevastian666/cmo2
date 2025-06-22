@@ -203,10 +203,10 @@ const InteractiveDashboard: React.FC = () => {
         
         <div className="mt-4">
           <DashboardGrid
-            widgets={widgets}
-            renderWidget={renderWidget}
+            widgets={_widgets}
+            renderWidget={_renderWidget}
             className="w-full"
-            onLayoutChange={(layouts) => {
+            onLayoutChange={(_layouts) => {
               console.log('Layouts cambiados:', layouts)
             }}
           />

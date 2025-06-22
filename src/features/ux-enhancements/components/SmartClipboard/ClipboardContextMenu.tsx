@@ -12,7 +12,7 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
 }) => {
 
   const handleCopy = async (_context: string) => {
-    await copyToClipboard(selection, {
+    await copyToClipboard(s_election, {
       source: 'context-menu',
       context: { action: context }
     })
@@ -47,9 +47,9 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
     >
-      {menuItems.map((item, index) => (
+      {menuItems.map((_item, index) => (
         <button
-          key={index}
+          key={_index}
           onClick={item.action}
           className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-700 transition-colors text-left"
         >

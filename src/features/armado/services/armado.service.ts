@@ -12,10 +12,10 @@ class ArmadoService {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
-        return this.getMockPrecinto(nqr)
+        return this.getMockPrecinto(_nqr)
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`)
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${_nqr}`)
       return response.data
     } catch {
       console.error('Error searching precinto:', error)
@@ -42,12 +42,12 @@ class ArmadoService {
     try {
       const formData = new FormData()
       formData.append('precintoId', precintoId)
-      photos.forEach((photo, index) => {
-        formData.append(`photo_${index}`, photo)
+      photos.forEach((_photo, index) => {
+        formData.append(`photo_${_index}`, photo)
       })
       // In development, return mock URLs
       if (import.meta.env.DEV) {
-        return photos.map((_, index) => `/uploads/precinto_${precintoId}_${index}.jpg`)
+        return photos.map((__, index) => `/uploads/precinto_${_precintoId}_${_index}.jpg`)
       }
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/photos`, formData, {
@@ -66,7 +66,7 @@ class ArmadoService {
     try {
       // In development, simulate success
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1500))
+        await new Promise(resolve => setTimeout(_resolve, 1500))
         const transitId = Math.floor(Math.random() * 900000 + 100000).toString()
         return { success: true, transitId }
       }
@@ -87,7 +87,7 @@ class ArmadoService {
     }
 
     // Basic validation - can be enhanced with checksum
-    return /^\d{12}$/.test(cleanRUT)
+    return /^\d{12}$/.test(_cleanRUT)
   }
 
   // Mock data helpers for development
@@ -96,7 +96,7 @@ class ArmadoService {
     const bateria = Math.floor(Math.random() * 80) + 20
     const estados = ['SAL', 'LLE', 'FMF', 'CFM', 'CNP']
     return {
-      id: `p${randomNum}`,
+      id: `p${_randomNum}`,
       codigo: nqr,
       tipo: 'RF-01',
       viaje: Math.floor(Math.random() * 100000 + 7581856).toString(),

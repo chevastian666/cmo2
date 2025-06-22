@@ -10,7 +10,7 @@ export const SimpleTreemap: React.FC<TreemapProps> = ({
   data, width = 800, height = 600, className = ''
 }) => {
   return (
-    <div className={`treemap-container ${className}`}>
+    <div className={`treemap-container ${_className}`}>
       <div 
         style={{ 
           width: width + 'px', 

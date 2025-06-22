@@ -28,7 +28,7 @@ function generateLargeDataset(count: number) {
       status: statuses[Math.floor(Math.random() * statuses.length)],
       location: locations[Math.floor(Math.random() * locations.length)],
       user: `user-${Math.floor(Math.random() * 1000)}`,
-      description: `Transaction ${i} - Lorem ipsum dolor sit amet`
+      description: `Transaction ${_i} - Lorem ipsum dolor sit amet`
     })
   }
   
@@ -37,7 +37,7 @@ function generateLargeDataset(count: number) {
 
 export const PerformanceDemo: React.FC = () => {
   const [dataSize, setDataSize] = useState(1000000); // 1 million records
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(_false)
   const [dataset, setDataset] = useState<any[]>([])
   const [metrics, setMetrics] = useState({
     generationTime: 0,
@@ -73,23 +73,23 @@ export const PerformanceDemo: React.FC = () => {
   }, [])
   // Generate data
   const generateData = useCallback(async () => {
-    setIsGenerating(true)
+    setIsGenerating(_true)
     await measurePerformance(async () => {
       // Generate in chunks to avoid blocking UI
       const chunkSize = 100000
       const chunks = Math.ceil(dataSize / chunkSize)
       let allData: unknown[] = []
       for (let i = 0; i < chunks; i++) {
-        const size = Math.min(chunkSize, dataSize - i * chunkSize)
-        const chunk = generateLargeDataset(size)
+        const size = Math.min(_chunkSize, dataSize - i * chunkSize)
+        const chunk = generateLargeDataset(s_ize)
         allData = [...allData, ...chunk]
         // Allow UI to update
-        await new Promise(resolve => setTimeout(resolve, 0))
+        await new Promise(resolve => setTimeout(_resolve, 0))
       }
       
-      setDataset(allData)
+      setDataset(_allData)
     }, 'generationTime')
-    setIsGenerating(false)
+    setIsGenerating(_false)
   }, [])
   // Web Worker for processing
   const { processLargeDataset } = useDataProcessor()
@@ -100,12 +100,12 @@ export const PerformanceDemo: React.FC = () => {
     queryKey: ['performance-demo', 'paginated'],
     queryFn: async ({ page, pageSize, sortBy, sortOrder, filters, search }) => {
       // Simulate server delay
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await new Promise(resolve => setTimeout(_resolve, 100))
       let filtered = dataset
       // Apply search
-      if (search) {
+      if (s_earch) {
         filtered = filtered.filter(item => 
-          item.id.includes(search) || 
+          item.id.includes(s_earch) || 
           item.description.toLowerCase().includes(search.toLowerCase())
         )
       }
@@ -116,8 +116,8 @@ export const PerformanceDemo: React.FC = () => {
       }
       
       // Sort
-      if (sortBy) {
-        filtered.sort((a, b) => {
+      if (s_ortBy) {
+        filtered.sort((_a, b) => {
           const aVal = a[sortBy]
           const bVal = b[sortBy]
           const order = sortOrder === 'asc' ? 1 : -1
@@ -129,7 +129,7 @@ export const PerformanceDemo: React.FC = () => {
       const start = (page - 1) * pageSize
       const end = start + pageSize
       return {
-        data: filtered.slice(start, end),
+        data: filtered.slice(s_tart, end),
         total: filtered.length,
         page,
         pageSize,
@@ -142,7 +142,7 @@ export const PerformanceDemo: React.FC = () => {
   })
   // Debounced search
   const handleSearch = useDebouncedCallback((search: string) => {
-    paginatedData.setSearch(search)
+    paginatedData.setSearch(s_earch)
   }, { delay: 300 })
   // Throttled scroll handler
   const handleScroll = useThrottledCallback((scrollOffset: number) => {
@@ -156,7 +156,7 @@ export const PerformanceDemo: React.FC = () => {
   const processData = useCallback(async () => {
     if (!workerReady || dataset.length === 0) return
     await measurePerformance(async () => {
-      const result = await processLargeDataset(dataset, {
+      const result = await processLargeDataset(_dataset, {
         groupBy: 'status',
         aggregateFields: ['value', 'quantity'],
         sortBy: { field: 'value', order: 'desc' },
@@ -172,7 +172,7 @@ export const PerformanceDemo: React.FC = () => {
   }, [])
   // Render virtualized list item
   const renderVirtualizedItem = useCallback((item: unknown, index: number, style: React.CSSProperties) => (
-    <div style={style} className="flex items-center px-4 py-2 border-b border-gray-700 hover:bg-gray-800">
+    <div style={s_tyle} className="flex items-center px-4 py-2 border-b border-gray-700 hover:bg-gray-800">
       <div className="flex-1">
         <div className="font-medium text-white">{item.id}</div>
         <div className="text-sm text-gray-400">{item.description}</div>
@@ -238,10 +238,10 @@ export const PerformanceDemo: React.FC = () => {
                 Dataset Size
               </label>
               <select
-                value={dataSize}
-                onChange={(e) => setDataSize(Number(e.target.value))}
+                value={_dataSize}
+                onChange={(_e) => setDataSize(Number(e.target.value))}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                disabled={isGenerating}
+                disabled={_isGenerating}
               >
                 <option value={10000}>10,000 records</option>
                 <option value={100000}>100,000 records</option>
@@ -252,8 +252,8 @@ export const PerformanceDemo: React.FC = () => {
             
             <div className="flex items-end space-x-2">
               <button
-                onClick={generateData}
-                disabled={isGenerating}
+                onClick={_generateData}
+                disabled={_isGenerating}
                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {isGenerating ? (
@@ -270,7 +270,7 @@ export const PerformanceDemo: React.FC = () => {
               </button>
               
               <button
-                onClick={processData}
+                onClick={_processData}
                 disabled={!workerReady || dataset.length === 0}
                 className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
               >
@@ -288,9 +288,9 @@ export const PerformanceDemo: React.FC = () => {
               { key: 'virtualized', label: 'Virtualized List', icon: Activity },
               { key: 'paginated', label: 'Server Pagination', icon: Database },
               { key: 'analytics', label: 'Analytics', icon: TrendingUp }
-            ].map((key, label, icon: Icon ) => (
+            ].map((_key, label, icon: Icon ) => (
               <button
-                key={key}
+                key={_key}
                 onClick={() => setSelectedTab(key as unknown)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   selectedTab === key
@@ -299,7 +299,7 @@ export const PerformanceDemo: React.FC = () => {
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                <span>{label}</span>
+                <span>{_label}</span>
               </button>
             ))}
           </div>
@@ -314,10 +314,10 @@ export const PerformanceDemo: React.FC = () => {
               </h3>
               <div className="h-full">
                 <VirtualizedList
-                  items={dataset}
-                  renderItem={renderVirtualizedItem}
+                  items={_dataset}
+                  renderItem={_renderVirtualizedItem}
                   itemHeight={80}
-                  onScroll={handleScroll}
+                  onScroll={_handleScroll}
                   overscan={10}
                 />
               </div>
@@ -330,7 +330,7 @@ export const PerformanceDemo: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Search..."
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(_e) => handleSearch(e.target.value)}
                   className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 />
               </div>
@@ -346,13 +346,13 @@ export const PerformanceDemo: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedData.data.map((item) => (
+                    {paginatedData.data.map((_item) => (
                       <OptimizedTableRow
                         key={item.id}
-                        data={item}
+                        data={_item}
                         columns={[
                           { key: 'id', header: 'ID' },
-                          { key: 'value', header: 'Value', render: (v) => `$${v.toFixed(2)}` },
+                          { key: 'value', header: 'Value', render: (_v) => `$${v.toFixed(2)}` },
                           { key: 'status', header: 'Status' },
                           { key: 'location', header: 'Location' }
                         ]}

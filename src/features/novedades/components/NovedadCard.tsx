@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react'
+import {_Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react'
 import { Badge, Card, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
@@ -19,7 +19,7 @@ interface NovedadCardProps {
 export const NovedadCard: React.FC<NovedadCardProps> = ({
   novedad, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, isOwner = false, className
 }) => {
-  const [showMenu, setShowMenu] = useState(false)
+  const [showMenu, setShowMenu] = useState(_false)
   const tipoConfig = TIPOS_NOVEDAD[novedad.tipoNovedad]
   // Verificar si es editable (creada en las últimas 24h por el mismo usuario)
   const esEditable = () => {
@@ -98,14 +98,14 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
               {showMenu && (<>
                   <div
                     className="fixed inset-0 z-10"
-                    onClick={() => setShowMenu(false)}
+                    onClick={() => setShowMenu(_false)}
                   />
                   <div className="absolute right-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-20">
                     <div className="py-1">
                       {onVerDetalles && (<button
                           onClick={() => {
-                            onVerDetalles(novedad)
-                            setShowMenu(false)
+                            onVerDetalles(_novedad)
+                            setShowMenu(_false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -116,8 +116,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && novedad.estado !== 'resuelta' && onMarcarResuelta && (<button
                           onClick={() => {
-                            onMarcarResuelta(novedad)
-                            setShowMenu(false)
+                            onMarcarResuelta(_novedad)
+                            setShowMenu(_false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -128,8 +128,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && onAgregarSeguimiento && (<button
                           onClick={() => {
-                            onAgregarSeguimiento(novedad)
-                            setShowMenu(false)
+                            onAgregarSeguimiento(_novedad)
+                            setShowMenu(_false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -142,8 +142,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                           <div className="border-t border-gray-700 my-1" />
                           <button
                             onClick={() => {
-                              onEditar(novedad)
-                              setShowMenu(false)
+                              onEditar(_novedad)
+                              setShowMenu(_false)
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                           >

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, FileText} from 'lucide-react'
+import {_X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, FileText} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '@/components/ui/card'
 import { LoadingState} from '@/components/ui/LoadingState'
 import { cn} from '../../../utils/utils'
@@ -19,8 +19,8 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
   const [rotation, setRotation] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages] = useState(1)
-  const [loading, setLoading] = useState(true)
-  const [fullscreen, setFullscreen] = useState(false)
+  const [loading, setLoading] = useState(_true)
+  const [fullscreen, setFullscreen] = useState(_false)
   if (!isOpen || !documento) return null
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 25, 200))
@@ -43,7 +43,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
           "fixed inset-0 bg-black z-40",
           fullscreen ? "bg-opacity-95" : "bg-opacity-75"
         )}
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -90,7 +90,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                     <ChevronLeft className="h-4 w-4 text-gray-400" />
                   </button>
                   <span className="text-sm text-gray-300 px-2">
-                    {currentPage} / {totalPages}
+                    {_currentPage} / {_totalPages}
                   </span>
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
@@ -104,17 +104,17 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                 {/* Controles de zoom */}
                 <div className="flex items-center gap-1 px-3 py-1 bg-gray-800 rounded-lg">
                   <button
-                    onClick={handleZoomOut}
+                    onClick={_handleZoomOut}
                     className="p-1 hover:bg-gray-700 rounded transition-colors"
                     title="Alejar"
                   >
                     <ZoomOut className="h-4 w-4 text-gray-400" />
                   </button>
                   <span className="text-sm text-gray-300 px-2 min-w-[50px] text-center">
-                    {zoom}%
+                    {_zoom}%
                   </span>
                   <button
-                    onClick={handleZoomIn}
+                    onClick={_handleZoomIn}
                     className="p-1 hover:bg-gray-700 rounded transition-colors"
                     title="Acercar"
                   >
@@ -124,7 +124,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
 
                 {/* Otros controles */}
                 <button
-                  onClick={handleRotate}
+                  onClick={_handleRotate}
                   className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                   title="Rotar"
                 >
@@ -132,7 +132,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                 </button>
 
                 <button
-                  onClick={toggleFullscreen}
+                  onClick={_toggleFullscreen}
                   className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                   title={fullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
                 >
@@ -144,7 +144,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                 </button>
 
                 <button
-                  onClick={() => onDescargar(documento)}
+                  onClick={() => onDescargar(_documento)}
                   className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                   title="Descargar"
                 >
@@ -152,7 +152,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                 </button>
 
                 <button
-                  onClick={onClose}
+                  onClick={_onClose}
                   className="p-2 hover:bg-gray-700 rounded-lg transition-colors ml-2"
                   title="Cerrar"
                 >
@@ -176,7 +176,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
               <div 
                 className="bg-white shadow-xl transition-all duration-300"
                 style={{
-                  transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
+                  transform: `scale(${zoom / 100}) rotate(${_rotation}deg)`,
                   transformOrigin: 'center',
                   width: '80%',
                   height: '90%',
@@ -185,7 +185,7 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
-                onLoad={() => setLoading(false)}
+                onLoad={() => setLoading(_false)}
               >
                 <div className="text-gray-800 text-center p-8">
                   <FileText className="h-24 w-24 mx-auto mb-4 text-gray-400" />

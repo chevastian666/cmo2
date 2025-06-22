@@ -32,7 +32,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       header: 'N° de Viaje / MOV',
       sortable: true,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div>
           <div className="flex items-center gap-2">
             <span className="text-base font-medium text-blue-400">{item.numeroViaje}</span>
@@ -58,7 +58,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       header: 'DUA',
       sortable: true,
       filterable: true,
-      accessor: (item) => item.dua
+      accessor: (_item) => item.dua
     },
     {
       key: 'tipoCarga',
@@ -70,14 +70,14 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Contenedor', label: 'Contenedor' },
         { value: 'Enlonada', label: 'Enlonada' }
       ],
-      accessor: (item) => item.tipoCarga
+      accessor: (_item) => item.tipoCarga
     },
     {
       key: 'matricula',
       header: 'Matrícula',
       sortable: true,
       filterable: true,
-      accessor: (item) => <span className="font-medium">{item.matricula}</span>
+      accessor: (_item) => <span className="font-medium">{item.matricula}</span>
     },
     {
       key: 'origen',
@@ -99,7 +99,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Bella Unión', label: 'Bella Unión' },
         { value: 'Aceguá', label: 'Aceguá' }
       ],
-      accessor: (item) => item.origen
+      accessor: (_item) => item.origen
     },
     {
       key: 'destino',
@@ -121,14 +121,14 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Bella Unión', label: 'Bella Unión' },
         { value: 'Aceguá', label: 'Aceguá' }
       ],
-      accessor: (item) => item.destino
+      accessor: (_item) => item.destino
     },
     {
       key: 'despachante',
       header: 'Despachante',
       sortable: true,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="max-w-xs truncate" title={item.despachante}>
           {item.despachante}
         </div>
@@ -138,7 +138,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       key: 'fechaIngreso',
       header: 'Tiempo Pendiente',
       sortable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center">
           <Clock className="h-4 w-4 mr-1 text-gray-500" />
           <span className={cn(
@@ -153,7 +153,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
   ]
   const handleExport = (_data: TransitoPendiente[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `transitos-pendientes-${timestamp}`
+    const filename = `transitos-pendientes-${_timestamp}`
     if (format === 'csv') {
       const headers = ['N° Viaje', 'MOV', 'DUA', 'Tipo de Carga', 'Matrícula', 'Origen', 'Destino', 'Despachante', 'Fecha Ingreso']
       const rows = data.map(t => [
@@ -167,30 +167,30 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         t.despachante,
         new Date(t.fechaIngreso * 1000).toLocaleString('es-UY')
       ])
-      const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
+      const csv = [headers, ...rows.map(row => row.map(cell => `"${_cell}"`))].
         map(row => row.join(',')).join('\n')
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = `${filename}.csv`
+      link.href = URL.createObjectURL(_blob)
+      link.download = `${_filename}.csv`
       link.click()
     } else {
-      const jsonData = JSON.stringify(_data, null, 2)
+      const jsonData = JSON.stringify(__data, null, 2)
       const blob = new Blob([jsonData], { type: 'application/json' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = `${filename}.json`
+      link.href = URL.createObjectURL(_blob)
+      link.download = `${_filename}.json`
       link.click()
     }
   }
   return (
     <DataTable
-      data={transitos}
-      columns={columns}
+      data={_transitos}
+      columns={_columns}
       searchKeys={['numeroViaje', 'dua', 'matricula', 'despachante']}
       searchPlaceholder="Buscar por viaje, DUA, matrícula o despachante..."
       title="Tránsitos Pendientes en LUCIA"
-      onExport={handleExport}
+      onExport={_handleExport}
       emptyMessage="No hay tránsitos pendientes"
       defaultItemsPerPage={25}
       itemsPerPageOptions={[10, 25, 50, 100]}

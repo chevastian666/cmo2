@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Users, Plus, Activity, Building2, MapPin, Search, EyeOff, Key, Settings} from 'lucide-react'
 export const SubPanelesPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(_false)
   // Cerrar modal con Esc
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && showModal) {
-        setShowModal(false)
+        setShowModal(_false)
       }
     }
-    if (showModal) {
+    if (s_howModal) {
       document.addEventListener('keydown', handleEsc)
     }
     
@@ -27,7 +27,7 @@ export const SubPanelesPage: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowModal(_true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus className="h-5 w-5" />
@@ -189,9 +189,9 @@ export const SubPanelesPage: React.FC = () => {
       
       {showModal && (<div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={(e) => {
+          onClick={(_e) => {
             if (e.target === e.currentTarget) {
-              setShowModal(false)
+              setShowModal(_false)
             }
           }}
         >
@@ -204,7 +204,7 @@ export const SubPanelesPage: React.FC = () => {
                   Tipo de Sub Panel
                 </label>
                 <select className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                  <option value="cliente">Cliente (Empresa)</option>
+                  <option value="cliente">Cliente (_Empresa)</option>
                   <option value="punto">Punto de Operación</option>
                 </select>
               </div>
@@ -269,13 +269,13 @@ export const SubPanelesPage: React.FC = () => {
             
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowModal(_false)}
                 className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
               >
                 Cancelar
               </button>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowModal(_false)}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
               >
                 Crear Sub Panel

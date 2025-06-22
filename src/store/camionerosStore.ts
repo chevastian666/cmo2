@@ -21,13 +21,13 @@ interface CamionerosState {
 }
 
 export const useCamionerosStore = create<CamionerosState>()(devtools(
-    (set) => ({
+    (s_et) => ({
       // Estado inicial
       camioneros: [], camioneroSeleccionado: null, transitosCamionero: [], matriculasFrecuentes: [], estadisticasCamionero: null, loading: false, error: null, // Acciones
       fetchCamioneros: async (filtros?: FiltrosCamionero) => {
         set({ loading: true, error: null })
         try {
-          const camioneros = await camionerosService.getCamioneros(filtros)
+          const camioneros = await camionerosService.getCamioneros(_filtros)
           set({ camioneros, loading: false })
         } catch {
           set({ error: 'Error al cargar camioneros', loading: false })
@@ -39,10 +39,10 @@ export const useCamionerosStore = create<CamionerosState>()(devtools(
         set({ loading: true, error: null })
         try {
           const [camionero, transitos, matriculas, estadisticas] = await Promise.all([
-            camionerosService.getCamioneroByDocumento(documento),
-            camionerosService.getTransitosCamionero(documento),
-            camionerosService.getMatriculasFrecuentes(documento),
-            camionerosService.getEstadisticasCamionero(documento)
+            camionerosService.getCamioneroByDocumento(_documento),
+            camionerosService.getTransitosCamionero(_documento),
+            camionerosService.getMatriculasFrecuentes(_documento),
+            camionerosService.getEstadisticasCamionero(_documento)
           ])
           if (!camionero) {
             throw new Error('Camionero no encontrado')
@@ -61,10 +61,10 @@ export const useCamionerosStore = create<CamionerosState>()(devtools(
         }
       },
 
-      createCamionero: async (_data) => {
+      createCamionero: async (__data) => {
         set({ loading: true, error: null })
         try {
-          const nuevoCamionero = await camionerosService.createCamionero(_data)
+          const nuevoCamionero = await camionerosService.createCamionero(__data)
           set(state => ({
             camioneros: [nuevoCamionero, ...state.camioneros],
             loading: false
@@ -76,10 +76,10 @@ export const useCamionerosStore = create<CamionerosState>()(devtools(
         }
       },
 
-      updateCamionero: async (documento, _data) => {
+      updateCamionero: async (_documento, _data) => {
         set({ loading: true, error: null })
         try {
-          const camioneroActualizado = await camionerosService.updateCamionero(documento, _data)
+          const camioneroActualizado = await camionerosService.updateCamionero(_documento, _data)
           if (!camioneroActualizado) {
             throw new Error('Camionero no encontrado')
           }

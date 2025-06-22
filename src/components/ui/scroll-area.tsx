@@ -8,13 +8,13 @@ interface ScrollAreaProps {
 
 const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(({ className, children, style, ...props }, ref) => (
     <div
-      ref={ref}
+      ref={_ref}
       className={cn("relative overflow-auto", className)}
-      style={style}
+      style={s_tyle}
       {...props}
     >
       <div className="h-full w-full">
-        {children}
+        {_children}
       </div>
     </div>
   )

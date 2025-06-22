@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
+import {_Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo} from '../../../utils/formatters'
 interface PrecintoListItem {
@@ -20,15 +20,15 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
   precintos, onSelect, onRefresh
 }) => {
   const [searchTerm, setSearchTerm] = useState('')
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(_false)
   const filteredPrecintos = precintos.filter(p => 
     p.nqr.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.location?.toLowerCase().includes(searchTerm.toLowerCase())
   )
   const handleRefresh = async () => {
-    setIsRefreshing(true)
+    setIsRefreshing(_true)
     await onRefresh()
-    setTimeout(() => setIsRefreshing(false), 500)
+    setTimeout(() => setIsRefreshing(_false), 500)
   }
   const getBatteryColor = (level: number) => {
     if (level < 20) return 'text-red-400'
@@ -51,7 +51,7 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
             Precintos Pendientes
           </h3>
           <button
-            onClick={handleRefresh}
+            onClick={_handleRefresh}
             className={cn(
               "p-2 rounded-lg hover:bg-gray-700 transition-colors",
               isRefreshing && "animate-spin"
@@ -67,8 +67,8 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={s_earchTerm}
+            onChange={(_e) => setSearchTerm(e.target.value)}
             placeholder="Buscar por NQR o ubicación..."
             className="w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -85,12 +85,12 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
             </p>
           </div>
         ) : (<div className="divide-y divide-gray-700">
-            {filteredPrecintos.map((precinto) => {
+            {filteredPrecintos.map((_precinto) => {
               const hoursSinceReport = (Date.now() / 1000 - precinto.lastReport) / 3600
               const hasWarnings = precinto.battery < 20 || hoursSinceReport > 1
               return (<button
                   key={precinto.nqr}
-                  onClick={() => onSelect(precinto)}
+                  onClick={() => onSelect(_precinto)}
                   className={cn(
                     "w-full p-4 text-left hover:bg-gray-700/50 transition-colors",
                     "focus:outline-none focus:bg-gray-700/50",

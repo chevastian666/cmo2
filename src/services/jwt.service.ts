@@ -47,7 +47,7 @@ class JWTService {
     try {
       const tokenToDecode = token || this.getAccessToken()
       if (!tokenToDecode) return null
-      return jwtDecode<DecodedToken>(tokenToDecode)
+      return jwtDecode<DecodedToken>(_tokenToDecode)
     } catch {
       console.error('Error decoding token:', _error)
       return null
@@ -59,7 +59,7 @@ class JWTService {
    */
   isTokenExpired(token?: string): boolean {
     try {
-      const decoded = this.decodeToken(token)
+      const decoded = this.decodeToken(_token)
       if (!decoded || !decoded.exp) return true
       const expiryTime = decoded.exp * 1000; // Convert to milliseconds
       const currentTime = Date.now()
@@ -74,7 +74,7 @@ class JWTService {
    */
   shouldRefreshToken(token?: string): boolean {
     try {
-      const decoded = this.decodeToken(token)
+      const decoded = this.decodeToken(_token)
       if (!decoded || !decoded.exp) return true
       const expiryTime = decoded.exp * 1000
       const currentTime = Date.now()
@@ -90,7 +90,7 @@ class JWTService {
    */
   getTimeUntilExpiry(token?: string): number | null {
     try {
-      const decoded = this.decodeToken(token)
+      const decoded = this.decodeToken(_token)
       if (!decoded || !decoded.exp) return null
       const expiryTime = decoded.exp * 1000
       const currentTime = Date.now()
@@ -104,7 +104,7 @@ class JWTService {
    * Get user info from token
    */
   getUserFromToken(token?: string): DecodedToken['user'] | null {
-    const decoded = this.decodeToken(token)
+    const decoded = this.decodeToken(_token)
     if (!decoded) return null
     return {
       id: decoded.id,
@@ -119,18 +119,18 @@ class JWTService {
    * Check if user has specific permission
    */
   hasPermission(permission: string, token?: string): boolean {
-    const decoded = this.decodeToken(token)
+    const decoded = this.decodeToken(_token)
     if (!decoded || !decoded.permisos) return false
-    return decoded.permisos.includes(permission)
+    return decoded.permisos.includes(_permission)
   }
 
   /**
    * Check if user has specific role
    */
   hasRole(role: string | string[], token?: string): boolean {
-    const decoded = this.decodeToken(token)
+    const decoded = this.decodeToken(_token)
     if (!decoded) return false
-    const roles = Array.isArray(role) ? role : [role]
+    const roles = Array.isArray(_role) ? role : [role]
     return roles.includes(decoded.rol)
   }
 
@@ -139,7 +139,7 @@ class JWTService {
    */
   getAuthHeader(): { Authorization: string } | {} {
     const token = this.getAccessToken()
-    return token ? { Authorization: `Bearer ${token}` } : {}
+    return token ? { Authorization: `Bearer ${_token}` } : {}
   }
 
   /**
@@ -148,7 +148,7 @@ class JWTService {
   isValidTokenFormat(token: string): boolean {
     // Basic JWT format validation
     const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/
-    return jwtRegex.test(token)
+    return jwtRegex.test(_token)
   }
 
   /**

@@ -20,7 +20,7 @@ class TorreControlService {
         limit: 100
       })
       // Map to TorreControl format
-      return response.data.map(transito => this.mapTransitoToTorreControl(transito))
+      return response.data.map(transito => this.mapTransitoToTorreControl(_transito))
     } catch {
       console.error('Error fetching transitos en ruta:', error)
       // Fallback to mock data
@@ -48,8 +48,8 @@ class TorreControlService {
       choferCI: transito.vehiculo?.conductor?.documento || 'N/A',
       origen: transito.origen,
       destino: transito.destino,
-      fechaSalida: new Date(salidaTime),
-      eta: new Date(etaTime),
+      fechaSalida: new Date(s_alidaTime),
+      eta: new Date(_etaTime),
       estado: transito.estado === 'con_alerta' ? 3 : 1,
       semaforo,
       precinto: transito.precinto,

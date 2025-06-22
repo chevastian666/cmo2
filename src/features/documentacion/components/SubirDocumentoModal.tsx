@@ -33,14 +33,14 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
     confidencial: false,
     fechaDocumento: new Date().toISOString().split('T')[0]
   })
-  const [archivo, setArchivo] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [archivo, setArchivo] = useState<File | null>(_null)
+  const [loading, setLoading] = useState(_false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(_null)
   if (!isOpen) return null
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
+    if (_file) {
       if (file.type !== 'application/pdf') {
         setErrors({ ...errors, archivo: 'Solo se permiten archivos PDF' })
         return
@@ -49,7 +49,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
         setErrors({ ...errors, archivo: 'El archivo no puede superar los 10MB' })
         return
       }
-      setArchivo(file)
+      setArchivo(_file)
       setErrors({ ...errors, archivo: '' })
     }
   }
@@ -63,12 +63,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       newErrors.numeroDUA = 'El número de DUA es requerido para este tipo'
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(_newErrors)
+    return Object.keys(_newErrors).length === 0
   }
   const handleSubmit = async () => {
     if (!validateForm()) return
-    setLoading(true)
+    setLoading(_true)
     try {
       await onSubmit({
         ...formData as FormData,
@@ -79,7 +79,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
     } catch {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   const handleReset = () => {
@@ -89,7 +89,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       confidencial: false,
       fechaDocumento: new Date().toISOString().split('T')[0]
     })
-    setArchivo(null)
+    setArchivo(_null)
     setErrors({})
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -100,7 +100,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -116,9 +116,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </h2>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                disabled={loading}
+                disabled={_loading}
               >
                 <X className="h-5 w-5 text-gray-400" />
               </button>
@@ -135,15 +135,15 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </label>
                 <select
                   value={formData.tipo}
-                  onChange={(e) => setFormData({ ...formData, tipo: e.target.value as TipoDocumento })}
+                  onChange={(_e) => setFormData({ ...formData, tipo: e.target.value as TipoDocumento })}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.tipo ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={loading}
+                  disabled={_loading}
                 >
-                  {Object.entries(TIPOS_DOCUMENTO).map(([key, config]) => (
-                    <option key={key} value={key}>{config.label}</option>
+                  {Object.entries(_TIPOS_DOCUMENTO).map(([key, config]) => (
+                    <option key={_key} value={_key}>{config.label}</option>
                   ))}
                 </select>
                 {errors.tipo && <p className="text-red-400 text-sm mt-1">{errors.tipo}</p>}
@@ -157,13 +157,13 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="text"
                     value={formData.numeroDUA || ''}
-                    onChange={(e) => setFormData({ ...formData, numeroDUA: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, numeroDUA: e.target.value })}
                     placeholder="Ej: 2024/123456"
                     className={cn(
                       "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                       errors.numeroDUA ? "border-red-500" : "border-gray-700"
                     )}
-                    disabled={loading}
+                    disabled={_loading}
                   />
                   {errors.numeroDUA && <p className="text-red-400 text-sm mt-1">{errors.numeroDUA}</p>}
                 </div>
@@ -177,12 +177,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 <input
                   type="date"
                   value={formData.fechaDocumento || ''}
-                  onChange={(e) => setFormData({ ...formData, fechaDocumento: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, fechaDocumento: e.target.value })}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.fechaDocumento ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={loading}
+                  disabled={_loading}
                 />
                 {errors.fechaDocumento && <p className="text-red-400 text-sm mt-1">{errors.fechaDocumento}</p>}
               </div>
@@ -190,15 +190,15 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
               {/* Empresa */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Empresa (opcional)
+                  Empresa (_opcional)
                 </label>
                 <input
                   type="text"
                   value={formData.empresa || ''}
-                  onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, empresa: e.target.value })}
                   placeholder="Nombre de la empresa"
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={loading}
+                  disabled={_loading}
                 />
               </div>
 
@@ -209,14 +209,14 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </label>
                 <textarea
                   value={formData.descripcion || ''}
-                  onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, descripcion: e.target.value })}
                   placeholder="Breve descripción del contenido del documento"
                   rows={3}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.descripcion ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={loading}
+                  disabled={_loading}
                 />
                 {errors.descripcion && <p className="text-red-400 text-sm mt-1">{errors.descripcion}</p>}
               </div>
@@ -229,10 +229,10 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 <input
                   type="text"
                   value={formData.palabrasClave || ''}
-                  onChange={(e) => setFormData({ ...formData, palabrasClave: e.target.value })}
+                  onChange={(_e) => setFormData({ ...formData, palabrasClave: e.target.value })}
                   placeholder="autorización, importación, contenedor"
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={loading}
+                  disabled={_loading}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Las palabras clave ayudan a encontrar el documento más fácilmente
@@ -250,12 +250,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   "hover:border-blue-500 transition-colors"
                 )}>
                   <input
-                    ref={fileInputRef}
+                    ref={_fileInputRef}
                     type="file"
                     accept=".pdf,application/pdf"
-                    onChange={handleFileChange}
+                    onChange={_handleFileChange}
                     className="hidden"
-                    disabled={loading}
+                    disabled={_loading}
                   />
                   
                   {archivo ? (
@@ -268,7 +268,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="text-blue-400 hover:text-blue-300 text-sm"
-                        disabled={loading}
+                        disabled={_loading}
                       >
                         Cambiar archivo
                       </button>
@@ -278,7 +278,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                        disabled={loading}
+                        disabled={_loading}
                       >
                         Seleccionar archivo PDF
                       </button>
@@ -297,9 +297,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="checkbox"
                     checked={formData.destacado || false}
-                    onChange={(e) => setFormData({ ...formData, destacado: e.target.checked })}
+                    onChange={(_e) => setFormData({ ...formData, destacado: e.target.checked })}
                     className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500"
-                    disabled={loading}
+                    disabled={_loading}
                   />
                   <span className="text-gray-300">Marcar como destacado</span>
                   <Badge variant="yellow" className="text-xs">⭐</Badge>
@@ -309,9 +309,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="checkbox"
                     checked={formData.confidencial || false}
-                    onChange={(e) => setFormData({ ...formData, confidencial: e.target.checked })}
+                    onChange={(_e) => setFormData({ ...formData, confidencial: e.target.checked })}
                     className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500"
-                    disabled={loading}
+                    disabled={_loading}
                   />
                   <span className="text-gray-300">Documento confidencial</span>
                   <Badge variant="red" className="text-xs">🔒</Badge>
@@ -323,23 +323,23 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
           {/* Footer */}
           <div className="p-4 border-t border-gray-700 flex justify-between">
             <button
-              onClick={handleReset}
+              onClick={_handleReset}
               className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
-              disabled={loading}
+              disabled={_loading}
             >
               Limpiar
             </button>
             <div className="flex gap-3">
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
-                disabled={loading}
+                disabled={_loading}
               >
                 Cancelar
               </button>
               <button
-                onClick={handleSubmit}
-                disabled={loading}
+                onClick={_handleSubmit}
+                disabled={_loading}
                 className={cn(
                   "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
                   loading 

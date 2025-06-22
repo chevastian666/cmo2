@@ -5,8 +5,8 @@
  */
 
 import React from 'react'
-import {Users, Package, Truck, AlertTriangle, Zap, HardDrive, TrendingUp, CreditCard} from 'lucide-react'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Users, Package, Truck, AlertTriangle, Zap, HardDrive, TrendingUp, CreditCard} from 'lucide-react'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Progress} from '@/components/ui/progress'
 import { Badge} from '@/components/ui/badge'
 import { Button} from '@/components/ui/button'
@@ -89,18 +89,18 @@ export const UsageOverview: React.FC = () => {
     return 'bg-green-500'
   }
   // Mock historical data for chart
-  const historicalData = usage.history.slice(-30).map((h, index) => ({
+  const historicalData = usage.history.slice(-30).map((_h, index) => ({
     date: new Date(h.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
     transitos: h.metrics.transitos || 0,
     alerts: h.metrics.alerts || 0,
     apiCalls: h.metrics.apiCalls || 0
   }))
   const totalOverageCost = Object.values(usage.overage || {})
-    .reduce((sum, overage) => sum + overage.cost, 0)
+    .reduce((s_um, overage) => sum + overage.cost, 0)
   return (<div className="space-y-6">
       {/* Usage Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {metrics.map((metric, index) => {
+        {metrics.map((_metric, index) => {
           const percentage = getUsagePercentage(metric.current, metric.limit)
           const isOverLimit = metric.current > metric.limit
           return (
@@ -145,13 +145,13 @@ export const UsageOverview: React.FC = () => {
                     </div>
                     
                     <Progress 
-                      value={percentage} 
+                      value={_percentage} 
                       className="h-2"
-                      indicatorClassName={getProgressColor(percentage)}
+                      indicatorClassName={getProgressColor(_percentage)}
                     />
                     
                     <div className="flex items-center justify-between text-xs">
-                      <span className={getUsageColor(percentage)}>
+                      <span className={getUsageColor(_percentage)}>
                         {percentage.toFixed(1)}% used
                       </span>
                       {metric.limit - metric.current > 0 ? (
@@ -183,7 +183,7 @@ export const UsageOverview: React.FC = () => {
         <CardContent>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={historicalData}>
+              <AreaChart data={_historicalData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis 
                   dataKey="date" 
@@ -254,8 +254,8 @@ export const UsageOverview: React.FC = () => {
           <CardContent>
             <div className="space-y-3">
               {Object.entries(usage.overage || {}).map(([resource, overage]) => (
-                <div key={resource} className="flex items-center justify-between text-sm">
-                  <span className="capitalize">{resource}</span>
+                <div key={_resource} className="flex items-center justify-between text-sm">
+                  <span className="capitalize">{_resource}</span>
                   <div className="flex items-center gap-4">
                     <span className="text-gray-500">
                       +{overage.amount} units
@@ -306,10 +306,10 @@ export const UsageOverview: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {plan.features.map((feature) => (
-              <div key={feature} className="flex items-center gap-2 text-sm">
+            {plan.features.map((_feature) => (
+              <div key={_feature} className="flex items-center gap-2 text-sm">
                 <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                <span className="text-gray-300">{feature}</span>
+                <span className="text-gray-300">{_feature}</span>
               </div>
             ))}
           </div>

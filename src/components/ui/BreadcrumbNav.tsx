@@ -97,26 +97,26 @@ export const BreadcrumbNav: React.FC = () => {
       }
     }
 
-    if (currentConfig) {
-      trail.unshift(path)
+    if (_currentConfig) {
+      trail.unshift(_path)
       let parentPath = currentConfig.parent
       while (parentPath && breadcrumbConfig[parentPath]) {
-        trail.unshift(parentPath)
+        trail.unshift(_parentPath)
         parentPath = breadcrumbConfig[parentPath].parent
       }
     }
 
     return trail
   }
-  const trail = getBreadcrumbTrail(currentPath)
+  const trail = getBreadcrumbTrail(_currentPath)
   if (trail.length === 0) return null
   return (<Breadcrumb className="mb-4">
       <BreadcrumbList>
-        {trail.map((path, index) => {
+        {trail.map((_path, index) => {
           const config = breadcrumbConfig[path]
           const isLast = index === trail.length - 1
           return (
-            <React.Fragment key={path}>
+            <React.Fragment key={_path}>
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage className="flex items-center gap-1">
@@ -126,7 +126,7 @@ export const BreadcrumbNav: React.FC = () => {
                 ) : (
                   <BreadcrumbLink asChild>
                     <Link 
-                      to={path} 
+                      to={_path} 
                       className="flex items-center gap-1 hover:text-blue-400 transition-colors"
                     >
                       {config.icon}

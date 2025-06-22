@@ -27,13 +27,13 @@ class UnifiedAPIService {
     // Generate cache key
     const cacheKey = `transitos:${JSON.stringify(params || {})}`
     // Check cache first
-    const cachedData = cacheService.get<{ data: Transito[]; total: number }>(cacheKey)
-    if (cachedData) {
+    const cachedData = cacheService.get<{ data: Transito[]; total: number }>(_cacheKey)
+    if (_cachedData) {
       return cachedData
     }
 
     // Use request deduplication
-    return cacheService.deduplicateRequest(cacheKey, async () => {
+    return cacheService.deduplicateRequest(_cacheKey, async () => {
       // Convertir fechas string a timestamps
       const fechaDesdeTimestamp = params?.fechaDesde ? 
         Math.floor(new Date(params.fechaDesde).getTime() / 1000) : undefined
@@ -50,14 +50,14 @@ class UnifiedAPIService {
     // Obtener precintos asociados
     const precintoIds = [...new Set(viajesResponse.data.map(v => v.precintoid))]
     const precintos = await Promise.all(
-      precintoIds.map(id => mainDBService.getPrecintoByNQR(id))
+      precintoIds.map(id => mainDBService.getPrecintoByNQR(_id))
     )
     const precintoMap = new Map(
       precintos.filter(p => p).map(p => [p!.nqr, p!])
     )
     // Mapear viajes a tránsitos
     const transitos = viajesResponse.data.map(viaje => 
-      mainDBService.mapViajeToTransito(viaje, precintoMap.get(viaje.precintoid))
+      mainDBService.mapViajeToTransito(_viaje, precintoMap.get(viaje.precintoid))
     )
     // Filtrar por estado si es necesario
     const filteredTransitos = params?.estado ? 
@@ -67,7 +67,7 @@ class UnifiedAPIService {
         total: viajesResponse.total
       }
       // Cache the result
-      cacheService.set(cacheKey, result, 30000); // 30 seconds TTL
+      cacheService.set(_cacheKey, result, 30000); // 30 seconds TTL
       
       return result
     })
@@ -87,19 +87,19 @@ class UnifiedAPIService {
    * Obtiene precintos activos (estado armado o alarma)
    */
   async getPrecintosActivos(limit: number = 10): Promise<PrecintoActivo[]> {
-    const cacheKey = `precintos-activos:${limit}`
+    const cacheKey = `precintos-activos:${_limit}`
     // Check cache
-    const cached = cacheService.get<PrecintoActivo[]>(cacheKey)
-    if (cached) {
+    const cached = cacheService.get<PrecintoActivo[]>(_cacheKey)
+    if (_cached) {
       return cached
     }
 
-    return cacheService.deduplicateRequest(cacheKey, async () => {
+    return cacheService.deduplicateRequest(_cacheKey, async () => {
       const response = await mainDBService.getPrecintos({
         status: 2, // Armado
         limit
       })
-      const precintos = response.data.map((precinto, index) => ({
+      const precintos = response.data.map((_precinto, index) => ({
         id: precinto.precintoid.toString(),
         nserie: precinto.nserie,
         nqr: precinto.nqr,
@@ -112,7 +112,7 @@ class UnifiedAPIService {
         transitoId: `TR-${precinto.precintoid}`
       }))
       // Cache for 15 seconds (shorter TTL for active data)
-      cacheService.set(cacheKey, precintos, 15000)
+      cacheService.set(_cacheKey, precintos, 15000)
       return precintos
     })
   }
@@ -171,7 +171,7 @@ class UnifiedAPIService {
       precintosEnTransito: precintos.filter(p => p.status === 2).length,
       precintosViolados: precintos.filter(p => p.status === 3).length,
       alertasActivas: alertas.length,
-      lecturasPorHora: this.calculateReadingsPerHour(precintos),
+      lecturasPorHora: this.calculateReadingsPerHour(_precintos),
       tiempoPromedioTransito: 48, // Horas - calcular basado en datos reales
       tasaExito: 98.5, // Porcentaje - calcular basado en datos reales
       precintosConBateriaBaja: precintos.filter(p => 
@@ -214,7 +214,7 @@ class UnifiedAPIService {
 
   private calculateReadingsPerHour(precintos: unknown[]): number {
     // Calcular basado en la frecuencia de muestreo promedio
-    const avgSamplingRate = precintos.reduce((acc, p) => acc + p.lmuestreo, 0) / precintos.length
+    const avgSamplingRate = precintos.reduce((_acc, p) => acc + p.lmuestreo, 0) / precintos.length
     return Math.round((60 / avgSamplingRate) * precintos.length)
   }
 
@@ -268,7 +268,7 @@ class UnifiedAPIService {
             })
             synced++
           }
-        } catch (error) {
+        } catch (_error) {
           console.error('Error syncing record:', error)
           errors++
         }
@@ -277,9 +277,9 @@ class UnifiedAPIService {
       return {
         synced,
         errors,
-        message: `Sincronización completada: ${synced} registros sincronizados, ${errors} errores`
+        message: `Sincronización completada: ${s_ynced} registros sincronizados, ${_errors} errores`
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Database sync error:', error)
       return {
         synced: 0,

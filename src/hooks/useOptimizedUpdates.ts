@@ -25,7 +25,7 @@ export function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
   options: UseDebounceOptions = {}
 ): T {
 
-  const callbackRef = useRef(callback)
+  const callbackRef = useRef(_callback)
   // Update callback ref on each render
 
     useEffect(() => {
@@ -54,7 +54,7 @@ export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
   options: UseThrottleOptions = {}
 ): T {
 
-  const callbackRef = useRef(callback)
+  const callbackRef = useRef(_callback)
   // Update callback ref on each render
 
     useEffect(() => {
@@ -82,13 +82,13 @@ export function useDebouncedValue<T>(
   value: T,
   delay: number = 300
 ): T {
-  const [debouncedValue, setDebouncedValue] = React.useState(value)
+  const [debouncedValue, setDebouncedValue] = React.useState(_value)
     useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(value)
+      setDebouncedValue(_value)
     }, delay)
     return () => {
-      clearTimeout(timer)
+      clearTimeout(_timer)
     }
   }, [value, delay])
   return debouncedValue
@@ -99,17 +99,17 @@ export function useThrottledValue<T>(
   value: T,
   delay: number = 100
 ): T {
-  const [throttledValue, setThrottledValue] = React.useState(value)
+  const [throttledValue, setThrottledValue] = React.useState(_value)
   const lastRun = useRef(Date.now())
     useEffect(() => {
     const handler = setTimeout(() => {
       if (Date.now() - lastRun.current >= delay) {
-        setThrottledValue(value)
+        setThrottledValue(_value)
         lastRun.current = Date.now()
       }
     }, delay - (Date.now() - lastRun.current))
     return () => {
-      clearTimeout(handler)
+      clearTimeout(_handler)
     }
   }, [value, delay])
   return throttledValue
@@ -122,20 +122,20 @@ export function useOptimizedState<T>(initialValue: T, options: {
     mode?: 'debounce' | 'throttle'
   } = {}) {
 
-  const [value, setValue] = React.useState(initialValue)
-  const [optimizedValue, setOptimizedValue] = React.useState(initialValue)
+  const [value, setValue] = React.useState(_initialValue)
+  const [optimizedValue, setOptimizedValue] = React.useState(_initialValue)
   // Create optimized setter
   const optimizedSetter = mode === 'debounce'
     ? useDebouncedCallback((newValue: T) => {
-        setOptimizedValue(newValue)
+        setOptimizedValue(_newValue)
       }, { delay: debounceDelay })
     : useThrottledCallback((newValue: T) => {
-        setOptimizedValue(newValue)
+        setOptimizedValue(_newValue)
       }, { delay: throttleDelay })
   // Update optimized value when value changes
 
     useEffect(() => {
-    optimizedSetter(value)
+    optimizedSetter(_value)
   }, [value])
   return [value, setValue, optimizedValue] as const
 }
@@ -149,7 +149,7 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
 ) {
 
   const batchRef = useRef<T[]>([])
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const timerRef = useRef<NodeJS.Timeout | null>(_null)
   const flush = useCallback(() => {
     if (batchRef.current.length > 0) {
       updateFn([...batchRef.current])
@@ -162,7 +162,7 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
     }
   }, [])
   const addUpdate = useCallback((update: T) => {
-    batchRef.current.push(update)
+    batchRef.current.push(_update)
     // Flush if batch is full
     if (batchRef.current.length >= maxBatchSize) {
       flush()
@@ -171,7 +171,7 @@ export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
 
     // Schedule flush
     if (!timerRef.current) {
-      timerRef.current = setTimeout(flush, flushDelay)
+      timerRef.current = setTimeout(_flush, flushDelay)
     }
   }, [flush])
   // Cleanup on unmount
@@ -197,7 +197,7 @@ export function useAnimationFrame(callback: (deltaTime: number) => void,
 ) {
   const requestRef = useRef<number>()
   const previousTimeRef = useRef<number>()
-  const callbackRef = useRef(callback)
+  const callbackRef = useRef(_callback)
     useEffect(() => {
     callbackRef.current = callback
   }, [callback])
@@ -206,12 +206,12 @@ export function useAnimationFrame(callback: (deltaTime: number) => void,
     const animate = (time: number) => {
       if (previousTimeRef.current !== undefined) {
         const deltaTime = time - previousTimeRef.current
-        callbackRef.current(deltaTime)
+        callbackRef.current(_deltaTime)
       }
       previousTimeRef.current = time
-      requestRef.current = requestAnimationFrame(animate)
+      requestRef.current = requestAnimationFrame(_animate)
     }
-    requestRef.current = requestAnimationFrame(animate)
+    requestRef.current = requestAnimationFrame(_animate)
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current)

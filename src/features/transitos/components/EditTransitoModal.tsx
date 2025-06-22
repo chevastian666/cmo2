@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {X} from 'lucide-react'
+import {_X} from 'lucide-react'
 import { notificationService} from '../../../services/shared/notification.service'
 import { transitosService} from '../services/transitos.service'
 import type { Transito} from '../types'
@@ -17,9 +17,9 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
     dua: '',
     destino: ''
   })
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(_false)
   useEffect(() => {
-    if (transito) {
+    if (_transito) {
       setFormData({
         dua: transito.dua || '',
         destino: transito.destino || ''
@@ -34,7 +34,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
         onClose()
       }
     }
-    if (isOpen) {
+    if (_isOpen) {
       document.addEventListener('keydown', handleEscKey)
     }
 
@@ -46,7 +46,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
     e.preventDefault()
     if (!transito) return
     try {
-      setLoading(true)
+      setLoading(_true)
       // Call the update service
       await transitosService.updateTransito(transito.id, {
         dua: formData.dua,
@@ -64,7 +64,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'
       )
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
   if (!transito || !isOpen) return null
@@ -73,7 +73,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={onClose}
+        onClick={_onClose}
       />
       
       {/* Modal */}
@@ -84,7 +84,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
               <h2 className="text-xl font-semibold text-white">Editar Tránsito</h2>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -92,7 +92,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
             </div>
             
             {/* Content */}
-            <form id="edit-transito-form" onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form id="edit-transito-form" onSubmit={_handleSubmit} className="p-6 space-y-6">
               {/* Transit Info Display */}
               <div className="bg-gray-900 rounded-lg p-4 space-y-3">
                 <h3 className="text-lg font-semibold text-white mb-3">Información del Viaje</h3>
@@ -139,7 +139,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
                     type="text"
                     id="dua"
                     value={formData.dua}
-                    onChange={(e) => setFormData({ ...formData, dua: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, dua: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Ingrese el DUA"
                     required
@@ -154,7 +154,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
                     type="text"
                     id="destino"
                     value={formData.destino}
-                    onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
+                    onChange={(_e) => setFormData({ ...formData, destino: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Ingrese el destino"
                     required
@@ -167,16 +167,16 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
             <div className="flex justify-end gap-3 p-6 border-t border-gray-700">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={_onClose}
                 className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
-                disabled={loading}
+                disabled={_loading}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 form="edit-transito-form"
-                disabled={loading}
+                disabled={_loading}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? (

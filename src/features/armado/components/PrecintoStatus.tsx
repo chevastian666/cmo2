@@ -1,5 +1,5 @@
 import React from 'react'
-import {Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle} from 'lucide-react'
+import {_Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
 import type { Precinto} from '../../../types'
@@ -16,7 +16,7 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   const getBatteryIcon = (level: number) => {
     return (
       <div className="relative">
-        <Battery className={cn('h-6 w-6', getBatteryColor(level))} />
+        <Battery className={cn('h-6 w-6', getBatteryColor(_level))} />
         {level < 20 && (
           <AlertTriangle className="h-3 w-3 text-red-400 absolute -top-1 -right-1" />
         )}

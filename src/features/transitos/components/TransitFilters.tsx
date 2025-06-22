@@ -1,5 +1,5 @@
 import React from 'react'
-import {Search, Calendar, Building, MapPin, Filter} from 'lucide-react'
+import {_Search, Calendar, Building, MapPin, Filter} from 'lucide-react'
 import { ORIGENES_DESTINOS} from '../../../constants/locations'
 import type { Transito} from '../types'
 interface FiltersState {
@@ -45,7 +45,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
           Filtros
         </h3>
         <button
-          onClick={handleReset}
+          onClick={_handleReset}
           className="text-sm text-gray-400 hover:text-white transition-colors"
         >
           Limpiar filtros
@@ -56,14 +56,14 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
         {/* Search */}
         <div className="lg:col-span-2">
           <label className="block text-xs font-medium text-gray-400 mb-1">
-            Buscar (DUA, Precinto, Empresa)
+            Buscar (_DUA, Precinto, Empresa)
           </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
               value={filters.searchText}
-              onChange={(e) => handleChange('searchText', e.target.value)}
+              onChange={(_e) => handleChange('searchText', e.target.value)}
               placeholder="Buscar..."
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
@@ -77,7 +77,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
           </label>
           <select
             value={filters.estado}
-            onChange={(e) => handleChange('estado', e.target.value)}
+            onChange={(_e) => handleChange('estado', e.target.value)}
             className="w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="">Todos</option>
@@ -95,7 +95,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
           <input
             type="text"
             value={filters.precinto}
-            onChange={(e) => handleChange('precinto', e.target.value)}
+            onChange={(_e) => handleChange('precinto', e.target.value)}
             placeholder="Código..."
             className="w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
@@ -111,7 +111,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             <input
               type="date"
               value={filters.fechaDesde}
-              onChange={(e) => handleChange('fechaDesde', e.target.value)}
+              onChange={(_e) => handleChange('fechaDesde', e.target.value)}
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
@@ -127,7 +127,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             <input
               type="date"
               value={filters.fechaHasta}
-              onChange={(e) => handleChange('fechaHasta', e.target.value)}
+              onChange={(_e) => handleChange('fechaHasta', e.target.value)}
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
@@ -142,12 +142,12 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <select
               value={filters.empresa}
-              onChange={(e) => handleChange('empresa', e.target.value)}
+              onChange={(_e) => handleChange('empresa', e.target.value)}
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="">Todas</option>
               {empresas.map(empresa => (
-                <option key={empresa} value={empresa}>{empresa}</option>
+                <option key={_empresa} value={_empresa}>{_empresa}</option>
               ))}
             </select>
           </div>
@@ -162,12 +162,12 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <select
               value={filters.origen}
-              onChange={(e) => handleChange('origen', e.target.value)}
+              onChange={(_e) => handleChange('origen', e.target.value)}
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="">Todos</option>
               {ORIGENES_DESTINOS.map(lugar => (
-                <option key={lugar} value={lugar}>{lugar}</option>
+                <option key={_lugar} value={_lugar}>{_lugar}</option>
               ))}
             </select>
           </div>
@@ -182,12 +182,12 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <select
               value={filters.destino}
-              onChange={(e) => handleChange('destino', e.target.value)}
+              onChange={(_e) => handleChange('destino', e.target.value)}
               className="w-full pl-10 pr-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="">Todos</option>
               {ORIGENES_DESTINOS.map(lugar => (
-                <option key={lugar} value={lugar}>{lugar}</option>
+                <option key={_lugar} value={_lugar}>{_lugar}</option>
               ))}
             </select>
           </div>

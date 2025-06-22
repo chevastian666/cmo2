@@ -1,8 +1,8 @@
 import React from 'react'
-import {X, Filter} from 'lucide-react'
+import {_X, Filter} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Label} from '@/components/ui/label'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types'
 import type { DepositoFilters as Filters} from '../types'
 interface DepositoFiltersProps {
@@ -30,7 +30,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
         <Button
           size="icon"
           variant="ghost"
-          onClick={onClose}
+          onClick={_onClose}
         >
           <X className="h-5 w-5" />
         </Button>
@@ -42,7 +42,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
           <Label>Tipo</Label>
           <Select
             value={filters.tipo}
-            onValueChange={(value) => onFiltersChange({ ...filters, tipo: value })}
+            onValueChange={(_value) => onFiltersChange({ ...filters, tipo: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todos" />
@@ -50,7 +50,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todos</SelectItem>
               {DEPOSITO_TIPOS.map(tipo => (
-                <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
+                <SelectItem key={_tipo} value={_tipo}>{_tipo}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -61,7 +61,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
           <Label>Zona</Label>
           <Select
             value={filters.zona}
-            onValueChange={(value) => onFiltersChange({ ...filters, zona: value })}
+            onValueChange={(_value) => onFiltersChange({ ...filters, zona: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todas" />
@@ -69,7 +69,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todas</SelectItem>
               {DEPOSITO_ZONAS.map(zona => (
-                <SelectItem key={zona} value={zona}>{zona}</SelectItem>
+                <SelectItem key={_zona} value={_zona}>{_zona}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -80,7 +80,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
           <Label>Padre</Label>
           <Select
             value={filters.padre}
-            onValueChange={(value) => onFiltersChange({ ...filters, padre: value })}
+            onValueChange={(_value) => onFiltersChange({ ...filters, padre: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todos" />
@@ -88,7 +88,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todos</SelectItem>
               {DEPOSITO_ZONAS.map(zona => (
-                <SelectItem key={zona} value={zona}>{zona}</SelectItem>
+                <SelectItem key={_zona} value={_zona}>{_zona}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -98,12 +98,12 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
       <div className="flex justify-end gap-2 pt-4">
         <Button
           variant="secondary"
-          onClick={handleReset}
+          onClick={_handleReset}
         >
           Limpiar filtros
         </Button>
         <Button
-          onClick={onClose}
+          onClick={_onClose}
         >
           Aplicar
         </Button>

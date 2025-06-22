@@ -13,20 +13,20 @@ export const MapWithPolling: React.FC = () => {
   return (<Card className="relative">
       <div className="absolute top-4 right-4 z-10">
         <button
-          onClick={refresh}
+          onClick={_refresh}
           className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-          disabled={isLoading}
+          disabled={_isLoading}
         >
           <RefreshCw className={`h-4 w-4 text-gray-400 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
       </div>
       
       <MapModule
-        markers={markers}
-        routes={routes}
+        markers={_markers}
+        routes={_routes}
         height="500px"
         useDetailedIcons
-        onMarkerClick={(marker) => {
+        onMarkerClick={(_marker) => {
           console.log('Marker clicked:', marker)
         }}
       />
@@ -52,7 +52,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
     )
   }
 
-  if (error) {
+  if (_error) {
     return (
       <Card className="text-red-400">
         Error cargando tránsito
@@ -65,8 +65,8 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
   }
 
   return (<TransitCard
-      transit={transit}
-      onViewHistory={(plate) => {
+      transit={_transit}
+      onViewHistory={(_plate) => {
         console.log('Ver historial de:', plate)
       }}
     />
@@ -95,20 +95,20 @@ export const AlertsPanelWithPolling: React.FC = () => {
       <div className="relative">
         {/* Botón de actualización manual */}
         <button
-          onClick={refresh}
+          onClick={_refresh}
           className="absolute -top-2 right-2 z-10 p-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-          disabled={isLoading}
+          disabled={_isLoading}
           title="Actualizar alertas"
         >
           <RefreshCw className={`h-3.5 w-3.5 text-gray-400 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
 
         <AlertsPanel
-          alerts={alerts}
-          onAlertClick={(alert) => {
+          alerts={_alerts}
+          onAlertClick={(_alert) => {
             console.log('Alert clicked:', alert)
           }}
-          onAlertAcknowledge={acknowledgeAlert}
+          onAlertAcknowledge={_acknowledgeAlert}
           groupByPriority
           enableSound
           enableVisualPulse

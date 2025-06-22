@@ -14,13 +14,13 @@ import { Button} from '@/components/ui/button'
 import { Badge} from '@/components/ui/badge'
 export const AlertsTableV2: React.FC = () => {
 
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(_null)
+  const [isModalOpen, setIsModalOpen] = useState(_false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(_null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(_false)
   const handleAlertClick = (alerta: Alerta) => {
     setSelectedAlertaId(alerta.id)
-    setIsModalOpen(true)
+    setIsModalOpen(_true)
   }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
     event.stopPropagation()
@@ -29,12 +29,12 @@ export const AlertsTableV2: React.FC = () => {
       return
     }
     
-    setSelectedAlertaForResponse(alerta)
-    setIsResponseModalOpen(true)
+    setSelectedAlertaForResponse(_alerta)
+    setIsResponseModalOpen(_true)
   }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId)
+      await actions.atenderAlerta(_alertaId)
       notificationService.success('Alerta respondida correctamente')
       console.log('Alert response:', {
         alertaId,
@@ -50,11 +50,11 @@ export const AlertsTableV2: React.FC = () => {
     }
   }
   const closeModal = () => {
-    setIsModalOpen(false)
-    setSelectedAlertaId(null)
+    setIsModalOpen(_false)
+    setSelectedAlertaId(_null)
   }
   const getIcon = (tipo: string) => {
-    switch (tipo) {
+    switch (_tipo) {
       case 'AAR': {
   return <Clock className="h-4 w-4" />
       case 'BBJ': {
@@ -77,7 +77,7 @@ export const AlertsTableV2: React.FC = () => {
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   return 'text-red-400 bg-red-900/20'
       case 'alta': {
@@ -91,7 +91,7 @@ export const AlertsTableV2: React.FC = () => {
     }
   }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
-    switch (severidad) {
+    switch (s_everidad) {
       case 'critica': {
   case 'alta':
         return 'destructive'
@@ -110,12 +110,12 @@ export const AlertsTableV2: React.FC = () => {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: Object.entries(TIPOS_ALERTA).map(([key, value]) => ({
+      filterOptions: Object.entries(_TIPOS_ALERTA).map(([key, value]) => ({
         value: key,
         label: value
       })),
       width: '120px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center space-x-2">
           <div className={cn('p-1.5 rounded', getSeveridadColor(item.severidad))}>
             {getIcon(item.tipo)}
@@ -129,7 +129,7 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Precinto',
       sortable: true,
       filterable: true,
-      accessor: (item) => <span className="font-medium">{item.codigoPrecinto}</span>
+      accessor: (_item) => <span className="font-medium">{item.codigoPrecinto}</span>
     },
     {
       key: 'severidad',
@@ -144,7 +144,7 @@ export const AlertsTableV2: React.FC = () => {
         { value: 'baja', label: 'Baja' }
       ],
       width: '120px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <Badge variant={getSeveridadVariant(item.severidad)}>
           {item.severidad}
         </Badge>
@@ -155,7 +155,7 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Mensaje',
       sortable: false,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="max-w-md">
           <p className="text-sm text-muted-foreground truncate">{item.mensaje}</p>
         </div>
@@ -165,11 +165,11 @@ export const AlertsTableV2: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (item) => (item.ubicacion ? (
+      accessor: (_item) => (item.ubicacion ? (
           <Button
             size="sm"
             variant="default"
-            onClick={(e) => {
+            onClick={(_e) => {
               e.stopPropagation()
               notificationService.info('Función de mapa próximamente')
             }}
@@ -186,7 +186,7 @@ export const AlertsTableV2: React.FC = () => {
       key: 'timestamp',
       header: 'Tiempo',
       sortable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="text-sm">
           <div>{formatTimeAgo(item.timestamp)}</div>
           <div className="text-xs text-muted-foreground">{formatDateTime(item.timestamp)}</div>
@@ -204,7 +204,7 @@ export const AlertsTableV2: React.FC = () => {
         { value: 'true', label: 'Atendida' }
       ],
       width: '100px',
-      accessor: (item) => (
+      accessor: (_item) => (
         <Badge variant={item.atendida ? 'outline' : 'destructive'}>
           {item.atendida ? 'Atendida' : 'Activa'}
         </Badge>
@@ -215,11 +215,11 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (item) => (<div className="flex items-center justify-center">
+      accessor: (_item) => (<div className="flex items-center justify-center">
           <Button
             size="sm"
             variant={item.atendida ? "secondary" : "default"}
-            onClick={(e) => handleVerificar(item, e)}
+            onClick={(_e) => handleVerificar(_item, e)}
             disabled={item.atendida}
             title={item.atendida ? 'Alerta ya verificada' : 'Responder alerta'}
           >
@@ -232,7 +232,7 @@ export const AlertsTableV2: React.FC = () => {
   ]
   const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `alertas-${timestamp}`
+    const filename = `alertas-${_timestamp}`
     if (format === 'csv') {
       const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
@@ -246,37 +246,37 @@ export const AlertsTableV2: React.FC = () => {
       ])
       const csvContent = [
         headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+        ...rows.map(row => row.map(cell => `"${_cell}"`).join(','))
       ].join('\n')
       const blob = new Blob([csvContent], { type: 'text/csv' })
-      const url = URL.createObjectURL(blob)
+      const url = URL.createObjectURL(_blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `${filename}.csv`
+      link.download = `${_filename}.csv`
       link.click()
-      URL.revokeObjectURL(url)
+      URL.revokeObjectURL(_url)
     } else {
-      const jsonContent = JSON.stringify(_data, null, 2)
+      const jsonContent = JSON.stringify(__data, null, 2)
       const blob = new Blob([jsonContent], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
+      const url = URL.createObjectURL(_blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `${filename}.json`
+      link.download = `${_filename}.json`
       link.click()
-      URL.revokeObjectURL(url)
+      URL.revokeObjectURL(_url)
     }
   }
-  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId)
+  const {data: selectedAlerta} =  useAlertaExtendida(s_electedAlertaId)
   return (<>
       <DataTable
-        data={alertas}
-        columns={columns}
-        loading={loading}
-        error={error}
+        data={_alertas}
+        columns={_columns}
+        loading={_loading}
+        error={_error}
         pageSize={20}
         searchPlaceholder="Buscar alertas..."
-        onRowClick={handleAlertClick}
-        onExport={handleExport}
+        onRowClick={_handleAlertClick}
+        onExport={_handleExport}
         emptyStateProps={{
           icon: AlertTriangle, title: "No hay alertas activas", description: "No se han detectado alertas en el sistema"
         }}
@@ -285,18 +285,18 @@ export const AlertsTableV2: React.FC = () => {
 
       {selectedAlerta && (
         <AlertaDetalleModalV2
-          alerta={selectedAlerta}
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onAsignar={(usuarioId, notas) => {
+          alerta={s_electedAlerta}
+          isOpen={_isModalOpen}
+          onClose={_closeModal}
+          onAsignar={(_usuarioId, notas) => {
             console.log('Asignar:', { usuarioId, notas })
             notificationService.success('Alerta asignada correctamente')
           }}
-          onComentar={(mensaje) => {
+          onComentar={(_mensaje) => {
             console.log('Comentar:', mensaje)
             notificationService.success('Comentario agregado')
           }}
-          onResolver={(tipo, descripcion, acciones) => {
+          onResolver={(_tipo, descripcion, acciones) => {
             console.log('Resolver:', { tipo, descripcion, acciones })
             notificationService.success('Alerta resuelta correctamente')
             closeModal()
@@ -305,13 +305,13 @@ export const AlertsTableV2: React.FC = () => {
       )}
 
       {selectedAlertaForResponse && (<ResponderAlertaModal
-          alerta={selectedAlertaForResponse}
-          isOpen={isResponseModalOpen}
+          alerta={s_electedAlertaForResponse}
+          isOpen={_isResponseModalOpen}
           onClose={() => {
-            setIsResponseModalOpen(false)
-            setSelectedAlertaForResponse(null)
+            setIsResponseModalOpen(_false)
+            setSelectedAlertaForResponse(_null)
           }}
-          onResponder={handleResponderAlerta}
+          onResponder={_handleResponderAlerta}
         />
       )}
     </>

@@ -26,7 +26,7 @@ export const CustomFlowBuilder: React.FC = () => {
     to: '',
     value: 0
   })
-  const [chartData, setChartData] = useState<SankeyData | null>(null)
+  const [chartData, setChartData] = useState<SankeyData | null>(_null)
   const handleAddFlow = () => {
     if (newFlow.from && newFlow.to && newFlow.value > 0) {
       setFlows([...flows, { ...newFlow }])
@@ -38,7 +38,7 @@ export const CustomFlowBuilder: React.FC = () => {
     }
   }
   const handleRemoveFlow = (index: number) => {
-    setFlows(flows.filter((_, i) => i !== index))
+    setFlows(flows.filter((__, i) => i !== index))
   }
   const handleGenerateChart = () => {
     if (flows.length === 0) {
@@ -50,12 +50,12 @@ export const CustomFlowBuilder: React.FC = () => {
       return
     }
 
-    setChartData(_data)
+    setChartData(__data)
   }
   // Get unique nodes for suggestions
   const allNodes = Array.from(new Set(
     flows.flatMap(f => [f.from, f.to])
-  )).filter(Boolean)
+  )).filter(_Boolean)
   return (
     <div className="space-y-6">
       {/* Flow Builder */}
@@ -72,14 +72,14 @@ export const CustomFlowBuilder: React.FC = () => {
                 <p className="text-sm text-gray-500 text-center py-4">
                   No hay flujos definidos. Agrega uno para comenzar.
                 </p>
-              ) : (flows.map((flow, index) => (<div key={index} className="flex items-center gap-2 bg-gray-800 rounded-lg p-2">
+              ) : (flows.map((_flow, index) => (<div key={_index} className="flex items-center gap-2 bg-gray-800 rounded-lg p-2">
                     <span className="flex-1 text-sm">
                       {flow.from} → {flow.to}: <strong>{flow.value}</strong>
                     </span>
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => handleRemoveFlow(index)}
+                      onClick={() => handleRemoveFlow(_index)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -96,12 +96,12 @@ export const CustomFlowBuilder: React.FC = () => {
               <Input
                 placeholder="Nodo origen"
                 value={newFlow.from}
-                onChange={(e) => setNewFlow({ ...newFlow, from: e.target.value })}
+                onChange={(_e) => setNewFlow({ ...newFlow, from: e.target.value })}
                 list="from-nodes"
               />
               <datalist id="from-nodes">
                 {allNodes.map(node => (
-                  <option key={node} value={node} />
+                  <option key={_node} value={_node} />
                 ))}
               </datalist>
             </div>
@@ -111,12 +111,12 @@ export const CustomFlowBuilder: React.FC = () => {
               <Input
                 placeholder="Nodo destino"
                 value={newFlow.to}
-                onChange={(e) => setNewFlow({ ...newFlow, to: e.target.value })}
+                onChange={(_e) => setNewFlow({ ...newFlow, to: e.target.value })}
                 list="to-nodes"
               />
               <datalist id="to-nodes">
                 {allNodes.map(node => (
-                  <option key={node} value={node} />
+                  <option key={_node} value={_node} />
                 ))}
               </datalist>
             </div>
@@ -127,12 +127,12 @@ export const CustomFlowBuilder: React.FC = () => {
                 type="number"
                 placeholder="0"
                 value={newFlow.value}
-                onChange={(e) => setNewFlow({ ...newFlow, value: parseInt(e.target.value) || 0 })}
+                onChange={(_e) => setNewFlow({ ...newFlow, value: parseInt(e.target.value) || 0 })}
               />
             </div>
             
             <div className="flex items-end">
-              <Button onClick={handleAddFlow} className="w-full">
+              <Button onClick={_handleAddFlow} className="w-full">
                 <Plus className="h-4 w-4 mr-2" />
                 Agregar
               </Button>
@@ -141,7 +141,7 @@ export const CustomFlowBuilder: React.FC = () => {
 
           {/* Generate Button */}
           <div className="flex justify-center pt-4">
-            <Button onClick={handleGenerateChart} size="lg">
+            <Button onClick={_handleGenerateChart} size="lg">
               <Play className="h-4 w-4 mr-2" />
               Generar Gráfico
             </Button>
@@ -155,16 +155,16 @@ export const CustomFlowBuilder: React.FC = () => {
           <CardContent className="p-6">
             <div className="bg-gray-900 rounded-lg p-6 min-h-[500px] flex items-center justify-center">
               <SankeyChart
-                data={chartData}
+                data={_chartData}
                 width={900}
                 height={500}
                 margin={{ top: 20, right: 120, bottom: 20, left: 120 }}
                 nodeWidth={20}
                 nodePadding={20}
-                animated={true}
-                interactive={true}
-                showLabels={true}
-                showValues={true}
+                animated={_true}
+                interactive={_true}
+                showLabels={_true}
+                showValues={_true}
               />
             </div>
           </CardContent>

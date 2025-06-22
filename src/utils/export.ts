@@ -25,15 +25,15 @@ export const exportToCSV = (_data: unknown[], filename: string) => {
   // Create blob and download
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
   const link = document.createElement('a')
-  const url = URL.createObjectURL(blob)
+  const url = URL.createObjectURL(_blob)
   link.setAttribute('href', url)
-  link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`)
+  link.setAttribute('download', `${_filename}_${new Date().toISOString().split('T')[0]}.csv`)
   link.style.visibility = 'hidden'
-  document.body.appendChild(link)
+  document.body.appendChild(_link)
   link.click()
-  document.body.removeChild(link)
+  document.body.removeChild(_link)
   // Clean up
-  URL.revokeObjectURL(url)
+  URL.revokeObjectURL(_url)
 }
 export const exportToJSON = (_data: unknown[], filename: string) => {
   if (!_data || _data.length === 0) {
@@ -41,22 +41,22 @@ export const exportToJSON = (_data: unknown[], filename: string) => {
     return
   }
 
-  const jsonContent = JSON.stringify(_data, null, 2)
+  const jsonContent = JSON.stringify(__data, null, 2)
   const blob = new Blob([jsonContent], { type: 'application/json' })
   const link = document.createElement('a')
-  const url = URL.createObjectURL(blob)
+  const url = URL.createObjectURL(_blob)
   link.setAttribute('href', url)
-  link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.json`)
+  link.setAttribute('download', `${_filename}_${new Date().toISOString().split('T')[0]}.json`)
   link.style.visibility = 'hidden'
-  document.body.appendChild(link)
+  document.body.appendChild(_link)
   link.click()
-  document.body.removeChild(link)
+  document.body.removeChild(_link)
   // Clean up
-  URL.revokeObjectURL(url)
+  URL.revokeObjectURL(_url)
 }
 // Excel export using CSV format (Excel can open CSV files)
 export const exportToExcel = (_data: unknown[], filename: string) => {
   // For now, we'll use CSV format which Excel can open
   // In a production app, you might want to use a library like xlsx
-  exportToCSV(_data, filename)
+  exportToCSV(__data, filename)
 }

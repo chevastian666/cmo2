@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react'
 import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui'
-import {useUserInfo} from '../../../hooks/useAuth'
+import {_useUserInfo} from '../../../hooks/useAuth'
 import { exportToCSV} from '../../../utils/export'
 import { notificationService} from '../../../services/shared/notification.service'
 import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
@@ -15,7 +15,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
   const _userInfo = useUserInfo()
   const _canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamionero(_documento)
+    selectCamionero(__documento)
     return () => clearSelection()
   }, [documento])
   const _handleExportarHistorial = () => {
@@ -36,7 +36,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
     const _nombreArchivo = camioneroSeleccionado 
       ? `historial_${camioneroSeleccionado.nombre}_${camioneroSeleccionado.apellido}_${new Date().toISOString().split('T')[0]}`
       : 'historial_camionero'
-    exportToCSV(datos, nombreArchivo)
+    exportToCSV(_datos, nombreArchivo)
     notificationService.success('Éxito', 'Historial exportado correctamente')
   }
   if (loading || !camioneroSeleccionado) {
@@ -49,7 +49,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={onClose}
+            onClick={_onClose}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-gray-400" />
@@ -71,7 +71,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
         </div>
         
         <button
-          onClick={handleExportarHistorial}
+          onClick={_handleExportarHistorial}
           className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
         >
           <Download className="h-4 w-4" />
@@ -153,7 +153,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   </label>
                   <textarea
                     value={camioneroSeleccionado.comentario || ''}
-                    onChange={(_e) => updateCamionero(documento, { comentario: e.target.value })}
+                    onChange={(__e) => updateCamionero(_documento, { comentario: e.target.value })}
                     placeholder="Agregar comentarios..."
                     className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={4}
@@ -192,8 +192,8 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   <div>
                     <p className="text-sm text-gray-400 mb-2">Rutas frecuentes</p>
                     <div className="space-y-2">
-                      {estadisticasCamionero.rutasFrecuentes.slice(0, 3).map((ruta, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                      {estadisticasCamionero.rutasFrecuentes.slice(0, 3).map((_ruta, idx) => (
+                        <div key={_idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                           <div className="flex items-center gap-2">
                             <Route className="h-4 w-4 text-gray-500" />
                             <span className="text-sm text-white">
@@ -225,7 +225,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {matriculasFrecuentes.map((_matricula) => {
+                  {matriculasFrecuentes.map((__matricula) => {
                     const _estadoConfig = matricula.camion?.estado 
                       ? ESTADOS_CAMION[matricula.camion.estado as keyof typeof ESTADOS_CAMION]
                       : null
@@ -295,7 +295,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                       </tr>
                     </thead>
                     <tbody>
-                      {transitosCamionero.map((_transito) => (
+                      {transitosCamionero.map((__transito) => (
                         <tr key={transito.id} className="border-b border-gray-800 hover:bg-gray-800/50">
                           <td className="py-3 px-4">
                             <div className="text-sm text-white">

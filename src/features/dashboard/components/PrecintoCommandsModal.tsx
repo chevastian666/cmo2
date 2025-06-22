@@ -72,8 +72,8 @@ const COMMANDS: Command[] = [
 export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
   precinto, isOpen, onClose
 }) => {
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
-  const [confirmCommand, setConfirmCommand] = useState<string | null>(null)
+  const [sendingCommand, setSendingCommand] = useState<string | null>(_null)
+  const [confirmCommand, setConfirmCommand] = useState<string | null>(_null)
   // ESC key handler
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
         onClose()
       }
     }
-    if (isOpen) {
+    if (_isOpen) {
       document.addEventListener('keydown', handleEscKey)
     }
 
@@ -98,10 +98,10 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
     }
 
     setSendingCommand(command.id)
-    setConfirmCommand(null)
+    setConfirmCommand(_null)
     try {
       // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      await new Promise(resolve => setTimeout(_resolve, 2000))
       notificationService.success(
         `Comando "${command.name}" enviado al precinto ${precinto.nqr}`
       )
@@ -118,11 +118,11 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
         `Error al enviar comando: ${error instanceof Error ? error.message : 'Error desconocido'}`
       )
     } finally {
-      setSendingCommand(null)
+      setSendingCommand(_null)
     }
   }
   const cancelConfirmation = () => {
-    setConfirmCommand(null)
+    setConfirmCommand(_null)
   }
   if (!isOpen) return null
   return (
@@ -130,7 +130,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div 
           className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" 
-          onClick={onClose}
+          onClick={_onClose}
         />
 
         <div className="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
@@ -146,7 +146,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
                 </p>
               </div>
               <button
-                onClick={onClose}
+                onClick={_onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -188,7 +188,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
           {/* Commands */}
           <div className="p-6">
             <div className="grid grid-cols-2 gap-3">
-              {COMMANDS.map((command) => (<div key={command.id}>
+              {COMMANDS.map((_command) => (<div key={command.id}>
                   {confirmCommand === command.id ? (
                     <div className="bg-gray-700 rounded-lg p-4 border-2 border-red-500">
                       <div className="flex items-center gap-2 mb-2">
@@ -200,13 +200,13 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
                       </p>
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleCommand(command)}
+                          onClick={() => handleCommand(_command)}
                           className="flex-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors"
                         >
                           Confirmar
                         </button>
                         <button
-                          onClick={cancelConfirmation}
+                          onClick={_cancelConfirmation}
                           className="flex-1 px-3 py-1.5 bg-gray-600 hover:bg-gray-500 text-white text-sm rounded transition-colors"
                         >
                           Cancelar
@@ -214,7 +214,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
                       </div>
                     </div>
                   ) : (<button
-                      onClick={() => handleCommand(command)}
+                      onClick={() => handleCommand(_command)}
                       disabled={sendingCommand !== null}
                       className={cn(
                         "w-full bg-gray-700 hover:bg-gray-600 rounded-lg p-4 transition-all",
@@ -260,7 +260,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
 
             {/* Close button */}
             <button
-              onClick={onClose}
+              onClick={_onClose}
               className="w-full mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors"
             >
               Cerrar

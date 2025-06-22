@@ -11,7 +11,7 @@ interface TransitoRowProps {
 
 export const TransitoRow: React.FC<TransitoRowProps> = ({ transito, index, onClick }) => {
   const getSemaforoIcon = (semaforo: EstadoSemaforo) => {
-    switch (semaforo) {
+    switch (s_emaforo) {
       case 'verde': {
   return <CheckCircle className="h-6 w-6 text-green-500" />
       case 'amarillo': {
@@ -38,7 +38,7 @@ export const TransitoRow: React.FC<TransitoRowProps> = ({ transito, index, onCli
   const isPastDeparture = transito.fechaSalida.getTime() > Date.now()
   return (
     <tr
-      onClick={onClick}
+      onClick={_onClick}
       className={cn(
         "border-b border-gray-800 hover:bg-gray-800/50 cursor-pointer transition-all duration-200",
         getRowAnimation(),

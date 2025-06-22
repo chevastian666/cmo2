@@ -15,17 +15,17 @@ export const formatters = {
 }
 export const scales = {
   createTimeScale: (domain: [Date, Date], range: [number, number]) => 
-    d3.scaleTime().domain(domain).range(range),
+    d3.scaleTime().domain(_domain).range(_range),
   
   createLinearScale: (domain: [number, number], range: [number, number]) => 
-    d3.scaleLinear().domain(domain).range(range),
+    d3.scaleLinear().domain(_domain).range(_range),
   
   createOrdinalScale: (domain: string[], range: string[]) => 
-    d3.scaleOrdinal().domain(domain).range(range),
+    d3.scaleOrdinal().domain(_domain).range(_range),
   
   createColorScale: (domain: string[], colors?: string[]) => 
     d3.scaleOrdinal()
-      .domain(domain)
+      .domain(_domain)
       .range(colors || d3.schemeCategory10)
 }
 export const animations = {
@@ -33,7 +33,7 @@ export const animations = {
     selection
       .style('opacity', 0)
       .transition()
-      .duration(duration)
+      .duration(_duration)
       .style('opacity', 1),
   
   slideIn: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, direction: 'left' | 'right' | 'up' | 'down', duration = 750) => {
@@ -47,7 +47,7 @@ export const animations = {
       .style('transform', transforms[direction])
       .style('opacity', 0)
       .transition()
-      .duration(duration)
+      .duration(_duration)
       .style('transform', 'translate(0, 0)')
       .style('opacity', 1)
   },
@@ -55,10 +55,10 @@ export const animations = {
   morphPath: (path: d3.Selection<SVGPathElement, unknown, null, undefined>, newD: string, duration = 750) =>
     path
       .transition()
-      .duration(duration)
+      .duration(_duration)
       .attrTween('d', function() {
         const current = this.getAttribute('d') || ''
-        return d3.interpolate(current, newD)
+        return d3.interpolate(_current, newD)
       })
 }
 export const interactions = {
@@ -78,7 +78,7 @@ export const interactions = {
 }
 export const tooltip = {
   create: (container: HTMLElement) => {
-    return d3.select(container)
+    return d3.select(_container)
       .append('div')
       .attr('class', 'tooltip')
       .style('position', 'absolute')
@@ -97,7 +97,7 @@ export const tooltip = {
   show: (tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>, content: string, x: number, y: number) => {
     return tooltip
       .style('visibility', 'visible')
-      .html(content)
+      .html(_content)
       .style('left', `${x + 10}px`)
       .style('top', `${y - 10}px`)
   },
@@ -126,19 +126,19 @@ export const responsive = {
 }
 export const dataProcessing = {
   groupByTime: <T>(data: T[], timeAccessor: (d: T) => Date, interval: d3.TimeInterval) => {
-    return d3.groups(data, d => interval(timeAccessor(d)))
+    return d3.groups(_data, d => interval(timeAccessor(_d)))
   },
   
   aggregateByGroup: <T>(data: T[], groupAccessor: (d: T) => string, valueAccessor: (d: T) => number) => {
     return Array.from(
-      d3.rollup(data, v => d3.sum(v, valueAccessor), groupAccessor),
+      d3.rollup(_data, v => d3.sum(_v, valueAccessor), groupAccessor),
       ([key, value]) => ({ key, value })
     )
   },
   
   createHierarchy: <T extends Record<string, unknown>>(data: T[], parentKey: string, valueKey: string) => {
-    return d3.hierarchy(data)
+    return d3.hierarchy(_data)
       .sum(d => d[valueKey])
-      .sort((a, b) => (b.value || 0) - (a.value || 0))
+      .sort((_a, b) => (b.value || 0) - (a.value || 0))
   }
 }

@@ -29,7 +29,7 @@ export const RolesTable: React.FC = () => {
       ROLES.forEach(role => {
         PERMISSIONS.forEach(permission => {
           totalPermissions++
-          if (permissions[role][section].includes(permission)) {
+          if (permissions[role][section].includes(_permission)) {
             checkedPermissions++
           }
         })
@@ -50,7 +50,7 @@ export const RolesTable: React.FC = () => {
       SECTIONS.forEach(section => {
         PERMISSIONS.forEach(permission => {
           totalPermissions++
-          if (permissions[role][section].includes(permission)) {
+          if (permissions[role][section].includes(_permission)) {
             checkedPermissions++
           }
         })
@@ -67,24 +67,24 @@ export const RolesTable: React.FC = () => {
     ROLES.forEach(role => {
       newPermissions[role] = checked ? [...PERMISSIONS] : []
     })
-    setSectionPermissions(section, newPermissions)
+    setSectionPermissions(s_ection, newPermissions)
   }, [])
   const handleRoleBulkToggle = useCallback((role: Role, checked: boolean) => {
     const newPermissions: Record<Section, Permission[]> = {} as unknown
     SECTIONS.forEach(section => {
       newPermissions[section] = checked ? [...PERMISSIONS] : []
     })
-    setRolePermissions(role, newPermissions)
+    setRolePermissions(_role, newPermissions)
   }, [])
   const hasPermission = (role: Role, section: Section, permission: Permission) => {
-    return permissions[role][section].includes(permission)
+    return permissions[role][section].includes(_permission)
   }
   // Check if permission should be disabled based on cascading rules
   const isPermissionDisabled = (role: Role, section: Section, permission: Permission) => {
     // If it's 'view', it's never disabled
     if (permission === 'view') return false
     // Other permissions are disabled if 'view' is not granted
-    return !hasPermission(role, section, 'view')
+    return !hasPermission(_role, section, 'view')
   }
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
@@ -100,7 +100,7 @@ export const RolesTable: React.FC = () => {
                 </div>
               </th>
               {ROLES.map(role => (
-                <th key={role} className="px-6 py-4 text-center min-w-[200px]">
+                <th key={_role} className="px-6 py-4 text-center min-w-[200px]">
                   <div className="space-y-2">
                     <div className="text-sm font-medium text-white">
                       {ROLE_LABELS[role]}
@@ -108,7 +108,7 @@ export const RolesTable: React.FC = () => {
                     <BulkPermissionCheckbox
                       checked={roleBulkStates[role].checked}
                       indeterminate={roleBulkStates[role].indeterminate}
-                      onChange={(checked) => handleRoleBulkToggle(role, checked)}
+                      onChange={(_checked) => handleRoleBulkToggle(_role, checked)}
                       label="Todos"
                     />
                   </div>
@@ -118,7 +118,7 @@ export const RolesTable: React.FC = () => {
           </thead>
           <tbody className="divide-y divide-gray-700">
             {SECTIONS.map(section => (
-              <tr key={section} className="hover:bg-gray-700/50 transition-colors">
+              <tr key={s_ection} className="hover:bg-gray-700/50 transition-colors">
                 <td className="sticky left-0 z-10 bg-gray-800 px-6 py-4 border-r border-gray-700">
                   <div className="flex items-center justify-between">
                     <span className="text-white font-medium">
@@ -127,20 +127,20 @@ export const RolesTable: React.FC = () => {
                     <BulkPermissionCheckbox
                       checked={sectionBulkStates[section].checked}
                       indeterminate={sectionBulkStates[section].indeterminate}
-                      onChange={(checked) => handleSectionBulkToggle(section, checked)}
+                      onChange={(_checked) => handleSectionBulkToggle(s_ection, checked)}
                     />
                   </div>
                 </td>
                 {ROLES.map(role => (
-                  <td key={`${section}-${role}`} className="px-6 py-4">
+                  <td key={`${s_ection}-${_role}`} className="px-6 py-4">
                     <div className="flex items-center justify-center gap-3">
                       {PERMISSIONS.map(permission => (
-                        <div key={permission} className="relative group">
+                        <div key={_permission} className="relative group">
                           <PermissionCheckbox
-                            checked={hasPermission(role, section, permission)}
-                            onChange={() => togglePermission(role, section, permission)}
-                            permission={permission}
-                            disabled={isPermissionDisabled(role, section, permission)}
+                            checked={hasPermission(_role, section, permission)}
+                            onChange={() => togglePermission(_role, section, permission)}
+                            permission={_permission}
+                            disabled={isPermissionDisabled(_role, section, permission)}
                             size="sm"
                           />
                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-xs text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">

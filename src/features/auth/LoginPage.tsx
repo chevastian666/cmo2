@@ -18,7 +18,7 @@ export const LoginPage: React.FC = () => {
     }
 
     try {
-      await login(email, password)
+      await login(_email, password)
       // Navigation will be handled by the auth state change
     } catch (err: unknown) {
       setLocalError(err.message || 'Error al iniciar sesión')
@@ -42,11 +42,11 @@ export const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={_handleSubmit}>
           {displayError && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{displayError}</AlertDescription>
+              <AlertDescription>{_displayError}</AlertDescription>
             </Alert>
           )}
 
@@ -59,8 +59,8 @@ export const LoginPage: React.FC = () => {
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={_email}
+                onChange={(_e) => setEmail(e.target.value)}
                 placeholder="usuario@blocktracker.uy"
               />
             </div>
@@ -73,8 +73,8 @@ export const LoginPage: React.FC = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={_password}
+                onChange={(_e) => setPassword(e.target.value)}
                 placeholder="••••••••"
               />
             </div>
@@ -83,7 +83,7 @@ export const LoginPage: React.FC = () => {
           <div>
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={_isLoading}
               className="w-full"
               size="default"
             >

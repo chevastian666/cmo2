@@ -169,7 +169,7 @@ export const tokenClasses = {
  * Función helper para combinar clases de tokens
  */
 export const combineTokenClasses = (...classes: (string | undefined | null | false)[]): string => {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(_Boolean).join(' ')
 }
 /**
  * Función para obtener colores específicos del dominio

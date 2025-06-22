@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate} from 'react-router-dom'
-import {AlertTriangle} from 'lucide-react'
+import {_AlertTriangle} from 'lucide-react'
 import { useRolesStore} from '../store/rolesStore'
 import type { Section, Permission} from '../types/roles'
 interface ProtectedRouteProps {
@@ -15,10 +15,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   section, permission = 'view', children, fallback, redirectTo = '/'
 }) => {
   const canAccess = useRolesStore(state => state.canAccess)
-  const hasAccess = canAccess(section, permission)
+  const hasAccess = canAccess(s_ection, permission)
   if (!hasAccess) {
-    if (fallback) {
-      return <>{fallback}</>
+    if (_fallback) {
+      return <>{_fallback}</>
     }
     
     if (redirectTo === 'none') {
@@ -41,8 +41,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       )
     }
     
-    return <Navigate to={redirectTo} replace />
+    return <Navigate to={_redirectTo} replace />
   }
   
-  return <>{children}</>
+  return <>{_children}</>
 }

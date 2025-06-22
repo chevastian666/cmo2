@@ -26,8 +26,8 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
   if (variant === 'minimal') {
     return (
       <motion.button
-        onClick={onClick}
-        disabled={disabled}
+        onClick={_onClick}
+        disabled={_disabled}
         className={cn(
           "group flex items-center gap-2 rounded-md font-medium transition-all",
           "text-gray-400 hover:text-white",
@@ -48,8 +48,8 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
   if (variant === 'gradient') {
     return (
       <motion.button
-        onClick={onClick}
-        disabled={disabled}
+        onClick={_onClick}
+        disabled={_disabled}
         className={cn(
           "group relative flex items-center gap-2 rounded-lg font-medium",
           "bg-gradient-to-r from-blue-600 to-indigo-600 text-white",
@@ -82,8 +82,8 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
   if (variant === 'glow') {
     return (
       <motion.button
-        onClick={onClick}
-        disabled={disabled}
+        onClick={_onClick}
+        disabled={_disabled}
         className={cn(
           "group relative flex items-center gap-2 rounded-lg font-medium",
           "bg-gray-800 text-blue-400 border border-blue-500/50",
@@ -108,8 +108,8 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
   // Default variant
   return (
     <motion.button
-      onClick={onClick}
-      disabled={disabled}
+      onClick={_onClick}
+      disabled={_disabled}
       className={cn(
         "group relative flex items-center gap-2 rounded-lg font-medium",
         "bg-blue-600 hover:bg-blue-700 text-white",
@@ -168,9 +168,9 @@ export const VerificadoBadge: React.FC<{
         <span className="font-medium text-green-400">Verificada</span>
         {(verificadoPor || fecha) && (
           <span className="text-xs text-green-600">
-            {verificadoPor && `por ${verificadoPor}`}
+            {verificadoPor && `por ${_verificadoPor}`}
             {verificadoPor && fecha && ' • '}
-            {fecha && new Date(fecha).toLocaleDateString()}
+            {fecha && new Date(_fecha).toLocaleDateString()}
           </span>
         )}
       </div>

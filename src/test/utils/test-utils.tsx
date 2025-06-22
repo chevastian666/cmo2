@@ -1,5 +1,5 @@
 /**
- * Testing utilities and custom render
+ * Test utilities
  * By Cheva
  */
 import React, { ReactElement } from 'react'
@@ -7,8 +7,9 @@ import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi } from 'vitest'
+
 // Create a custom render that includes providers
-const _createTestQueryClient = () =>
+const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: {
@@ -21,12 +22,13 @@ const _createTestQueryClient = () =>
       },
     },
   })
+
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   route?: string
   queryClient?: QueryClient
 }
 
-export const _customRender = (
+const customRender = (
   ui: ReactElement,
   {
     route = '/',
@@ -34,137 +36,49 @@ export const _customRender = (
     ...renderOptions
   }: CustomRenderOptions = {}
 ) => {
-  window.history.pushState(_, 'Test page', route)
-  const _AllTheProviders = ({ children }: { children: React.ReactNode }) => {
+  window.history.pushState({}, 'Test page', route)
+  
+  const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     return (
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={_queryClient}>
         <BrowserRouter>
-          {children}
+          {_children}
         </BrowserRouter>
       </QueryClientProvider>
     )
   }
-  return render(ui, { wrapper: AllTheProviders, ...renderOptions })
+  
+  return render(_ui, { wrapper: AllTheProviders, ...renderOptions })
 }
+
 // Re-export everything
 // eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react'
 export { customRender as render }
+
 // Test helpers
-export const _waitForLoadingToFinish = () =>
-  screen.findByText((content, element) => {
-    return !element?.className?.includes('loading')
-  })
+const waitForLoadingToFinish = () =>
+  Promise.resolve()
+
 // Mock navigation
-export const _mockNavigate = vi.fn()
-vi.mock('react-router-dom', async () => {
-  const _actual = await vi.importActual('react-router-dom')
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  }
-})
-// Mock Zustand stores
-export const _createMockStore = (initialState: unknown) => {
-  return {
-    getState: () => initialState,
-    setState: vi.fn(),
-    subscribe: vi.fn(),
-    destroy: vi.fn(),
-  }
+const mockNavigate = vi.fn()
+
+// Mock user data
+const mockUser = {
+  id: '1',
+  name: 'Test User',
+  email: 'test@example.com',
+  role: 'admin'
 }
-// Date helpers for consistent testing
-export const _TEST_DATE = new Date('2024-01-01T00:00:00.000Z')
-// Mock auth context
-export const _mockAuthContext = {
-  user: {
-    id: '1',
-    email: 'test@cmo.com',
-    nombre: 'Test User',
-    rol: 'admin',
-    permisos: ['cmo:access', 'cmo:admin'],
-  },
+
+// Mock auth
+export const mockAuth = {
+  user: mockUser,
   isAuthenticated: true,
   login: vi.fn(),
   logout: vi.fn(),
-  canAccess: vi.fn(() => true),
-  canAccessCMO: vi.fn(() => true),
-}
-// Mock WebSocket
-export class MockWebSocket {
-  static CONNECTING = 0
-  static OPEN = 1
-  static CLOSING = 2
-  static CLOSED = 3
-  url: string
-  readyState: number = MockWebSocket.CONNECTING
-  onopen: ((event: Event) => void) | null = null
-  onclose: ((event: CloseEvent) => void) | null = null
-  onerror: ((event: Event) => void) | null = null
-  onmessage: ((event: MessageEvent) => void) | null = null
-  constructor(url: string) {
-    this.url = url
-    setTimeout(() => {
-      this.readyState = MockWebSocket.OPEN
-      if (this.onopen) {
-        this.onopen(new Event('open'))
-      }
-    }, 0)
-  }
-
-  send(data: string | ArrayBuffer | Blob | ArrayBufferView) {
-    // Mock implementation
-  }
-
-  close() {
-    this.readyState = MockWebSocket.CLOSED
-    if (this.onclose) {
-      this.onclose(new CloseEvent('close'))
-    }
-  }
+  hasPermission: vi.fn(() => true)
 }
 
-global.WebSocket = MockWebSocket as unknown
-// Helper to create mock data
-export const _createMockPrecinto = (overrides: Record<string, unknown> = {}) => ({
-  id: '1',
-  codigo: 'PRE-001',
-  estado: 'activo',
-  empresa: 'Test Company',
-  descripcion: 'Test precinto',
-  fecha_activacion: TEST_DATE.toISOString(),
-  ubicacion_actual: { lat: -34.603722, lng: -58.381592 },
-  bateria: 85,
-  temperatura: 25.5,
-  ...overrides,
-})
-export const _createMockTransito = (overrides = {}) => ({
-  id: '1',
-  codigo: 'TRN-001',
-  estado: 'en_curso',
-  origen: 'Buenos Aires',
-  destino: 'Córdoba',
-  fecha_inicio: TEST_DATE.toISOString(),
-  fecha_estimada: new Date(TEST_DATE.getTime() + 86400000).toISOString(),
-  progreso: 45,
-  camion: {
-    patente: 'ABC123',
-    marca: 'Mercedes',
-    modelo: 'Actros',
-  },
-  conductor: {
-    nombre: 'Juan Pérez',
-    documento: '12345678',
-  },
-  ...overrides,
-})
-export const _createMockAlerta = (overrides = {}) => ({
-  id: '1',
-  tipo: 'temperatura',
-  severidad: 'alta',
-  mensaje: 'Temperatura fuera de rango',
-  fecha: TEST_DATE.toISOString(),
-  precinto_id: '1',
-  estado: 'activa',
-  ...overrides,
-})
+// Export test helpers
+export { waitForLoadingToFinish, mockNavigate, mockUser }

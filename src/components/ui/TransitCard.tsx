@@ -4,7 +4,7 @@ import { cn} from '../../utils/utils'
 import { Card} from './Card'
 import { StatusBadge} from './StatusBadge'
 import { InfoRow} from './InfoRow'
-import {Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
+import {_Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
 export interface TransitInfo {
   id: string
   origin: string
@@ -42,16 +42,16 @@ interface TransitCardProps {
 export const TransitCard: React.FC<TransitCardProps> = ({
   transit, className, onClick, onViewHistory, variant = 'default', showProgress = true
 }) => {
-  const [timeRemaining, setTimeRemaining] = useState<string | null>(null)
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(_null)
   useEffect(() => {
     const updateTimeRemaining = () => {
       setTimeRemaining(calculateTimeRemaining())
     }
     updateTimeRemaining()
-    const interval = setInterval(updateTimeRemaining, 60000); // Update every minute
+    const interval = setInterval(_updateTimeRemaining, 60000); // Update every minute
 
-    return () => clearInterval(interval)
-  }, [transit.status])
+    return () => clearInterval(_interval)
+  }, [calculateTimeRemainingtransit.status])
   const getStatusVariant = (status: TransitInfo['status']): 'success' | 'warning' | 'danger' | 'info' | 'default' => {
     const variants = {
       'in-transit': 'info' as const,
@@ -73,7 +73,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
     return texts[status]
   }
   const formatDate = (date: Date | string) => {
-    const d = date instanceof Date ? date : new Date(date)
+    const d = date instanceof Date ? date : new Date(_date)
     return d.toLocaleString('es-AR', {
       day: '2-digit',
       month: '2-digit',
@@ -95,9 +95,9 @@ export const TransitCard: React.FC<TransitCardProps> = ({
     const days = Math.floor(diff / 86400000)
     const hours = Math.floor((diff % 86400000) / 3600000)
     const minutes = Math.floor((diff % 3600000) / 60000)
-    if (days > 0) return `${days}d ${hours}h`
-    if (hours > 0) return `${hours}h ${minutes}min`
-    return `${minutes}min`
+    if (days > 0) return `${_days}d ${_hours}h`
+    if (hours > 0) return `${_hours}h ${_minutes}min`
+    return `${_minutes}min`
   }
   const getTrafficLightStatus = () => {
     if (transit.status === 'stopped' || transit.status === 'delayed') return 'danger'
@@ -111,7 +111,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
         onClick && 'hover:border-blue-500',
         className
       )}
-      onClick={() => onClick?.(transit)}
+      onClick={() => onClick?.(_transit)}
       variant="elevated"
     >
       {/* Header */}
@@ -147,7 +147,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
               <span className="text-sm font-medium text-gray-300">ETA</span>
             </div>
             <div className="text-right">
-              <p className="text-lg font-semibold text-white">{timeRemaining}</p>
+              <p className="text-lg font-semibold text-white">{_timeRemaining}</p>
               <p className="text-xs text-gray-400">{formatDate(transit.estimatedArrival)}</p>
             </div>
           </div>
@@ -270,7 +270,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
           {transit.vehicle?.plate && (
             <button 
               className="text-sm text-gray-400 hover:text-gray-300 flex items-center gap-1"
-              onClick={(e) => {
+              onClick={(_e) => {
                 e.stopPropagation()
                 onViewHistory?.(transit.vehicle!.plate)
               }}

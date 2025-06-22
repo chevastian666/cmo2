@@ -7,8 +7,8 @@ export const RolesTableSkeleton: React.FC = () => {
         <div className="bg-gray-900/50 border-b border-gray-700 p-6">
           <div className="flex items-center gap-4">
             <div className="w-32 h-6 bg-gray-700 rounded"></div>
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex-1">
+            {[1, 2, 3, 4].map((_i) => (
+              <div key={_i} className="flex-1">
                 <div className="w-24 h-4 bg-gray-700 rounded mx-auto mb-2"></div>
                 <div className="w-16 h-5 bg-gray-700 rounded mx-auto"></div>
               </div>
@@ -17,12 +17,12 @@ export const RolesTableSkeleton: React.FC = () => {
         </div>
         
         {/* Rows */}
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((row) => (<div key={row} className="border-b border-gray-700 p-6">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((_row) => (<div key={_row} className="border-b border-gray-700 p-6">
             <div className="flex items-center gap-4">
               <div className="w-32 h-5 bg-gray-700 rounded"></div>
-              {[1, 2, 3, 4].map((col) => (<div key={col} className="flex-1 flex justify-center gap-2">
-                  {[1, 2, 3, 4].map((perm) => (
-                    <div key={perm} className="w-6 h-6 bg-gray-700 rounded"></div>
+              {[1, 2, 3, 4].map((_col) => (<div key={_col} className="flex-1 flex justify-center gap-2">
+                  {[1, 2, 3, 4].map((_perm) => (
+                    <div key={_perm} className="w-6 h-6 bg-gray-700 rounded"></div>
                   ))}
                 </div>
               ))}

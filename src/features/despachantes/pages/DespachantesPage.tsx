@@ -7,7 +7,7 @@ import { Button} from '@/components/ui/button'
 import { Switch} from '@/components/ui/switch'
 import { notificationService} from '@/services/shared/notification.service'
 export const DespachantesPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(_false)
   const [formData, setFormData] = useState({
     nombre: '',
     razonSocial: '',
@@ -94,7 +94,7 @@ export const DespachantesPage: React.FC = () => {
           <p className="text-gray-400 mt-1">Gestión de despachantes de aduana autorizados</p>
         </div>
         <button 
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowModal(_true)}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
@@ -123,7 +123,7 @@ export const DespachantesPage: React.FC = () => {
         <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
           <p className="text-sm text-gray-400">Tránsitos Totales</p>
           <p className="text-2xl font-semibold text-white mt-1">
-            {despachantes.reduce((sum, d) => sum + d.transitosActivos, 0)}
+            {despachantes.reduce((s_um, d) => sum + d.transitosActivos, 0)}
           </p>
         </div>
       </div>
@@ -158,7 +158,7 @@ export const DespachantesPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {despachantes.map((despachante) => (
+              {despachantes.map((_despachante) => (
                 <tr key={despachante.id} className="hover:bg-gray-700/50 transition-colors">
                   <td className="px-4 py-3">
                     <div>
@@ -221,7 +221,7 @@ export const DespachantesPage: React.FC = () => {
       </div>
 
       {/* Modal Nuevo Despachante */}
-      <Dialog open={showModal} onOpenChange={setShowModal}>
+      <Dialog open={s_howModal} onOpenChange={s_etShowModal}>
         <DialogContent className="bg-gray-900 border-gray-800 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white">Nuevo Despachante</DialogTitle>
@@ -230,11 +230,11 @@ export const DespachantesPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={(e) => {
+          <form onSubmit={(_e) => {
             e.preventDefault()
             // Aquí iría la lógica para guardar el despachante
             notificationService.success('Despachante registrado', `${formData.nombre} ha sido agregado exitosamente`)
-            setShowModal(false)
+            setShowModal(_false)
             // Reset form
             setFormData({
               nombre: '',
@@ -252,7 +252,7 @@ export const DespachantesPage: React.FC = () => {
                 <Input
                   id="nombre"
                   value={formData.nombre}
-                  onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                  onChange={(_e) => setFormData({...formData, nombre: e.target.value})}
                   placeholder="Ej: JUAN PÉREZ GONZÁLEZ"
                   className="mt-1 bg-gray-800 border-gray-700"
                   required
@@ -264,7 +264,7 @@ export const DespachantesPage: React.FC = () => {
                 <Input
                   id="razonSocial"
                   value={formData.razonSocial}
-                  onChange={(e) => setFormData({...formData, razonSocial: e.target.value})}
+                  onChange={(_e) => setFormData({...formData, razonSocial: e.target.value})}
                   placeholder="Ej: PÉREZ GONZÁLEZ Y ASOCIADOS S.A."
                   className="mt-1 bg-gray-800 border-gray-700"
                   required
@@ -276,7 +276,7 @@ export const DespachantesPage: React.FC = () => {
                 <Input
                   id="rut"
                   value={formData.rut}
-                  onChange={(e) => setFormData({...formData, rut: e.target.value})}
+                  onChange={(_e) => setFormData({...formData, rut: e.target.value})}
                   placeholder="Ej: 217894560012"
                   className="mt-1 bg-gray-800 border-gray-700"
                   required
@@ -289,7 +289,7 @@ export const DespachantesPage: React.FC = () => {
                   <Input
                     id="telefono"
                     value={formData.telefono}
-                    onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+                    onChange={(_e) => setFormData({...formData, telefono: e.target.value})}
                     placeholder="Ej: 2908 1234"
                     className="mt-1 bg-gray-800 border-gray-700"
                     required
@@ -302,7 +302,7 @@ export const DespachantesPage: React.FC = () => {
                     id="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(_e) => setFormData({...formData, email: e.target.value})}
                     placeholder="email@ejemplo.com"
                     className="mt-1 bg-gray-800 border-gray-700"
                     required
@@ -315,7 +315,7 @@ export const DespachantesPage: React.FC = () => {
                 <Input
                   id="direccion"
                   value={formData.direccion}
-                  onChange={(e) => setFormData({...formData, direccion: e.target.value})}
+                  onChange={(_e) => setFormData({...formData, direccion: e.target.value})}
                   placeholder="Ej: Rambla 25 de Agosto 123, Montevideo"
                   className="mt-1 bg-gray-800 border-gray-700"
                   required
@@ -327,7 +327,7 @@ export const DespachantesPage: React.FC = () => {
                 <Switch
                   id="activo"
                   checked={formData.activo}
-                  onCheckedChange={(checked) => setFormData({...formData, activo: checked})}
+                  onCheckedChange={(_checked) => setFormData({...formData, activo: checked})}
                 />
               </div>
             </div>
@@ -336,7 +336,7 @@ export const DespachantesPage: React.FC = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowModal(_false)}
                 className="bg-gray-800 border-gray-700"
               >
                 Cancelar
