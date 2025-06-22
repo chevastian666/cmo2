@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { estadisticasService } from '../../../services/estadisticas.service';
-import { QUERY_KEYS } from '../../../config';
+import { useQuery} from '@tanstack/react-query';
+import { estadisticasService} from '../../../services/estadisticas.service';
+import { QUERY_KEYS} from '../../../config';
 
 export const useEstadisticas = () => {
   return useQuery({
@@ -12,16 +12,14 @@ export const useEstadisticas = () => {
 
 export const useHistoricoLecturas = (horas = 24) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ESTADISTICAS, 'lecturas', horas],
-    queryFn: () => estadisticasService.getHistoricoLecturas(horas),
+    queryKey: [QUERY_KEYS.ESTADISTICAS, 'lecturas', horas], queryFn: () => estadisticasService.getHistoricoLecturas(horas),
     refetchInterval: 60000,
   });
 };
 
 export const useRendimiento = () => {
   return useQuery({
-    queryKey: [QUERY_KEYS.ESTADISTICAS, 'rendimiento'],
-    queryFn: () => estadisticasService.getRendimiento(),
+    queryKey: [QUERY_KEYS.ESTADISTICAS, 'rendimiento'], queryFn: () => estadisticasService.getRendimiento(),
     refetchInterval: 60000,
   });
 };

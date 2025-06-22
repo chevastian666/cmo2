@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
-import { Package, Lock, Unlock, Clock, ArrowRight } from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
-import { usePrecintosStore } from '../../../store/store';
-import { AnimatedBadge } from '../../animations/AnimatedComponents';
+import { Lock, Unlock, Clock, ArrowRight} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
+import { usePrecintosStore} from '../../../store/store';
+import { AnimatedBadge} from '../../animations/AnimatedComponents';
 
 export const PendingPrecintosWidget: React.FC = () => {
   const precintos = usePrecintosStore(state => state.precintos);

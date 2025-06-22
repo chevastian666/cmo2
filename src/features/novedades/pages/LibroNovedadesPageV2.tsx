@@ -5,43 +5,31 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import {FileText, Download,TrendingUp, Plus,Filter, Search,Calendar,Clock, AlertCircle,CheckCircle, Eye,MessageSquare, Paperclip, Building2,User,Hash, Activity, ChevronRight,X, Upload, Loader, Star, Bell, Flag} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { FileText, Download, Plus, Filter, Search, Calendar, Clock, AlertCircle, CheckCircle, Eye, MessageSquare, Paperclip, User, ChevronRight, X} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card';
+import { Badge} from '@/components/ui/badge';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Label} from '@/components/ui/label';
+import { Separator} from '@/components/ui/separator';
+import { Textarea} from '@/components/ui/textarea';
+import { Switch} from '@/components/ui/switch';
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
+
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedDiv,
-  AnimatedSpinner
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNovedadesStore } from '@/store/novedadesStore';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+
 import {useUserInfo} from '@/hooks/useAuth';
-import { notificationService } from '@/services/shared/notification.service';
-import { exportToCSV } from '@/utils/export';
-import { cn } from '@/utils/utils';
-import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad } from '../types';
-import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION } from '../types';
-import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight, pulseVariants} from '@/components/animations/AnimationPresets';
+import { notificationService} from '@/services/shared/notification.service';
+import { exportToCSV} from '@/utils/export';
+import { cn} from '@/utils/utils';
+import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad} from '../types';
+import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION} from '../types';
+import { pulseVariants} from '@/components/animations/AnimationPresets';
 
 const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
 
@@ -69,23 +57,32 @@ export const LibroNovedadesPageV2: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas');
   const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set());
   
-  const {novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento} = useNovedadesStore();
+  
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
 
   // Cargar novedades al montar y cuando cambien los filtros
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     fetchNovedades(filtros);
   }, [fetchNovedades, filtros]);
 
   // Guardar filtros en localStorage
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
   }, [filtros]);
 
   // Auto-refresh cada minuto
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     const interval = setInterval(() => {
       fetchNovedades(filtros);
     }, 60000);
@@ -161,8 +158,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
     setFiltros(FILTROS_DEFAULT);
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
           title="Libro de Novedades"
@@ -317,8 +313,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
                 </div>
               ) : filteredNovedades.length === 0 ? (
                 <EmptyState tab={selectedTab} />
-              ) : (
-                <AnimatedList className="space-y-4">
+              ) : (<AnimatedList className="space-y-4">
                   {filteredNovedades.map((novedad, index) => (
                     <NovedadItem
                       key={novedad.id}
@@ -399,8 +394,7 @@ const FilterPanel: React.FC<{
   filtros: FiltrosNovedades;
   onFiltersChange: (filtros: FiltrosNovedades) => void;
   onClear: () => void;
-}> = ({ filtros, onFiltersChange, onClear }) => (
-  <div className="space-y-4">
+}> = ({ filtros, onFiltersChange, onClear }) => (<div className="space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <Label htmlFor="puntoOperacion">Punto de Operación</Label>
@@ -608,8 +602,7 @@ const NovedadItem: React.FC<{
                 )}
 
                 {/* Timeline de seguimientos */}
-                {novedad.seguimientos && novedad.seguimientos.length > 0 && (
-                  <div>
+                {novedad.seguimientos && novedad.seguimientos.length > 0 && (<div>
                     <h5 className="text-sm font-medium text-gray-400 mb-3">Seguimientos</h5>
                     <div className="space-y-3">
                       {novedad.seguimientos.map((seg, idx) => (
@@ -653,8 +646,7 @@ const NovedadItem: React.FC<{
                 )}
 
                 {/* Acciones */}
-                {canEdit && novedad.estado !== 'resuelta' && (
-                  <div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
+                {canEdit && novedad.estado !== 'resuelta' && (<div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
                     <AnimatedButton
                       variant="outline"
                       size="sm"
@@ -749,8 +741,7 @@ const FormularioNovedadModal: React.FC<{
     });
   };
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+  return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Nueva Novedad</DialogTitle>
@@ -869,8 +860,7 @@ const SeguimientoModal: React.FC<{
     }
   };
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+  return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Agregar Seguimiento</DialogTitle>

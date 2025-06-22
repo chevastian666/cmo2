@@ -1,13 +1,8 @@
-import { SHARED_CONFIG, formatApiEndpoint } from '../../config/shared.config';
-import { jwtService } from '../jwt.service';
+import { SHARED_CONFIG, formatApiEndpoint} from '../../config/shared.config';
+import { jwtService} from '../jwt.service';
 import type { 
-  Precinto, 
-  TransitoPendiente, 
-  Alerta, 
-  EstadisticasMonitoreo,
-  Usuario 
-} from '../../types';
-import type { LoginResponse, RefreshTokenResponse } from '../../types/jwt';
+  Precinto, TransitoPendiente, Alerta, EstadisticasMonitoreo, Usuario} from '../../types';
+import type { LoginResponse, RefreshTokenResponse} from '../../types/jwt';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -140,7 +135,7 @@ class SharedApiService {
                   const retryData: ApiResponse<T> = await retryResponse.json();
                   return retryData.data || retryData as T;
                 }
-              } catch (_refreshError) {
+              } catch {
                 // Refresh failed, continue with original error
                 console.error('Token refresh failed:', refreshError);
               }
@@ -165,7 +160,7 @@ class SharedApiService {
         }
         
         return result;
-      } catch (_error) {
+      } catch {
         // If we have retries left and it's a network error, retry
         if (retriesLeft > 0 && (_error instanceof TypeError || (_error as any).code === 'ECONNREFUSED')) {
           console.warn(`Request failed, retrying... (${retriesLeft} retries left)`);
@@ -489,22 +484,22 @@ class SharedApiService {
 
     // Generate mock data based on endpoint
     if (endpoint.includes('/transitos/pendientes')) {
-      const {generateMockTransitos} = await import('../../utils/mockData');
+      
       return generateMockTransitos() as T;
     }
     
     if (endpoint.includes('/precintos/activos')) {
-      const {generateMockPrecintos} = await import('../../utils/mockData');
+      
       return generateMockPrecintos() as T;
     }
     
     if (endpoint.includes('/alertas/activas')) {
-      const {generateMockAlertas} = await import('../../utils/mockData');
+      
       return generateMockAlertas().filter(a => !a.atendida) as T;
     }
     
     if (endpoint.includes('/alertas')) {
-      const {generateMockAlertas} = await import('../../utils/mockData');
+      
       return generateMockAlertas() as T;
     }
     

@@ -1,11 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Ripple Effect Component for enhanced visual feedback
  * By Cheva
  */
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/lib/utils';
 
 interface Ripple {
   x: number;

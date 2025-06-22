@@ -1,6 +1,6 @@
-import {useEffect,  useRef, useCallback} from 'react';
-import { sharedWebSocketService } from '../services/shared/sharedWebSocket.service';
-import { useConnectionStatus } from './useSharedState';
+import {useEffect, useRef, useCallback} from 'react';
+import { sharedWebSocketService} from '../services/shared/sharedWebSocket.service';
+import { useConnectionStatus} from './useSharedState';
 
 interface UseWebSocketOptions {
   onConnect?: () => void;
@@ -10,12 +10,14 @@ interface UseWebSocketOptions {
 }
 
 export function useWebSocket(options: UseWebSocketOptions = {}) {
-  const {onConnect, onDisconnect, onReconnect, autoConnect = true} = options;
+  
   
   const connectionStatus = useConnectionStatus();
   const previousStatus = useRef(connectionStatus);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     if (autoConnect) {
       sharedWebSocketService.connect();
     }
@@ -24,8 +26,10 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
       // Don't disconnect on unmount as other components might be using it
     };
   }, [autoConnect]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     // Handle connection status changes
     if (previousStatus.current !== connectionStatus) {
       switch (connectionStatus) {
@@ -60,16 +64,16 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
 }
 
 // Hook for subscribing to WebSocket events
-export function useWebSocketEvent<T = any>(
-  event: string,
-  handler: (data: T) => void,
+export function useWebSocketEvent<T = unknown>(event: string, handler: (data: T) => void,
   deps: React.DependencyList = []
 ) {
   const handlerRef = useRef(handler);
   handlerRef.current = handler;
+   
 
-  useEffect(() => {
-    const wrappedHandler = (_data: T) => {
+
+    useEffect(() => {
+    const wrappedHandler = (data: T) => {
       handlerRef.current(data);
     };
 
@@ -79,43 +83,37 @@ export function useWebSocketEvent<T = any>(
 }
 
 // Typed event hooks
-export function useTransitUpdates(
-  handler: (data: unknown) => void,
+export function useTransitUpdates(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('transit_update', handler, deps);
-}
+  }
 
-export function usePrecintoUpdates(
-  handler: (data: unknown) => void,
+export function usePrecintoUpdates(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('precinto_update', handler, deps);
 }
 
-export function useAlertUpdates(
-  handler: (data: unknown) => void,
+export function useAlertUpdates(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('alert_new', handler, deps);
 }
 
-export function useSystemUpdates(
-  handler: (data: unknown) => void,
+export function useSystemUpdates(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('system_update', handler, deps);
 }
 
-export function useCMOMessages(
-  handler: (data: unknown) => void,
+export function useCMOMessages(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('cmo_message', handler, deps);
 }
 
-export function useVehicleTracking(
-  handler: (data: unknown) => void,
+export function useVehicleTracking(handler: (data: unknown) => void,
   deps: React.DependencyList = []
 ) {
   useWebSocketEvent('truck_position', handler, deps);

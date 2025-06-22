@@ -2,8 +2,8 @@
  * MSW Request Handlers
  * By Cheva
  */
-import { http, HttpResponse } from 'msw';
-import { faker } from '@faker-js/faker';
+import { http, HttpResponse} from 'msw';
+import { faker} from '@faker-js/faker';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -55,9 +55,9 @@ const generateMockAlerta = () => ({
 
 export const handlers = [
   // Auth endpoints
-  http.post(`${API_URL}/auth/login`, async ({ request }) => {
+  http.post(`${API_URL}/auth/login`, async () => {
     const body = await request.json();
-    const {email, password} = body as { email: string; password: string };
+    const { email } = body as { email: string; password: string };
     
     if (email === 'test@cmo.com' && password === 'test123') {
       return HttpResponse.json({
@@ -107,8 +107,8 @@ export const handlers = [
     });
   }),
 
-  http.post(`${API_URL}/precintos`, async ({ request }) => {
-    const _data = await request.json();
+  http.post(`${API_URL}/precintos`, async () => {
+
     return HttpResponse.json({
       data: {
         ...generateMockPrecinto(),

@@ -5,31 +5,20 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {Plus, Download,Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
+import {Plus, Download, Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react';
+
+import { Input} from '@/components/ui/input';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card';
+
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedSkeleton
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePrecintosStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import { Precinto } from '@/types/precinto';
-import { exportToExcel } from '@/utils/export';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+
+import { cn} from '@/utils/utils';
+import { Precinto} from '@/types/precinto';
+import { exportToExcel} from '@/utils/export';
 
 // KPI Card Component
 const KPICard: React.FC<{
@@ -149,13 +138,15 @@ const PrecintoRow: React.FC<{
 };
 
 const PrecintosPageV2: React.FC = () => {
-  const {precintos, loading, fetchPrecintos, precintosActivos, getPrecintosConAlertas, getPrecintosBajaBateria} = usePrecintosStore();
+  
 
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('todos');
   const [sortBy, setSortBy] = useState('fecha');
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     fetchPrecintos();
   }, [fetchPrecintos]);
 
@@ -211,8 +202,7 @@ const PrecintosPageV2: React.FC = () => {
     console.log('Ver precinto:', precinto);
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
           title="Gestión de Precintos"
@@ -366,8 +356,7 @@ const PrecintosPageV2: React.FC = () => {
                           No se encontraron precintos
                         </td>
                       </tr>
-                    ) : (
-                      <AnimatePresence mode="popLayout">
+                    ) : (<AnimatePresence mode="popLayout">
                         {filteredPrecintos.map((precinto, index) => (
                           <PrecintoRow
                             key={precinto.id}

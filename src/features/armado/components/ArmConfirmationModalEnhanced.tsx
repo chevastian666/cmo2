@@ -1,7 +1,7 @@
 import React from 'react';
-import {X,Package,AlertTriangle,CheckCircle,MapPin,Truck,User,Building,CreditCard,Container, Globe, Home} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { Precinto } from '../../../types';
+import { X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User, Building, Globe, Home} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { Precinto} from '../../../types';
 
 // Import the location names
 const UBICACIONES: Record<string, string> = {
@@ -80,11 +80,7 @@ interface ArmConfirmationModalProps {
 }
 
 export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  precinto,
-  transito
+  isOpen, onClose, onConfirm, precinto, transito
 }) => {
   if (!isOpen || !precinto) return null;
 

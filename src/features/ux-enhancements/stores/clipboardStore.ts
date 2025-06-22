@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { ClipboardEntry, ClipboardContentType } from '../types';
+import { create} from 'zustand';
+import { persist} from 'zustand/middleware';
+import type { ClipboardEntry, ClipboardContentType} from '../types';
 
 interface ClipboardStore {
   history: ClipboardEntry[];
@@ -24,17 +24,9 @@ interface ClipboardStore {
   getEntryById: (id: string) => ClipboardEntry | undefined;
 }
 
-export const useClipboardStore = create<ClipboardStore>()(
-  persist(
+export const useClipboardStore = create<ClipboardStore>()(persist(
     (set, get) => ({
-      history: [],
-      maxHistory: 50,
-      searchQuery: '',
-      selectedType: 'all',
-      isOpen: false,
-      syncStatus: 'idle',
-      
-      addEntry: (entry) => {
+      history: [], maxHistory: 50, searchQuery: '', selectedType: 'all', isOpen: false, syncStatus: 'idle', addEntry: (entry) => {
         const newEntry: ClipboardEntry = {
           ...entry,
           id: crypto.randomUUID(),
@@ -95,7 +87,7 @@ export const useClipboardStore = create<ClipboardStore>()(
       setSyncStatus: (status) => set({ syncStatus: status }),
       
       getFilteredHistory: () => {
-        const {history, searchQuery, selectedType} = get();
+        
         
         return history.filter(entry => {
           // Type filter
@@ -105,7 +97,7 @@ export const useClipboardStore = create<ClipboardStore>()(
           
           // Search filter
           if (searchQuery) {
-            const _query = searchQuery.toLowerCase();
+
             return (
               entry.content.toLowerCase().includes(_query) ||
               entry.tags.some(tag => tag.toLowerCase().includes(_query)) ||
@@ -154,7 +146,7 @@ if (typeof window !== 'undefined') {
             store.clearHistory();
             break;
         }
-      } catch (_error) {
+      } catch {
         console.error('Clipboard sync error:', _error);
       }
     }

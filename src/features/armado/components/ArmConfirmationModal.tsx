@@ -1,17 +1,11 @@
 import React from 'react';
-import {X,Package,AlertTriangle,CheckCircle,MapPin,Truck,User} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Package, AlertTriangle, CheckCircle, MapPin, Truck, User} from 'lucide-react';
+import { cn} from '@/lib/utils';
+import { Button} from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import type { Precinto } from '../../../types';
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
+import type { Precinto} from '../../../types';
 
 interface TransitoFormData {
   matricula: string;
@@ -38,11 +32,7 @@ interface ArmConfirmationModalProps {
 }
 
 export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  precinto,
-  transito
+  isOpen, onClose, onConfirm, precinto, transito
 }) => {
   if (!precinto) return null;
 

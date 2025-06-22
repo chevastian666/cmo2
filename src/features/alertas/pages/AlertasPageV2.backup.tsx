@@ -5,38 +5,25 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {AlertTriangle, Shield,TrendingUp,Clock,Users,CheckCircle, History, Bell,BellOff,Filter, RefreshCw,User,MessageSquare,XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react';
+
+import { Input} from '@/components/ui/input';
+
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Progress} from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedSkeleton,
-  AnimatedDiv
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAlertasStore, usePrecintosStore, useTransitosStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import type { Alerta } from '@/types';
-import { fadeInUp, staggerChildren, scaleIn } from '@/components/animations/AnimationPresets';
-import { HistorialAlertasCriticasModal } from '../components/HistorialAlertasCriticasModal';
-import { VerificarAlertaModalV2 } from '../components/VerificarAlertaModalV2';
-import { VerificarButton, VerificadoBadge } from '../components/VerificarButton';
-import { colors, spacing } from '@/styles/design-tokens';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton, AnimatedDiv} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+
+import { cn} from '@/utils/utils';
+import type { Alerta} from '@/types';
+import { fadeInUp} from '@/components/animations/AnimationPresets';
+import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal';
+import { VerificarAlertaModalV2} from '../components/VerificarAlertaModalV2';
+import { VerificarButton, VerificadoBadge} from '../components/VerificarButton';
 
 // KPI Card mejorado con animaciones
 const KPICard: React.FC<{
@@ -247,8 +234,7 @@ const AlertRow: React.FC<{
       
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center justify-end">
-          {!alerta.atendida ? (
-            <VerificarButton
+          {!alerta.atendida ? (<VerificarButton
               onClick={() => onVerificar(alerta)}
               variant="gradient"
               size="md"
@@ -294,18 +280,20 @@ const StatCard: React.FC<{
 };
 
 const AlertasPageV2: React.FC = () => {
-  const {alertas, alertasActivas, loading, fetchAlertas, fetchAlertasActivas, atenderAlerta, asignarAlerta, filter, setFilter} = useAlertasStore();
+  
 
-  const {precintos} = usePrecintosStore();
-  const {transitos} = useTransitosStore();
+  
+  
 
   const [showHistorialModal, setShowHistorialModal] = useState(false);
   const [showVerificarModal, setShowVerificarModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState('todas');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     fetchAlertas();
     fetchAlertasActivas();
     
@@ -403,8 +391,7 @@ const AlertasPageV2: React.FC = () => {
     }
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
           title="Centro de Gestión de Alarmas"
@@ -619,8 +606,7 @@ const AlertasPageV2: React.FC = () => {
                             </motion.div>
                           </td>
                         </tr>
-                      ) : (
-                        <AnimatePresence mode="popLayout">
+                      ) : (<AnimatePresence mode="popLayout">
                           {filteredAlertas.map((alerta, index) => (
                             <AlertRow
                               key={alerta.id}
@@ -647,8 +633,7 @@ const AlertasPageV2: React.FC = () => {
       />
 
       {/* Modal de verificar */}
-      {selectedAlerta && (
-        <VerificarAlertaModalV2
+      {selectedAlerta && (<VerificarAlertaModalV2
           isOpen={showVerificarModal}
           onClose={() => {
             setShowVerificarModal(false);

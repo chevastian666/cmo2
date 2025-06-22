@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { ComponentType, useEffect, useRef } from 'react';
-import { usePriorityScheduler } from './PriorityProvider';
-import type { RenderPriority } from './types';
+import { usePriorityScheduler} from './PriorityProvider';
+import type { RenderPriority} from './types';
 
 interface WithPriorityOptions {
   priority: RenderPriority;
@@ -11,17 +12,17 @@ interface WithPriorityOptions {
 /**
  * HOC to wrap components with priority scheduling
  */
-export function withPriority<P extends object>(
-  Component: ComponentType<P>,
-  options: WithPriorityOptions
-) {
-  const {priority, fallback, suspense = true} = options;
+
+
+export function withPriority<P extends object>(Component: ComponentType<P>, options: WithPriorityOptions) {
+  
 
   return React.forwardRef<any, P>((props, ref) => {
-    const {schedulePriorityUpdate, cancelUpdate, isPending} = usePriorityScheduler();
+    
     const [shouldRender, setShouldRender] = React.useState(priority === 'immediate');
     const taskIdRef = useRef<string | null>(null);
     const isMountedRef = useRef(true);
+   
 
     useEffect(() => {
       isMountedRef.current = true;
@@ -67,15 +68,14 @@ interface PriorityBoundaryProps {
 }
 
 export const PriorityBoundary: React.FC<PriorityBoundaryProps> = ({
-  priority,
-  children,
-  fallback
+  priority, children, fallback
 }) => {
-  const {schedulePriorityUpdate, cancelUpdate} = usePriorityScheduler();
+  
   const [canRender, setCanRender] = React.useState(priority === 'immediate');
   const taskIdRef = useRef<string | null>(null);
+   
 
-  useEffect(() => {
+    useEffect(() => {
     if (!canRender && priority !== 'immediate') {
       taskIdRef.current = schedulePriorityUpdate(priority, () => {
         setCanRender(true);

@@ -2,9 +2,9 @@
  * Button Component Tests
  * By Cheva
  */
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@/test/utils/test-utils';
-import { Button } from './button';
+import { describe, it, expect, vi} from 'vitest';
+import { render, screen, fireEvent} from '@/test/utils/test-utils';
+import { Button} from './button';
 
 describe('Button', () => {
   it('renders correctly', () => {
@@ -13,7 +13,7 @@ describe('Button', () => {
   });
 
   it('applies variant classes correctly', () => {
-    const {rerender} = render(<Button variant="default">Default</Button>);
+    
     expect(screen.getByRole('button')).toHaveClass('bg-primary');
 
     rerender(<Button variant="destructive">Destructive</Button>);
@@ -24,7 +24,7 @@ describe('Button', () => {
   });
 
   it('applies size classes correctly', () => {
-    const {rerender} = render(<Button size="default">Default</Button>);
+    
     expect(screen.getByRole('button')).toHaveClass('h-10');
 
     rerender(<Button size="sm">Small</Button>);

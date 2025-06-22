@@ -5,15 +5,15 @@
  */
 
 import React from 'react';
-import {Users,Package,Truck,AlertTriangle, Zap, HardDrive,TrendingUp,CreditCard} from 'lucide-react';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useTenantStore } from '@/store/tenantStore';
-import { cn } from '@/utils/utils';
-import { motion } from 'framer-motion';
-import {LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import {Users, Package, Truck, AlertTriangle, Zap, HardDrive, TrendingUp, CreditCard} from 'lucide-react';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Progress} from '@/components/ui/progress';
+import { Badge} from '@/components/ui/badge';
+import { Button} from '@/components/ui/button';
+
+import { cn} from '@/utils/utils';
+import { motion} from 'framer-motion';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
 
 interface UsageMetric {
   label: string;
@@ -25,14 +25,14 @@ interface UsageMetric {
 }
 
 export const UsageOverview: React.FC = () => {
-  const {currentTenant, context} = useTenantStore();
+  
 
   if (!currentTenant || !context) {
     return null;
   }
 
-  const {usage, plan} = currentTenant;
-  const {limits} = context;
+  
+  
 
   const metrics: UsageMetric[] = [
     {
@@ -109,8 +109,7 @@ export const UsageOverview: React.FC = () => {
   const totalOverageCost = Object.values(usage.overage || {})
     .reduce((sum, overage) => sum + overage.cost, 0);
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Usage Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {metrics.map((metric, index) => {

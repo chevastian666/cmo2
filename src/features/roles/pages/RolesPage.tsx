@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {Shield, Save, History, Eye,Users,AlertTriangle} from 'lucide-react';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
-import { RolesTable } from '../components/RolesTable';
-import { RoleCard } from '../components/RoleCard';
-import { ChangeHistory } from '../components/ChangeHistory';
-import { RolesTableSkeleton, RoleCardSkeleton } from '../components/RolesTableSkeleton';
-import { useRolesStore } from '../../../store/rolesStore';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { Role } from '../../../types/roles';
-import { ROLE_LABELS } from '../../../types/roles';
-import { cn } from '../../../utils/utils';
+import {Shield, Save, History, Eye, Users, AlertTriangle} from 'lucide-react';
+import { useMediaQuery} from '../../../hooks/useMediaQuery';
+import { RolesTable} from '../components/RolesTable';
+import { RoleCard} from '../components/RoleCard';
+import { ChangeHistory} from '../components/ChangeHistory';
+import { RolesTableSkeleton, RoleCardSkeleton} from '../components/RolesTableSkeleton';
+import { useRolesStore} from '../../../store/rolesStore';
+
+import type { Role} from '../../../types/roles';
+import { ROLE_LABELS} from '../../../types/roles';
+import { cn} from '../../../utils/utils';
 
 const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
 
 export const RolesPage: React.FC = () => {
-  const {loading, saving, currentUserRole, loadPermissions, savePermissions, setCurrentUserRole} = useRolesStore();
+  
   
   const [showHistory, setShowHistory] = useState(false);
   const [expandedRole, setExpandedRole] = useState<Role | null>(null);
@@ -26,14 +26,17 @@ export const RolesPage: React.FC = () => {
   const isTablet = useMediaQuery('(max-width: 1024px)');
   
   // Load permissions on mount
+   
+
   useEffect(() => {
     loadPermissions();
   }, [loadPermissions]);
   
   // Track changes
+   
+
   useEffect(() => {
-    const unsubscribe = useRolesStore.subscribe(
-      (state) => state.permissions,
+    const unsubscribe = useRolesStore.subscribe((state) => state.permissions,
       () => setHasChanges(true)
     );
     
@@ -44,7 +47,7 @@ export const RolesPage: React.FC = () => {
     try {
       await savePermissions();
       setHasChanges(false);
-    } catch (_error) {
+    } catch {
       // Error is handled in the store
     }
   };
@@ -81,8 +84,7 @@ export const RolesPage: React.FC = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -198,8 +200,7 @@ export const RolesPage: React.FC = () => {
         ) : (
           <RolesTableSkeleton />
         )
-      ) : (
-        <>
+      ) : (<>
           {isMobile || isTablet ? (
             // Mobile/Tablet view - Role cards
             <div className="space-y-4">

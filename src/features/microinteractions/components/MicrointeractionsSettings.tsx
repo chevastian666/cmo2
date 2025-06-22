@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {Volume2, VolumeX, Sparkles,Settings,X} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { asmrSoundService, useASMRSound } from '../services/soundService';
+import {Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { asmrSoundService, useASMRSound} from '../services/soundService';
 
 interface MicrointeractionsConfig {
   animationsEnabled: boolean;
@@ -14,7 +14,7 @@ interface MicrointeractionsConfig {
 
 export const MicrointeractionsSettings: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {config: soundConfig, playHover, playOpen, playClose} = useASMRSound();
+  const { config: soundConfig } = useASMRSound();
   
   const [_config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
@@ -26,6 +26,8 @@ export const MicrointeractionsSettings: React.FC = () => {
   });
 
   // Load config from localStorage
+   
+
   useEffect(() => {
     const saved = localStorage.getItem('microinteractions-config');
     if (saved) {
@@ -70,8 +72,7 @@ export const MicrointeractionsSettings: React.FC = () => {
     }
   };
 
-  return (
-    <>
+  return (<>
       {/* Settings Button */}
       <button
         onClick={handleToggle}
@@ -83,8 +84,7 @@ export const MicrointeractionsSettings: React.FC = () => {
       </button>
 
       {/* Settings Panel */}
-      {isOpen && (
-        <>
+      {isOpen && (<>
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/50 z-50"
@@ -172,8 +172,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                   />
                 </label>
 
-                {config.soundsEnabled && (
-                  <div className="ml-4 space-y-1">
+                {config.soundsEnabled && (<div className="ml-4 space-y-1">
                     <label className="text-xs text-gray-400">Volumen</label>
                     <input
                       type="range"

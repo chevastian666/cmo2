@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {X} from 'lucide-react';
-import { notificationService } from '../../../services/shared/notification.service';
-import { transitosService } from '../services/transitos.service';
-import type { Transito } from '../types';
+import { notificationService} from '../../../services/shared/notification.service';
+import { transitosService} from '../services/transitos.service';
+import type { Transito} from '../types';
 
 interface EditTransitoModalProps {
   isOpen: boolean;
@@ -12,16 +12,14 @@ interface EditTransitoModalProps {
 }
 
 export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
-  isOpen,
-  onClose,
-  transito,
-  onSuccess
+  isOpen, onClose, transito, onSuccess
 }) => {
   const [formData, setFormData] = useState({
     dua: '',
     destino: ''
   });
   const [loading, setLoading] = useState(false);
+   
 
   useEffect(() => {
     if (transito) {
@@ -33,6 +31,8 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
   }, [transito]);
 
   // ESC key handler
+   
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -70,7 +70,7 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
 
       onSuccess?.();
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'

@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
-import { sharedStateService } from '../services/shared/sharedState.service';
+import { sharedStateService} from '../services/shared/sharedState.service';
 
 // Hook to subscribe to entire shared state
 export function useSharedState() {
   const [state, setState] = useState(sharedStateService.getState());
+   
 
   useEffect(() => {
     // Subscribe to state changes
@@ -25,6 +26,7 @@ export function useSharedStateKey<K extends keyof ReturnType<typeof sharedStateS
   key: K
 ): ReturnType<typeof sharedStateService.getState>[K] {
   const [value, setValue] = useState(sharedStateService.getStateValue(key));
+   
 
   useEffect(() => {
     const unsubscribe = sharedStateService.subscribeToKey(key, (newValue) => {

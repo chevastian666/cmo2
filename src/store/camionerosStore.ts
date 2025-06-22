@@ -1,8 +1,8 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
-import { camionerosService } from '../features/camioneros/services/camioneros.service';
-import { notificationService } from '../services/shared/notification.service';
-import type { Camionero, TransitoCamionero, EstadisticasCamionero, FiltrosCamionero, MatriculaFrecuente } from '../features/camioneros/types';
+import { create} from 'zustand';
+import { devtools} from 'zustand/middleware';
+import { camionerosService} from '../features/camioneros/services/camioneros.service';
+import { notificationService} from '../services/shared/notification.service';
+import type { Camionero, TransitoCamionero, EstadisticasCamionero, FiltrosCamionero, MatriculaFrecuente} from '../features/camioneros/types';
 
 interface CamionerosState {
   // Estado
@@ -22,25 +22,16 @@ interface CamionerosState {
   clearSelection: () => void;
 }
 
-export const useCamionerosStore = create<CamionerosState>()(
-  devtools(
-    (set, get) => ({
+export const useCamionerosStore = create<CamionerosState>()(devtools(
+    (set) => ({
       // Estado inicial
-      camioneros: [],
-      camioneroSeleccionado: null,
-      transitosCamionero: [],
-      matriculasFrecuentes: [],
-      estadisticasCamionero: null,
-      loading: false,
-      error: null,
-
-      // Acciones
+      camioneros: [], camioneroSeleccionado: null, transitosCamionero: [], matriculasFrecuentes: [], estadisticasCamionero: null, loading: false, error: null, // Acciones
       fetchCamioneros: async (filtros?: FiltrosCamionero) => {
         set({ loading: true, error: null });
         try {
           const camioneros = await camionerosService.getCamioneros(filtros);
           set({ camioneros, loading: false });
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al cargar camioneros', loading: false });
           notificationService.error('Error', 'No se pudieron cargar los camioneros');
         }
@@ -67,7 +58,7 @@ export const useCamionerosStore = create<CamionerosState>()(
             estadisticasCamionero: estadisticas,
             loading: false
           });
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al cargar información del camionero', loading: false });
           notificationService.error('Error', 'No se pudo cargar la información del camionero');
         }
@@ -82,7 +73,7 @@ export const useCamionerosStore = create<CamionerosState>()(
             loading: false
           }));
           notificationService.success('Éxito', 'Camionero registrado correctamente');
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al crear camionero', loading: false });
           notificationService.error('Error', 'No se pudo registrar el camionero');
         }
@@ -106,7 +97,7 @@ export const useCamionerosStore = create<CamionerosState>()(
             loading: false
           }));
           notificationService.success('Éxito', 'Camionero actualizado correctamente');
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al actualizar camionero', loading: false });
           notificationService.error('Error', 'No se pudo actualizar el camionero');
         }

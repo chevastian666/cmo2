@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {Package, Search, AlertCircle,CheckCircle, Loader} from 'lucide-react';
-import { notificationService } from '../../../services/shared/notification.service';
-import { prearmadoService } from '../services/prearmado.service';
+import { useNavigate} from 'react-router-dom';
+import {Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react';
+import { notificationService} from '../../../services/shared/notification.service';
+import { prearmadoService} from '../services/prearmado.service';
 
 interface PrearmadoFormData {
   viajeId: string;
@@ -68,7 +68,7 @@ export const PrearmadoPage: React.FC = () => {
         setTransitInfo(null);
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados');
       }
-    } catch (_error) {
+    } catch {
       notificationService.error('Error', 'Error al buscar la información del tránsito');
       setTransitInfo(null);
     } finally {
@@ -123,8 +123,7 @@ export const PrearmadoPage: React.FC = () => {
     return type && types[type] ? types[type] : 'Documento';
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
           <Package className="h-8 w-8 text-blue-500" />

@@ -1,6 +1,7 @@
-import { forwardRef } from 'react';
-import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from './button';
-import { cn } from '@/lib/utils';
+/* eslint-disable react-refresh/only-export-components */
+import { forwardRef} from 'react';
+import { Button as ShadcnButton} from './button';
+import { cn} from '@/lib/utils';
 
 export interface ButtonMigrationProps extends ShadcnButtonProps {
   // Additional props to help with migration
@@ -12,8 +13,7 @@ export interface ButtonMigrationProps extends ShadcnButtonProps {
  * Migration helper component that maps common button patterns to shadcn/ui Button
  * This helps maintain compatibility while migrating existing button styles
  */
-export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProps>(
-  ({ className, variant, size, fullWidth, loading, disabled, children, ...props }, ref) => {
+export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProps>(({ className, variant, size, fullWidth, loading, disabled, children, ...props }, ref) => {
     // Map common class patterns to shadcn/ui variants
     let mappedVariant = variant;
     let mappedSize = size;

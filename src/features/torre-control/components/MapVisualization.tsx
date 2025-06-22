@@ -5,15 +5,15 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {MapPin, Navigation, Activity,AlertTriangle,TrendingUp,Clock,Truck} from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { motion, AnimatePresence } from 'framer-motion';
-import type { TransitoTorreControl } from '../types';
-import { cn } from '@/utils/utils';
+import {MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react';
+import { Card} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Progress} from '@/components/ui/progress';
+import { ScrollArea} from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { motion, AnimatePresence} from 'framer-motion';
+import type { TransitoTorreControl} from '../types';
+import { cn} from '@/utils/utils';
 
 interface MapVisualizationProps {
   data: TransitoTorreControl[];
@@ -23,6 +23,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
   const [selectedTab, setSelectedTab] = useState('rutas');
   const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+   
 
   useEffect(() => {
     // Simulate loading delay to ensure proper mounting
@@ -96,8 +97,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
     );
   }
 
-  return (
-    <div className="h-full flex flex-col" style={{ minHeight: '400px' }}>
+  return (<div className="h-full flex flex-col" style={{ minHeight: '400px' }}>
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
         <Navigation className="h-5 w-5 text-blue-400" />
         Visualización de Rutas y Tránsitos
@@ -304,8 +304,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
 
       {/* Selected Transit Details */}
       <AnimatePresence>
-        {selectedTransito && (
-          <motion.div
+        {selectedTransito && (<motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}

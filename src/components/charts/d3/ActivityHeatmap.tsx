@@ -6,8 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { HeatmapData, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
-import { formatters, animations, tooltip } from './utils';
+import { HeatmapData, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
+import { formatters, animations, tooltip} from './utils';
 
 interface ActivityHeatmapProps {
   data: HeatmapData[];
@@ -19,9 +19,7 @@ const DAYS = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
-  data,
-  config: userConfig,
-  onCellClick
+  data, config: userConfig, onCellClick
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,11 +28,14 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+    const resizeObserver = new ResizeObserver(() => {
+      const { width, height } = containerRef.current!.getBoundingClientRect();
       setDimensions({ width: width || 800, height: height || 400 });
     });
 
@@ -48,8 +49,8 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const { width, height } = dimensions;
-    const { margin } = config;
+    
+    
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -206,7 +207,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
 
     const legendAxis = d3.axisBottom(legendScale)
       .ticks(5)
-      .tickFormat(formatters.number as any);
+      .tickFormat(formatters.number);
 
     legend.append('g')
       .attr('transform', `translate(0, ${legendHeight})`)
@@ -274,11 +275,13 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
 
     animations.fadeIn(stats, config.animations.duration + 300);
 
-  }, [data, dimensions, config, onCellClick]);
+  }, [data, config, onCellClick]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     drawHeatmap();
-  }, [drawHeatmap]);
+  }, [drawHeatmap, dimensions]);
 
   return (
     <div 

@@ -62,7 +62,7 @@ export class ScrollPredictor {
   predictNextItems(currentIndex: number, visibleCount: number): number[] {
     const pattern = this.detectPattern();
     const velocity = this.getCurrentVelocity();
-    const acceleration = this.getCurrentAcceleration();
+    // acceleration removed - unused
     
     const predictedItems: number[] = [];
     

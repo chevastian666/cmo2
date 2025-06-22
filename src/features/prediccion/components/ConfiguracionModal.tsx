@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import {X, Save, RotateCcw, Plus, Trash2} from 'lucide-react';
 import { 
-  Card,
-  CardHeader,
-  CardContent,
-  InfoSection
-} from '../../../components/ui';
-import { congestionAnalyzer } from '../utils/congestionAnalyzer';
-import { CONFIGURACION_DEFAULT } from '../types';
-import type { ConfiguracionPrediccion } from '../types';
+  Card, CardHeader, CardContent, InfoSection} from '../../../components/ui';
+import { congestionAnalyzer} from '../utils/congestionAnalyzer';
+import { CONFIGURACION_DEFAULT} from '../types';
+import type { ConfiguracionPrediccion} from '../types';
 
 interface ConfiguracionModalProps {
   isOpen: boolean;
@@ -17,9 +13,7 @@ interface ConfiguracionModalProps {
 }
 
 export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
-  isOpen,
-  onClose,
-  onSave
+  isOpen, onClose, onSave
 }) => {
   const [_config, setConfig] = useState<ConfiguracionPrediccion>(CONFIGURACION_DEFAULT);
   const [nuevoDestino, setNuevoDestino] = useState('');

@@ -52,6 +52,7 @@ export const customRender = (
 };
 
 // Re-export everything
+// eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react';
 export { customRender as render };
 
@@ -139,7 +140,7 @@ export class MockWebSocket {
 global.WebSocket = MockWebSocket as unknown;
 
 // Helper to create mock data
-export const createMockPrecinto = (overrides: Record<string, any> = {}) => ({
+export const createMockPrecinto = (overrides: Record<string, unknown> = {}) => ({
   id: '1',
   codigo: 'PRE-001',
   estado: 'activo',

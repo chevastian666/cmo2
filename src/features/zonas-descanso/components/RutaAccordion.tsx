@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {ChevronDown, ChevronUp,MapPin} from 'lucide-react';
-import type { RutaZonas } from '../data/zonasDescansoData';
+import {ChevronDown, ChevronUp, MapPin} from 'lucide-react';
+import type { RutaZonas} from '../data/zonasDescansoData';
 
 interface RutaAccordionProps {
   rutaData: RutaZonas;
@@ -10,8 +10,7 @@ interface RutaAccordionProps {
 export const RutaAccordion: React.FC<RutaAccordionProps> = ({ rutaData, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+  return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-700 transition-colors"
@@ -30,8 +29,7 @@ export const RutaAccordion: React.FC<RutaAccordionProps> = ({ rutaData, defaultO
         </div>
       </button>
 
-      {isOpen && (
-        <div className="px-6 pb-4 space-y-3 border-t border-gray-700">
+      {isOpen && (<div className="px-6 pb-4 space-y-3 border-t border-gray-700">
           {rutaData.zonas.map((zona, index) => (
             <div
               key={index}

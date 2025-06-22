@@ -1,5 +1,5 @@
-import {useState, useCallback,  useRef, useEffect} from 'react';
-import type { Alert } from '../types/alerts';
+import {useState, useCallback, useRef, useEffect} from 'react';
+import type { Alert} from '../types/alerts';
 
 interface UseInfiniteLoadingProps {
   loadMore: (page: number) => Promise<{
@@ -24,10 +24,7 @@ interface InfiniteLoadingState {
 }
 
 export function useInfiniteLoading({
-  loadMore,
-  threshold = 500,
-  retryDelay = 1000,
-  maxRetries = 3
+  loadMore, threshold = 500, retryDelay = 1000, maxRetries = 3
 }: UseInfiniteLoadingProps) {
   const [state, setState] = useState<InfiniteLoadingState>({
     items: [],
@@ -45,7 +42,10 @@ export function useInfiniteLoading({
   const mountedRef = useRef(true);
 
   // Load initial data
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     mountedRef.current = true;
     loadInitialData();
     
@@ -79,7 +79,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }));
-    } catch (_error) {
+    } catch {
       if (!mountedRef.current) return;
       
       setState(prev => ({
@@ -123,7 +123,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }));
-    } catch (_error) {
+    } catch {
       if (!mountedRef.current) return;
       
       setState(prev => ({
@@ -227,12 +227,14 @@ export function useInfiniteLoading({
 /**
  * Hook for subscribing to real-time alert updates
  */
-export function useAlertSubscription(
-  onNewAlert: (alert: Alert) => void,
+export function useAlertSubscription(onNewAlert: (alert: Alert) => void,
   onUpdateAlert: (id: string, updates: Partial<Alert>) => void,
   onRemoveAlert: (id: string) => void
 ) {
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     // Subscribe to WebSocket or SSE for real-time updates
     const unsubscribe = subscribeToAlertUpdates({
       onNew: onNewAlert,

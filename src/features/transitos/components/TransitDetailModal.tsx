@@ -1,8 +1,8 @@
 import React from 'react';
-import {X,Truck,User,Building,MapPin,Package,Clock,AlertTriangle,Phone} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { TransitStatus } from './TransitStatus';
-import type { Transito } from '../types';
+import { X, Truck, User, Building, MapPin, Clock, AlertTriangle, Phone} from 'lucide-react';
+
+import { TransitStatus} from './TransitStatus';
+import type { Transito} from '../types';
 
 interface TransitDetailModalProps {
   isOpen: boolean;
@@ -11,9 +11,7 @@ interface TransitDetailModalProps {
 }
 
 export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
-  isOpen,
-  onClose,
-  transito
+  isOpen, onClose, transito
 }) => {
   if (!isOpen) return null;
 
@@ -167,8 +165,7 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                 </div>
 
                 {/* Alertas */}
-                {transito.alertas && transito.alertas.length > 0 && (
-                  <div>
+                {transito.alertas && transito.alertas.length > 0 && (<div>
                     <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">
                       Alertas Activas
                     </h3>

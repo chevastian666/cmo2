@@ -4,14 +4,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {Truck, Download,MapPin} from 'lucide-react';
-import { TransitTable } from '../components/TransitTable';
+import { Truck, Download} from 'lucide-react';
+import { TransitTable} from '../components/TransitTable';
 import {TransitFilters} from '../components/TransitFilters';
-import { TransitDetailModalEnhanced as TransitDetailModal } from '../components/TransitoDetailModalEnhanced';
-import { EditTransitoModal } from '../components/EditTransitoModal';
-import { notificationService } from '../../../services/shared/notification.service';
-import { transitosService } from '../services/transitos.service';
-import type { Transito } from '../types';
+
+import { EditTransitoModal} from '../components/EditTransitoModal';
+import { notificationService} from '../../../services/shared/notification.service';
+import { transitosService} from '../services/transitos.service';
+import type { Transito} from '../types';
 
 export const TransitosPage: React.FC = () => {
   const [transitos, setTransitos] = useState<Transito[]>([]);
@@ -65,7 +65,7 @@ export const TransitosPage: React.FC = () => {
       
       setTransitos(response._data);
       setTotalTransitos(response.total);
-    } catch (_error) {
+    } catch {
       console.error('Error loading transitos:', _error);
       notificationService.error('Error', 'No se pudieron cargar los tránsitos');
     } finally {
@@ -74,11 +74,15 @@ export const TransitosPage: React.FC = () => {
   };
 
   // Load data on mount and when pagination/sort changes
+   
+
   useEffect(() => {
     loadTransitos();
   }, [currentPage, itemsPerPage, sortField, sortOrder]);
 
   // Debounced filter loading
+   
+
   useEffect(() => {
     if (filterDebounce) {
       clearTimeout(filterDebounce);
@@ -97,6 +101,8 @@ export const TransitosPage: React.FC = () => {
   }, [filters]);
 
   // Auto-refresh every 30 seconds
+   
+
   useEffect(() => {
     const interval = setInterval(loadTransitos, 30000);
     return () => clearInterval(interval);
@@ -140,7 +146,7 @@ export const TransitosPage: React.FC = () => {
       await transitosService.markDesprecintado(transito.id);
       notificationService.success('Éxito', `Tránsito ${transito.dua} marcado como desprecintado`);
       loadTransitos();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error', 'No se pudo actualizar el tránsito');
     }
   };
@@ -180,8 +186,7 @@ export const TransitosPage: React.FC = () => {
     link.click();
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import type { Role, Section, Permission, PermissionChange } from '../types/roles';
-import { notificationService } from '../services/shared/notification.service';
+import { create} from 'zustand';
+import { devtools, persist} from 'zustand/middleware';
+import type { Role, Section, Permission, PermissionChange} from '../types/roles';
+import { notificationService} from '../services/shared/notification.service';
 
 interface RolesStore {
   // Permissions matrix
@@ -87,17 +87,11 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
   }
 };
 
-export const useRolesStore = create<RolesStore>()(
-  devtools(
+export const useRolesStore = create<RolesStore>()(devtools(
     persist(
       (set, get) => ({
-        permissions: defaultPermissions,
-        currentUserRole: 'God', // Default to God for development
-        permissionHistory: [],
-        loading: false,
-        saving: false,
-
-        updatePermissions: (role, section, permissions) => {
+        permissions: defaultPermissions, currentUserRole: 'God', // Default to God for development
+        permissionHistory: [], loading: false, saving: false, updatePermissions: (role, section, permissions) => {
           const oldPermissions = get().permissions[role][section];
           
           set((state) => ({
@@ -169,12 +163,12 @@ export const useRolesStore = create<RolesStore>()(
         },
 
         canAccess: (section, permission = 'view') => {
-          const {currentUserRole, permissions} = get();
+          
           return permissions[currentUserRole][section].includes(permission);
         },
 
         canAccessForRole: (role, section, permission = 'view') => {
-          const {permissions} = get();
+          
           return permissions[role][section].includes(permission);
         },
 
@@ -190,7 +184,7 @@ export const useRolesStore = create<RolesStore>()(
             // set({ permissions: response.data });
             
             notificationService.success('Permisos cargados correctamente');
-          } catch (_error) {
+          } catch {
             notificationService.error('Error al cargar permisos');
           } finally {
             set({ loading: false });
@@ -208,7 +202,7 @@ export const useRolesStore = create<RolesStore>()(
             // await api.savePermissions(get().permissions);
             
             notificationService.success('Permisos guardados correctamente');
-          } catch (_error) {
+          } catch {
             notificationService.error('Error al guardar permisos');
           } finally {
             set({ saving: false });

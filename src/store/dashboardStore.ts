@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { createStore } from './createStore';
-import type { Layouts } from 'react-grid-layout';
+import { createStore} from './createStore';
+import type { Layouts} from 'react-grid-layout';
 
 interface DashboardState {
   // Layouts guardados
@@ -30,16 +30,10 @@ interface DashboardState {
   updateWidgetSettings: (widgetId: string, settings: unknown) => void;
 }
 
-export const useDashboardStore = createStore<DashboardState>(
-  (set, get) => ({
+export const useDashboardStore = createStore<DashboardState>((set) => ({
     // Estado inicial
-    layouts: null,
-    layoutVersion: 2, // Incrementado para forzar reset
-    editMode: false,
-    visibleWidgets: [],
-    widgetSettings: {},
-    
-    // Acciones
+    layouts: null, layoutVersion: 2, // Incrementado para forzar reset
+    editMode: false, visibleWidgets: [], widgetSettings: {}, // Acciones
     setLayouts: (layouts) => {
       set((state) => {
         state.layouts = layouts;

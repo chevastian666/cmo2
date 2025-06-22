@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import type { Notification, NotificationGroup } from '../../types/notifications';
+import type { Notification, NotificationGroup} from '../../types/notifications';
 
 interface GroupingOptions {
   enabled: boolean;
@@ -31,8 +31,7 @@ export class GroupingService {
     const ungrouped: Notification[] = [];
 
     // Sort notifications by timestamp (newest first)
-    const sortedNotifications = [...notifications].sort(
-      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    const sortedNotifications = [...notifications].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     );
 
     for (const notification of sortedNotifications) {
@@ -137,7 +136,7 @@ export class GroupingService {
    * Extract alert pattern for grouping similar alerts
    */
   private extractAlertPattern(notification: Notification): string | null {
-    const { title, message } = notification;
+    
     
     // Common alert patterns
     const patterns = [

@@ -1,6 +1,6 @@
-import type { Precinto, EventoPrecinto } from '../types/monitoring';
-import { unifiedAPIService } from './api/unified.service';
-import { generateMockPrecinto } from '../utils/mockData';
+import type { Precinto, EventoPrecinto} from '../types/monitoring';
+import { unifiedAPIService} from './api/unified.service';
+import { generateMockPrecinto} from '../utils/mockData';
 
 export interface PrecintoFilters {
   estado?: string;
@@ -21,7 +21,7 @@ export const precintosService = {
       // Use unified API service
       const response = await unifiedAPIService.getPrecintosActivos(filters?.limit || 100);
       return response;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching precintos:', _error);
       // Fallback to mock data
       return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i));
@@ -39,7 +39,7 @@ export const precintosService = {
       const precinto = all.find(p => p.id === id);
       if (!precinto) throw new Error('Precinto not found');
       return precinto;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching precinto:', _error);
       return generateMockPrecinto(parseInt(id) || 1);
     }
@@ -53,7 +53,7 @@ export const precintosService = {
       
       const response = await unifiedAPIService.getPrecintosActivos(10);
       return response;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching precintos activos:', _error);
       return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
     }
@@ -77,7 +77,7 @@ export const precintosService = {
       
       // TODO: Implement real API call when endpoint is available
       return [];
-    } catch (_error) {
+    } catch {
       console.error('Error fetching eventos:', _error);
       return [];
     }
@@ -91,7 +91,7 @@ export const precintosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error activating precinto:', _error);
       return { ...generateMockPrecinto(1), ...precintoData } as Precinto;
     }
@@ -106,7 +106,7 @@ export const precintosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error deactivating precinto:', _error);
     }
   },
@@ -120,7 +120,7 @@ export const precintosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error updating location:', _error);
     }
   },

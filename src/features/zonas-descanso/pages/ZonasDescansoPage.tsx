@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import {MapPin} from 'lucide-react';
-import { zonasDescansoData } from '../data/zonasDescansoData';
-import { RutaAccordion } from '../components/RutaAccordion';
-import { ZonasDescansoSearch } from '../components/ZonasDescansoSearch';
-import { ZonasDescansoStats } from '../components/ZonasDescansoStats';
+import { zonasDescansoData} from '../data/zonasDescansoData';
+import { RutaAccordion} from '../components/RutaAccordion';
+import { ZonasDescansoSearch} from '../components/ZonasDescansoSearch';
+import { ZonasDescansoStats} from '../components/ZonasDescansoStats';
 
 export const ZonasDescansoPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,8 +33,7 @@ export const ZonasDescansoPage: React.FC = () => {
   const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0);
   const totalRutas = zonasDescansoData.length;
 
-  return (
-    <div className="max-w-6xl mx-auto space-y-6">
+  return (<div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center sm:text-left">
         <div className="flex items-center gap-3 justify-center sm:justify-start mb-2">

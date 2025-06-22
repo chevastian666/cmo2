@@ -1,9 +1,9 @@
 import React from 'react';
-import { formatTime24h } from '../../../utils/formatters';
-import type { Precinto } from '../../../types/monitoring';
-import {Battery,MapPin,Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { DataTable, type Column } from '../../../components/DataTable';
+import { formatTime24h} from '../../../utils/formatters';
+import type { Precinto} from '../../../types/monitoring';
+import {Battery, MapPin, Radio, Lock, LockOpen, ShieldAlert} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { DataTable} from '../../../components/DataTable';
 
 interface PrecintosTableProps {
   precintos: Precinto[];

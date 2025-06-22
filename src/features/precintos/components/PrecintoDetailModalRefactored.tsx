@@ -1,22 +1,10 @@
 import React from 'react';
-import {X,MapPin, Battery,Thermometer, Activity,Package,AlertTriangle} from 'lucide-react';
+import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react';
 import { 
-  Card,
-  CardHeader,
-  CardContent,
-  StatusBadge,
-  InfoRow,
-  InfoGrid,
-  InfoSection,
-  Badge,
-  BadgeGroup,
-  Tabs,
-  MapModule,
-  LoadingState
-} from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import { PrecintoStatus, getStatusInfo } from '../types';
-import type { Precinto } from '../../../types';
+  Card, CardHeader, CardContent, StatusBadge, InfoRow, InfoGrid, InfoSection, Badge, BadgeGroup, Tabs, MapModule, LoadingState} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import { getStatusInfo} from '../types';
+import type { Precinto} from '../../../types';
 
 interface PrecintoDetailModalRefactoredProps {
   precinto: Precinto;
@@ -25,9 +13,7 @@ interface PrecintoDetailModalRefactoredProps {
 }
 
 export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactoredProps> = ({
-  precinto,
-  isOpen,
-  onClose
+  precinto, isOpen, onClose
 }) => {
   const [activeTab, setActiveTab] = React.useState('info');
   const statusInfo = getStatusInfo(precinto.estado as unknown);

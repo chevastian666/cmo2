@@ -1,17 +1,8 @@
 import React from 'react';
-import {X,TrendingUp,Truck,Clock,MapPin,User,AlertTriangle} from 'lucide-react';
-import { 
-  Card,
-  CardHeader,
-  CardContent,
-  InfoRow,
-  InfoGrid,
-  InfoSection,
-  Badge,
-  StatusBadge
-} from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import type { CongestionAnalysis } from '../types';
+import {X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react';
+import { Card, CardHeader, CardContent, InfoRow, InfoGrid, InfoSection, StatusBadge} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import type { CongestionAnalysis} from '../types';
 
 interface CongestionDetailModalProps {
   congestion: CongestionAnalysis;
@@ -20,9 +11,7 @@ interface CongestionDetailModalProps {
 }
 
 export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
-  congestion,
-  isOpen,
-  onClose
+  congestion, isOpen, onClose
 }) => {
   if (!isOpen) return null;
 

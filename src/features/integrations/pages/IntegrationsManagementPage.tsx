@@ -5,34 +5,18 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Settings, 
-  Webhook, 
-  MessageSquare, 
-  Ticket, 
-  BarChart3, 
-  Server, 
-  Database,
-  Plus,
-  Play,
-  Pause,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Activity
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Button} from '@/components/ui/button';
+import { Badge} from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { Settings, Webhook, MessageSquare, Ticket, BarChart3, Server, Database, Plus, Play, Pause, Trash2, Activity} from 'lucide-react';
 
-import { webhooksService, WebhookConfig } from '../../../services/integrations/webhooks.service';
-import { chatService, ChatConfig } from '../../../services/integrations/chat.service';
-import { ticketingService, TicketingConfig } from '../../../services/integrations/ticketing.service';
-import { restAPIService, APIEndpoint } from '../../../services/integrations/rest-api.service';
-import { graphQLService } from '../../../services/integrations/graphql.service';
-import { biExportService, BIConnection } from '../../../services/integrations/bi-export.service';
+import { webhooksService, WebhookConfig} from '../../../services/integrations/webhooks.service';
+import { chatService, ChatConfig} from '../../../services/integrations/chat.service';
+import { ticketingService, TicketingConfig} from '../../../services/integrations/ticketing.service';
+import { restAPIService, APIEndpoint} from '../../../services/integrations/rest-api.service';
+
+import { biExportService, BIConnection} from '../../../services/integrations/bi-export.service';
 
 interface IntegrationStats {
   webhooks: {
@@ -76,6 +60,7 @@ const IntegrationsManagementPage: React.FC = () => {
   const [ticketingConfigs, setTicketingConfigs] = useState<TicketingConfig[]>([]);
   const [apiEndpoints, setApiEndpoints] = useState<APIEndpoint[]>([]);
   const [biConnections, setBiConnections] = useState<BIConnection[]>([]);
+   
 
   useEffect(() => {
     loadData();

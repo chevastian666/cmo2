@@ -5,16 +5,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, BellOff } from 'lucide-react';
-import { NotificationCenter } from './NotificationCenter';
-import { notificationService } from '../../services/notifications/notificationService';
+import { motion, AnimatePresence} from 'framer-motion';
+import { Bell, BellOff} from 'lucide-react';
+import { NotificationCenter} from './NotificationCenter';
+import { notificationService} from '../../services/notifications/notificationService';
 import type { 
-  Notification, 
-  NotificationFilter, 
-  NotificationGroup, 
-  NotificationStats 
-} from '../../types/notifications';
+  Notification, NotificationFilter, NotificationGroup, NotificationStats} from '../../types/notifications';
 
 interface NotificationButtonProps {
   className?: string;
@@ -42,7 +38,10 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
   }, [filter]);
 
   // Load notifications on mount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     loadNotifications();
     loadStats();
 
@@ -64,15 +63,14 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
   }, [loadNotifications, loadStats]);
 
   // Reload when filter changes
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     loadNotifications();
   }, [loadNotifications]);
 
-  const handleNotificationAction = async (
-    notificationId: string, 
-    action: string, 
-    payload?: any
-  ) => {
+  const handleNotificationAction = async (notificationId: string, action: string, payload?: unknown) => {
     try {
       await notificationService.handleNotificationAction(notificationId, action, payload);
     } catch (error) {
@@ -95,8 +93,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
   const unreadCount = stats?.unread || 0;
   const hasNotifications = notifications.length > 0;
 
-  return (
-    <>
+  return (<>
       {/* Notification Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
@@ -140,8 +137,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
 
       {/* Notification Center */}
       <AnimatePresence>
-        {isOpen && (
-          <NotificationCenter
+        {isOpen && (<NotificationCenter
             isOpen={isOpen}
             onClose={() => setIsOpen(false)}
             notifications={notifications}

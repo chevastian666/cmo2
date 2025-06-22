@@ -2,11 +2,11 @@
  * Precintos Store Tests
  * By Cheva
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { act, renderHook } from '@testing-library/react';
-import { usePrecintosStore } from '../store';
-import { precintosService } from '@/services/api/precintos.service';
-import { createMockPrecinto } from '@/test/utils/test-utils';
+import { describe, it, expect, beforeEach, vi} from 'vitest';
+import { act} from '@testing-library/react';
+
+import { precintosService} from '@/services/api/precintos.service';
+import { createMockPrecinto} from '@/test/utils/test-utils';
 
 // Mock the service
 vi.mock('@/services/api/precintos.service', () => ({
@@ -22,7 +22,7 @@ vi.mock('@/services/api/precintos.service', () => ({
 describe('PrecintosStore', () => {
   beforeEach(() => {
     // Reset store state
-    const {result} = renderHook(() => usePrecintosStore());
+    
     act(() => {
       result.current.reset();
     });
@@ -33,7 +33,7 @@ describe('PrecintosStore', () => {
 
   describe('Initial State', () => {
     it('has correct initial state', () => {
-      const {result} = renderHook(() => usePrecintosStore());
+      
       
       expect(result.current.precintos).toEqual([]);
       expect(result.current.loading).toBe(false);
@@ -65,7 +65,7 @@ describe('PrecintosStore', () => {
         },
       });
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       expect(result.current.loading).toBe(false);
 
@@ -80,10 +80,10 @@ describe('PrecintosStore', () => {
     });
 
     it('handles fetch error', async () => {
-      const _error = new Error('Network error');
+
       vi.mocked(precintosService.getPrecintos).mockRejectedValue(_error);
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       await act(async () => {
         await result.current.fetchPrecintos();
@@ -95,11 +95,10 @@ describe('PrecintosStore', () => {
     });
 
     it('sets loading state correctly', async () => {
-      vi.mocked(precintosService.getPrecintos).mockImplementation(
-        () => new Promise(resolve => setTimeout(resolve, 100))
+      vi.mocked(precintosService.getPrecintos).mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100))
       );
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       const fetchPromise = act(async () => {
         await result.current.fetchPrecintos();
@@ -122,7 +121,7 @@ describe('PrecintosStore', () => {
         data: newPrecinto,
       });
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       await act(async () => {
         await result.current.addPrecinto({
@@ -139,15 +138,15 @@ describe('PrecintosStore', () => {
     });
 
     it('handles create error', async () => {
-      const _error = new Error('Validation error');
+
       vi.mocked(precintosService.createPrecinto).mockRejectedValue(_error);
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       await act(async () => {
         try {
           await result.current.addPrecinto({ codigo: 'PRE-003' });
-        } catch (_e) {
+        } catch {
           // Expected error
         }
       });
@@ -161,7 +160,7 @@ describe('PrecintosStore', () => {
       const existingPrecinto = createMockPrecinto({ id: '1', estado: 'activo' });
       const updatedPrecinto = { ...existingPrecinto, estado: 'inactivo' };
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       // Set initial state
       act(() => {
@@ -191,7 +190,7 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '3' }),
       ];
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       act(() => {
         result.current.setPrecintos(precintos);
@@ -210,7 +209,7 @@ describe('PrecintosStore', () => {
 
   describe('setFilters', () => {
     it('sets filters and resets pagination', () => {
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       act(() => {
         result.current.setPagination({ page: 3 });
@@ -224,7 +223,7 @@ describe('PrecintosStore', () => {
 
   describe('setPagination', () => {
     it('updates pagination values', () => {
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       act(() => {
         result.current.setPagination({ page: 2, limit: 20 });
@@ -242,7 +241,7 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '2' }),
       ];
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       act(() => {
         result.current.setPrecintos(precintos);
@@ -253,7 +252,7 @@ describe('PrecintosStore', () => {
     });
 
     it('returns undefined for non-existent id', () => {
-      const {result} = renderHook(() => usePrecintosStore());
+      
       const precinto = result.current.getPrecintoById('999');
       expect(precinto).toBeUndefined();
     });
@@ -267,7 +266,7 @@ describe('PrecintosStore', () => {
         createMockPrecinto({ id: '3', estado: 'activo' }),
       ];
 
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       act(() => {
         result.current.setPrecintos(precintos);
@@ -281,7 +280,7 @@ describe('PrecintosStore', () => {
 
   describe('reset', () => {
     it('resets store to initial state', () => {
-      const {result} = renderHook(() => usePrecintosStore());
+      
 
       // Modify state
       act(() => {

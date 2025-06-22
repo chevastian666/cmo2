@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import {Clock,User,MapPin, MoreVertical, Check, Eye, Edit2,MessageSquare, Paperclip,Calendar} from 'lucide-react';
-import { Badge, Card, CardContent } from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
-import type { Novedad } from '../types';
-import { TIPOS_NOVEDAD } from '../types';
+import {Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react';
+import { Badge, Card, CardContent} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
+import type { Novedad} from '../types';
+import { TIPOS_NOVEDAD} from '../types';
 
 interface NovedadCardProps {
   novedad: Novedad;
@@ -18,14 +18,7 @@ interface NovedadCardProps {
 }
 
 export const NovedadCard: React.FC<NovedadCardProps> = ({
-  novedad,
-  onMarcarResuelta,
-  onAgregarSeguimiento,
-  onEditar,
-  onVerDetalles,
-  canEdit = false,
-  isOwner = false,
-  className
+  novedad, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, isOwner = false, className
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const tipoConfig = TIPOS_NOVEDAD[novedad.tipoNovedad];
@@ -98,8 +91,7 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
           </div>
 
           {/* Menu de acciones */}
-          {(canEdit || onVerDetalles) && (
-            <div className="relative">
+          {(canEdit || onVerDetalles) && (<div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="p-1 hover:bg-gray-800 rounded transition-colors"
@@ -107,16 +99,14 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                 <MoreVertical className="h-4 w-4 text-gray-400" />
               </button>
 
-              {showMenu && (
-                <>
+              {showMenu && (<>
                   <div
                     className="fixed inset-0 z-10"
                     onClick={() => setShowMenu(false)}
                   />
                   <div className="absolute right-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-20">
                     <div className="py-1">
-                      {onVerDetalles && (
-                        <button
+                      {onVerDetalles && (<button
                           onClick={() => {
                             onVerDetalles(novedad);
                             setShowMenu(false);
@@ -128,8 +118,7 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                         </button>
                       )}
                       
-                      {canEdit && novedad.estado !== 'resuelta' && onMarcarResuelta && (
-                        <button
+                      {canEdit && novedad.estado !== 'resuelta' && onMarcarResuelta && (<button
                           onClick={() => {
                             onMarcarResuelta(novedad);
                             setShowMenu(false);
@@ -141,8 +130,7 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                         </button>
                       )}
                       
-                      {canEdit && onAgregarSeguimiento && (
-                        <button
+                      {canEdit && onAgregarSeguimiento && (<button
                           onClick={() => {
                             onAgregarSeguimiento(novedad);
                             setShowMenu(false);
@@ -154,8 +142,7 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                         </button>
                       )}
                       
-                      {esEditable() && onEditar && (
-                        <>
+                      {esEditable() && onEditar && (<>
                           <div className="border-t border-gray-700 my-1" />
                           <button
                             onClick={() => {

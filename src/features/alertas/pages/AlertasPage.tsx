@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {AlertTriangle, Shield,TrendingUp,Clock,Users,CheckCircle, History} from 'lucide-react';
-import { AlertsTable } from '../components/AlertsTable';
-import { HistorialAlertasCriticasModal } from '../components/HistorialAlertasCriticasModal';
-import { useAlertasStore } from '../../../store';
+import { AlertTriangle, Shield, TrendingUp, CheckCircle, History} from 'lucide-react';
+import { AlertsTable} from '../components/AlertsTable';
+import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal';
+import { useAlertasStore} from '../../../store';
 
 export const AlertasPage: React.FC = () => {
   const alertas = useAlertasStore(state => state.alertas);
@@ -28,8 +28,7 @@ export const AlertasPage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white">Gestión de Alarmas</h1>

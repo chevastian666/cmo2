@@ -1,4 +1,4 @@
-import { sharedApiService } from '../../../services/shared/sharedApi.service';
+import { sharedApiService} from '../../../services/shared/sharedApi.service';
 
 interface TransitInfo {
   track: string;
@@ -35,7 +35,7 @@ class PrearmadoService {
         `${this.API_BASE}/search?VjeId=${viajeId}&MovId=${movimientoId}`
       );
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error searching transit:', _error);
       return null;
     }

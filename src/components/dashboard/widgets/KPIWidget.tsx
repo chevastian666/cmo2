@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import {TrendingUp,TrendingDown, Minus} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
+import {TrendingUp, TrendingDown, Minus} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
 
 interface KPIWidgetProps {
   title: string;
@@ -20,14 +20,7 @@ interface KPIWidgetProps {
 }
 
 export const KPIWidget: React.FC<KPIWidgetProps> = ({
-  title,
-  value,
-  unit = '',
-  change,
-  trend = 'neutral',
-  icon,
-  color = 'blue',
-  description
+  title, value, unit = '', change, trend = 'neutral', icon, color = 'blue', description
 }) => {
   const colorClasses = {
     blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',

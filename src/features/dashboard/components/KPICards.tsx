@@ -1,7 +1,7 @@
 import React from 'react';
-import {Truck,Package,AlertTriangle,Clock,CheckCircle,TrendingUp,TrendingDown, Minus} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { TransitoPendiente, Alerta } from '../../../types';
+import {Truck, Package, AlertTriangle, Clock, CheckCircle, TrendingUp, TrendingDown, Minus} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { TransitoPendiente, Alerta} from '../../../types';
 
 interface KPICardsProps {
   transitos: TransitoPendiente[];
@@ -110,8 +110,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
     }
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Main KPI Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
         {kpiData.map((kpi, index) => (

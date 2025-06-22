@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ProtectedRoute } from './ProtectedRoute';
+import { ProtectedRoute} from './ProtectedRoute';
 
 // Permission types for better typing
 export type Section = 
@@ -20,11 +20,7 @@ export type Section =
 export type Permission = 'view' | 'create' | 'edit' | 'delete' | 'admin';
 
 // HOC variant for more flexibility
-export function withProtection<P extends object>(
-  Component: React.ComponentType<P>,
-  section: Section,
-  permission: Permission = 'view'
-) {
+export function withProtection<P extends object>(Component: React.ComponentType<P>, section: Section, permission: Permission = 'view') {
   return (props: P) => (
     <ProtectedRoute section={section} permission={permission}>
       <Component {...props} />

@@ -5,7 +5,7 @@
  */
 
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
-import { debounce, throttle } from 'lodash-es';
+import { debounce, throttle} from 'lodash-es';
 
 interface UseDebounceOptions {
   delay?: number;
@@ -21,28 +21,24 @@ interface UseThrottleOptions {
 }
 
 // Debounced callback hook
-export function useDebouncedCallback<T extends (...args: any[]) => any>(
+export function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   options: UseDebounceOptions = {}
 ): T {
-  const {
-    delay = 300,
-    leading = false,
-    trailing = true,
-    maxWait
-  } = options;
+  
 
   const callbackRef = useRef(callback);
   
   // Update callback ref on each render
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     callbackRef.current = callback;
   });
 
   // Create debounced function
-  const debouncedFn = useMemo(
-    () => debounce(
-      (...args: Parameters<T>) => callbackRef.current(...args),
+  const debouncedFn = useMemo(() => debounce((...args: Parameters<T>) => callbackRef.current(...args),
       delay,
       { leading, trailing, maxWait }
     ),
@@ -50,7 +46,10 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
   );
 
   // Cleanup on unmount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     return () => {
       debouncedFn.cancel();
     };
@@ -60,27 +59,24 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
 }
 
 // Throttled callback hook
-export function useThrottledCallback<T extends (...args: any[]) => any>(
+export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   options: UseThrottleOptions = {}
 ): T {
-  const {
-    delay = 100,
-    leading = true,
-    trailing = true
-  } = options;
+  
 
   const callbackRef = useRef(callback);
   
   // Update callback ref on each render
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     callbackRef.current = callback;
   });
 
   // Create throttled function
-  const throttledFn = useMemo(
-    () => throttle(
-      (...args: Parameters<T>) => callbackRef.current(...args),
+  const throttledFn = useMemo(() => throttle((...args: Parameters<T>) => callbackRef.current(...args),
       delay,
       { leading, trailing }
     ),
@@ -88,7 +84,10 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
   );
 
   // Cleanup on unmount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     return () => {
       throttledFn.cancel();
     };
@@ -103,8 +102,10 @@ export function useDebouncedValue<T>(
   delay: number = 300
 ): T {
   const [debouncedValue, setDebouncedValue] = React.useState(value);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
@@ -124,8 +125,10 @@ export function useThrottledValue<T>(
 ): T {
   const [throttledValue, setThrottledValue] = React.useState(value);
   const lastRun = useRef(Date.now());
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const handler = setTimeout(() => {
       if (Date.now() - lastRun.current >= delay) {
         setThrottledValue(value);
@@ -142,19 +145,12 @@ export function useThrottledValue<T>(
 }
 
 // Combined hook for optimized state updates
-export function useOptimizedState<T>(
-  initialValue: T,
-  options: {
+export function useOptimizedState<T>(initialValue: T, options: {
     debounceDelay?: number;
     throttleDelay?: number;
     mode?: 'debounce' | 'throttle';
-  } = {}
-) {
-  const {
-    debounceDelay = 300,
-    throttleDelay = 100,
-    mode = 'debounce'
-  } = options;
+  } = {}) {
+  
 
   const [value, setValue] = React.useState(initialValue);
   const [optimizedValue, setOptimizedValue] = React.useState(initialValue);
@@ -169,7 +165,10 @@ export function useOptimizedState<T>(
       }, { delay: throttleDelay });
 
   // Update optimized value when value changes
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     optimizedSetter(value);
   }, [value, optimizedSetter]);
 
@@ -177,17 +176,13 @@ export function useOptimizedState<T>(
 }
 
 // Batched updates hook
-export function useBatchedUpdates<T>(
-  updateFn: (updates: T[]) => void,
+export function useBatchedUpdates<T>(updateFn: (updates: T[]) => void,
   options: {
     maxBatchSize?: number;
     flushDelay?: number;
   } = {}
 ) {
-  const {
-    maxBatchSize = 100,
-    flushDelay = 50
-  } = options;
+  
 
   const batchRef = useRef<T[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -220,7 +215,10 @@ export function useBatchedUpdates<T>(
   }, [flush, maxBatchSize, flushDelay]);
 
   // Cleanup on unmount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -237,19 +235,22 @@ export function useBatchedUpdates<T>(
 }
 
 // Request animation frame hook
-export function useAnimationFrame(
-  callback: (deltaTime: number) => void,
+export function useAnimationFrame(callback: (deltaTime: number) => void,
   enabled: boolean = true
 ) {
   const requestRef = useRef<number>();
   const previousTimeRef = useRef<number>();
   const callbackRef = useRef(callback);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     if (!enabled) return;
 
     const animate = (time: number) => {

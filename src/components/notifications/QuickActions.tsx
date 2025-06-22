@@ -5,23 +5,14 @@
  */
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence} from 'framer-motion';
 import { 
-  CheckCircle, 
-  Clock, 
-  ArrowUp, 
-  X, 
-  Eye, 
-  MoreHorizontal,
-  Play,
-  Pause,
-  Archive
-} from 'lucide-react';
-import type { Notification } from '../../types/notifications';
+  CheckCircle, Clock, ArrowUp, X, Eye, MoreHorizontal, Archive} from 'lucide-react';
+import type { Notification} from '../../types/notifications';
 
 interface QuickActionsProps {
   notification?: Notification;
-  onAction: (action: string, payload?: any) => void;
+  onAction: (action: string, payload?: unknown) => void;
   compact?: boolean;
   disabled?: boolean;
 }
@@ -41,10 +32,7 @@ const snoozeOptions: SnoozeOption[] = [
 ];
 
 export const QuickActions: React.FC<QuickActionsProps> = ({
-  notification,
-  onAction,
-  compact = false,
-  disabled = false
+  notification, onAction, compact = false, disabled = false
 }) => {
   const [showSnoozeOptions, setShowSnoozeOptions] = useState(false);
   const [showMoreActions, setShowMoreActions] = useState(false);
@@ -96,8 +84,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         )}
 
         {/* Snooze */}
-        {canSnooze && (
-          <div className="relative">
+        {canSnooze && (<div className="relative">
             <button
               onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
               disabled={disabled}
@@ -108,15 +95,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
             </button>
 
             <AnimatePresence>
-              {showSnoozeOptions && (
-                <motion.div
+              {showSnoozeOptions && (<motion.div
                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
                   className="absolute right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-10 min-w-max"
                 >
-                  {snoozeOptions.map((option) => (
-                    <button
+                  {snoozeOptions.map((option) => (<button
                       key={option.duration}
                       onClick={() => handleSnooze(option.duration)}
                       className="block w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
@@ -208,8 +193,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
       )}
 
       {/* Snooze with dropdown */}
-      {canSnooze && (
-        <div className="relative">
+      {canSnooze && (<div className="relative">
           <button
             onClick={() => setShowSnoozeOptions(!showSnoozeOptions)}
             disabled={disabled}
@@ -220,8 +204,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           </button>
 
           <AnimatePresence>
-            {showSnoozeOptions && (
-              <motion.div
+            {showSnoozeOptions && (<motion.div
                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -230,8 +213,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                 <div className="p-2">
                   <div className="text-xs text-gray-400 mb-2">Posponer por:</div>
                   <div className="grid grid-cols-2 gap-1">
-                    {snoozeOptions.map((option) => (
-                      <button
+                    {snoozeOptions.map((option) => (<button
                         key={option.duration}
                         onClick={() => handleSnooze(option.duration)}
                         className="px-2 py-1 text-sm text-gray-300 hover:bg-gray-700 rounded"

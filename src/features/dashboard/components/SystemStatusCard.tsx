@@ -1,6 +1,6 @@
 import React from 'react';
-import {MessageSquare, Database, Server,FileText} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import {MessageSquare, Database, Server, FileText} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface SystemStatusCardProps {
   smsPendientes: number;
@@ -16,10 +16,7 @@ interface SystemStatusCardProps {
 }
 
 export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
-  smsPendientes,
-  dbStats,
-  apiStats,
-  reportesPendientes
+  smsPendientes, dbStats, apiStats, reportesPendientes
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">

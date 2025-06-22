@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {BarChart,Clock,TrendingUp} from 'lucide-react';
-import { Card, CardHeader, CardContent } from '../../../components/ui';
-import { congestionAnalyzer } from '../utils/congestionAnalyzer';
-import { cn } from '../../../utils/utils';
-import type { TransitoTorreControl } from '../../torre-control/types';
-import type { ProyeccionPorHora } from '../types';
+import {BarChart, Clock, TrendingUp} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '../../../components/ui';
+
+import { cn} from '../../../utils/utils';
+import type { TransitoTorreControl} from '../../torre-control/types';
+import type { ProyeccionPorHora} from '../types';
 
 interface ProyeccionTimelineProps {
   transitos: TransitoTorreControl[];
@@ -13,15 +13,14 @@ interface ProyeccionTimelineProps {
 }
 
 export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
-  transitos,
-  className,
-  destinosDestacados = ['TCP', 'Montecon']
+  transitos, className, destinosDestacados = ['TCP', 'Montecon']
 }) => {
   const [proyeccion, setProyeccion] = useState<ProyeccionPorHora[]>([]);
   const [maxCamiones, setMaxCamiones] = useState(0);
+   
 
   useEffect(() => {
-    const _data = congestionAnalyzer.generarProyeccionPorHora(transitos);
+
     setProyeccion(_data);
     
     // Calcular máximo para escala
@@ -84,8 +83,7 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
             <TrendingUp className="h-8 w-8 text-gray-600 mx-auto mb-2" />
             <p className="text-gray-400">No hay datos de proyección disponibles</p>
           </div>
-        ) : (
-          <div className="space-y-6">
+        ) : (<div className="space-y-6">
             {/* Timeline por hora */}
             {proyeccion.map((hora, index) => (
               <div key={index} className="space-y-3">

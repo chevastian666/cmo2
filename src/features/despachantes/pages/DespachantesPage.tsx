@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {Building2,Phone, Mail,MapPin,FileText,Calendar, Plus, X} from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { notificationService } from '@/services/shared/notification.service';
+import { Phone, Mail, MapPin, FileText, Calendar, Plus} from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+import { Button} from '@/components/ui/button';
+import { Switch} from '@/components/ui/switch';
+import { notificationService} from '@/services/shared/notification.service';
 
 export const DespachantesPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -88,8 +88,7 @@ export const DespachantesPage: React.FC = () => {
     }
   ];
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>

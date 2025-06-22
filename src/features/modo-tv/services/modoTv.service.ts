@@ -1,6 +1,6 @@
-import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV } from '../types';
-import { transitosService } from '../../transitos/services/transitos.service';
-import { alertasService } from '../../../services/alertas.service';
+import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types';
+import { transitosService} from '../../transitos/services/transitos.service';
+import { alertasService} from '../../../services/alertas.service';
 
 class ModoTvService {
   private configuracion: ConfiguracionTV = {
@@ -71,7 +71,7 @@ class ModoTvService {
         .slice(0, limite);
       
       return arribos;
-    } catch (_error) {
+    } catch {
       console.error('Error obteniendo próximos arribos:', _error);
       return this.getMockArribos();
     }
@@ -120,7 +120,7 @@ class ModoTvService {
           };
         })
         .slice(0, limite);
-    } catch (_error) {
+    } catch {
       console.error('Error obteniendo alertas, usando datos mock:', _error);
       return this.getMockAlertas().slice(0, limite);
     }
@@ -177,7 +177,7 @@ class ModoTvService {
           return niveles[b.nivel] - niveles[a.nivel];
         })
         .slice(0, limite);
-    } catch (_error) {
+    } catch {
       console.error('Error obteniendo tránsitos críticos:', _error);
       return this.getMockCriticos();
     }

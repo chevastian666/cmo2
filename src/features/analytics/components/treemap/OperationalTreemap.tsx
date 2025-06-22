@@ -5,18 +5,18 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Activity, Layers, Zap, Target } from 'lucide-react';
-import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
-import { usePrecintosStore, useTransitosStore, useAlertasStore } from '@/store/store';
-import type { TreemapData, TreemapNode } from '@/components/charts/treemap/types';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
+import { Badge} from '@/components/ui/badge';
+import { Activity, Layers, Zap, Target} from 'lucide-react';
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
+
+import type { TreemapData, TreemapNode} from '@/components/charts/treemap/types';
 
 export const OperationalTreemap: React.FC = () => {
-  const {precintos} = usePrecintosStore();
-  const {transitos} = useTransitosStore();
-  const {alertas} = useAlertasStore();
+  
+  
+  
   const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview');
 
   const operationalData = useMemo((): TreemapData => {

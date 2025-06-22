@@ -5,27 +5,19 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {BarChart3, Info, Download, Maximize2, Grid3X3,Package,Truck,AlertTriangle,Building} from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import { motion} from 'framer-motion';
+import { Info, Download, Maximize2, Grid3X3, Package, Truck, AlertTriangle, Building} from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { Button} from '@/components/ui/button';
 import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { PrecintosTreemap } from './treemap/PrecintosTreemap';
-import { TransitosTreemap } from './treemap/TransitosTreemap';
-import { AlertasTreemap } from './treemap/AlertasTreemap';
-import { OperationalTreemap } from './treemap/OperationalTreemap';
-import { toast } from '@/hooks/use-toast';
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
+import { PrecintosTreemap} from './treemap/PrecintosTreemap';
+import { TransitosTreemap} from './treemap/TransitosTreemap';
+import { AlertasTreemap} from './treemap/AlertasTreemap';
+import { OperationalTreemap} from './treemap/OperationalTreemap';
+import { toast} from '@/hooks/use-toast';
 
 export const TreemapDashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('precintos');
@@ -138,8 +130,7 @@ export const TreemapDashboard: React.FC = () => {
           </TabsList>
 
           <div className="space-y-4">
-            {Object.entries(tabInfo).map(([key, info]) => (
-              <TabsContent key={key} value={key} className="space-y-4">
+            {Object.entries(tabInfo).map(([key, info]) => (<TabsContent key={key} value={key} className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl font-semibold">{info.title}</h2>

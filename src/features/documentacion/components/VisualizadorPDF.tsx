@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight,FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { LoadingState } from '@/components/ui/LoadingState';
-import { cn } from '../../../utils/utils';
-import type { Documento } from '../types';
-import { TIPOS_DOCUMENTO } from '../types';
+import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, FileText} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '@/components/ui/card';
+import { LoadingState} from '@/components/ui/LoadingState';
+import { cn} from '../../../utils/utils';
+import type { Documento} from '../types';
+import { TIPOS_DOCUMENTO} from '../types';
 
 interface VisualizadorPDFProps {
   documento: Documento | null;
@@ -14,15 +14,12 @@ interface VisualizadorPDFProps {
 }
 
 export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
-  documento,
-  isOpen,
-  onClose,
-  onDescargar
+  documento, isOpen, onClose, onDescargar
 }) => {
   const [zoom, setZoom] = useState(100);
   const [rotation, setRotation] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [fullscreen, setFullscreen] = useState(false);
 

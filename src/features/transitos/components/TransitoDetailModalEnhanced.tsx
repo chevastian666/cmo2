@@ -1,20 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {X,Truck,User,MapPin,Clock,Package,AlertTriangle,CheckCircle,XCircle, Battery,Wifi, Navigation,Calendar, Activity, Shield, Route, Gauge,MessageSquare,FileText,Hash, Camera, Maximize2, Download, Play, Pause,Building,Phone} from 'lucide-react';
-import { 
-  Card,
-  CardHeader,
-  CardContent,
-  StatusBadge,
-  InfoRow,
-  InfoGrid,
-  InfoSection,
-  Badge,
-  BadgeGroup,
-  AlertsPanel
-} from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import { TransitStatus } from './TransitStatus';
-import type { Transito } from '../types';
+import { X, Truck, User, MapPin, Clock, Package, AlertTriangle, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Building, Phone} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import { TransitStatus} from './TransitStatus';
+import type { Transito} from '../types';
 
 
 interface TransitDetailModalProps {
@@ -24,16 +13,15 @@ interface TransitDetailModalProps {
 }
 
 export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
-  isOpen,
-  onClose,
-  transito
+  isOpen, onClose, transito
 }) => {
-  const [mapError, setMapError] = useState(false);
+  const [mapError] = useState(false);
   const [showFullImage, setShowFullImage] = useState(false);
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
   const [isPlayingTimeline, setIsPlayingTimeline] = useState(false);
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
+   
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -54,10 +42,6 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
       };
     }
   }, [isOpen, onClose, transito]);
-
-
-
-
 
 
   const handleTimelineChange = (value: number) => {
@@ -94,6 +78,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
       }, 100); // Update every 100ms
     }
   };
+   
 
   useEffect(() => {
     return () => {
@@ -611,8 +596,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
       </div>
 
       {/* Full Image Modal */}
-      {showFullImage && enhancedTransito.fotoPrecintado && (
-        <>
+      {showFullImage && enhancedTransito.fotoPrecintado && (<>
           <div 
             className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
             onClick={() => setShowFullImage(false)}

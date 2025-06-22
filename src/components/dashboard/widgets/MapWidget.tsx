@@ -61,8 +61,7 @@ const MapPlaceholder: React.FC = () => {
 };
 
 export const MapWidget: React.FC<MapWidgetProps> = ({
-  showControls = false,
-  showLegend = false
+  showControls = false, showLegend = false
 }) => {
   return (
     <div className="h-full w-full flex flex-col">

@@ -14,11 +14,10 @@ interface TreemapChartProps {
 }
 
 export const TreemapChart: React.FC<TreemapChartProps> = ({
-  data,
-  width = 800,
-  height = 600
+  data, width = 800, height = 600
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+   
 
   useEffect(() => {
     if (!svgRef.current || !data) return;
@@ -35,8 +34,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     // Create treemap layout
     d3.treemap()
       .size([width, height])
-      .padding(2)
-      (root);
+      .padding(2)(root);
 
     // Create color scale
     const color = d3.scaleOrdinal(d3.schemeCategory10);

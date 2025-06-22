@@ -21,18 +21,11 @@ interface ParticleTrailProps {
 }
 
 const statusColors = {
-  normal: 'rgba(34, 197, 94, ',
-  alert: 'rgba(251, 191, 36, ',
-  critical: 'rgba(239, 68, 68, '
+  normal: 'rgba(34, 197, 94, ', alert: 'rgba(251, 191, 36, ', critical: 'rgba(239, 68, 68, '
 };
 
 export const ParticleTrail: React.FC<ParticleTrailProps> = ({
-  x,
-  y,
-  isMoving,
-  speed,
-  status,
-  className
+  x, y, isMoving, speed, status, className
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -104,8 +97,10 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
 
     animationRef.current = requestAnimationFrame(updateParticles);
   }, [x, y, isMoving, createParticle]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 

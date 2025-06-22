@@ -5,20 +5,20 @@
  */
 
 import React, { useMemo } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {AlertTriangle,CheckCircle,Clock,TrendingUp} from 'lucide-react';
-import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
-import { transformAlertFlow } from '@/components/charts/sankey/utils/dataTransformers';
-import { useAlertasStore } from '@/store/store';
-import type { AlertFlow } from '@/components/charts/types/sankey.types';
+import { Card, CardContent} from '@/components/ui/card';
+
+import { AlertTriangle, CheckCircle, Clock} from 'lucide-react';
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
+import { transformAlertFlow} from '@/components/charts/sankey/utils/dataTransformers';
+
+import type { AlertFlow} from '@/components/charts/types/sankey.types';
 
 interface AlertFlowAnalysisProps {
   dateRange?: { from: Date; to: Date };
 }
 
 export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange }) => {
-  const {alertas} = useAlertasStore();
+  
 
   // Transform alerts into flow data
   const alertFlowData = useMemo(() => {
@@ -89,8 +89,7 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
     };
   }, [alertas]);
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>

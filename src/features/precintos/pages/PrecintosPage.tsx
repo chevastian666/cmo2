@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {Download, RefreshCw, Plus,XCircle} from 'lucide-react';
-import { PrecintoTable } from '../components/PrecintoTable';
+import {Download, RefreshCw, Plus, XCircle} from 'lucide-react';
+import { PrecintoTable} from '../components/PrecintoTable';
 import {PrecintoFilters} from '../components/PrecintoFilters';
-import { PrecintoDetailModal } from '../components/PrecintoDetailModal';
-import { ErrorBoundary } from '../components/ErrorBoundary';
-import { precintosService } from '../services/precintos.service';
-import { PrecintoStatus } from '../types';
-import type { Precinto, PrecintoFilters as PrecintoFiltersType } from '../types';
+import { PrecintoDetailModal} from '../components/PrecintoDetailModal';
+import { ErrorBoundary} from '../components/ErrorBoundary';
+import { precintosService} from '../services/precintos.service';
+import { PrecintoStatus} from '../types';
+import type { Precinto, PrecintoFilters as PrecintoFiltersType} from '../types';
 
 export const PrecintosPage: React.FC = () => {
   
@@ -21,6 +21,7 @@ export const PrecintosPage: React.FC = () => {
   // Unique empresas and ubicaciones for filters
   const empresas = [...new Set(precintos.map(p => p.empresa).filter(Boolean))] as string[];
   const ubicaciones = [...new Set(precintos.map(p => p.ubicacion).filter(Boolean))] as string[];
+   
 
   useEffect(() => {
     loadPrecintos();
@@ -29,9 +30,9 @@ export const PrecintosPage: React.FC = () => {
   const loadPrecintos = async () => {
     try {
       setLoading(true);
-      const _data = await precintosService.getPrecintos(filters);
+
       setPrecintos(_data);
-    } catch (_error) {
+    } catch {
       console.error('Error loading precintos:', _error);
     } finally {
       setLoading(false);
@@ -85,7 +86,7 @@ export const PrecintosPage: React.FC = () => {
         } else {
           alert('Error al marcar el precinto como roto');
         }
-      } catch (_error) {
+      } catch {
         console.error('Error marking precinto as broken:', _error);
         alert('Error al marcar el precinto como roto');
       }
@@ -107,7 +108,7 @@ export const PrecintosPage: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (_error) {
+    } catch {
       console.error('Error exporting precintos:', _error);
       alert('Error al exportar precintos');
     } finally {
@@ -261,7 +262,7 @@ export const PrecintosPage: React.FC = () => {
       </ErrorBoundary>
     </div>
   );
-  } catch (_error) {
+  } catch {
     console.error('PrecintosPage: Error rendering component:', _error);
     return (
       <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg">

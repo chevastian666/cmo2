@@ -5,13 +5,12 @@
  */
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
 import {TrendingUp, Download, RefreshCw} from 'lucide-react';
 
 const SimpleAnalytics: React.FC = () => {
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -37,10 +36,7 @@ const SimpleAnalytics: React.FC = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
-          { label: 'Flujos Activos', value: '127', change: '+12%', color: 'blue' },
-          { label: 'Volumen Total', value: '45,382', change: '+8%', color: 'green' },
-          { label: 'Eficiencia', value: '94.3%', change: '-2%', color: 'yellow' },
-          { label: 'Alertas Resueltas', value: '89%', change: '+5%', color: 'purple' }
+          { label: 'Flujos Activos', value: '127', change: '+12%', color: 'blue' }, { label: 'Volumen Total', value: '45, 382', change: '+8%', color: 'green' }, { label: 'Eficiencia', value: '94.3%', change: '-2%', color: 'yellow' }, { label: 'Alertas Resueltas', value: '89%', change: '+5%', color: 'purple' }
         ].map((stat, index) => (
           <Card key={index}>
             <CardContent className="p-6">

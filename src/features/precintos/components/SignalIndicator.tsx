@@ -1,6 +1,6 @@
 import React from 'react';
 import {Wifi, WifiOff} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 
 interface SignalIndicatorProps {
   strength?: number;
@@ -9,9 +9,7 @@ interface SignalIndicatorProps {
 }
 
 export const SignalIndicator: React.FC<SignalIndicatorProps> = ({ 
-  strength, 
-  size = 'md',
-  showValue = false 
+  strength, size = 'md', showValue = false 
 }) => {
   if (strength === undefined) {
     return <WifiOff className={cn(

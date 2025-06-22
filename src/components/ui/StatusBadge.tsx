@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'secondary';
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -15,13 +16,7 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
-  children,
-  variant = 'default',
-  size = 'md',
-  className,
-  icon,
-  pulse = false,
-  outline = false
+  children, variant = 'default', size = 'md', className, icon, pulse = false, outline = false
 }) => {
   const variantStyles = {
     default: outline 

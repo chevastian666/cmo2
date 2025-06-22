@@ -1,39 +1,12 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle,CheckCircle, Info,Settings} from 'lucide-react';
+import { motion, AnimatePresence} from 'framer-motion';
+import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react';
 import { 
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedModal,
-  AnimatedBadge,
-  AnimatedSpinner,
-  AnimatedSkeleton,
-  AnimatedProgress,
-  FadeDiv,
-  ScaleDiv,
-  SlideUpDiv,
-  SlideDownDiv
-} from './AnimatedComponents';
+  AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedModal, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton, AnimatedProgress, FadeDiv, ScaleDiv, SlideUpDiv, SlideDownDiv} from './AnimatedComponents';
 import {
-  PageTransition,
-  AnimatedSection,
-  AnimatedHeader,
-  AnimatedTabPanel,
-  AnimatedGrid
-} from './PageTransitions';
+  PageTransition, AnimatedSection, AnimatedHeader, AnimatedTabPanel, AnimatedGrid} from './PageTransitions';
 import {
-  rotateScaleVariants,
-  pulseVariants,
-  shakeVariants,
-  glowVariants,
-  hoverScaleVariants,
-  hoverLiftVariants,
-  alertCriticalVariants,
-  transitMovingVariants,
-  precintoActiveVariants
-} from './AnimationPresets';
+  rotateScaleVariants, pulseVariants, shakeVariants, glowVariants, hoverScaleVariants, hoverLiftVariants, alertCriticalVariants, transitMovingVariants, precintoActiveVariants} from './AnimationPresets';
 
 export const AnimationsDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basics');
@@ -58,8 +31,7 @@ export const AnimationsDemo: React.FC = () => {
     { id: 'domain', label: 'Dominio', icon: Settings }
   ];
 
-  return (
-    <PageTransition variant="fade">
+  return (<PageTransition variant="fade">
       <div className="min-h-screen bg-gray-900 p-8">
         <AnimatedHeader 
           title="Demo de Animaciones con Framer Motion"
@@ -94,8 +66,7 @@ export const AnimationsDemo: React.FC = () => {
         {/* Tabs */}
         <AnimatedSection delay={0.2}>
           <div className="flex gap-2 mb-6 overflow-x-auto">
-            {tabs.map((tab, index) => (
-              <motion.button
+            {tabs.map((tab, index) => (<motion.button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap ${
@@ -394,8 +365,7 @@ export const AnimationsDemo: React.FC = () => {
                 </AnimatedButton>
                 
                 <AnimatePresence mode="wait">
-                  {showGrid && (
-                    <AnimatedGrid className="grid grid-cols-3 gap-4">
+                  {showGrid && (<AnimatedGrid className="grid grid-cols-3 gap-4">
                       {[1, 2, 3, 4, 5, 6].map((item) => (
                         <div
                           key={item}

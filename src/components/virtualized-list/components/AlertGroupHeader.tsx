@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import {ChevronDown, ChevronRight,Calendar,AlertTriangle,MapPin, Shield} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { GroupingOptions } from '../types/virtualization';
+import {ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { GroupingOptions} from '../types/virtualization';
 
 interface AlertGroupHeaderProps {
   groupKey: string;
@@ -14,13 +14,7 @@ interface AlertGroupHeaderProps {
 }
 
 export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
-  groupKey,
-  groupValue,
-  count,
-  isExpanded,
-  onToggle,
-  groupBy,
-  style
+  groupKey, groupValue, count, isExpanded, onToggle, groupBy, style
 }) => {
   const getIcon = () => {
     switch (groupBy) {

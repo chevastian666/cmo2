@@ -1,13 +1,6 @@
-import { 
-  UBICACIONES_URUGUAY, 
-  TIPO_CARGA, 
-  ESTADO_PRECINTO,
-  TIPO_PRECINTO,
-  TIPO_ALERTA,
-  SEVERIDAD_ALERTA
-} from '../constants';
-import { DESPACHANTES } from '../constants/locations';
-import type { Precinto, TransitoPendiente, Alerta } from '../types';
+import { UBICACIONES_URUGUAY, TIPO_CARGA, ESTADO_PRECINTO, SEVERIDAD_ALERTA} from '../constants';
+import { DESPACHANTES} from '../constants/locations';
+import type { Precinto, TransitoPendiente, Alerta} from '../types';
 
 export const generateMockPrecinto = (index: number): Precinto => {
   const estados = Object.values(ESTADO_PRECINTO);

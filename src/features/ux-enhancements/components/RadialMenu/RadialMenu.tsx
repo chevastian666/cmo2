@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { cn } from '../../../../utils/utils';
-import type { RadialMenuProps, RadialMenuAction } from '../../types';
-import { useRadialMenuStore } from '../../stores/radialMenuStore';
-import { useHotkeys } from '../../hooks/useHotkeys';
+import { motion, AnimatePresence, useAnimation} from 'framer-motion';
+import { cn} from '../../../../utils/utils';
+import type { RadialMenuProps, RadialMenuAction} from '../../types';
+
+import { useHotkeys} from '../../hooks/useHotkeys';
 
 const RADIUS = {
   small: 80,
@@ -30,21 +30,13 @@ const ANIMATION_PRESETS = {
 };
 
 export const RadialMenu: React.FC<RadialMenuProps> = ({
-  actions,
-  position,
-  isOpen,
-  onClose,
-  customizable = true,
-  gestureEnabled = true,
-  context,
-  size = 'medium',
-  animationPreset = 'smooth'
+  actions, position, isOpen, onClose, customizable = true, gestureEnabled = true, context, size = 'medium', animationPreset = 'smooth'
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const controls = useAnimation();
-  const {settings, updateSettings, canUseAction} = useRadialMenuStore();
+  
 
   // Filter actions based on permissions
   const availableActions = actions.filter(action => 
@@ -74,7 +66,10 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
   };
 
   // Handle click outside
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         onClose();
@@ -88,7 +83,10 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
   }, [isOpen, onClose]);
 
   // Keyboard navigation
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -199,7 +197,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
 
           {/* Action buttons */}
           {sortedActions.map((action, index) => {
-            const {x, y} = getActionPosition(index);
+            
             const isSelected = selectedAction === action.id;
             const isFavorite = settings.favoriteActions.includes(action.id);
 

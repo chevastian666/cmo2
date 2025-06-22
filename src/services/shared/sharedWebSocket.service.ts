@@ -1,5 +1,5 @@
-import { SHARED_CONFIG } from '../../config/shared.config';
-import { jwtService } from '../jwt.service';
+import { SHARED_CONFIG} from '../../config/shared.config';
+import { jwtService} from '../jwt.service';
 
 type EventCallback = (data: unknown) => void;
 type ConnectionCallback = (status: 'connected' | 'disconnected' | 'reconnecting') => void;
@@ -60,7 +60,7 @@ export class SharedWebSocketService {
       this.ws = new WebSocket(this.url);
       this.setupEventListeners();
       this.updateConnectionState('reconnecting');
-    } catch (_error) {
+    } catch {
       console.error('WebSocket connection error:', error);
       // Fall back to simulation mode
       if (SHARED_CONFIG.IS_DEVELOPMENT) {
@@ -102,7 +102,7 @@ export class SharedWebSocketService {
       try {
         const message = JSON.parse(event.data);
         this.handleMessage(message);
-      } catch (_error) {
+      } catch {
         console.error('Failed to parse WebSocket message:', error);
       }
     };
@@ -120,8 +120,8 @@ export class SharedWebSocketService {
     };
   }
 
-  private handleMessage(message: unknown): void {
-    const {type, data, id, timestamp} = message;
+  private handleMessage(): void {
+    
 
     // Handle system messages
     switch (type) {
@@ -213,7 +213,7 @@ export class SharedWebSocketService {
     if (this.isConnected() && this.isAuthenticated) {
       try {
         this.ws!.send(JSON.stringify(message));
-      } catch (_error) {
+      } catch {
         console.error('Failed to send message:', error);
         this.queueMessage(message);
       }
@@ -240,7 +240,7 @@ export class SharedWebSocketService {
     for (const message of messages) {
       try {
         this.ws!.send(JSON.stringify(message));
-      } catch (_error) {
+      } catch {
         if (message.retries < 3) {
           message.retries++;
           this.messageQueue.push(message);
@@ -309,7 +309,7 @@ export class SharedWebSocketService {
     this.globalListeners.forEach(callback => {
       try {
         callback({ type: event, data });
-      } catch (_error) {
+      } catch {
         console.error('Error in global event listener:', error);
       }
     });

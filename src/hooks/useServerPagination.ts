@@ -24,7 +24,7 @@ interface PaginationParams {
   pageSize: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   search?: string;
 }
 
@@ -43,7 +43,7 @@ interface PaginationState {
   pageSize: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  filters: Record<string, any>;
+  filters: Record<string, unknown>;
   search: string;
 }
 
@@ -151,7 +151,10 @@ export function useServerPagination<T>({
   });
 
   // Handle errors
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (isError && error && onError) {
       onError(error as Error);
     }
@@ -203,7 +206,7 @@ export function useServerPagination<T>({
   }, []);
 
   // Filtering
-  const setFilter = useCallback((key: string, value: any) => {
+  const setFilter = useCallback((key: string, value: unknown) => {
     setState(prev => ({
       ...prev,
       filters: { ...prev.filters, [key]: value },
@@ -211,7 +214,7 @@ export function useServerPagination<T>({
     }));
   }, []);
 
-  const setFilters = useCallback((filters: Record<string, any>) => {
+  const setFilters = useCallback((filters: Record<string, unknown>) => {
     setState(prev => ({
       ...prev,
       filters,
@@ -267,7 +270,10 @@ export function useServerPagination<T>({
   }, [pageSize]);
 
   // Cleanup on unmount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();

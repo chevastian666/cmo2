@@ -5,25 +5,21 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {Download,Filter,TrendingUp,TrendingDown,MapPin,Package,Truck, AlertCircle, RefreshCw} from 'lucide-react';
-import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { Download, TrendingUp, MapPin, Package, Truck, AlertCircle, RefreshCw} from 'lucide-react';
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
 import { 
-  transformLogisticsFlow, 
-  transformPrecintoLifecycle,
-  transformAlertFlow,
-  transformTimeBasedFlow
-} from '@/components/charts/sankey/utils/dataTransformers';
-import { useTransitosStore } from '@/store/store';
-import { motion } from 'framer-motion';
-import { toast } from '@/hooks/use-toast';
+  transformLogisticsFlow, transformPrecintoLifecycle, transformAlertFlow, transformTimeBasedFlow} from '@/components/charts/sankey/utils/dataTransformers';
+
+import { motion} from 'framer-motion';
+import { toast} from '@/hooks/use-toast';
 
 export const LogisticsFlowChart: React.FC = () => {
-  const {transitos} = useTransitosStore();
+  
   const [timeRange, setTimeRange] = useState('week');
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes');
   const [loading, setLoading] = useState(false);
@@ -148,8 +144,7 @@ export const LogisticsFlowChart: React.FC = () => {
     });
   };
 
-  return (
-    <Card className="w-full">
+  return (<Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>

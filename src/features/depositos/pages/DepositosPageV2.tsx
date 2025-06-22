@@ -5,44 +5,31 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {Plus, Search,Filter, Download, Building2,MapPin,Phone,Clock,Package,TrendingUp, AlertCircle, Edit2, Eye,X, ChevronDown, ChevronUp,Building,Hash,Users, Activity,Calendar, Zap, Map, Info} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
+import { Plus, Search, Filter, Download, Building2, MapPin, Phone, Clock, Package, Edit2, Eye, X, Hash, Activity, Map} from 'lucide-react';
+
+import { Input} from '@/components/ui/input';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Label} from '@/components/ui/label';
+import { Separator} from '@/components/ui/separator';
+import { Progress} from '@/components/ui/progress';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedDiv,
-  AnimatedSpinner,
-  AnimatedSkeleton
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useDepositosStore } from '@/store/useDepositosStore';
-import { exportToCSV } from '@/utils/export';
-import { cn } from '@/utils/utils';
-import type { Deposito, DepositoFilters, DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
-import { DepositoDetailModal } from '../components/DepositoDetailModal';
-import { DepositoFormModal } from '../components/DepositoFormModal';
-import { InteractiveMap } from '@/components/maps/InteractiveMap';
-import type { MapMarker } from '@/components/maps/InteractiveMap';
-import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+
+import { exportToCSV} from '@/utils/export';
+import { cn} from '@/utils/utils';
+import type { Deposito, DepositoFilters} from '../types';
+import { DepositoDetailModal} from '../components/DepositoDetailModal';
+import { DepositoFormModal} from '../components/DepositoFormModal';
+import { InteractiveMap} from '@/components/maps/InteractiveMap';
+import type { MapMarker} from '@/components/maps/InteractiveMap';
+import { staggerItem, fadeInUp} from '@/components/animations/AnimationPresets';
 
 export const DepositosPageV2: React.FC = () => {
-  const {depositos, loading, addDeposito, updateDeposito} = useDepositosStore();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
@@ -254,8 +241,7 @@ export const DepositosPageV2: React.FC = () => {
 
               {/* Expanded Filters */}
               <AnimatePresence>
-                {showFilters && (
-                  <motion.div
+                {showFilters && (<motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -375,8 +361,7 @@ export const DepositosPageV2: React.FC = () => {
         </AnimatedSection>
 
         {/* Modals */}
-        {showDetail && selectedDeposito && (
-          <DepositoDetailModal
+        {showDetail && selectedDeposito && (<DepositoDetailModal
             deposito={selectedDeposito}
             isOpen={showDetail}
             onClose={() => setShowDetail(false)}
@@ -387,8 +372,7 @@ export const DepositosPageV2: React.FC = () => {
           />
         )}
 
-        {showForm && (
-          <DepositoFormModal
+        {showForm && (<DepositoFormModal
             deposito={editingDeposito}
             isOpen={showForm}
             onClose={() => setShowForm(false)}
@@ -461,8 +445,7 @@ const DepositosTable: React.FC<{
     );
   }
 
-  return (
-    <Card>
+  return (<Card>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -493,8 +476,7 @@ const DepositosTable: React.FC<{
             </thead>
             <tbody className="divide-y divide-gray-700">
               <AnimatePresence>
-                {depositos.map((deposito, index) => (
-                  <React.Fragment key={deposito.id}>
+                {depositos.map((deposito, index) => (<React.Fragment key={deposito.id}>
                     <motion.tr
                       variants={fadeInUp}
                       initial="hidden"
@@ -666,10 +648,8 @@ const DepositosGrid: React.FC<{
     );
   }
 
-  return (
-    <AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {depositos.map((deposito, index) => (
-        <AnimatedCard
+  return (<AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {depositos.map((deposito, index) => (<AnimatedCard
           key={deposito.id}
           variants={staggerItem}
           whileHover={{ y: -8, scale: 1.02 }}
@@ -788,8 +768,7 @@ const DepositosMap: React.FC<{
     }
   }));
 
-  return (
-    <InteractiveMap
+  return (<InteractiveMap
       markers={markers}
       height="600px"
       showControls={true}

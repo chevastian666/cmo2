@@ -1,5 +1,6 @@
-import React, { useEffect, useState, Profiler, ProfilerOnRenderCallback } from 'react';
-import {Activity, Zap,Clock,TrendingUp} from 'lucide-react';
+ 
+import React, { useEffect, useState } from 'react';
+import {Activity, Zap, Clock, TrendingUp} from 'lucide-react';
 
 interface RenderMetric {
   id: string;
@@ -21,7 +22,7 @@ interface PerformanceStats {
 }
 
 export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }) => {
-  const [metrics, setMetrics] = useState<RenderMetric[]>([]);
+  const [metrics] = useState<RenderMetric[]>([]);
   const [stats, setStats] = useState<PerformanceStats>({
     fps: 60,
     renderCount: 0,
@@ -31,6 +32,8 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
   });
 
   // FPS monitoring
+   
+
   useEffect(() => {
     let frameCount = 0;
     let lastTime = performance.now();
@@ -56,6 +59,8 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
   }, []);
 
   // Memory monitoring
+   
+
   useEffect(() => {
     const measureMemory = () => {
       if ('memory' in performance && (performance as unknown).memory) {
@@ -69,44 +74,8 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
     return () => clearInterval(interval);
   }, []);
 
-  const onRender: ProfilerOnRenderCallback = (
-    id,
-    phase,
-    actualDuration,
-    baseDuration,
-    startTime,
-    commitTime,
-    interactions
-  ) => {
-    const metric: RenderMetric = {
-      id,
-      phase,
-      actualDuration,
-      baseDuration,
-      startTime,
-      commitTime,
-      interactions
-    };
-
-    setMetrics(prev => {
-      const newMetrics = [...prev.slice(-49), metric]; // Keep last 50
-      
-      // Calculate stats
-      const renderCount = newMetrics.length;
-      const avgRenderTime = newMetrics.reduce((sum, m) => sum + m.actualDuration, 0) / renderCount;
-      const slowRenders = newMetrics.filter(m => m.actualDuration > 16).length;
-      
-      setStats(prevStats => ({
-        ...prevStats,
-        renderCount,
-        avgRenderTime,
-        slowRenders,
-        droppedFrames: prevStats.droppedFrames + (actualDuration > 16 ? 1 : 0)
-      }));
-
-      return newMetrics;
-    });
-  };
+  // onRender callback removed - not currently used
+  // Could be reactivated when wrapping components with React.Profiler
 
   if (!show) return null;
 
@@ -206,12 +175,9 @@ interface ProfiledComponentProps {
 }
 
 export const ProfiledComponent: React.FC<ProfiledComponentProps> = ({ 
-  id, 
-  children, 
-  onRender 
+  id, children, onRender 
 }) => {
-  return (
-    <Profiler id={id} onRender={onRender || (() => {})}>
+  return (<Profiler id={id} onRender={onRender || (() => {})}>
       {children}
     </Profiler>
   );

@@ -1,12 +1,13 @@
+ 
 /**
  * Componentes de transición de página con Framer Motion
  * By Cheva
  */
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
-import { transitions } from './AnimationPresets';
+import { motion, AnimatePresence} from 'framer-motion';
+import { useLocation} from 'react-router-dom';
+import { transitions} from './AnimationPresets';
 
 // ==========================================
 // VARIANTES DE TRANSICIÓN DE PÁGINA
@@ -80,9 +81,7 @@ interface PageTransitionProps {
 }
 
 export const PageTransition: React.FC<PageTransitionProps> = ({ 
-  children, 
-  variant = 'slide',
-  className = ""
+  children, variant = 'slide', className = ""
 }) => {
   const location = useLocation();
   
@@ -119,9 +118,7 @@ interface AnimatedSectionProps {
 }
 
 export const AnimatedSection: React.FC<AnimatedSectionProps> = ({ 
-  children, 
-  delay = 0,
-  className = "" 
+  children, delay = 0, className = "" 
 }) => {
   return (
     <motion.section
@@ -152,9 +149,7 @@ interface AnimatedHeaderProps {
 }
 
 export const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({ 
-  title, 
-  subtitle,
-  className = "" 
+  title, subtitle, className = "" 
 }) => {
   return (
     <motion.div className={`mb-6 ${className}`}>
@@ -190,8 +185,7 @@ interface AnimatedLayoutProps {
 }
 
 export const AnimatedLayout: React.FC<AnimatedLayoutProps> = ({ 
-  children, 
-  sidebar 
+  children, sidebar 
 }) => {
   return (
     <div className="flex h-screen bg-gray-900">
@@ -229,9 +223,7 @@ interface AnimatedTabPanelProps {
 }
 
 export const AnimatedTabPanel: React.FC<AnimatedTabPanelProps> = ({ 
-  children, 
-  isActive,
-  className = "" 
+  children, isActive, className = "" 
 }) => {
   return (
     <AnimatePresence mode="wait">
@@ -261,20 +253,15 @@ interface AnimatedGridProps {
 }
 
 export const AnimatedGrid: React.FC<AnimatedGridProps> = ({ 
-  children, 
-  className = "",
-  staggerDelay = 0.05
+  children, className = "", staggerDelay = 0.05
 }) => {
-  return (
-    <motion.div
+  return (<motion.div
       className={className}
       initial="hidden"
       animate="visible"
       variants={{
-        hidden: { opacity: 0 },
-        visible: {
-          opacity: 1,
-          transition: {
+        hidden: { opacity: 0 }, visible: {
+          opacity: 1, transition: {
             staggerChildren: staggerDelay
           }
         }

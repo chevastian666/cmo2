@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { unifiedAPIService } from '../../../services/api/unified.service';
-import type { TransitoTorreControl } from '../types';
+import { unifiedAPIService} from '../../../services/api/unified.service';
+import type { TransitoTorreControl} from '../types';
 
 class TorreControlService {
   async getTransitosEnRuta(): Promise<TransitoTorreControl[]> {
@@ -23,7 +23,7 @@ class TorreControlService {
       
       // Map to TorreControl format
       return response.data.map(transito => this.mapTransitoToTorreControl(transito));
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transitos en ruta:', error);
       // Fallback to mock data
       return this.getMockTransitos();

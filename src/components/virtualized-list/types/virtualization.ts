@@ -67,4 +67,4 @@ export interface ItemRenderer<T> {
   }): React.ReactElement;
 }
 
-import type { Alert } from './alerts';
+import type { Alert} from './alerts';

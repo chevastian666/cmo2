@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -16,14 +17,7 @@ interface BadgeProps {
 }
 
 export const Badge: React.FC<BadgeProps> = ({
-  children,
-  variant = 'default',
-  size = 'md',
-  className,
-  dot = false,
-  rounded = true,
-  removable = false,
-  onRemove
+  children, variant = 'default', size = 'md', className, dot = false, rounded = true, removable = false, onRemove
 }) => {
   const variantStyles = {
     primary: 'bg-blue-500/20 text-blue-400 border-blue-500/50',
@@ -81,8 +75,7 @@ export const Badge: React.FC<BadgeProps> = ({
       
       {children}
       
-      {removable && (
-        <button
+      {removable && (<button
           onClick={(e) => {
             e.stopPropagation();
             onRemove?.();
@@ -111,9 +104,7 @@ interface BadgeGroupProps {
 }
 
 export const BadgeGroup: React.FC<BadgeGroupProps> = ({
-  children,
-  className,
-  max
+  children, className, max
 }) => {
   const items = React.Children.toArray(children);
   const visibleItems = max ? items.slice(0, max) : items;

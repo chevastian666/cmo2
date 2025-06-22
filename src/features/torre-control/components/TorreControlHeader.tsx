@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {Clock, RefreshCw,Filter, Monitor} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import {Clock, RefreshCw, Filter, Monitor} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface TorreControlHeaderProps {
   lastUpdate: Date;
@@ -11,13 +11,10 @@ interface TorreControlHeaderProps {
 }
 
 export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
-  lastUpdate,
-  transitosCount,
-  onRefresh,
-  onToggleFilters,
-  showFilters
+  lastUpdate, transitosCount, onRefresh, onToggleFilters, showFilters
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+   
 
   useEffect(() => {
     const timer = setInterval(() => {

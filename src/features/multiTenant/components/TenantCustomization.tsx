@@ -5,31 +5,21 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  Palette, 
-  Upload, 
-  Save, 
-  RotateCcw,
-  Globe,
-  Mail,
-  Layout,
-  Code,
-  Eye
-} from 'lucide-react';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ColorPicker } from '@/components/ui/color-picker';
-import { toast } from '@/hooks/use-toast';
-import { useTenantStore } from '@/store/tenantStore';
-import type { TenantCustomization as TCustomization } from '../types';
+import { Palette, Upload, Save, RotateCcw, Eye} from 'lucide-react';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+import { Textarea} from '@/components/ui/textarea';
+import { Switch} from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { ColorPicker} from '@/components/ui/color-picker';
+import { toast} from '@/hooks/use-toast';
+
+import type { TenantCustomization as TCustomization} from '../types';
 
 export const TenantCustomization: React.FC = () => {
-  const {currentTenant, updateTenantCustomization, checkFeature} = useTenantStore();
+  
   const [customization, setCustomization] = useState<TCustomization>(
     currentTenant?.customization || {} as TCustomization
   );
@@ -49,7 +39,7 @@ export const TenantCustomization: React.FC = () => {
       
       // Apply theme changes immediately
       applyTheme(customization.branding);
-    } catch (_error) {
+    } catch {
       toast({
         title: 'Error saving customization',
         description: 'Please try again later.',
@@ -139,8 +129,7 @@ export const TenantCustomization: React.FC = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Customization</h2>

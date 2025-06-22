@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import {Clock,Package,Truck, Shield, AlertCircle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
+import {Package, Truck, Shield, AlertCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
 
 interface Activity {
   id: string;
@@ -87,8 +87,7 @@ export const ActivityWidget: React.FC = () => {
     return `Hace ${days} días`;
   };
 
-  return (
-    <div className="h-full flex flex-col">
+  return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-1 overflow-auto">
         {activities.map((activity, index) => (
           <motion.div

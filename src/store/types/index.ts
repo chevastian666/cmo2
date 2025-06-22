@@ -5,7 +5,7 @@
  */
 
 // import type { Precinto, Alerta, EstadisticasMonitoreo, AlertaExtendida, ComentarioAlerta } from '../../types';
-import type { Transito } from '../../features/transitos/types';
+import type { Transito} from '../../features/transitos/types';
 
 // Filters for stores
 export interface StoreFilters {

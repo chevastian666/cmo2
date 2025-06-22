@@ -1,6 +1,6 @@
-import { sharedApiService } from '../../../services/shared/sharedApi.service';
-import { unifiedAPIService } from '../../../services/api/unified.service';
-import type { Transito } from '../types';
+import { sharedApiService} from '../../../services/shared/sharedApi.service';
+import { unifiedAPIService} from '../../../services/api/unified.service';
+import type { Transito} from '../types';
 
 interface TransitosResponse {
   data: Transito[];
@@ -24,7 +24,7 @@ class TransitosService {
 
   async getTransitos(params: TransitosParams = {}): Promise<TransitosResponse> {
     try {
-      const {page = 1, limit = 10, sortBy, sortOrder, filters} = params;
+      
       
       // In development, return mock data with pagination
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
@@ -65,7 +65,7 @@ class TransitosService {
         page,
         limit
       };
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transitos:', error);
       // Return paginated mock data on error
       return this.getTransitos({ ...params });
@@ -109,7 +109,7 @@ class TransitosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transito:', error);
       return null;
     }
@@ -128,7 +128,7 @@ class TransitosService {
         this.clearCache(); // Clear cache after successful update
       }
       return response.data.success;
-    } catch (_error) {
+    } catch {
       console.error('Error marking desprecintado:', error);
       return false;
     }
@@ -148,7 +148,7 @@ class TransitosService {
         this.clearCache(); // Clear cache after successful update
       }
       return response.data.success;
-    } catch (_error) {
+    } catch {
       console.error('Error updating transito:', error);
       throw _error;
     }

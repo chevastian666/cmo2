@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import {AlertTriangle, Shield, Battery,MapPin,Radio,Thermometer,Package,Clock,User,MessageSquare,CheckCircle, Unlock, Navigation, BatteryLow,LogOut, WifiOff, Satellite, Pause, Zap} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatTimeAgo } from '../../../utils/formatters';
-import type { Alerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { useAlertasActivas, useAlertaExtendida } from '../../../store/hooks/useAlertas';
-import { ResponderAlertaModal } from './ResponderAlertaModal';
-import { notificationService } from '../../../services/shared/notification.service';
+import { AlertTriangle, Shield, MapPin, Clock, CheckCircle, Unlock, Navigation, BatteryLow, WifiOff, Satellite, Pause, Zap} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatTimeAgo} from '../../../utils/formatters';
+import type { Alerta} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+
+import { ResponderAlertaModal} from './ResponderAlertaModal';
+import { notificationService} from '../../../services/shared/notification.service';
 
 // Alarm codes mapping
 interface AlarmCode {
@@ -84,7 +84,7 @@ const ALARM_CODES: Record<string, AlarmCode> = {
 };
 
 export const AlertsList: React.FC = () => {
-  const {alertas, loading, error, actions} = useAlertasActivas();
+  
   const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -111,7 +111,7 @@ export const AlertsList: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       });
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al responder la alerta');
       console.error('Error responding to alert:', _error);
       throw _error;
@@ -191,9 +191,7 @@ export const AlertsList: React.FC = () => {
               <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>No hay alarmas activas</p>
             </div>
-          ) : (
-            alertas.map((alerta) => (
-              <div
+          ) : (alertas.map((alerta) => (<div
                 key={alerta.id}
                 onClick={() => handleAlertClick(alerta)}
                 className={cn(

@@ -4,14 +4,14 @@
  * By Cheva
  */
 
-import {useEffect,  lazy,  Suspense} from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LayoutOptimized } from './features/common';
-import { Dashboard } from './features/dashboard/components/Dashboard';
-import { LoginPage } from './features/auth/LoginPage';
-import { LoadingOverlay } from './components/ui/LoadingState';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import {useEffect, lazy, Suspense} from 'react';
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+import { LayoutOptimized} from './features/common';
+import { Dashboard} from './features/dashboard/components/Dashboard';
+import { LoginPage} from './features/auth/LoginPage';
+import { LoadingOverlay} from './components/ui/LoadingState';
+import { ProtectedRoute} from './components/ProtectedRoute';
 import './utils/clearDashboardLayout';
 
 // Lazy load heavy components
@@ -55,14 +55,14 @@ const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3Vis
 const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })));
 const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })));
 const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })));
-import { initializeStores, setupAutoRefresh } from './store';
-import { useSharedIntegration, useSyncStoreActions } from './hooks/useSharedIntegration';
-import { useAuth } from './hooks/useAuth';
-import { useWebSocket } from './hooks/useWebSocket';
-import { notificationService } from './services/shared/notification.service';
-import { sharedWebSocketService } from './services/shared/sharedWebSocket.service';
-import { SHARED_CONFIG } from './config/shared.config';
-import { Toaster } from '@/components/ui/toaster';
+import { initializeStores, setupAutoRefresh} from './store';
+import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedIntegration';
+
+import { useWebSocket} from './hooks/useWebSocket';
+import { notificationService} from './services/shared/notification.service';
+import { sharedWebSocketService} from './services/shared/sharedWebSocket.service';
+import { SHARED_CONFIG} from './config/shared.config';
+import { Toaster} from '@/components/ui/toaster';
 import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 // import TreemapDirect from './features/analytics/components/TreemapDirect';
 import './App.css';
@@ -78,7 +78,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const {isAuthenticated, canAccessCMO} = useAuth();
+  
   
   // Initialize shared services integration
   useSharedIntegration();
@@ -97,21 +97,20 @@ function App() {
       notificationService.info('Conexión Restaurada', 'La conexión en tiempo real ha sido restaurada');
     }
   });
-  
+   
+
   useEffect(() => {
     // Set up notification handlers for real-time events
     const unsubscribers: (() => void)[] = [];
     
     // New alert notifications
-    unsubscribers.push(
-      sharedWebSocketService.onAlertNew((_data) => {
+    unsubscribers.push(sharedWebSocketService.onAlertNew((_data) => {
         notificationService.newAlert(_data.alert || _data);
       })
     );
     
     // Transit delay notifications
-    unsubscribers.push(
-      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (_data) => {
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (_data) => {
         if (_data.status === 'delayed') {
           notificationService.transitDelayed(_data.transit);
         }
@@ -119,8 +118,7 @@ function App() {
     );
     
     // CMO message notifications
-    unsubscribers.push(
-      sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (_data) => {
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (_data) => {
         notificationService.cmoMessage(_data.message || _data);
       })
     );

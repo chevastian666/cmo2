@@ -5,41 +5,29 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {Package, AlertCircle, Loader, Shield,Truck,User,Building,MapPin, Camera, CheckCircle2, ChevronRight,FileText,Clock, Zap,AlertTriangle, QrCode, Search,X, Battery} from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedDiv,
-  AnimatedSkeleton,
-  AnimatedSpinner
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePrecintosStore, useTransitosStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import { notificationService } from '@/services/shared/notification.service';
-import { armadoService } from '../services/armado.service';
-import type { Precinto, TransitoPendiente } from '@/types';
-import { fadeInUp, staggerChildren, scaleIn } from '@/components/animations/AnimationPresets';
-import { ArmConfirmationModalEnhanced } from '../components/ArmConfirmationModalEnhanced';
+import { Package, Shield, Truck, User, Building, MapPin, Camera, CheckCircle2, ChevronRight, FileText, QrCode, Search, X, Battery} from 'lucide-react';
+import { useNavigate, useLocation} from 'react-router-dom';
+
+import { Input} from '@/components/ui/input';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Label} from '@/components/ui/label';
+import { Textarea} from '@/components/ui/textarea';
+import { Checkbox} from '@/components/ui/checkbox';
+
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+import { Separator} from '@/components/ui/separator';
+import { PageTransition, AnimatedHeader, AnimatedSection} from '@/components/animations/PageTransitions';
+import { AnimatedButton, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+
+import { cn} from '@/utils/utils';
+import { notificationService} from '@/services/shared/notification.service';
+
+import type { Precinto} from '@/types';
+
+import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced';
 
 // Precinto Search Enhanced Component
 const PrecintoSearchEnhanced: React.FC<{
@@ -50,7 +38,7 @@ const PrecintoSearchEnhanced: React.FC<{
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<Precinto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const {precintos, fetchPrecintos} = usePrecintosStore();
+   
 
   useEffect(() => {
     fetchPrecintos();
@@ -75,6 +63,8 @@ const PrecintoSearchEnhanced: React.FC<{
   };
 
   // Clear results when value is empty
+   
+
   useEffect(() => {
     if (!value.trim()) {
       setResults([]);
@@ -95,8 +85,7 @@ const PrecintoSearchEnhanced: React.FC<{
               className="pl-10 pr-10 h-12 text-base"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            {value && (
-              <button
+            {value && (<button
                 type="button"
                 onClick={() => {
                   onChange('');
@@ -180,8 +169,7 @@ const PrecintoSearchEnhanced: React.FC<{
       )}
 
       <AnimatePresence>
-        {results.length > 0 && (
-          <motion.div
+        {results.length > 0 && (<motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -286,7 +274,7 @@ export const ArmadoPageV2: React.FC = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null);
   const [precintoSearch, setPrecintoSearch] = useState('');
-  const [photos, setPhotos] = useState<File[]>([]);
+  const [photos] = useState<File[]>([]);
   
   const [formData, setFormData] = useState({
     // Datos del viaje
@@ -358,7 +346,7 @@ export const ArmadoPageV2: React.FC = () => {
       
       // Navegar a página de espera
       navigate(`/armado/waiting/${selectedPrecinto?.id}`);
-    } catch (_error) {
+    } catch {
       notificationService.error(
         'Error',
         'No se pudo completar el armado del precinto'
@@ -369,8 +357,7 @@ export const ArmadoPageV2: React.FC = () => {
     }
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="max-w-6xl mx-auto space-y-6">
         <AnimatedHeader
           title="Armado de Precinto"

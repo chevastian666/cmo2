@@ -3,16 +3,10 @@
  * By Cheva
  */
 
-import { sharedApiService } from '../shared/sharedApi.service';
+import { sharedApiService} from '../shared/sharedApi.service';
 import type { 
-  Aduana, 
-  DUA, 
-  DUAAlert, 
-  AduanaAlert,
-  Office,
-  EstadoDUA
-} from '../../types/api/auxdb.types';
-import type { TransitoPendiente } from '../../types';
+  Aduana, DUA, DUAAlert, AduanaAlert, Office, EstadoDUA} from '../../types/api/auxdb.types';
+import type { TransitoPendiente} from '../../types';
 
 class AuxDBService {
   private readonly API_BASE = '/api/auxdb';

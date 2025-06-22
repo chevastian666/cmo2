@@ -1,12 +1,12 @@
 import React, { useState, Fragment } from 'react';
-import {ChevronUp, ChevronDown,MapPin, Eye, Send, History, Unlink,XCircle} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { PrecintoStatusBadge } from './PrecintoStatusBadge';
-import { BatteryIndicator } from './BatteryIndicator';
-import { SignalIndicator } from './SignalIndicator';
-import { PrecintoStatus } from '../types';
-import type { Precinto } from '../types';
+import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react';
+import { cn} from '@/lib/utils';
+import { Button} from '@/components/ui/button';
+import { PrecintoStatusBadge} from './PrecintoStatusBadge';
+import { BatteryIndicator} from './BatteryIndicator';
+import { SignalIndicator} from './SignalIndicator';
+import { PrecintoStatus} from '../types';
+import type { Precinto} from '../types';
 
 interface PrecintoTableProps {
   precintos: Precinto[];
@@ -22,14 +22,7 @@ interface PrecintoTableProps {
 type SortField = keyof Precinto;
 
 export const PrecintoTable: React.FC<PrecintoTableProps> = ({
-  precintos,
-  loading,
-  onViewDetail,
-  onViewMap,
-  onAssign,
-  onSendCommand,
-  onViewHistory,
-  onMarkAsBroken
+  precintos, loading, onViewDetail, onViewMap, onAssign, onSendCommand, onViewHistory, onMarkAsBroken
 }) => {
   const [sortField, setSortField] = useState<SortField>('id');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -77,8 +70,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
       <ChevronDown className="h-4 w-4" />;
   };
 
-  const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
-    <th 
+  const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (<th 
       onClick={() => handleSort(field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
     >
@@ -107,8 +99,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
     );
   }
 
-  return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700">
+  return (<div className="bg-gray-800 rounded-lg border border-gray-700">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-900/50 border-b border-gray-700">
@@ -191,8 +182,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    {precinto.gps && (
-                      <Button
+                    {precinto.gps && (<Button
                         size="icon"
                         variant="ghost"
                         onClick={() => onViewMap(precinto)}
@@ -220,8 +210,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     >
                       <History className="h-4 w-4" />
                     </Button>
-                    {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (
-                      <Button
+                    {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (<Button
                         size="icon"
                         variant="ghost"
                         onClick={() => onMarkAsBroken(precinto)}

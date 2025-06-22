@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState, useEffect, memo } from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 export interface VirtualizedListProps<T> {
   items: T[];
@@ -12,19 +12,13 @@ export interface VirtualizedListProps<T> {
 }
 
 export const VirtualizedList = <T,>({
-  items,
-  itemHeight,
-  containerHeight,
-  renderItem,
-  overscan = 3,
-  className,
-  onScroll
+  items, itemHeight, containerHeight, renderItem, overscan = 3, className, onScroll
 }: VirtualizedListProps<T>) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
 
   const totalHeight = items.length * itemHeight;
-  const visibleCount = Math.ceil(containerHeight / itemHeight);
+  // visibleCount removed - unused
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const endIndex = Math.min(
     items.length - 1,
@@ -41,8 +35,10 @@ export const VirtualizedList = <T,>({
       onScroll?.(newScrollTop);
     }
   }, [onScroll]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll, { passive: true });
@@ -102,14 +98,7 @@ export interface VirtualizedTableProps<T> {
 }
 
 export const VirtualizedTable = <T extends Record<string, unknown>,>({
-  items,
-  columns,
-  rowHeight = 60,
-  containerHeight = 600,
-  onRowClick,
-  className,
-  headerClassName,
-  rowClassName
+  items, columns, rowHeight = 60, containerHeight = 600, onRowClick, className, headerClassName, rowClassName
 }: VirtualizedTableProps<T>) => {
   const renderRow = useCallback((item: T, index: number) => {
     const rowClass = typeof rowClassName === 'function' 

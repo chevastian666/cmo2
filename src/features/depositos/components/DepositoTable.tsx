@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react';
-import type { Deposito } from '../types';
-import { cn } from '../../../utils/utils';
+import type { Deposito} from '../types';
+import { cn} from '../../../utils/utils';
 
 interface DepositoTableProps {
   depositos: Deposito[];
@@ -14,10 +14,7 @@ type SortField = 'codigo' | 'nombre' | 'zona' | 'transitosActivos';
 type SortOrder = 'asc' | 'desc';
 
 export const DepositoTable: React.FC<DepositoTableProps> = ({
-  depositos,
-  loading,
-  onView,
-  onEdit
+  depositos, loading, onView, onEdit
 }) => {
   const [sortField, setSortField] = useState<SortField>('codigo');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
@@ -69,8 +66,7 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
     );
   }
 
-  return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden">
+  return (<div className="bg-gray-800 rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

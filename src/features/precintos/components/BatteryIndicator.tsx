@@ -1,6 +1,6 @@
 import React from 'react';
-import { Battery, BatteryLow } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Battery, BatteryLow} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface BatteryIndicatorProps {
   level?: number;
@@ -9,9 +9,7 @@ interface BatteryIndicatorProps {
 }
 
 export const BatteryIndicator: React.FC<BatteryIndicatorProps> = ({ 
-  level, 
-  size = 'md',
-  showPercentage = true 
+  level, size = 'md', showPercentage = true 
 }) => {
   if (level === undefined) {
     return <span className="text-gray-500">-</span>;

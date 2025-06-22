@@ -1,17 +1,15 @@
-import {useEffect,  useRef} from 'react';
+import {useEffect, useRef} from 'react';
 
 type HotkeyCallback = (event: KeyboardEvent) => void;
 
-export function useHotkeys(
-  keys: string,
-  callback: HotkeyCallback,
-  deps: React.DependencyList = []
-) {
+export function useHotkeys(keys: string, callback: HotkeyCallback, deps: React.DependencyList = []) {
   const callbackRef = useRef<HotkeyCallback>(callback);
+   
 
   useEffect(() => {
     callbackRef.current = callback;
   });
+   
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

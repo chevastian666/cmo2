@@ -1,5 +1,5 @@
-import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion } from '../types';
-import { transitosService } from '../../transitos/services/transitos.service';
+import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion} from '../types';
+import { transitosService} from '../../transitos/services/transitos.service';
 
 class CamionesService {
   private camiones: Map<string, Camion> = new Map();

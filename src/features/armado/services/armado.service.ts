@@ -1,5 +1,5 @@
-import { sharedApiService } from '../../../services/shared/sharedApi.service';
-import type { Precinto } from '../../../types';
+import { sharedApiService} from '../../../services/shared/sharedApi.service';
+import type { Precinto} from '../../../types';
 
 interface ArmadoCommand {
   precintoId: string;
@@ -19,7 +19,7 @@ class ArmadoService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error searching precinto:', error);
       return null;
     }
@@ -34,7 +34,7 @@ class ArmadoService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/pending`);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching pending precintos:', error);
       return [];
     }
@@ -59,7 +59,7 @@ class ArmadoService {
         },
       });
       return response.data.urls;
-    } catch (_error) {
+    } catch {
       console.error('Error uploading photos:', error);
       return [];
     }
@@ -76,7 +76,7 @@ class ArmadoService {
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/execute`, command);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error executing armado:', error);
       throw _error;
     }

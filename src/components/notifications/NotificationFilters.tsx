@@ -5,15 +5,10 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Filter, X } from 'lucide-react';
+import { motion} from 'framer-motion';
+import { Filter, X} from 'lucide-react';
 import type { 
-  NotificationFilter, 
-  NotificationStats,
-  NotificationType,
-  NotificationPriority,
-  NotificationStatus
-} from '../../types/notifications';
+  NotificationFilter, NotificationStats, NotificationType, NotificationPriority, NotificationStatus} from '../../types/notifications';
 
 interface NotificationFiltersProps {
   filter: NotificationFilter;
@@ -47,9 +42,7 @@ const statusOptions: { key: NotificationStatus; label: string; color: string }[]
 ];
 
 export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
-  filter,
-  onFilterChange,
-  stats
+  filter, onFilterChange, stats
 }) => {
   const clearFilters = () => {
     onFilterChange({
@@ -73,10 +66,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
     filter.unreadOnly
   );
 
-  const toggleArrayFilter = <T extends string>(
-    filterKey: 'types' | 'priorities' | 'statuses',
-    value: T
-  ) => {
+  const toggleArrayFilter = <T extends string>(filterKey: 'types' | 'priorities' | 'statuses', value: T) => {
     const currentArray = (filter[filterKey] as T[]) || [];
     const newArray = currentArray.includes(value)
       ? currentArray.filter(item => item !== value)
@@ -156,8 +146,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
             const isSelected = filter.types?.includes(key);
             const count = stats?.byType[key] || 0;
             
-            return (
-              <button
+            return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('types', key)}
                 className={`flex items-center space-x-1 px-2 py-1 text-xs rounded transition-colors ${
@@ -187,8 +176,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
             const isSelected = filter.priorities?.includes(key);
             const count = stats?.byPriority[key] || 0;
             
-            return (
-              <button
+            return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('priorities', key)}
                 className={`flex items-center space-x-1 px-2 py-1 text-xs rounded transition-colors ${
@@ -217,8 +205,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
             const isSelected = filter.statuses?.includes(key);
             const count = stats?.byStatus[key] || 0;
             
-            return (
-              <button
+            return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('statuses', key)}
                 className={`flex items-center space-x-1 px-2 py-1 text-xs rounded transition-colors ${

@@ -6,8 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
-import { formatters, scales, animations, tooltip } from './utils';
+import { TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
+import { formatters, scales, animations, tooltip} from './utils';
 
 interface InteractiveTreemapProps {
   data: TreemapNode;
@@ -17,10 +17,7 @@ interface InteractiveTreemapProps {
 }
 
 export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
-  data,
-  config: userConfig,
-  onNodeClick,
-  enableDrillDown = true
+  data, config: userConfig, onNodeClick, enableDrillDown = true
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,11 +28,14 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+    const resizeObserver = new ResizeObserver(() => {
+      const { width, height } = containerRef.current!.getBoundingClientRect();
       setDimensions({ width: width || 800, height: height || 600 });
     });
 
@@ -49,8 +49,8 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const { width, height } = dimensions;
-    const { margin } = config;
+    
+    
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom - 50; // Space for breadcrumbs
 
@@ -327,13 +327,17 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
 
     animations.fadeIn(stats, config.animations.duration + 800);
 
-  }, [currentRoot, dimensions, config, onNodeClick, enableDrillDown, breadcrumbs]);
+  }, [currentRoot, config, onNodeClick, enableDrillDown, breadcrumbs]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     drawTreemap();
-  }, [drawTreemap]);
+  }, [drawTreemap, dimensions]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     setCurrentRoot(data);
     setBreadcrumbs([data]);
   }, [data]);

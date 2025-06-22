@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Shield, Loader, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Shield, Loader, AlertCircle} from 'lucide-react';
+
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+import { Alert, AlertDescription} from '@/components/ui/alert';
 
 export const LoginPage: React.FC = () => {
-  const {login, isLoading, error} = useAuth();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');

@@ -6,16 +6,12 @@
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import * as d3 from 'd3';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/utils/utils';
-import { TreemapProps, TreemapNode, TreemapTooltipData } from './types';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/utils/utils';
+import { TreemapProps, TreemapNode, TreemapTooltipData} from './types';
 
 export const InteractiveTreemap: React.FC<TreemapProps> = ({
-  data,
-  width = 800,
-  height = 600,
-  colorScheme = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'],
-  valueFormat = (v) => v.toLocaleString(),
+  data, width = 800, height = 600, colorScheme = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'], valueFormat = (v) => v.toLocaleString(),
   onNodeClick,
   onNodeHover,
   animated = true,
@@ -31,20 +27,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
   const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [breadcrumb, setBreadcrumb] = useState<string[]>(['Root']);
-  const [currentRoot, setCurrentRoot] = useState<unknown>(null);
-
-  // Validate data
-  if (!data || !data.children) {
-    return (
-      <div className={cn('relative', className)}>
-        <div className="bg-gray-900 rounded-lg p-8 text-center">
-          <p className="text-gray-400">No hay datos disponibles para mostrar</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Create color scale
+  const [, setCurrentRoot] = useState<unknown>(null);// Create color scale
   const colorScale = useMemo(() => {
     const uniqueNames = new Set<string>();
     const extractNames = (node: TreemapNode) => {
@@ -271,16 +254,32 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
     setCurrentRoot(root);
   }, [data, width, height, colorScale, valueFormat, animated, showTooltip, 
       onNodeClick, onNodeHover, minZoom, maxZoom]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     buildTreemap();
   }, [buildTreemap]);
+
+
+  // Validate data
+  if (!data || !data.children) {
+    return (
+      <div className={cn('relative', className)}>
+        <div className="bg-gray-900 rounded-lg p-8 text-center">
+          <p className="text-gray-400">No hay datos disponibles para mostrar</p>
+        </div>
+      </div>
+    );
+  }
+
+  
+
 
   return (
     <div className={cn('relative', className)}>
       {/* Header */}
-      {(title || subtitle || showBreadcrumb) && (
-        <div className="mb-4">
+      {(title || subtitle || showBreadcrumb) && (<div className="mb-4">
           {title && <h3 className="text-xl font-semibold text-gray-100">{title}</h3>}
           {subtitle && <p className="text-sm text-gray-400 mt-1">{subtitle}</p>}
           

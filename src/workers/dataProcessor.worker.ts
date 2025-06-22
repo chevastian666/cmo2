@@ -17,19 +17,19 @@ interface ProcessingResult {
     count: number;
     standardDeviation: number;
   };
-  groupedData: Record<string, any[]>;
+  groupedData: Record<string, unknown[]>;
   processedCount: number;
   processingTime: number;
 }
 
 export class DataProcessor {
   // Process large dataset with aggregations
-  async processLargeDataset<T extends Record<string, any>>(
+  async processLargeDataset<T extends Record<string, unknown>>(
     data: T[],
     options: {
       groupBy?: keyof T;
       aggregateFields?: (keyof T)[];
-      filters?: Array<{ field: keyof T; operator: '=' | '>' | '<' | '>=' | '<=' | '!='; value: any }>;
+      filters?: Array<{ field: keyof T; operator: '=' | '>' | '<' | '>=' | '<=' | '!='; value: unknown }>;
       sortBy?: { field: keyof T; order: 'asc' | 'desc' };
       limit?: number;
     } = {}
@@ -154,7 +154,7 @@ export class DataProcessor {
 
   // Aggregate time series data
   aggregateTimeSeries(
-    data: Array<{ timestamp: number; value: number; [key: string]: any }>,
+    data: Array<{ timestamp: number; value: number; [key: string]: unknown }>,
     interval: 'minute' | 'hour' | 'day' | 'week' | 'month',
     aggregationType: 'sum' | 'avg' | 'min' | 'max' | 'count' = 'sum'
   ): Array<{ timestamp: number; value: number; count: number }> {
@@ -248,7 +248,7 @@ export class DataProcessor {
       : sortedValues[mid];
   }
 
-  private extractNumericValues(data: any[]): number[] {
+  private extractNumericValues(data: unknown[]): number[] {
     const values: number[] = [];
     
     data.forEach(item => {
@@ -275,11 +275,12 @@ export class DataProcessor {
       case 'day':
         date.setHours(0, 0, 0, 0);
         break;
-      case 'week':
+      case 'week': {
         const dayOfWeek = date.getDay();
         date.setDate(date.getDate() - dayOfWeek);
         date.setHours(0, 0, 0, 0);
         break;
+      }
       case 'month':
         date.setDate(1);
         date.setHours(0, 0, 0, 0);

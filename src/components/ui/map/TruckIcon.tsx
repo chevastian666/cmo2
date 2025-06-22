@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 
 interface TruckIconProps {
   status?: 'normal' | 'warning' | 'critical' | 'inactive';
@@ -11,12 +12,7 @@ interface TruckIconProps {
 }
 
 export const TruckIcon: React.FC<TruckIconProps> = ({
-  status = 'normal',
-  size = 'md',
-  className,
-  animated = false,
-  showTrafficLight = true,
-  direction = 0
+  status = 'normal', size = 'md', className, animated = false, showTrafficLight = true, direction = 0
 }) => {
   const sizes = {
     sm: 'w-6 h-6',
@@ -111,12 +107,7 @@ export const TruckIcon: React.FC<TruckIconProps> = ({
 
 // Variant with more detailed truck icon
 export const TruckIconDetailed: React.FC<TruckIconProps> = ({
-  status = 'normal',
-  size = 'md',
-  className,
-  animated = false,
-  showTrafficLight = true,
-  direction = 0
+  status = 'normal', size = 'md', className, animated = false, showTrafficLight = true, direction = 0
 }) => {
   const sizes = {
     sm: 'w-8 h-8',

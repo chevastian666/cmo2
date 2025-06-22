@@ -1,4 +1,4 @@
-import type { Alerta } from './monitoring';
+import type { Alerta} from './monitoring';
 
 export interface Usuario {
   id: string;

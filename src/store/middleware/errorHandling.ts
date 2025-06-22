@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-import { notificationService } from '../../services/notificationService';
+import { notificationService} from '../../services/notificationService';
 
 export type LoadingState = 
   | { status: 'idle' }
@@ -26,12 +26,11 @@ export interface AsyncActionOptions {
 /**
  * Helper para ejecutar acciones asíncronas con manejo de errores consistente
  */
-export async function executeAsyncAction<T>(
-  action: () => Promise<T>,
+export async function executeAsyncAction<T>(action: () => Promise<T>,
   setLoadingState: (state: LoadingState) => void,
   options: AsyncActionOptions = {}
 ): Promise<T | null> {
-  const {showErrorNotification = true, errorMessage = 'Ocurrió un error al realizar la operación', successMessage, showSuccessNotification = false} = options;
+  
 
   setLoadingState({ status: 'loading' });
 
@@ -45,7 +44,7 @@ export async function executeAsyncAction<T>(
     }
     
     return result;
-  } catch (_error) {
+  } catch {
     const errorMsg = error instanceof Error ? error.message : errorMessage;
     
     setLoadingState({ status: 'error', error: errorMsg });

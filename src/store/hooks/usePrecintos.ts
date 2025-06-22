@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
-import { usePrecintosStore } from '../store';
+import { usePrecintosStore} from '../store';
 
 export const usePrecintos = () => {
   const store = usePrecintosStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.precintos.length === 0 && !store.loading) {
@@ -25,7 +26,8 @@ export const usePrecintos = () => {
 
 export const usePrecintosActivos = () => {
   const store = usePrecintosStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.precintosActivos.length === 0 && !store.loading) {

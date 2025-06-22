@@ -3,12 +3,12 @@
  * By Cheva
  */
 
-import { mainDBService } from './maindb.service';
-import { auxDBService } from './auxdb.service';
-import { cacheService } from './cache.service';
-import type { Transito } from '../../features/transitos/types';
-import type { TransitoPendiente, Alerta, EstadisticasMonitoreo } from '../../types';
-import type { PrecintoActivo } from '../../types/monitoring';
+import { mainDBService} from './maindb.service';
+import { auxDBService} from './auxdb.service';
+import { cacheService} from './cache.service';
+import type { Transito} from '../../features/transitos/types';
+import type { TransitoPendiente, Alerta, EstadisticasMonitoreo} from '../../types';
+import type { PrecintoActivo} from '../../types/monitoring';
 
 class UnifiedAPIService {
   
@@ -175,10 +175,9 @@ class UnifiedAPIService {
    */
   async getEstadisticas(): Promise<EstadisticasMonitoreo> {
     // Obtener datos de múltiples fuentes
-    const [precintosResponse, alertasResponse, aduanaStats] = await Promise.all([
+    const [precintosResponse, alertasResponse] = await Promise.all([
       mainDBService.getPrecintos({ limit: 1000 }),
-      mainDBService.getAlarmas({ status: 0, limit: 100 }),
-      auxDBService.getAduanaStats()
+      mainDBService.getAlarmas({ status: 0, limit: 100 })
     ]);
 
     const precintos = precintosResponse.data;
@@ -292,7 +291,7 @@ class UnifiedAPIService {
             
             synced++;
           }
-        } catch (_error) {
+        } catch (error) {
           console.error('Error syncing record:', error);
           errors++;
         }
@@ -303,7 +302,7 @@ class UnifiedAPIService {
         errors,
         message: `Sincronización completada: ${synced} registros sincronizados, ${errors} errores`
       };
-    } catch (_error) {
+    } catch (error) {
       console.error('Database sync error:', error);
       return {
         synced: 0,

@@ -1,8 +1,8 @@
 import React from 'react';
-import {X, Monitor, Volume2, Layout,MapPin} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { ConfiguracionTV } from '../types';
-import { PUNTOS_OPERACION_TV } from '../types';
+import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { ConfiguracionTV} from '../types';
+import { PUNTOS_OPERACION_TV} from '../types';
 
 interface ConfiguracionModalProps {
   configuracion: ConfiguracionTV;
@@ -11,12 +11,9 @@ interface ConfiguracionModalProps {
 }
 
 export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
-  configuracion,
-  onClose,
-  onChange
+  configuracion, onClose, onChange
 }) => {
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+  return (<div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 rounded-lg max-w-lg w-full border border-gray-700">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-700">

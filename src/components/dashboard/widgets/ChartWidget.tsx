@@ -3,10 +3,10 @@
  * By Cheva
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import {LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts';
-import { useDashboardStore } from '../../../store/dashboardStore';
-import { D3VisualizationWidget } from '../../charts/d3/D3VisualizationWidget';
+import { useDashboardStore} from '../../../store/dashboardStore';
+import { D3VisualizationWidget} from '../../charts/d3/D3VisualizationWidget';
 
 interface ChartWidgetProps {
   widgetId: string;
@@ -18,12 +18,7 @@ interface ChartWidgetProps {
 }
 
 export const ChartWidget: React.FC<ChartWidgetProps> = ({
-  widgetId,
-  type = 'line',
-  data: defaultData,
-  dataKey = 'value',
-  xAxisKey = 'name',
-  colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444']
+  widgetId, type = 'line', data: defaultData, dataKey = 'value', xAxisKey = 'name', colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444']
 }) => {
   const widgetSettings = useDashboardStore(state => state.widgetSettings[widgetId]);
   
@@ -143,8 +138,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         );
 
       case 'pie':
-        return (
-          <PieChart>
+        return (<PieChart>
             <Pie
               data={pieData}
               cx="50%"

@@ -4,11 +4,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {X,AlertTriangle,Clock,User,MessageSquare,CheckCircle, Search,Calendar} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
-import type { Alerta } from '../../../types';
-import { useAlertasStore } from '../../../store';
+import { X, AlertTriangle, Clock, User, MessageSquare, CheckCircle, Search} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
+import type { Alerta} from '../../../types';
 
 interface HistorialAlertasCriticasModalProps {
   isOpen: boolean;
@@ -37,14 +36,14 @@ interface AlertaCriticaHistorial extends Alerta {
 }
 
 export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasModalProps> = ({
-  isOpen,
-  onClose
+  isOpen, onClose
 }) => {
   const [alertasCriticas, setAlertasCriticas] = useState<AlertaCriticaHistorial[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(null);
+   
 
   useEffect(() => {
     if (isOpen) {
@@ -53,6 +52,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
   }, [isOpen]);
 
   // ESC key handler
+   
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -76,7 +77,7 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
       // For now, generate mock data
       const mockData: AlertaCriticaHistorial[] = generateMockAlertasCriticas();
       setAlertasCriticas(mockData);
-    } catch (_error) {
+    } catch {
       console.error('Error fetching critical alerts history:', _error);
     } finally {
       setLoading(false);
@@ -116,8 +117,7 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+  return (<div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={onClose} />
 
@@ -222,10 +222,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                 <AlertTriangle className="h-12 w-12 text-gray-600 mx-auto mb-3" />
                 <p className="text-gray-400">No se encontraron alertas críticas</p>
               </div>
-            ) : (
-              <div className="space-y-4">
-                {filteredAlerts.map((alerta) => (
-                  <div
+            ) : (<div className="space-y-4">
+                {filteredAlerts.map((alerta) => (<div
                     key={alerta.id}
                     className="bg-gray-700 rounded-lg p-4 hover:bg-gray-650 transition-colors cursor-pointer"
                     onClick={() => setSelectedAlerta(alerta)}
@@ -269,8 +267,7 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                               <Clock className="h-3 w-3" />
                               <span>{formatTimeAgo(alerta.respuesta.timestamp)}</span>
                             </div>
-                            {alerta.respuesta.acciones && alerta.respuesta.acciones.length > 0 && (
-                              <div className="mt-2 ml-6">
+                            {alerta.respuesta.acciones && alerta.respuesta.acciones.length > 0 && (<div className="mt-2 ml-6">
                                 <p className="text-xs text-gray-500 mb-1">Acciones tomadas:</p>
                                 <ul className="list-disc list-inside text-xs text-gray-400">
                                   {alerta.respuesta.acciones.map((accion, index) => (
@@ -323,8 +320,7 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
       </div>
 
       {/* Detail Modal */}
-      {selectedAlerta && (
-        <AlertaDetailModal
+      {selectedAlerta && (<AlertaDetailModal
           alerta={selectedAlerta}
           onClose={() => setSelectedAlerta(null)}
         />
@@ -339,6 +335,8 @@ const AlertaDetailModal: React.FC<{
   onClose: () => void;
 }> = ({ alerta, onClose }) => {
   // ESC key handler
+   
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -419,8 +417,7 @@ const AlertaDetailModal: React.FC<{
             )}
 
             {/* Response */}
-            {alerta.respuesta && (
-              <div className="mb-6">
+            {alerta.respuesta && (<div className="mb-6">
                 <h4 className="text-sm font-medium text-gray-400 mb-2">Respuesta</h4>
                 <div className="bg-gray-700 rounded-lg p-4">
                   <div className="mb-3">

@@ -1,16 +1,16 @@
+ 
 /**
  * Reusable Skeleton Loaders for CMO Dashboard
  * By Cheva
  */
 
 import React from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
+import { Skeleton} from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader} from '@/components/ui/Card';
 
 // Table Skeleton Loader
 export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({ 
-  rows = 5, 
-  columns = 4 
+  rows = 5, columns = 4 
 }) => {
   return (
     <div className="w-full">

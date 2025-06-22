@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-import { designTokens } from './design-tokens';
+import { designTokens} from './design-tokens';
 
 /**
  * Hook para acceder a los tokens de diseño

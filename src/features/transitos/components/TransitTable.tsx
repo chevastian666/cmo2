@@ -1,9 +1,9 @@
 import React, { Fragment, memo, useMemo } from 'react';
-import {ChevronUp, ChevronDown, Unlock, Eye, Edit2,Truck} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { TransitStatus } from './TransitStatus';
-import { TransitTableSkeleton } from './TransitTableSkeleton';
-import type { Transito } from '../types';
+import {ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { TransitStatus} from './TransitStatus';
+import { TransitTableSkeleton} from './TransitTableSkeleton';
+import type { Transito} from '../types';
 
 interface TransitTableProps {
   transitos: Transito[];
@@ -24,20 +24,7 @@ interface TransitTableProps {
 
 
 export const TransitTable: React.FC<TransitTableProps> = memo(({
-  transitos,
-  loading,
-  currentPage,
-  totalItems,
-  itemsPerPage,
-  sortField,
-  sortOrder,
-  onPageChange,
-  onItemsPerPageChange,
-  onSort,
-  onViewDetail,
-  onViewMap,
-  onMarkDesprecintado,
-  onEdit
+  transitos, loading, currentPage, totalItems, itemsPerPage, sortField, sortOrder, onPageChange, onItemsPerPageChange, onSort, onViewDetail, onViewMap, onMarkDesprecintado, onEdit
 }) => {
   const totalPages = useMemo(() => 
     Math.max(1, Math.ceil(totalItems / itemsPerPage)), 
@@ -95,8 +82,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
     );
   }
 
-  return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700">
+  return (<div className="bg-gray-800 rounded-lg border border-gray-700">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-900/50 border-b border-gray-700">
@@ -222,8 +208,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      {onEdit && (
-                        <button
+                      {onEdit && (<button
                           onClick={() => onEdit(transito)}
                           className="p-1.5 bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
                           title="Editar"
@@ -238,8 +223,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
                       >
                         <Eye className="h-4 w-4" />
                       </button>
-                      {transito.estado === 'en_viaje' && (
-                        <button
+                      {transito.estado === 'en_viaje' && (<button
                           onClick={() => onMarkDesprecintado(transito)}
                           className="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
                           title="Desprecintar"

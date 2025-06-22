@@ -1,11 +1,12 @@
+ 
 import React, { useEffect, useRef, useState } from 'react';
-import {X,Truck,User,MapPin,Clock,Package,AlertTriangle,CheckCircle,XCircle, Battery,Wifi, Navigation,Calendar, Activity, Shield, Route, Gauge,MessageSquare,FileText,Hash, Camera, Maximize2, Download, Play, Pause, Link2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
+import { User, MapPin, Clock, Package, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Link2} from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Card, CardContent, CardHeader} from '@/components/ui/card';
+import { Badge} from '@/components/ui/badge';
+import { Slider} from '@/components/ui/slider';
+import { cn} from '@/lib/utils';
 
 
 export interface TransitoDashboard {
@@ -44,9 +45,7 @@ interface TransitoDetailModalProps {
 }
 
 export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
-  transitoId,
-  isOpen,
-  onClose
+  transitoId, isOpen, onClose
 }) => {
   const [showFullImage, setShowFullImage] = useState(false);
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
@@ -56,6 +55,8 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
   const [transito, setTransito] = useState<TransitoDashboard | null>(null);
 
   // Fetch transit data based on transitoId
+   
+
   useEffect(() => {
     if (isOpen && transitoId) {
       // In a real app, this would fetch from API
@@ -89,11 +90,6 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
       setTimelinePosition(mockTransito.progreso);
     }
   }, [isOpen, transitoId]);
-
-
-
-
-
 
 
   const handleTimelineChange = (value: number[]) => {
@@ -131,6 +127,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
       }, 100); // Update every 100ms
     }
   };
+   
 
   useEffect(() => {
     return () => {
@@ -375,8 +372,7 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                 </Card>
 
                 {/* Foto del Precintado */}
-                {transito.fotoPrecintado && (
-                  <Card className="bg-gray-800 border-gray-700">
+                {transito.fotoPrecintado && (<Card className="bg-gray-800 border-gray-700">
                     <CardHeader className="pb-4">
                       <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                         <Camera className="h-5 w-5 text-blue-500" />

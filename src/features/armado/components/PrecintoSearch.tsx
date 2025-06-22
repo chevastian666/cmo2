@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Search, Loader, AlertCircle } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Search, Loader, AlertCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface PrecintoSearchProps {
   onSearch: (nqr: string) => void;
@@ -9,9 +9,7 @@ interface PrecintoSearchProps {
 }
 
 export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
-  onSearch,
-  loading = false,
-  error = null
+  onSearch, loading = false, error = null
 }) => {
   const [nqr, setNqr] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

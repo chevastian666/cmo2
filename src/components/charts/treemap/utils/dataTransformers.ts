@@ -168,7 +168,7 @@ export const transformAlertsBySeverity = (
  * Transform data by time periods (daily, weekly, monthly)
  */
 export const transformByTimePeriod = (
-  data: any[],
+  data: unknown[],
   dateField: string,
   groupBy: 'day' | 'week' | 'month' = 'day'
 ): TreemapData => {
@@ -182,11 +182,12 @@ export const transformByTimePeriod = (
       case 'day':
         period = date.toLocaleDateString();
         break;
-      case 'week':
+      case 'week': {
         const weekStart = new Date(date);
         weekStart.setDate(date.getDate() - date.getDay());
         period = `Semana del ${weekStart.toLocaleDateString()}`;
         break;
+      }
       case 'month':
         period = date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
         break;
@@ -222,7 +223,7 @@ export const transformByTimePeriod = (
  * Create hierarchical data from flat structure
  */
 export const createHierarchy = (
-  data: any[],
+  data: unknown[],
   levels: string[]
 ): TreemapData => {
   const root: TreemapNode = {

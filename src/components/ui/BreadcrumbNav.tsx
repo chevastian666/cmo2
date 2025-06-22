@@ -1,14 +1,8 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, Home } from 'lucide-react';
+import { Link, useLocation} from 'react-router-dom';
+import { ChevronRight, Home} from 'lucide-react';
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from '@/components/ui/breadcrumb';
 
 interface BreadcrumbConfig {
   [key: string]: {
@@ -124,8 +118,7 @@ export const BreadcrumbNav: React.FC = () => {
 
   if (trail.length === 0) return null;
 
-  return (
-    <Breadcrumb className="mb-4">
+  return (<Breadcrumb className="mb-4">
       <BreadcrumbList>
         {trail.map((path, index) => {
           const config = breadcrumbConfig[path];

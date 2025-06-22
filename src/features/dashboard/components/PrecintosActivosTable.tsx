@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import {Link2, Battery,MapPin,AlertTriangle, ChevronUp, ChevronDown, Network, Eye} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { PrecintoCommandsModal } from './PrecintoCommandsModal';
-import { TransitoDetailModal } from './TransitoDetailModal';
-import type { PrecintoActivo as PrecintoActivoType } from '../../../types/monitoring';
+import { Link2, Battery, MapPin, AlertTriangle, Network, Eye} from 'lucide-react';
+import { Link} from 'react-router-dom';
+import { cn} from '@/lib/utils';
+import { Button} from '@/components/ui/button';
+import { PrecintoCommandsModal} from './PrecintoCommandsModal';
+import { TransitoDetailModal} from './TransitoDetailModal';
+import type { PrecintoActivo as PrecintoActivoType} from '../../../types/monitoring';
 
 interface PrecintoActivo {
   id: string;
@@ -176,8 +176,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
     });
   }, [mappedPrecintos, mockPrecintos, sortColumn, sortDirection]);
 
-  return (
-    <div className="bg-gray-800 rounded-lg border-2 border-blue-600/50 shadow-lg shadow-blue-600/10">
+  return (<div className="bg-gray-800 rounded-lg border-2 border-blue-600/50 shadow-lg shadow-blue-600/10">
       <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-700 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-blue-600/20 rounded-lg">
@@ -289,8 +288,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {sortedPrecintos.map((precinto) => (
-              <tr key={precinto.id} className="hover:bg-gray-700/50 transition-colors">
+            {sortedPrecintos.map((precinto) => (<tr key={precinto.id} className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="text-lg font-bold text-white">
@@ -353,8 +351,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-center gap-2">
-                    {precinto.transitoId && (
-                      <Button
+                    {precinto.transitoId && (<Button
                         size="icon"
                         variant="secondary"
                         onClick={() => {
@@ -382,8 +379,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
       )}
       
       {/* Commands Modal */}
-      {selectedPrecinto && (
-        <PrecintoCommandsModal
+      {selectedPrecinto && (<PrecintoCommandsModal
           precinto={selectedPrecinto}
           isOpen={showCommandsModal}
           onClose={() => {
@@ -394,8 +390,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
       )}
       
       {/* Transito Detail Modal */}
-      {selectedTransitoId && (
-        <TransitoDetailModal
+      {selectedTransitoId && (<TransitoDetailModal
           transitoId={selectedTransitoId}
           isOpen={showTransitoModal}
           onClose={() => {

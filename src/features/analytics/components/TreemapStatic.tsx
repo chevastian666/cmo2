@@ -5,16 +5,10 @@
  */
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 
 const TreemapStatic: React.FC = () => {
   // Mock data for testing
-  const _data = [
-    { name: 'Activos', value: 45, color: '#10b981' },
-    { name: 'En Tránsito', value: 30, color: '#3b82f6' },
-    { name: 'Completados', value: 85, color: '#8b5cf6' },
-    { name: 'Inactivos', value: 20, color: '#6b7280' }
-  ];
 
   const total = _data.reduce((sum, item) => sum + item.value, 0);
 

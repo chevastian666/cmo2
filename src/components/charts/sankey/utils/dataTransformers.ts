@@ -5,19 +5,14 @@
  */
 
 import type { 
-  SankeyData, 
-  FlowData, 
-  LogisticsFlow, 
-  PrecintoFlow,
-  AlertFlow 
-} from '../types/sankey.types';
+  SankeyData, FlowData, LogisticsFlow, PrecintoFlow, AlertFlow} from '../types/sankey.types';
 
 /**
  * Transform logistics flow data into Sankey format
  */
 export function transformLogisticsFlow(flows: LogisticsFlow[]): SankeyData {
   const nodes = new Map<string, number>();
-  const links: any[] = [];
+  const links: SankeyData['links'] = [];
 
   // Extract unique locations and calculate totals
   flows.forEach(flow => {
@@ -84,7 +79,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
   const sourceNodes = new Map<string, number>();
   const typeNodes = new Map<string, number>();
   const resolutionNodes = new Map<string, number>();
-  const links: any[] = [];
+  const links: SankeyData['links'] = [];
 
   alerts.forEach(alert => {
     // Count by source
@@ -132,7 +127,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
         id,
         name: `${formatAlertType(type)} (${severity})`,
         value,
-        color: getSeverityColor(severity as any)
+        color: getSeverityColor(severity as 'low' | 'medium' | 'high' | 'critical')
       };
     }),
     ...Array.from(resolutionNodes.entries()).map(([id, value]) => ({
@@ -172,7 +167,7 @@ export function transformTimeBasedFlow(
   });
 
   const nodes = new Set<string>();
-  const links: any[] = [];
+  const links: SankeyData['links'] = [];
 
   timeGroups.forEach((flows, timeKey) => {
     flows.forEach((value, flowKey) => {
@@ -276,9 +271,10 @@ function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): st
       return `${d.toLocaleDateString()} ${d.getHours()}:00`;
     case 'day':
       return d.toLocaleDateString();
-    case 'week':
+    case 'week': {
       const week = Math.ceil((d.getDate() + 6 - d.getDay()) / 7);
       return `Week ${week}, ${d.getFullYear()}`;
+    }
     case 'month':
       return `${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}`;
   }
@@ -305,7 +301,7 @@ export function aggregateFlows(flows: FlowData[], threshold = 0): SankeyData {
   }));
 
   const links = Array.from(aggregated.entries())
-    .filter(([_, value]) => value > threshold)
+    .filter(([, value]) => value > threshold)
     .map(([key, value]) => {
       const [source, target] = key.split('-');
       return { source, target, value };

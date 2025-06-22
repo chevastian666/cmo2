@@ -11,11 +11,7 @@ export interface VisibleRange {
 /**
  * Calculate visible range of items based on scroll position
  */
-export function calculateVisibleRange(
-  scrollTop: number,
-  containerHeight: number,
-  itemCount: number,
-  itemHeight: number | ((index: number) => number),
+export function calculateVisibleRange(scrollTop: number, containerHeight: number, itemCount: number, itemHeight: number | ((index: number) => number),
   overscan: number = 3
 ): VisibleRange {
   if (typeof itemHeight === 'number') {
@@ -43,11 +39,7 @@ export function calculateVisibleRange(
 /**
  * Calculate range for variable height items
  */
-function calculateVariableHeightRange(
-  scrollTop: number,
-  containerHeight: number,
-  itemCount: number,
-  getItemHeight: (index: number) => number,
+function calculateVariableHeightRange(scrollTop: number, containerHeight: number, itemCount: number, getItemHeight: (index: number) => number,
   overscan: number
 ): VisibleRange {
   let accumulatedHeight = 0;
@@ -89,9 +81,7 @@ function calculateVariableHeightRange(
 /**
  * Calculate total height of all items
  */
-export function calculateTotalHeight(
-  itemCount: number,
-  itemHeight: number | ((index: number) => number),
+export function calculateTotalHeight(itemCount: number, itemHeight: number | ((index: number) => number),
   cachedHeights?: Map<number, number>
 ): number {
   if (typeof itemHeight === 'number') {
@@ -109,10 +99,7 @@ export function calculateTotalHeight(
 /**
  * Binary search to find item at specific scroll position
  */
-export function findItemAtOffset(
-  offset: number,
-  itemCount: number,
-  getItemHeight: (index: number) => number
+export function findItemAtOffset(offset: number, itemCount: number, getItemHeight: (index: number) => number
 ): number {
   let low = 0;
   let high = itemCount - 1;

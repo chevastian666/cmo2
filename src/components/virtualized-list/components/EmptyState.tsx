@@ -1,6 +1,6 @@
 import React from 'react';
-import {AlertTriangle, Search,Filter} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { AlertTriangle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface EmptyStateProps {
   title: string;
@@ -14,11 +14,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  title,
-  description,
-  icon,
-  action,
-  className
+  title, description, icon, action, className
 }) => {
   const defaultIcon = <AlertTriangle className="h-12 w-12 text-gray-600" />;
 

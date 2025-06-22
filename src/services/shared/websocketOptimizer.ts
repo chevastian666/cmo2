@@ -24,8 +24,7 @@ export class WebSocketOptimizer {
   private config: BatchConfig;
   private onBatchReady: (batch: BatchedUpdate) => void;
 
-  constructor(
-    onBatchReady: (batch: BatchedUpdate) => void,
+  constructor(onBatchReady: (batch: BatchedUpdate) => void,
     config: BatchConfig = {
       maxBatchSize: 50,
       batchInterval: 100, // 100ms batching window
@@ -188,8 +187,7 @@ export class WebSocketOptimizer {
 // Singleton instance
 let optimizerInstance: WebSocketOptimizer | null = null;
 
-export function getWebSocketOptimizer(
-  onBatchReady: (batch: BatchedUpdate) => void,
+export function getWebSocketOptimizer(onBatchReady: (batch: BatchedUpdate) => void,
   config?: BatchConfig
 ): WebSocketOptimizer {
   if (!optimizerInstance) {

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import {ArrowLeft,Truck,Calendar,User, Route, AlertCircle, Download, Edit, Camera, Activity} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, LoadingState } from '../../../components/ui';
-import { useCamionesStore } from '../../../store/camionesStore';
+import { ArrowLeft, Truck, Route, AlertCircle, Download, Camera, Activity} from 'lucide-react';
+import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { exportToCSV } from '../../../utils/export';
-import { notificationService } from '../../../services/shared/notification.service';
-import { cn } from '../../../utils/utils';
-import { ESTADOS_CAMION } from '../types';
+import { exportToCSV} from '../../../utils/export';
+import { notificationService} from '../../../services/shared/notification.service';
+
+import { ESTADOS_CAMION} from '../types';
 
 interface FichaCamionProps {
   matricula: string;
@@ -16,8 +16,7 @@ interface FichaCamionProps {
 export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) => {
   const userInfo = useUserInfo();
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-  
-  const {camionSeleccionado, transitosCamion, estadisticasCamion, loading, selectCamion, updateCamion, uploadFotoCamion, clearSelection} = useCamionesStore();
+   
 
   useEffect(() => {
     selectCamion(matricula);
@@ -152,8 +151,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                 <p className="text-white">{camionSeleccionado.creadoPor.nombre}</p>
               </div>
 
-              {canEdit && (
-                <div className="pt-4 border-t border-gray-700">
+              {canEdit && (<div className="pt-4 border-t border-gray-700">
                   <label className="text-sm text-gray-400 mb-2 block">
                     Observaciones
                   </label>
@@ -245,8 +243,7 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
                   <AlertCircle className="h-12 w-12 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No hay tránsitos registrados</p>
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
+              ) : (<div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-700">

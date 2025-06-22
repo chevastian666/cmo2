@@ -7,22 +7,15 @@
 import React, { useState } from 'react';
 import {Building2, Check, ChevronDown, Plus} from 'lucide-react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useTenantStore } from '@/store/tenantStore';
-import { cn } from '@/utils/utils';
-import { motion } from 'framer-motion';
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
+import { Button} from '@/components/ui/button';
+import { Badge} from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+
+import { cn} from '@/utils/utils';
 
 export const TenantSwitcher: React.FC = () => {
-  const {currentTenant, tenants, switchTenant, canSwitchTenants, isLoading} = useTenantStore();
+  
   const [open, setOpen] = useState(false);
 
   if (!currentTenant) {
@@ -110,8 +103,7 @@ export const TenantSwitcher: React.FC = () => {
         <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
         <DropdownMenuSeparator />
         
-        {tenants.map((tenant) => (
-          <DropdownMenuItem
+        {tenants.map((tenant) => (<DropdownMenuItem
             key={tenant.id}
             onClick={() => switchTenant(tenant.id)}
             disabled={tenant.status === 'suspended' || tenant.status === 'inactive'}

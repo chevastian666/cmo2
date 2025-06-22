@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useCallback, useRef, useState, useEffect } from 'react';
-import { unstable_scheduleCallback, unstable_cancelCallback, unstable_runWithPriority } from 'scheduler';
-import type { RenderPriority, PriorityConfig, PriorityTask, PriorityContextValue } from './types';
+import { unstable_scheduleCallback, unstable_cancelCallback, unstable_runWithPriority} from 'scheduler';
+import type { RenderPriority, PriorityConfig, PriorityTask, PriorityContextValue} from './types';
 
 // Map our priorities to React Scheduler priorities
 const PRIORITY_MAP = {
@@ -20,9 +21,7 @@ interface PriorityProviderProps {
 }
 
 export const PriorityProvider: React.FC<PriorityProviderProps> = ({ 
-  children, 
-  config,
-  enableMetrics = true 
+  children, config: _config, enableMetrics = true 
 }) => {
   const [currentPriority, setCurrentPriority] = useState<RenderPriority>('medium');
   const [pendingTasks, setPendingTasks] = useState<Map<RenderPriority, number>>(new Map());
@@ -63,9 +62,7 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
 
     // Schedule with React Scheduler
     const schedulerPriority = PRIORITY_MAP[priority];
-    const schedulerTask = unstable_scheduleCallback(
-      schedulerPriority,
-      () => {
+    const schedulerTask = unstable_scheduleCallback(schedulerPriority, () => {
         if (!task.cancelled) {
           // Set current priority context
           setCurrentPriority(priority);
@@ -136,7 +133,7 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
   const getCurrentPriority = useCallback(() => currentPriority, [currentPriority]);
 
   // Run callback with specific priority
-  const withPriority = useCallback(<T,>(priority: RenderPriority, callback: () => T): T => {
+  const withPriority = useCallback(<T, >(priority: RenderPriority, callback: () => T): T => {
     let result: T;
     unstable_runWithPriority(PRIORITY_MAP[priority], () => {
       result = callback();
@@ -153,7 +150,10 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
   }, [pendingTasks]);
 
   // Performance monitoring
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!enableMetrics) return;
 
     const interval = setInterval(() => {

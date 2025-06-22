@@ -1,8 +1,8 @@
 import React from 'react';
 import {Package} from 'lucide-react';
-import { BreathingPrecinto } from '../components/BreathingPrecinto';
-import { useASMRSound } from '../services/soundService';
-import { cn } from '../../../utils/utils';
+import { BreathingPrecinto} from '../components/BreathingPrecinto';
+
+import { cn} from '../../../utils/utils';
 
 interface PrecintoData {
   id: string;
@@ -12,7 +12,7 @@ interface PrecintoData {
 }
 
 export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ precinto }) => {
-  const {playHover, playSuccess} = useASMRSound();
+  
 
   const getStatus = (estado: string): 'normal' | 'alert' | 'critical' => {
     switch (estado) {

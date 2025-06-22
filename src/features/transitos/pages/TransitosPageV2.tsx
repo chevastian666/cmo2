@@ -5,22 +5,18 @@
  */
 
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { 
-  Truck, Download, Filter, RefreshCw, MapPin, CheckCircle2, 
-  Clock, AlertTriangle, Package, Search, Calendar, Building2,
-  Shield, Route, Timer, Eye, BarChart3, Activity, Info
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTransitosStore, useAlertasStore, usePrecintosStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import type { Transito } from '../types';
-import { exportToExcel } from '@/utils/export';
+import { Truck, Download, RefreshCw, MapPin, CheckCircle2, Clock, AlertTriangle, Package, Search, Calendar, Building2, Shield, Route, Timer, Eye, Activity} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Card, CardContent} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs';
+
+import { useTransitosStore, useAlertasStore, usePrecintosStore} from '@/store/store';
+import { cn} from '@/utils/utils';
+import type { Transito} from '../types';
+import { exportToExcel} from '@/utils/export';
 
 // Lazy load el modal pesado
 const TransitDetailModalEnhanced = lazy(() => 
@@ -317,7 +313,8 @@ const TransitosPageV2: React.FC = () => {
   const itemsPerPage = 20;
 
   // Load data once with loading state
-  useEffect(() => {
+  
+    useEffect(() => {
     const loadData = async () => {
       if (!isInitialLoad) return;
       
@@ -384,16 +381,17 @@ const TransitosPageV2: React.FC = () => {
           case 'hoy':
             if (fecha.toDateString() !== ahora.toDateString()) return false;
             break;
-          case 'semana':
+          case 'semana': {
             const unaSemanaAtras = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000);
             if (fecha < unaSemanaAtras) return false;
             break;
-          case 'mes':
+          }
+          case 'mes': {
             const unMesAtras = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
             if (fecha < unMesAtras) return false;
             break;
+          }
         }
-      }
 
       return true;
     });
@@ -453,7 +451,8 @@ const TransitosPageV2: React.FC = () => {
   }, [fetchTransitos]);
 
   // Reset page when changing filters
-  useEffect(() => {
+  
+    useEffect(() => {
     setCurrentPage(1);
   }, [activeTab, searchTerm, empresaFilter, fechaFilter]);
 
@@ -639,8 +638,7 @@ const TransitosPageV2: React.FC = () => {
                       {activeTab === 'completados' && 'No hay tránsitos completados con los filtros actuales'}
                     </p>
                   </div>
-                ) : (
-                  filteredTransitos.map((transito) => (
+                ) : (filteredTransitos.map((transito) => (
                     <TransitoCard
                       key={transito.id}
                       transito={transito}
@@ -652,8 +650,7 @@ const TransitosPageV2: React.FC = () => {
               </div>
               
               {/* Paginación */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between px-6 py-3 mt-4">
+              {totalPages > 1 && (<div className="flex items-center justify-between px-6 py-3 mt-4">
                   <p className="text-sm text-gray-400">
                     Página {currentPage} de {totalPages} - {totalItems} tránsitos
                   </p>
@@ -686,8 +683,7 @@ const TransitosPageV2: React.FC = () => {
 
       {/* Modal de detalles con lazy loading */}
       <Suspense fallback={null}>
-        {selectedTransito && (
-          <TransitDetailModalEnhanced
+        {selectedTransito && (<TransitDetailModalEnhanced
             isOpen={showDetailModal}
             onClose={() => {
               setShowDetailModal(false);

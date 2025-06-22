@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import { ColumnDef } from '@tanstack/react-table';
-import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery,Wifi,MapPin,AlertTriangle,CheckCircle} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
+import { ColumnDef} from '@tanstack/react-table';
+import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, Wifi, MapPin, AlertTriangle, CheckCircle} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Badge} from '@/components/ui/badge';
+import { Checkbox} from '@/components/ui/checkbox';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { DataTableV2 } from '@/components/ui/data-table/DataTableV2';
-import { cn } from '@/lib/utils';
-import type { Precinto } from '../../../types';
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
+import { DataTableV2} from '@/components/ui/data-table/DataTableV2';
+import { cn} from '@/lib/utils';
+import type { Precinto} from '../../../types';
 
 // Mock data for demonstration
 const mockPrecintos: Precinto[] = [
@@ -82,7 +73,7 @@ const mockPrecintos: Precinto[] = [
   }
 ];
 
-import { PrecintosTableSkeleton } from './PrecintosTableSkeleton';
+import { PrecintosTableSkeleton} from './PrecintosTableSkeleton';
 
 interface PrecintosTableProps {
   loading?: boolean;
@@ -114,8 +105,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
     {
       accessorKey: 'codigo',
       header: ({ column }) => {
-        return (
-          <Button
+        return (<Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -156,8 +146,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
     {
       accessorKey: 'bateria',
       header: ({ column }) => {
-        return (
-          <Button
+        return (<Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -308,8 +297,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
     {
       accessorKey: 'ultimaActualizacion',
       header: ({ column }) => {
-        return (
-          <Button
+        return (<Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -344,8 +332,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       cell: ({ row }) => {
         const precinto = row.original;
 
-        return (
-          <DropdownMenu>
+        return (<DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Abrir menú</span>

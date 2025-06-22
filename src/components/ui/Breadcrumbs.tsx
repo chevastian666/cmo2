@@ -1,13 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Breadcrumb Navigation Component
  * By Cheva
  */
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, Home } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { Link, useLocation} from 'react-router-dom';
+import { ChevronRight, Home} from 'lucide-react';
+import { motion} from 'framer-motion';
+import { cn} from '@/lib/utils';
 
 export interface BreadcrumbItem {
   label: string;
@@ -61,8 +62,7 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
     currentPath += `/${segment}`;
     
     // Check if we have a config for this exact path
-    const _config = routeConfig[currentPath];
-    
+
     if (_config) {
       items.push({
         label: config.label,
@@ -76,7 +76,7 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
       });
       
       if (dynamicKey) {
-        const _config = routeConfig[dynamicKey];
+
         items.push({
           label: config.label,
           href: index === segments.length - 1 ? undefined : currentPath
@@ -106,13 +106,7 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
 };
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
-  items,
-  separator = <ChevronRight className="h-4 w-4" />,
-  className,
-  showHome = true,
-  homeLabel = 'Inicio',
-  homeHref = '/',
-  maxItems = 4
+  items, separator = <ChevronRight className="h-4 w-4" />, className, showHome = true, homeLabel = 'Inicio', homeHref = '/', maxItems = 4
 }) => {
   const location = useLocation();
   

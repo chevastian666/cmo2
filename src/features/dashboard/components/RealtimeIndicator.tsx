@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Activity } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Activity} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 export const RealtimeIndicator: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+   
 
   useEffect(() => {
     // Listen for any store updates

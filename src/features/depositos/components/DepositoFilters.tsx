@@ -1,10 +1,10 @@
 import React from 'react';
-import {X,Filter} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
-import { DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
-import type { DepositoFilters as Filters } from '../types';
+import {X, Filter} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Label} from '@/components/ui/label';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
+import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types';
+import type { DepositoFilters as Filters} from '../types';
 
 interface DepositoFiltersProps {
   filters: Filters;
@@ -13,9 +13,7 @@ interface DepositoFiltersProps {
 }
 
 export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
-  filters,
-  onFiltersChange,
-  onClose
+  filters, onFiltersChange, onClose
 }) => {
   const handleReset = () => {
     onFiltersChange({
@@ -25,8 +23,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
     });
   };
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-6 space-y-4">
+  return (<div className="bg-gray-800 rounded-lg p-6 space-y-4">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5 text-blue-500" />

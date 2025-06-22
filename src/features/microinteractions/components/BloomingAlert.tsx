@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 import '../animations/bloom.css';
 
 interface BloomingAlertProps {
@@ -11,13 +11,10 @@ interface BloomingAlertProps {
 }
 
 export const BloomingAlert: React.FC<BloomingAlertProps> = ({
-  children,
-  status,
-  onBloomComplete,
-  className,
-  show = true
+  children, status, onBloomComplete, className, show = true
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+   
 
   useEffect(() => {
     if (show) {

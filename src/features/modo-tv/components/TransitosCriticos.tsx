@@ -1,7 +1,7 @@
 import React from 'react';
-import {AlertOctagon,Truck,Clock,Phone} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { TransitoCritico } from '../types';
+import {AlertOctagon, Truck, Clock, Phone} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { TransitoCritico} from '../types';
 
 interface TransitosCriticosProps {
   criticos: TransitoCritico[];
@@ -66,8 +66,7 @@ export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }
               <p className="text-lg text-gray-500">Sin tránsitos críticos</p>
             </div>
           </div>
-        ) : (
-          <div className="space-y-4">
+        ) : (<div className="space-y-4">
             {criticos.map((critico, index) => {
               const colores = getColorNivel(critico.nivel);
               return (

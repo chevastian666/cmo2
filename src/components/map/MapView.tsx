@@ -1,7 +1,7 @@
 import React, { useDeferredValue, useTransition, memo, Suspense, useState } from 'react';
-import {Map, Navigation,Truck, AlertCircle} from 'lucide-react';
-import { MapSkeleton } from './MapSkeleton';
-import { PriorityBoundary } from '../priority/withPriority';
+import { Map, Navigation, Truck} from 'lucide-react';
+import { MapSkeleton} from './MapSkeleton';
+import { PriorityBoundary} from '../priority/withPriority';
 
 interface Location {
   id: string;
@@ -17,33 +17,7 @@ interface Location {
 // Lazy load the actual map component
 const LazyMapRenderer = React.lazy(() => import('./MapRenderer'));
 
-interface MapMarkerProps {
-  location: Location;
-  onClick?: (location: Location) => void;
-}
-
-const MapMarker: React.FC<MapMarkerProps> = memo(({ location, onClick }) => {
-  const statusColors = {
-    active: 'bg-green-500',
-    inactive: 'bg-gray-500',
-    alert: 'bg-red-500'
-  };
-
-  return (
-    <div
-      className="relative cursor-pointer transform transition-transform hover:scale-110"
-      onClick={() => onClick?.(location)}
-      title={`${location.precintoId} - ${location.status}`}
-    >
-      <div className={`w-3 h-3 rounded-full ${statusColors[location.status]} animate-pulse`} />
-      {location.status === 'alert' && (
-        <div className="absolute -top-1 -right-1">
-          <AlertCircle className="h-4 w-4 text-red-500" />
-        </div>
-      )}
-    </div>
-  );
-});
+// MapMarker component removed - not currently used
 
 interface MapControlsProps {
   onZoomIn: () => void;

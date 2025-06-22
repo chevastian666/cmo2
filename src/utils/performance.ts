@@ -25,7 +25,7 @@ class PerformanceMonitor {
   ): T {
     if (!this.enabled) return Component;
 
-    const MeasuredComponent = (_props: unknown) => {
+    const MeasuredComponent = (props: unknown) => {
       const startTime = performance.now();
       
       React.useEffect(() => {
@@ -152,8 +152,7 @@ export const requestIdleCallback =
     const start = Date.now();
     return setTimeout(() => {
       cb({
-        didTimeout: false,
-        timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
+        didTimeout: false, timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
       });
     }, 1);
   };
@@ -179,9 +178,7 @@ export function deferWork(callback: () => void): void {
 /**
  * Memoize expensive computations
  */
-export function memoize<T extends (...args: unknown[]) => any>(
-  fn: T,
-  getKey?: (...args: Parameters<T>) => string
+export function memoize<T extends (...args: unknown[]) => any>(fn: T, getKey?: (...args: Parameters<T>) => string
 ): T {
   const cache = new Map<string, ReturnType<T>>();
   

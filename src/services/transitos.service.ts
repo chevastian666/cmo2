@@ -1,7 +1,7 @@
-import type { TransitoPendiente } from '../types/monitoring';
-import { unifiedAPIService } from './api/unified.service';
-import { trokorService } from './api/trokor.service';
-import { generateMockTransito } from '../utils/mockData';
+import type { TransitoPendiente} from '../types/monitoring';
+import { unifiedAPIService} from './api/unified.service';
+import { trokorService} from './api/trokor.service';
+import { generateMockTransito} from '../utils/mockData';
 
 export interface TransitoFilters {
   estado?: 'pendiente' | 'en_proceso' | 'precintado';
@@ -37,7 +37,7 @@ export const transitosService = {
       
       const response = await unifiedAPIService.getTransitosPendientesLucia(25);
       return response;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transitos pendientes:', _error);
       return Array.from({ length: 12 }, (_, i) => generateMockTransito(i));
     }
@@ -76,7 +76,7 @@ export const transitosService = {
         observaciones: transito.observaciones,
         vehiculo: transito.vehiculo
       }));
-    } catch (_error) {
+    } catch {
       console.error('Error fetching all transitos:', _error);
       return Array.from({ length: 20 }, (_, i) => generateMockTransito(i));
     }
@@ -93,7 +93,7 @@ export const transitosService = {
       const transito = all.find(t => t.id === id);
       if (!transito) throw new Error('Transito not found');
       return transito;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transito:', _error);
       return generateMockTransito(parseInt(id) || 1);
     }
@@ -108,7 +108,7 @@ export const transitosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error updating estado:', _error);
     }
   },
@@ -122,7 +122,7 @@ export const transitosService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error precintando:', _error);
     }
   },
@@ -150,7 +150,7 @@ export const transitosService = {
         precintados: 0, // Calculate from historical data
         tiempoPromedio: stats.tiempoPromedioTransito || 48
       };
-    } catch (_error) {
+    } catch {
       console.error('Error fetching estadisticas:', _error);
       return {
         pendientes: 15,

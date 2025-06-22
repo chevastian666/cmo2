@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {X,MessageSquare, Send} from 'lucide-react';
-import { Card, CardHeader, CardContent } from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import type { Novedad } from '../types';
+import {X, MessageSquare, Send} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import type { Novedad} from '../types';
 
 interface ModalSeguimientoProps {
   novedad: Novedad | null;
@@ -12,10 +12,7 @@ interface ModalSeguimientoProps {
 }
 
 export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
-  novedad,
-  isOpen,
-  onClose,
-  onSubmit
+  novedad, isOpen, onClose, onSubmit
 }) => {
   const [comentario, setComentario] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,7 +40,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
       await onSubmit(novedad.id, comentario.trim());
       setComentario('');
       onClose();
-    } catch (_err) {
+    } catch {
       setError('Error al guardar el seguimiento');
     } finally {
       setLoading(false);

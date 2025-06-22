@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
-import { authService } from '../services/shared/auth.service';
-import type { Usuario } from '../types';
+import { authService} from '../services/shared/auth.service';
+import type { Usuario} from '../types';
 
 interface UseAuthReturn {
   user: Usuario | null;
@@ -21,6 +21,7 @@ export function useAuth(): UseAuthReturn {
     isLoading: false,
     error: null as string | null
   });
+   
 
   useEffect(() => {
     // Subscribe to auth state changes
@@ -63,7 +64,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
   isLoading: boolean;
   user: Usuario | null;
 } {
-  const {user, isAuthenticated, isLoading, hasRole} = useAuth();
+  
   
   const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(requiredRoles));
   
@@ -76,7 +77,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
 
 // Hook for user info
 export function useUserInfo() {
-  const {user} = useAuth();
+  
   
   return {
     name: user?.nombre || 'Usuario',

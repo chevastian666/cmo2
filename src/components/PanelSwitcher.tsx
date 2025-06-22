@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import {Monitor,Truck, ChevronDown, ExternalLink} from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
-import { cn } from '../utils/utils';
+import {Monitor, Truck, ChevronDown, ExternalLink} from 'lucide-react';
+
+import { cn} from '../utils/utils';
 
 interface PanelSwitcherProps {
   currentPanel: 'cmo' | 'encargados';
 }
 
 export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) => {
-  const {canAccessCMO, canAccessEncargados} = useAuth();
+  
   const [isOpen, setIsOpen] = useState(false);
 
   const panels = [
@@ -42,8 +42,7 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
     setIsOpen(false);
   };
 
-  return (
-    <div className="relative">
+  return (<div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors"
@@ -60,8 +59,7 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
         )} />
       </button>
 
-      {isOpen && (
-        <>
+      {isOpen && (<>
           <div 
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
@@ -69,8 +67,7 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
           <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-md shadow-lg border border-gray-700 z-20">
             <div className="p-2">
               <p className="text-sm text-gray-500 px-2 py-1">Cambiar Panel</p>
-              {availablePanels.map((panel) => (
-                <button
+              {availablePanels.map((panel) => (<button
                   key={panel.id}
                   onClick={() => handlePanelSwitch(panel)}
                   className={cn(

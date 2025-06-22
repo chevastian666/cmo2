@@ -1,4 +1,4 @@
-import type { ClipboardContentType } from '../types';
+import type { ClipboardContentType} from '../types';
 
 interface DetectionResult {
   type: ClipboardContentType;
@@ -141,8 +141,7 @@ export function generateSmartPaste(
   targetContext: 'form' | 'search' | 'report' | 'message'
 ): string {
   const detection = detectClipboardContent(content);
-  const _data = detection.extractedData || {};
-  
+
   switch (targetContext) {
     case 'form':
       // Format for form fields

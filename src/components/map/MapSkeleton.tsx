@@ -1,5 +1,5 @@
 import React from 'react';
-import { Map } from 'lucide-react';
+import { Map} from 'lucide-react';
 
 export const MapSkeleton: React.FC = () => {
   return (

@@ -2,21 +2,9 @@
  * Date Utils Tests
  * By Cheva
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi} from 'vitest';
 import { 
-  formatDate, 
-  formatDateTime, 
-  formatRelativeTime, 
-  parseDate,
-  isDateInRange,
-  addDays,
-  getDaysBetween,
-  formatDuration,
-  isToday,
-  isYesterday,
-  getStartOfDay,
-  getEndOfDay
-} from './dateUtils';
+  formatDate, formatDateTime, formatRelativeTime, parseDate, isDateInRange, addDays, getDaysBetween, formatDuration, isToday, isYesterday, getStartOfDay, getEndOfDay} from './dateUtils';
 
 describe('DateUtils', () => {
   // Mock current date for consistent testing

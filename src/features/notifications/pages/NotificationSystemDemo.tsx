@@ -5,30 +5,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Bell,
-  Settings,
-  TestTube2,
-  Volume2,
-  Smartphone,
-  Mail,
-  Users,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle,
-  Play
-} from 'lucide-react';
-import { NotificationButton, NotificationPreferences } from '../../../components/notifications';
-import { notificationService } from '../../../services/notifications/notificationService';
-import { pushNotificationService } from '../../../services/notifications/pushNotificationService';
+import { motion} from 'framer-motion';
+import { Bell, Settings, TestTube2, Smartphone, Mail, TrendingUp, AlertTriangle, CheckCircle, Play} from 'lucide-react';
+import { NotificationButton, NotificationPreferences} from '../../../components/notifications';
+import { notificationService} from '../../../services/notifications/notificationService';
+import { pushNotificationService} from '../../../services/notifications/pushNotificationService';
 import type { 
-  NotificationPreferences as NotificationPrefsType,
-  NotificationType,
-  NotificationPriority,
-  NotificationStats
-} from '../../../types/notifications';
-import { DEFAULT_SOUNDS } from '../../../types/notifications';
+  NotificationPreferences as NotificationPrefsType, NotificationType, NotificationPriority, NotificationStats} from '../../../types/notifications';
+import { DEFAULT_SOUNDS} from '../../../types/notifications';
 
 export const NotificationSystemDemo: React.FC = () => {
   const [preferences, setPreferences] = useState<NotificationPrefsType | null>(null);
@@ -36,6 +20,7 @@ export const NotificationSystemDemo: React.FC = () => {
   const [pushSupported, setPushSupported] = useState(false);
   const [pushSubscribed, setPushSubscribed] = useState(false);
   const [activeTab, setActiveTab] = useState<'demo' | 'preferences' | 'stats'>('demo');
+   
 
   useEffect(() => {
     initializeDemo();
@@ -63,12 +48,7 @@ export const NotificationSystemDemo: React.FC = () => {
     }
   };
 
-  const createTestNotification = async (
-    type: NotificationType, 
-    priority: NotificationPriority,
-    title: string,
-    message: string
-  ) => {
+  const createTestNotification = async (type: NotificationType, priority: NotificationPriority, title: string, message: string) => {
     await notificationService.createNotification(type, title, message, {
       priority,
       metadata: {
@@ -167,8 +147,7 @@ export const NotificationSystemDemo: React.FC = () => {
     setStats(currentStats);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-900 p-6">
+  return (<div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -203,11 +182,8 @@ export const NotificationSystemDemo: React.FC = () => {
         <div className="mb-6">
           <div className="flex space-x-1 bg-gray-800 rounded-lg p-1">
             {[
-              { key: 'demo', label: 'Demostración', icon: TestTube2 },
-              { key: 'preferences', label: 'Preferencias', icon: Settings },
-              { key: 'stats', label: 'Estadísticas', icon: TrendingUp }
-            ].map(({ key, label, icon: Icon }) => (
-              <button
+              { key: 'demo', label: 'Demostración', icon: TestTube2 }, { key: 'preferences', label: 'Preferencias', icon: Settings }, { key: 'stats', label: 'Estadísticas', icon: TrendingUp }
+            ].map(({ key, label, icon: Icon }) => (<button
                 key={key}
                 onClick={() => setActiveTab(key as any)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
@@ -226,8 +202,7 @@ export const NotificationSystemDemo: React.FC = () => {
         {/* Tab Content */}
         <div className="space-y-6">
           {/* Demo Tab */}
-          {activeTab === 'demo' && (
-            <motion.div
+          {activeTab === 'demo' && (<motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="space-y-6"
@@ -318,8 +293,7 @@ export const NotificationSystemDemo: React.FC = () => {
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {DEFAULT_SOUNDS.map((sound) => (
-                    <div key={sound.id} className="bg-gray-700 rounded-lg p-4">
+                  {DEFAULT_SOUNDS.map((sound) => (<div key={sound.id} className="bg-gray-700 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-white">{sound.name}</span>
                         <button

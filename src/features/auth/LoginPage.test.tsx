@@ -2,9 +2,9 @@
  * LoginPage Component Tests
  * By Cheva
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@/test/utils/test-utils';
-import { LoginPage } from './LoginPage';
+import { describe, it, expect, vi, beforeEach} from 'vitest';
+import { render, screen, waitFor} from '@/test/utils/test-utils';
+import { LoginPage} from './LoginPage';
 import userEvent from '@testing-library/user-event';
 
 // Mock the auth hook

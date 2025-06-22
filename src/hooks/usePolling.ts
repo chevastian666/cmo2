@@ -1,4 +1,4 @@
-import {useEffect,  useRef, useCallback} from 'react';
+import {useEffect, useRef, useCallback} from 'react';
 
 interface UsePollingOptions {
   interval?: number;
@@ -12,22 +12,19 @@ interface UsePollingOptions {
  * @param callback Función a ejecutar en cada intervalo
  * @param options Opciones de configuración del polling
  */
-export function usePolling(
-  callback: () => void | Promise<void>,
+export function usePolling(callback: () => void | Promise<void>,
   options: UsePollingOptions = {}
 ) {
-  const {
-    interval = 45000, // 45 segundos por defecto
-    enabled = true, 
-    onError, 
-    immediateFirstCall = true
-  } = options;
+  
 
   const savedCallback = useRef(callback);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
   // Actualizar el callback guardado cuando cambie
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
@@ -35,7 +32,7 @@ export function usePolling(
   const executeCallback = useCallback(async () => {
     try {
       await savedCallback.current();
-    } catch (_error) {
+    } catch {
       console.error('Error during polling:', _error);
       onError?.(error as Error);
     }
@@ -59,7 +56,10 @@ export function usePolling(
   }, []);
 
   // Efecto principal para manejar el polling
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!enabled) {
       stopPolling();
       return;
@@ -133,8 +133,7 @@ export function useDataDiff<T extends { id: string }>(
 /**
  * Hook para polling con detección de cambios
  */
-export function usePollingWithDiff<T extends { id: string }>(
-  fetchData: () => Promise<T[]>,
+export function usePollingWithDiff<T extends { id: string }>(fetchData: () => Promise<T[]>,
   currentData: T[],
   onDataChange: (data: T[]) => void,
   options: UsePollingOptions = {}
@@ -158,7 +157,7 @@ export function usePollingWithDiff<T extends { id: string }>(
           console.log(`[Polling] ${diff.removed.length} items eliminados`);
         }
       }
-    } catch (_error) {
+    } catch {
       console.error('Error fetching data during polling:', _error);
       options.onError?.(error as Error);
     }
@@ -170,13 +169,14 @@ export function usePollingWithDiff<T extends { id: string }>(
 /**
  * Hook para manejar reconexión automática en caso de pérdida de conexión
  */
-export function useAutoReconnect(
-  onReconnect: () => void,
+export function useAutoReconnect(onReconnect: () => void,
   checkInterval = 5000
 ) {
   const isOnlineRef = useRef(navigator.onLine);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const handleOnline = () => {
       if (!isOnlineRef.current) {
         console.log('Conexión restaurada, reiniciando polling...');

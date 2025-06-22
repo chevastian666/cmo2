@@ -4,11 +4,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {X,AlertTriangle,CheckCircle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package,User,MessageSquare} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { Alerta } from '../../../types';
+import { X, AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, MessageSquare} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatTimeAgo} from '../../../utils/formatters';
+import { notificationService} from '../../../services/shared/notification.service';
+import type { Alerta} from '../../../types';
 
 interface VerificarAlertaModalProps {
   alerta: Alerta;
@@ -18,16 +18,15 @@ interface VerificarAlertaModalProps {
 }
 
 export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onVerificar
+  alerta, isOpen, onClose, onVerificar
 }) => {
   const [verificando, setVerificando] = useState(false);
   const [comentario, setComentario] = useState('');
   const [showComentario, setShowComentario] = useState(false);
 
   // Handle ESC key to close modal
+   
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -88,7 +87,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
       await onVerificar(alerta.id, comentario || undefined);
       notificationService.success(`Alerta ${alerta.codigoPrecinto} verificada correctamente`);
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al verificar la alerta');
       console.error('Error verifying alert:', _error);
     } finally {
@@ -199,8 +198,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
                 <span>{showComentario ? 'Ocultar' : 'Agregar'} comentario</span>
               </button>
               
-              {showComentario && (
-                <textarea
+              {showComentario && (<textarea
                   value={comentario}
                   onChange={(e) => setComentario(e.target.value)}
                   placeholder="Agregar un comentario sobre la verificación..."

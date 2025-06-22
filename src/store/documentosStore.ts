@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { Documento, EstadisticasDocumentacion, LogAuditoria } from '../features/documentacion/types';
+import { create} from 'zustand';
+import type { Documento, EstadisticasDocumentacion, LogAuditoria} from '../features/documentacion/types';
 
 // Mock data para desarrollo
 const mockDocumentos: Documento[] = [
@@ -81,13 +81,7 @@ interface DocumentosState {
 }
 
 export const useDocumentosStore = create<DocumentosState>((set, get) => ({
-  documentos: [],
-  estadisticas: null,
-  loading: false,
-  error: null,
-  logs: [],
-
-  fetchDocumentos: async () => {
+  documentos: [], estadisticas: null, loading: false, error: null, logs: [], fetchDocumentos: async () => {
     set({ loading: true });
     try {
       // Simular llamada a API
@@ -114,7 +108,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         loading: false,
         error: null
       });
-    } catch (_error) {
+    } catch {
       set({ 
         error: 'Error al cargar documentos',
         loading: false
@@ -122,7 +116,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
     }
   },
 
-  uploadDocumento: async (data: any) => {
+  uploadDocumento: async (data: unknown) => {
     try {
       // Simular subida
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -149,7 +143,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         estado: 'activo'
       };
 
-      const {documentos} = get();
+      
       set({ documentos: [...documentos, nuevoDoc] });
       
       // Registrar log
@@ -160,14 +154,14 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
       });
-    } catch (_error) {
+    } catch {
       throw new Error('Error al subir documento');
     }
   },
 
   deleteDocumento: async (id) => {
     try {
-      const {documentos} = get();
+      
       set({ documentos: documentos.filter(d => d.id !== id) });
       
       // Registrar log
@@ -178,14 +172,14 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
       });
-    } catch (_error) {
+    } catch {
       throw new Error('Error al eliminar documento');
     }
   },
 
   updateDocumento: async (id, updates) => {
     try {
-      const {documentos} = get();
+      
       set({
         documentos: documentos.map(d => 
           d.id === id 
@@ -211,7 +205,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         ip: '192.168.1.1',
         detalles: JSON.stringify(updates)
       });
-    } catch (_error) {
+    } catch {
       throw new Error('Error al actualizar documento');
     }
   },

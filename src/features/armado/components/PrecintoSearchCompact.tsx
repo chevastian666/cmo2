@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, QrCode, Loader, AlertCircle } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Search, QrCode, Loader, AlertCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface PrecintoSearchProps {
   onSearch: (nqr: string) => void;
@@ -9,12 +9,11 @@ interface PrecintoSearchProps {
 }
 
 export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({ 
-  onSearch, 
-  loading = false,
-  error = null
+  onSearch, loading = false, error = null
 }) => {
   const [nqr, setNqr] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+   
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -29,8 +28,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
     onSearch(nqr.trim());
   };
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+  return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
       <form onSubmit={handleSubmit}>
         <div className="flex items-center space-x-3">
           <Search className="h-5 w-5 text-blue-500" />

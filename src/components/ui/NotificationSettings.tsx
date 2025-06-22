@@ -1,7 +1,8 @@
+ 
 import React, { useState, useEffect } from 'react';
-import {Bell,BellOff, Volume2, VolumeX,AlertTriangle} from 'lucide-react';
-import { cn } from '../../utils/utils';
-import { notificationService } from '../../services/shared/notification.service';
+import {Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react';
+import { cn} from '../../utils/utils';
+import { notificationService} from '../../services/shared/notification.service';
 
 export interface NotificationSettingsProps {
   className?: string;
@@ -9,12 +10,12 @@ export interface NotificationSettingsProps {
 }
 
 export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ 
-  className,
-  compact = false 
+  className, compact = false 
 }) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [criticalOnly, setCriticalOnly] = useState(false);
+   
 
   useEffect(() => {
     // Load saved preferences

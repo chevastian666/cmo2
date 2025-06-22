@@ -5,34 +5,23 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {Package, Search, AlertCircle,CheckCircle, Loader,MapPin,Truck,User,FileText,Phone,Calendar, ChevronRight, ExternalLink, Copy,Hash, Shield,Building, Route,CreditCard} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { Label } from '@/components/ui/label';
+import { useNavigate} from 'react-router-dom';
+import { Package, Search, AlertCircle, CheckCircle, MapPin, Truck, User, FileText, Phone, Calendar, ChevronRight, ExternalLink, Copy, Hash, Shield, Building, Route, CreditCard} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+
+import { Label} from '@/components/ui/label';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedDiv,
-  AnimatedSpinner,
-  AnimatedSkeleton
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { notificationService } from '@/services/shared/notification.service';
-import { prearmadoService } from '../services/prearmado.service';
-import { cn } from '@/utils/utils';
-import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+import { notificationService} from '@/services/shared/notification.service';
+import { prearmadoService} from '../services/prearmado.service';
+
+import { staggerContainer, staggerItem, fadeInUp} from '@/components/animations/AnimationPresets';
 
 interface PrearmadoFormData {
   viajeId: string;
@@ -99,7 +88,7 @@ export const PrearmadoPageV2: React.FC = () => {
         setTransitInfo(null);
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados');
       }
-    } catch (_error) {
+    } catch {
       notificationService.error('Error', 'Error al buscar la información del tránsito');
       setTransitInfo(null);
     } finally {
@@ -134,7 +123,7 @@ export const PrearmadoPageV2: React.FC = () => {
       setCopiedField(field);
       notificationService.success('Copiado', 'Texto copiado al portapapeles');
       setTimeout(() => setCopiedField(null), 2000);
-    } catch (_error) {
+    } catch {
       notificationService.error('Error', 'No se pudo copiar el texto');
     }
   };
@@ -165,8 +154,7 @@ export const PrearmadoPageV2: React.FC = () => {
     return type && types[type] ? types[type] : 'Documento';
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
           title="Prearmado"
@@ -240,8 +228,7 @@ export const PrearmadoPageV2: React.FC = () => {
 
         {/* Results */}
         <AnimatePresence mode="wait">
-          {searchPerformed && !loading && (
-            <AnimatedSection delay={0.2}>
+          {searchPerformed && !loading && (<AnimatedSection delay={0.2}>
               {transitInfo ? (
                 <motion.div
                   variants={staggerContainer}

@@ -1,6 +1,6 @@
-import type { EstadisticasMonitoreo } from '../types/monitoring';
-import { unifiedAPIService } from './api/unified.service';
-import { trokorService } from './api/trokor.service';
+import type { EstadisticasMonitoreo} from '../types/monitoring';
+import { unifiedAPIService} from './api/unified.service';
+import { trokorService} from './api/trokor.service';
 
 export interface EstadisticasFilters {
   desde?: number;
@@ -63,7 +63,7 @@ export const estadisticasService = {
       
       // Si no está habilitada Trokor o falló, usar unified API
       return await unifiedAPIService.getEstadisticas();
-    } catch (_error) {
+    } catch {
       console.error('Error fetching estadisticas:', _error);
       // Return default values
       return {
@@ -106,7 +106,7 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (_error) {
+    } catch {
       console.error('Error fetching historico lecturas:', _error);
       return [];
     }
@@ -132,13 +132,13 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (_error) {
+    } catch {
       console.error('Error fetching historico alertas:', _error);
       return [];
     }
   },
 
-  getRendimiento: async (filters?: EstadisticasFilters): Promise<{
+  getRendimiento: async (_filters?: EstadisticasFilters): Promise<{
     tasaExito: number;
     tiempoPromedioTransito: number;
     lecturasPromedioPorHora: number;
@@ -161,7 +161,7 @@ export const estadisticasService = {
         lecturasPromedioPorHora: stats.lecturasPorHora,
         alertasPromedioPorDia: Math.round(stats.alertasActivas * 24 / 7) // Rough estimate
       };
-    } catch (_error) {
+    } catch {
       console.error('Error fetching rendimiento:', _error);
       return {
         tasaExito: 0,
@@ -217,7 +217,7 @@ export const estadisticasService = {
         },
         reportesPendientes: stats.reportesPendientes
       };
-    } catch (_error) {
+    } catch {
       console.error('Error fetching estado sistema:', _error);
       return {
         smsPendientes: 0,

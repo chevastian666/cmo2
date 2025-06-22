@@ -1,6 +1,5 @@
-import type { StateCreator } from 'zustand';
-import type { SystemStatusStore } from '../types';
-import { estadisticasService } from '../../services';
+import type { StateCreator} from 'zustand';
+import type { SystemStatusStore} from '../types';
 
 const mockEstadisticas = {
   precintosActivos: 1247,
@@ -25,22 +24,9 @@ const mockEstadisticas = {
 
 export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, get) => ({
   // State
-  estadisticas: null,
-  smsPendientes: 0,
-  dbStats: {
-    memoriaUsada: 0,
-    discoUsado: 0,
-  },
-  apiStats: {
-    memoriaUsada: 0,
-    discoUsado: 0,
-  },
-  reportesPendientes: 0,
-  loading: false,
-  error: null,
-  lastUpdate: null,
-
-  // Actions
+  estadisticas: null, smsPendientes: 0, dbStats: {
+    memoriaUsada: 0, discoUsado: 0, }, apiStats: {
+    memoriaUsada: 0, discoUsado: 0, }, reportesPendientes: 0, loading: false, error: null, lastUpdate: null, // Actions
   setEstadisticas: (estadisticas) => set({ 
     estadisticas, 
     smsPendientes: estadisticas.smsPendientes,
@@ -61,14 +47,14 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   setError: (error) => set({ error }),
   
   fetchEstadisticas: async () => {
-    const {setLoading, setError, setEstadisticas} = get();
+    
     setLoading(true);
     setError(null);
     
     try {
-      const _data = await estadisticasService.getGenerales();
+
       setEstadisticas(_data);
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       setEstadisticas(mockEstadisticas);
       console.warn('Using mock data for estadisticas:', _error);
@@ -78,14 +64,14 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   },
   
   fetchSystemStatus: async () => {
-    const {setLoading, setError, updateSystemStatus} = get();
+    
     setLoading(true);
     setError(null);
     
     try {
-      const _data = await estadisticasService.getEstadoSistema();
+
       updateSystemStatus(_data);
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       updateSystemStatus({
         smsPendientes: mockEstadisticas.smsPendientes,

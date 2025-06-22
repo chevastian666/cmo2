@@ -4,26 +4,17 @@
  * By Cheva
  */
 
-import { create } from 'zustand';
-import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
+import { create} from 'zustand';
+import { devtools, persist, subscribeWithSelector} from 'zustand/middleware';
+import { immer} from 'zustand/middleware/immer';
 import { 
-  createPrecintosSlice,
-  createTransitosSlice,
-  createAlertasSlice,
-  createSystemStatusSlice
-} from './slices';
+  createPrecintosSlice, createTransitosSlice, createAlertasSlice, createSystemStatusSlice} from './slices';
 import type { 
-  PrecintosStore, 
-  TransitosStore, 
-  AlertasStore, 
-  SystemStatusStore 
-} from './types';
+  PrecintosStore, TransitosStore, AlertasStore, SystemStatusStore} from './types';
 
 // Custom logger middleware for development
 const logger = (config: unknown) => (set: unknown, get: unknown, api: unknown) =>
-  config(
-    (...args: unknown[]) => {
+  config((...args: unknown[]) => {
       if (import.meta.env.DEV) {
         console.log('  applying', args);
       }
@@ -190,8 +181,7 @@ export const setupAutoRefresh = () => {
   const shouldRefresh = () => document.visibilityState === 'visible';
 
   // Refresh precintos every 10 seconds
-  intervals.push(
-    setInterval(() => {
+  intervals.push(setInterval(() => {
       if (shouldRefresh()) {
         usePrecintosStore.getState().fetchPrecintosActivos();
       }
@@ -199,8 +189,7 @@ export const setupAutoRefresh = () => {
   );
 
   // Refresh transitos every 30 seconds
-  intervals.push(
-    setInterval(() => {
+  intervals.push(setInterval(() => {
       if (shouldRefresh()) {
         useTransitosStore.getState().fetchTransitosPendientes();
       }
@@ -208,8 +197,7 @@ export const setupAutoRefresh = () => {
   );
 
   // Refresh alertas every 10 seconds
-  intervals.push(
-    setInterval(() => {
+  intervals.push(setInterval(() => {
       if (shouldRefresh()) {
         useAlertasStore.getState().fetchAlertasActivas();
       }
@@ -217,8 +205,7 @@ export const setupAutoRefresh = () => {
   );
 
   // Refresh system status every 5 seconds
-  intervals.push(
-    setInterval(() => {
+  intervals.push(setInterval(() => {
       if (shouldRefresh()) {
         useSystemStatusStore.getState().fetchEstadisticas();
       }
@@ -237,8 +224,7 @@ export { useDashboardStore } from './dashboardStore';
 // Cross-store subscriptions for reactive updates
 const setupStoreSubscriptions = () => {
   // Update system status when alerts count changes
-  useAlertasStore.subscribe(
-    (state) => state.alertasActivas.length,
+  useAlertasStore.subscribe((state) => state.alertasActivas.length,
     (count) => {
       const currentStats = useSystemStatusStore.getState().estadisticas;
       if (currentStats) {
@@ -253,8 +239,7 @@ const setupStoreSubscriptions = () => {
   );
 
   // Update alerts when precinto status changes to critical
-  usePrecintosStore.subscribe(
-    (state) => state.precintosActivos,
+  usePrecintosStore.subscribe((state) => state.precintosActivos,
     (precintos) => {
       const criticosNuevos = precintos.filter(p => p.estado === 3);
       // In a real app, this would create new alerts

@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback} from 'react';
 import * as Comlink from 'comlink';
 
 interface UseWebWorkerOptions {
@@ -13,22 +13,17 @@ interface UseWebWorkerOptions {
   onError?: (error: Error) => void;
 }
 
-export function useWebWorker<T>(
-  workerPath: string,
-  options: UseWebWorkerOptions = {}
-) {
-  const {
-    terminateOnUnmount = true,
-    fallbackToMainThread = true,
-    onError
-  } = options;
+export function useWebWorker<T>(workerPath: string, options: UseWebWorkerOptions = {}) {
+  
 
   const workerRef = useRef<Worker | null>(null);
   const proxyRef = useRef<T | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     let mounted = true;
 
     const initWorker = async () => {
@@ -109,14 +104,10 @@ export function useWebWorker<T>(
 
 // Specific hook for data processor worker
 export function useDataProcessor() {
-  const { proxy, isReady, error } = useWebWorker<
-    import('../workers/dataProcessor.worker').DataProcessor
-  >('../workers/dataProcessor.worker.ts');
+  
 
-  const processLargeDataset = useCallback(async <T extends Record<string, any>>(
-    data: T[],
-    options?: Parameters<typeof proxy.processLargeDataset>[1]
-  ) => {
+  const processLargeDataset = useCallback(async <T extends Record<string, unknown>>(
+    data: T[], options?: Parameters<typeof proxy.processLargeDataset>[1]) => {
     if (!proxy) {
       throw new Error('Data processor not ready');
     }
@@ -131,10 +122,7 @@ export function useDataProcessor() {
   }, [proxy]);
 
   const aggregateTimeSeries = useCallback(async (
-    data: Parameters<typeof proxy.aggregateTimeSeries>[0],
-    interval: Parameters<typeof proxy.aggregateTimeSeries>[1],
-    aggregationType?: Parameters<typeof proxy.aggregateTimeSeries>[2]
-  ) => {
+    data: Parameters<typeof proxy.aggregateTimeSeries>[0], interval: Parameters<typeof proxy.aggregateTimeSeries>[1], aggregationType?: Parameters<typeof proxy.aggregateTimeSeries>[2]) => {
     if (!proxy) {
       throw new Error('Data processor not ready');
     }
@@ -142,9 +130,7 @@ export function useDataProcessor() {
   }, [proxy]);
 
   const detectAnomalies = useCallback(async (
-    values: number[],
-    threshold?: number
-  ) => {
+    values: number[], threshold?: number) => {
     if (!proxy) {
       throw new Error('Data processor not ready');
     }

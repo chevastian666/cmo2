@@ -5,17 +5,16 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Label } from '@/components/ui/label';
-import {AlertTriangle, AlertCircle,CheckCircle,XCircle} from 'lucide-react';
-import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
-import { transformAlertsBySeverity, createHierarchy } from '@/components/charts/treemap/utils/dataTransformers';
-import { useAlertasStore } from '@/store/store';
+
+import { Label} from '@/components/ui/label';
+import {AlertTriangle, AlertCircle, CheckCircle, XCircle} from 'lucide-react';
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
+import { transformAlertsBySeverity, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers';
 
 export const AlertasTreemap: React.FC = () => {
-  const { alertas } = useAlertasStore();
+  
   const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity');
 
   const treemapData = useMemo(() => {
@@ -39,7 +38,8 @@ export const AlertasTreemap: React.FC = () => {
       case 'source':
         return createHierarchy(alertas, ['origen', 'tipo', 'estado']);
       
-      case 'time':
+      case 'time': {
+        
         const now = new Date();
         const categorizedAlerts = alertas.map(alert => {
           const alertTime = new Date(alert.timestamp);
@@ -136,7 +136,7 @@ export const AlertasTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Mapa de Alertas</CardTitle>
-            <RadioGroup value={groupBy} onValueChange={(value: any) => setGroupBy(value)}>
+            <RadioGroup value={groupBy} onValueChange={(value: unknown) => setGroupBy(value)}>
               <div className="flex gap-4">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="severity" id="severity" />

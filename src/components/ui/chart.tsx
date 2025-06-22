@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
-import { cn } from "@/lib/utils"
+import { cn} from "@/lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
@@ -66,8 +66,7 @@ const ChartContainer = React.forwardRef<
 ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme || config.color
+  const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color
   )
 
   if (!colorConfig.length) {
@@ -78,8 +77,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     <style
       dangerouslySetInnerHTML={{
         _html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
+          .map(([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
@@ -110,25 +108,9 @@ const ChartTooltipContent = React.forwardRef<
       nameKey?: string
       labelKey?: string
     }
->(
-  (
+>((
     {
-      active,
-      payload,
-      className,
-      indicator = "dot",
-      hideLabel = false,
-      hideIndicator = false,
-      label,
-      labelFormatter,
-      labelClassName,
-      formatter,
-      color,
-      nameKey,
-      labelKey,
-    },
-    ref
-  ) => {
+      active, payload, className, indicator = "dot", hideLabel = false, hideIndicator = false, label, labelFormatter, labelClassName, formatter, color, nameKey, labelKey, }, ref) => {
     const {config} = useChart()
 
     const tooltipLabel = React.useMemo(() => {
@@ -263,11 +245,8 @@ const ChartLegendContent = React.forwardRef<
       hideIcon?: boolean
       nameKey?: string
     }
->(
-  (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
-    ref
-  ) => {
+>((
+    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey }, ref) => {
     const {config} = useChart()
 
     if (!payload?.length) {
@@ -315,11 +294,7 @@ const ChartLegendContent = React.forwardRef<
 ChartLegendContent.displayName = "ChartLegend"
 
 // Helper to extract item config from a payload.
-function getPayloadConfigFromPayload(
-  config: ChartConfig,
-  payload: unknown,
-  key: string
-) {
+function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
   if (typeof payload !== "object" || payload === null) {
     return undefined
   }
@@ -333,16 +308,12 @@ function getPayloadConfigFromPayload(
 
   let configLabelKey: string = key
 
-  if (
-    key in payload &&
-    typeof payload[key as keyof typeof payload] === "string"
-  ) {
+  if (key in payload &&
+    typeof payload[key as keyof typeof payload] === "string") {
     configLabelKey = payload[key as keyof typeof payload] as string
-  } else if (
-    payloadPayload &&
+  } else if (payloadPayload &&
     key in payloadPayload &&
-    typeof payloadPayload[key as keyof typeof payloadPayload] === "string"
-  ) {
+    typeof payloadPayload[key as keyof typeof payloadPayload] === "string") {
     configLabelKey = payloadPayload[
       key as keyof typeof payloadPayload
     ] as string

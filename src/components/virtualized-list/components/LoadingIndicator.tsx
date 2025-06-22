@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 
 interface LoadingIndicatorProps {
   size?: 'small' | 'medium' | 'large';
@@ -8,9 +8,7 @@ interface LoadingIndicatorProps {
 }
 
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
-  size = 'medium',
-  message,
-  className
+  size = 'medium', message, className
 }) => {
   const sizeClasses = {
     small: 'h-4 w-4',

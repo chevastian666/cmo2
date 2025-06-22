@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { RadialMenuSettings } from '../types';
+import { create} from 'zustand';
+import { persist} from 'zustand/middleware';
+import type { RadialMenuSettings} from '../types';
 
 interface RadialMenuStore {
   settings: RadialMenuSettings;
@@ -12,19 +12,11 @@ interface RadialMenuStore {
   reorderActions: (actionIds: string[]) => void;
 }
 
-export const useRadialMenuStore = create<RadialMenuStore>()(
-  persist(
+export const useRadialMenuStore = create<RadialMenuStore>()(persist(
     (set, get) => ({
       settings: {
-        favoriteActions: [],
-        customOrder: undefined,
-        defaultSize: 'medium',
-        animationSpeed: 1,
-        hapticFeedback: true
-      },
-      userPermissions: [],
-
-      updateSettings: (newSettings) => {
+        favoriteActions: [], customOrder: undefined, defaultSize: 'medium', animationSpeed: 1, hapticFeedback: true
+      }, userPermissions: [], updateSettings: (newSettings) => {
         set((state) => ({
           settings: { ...state.settings, ...newSettings }
         }));
@@ -36,7 +28,7 @@ export const useRadialMenuStore = create<RadialMenuStore>()(
 
       canUseAction: (requiredPermissions) => {
         if (requiredPermissions.length === 0) return true;
-        const {userPermissions} = get();
+        
         return requiredPermissions.some(perm => userPermissions.includes(perm));
       },
 

@@ -5,10 +5,10 @@
  */
 
 import React, { useCallback, useRef, useMemo, memo } from 'react';
-import { VariableSizeList as List } from 'react-window';
+
 import InfiniteLoader from 'react-window-infinite-loader';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { cn } from '@/utils/utils';
+import { cn} from '@/utils/utils';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -28,8 +28,8 @@ interface VirtualizedListProps<T> {
 }
 
 // Memoized row component to prevent unnecessary re-renders
-const Row = memo(({ data, index, style }: any) => {
-  const { items, renderItem } = data;
+const Row = memo(({ data, index, style }: unknown) => {
+  
   const item = items[index];
   
   if (!item) {
@@ -46,12 +46,7 @@ const Row = memo(({ data, index, style }: any) => {
 Row.displayName = 'VirtualizedRow';
 
 export function VirtualizedList<T>({
-  items,
-  itemHeight = 80,
-  renderItem,
-  loadMore,
-  hasNextPage = false,
-  isItemLoaded = (index: number) => !!items[index],
+  items, itemHeight = 80, renderItem, loadMore, hasNextPage = false, isItemLoaded = (index: number) => !!items[index],
   threshold = 15,
   overscan = 5,
   estimatedItemSize = 80,
@@ -98,15 +93,13 @@ export function VirtualizedList<T>({
   // Inner list component
   const InnerList = useCallback(({ height, width }: { height: number; width: number }) => {
     if (loadMore && hasNextPage) {
-      return (
-        <InfiniteLoader
+      return (<InfiniteLoader
           isItemLoaded={isItemLoaded}
           itemCount={itemCount}
           loadMoreItems={loadMore}
           threshold={threshold}
         >
-          {({ onItemsRendered, ref }) => (
-            <List
+          {({ onItemsRendered, ref }) => (<List
               ref={(list) => {
                 ref(list);
                 // @ts-ignore
@@ -197,10 +190,7 @@ export const VirtualizedListUtils = {
   },
 
   // Binary search for sorted lists
-  binarySearch: <T>(
-    items: T[],
-    target: T,
-    compareFn: (a: T, b: T) => number
+  binarySearch: <T>(items: T[], target: T, compareFn: (a: T, b: T) => number
   ): number => {
     let left = 0;
     let right = items.length - 1;

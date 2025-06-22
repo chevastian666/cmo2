@@ -1,12 +1,11 @@
-import {useMemo, useCallback, useState,  useRef} from 'react';
-import type { Alert, AlertFilters } from '../types/alerts';
+import {useMemo, useCallback, useState, useRef} from 'react';
+import type { Alert, AlertFilters} from '../types/alerts';
 
 interface UseAlertFilteringProps {
   alerts: Alert[];
   initialFilters?: AlertFilters;
   debounceMs?: number;
-}
-
+  }
 interface FilterResult {
   filteredAlerts: Alert[];
   filters: AlertFilters;
@@ -15,8 +14,7 @@ interface FilterResult {
   filterCount: number;
   isFiltering: boolean;
   highlightedIndices: Set<number>;
-}
-
+  }
 export function useAlertFiltering({
   alerts,
   initialFilters = {},
@@ -52,8 +50,7 @@ export function useAlertFiltering({
           if (!index.has(word)) index.set(word, new Set());
           index.get(word)!.add(i);
         });
-      }
-      
+  }
       // Index by location
       const locationWords = alert.location.address.toLowerCase().split(/\s+/);
       locationWords.forEach(word => {
@@ -66,8 +63,7 @@ export function useAlertFiltering({
   }, [alerts]);
 
   // Filter alerts with optimized performance
-  const {filteredAlerts, highlightedIndices} = useMemo(() => {
-    const startTime = performance.now();
+  
     
     let indices = new Set<number>(Array.from({ length: alerts.length }, (_, i) => i));
     const highlighted = new Set<number>();
@@ -78,30 +74,27 @@ export function useAlertFiltering({
       indices = new Set(
         Array.from(indices).filter(i => severitySet.has(alerts[i].severity))
       );
-    }
-    
+  }
     // Apply status filter
     if (filters.status && filters.status.length > 0) {
       const statusSet = new Set(filters.status);
       indices = new Set(
         Array.from(indices).filter(i => statusSet.has(alerts[i].status))
       );
-    }
-    
+  }
     // Apply date range filter
     if (filters.dateRange) {
-      const {start, end} = filters.dateRange;
+      
       indices = new Set(
         Array.from(indices).filter(i => {
           const date = alerts[i].timestamp;
           return date >= start && date <= end;
         })
       );
-    }
-    
+  }
     // Apply search query filter using index
     if (filters.searchQuery && filters.searchQuery.trim()) {
-      const _query = filters.searchQuery.toLowerCase();
+
       const searchWords = query.split(/\s+/);
       const matchingIndices = new Set<number>();
       
@@ -111,9 +104,9 @@ export function useAlertFiltering({
             if (indices.has(i)) {
               matchingIndices.add(i);
               highlighted.add(i);
-            }
+  }
           });
-        }
+  }
       });
       
       // Also check for partial matches
@@ -124,15 +117,14 @@ export function useAlertFiltering({
         if (searchWords.every(word => searchText.includes(word))) {
           matchingIndices.add(i);
           highlighted.add(i);
-        }
+  }
       });
       
       indices = matchingIndices;
-    }
-    
+  }
     // Apply location filter
     if (filters.location) {
-      const {lat, lng, radius} = filters.location;
+      
       indices = new Set(
         Array.from(indices).filter(i => {
           const alert = alerts[i];
@@ -143,8 +135,7 @@ export function useAlertFiltering({
           return distance <= radius;
         })
       );
-    }
-    
+  }
     // Apply assignedTo filter
     if (filters.assignedTo && filters.assignedTo.length > 0) {
       const assignedSet = new Set(filters.assignedTo);
@@ -153,16 +144,14 @@ export function useAlertFiltering({
           alerts[i].assignedTo && assignedSet.has(alerts[i].assignedTo!)
         )
       );
-    }
-    
+  }
     // Apply precinto IDs filter
     if (filters.precintoIds && filters.precintoIds.length > 0) {
       const precintoSet = new Set(filters.precintoIds);
       indices = new Set(
         Array.from(indices).filter(i => precintoSet.has(alerts[i].precintoId))
       );
-    }
-    
+  }
     // Apply vehicle IDs filter
     if (filters.vehicleIds && filters.vehicleIds.length > 0) {
       const vehicleSet = new Set(filters.vehicleIds);
@@ -171,8 +160,7 @@ export function useAlertFiltering({
           alerts[i].vehicleId && vehicleSet.has(alerts[i].vehicleId!)
         )
       );
-    }
-    
+  }
     const filtered = Array.from(indices)
       .sort((a, b) => b - a) // Most recent first
       .map(i => alerts[i]);
@@ -189,8 +177,7 @@ export function useAlertFiltering({
     
     if (filterTimeout.current) {
       clearTimeout(filterTimeout.current);
-    }
-    
+  }
     filterTimeout.current = setTimeout(() => {
       setFilters(prev => ({ ...prev, ...newFilters }));
       setIsFiltering(false);
@@ -226,8 +213,7 @@ export function useAlertFiltering({
     isFiltering,
     highlightedIndices
   };
-}
-
+  }
 // Helper function to calculate distance between coordinates
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Earth's radius in km
@@ -239,8 +225,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
-}
-
+  }
 function toRad(deg: number): number {
   return deg * (Math.PI / 180);
-}
+  }

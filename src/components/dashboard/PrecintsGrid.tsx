@@ -1,7 +1,7 @@
 import React, { useTransition, useState, memo, useDeferredValue } from 'react';
-import {Package, Search,Filter, RefreshCw} from 'lucide-react';
-import { PriorityBoundary } from '../priority/withPriority';
-import { DashboardSkeleton } from './DashboardSkeleton';
+import {Package, Search, RefreshCw} from 'lucide-react';
+import { PriorityBoundary} from '../priority/withPriority';
+import { DashboardSkeleton} from './DashboardSkeleton';
 
 interface Precinto {
   id: string;

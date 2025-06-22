@@ -3,12 +3,12 @@
  * By Cheva
  */
 
-import { sharedApiService } from './sharedApi.service';
-import { sharedStateService } from './sharedState.service';
-import { SHARED_CONFIG, hasRole } from '../../config/shared.config';
-import { jwtService } from '../jwt.service';
-import type { Usuario } from '../../types';
-import type { LoginResponse, TokenPair } from '../../types/jwt';
+import { sharedApiService} from './sharedApi.service';
+import { sharedStateService} from './sharedState.service';
+import { SHARED_CONFIG, hasRole} from '../../config/shared.config';
+import { jwtService} from '../jwt.service';
+import type { Usuario} from '../../types';
+import type { LoginResponse} from '../../types/jwt';
 
 interface AuthState {
   user: Usuario | null;
@@ -61,7 +61,7 @@ class AuthService {
           return true;
         }
       }
-    } catch (_error) {
+    } catch {
       console.error('Auth check failed:', _error);
       
       // Try to refresh token if it's expired
@@ -112,7 +112,7 @@ class AuthService {
       await sharedStateService.initialize();
 
       return response.user as Usuario;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Login failed';
       this.notifyListeners({
         user: null,
@@ -129,7 +129,7 @@ class AuthService {
     try {
       // Notify server about logout
       await sharedStateService.logout();
-    } catch (_error) {
+    } catch {
       console.error('Logout error:', _error);
     } finally {
       this.clearAuth();
@@ -168,7 +168,7 @@ class AuthService {
           
           return true;
         }
-      } catch (_error) {
+      } catch {
         console.error('Token refresh failed:', _error);
         return false;
       } finally {

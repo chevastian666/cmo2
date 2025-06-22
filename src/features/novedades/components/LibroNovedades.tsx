@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {FileText, Download,TrendingUp} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
-import { FormularioNovedad } from './FormularioNovedad';
-import { TimelineNovedades } from './TimelineNovedades';
-import { FiltrosNovedadesComponent } from './FiltrosNovedades';
-import { ModalSeguimiento } from './ModalSeguimiento';
-import { ModalResolucion } from './ModalResolucion';
-import { useNovedadesStore } from '../../../store/novedadesStore';
+import { Download, TrendingUp} from 'lucide-react';
+import { Card, CardHeader, CardContent, Badge} from '../../../components/ui';
+import { FormularioNovedad} from './FormularioNovedad';
+import { TimelineNovedades} from './TimelineNovedades';
+import { FiltrosNovedadesComponent} from './FiltrosNovedades';
+import { ModalSeguimiento} from './ModalSeguimiento';
+import { ModalResolucion} from './ModalResolucion';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { notificationService } from '../../../services/shared/notification.service';
-import { exportToCSV } from '../../../utils/export';
-import type { Novedad, FiltrosNovedades } from '../types';
-import { FILTROS_DEFAULT, TIPOS_NOVEDAD } from '../types';
+import { notificationService} from '../../../services/shared/notification.service';
+import { exportToCSV} from '../../../utils/export';
+import type { Novedad, FiltrosNovedades} from '../types';
+import { FILTROS_DEFAULT, TIPOS_NOVEDAD} from '../types';
 
 const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
 
@@ -33,22 +33,28 @@ export const LibroNovedades: React.FC = () => {
   const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null);
   const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null);
   
-  const {novedades, estadisticas, loading, fetchNovedades, crearNovedad, marcarResuelta, agregarSeguimiento} = useNovedadesStore();
+  
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
 
   // Cargar novedades al montar y cuando cambien los filtros
+   
+
   useEffect(() => {
     fetchNovedades(filtros);
   }, [fetchNovedades, filtros]);
 
   // Guardar filtros en localStorage
+   
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
   }, [filtros]);
 
   // Auto-refresh cada minuto
+   
+
   useEffect(() => {
     const interval = setInterval(() => {
       fetchNovedades(filtros);

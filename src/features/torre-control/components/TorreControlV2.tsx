@@ -5,47 +5,34 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {Truck,AlertTriangle,CheckCircle,XCircle,Clock,MapPin,User, RefreshCw,Filter, ChevronRight, Activity, Monitor, Zap,Radio, Gauge,TrendingUp, Shield, Eye, Maximize2, Minimize2,Settings, Layout, Save, RotateCcw} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Layout, Save, RotateCcw} from 'lucide-react';
+
+import { Input} from '@/components/ui/input';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Progress} from '@/components/ui/progress';
+
+import { Switch} from '@/components/ui/switch';
+import { Label} from '@/components/ui/label';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedSkeleton,
-  AnimatedDiv,
-  AnimatedSpinner
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTransitosStore, useAlertasStore, usePrecintosStore, useDashboardStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import { torreControlService } from '../services/torreControl.service';
-import type { TransitoTorreControl, EstadoSemaforo } from '../types';
-import type { CongestionAnalysis } from '../../prediccion/types';
-import { CongestionPanel } from '../../prediccion';
-import { CountdownTimer } from './CountdownTimer';
-import { TransitoDetailModal } from './TransitoDetailModal';
-import { MapWidget } from './MapWidget';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import {staggerContainer, staggerItem, fadeInUp, scaleIn, pulseVariants, alertCriticalVariants} from '@/components/animations/AnimationPresets';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+import { useDashboardStore} from '@/store/store';
+import { cn} from '@/utils/utils';
+import { torreControlService} from '../services/torreControl.service';
+import type { TransitoTorreControl, EstadoSemaforo} from '../types';
+
+import { CongestionPanel} from '../../prediccion';
+import { CountdownTimer} from './CountdownTimer';
+import { TransitoDetailModal} from './TransitoDetailModal';
+import { MapWidget} from './MapWidget';
+import { ErrorBoundary} from '@/components/ErrorBoundary';
+import { pulseVariants, alertCriticalVariants} from '@/components/animations/AnimationPresets';
 
 // Dashboard Grid Layout
-import { Responsive, WidthProvider } from 'react-grid-layout';
+import { Responsive, WidthProvider} from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import '../styles/torre-control.css';
@@ -128,8 +115,7 @@ const SemaforoWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
 const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const recentTransitos = data.slice(0, 5);
 
-  return (
-    <div className="h-full flex flex-col">
+  return (<div className="h-full flex flex-col">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
         <Radio className="h-5 w-5 text-blue-400" />
         Feed en Vivo
@@ -242,8 +228,7 @@ const TransitoRowV2: React.FC<{
     }
   };
 
-  return (
-    <motion.tr
+  return (<motion.tr
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
@@ -306,14 +291,14 @@ export const TorreControlV2: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [showCongestionPanel, setShowCongestionPanel] = useState(true);
+  const [showCongestionPanel] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both');
   const [lastUpdate, setLastUpdate] = useState(new Date());
   
-  const {alertasActivas} = useAlertasStore();
-  const {precintosActivos} = usePrecintosStore();
-  const {layouts, setLayouts, resetLayouts: resetDashboardLayouts} = useDashboardStore();
+  
+  
+  const { setLayouts } = useDashboardStore();
 
   const [filters, setFilters] = useState({
     origen: '',
@@ -359,8 +344,10 @@ export const TorreControlV2: React.FC = () => {
       setLoading(false);
     }
   }, []);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     fetchTransitos();
     const interval = setInterval(fetchTransitos, 30000);
     return () => clearInterval(interval);
@@ -447,7 +434,10 @@ export const TorreControlV2: React.FC = () => {
   }, [filteredTransitos, showCongestionPanel]);
 
   // Add debug info - only in development
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       console.log('TorreControlV2 state:', { 
         transitosCount: transitos.length, 
@@ -538,8 +528,7 @@ export const TorreControlV2: React.FC = () => {
 
         {/* Filtros */}
         <AnimatePresence>
-          {showFilters && (
-            <motion.div
+          {showFilters && (<motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -582,8 +571,7 @@ export const TorreControlV2: React.FC = () => {
         </AnimatePresence>
 
         {/* Dashboard View */}
-        {(selectedView === 'dashboard' || selectedView === 'both') && (
-          <AnimatedSection delay={0.2}>
+        {(selectedView === 'dashboard' || selectedView === 'both') && (<AnimatedSection delay={0.2}>
             <Card className="mb-6">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -702,8 +690,7 @@ export const TorreControlV2: React.FC = () => {
                             No se encontraron tránsitos activos
                           </td>
                         </tr>
-                      ) : (
-                        <AnimatePresence>
+                      ) : (<AnimatePresence>
                           {filteredTransitos.map((transito, index) => (
                             <TransitoRowV2
                               key={transito.id}
@@ -723,8 +710,7 @@ export const TorreControlV2: React.FC = () => {
         )}
 
         {/* Modal de detalles */}
-        {selectedTransito && (
-          <TransitoDetailModal
+        {selectedTransito && (<TransitoDetailModal
             transito={selectedTransito}
             isOpen={!!selectedTransito}
             onClose={() => setSelectedTransito(null)}

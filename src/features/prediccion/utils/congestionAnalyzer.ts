@@ -1,6 +1,6 @@
-import type { TransitoTorreControl } from '../../torre-control/types';
-import type { CongestionAnalysis, CamionProyectado, ProyeccionPorHora, ConfiguracionPrediccion } from '../types';
-import { CONFIGURACION_DEFAULT } from '../types';
+import type { TransitoTorreControl} from '../../torre-control/types';
+import type { CongestionAnalysis, CamionProyectado, ProyeccionPorHora, ConfiguracionPrediccion} from '../types';
+import { CONFIGURACION_DEFAULT} from '../types';
 
 export class CongestionAnalyzer {
   private config: ConfiguracionPrediccion;

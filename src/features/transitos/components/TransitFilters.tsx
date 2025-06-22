@@ -1,7 +1,7 @@
 import React from 'react';
-import {Search,Calendar,Building,MapPin,Filter} from 'lucide-react';
-import { ORIGENES_DESTINOS } from '../../../constants/locations';
-import type { Transito } from '../types';
+import {Search, Calendar, Building, MapPin, Filter} from 'lucide-react';
+import { ORIGENES_DESTINOS} from '../../../constants/locations';
+import type { Transito} from '../types';
 
 interface FiltersState {
   estado: string;

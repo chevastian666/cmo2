@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import {ArrowLeft,User,Phone, Flag,Truck,Calendar, Activity, Route, Download,FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, LoadingState } from '../../../components/ui';
-import { useCamionerosStore } from '../../../store/camionerosStore';
+import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react';
+import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { exportToCSV } from '../../../utils/export';
-import { notificationService } from '../../../services/shared/notification.service';
-import { cn } from '../../../utils/utils';
-import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
-import { ESTADOS_CAMION } from '../../camiones/types';
+import { exportToCSV} from '../../../utils/export';
+import { notificationService} from '../../../services/shared/notification.service';
+
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
+import { ESTADOS_CAMION} from '../../camiones/types';
 
 interface FichaCamioneroProps {
   documento: string;
@@ -17,8 +17,7 @@ interface FichaCamioneroProps {
 export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose }) => {
   const userInfo = useUserInfo();
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-  
-  const {camioneroSeleccionado, transitosCamionero, matriculasFrecuentes, estadisticasCamionero, loading, selectCamionero, updateCamionero, clearSelection} = useCamionerosStore();
+   
 
   useEffect(() => {
     selectCamionero(documento);
@@ -157,8 +156,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                 </p>
               </div>
 
-              {canEdit && (
-                <div className="pt-4 border-t border-gray-700">
+              {canEdit && (<div className="pt-4 border-t border-gray-700">
                   <label className="text-sm text-gray-400 mb-2 block">
                     Comentarios / Observaciones
                   </label>
@@ -227,8 +225,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
         {/* Matrículas frecuentes e historial */}
         <div className="lg:col-span-2 space-y-6">
           {/* Matrículas frecuentes */}
-          {matriculasFrecuentes.length > 0 && (
-            <Card>
+          {matriculasFrecuentes.length > 0 && (<Card>
               <CardHeader>
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   <Truck className="h-5 w-5 text-blue-500" />
@@ -295,8 +292,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   <FileText className="h-12 w-12 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No hay tránsitos registrados</p>
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
+              ) : (<div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-700">

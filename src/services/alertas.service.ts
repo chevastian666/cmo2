@@ -1,7 +1,7 @@
-import type { Alerta } from '../types/monitoring';
-import { unifiedAPIService } from './api/unified.service';
-import { trokorService } from './api/trokor.service';
-import { generateMockAlerta } from '../utils/mockData';
+import type { Alerta} from '../types/monitoring';
+import { unifiedAPIService} from './api/unified.service';
+import { trokorService} from './api/trokor.service';
+import { generateMockAlerta} from '../utils/mockData';
 
 export interface AlertaFilters {
   activa?: boolean;
@@ -87,7 +87,7 @@ export const alertasService = {
       }
       
       return filtered;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching alertas:', _error);
       return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i));
     }
@@ -114,7 +114,7 @@ export const alertasService = {
         limit: 10
       });
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching alertas activas:', _error);
       return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i));
     }
@@ -131,7 +131,7 @@ export const alertasService = {
       const alerta = all.find(a => a.id === id);
       if (!alerta) throw new Error('Alerta not found');
       return alerta;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching alerta:', _error);
       return generateMockAlerta(parseInt(id) || 1);
     }
@@ -146,7 +146,7 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error atendiendo alerta:', _error);
     }
   },
@@ -177,7 +177,7 @@ export const alertasService = {
       
       // TODO: Implement unified API call if needed
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error verificando alerta:', _error);
       throw _error;
     }
@@ -195,7 +195,7 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented');
-    } catch (_error) {
+    } catch {
       console.error('Error creating alerta:', _error);
       throw _error;
     }
@@ -222,7 +222,7 @@ export const alertasService = {
       
       // TODO: Implement real API call
       return [];
-    } catch (_error) {
+    } catch {
       console.error('Error fetching estadisticas:', _error);
       return [];
     }

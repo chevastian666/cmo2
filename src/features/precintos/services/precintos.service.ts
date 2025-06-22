@@ -1,6 +1,6 @@
-import { sharedApiService } from '../../../services/shared/sharedApi.service';
-import { PrecintoStatus } from '../types';
-import type { Precinto, PrecintoFilters } from '../types';
+import { sharedApiService} from '../../../services/shared/sharedApi.service';
+import { PrecintoStatus} from '../types';
+import type { Precinto, PrecintoFilters} from '../types';
 
 class PrecintosService {
   private readonly API_BASE = '/api/precintos';
@@ -25,7 +25,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}?${params.toString()}`);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching precintos:', error);
       return this.getMockPrecintos(filters);
     }
@@ -40,7 +40,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`);
       return response.data;
-    } catch (_error) {
+    } catch {
       console.error('Error fetching precinto:', error);
       return null;
     }
@@ -55,7 +55,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data);
       return response.data.success;
-    } catch (_error) {
+    } catch {
       console.error('Error updating precinto:', error);
       return false;
     }
@@ -73,7 +73,7 @@ class PrecintosService {
         ubicacion
       });
       return response.data.success;
-    } catch (_error) {
+    } catch {
       console.error('Error assigning precinto:', error);
       return false;
     }
@@ -91,7 +91,7 @@ class PrecintosService {
         params
       });
       return response.data.success;
-    } catch (_error) {
+    } catch {
       console.error('Error sending command:', error);
       return false;
     }

@@ -4,62 +4,32 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence} from 'framer-motion';
 import { 
-  Bell, 
-  BellOff, 
-  Search, 
-  Filter, 
-  Archive, 
-  Trash2, 
-  MoreHorizontal,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  X,
-  Settings,
-  Maximize2,
-  Minimize2
-} from 'lucide-react';
+  Bell, BellOff, Search, Filter, X, Settings, Maximize2, Minimize2} from 'lucide-react';
 import type { 
-  Notification, 
-  NotificationFilter, 
-  NotificationGroup, 
-  NotificationStats,
-  NotificationType,
-  NotificationPriority,
-  NotificationStatus
-} from '../../types/notifications';
-import { NotificationItem } from './NotificationItem';
-import { NotificationGroupItem } from './NotificationGroupItem';
-import { NotificationFilters } from './NotificationFilters';
-import { QuickActions } from './QuickActions';
+  Notification, NotificationFilter, NotificationGroup, NotificationStats, } from '../../types/notifications';
+import { NotificationItem} from './NotificationItem';
+import { NotificationGroupItem} from './NotificationGroupItem';
+import { NotificationFilters} from './NotificationFilters';
+import { QuickActions} from './QuickActions';
 
 interface NotificationCenterProps {
   isOpen: boolean;
   onClose: () => void;
-  onToggle?: () => void;
+  // onToggle removed - unused
   notifications: Notification[];
   groups?: NotificationGroup[];
   stats?: NotificationStats;
-  onNotificationAction: (notificationId: string, action: string, payload?: any) => void;
+  onNotificationAction: (notificationId: string, action: string, payload?: unknown) => void;
   onBulkAction: (notificationIds: string[], action: string) => void;
   onFilterChange: (filter: NotificationFilter) => void;
   className?: string;
 }
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({
-  isOpen,
-  onClose,
-  onToggle,
-  notifications,
-  groups = [],
-  stats,
-  onNotificationAction,
-  onBulkAction,
-  onFilterChange,
-  className = ''
+  isOpen, onClose, onToggle, notifications, groups = [], stats, onNotificationAction, onBulkAction, onFilterChange, className = ''
 }) => {
   const [viewMode, setViewMode] = useState<'list' | 'grouped'>('list');
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
@@ -169,7 +139,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   };
 
   // Handle notification action
-  const handleNotificationAction = (notificationId: string, action: string, payload?: any) => {
+  const handleNotificationAction = (notificationId: string, action: string, payload?: unknown) => {
     onNotificationAction(notificationId, action, payload);
     // Remove from selection if it was selected
     if (selectedNotifications.has(notificationId)) {
@@ -378,8 +348,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
           {/* Notification Items */}
           <div className="flex-1 overflow-y-auto">
             <AnimatePresence mode="popLayout">
-              {viewMode === 'list' ? (
-                // List View
+              {viewMode === 'list' ? (// List View
                 filteredNotifications.length > 0 ? (
                   filteredNotifications.map((notification) => (
                     <NotificationItem
@@ -399,8 +368,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     </div>
                   </div>
                 )
-              ) : (
-                // Grouped View
+              ) : (// Grouped View
                 filteredGroups.length > 0 ? (
                   filteredGroups.map((group) => (
                     <NotificationGroupItem

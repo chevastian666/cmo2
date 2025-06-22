@@ -1,7 +1,7 @@
 import React from 'react';
-import {AlertTriangle,TrendingUp,Truck,Clock} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { CongestionAnalysis } from '../types';
+import {AlertTriangle, TrendingUp, Truck, Clock} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { CongestionAnalysis} from '../types';
 
 interface CongestionAlertProps {
   congestion: CongestionAnalysis;
@@ -10,9 +10,7 @@ interface CongestionAlertProps {
 }
 
 export const CongestionAlert: React.FC<CongestionAlertProps> = ({ 
-  congestion, 
-  onClick,
-  compact = false 
+  congestion, onClick, compact = false 
 }) => {
   const getSeverityStyles = () => {
     switch (congestion.severidad) {

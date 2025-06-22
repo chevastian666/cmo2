@@ -1,7 +1,8 @@
+ 
 import React from 'react';
-import { Shield, CheckCircle2, Lock, Fingerprint } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { cn } from '@/utils/utils';
+import { Shield, CheckCircle2, Lock, Fingerprint} from 'lucide-react';
+import { motion} from 'framer-motion';
+import { cn} from '@/utils/utils';
 
 interface VerificarButtonProps {
   onClick: () => void;
@@ -11,10 +12,7 @@ interface VerificarButtonProps {
 }
 
 export const VerificarButton: React.FC<VerificarButtonProps> = ({
-  onClick,
-  variant = 'default',
-  size = 'md',
-  disabled = false
+  onClick, variant = 'default', size = 'md', disabled = false
 }) => {
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-xs',

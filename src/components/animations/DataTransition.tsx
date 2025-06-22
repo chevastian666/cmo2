@@ -1,10 +1,11 @@
+ 
 /**
  * Componente wrapper para transiciones suaves de datos
  * By Cheva
  */
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence} from 'framer-motion';
 
 interface DataTransitionProps {
   children: React.ReactNode;
@@ -13,11 +14,10 @@ interface DataTransitionProps {
 }
 
 export const DataTransition: React.FC<DataTransitionProps> = ({ 
-  children, 
-  dataKey,
-  className = '' 
+  children, dataKey, className = '' 
 }) => {
   const [isVisible, setIsVisible] = useState(true);
+   
 
   useEffect(() => {
     // Trigger re-animation when dataKey changes
@@ -56,8 +56,7 @@ interface ListTransitionProps {
 }
 
 export const ListTransition: React.FC<ListTransitionProps> = ({ 
-  children, 
-  className = '' 
+  children, className = '' 
 }) => {
   return (
     <motion.div
@@ -74,5 +73,3 @@ export const ListTransition: React.FC<ListTransitionProps> = ({
   );
 };
 
-// Export hook from separate file to fix Fast Refresh warning
-export { useDataChange } from './animationUtils';

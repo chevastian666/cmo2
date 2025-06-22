@@ -4,10 +4,10 @@
  * By Cheva
  */
 
-import type { StateCreator } from 'zustand';
-import type { PrecintosStore } from '../types';
-import { precintosService } from '../../services';
-import { generateMockPrecinto } from '../../utils/mockData';
+import type { StateCreator} from 'zustand';
+import type { PrecintosStore} from '../types';
+import { precintosService} from '../../services';
+import { generateMockPrecinto} from '../../utils/mockData';
 
 export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => ({
   // State
@@ -24,7 +24,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
 
   // Computed Properties (getters)
   get filteredPrecintos() {
-    const {precintos, filters} = get();
+    
     return precintos.filter(precinto => {
       const matchesSearch = !filters.search || 
         precinto.codigo.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -38,7 +38,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
 
   get precintosStats() {
-    const {precintosActivos} = get();
+    
     return {
       total: precintosActivos.length,
       enTransito: precintosActivos.filter(p => p.estado === 1).length,
@@ -88,7 +88,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   
   // Async Actions
   fetchPrecintos: async () => {
-    const {setLoading, setError, setPrecintos} = get();
+    
     setLoading(true);
     setError(null);
     
@@ -96,7 +96,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       const data = await precintosService.getAll();
       setPrecintos(data);
       return data;
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i));
       setPrecintos(mockData);
@@ -108,7 +108,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
   
   fetchPrecintosActivos: async () => {
-    const {setLoading, setError, setPrecintosActivos} = get();
+    
     setLoading(true);
     setError(null);
     
@@ -116,7 +116,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       const data = await precintosService.getActivos();
       setPrecintosActivos(data);
       return data;
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
       setPrecintosActivos(mockData);
@@ -155,12 +155,12 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
 
   // Legacy computed properties
   getPrecintosConAlertas: () => {
-    const {precintosActivos} = get();
+    
     return precintosActivos.filter(p => p.estado === 3);
   },
 
   getPrecintosBajaBateria: () => {
-    const {precintosActivos} = get();
+    
     return precintosActivos.filter(p => p.bateria && p.bateria < 20);
   }
 });

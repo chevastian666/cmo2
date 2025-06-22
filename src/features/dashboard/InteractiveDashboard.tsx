@@ -4,23 +4,14 @@
  */
 
 import React, { useMemo } from 'react';
-import {BarChart3, AlertCircle, Map, Activity,TrendingUp,Truck, Shield,Package} from 'lucide-react';
+import { AlertCircle, TrendingUp, Truck, Shield} from 'lucide-react';
 import DashboardGrid, { type WidgetConfig } from '../../components/dashboard/DashboardGrid';
 import {
-  KPIWidget,
-  ChartWidget,
-  AlertsWidget,
-  MapWidget,
-  ActivityWidget,
-  StatisticsWidget,
-  TransitWidget,
-  PrecintoStatusWidget,
-  PendingPrecintosWidget
-} from '../../components/dashboard/widgets';
-import { PageTransition, AnimatedHeader } from '../../components/animations/PageTransitions';
-import { usePrecintosStore } from '../../store/store';
-import { useTransitosStore } from '../../store/store';
-import { useAlertasStore } from '../../store/store';
+  KPIWidget, ChartWidget, AlertsWidget, MapWidget, ActivityWidget, StatisticsWidget, TransitWidget, PrecintoStatusWidget, PendingPrecintosWidget} from '../../components/dashboard/widgets';
+import { PageTransition, AnimatedHeader} from '../../components/animations/PageTransitions';
+import { usePrecintosStore} from '../../store/store';
+import { useTransitosStore} from '../../store/store';
+import { useAlertasStore} from '../../store/store';
 
 const InteractiveDashboard: React.FC = () => {
   // Datos de los stores
@@ -216,8 +207,7 @@ const InteractiveDashboard: React.FC = () => {
     }
   };
 
-  return (
-    <PageTransition variant="fade">
+  return (<PageTransition variant="fade">
       <div className="min-h-screen bg-gray-900 p-4">
         <AnimatedHeader
           title="Dashboard Interactivo"

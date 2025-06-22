@@ -3,10 +3,10 @@
  * By Cheva
  */
 
-import { createStore } from '../createStore';
-import { executeAsyncAction, LoadingState } from '../middleware/errorHandling';
-import { Precinto } from '../../types/precinto';
-import { precintosService } from '../../services/precintos.service';
+import { createStore} from '../createStore';
+import { executeAsyncAction, LoadingState} from '../middleware/errorHandling';
+import { Precinto} from '../../types/precinto';
+import { precintosService} from '../../services/precintos.service';
 
 interface PrecintosState {
   // Datos
@@ -31,19 +31,12 @@ interface PrecintosState {
   getPrecintosCount: () => number;
 }
 
-export const useEnhancedPrecintosStore = createStore<PrecintosState>(
-  (set, get) => ({
+export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) => ({
     // Estado inicial
-    precintos: [],
-    selectedPrecinto: null,
-    filters: {},
-    loadingState: { status: 'idle' },
-    
-    // Acciones con manejo de errores estandarizado
+    precintos: [], selectedPrecinto: null, filters: {}, loadingState: { status: 'idle' }, // Acciones con manejo de errores estandarizado
     fetchPrecintos: async () => {
-      await executeAsyncAction(
-        async () => {
-          const _data = await precintosService.getPrecintos();
+      await executeAsyncAction(async () => {
+
           set((state) => {
             state.precintos = _data;
           });
@@ -65,8 +58,7 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>(
     },
     
     updatePrecinto: async (id, updates) => {
-      await executeAsyncAction(
-        async () => {
+      await executeAsyncAction(async () => {
           const updated = await precintosService.updatePrecinto(id, updates);
           set((state) => {
             const index = state.precintos.findIndex(p => p.id === id);
@@ -96,7 +88,7 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>(
     
     // Computed selectors
     getFilteredPrecintos: () => {
-      const {precintos, filters} = get();
+      
       let filtered = [...precintos];
       
       if (filters.estado) {
@@ -138,15 +130,13 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>(
 
 // Suscripciones con selector para optimización
 export const subscribeToPrecintos = (callback: (precintos: Precinto[]) => void) => {
-  return useEnhancedPrecintosStore.subscribe(
-    (state) => state.precintos,
+  return useEnhancedPrecintosStore.subscribe((state) => state.precintos,
     callback
   );
 };
 
 export const subscribeToSelectedPrecinto = (callback: (precinto: Precinto | null) => void) => {
-  return useEnhancedPrecintosStore.subscribe(
-    (state) => state.selectedPrecinto,
+  return useEnhancedPrecintosStore.subscribe((state) => state.selectedPrecinto,
     callback
   );
 };

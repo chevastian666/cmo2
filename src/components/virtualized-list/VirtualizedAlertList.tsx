@@ -1,31 +1,23 @@
 import React, { memo, useCallback, useEffect, useRef } from 'react';
-import { useVirtualization } from './hooks/useVirtualization';
-import {useAlertFiltering} from './hooks/useAlertFiltering';
-import { useInfiniteLoading, useAlertSubscription } from './hooks/useInfiniteLoading';
-import { AlertListItem } from './components/AlertListItem';
-import { AlertGroupHeader } from './components/AlertGroupHeader';
-import { LoadingIndicator } from './components/LoadingIndicator';
-import { EmptyState } from './components/EmptyState';
-import { cn } from '../../utils/utils';
-import type { Alert, AlertFilters } from './types/alerts';
-import type { VirtualizedAlertListProps } from './types/virtualization';
+
+
+import { useInfiniteLoading, useAlertSubscription} from './hooks/useInfiniteLoading';
+import { AlertListItem} from './components/AlertListItem';
+
+import { LoadingIndicator} from './components/LoadingIndicator';
+import { EmptyState} from './components/EmptyState';
+import { cn} from '../../utils/utils';
+import type { Alert} from './types/alerts';
+import type { VirtualizedAlertListProps} from './types/virtualization';
 
 export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
-  alerts: initialAlerts,
-  itemHeight = 80,
-  containerHeight,
-  overscan = 5,
-  onItemClick,
-  onLoadMore,
-  groupingOptions,
-  filters: initialFilters,
-  className
+  alerts: initialAlerts, itemHeight = 80, containerHeight, overscan = 5, onItemClick, onLoadMore, groupingOptions, filters: initialFilters, className
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastRenderTime = useRef(0);
 
   // Infinite loading
-  const {items: loadedAlerts, isLoading, isLoadingMore, hasMore, error, total, checkLoadMore, retry, prependItems, updateItem, removeItem} = useInfiniteLoading({
+  const { items: loadedAlerts, hasMore } = useInfiniteLoading({
     loadMore: onLoadMore || (async () => ({ alerts: initialAlerts || [], hasMore: false }))
   });
 
@@ -33,21 +25,10 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   const alerts = onLoadMore ? loadedAlerts : (initialAlerts || []);
 
   // Filtering
-  const {filteredAlerts, filters, updateFilters, resetFilters, filterCount, isFiltering, highlightedIndices} = useAlertFiltering({
-    alerts,
-    initialFilters
-  });
+  
 
   // Virtualization
-  const {containerProps, scrollerProps, visibleItems, state, scrollToItem, scrollToOffset, updateItemHeight, getPerformanceMetrics, isScrolling, scrollDirection} = useVirtualization({
-    items: filteredAlerts,
-    itemHeight,
-    containerHeight,
-    overscan,
-    onScroll: (scrollTop) => {
-      // Check if should load more
-      if (onLoadMore && containerRef.current) {
-        const {scrollHeight, clientHeight} = containerRef.current;
+  
         checkLoadMore(scrollTop, scrollHeight, clientHeight);
       }
     }
@@ -61,7 +42,8 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   );
 
   // Monitor performance
-  useEffect(() => {
+  
+    useEffect(() => {
     const interval = setInterval(() => {
       const metrics = getPerformanceMetrics();
       if (metrics.fps < 30) {
@@ -76,8 +58,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   const renderItem = useCallback((item: Alert, index: number, style: React.CSSProperties) => {
     const isHighlighted = highlightedIndices.has(index);
     
-    return (
-      <AlertListItem
+    return (<AlertListItem
         key={item.id}
         alert={item}
         index={index}
@@ -220,7 +201,6 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
       </div>
     </div>
   );
-};
-
+}
 // Export memoized version
 export default memo(VirtualizedAlertList);

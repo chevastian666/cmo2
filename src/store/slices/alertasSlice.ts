@@ -4,12 +4,12 @@
  * By Cheva
  */
 
-import type { StateCreator } from 'zustand';
-import type { AlertasStore } from '../types';
-import type { AlertaExtendida, ComentarioAlerta, AsignacionAlerta, ResolucionAlerta, HistorialAlerta } from '../../types';
-import { alertasService } from '../../services';
-import { generateMockAlertas } from '../../utils/mockData';
-import { usuariosService } from '../../services/usuarios.service';
+import type { StateCreator} from 'zustand';
+import type { AlertasStore} from '../types';
+import type { AlertaExtendida, ComentarioAlerta, AsignacionAlerta, ResolucionAlerta, HistorialAlerta} from '../../types';
+import { alertasService} from '../../services';
+import { generateMockAlertas} from '../../utils/mockData';
+import { usuariosService} from '../../services/usuarios.service';
 
 export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   // State
@@ -25,7 +25,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
 
   // Computed Properties (getters)
   get filteredAlertas() {
-    const { alertas, filter } = get();
+    
     let filtered = [...alertas];
 
     if (filter.search) {
@@ -54,18 +54,20 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
         case 'activas':
           filtered = filtered.filter(a => !a.atendida);
           break;
-        case 'asignadas':
+        case 'asignadas': {
           const asignadas = Array.from(get().alertasExtendidas.values())
             .filter(ext => ext.asignacion)
             .map(ext => ext.id);
           filtered = filtered.filter(a => asignadas.includes(a.id));
           break;
-        case 'resueltas':
+        }
+        case 'resueltas': {
           const resueltas = Array.from(get().alertasExtendidas.values())
             .filter(ext => ext.resolucion)
             .map(ext => ext.id);
           filtered = filtered.filter(a => resueltas.includes(a.id));
           break;
+        }
       }
     }
 
@@ -73,7 +75,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   },
 
   get alertasStats() {
-    const { alertas, alertasExtendidas } = get();
+    
     const extendedMap = new Map(alertasExtendidas);
     
     return {
@@ -89,12 +91,12 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   },
 
   get alertasCriticas() {
-    const { alertasActivas } = get();
+    
     return alertasActivas.filter(a => a.severidad === 'critica');
   },
 
   get alertasPorTipo() {
-    const { alertas } = get();
+    
     const tipoMap = new Map<string, typeof alertas>();
     
     alertas.forEach(alerta => {
@@ -130,7 +132,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   }),
   
   updateAlerta: (id, data) => set((state) => {
-    const updateItem = (item: any) => item.id === id ? { ...item, ...data } : item;
+    const updateItem = (item: unknown) => item.id === id ? { ...item, ...data } : item;
     state.alertas = state.alertas.map(updateItem);
     state.alertasActivas = state.alertasActivas.map(updateItem);
     state.lastUpdate = Date.now();
@@ -143,7 +145,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   }),
   
   atenderAlerta: async (id) => {
-    const { setError, updateAlerta, alertasActivas } = get();
+    
     setError(null);
     
     try {
@@ -153,7 +155,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       set((state) => {
         state.alertasActivas = state.alertasActivas.filter(a => a.id !== id);
       });
-    } catch (_error) {
+    } catch {
       // En desarrollo, simular atención
       updateAlerta(id, { atendida: true });
       set((state) => {
@@ -176,7 +178,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   setError: (error) => set({ error }),
   
   fetchAlertas: async () => {
-    const { setLoading, setError, setAlertas, filter } = get();
+    
     setLoading(true);
     setError(null);
     
@@ -184,7 +186,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       const data = await alertasService.getAll(filter);
       setAlertas(data);
       return data;
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas();
       setAlertas(mockData);
@@ -196,7 +198,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   },
   
   fetchAlertasActivas: async () => {
-    const { setLoading, setError, setAlertasActivas } = get();
+    
     setLoading(true);
     setError(null);
     
@@ -204,7 +206,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       const data = await alertasService.getActivas();
       setAlertasActivas(data);
       return data;
-    } catch (_error) {
+    } catch {
       // En desarrollo, usar datos mock
       const mockData = generateMockAlertas().filter(a => !a.atendida);
       setAlertasActivas(mockData);
@@ -232,7 +234,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   }),
 
   batchAtenderAlertas: async (ids) => {
-    const { batchUpdateAlertas, setAlertasActivas, alertasActivas } = get();
+    
     
     try {
       // In production, this would be a batch API call
@@ -243,7 +245,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       
       // Remove from active alerts
       setAlertasActivas(alertasActivas.filter(a => !ids.includes(a.id)));
-    } catch (_error) {
+    } catch {
       console.error('Error batch attending alerts:', _error);
       // Still update in development
       batchUpdateAlertas(ids.map(id => ({ id, data: { atendida: true } })));
@@ -264,7 +266,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
 
   // Extended alert management
   fetchAlertaExtendida: async (id: string): Promise<AlertaExtendida | null> => {
-    const { alertasExtendidas, alertas } = get();
+    
     
     // Check cache first
     if (alertasExtendidas.has(id)) {
@@ -276,7 +278,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
     if (!baseAlerta) return null;
     
     // Create extended alert with mock data for now
-    const currentUser = await usuariosService.getCurrentUser();
+    // Current user fetch removed - not currently used
     const extendedAlerta: AlertaExtendida = {
       ...baseAlerta,
       comentarios: [],
@@ -304,7 +306,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   },
 
   asignarAlerta: async (alertaId: string, usuarioId: string, notas?: string) => {
-    const { alertasExtendidas, updateAlertaExtendida } = get();
+    
     
     try {
       // Get users
@@ -348,14 +350,14 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       // Update base alert
       get().updateAlerta(alertaId, { atendida: true });
       
-    } catch (_error) {
+    } catch {
       console.error('Error asignando alerta:', _error);
       throw _error;
     }
   },
 
   comentarAlerta: async (alertaId: string, mensaje: string) => {
-    const { updateAlertaExtendida } = get();
+    
     
     try {
       const currentUser = await usuariosService.getCurrentUser();
@@ -387,14 +389,14 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
         historial: [...alertaExtendida.historial, historialEntry]
       });
       
-    } catch (_error) {
+    } catch {
       console.error('Error agregando comentario:', _error);
       throw _error;
     }
   },
 
   resolverAlerta: async (alertaId: string, tipo: string, descripcion: string, acciones?: string[]) => {
-    const { updateAlertaExtendida, setAlertasActivas, alertasActivas } = get();
+    
     
     try {
       const currentUser = await usuariosService.getCurrentUser();
@@ -432,7 +434,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       get().updateAlerta(alertaId, { atendida: true });
       setAlertasActivas(alertasActivas.filter(a => a.id !== alertaId));
       
-    } catch (_error) {
+    } catch {
       console.error('Error resolviendo alerta:', _error);
       throw _error;
     }

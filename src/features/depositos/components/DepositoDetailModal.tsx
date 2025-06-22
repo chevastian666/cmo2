@@ -1,17 +1,11 @@
 import React from 'react';
-import {X,MapPin,Phone,Clock, Building2,Package, Activity, ExternalLink} from 'lucide-react';
-import type { Deposito } from '../types';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { MapPin, Phone, Clock, Building2, Package, Activity, ExternalLink} from 'lucide-react';
+import type { Deposito} from '../types';
+import { cn} from '@/lib/utils';
+import { Button} from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
+import { Badge} from '@/components/ui/badge';
 
 interface DepositoDetailModalProps {
   deposito: Deposito;
@@ -21,10 +15,7 @@ interface DepositoDetailModalProps {
 }
 
 export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
-  deposito,
-  isOpen,
-  onClose,
-  onEdit
+  deposito, isOpen, onClose, onEdit
 }) => {
   const getCapacidadColor = (capacidad: number) => {
     if (capacidad >= 80) return 'text-red-400';

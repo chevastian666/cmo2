@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 export type CardVariant = 'default' | 'elevated' | 'bordered' | 'ghost';
 
@@ -14,13 +15,7 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = ({
-  children,
-  className,
-  variant = 'default',
-  noPadding = false,
-  onClick,
-  header,
-  footer
+  children, className, variant = 'default', noPadding = false, onClick, header, footer
 }) => {
   const variantStyles = {
     default: 'bg-gray-800 border-gray-700',
@@ -71,9 +66,7 @@ interface CardHeaderProps {
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({
-  children,
-  className,
-  actions
+  children, className, actions
 }) => {
   return (
     <div className={cn('flex items-center justify-between', className)}>
@@ -95,8 +88,7 @@ interface CardTitleProps {
 }
 
 export const CardTitle: React.FC<CardTitleProps> = ({
-  children,
-  className
+  children, className
 }) => {
   return (
     <h3 className={cn('text-lg font-semibold text-gray-100', className)}>
@@ -111,8 +103,7 @@ interface CardDescriptionProps {
 }
 
 export const CardDescription: React.FC<CardDescriptionProps> = ({
-  children,
-  className
+  children, className
 }) => {
   return (
     <p className={cn('text-sm text-gray-400 mt-1', className)}>
@@ -127,8 +118,7 @@ interface CardContentProps {
 }
 
 export const CardContent: React.FC<CardContentProps> = ({
-  children,
-  className
+  children, className
 }) => {
   return (
     <div className={cn('text-gray-300', className)}>
@@ -143,8 +133,7 @@ interface CardFooterProps {
 }
 
 export const CardFooter: React.FC<CardFooterProps> = ({
-  children,
-  className
+  children, className
 }) => {
   return (
     <div className={cn('flex items-center justify-end gap-2', className)}>

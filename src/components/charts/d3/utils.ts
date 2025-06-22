@@ -32,14 +32,14 @@ export const scales = {
 };
 
 export const animations = {
-  fadeIn: (selection: d3.Selection<any, any, any, any>, duration = 750) => 
+  fadeIn: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, duration = 750) => 
     selection
       .style('opacity', 0)
       .transition()
       .duration(duration)
       .style('opacity', 1),
   
-  slideIn: (selection: d3.Selection<any, any, any, any>, direction: 'left' | 'right' | 'up' | 'down', duration = 750) => {
+  slideIn: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, direction: 'left' | 'right' | 'up' | 'down', duration = 750) => {
     const transforms = {
       left: 'translateX(-100%)',
       right: 'translateX(100%)',
@@ -56,7 +56,7 @@ export const animations = {
       .style('opacity', 1);
   },
   
-  morphPath: (path: d3.Selection<SVGPathElement, any, any, any>, newD: string, duration = 750) =>
+  morphPath: (path: d3.Selection<SVGPathElement, unknown, null, undefined>, newD: string, duration = 750) =>
     path
       .transition()
       .duration(duration)
@@ -67,10 +67,8 @@ export const animations = {
 };
 
 export const interactions = {
-  addHover: (
-    selection: d3.Selection<any, any, any, any>,
-    onMouseEnter: (event: MouseEvent, d: any) => void,
-    onMouseLeave: (event: MouseEvent, d: any) => void
+  addHover: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, onMouseEnter: (event: MouseEvent, d: unknown) => void,
+    onMouseLeave: (event: MouseEvent, d: unknown) => void
   ) => {
     return selection
       .on('mouseenter', onMouseEnter)
@@ -78,9 +76,7 @@ export const interactions = {
       .style('cursor', 'pointer');
   },
   
-  addClick: (
-    selection: d3.Selection<any, any, any, any>,
-    onClick: (event: MouseEvent, d: any) => void
+  addClick: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, onClick: (event: MouseEvent, d: unknown) => void
   ) => {
     return selection.on('click', onClick);
   }
@@ -104,7 +100,7 @@ export const tooltip = {
       .style('backdrop-filter', 'blur(8px)');
   },
   
-  show: (tooltip: d3.Selection<HTMLDivElement, any, any, any>, content: string, x: number, y: number) => {
+  show: (tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>, content: string, x: number, y: number) => {
     return tooltip
       .style('visibility', 'visible')
       .html(content)
@@ -112,7 +108,7 @@ export const tooltip = {
       .style('top', `${y - 10}px`);
   },
   
-  hide: (tooltip: d3.Selection<HTMLDivElement, any, any, any>) => {
+  hide: (tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>) => {
     return tooltip.style('visibility', 'hidden');
   }
 };
@@ -126,7 +122,7 @@ export const responsive = {
     };
   },
   
-  createResponsiveSVG: (container: d3.Selection<HTMLElement, any, any, any>, aspectRatio = 2) => {
+  createResponsiveSVG: (container: d3.Selection<HTMLElement, unknown, null, undefined>, aspectRatio = 2) => {
     return container
       .append('svg')
       .attr('width', '100%')
@@ -137,18 +133,18 @@ export const responsive = {
 };
 
 export const dataProcessing = {
-  groupByTime: (data: any[], timeAccessor: (d: any) => Date, interval: d3.TimeInterval) => {
+  groupByTime: <T>(data: T[], timeAccessor: (d: T) => Date, interval: d3.TimeInterval) => {
     return d3.groups(data, d => interval(timeAccessor(d)));
   },
   
-  aggregateByGroup: (data: any[], groupAccessor: (d: any) => string, valueAccessor: (d: any) => number) => {
+  aggregateByGroup: <T>(data: T[], groupAccessor: (d: T) => string, valueAccessor: (d: T) => number) => {
     return Array.from(
       d3.rollup(data, v => d3.sum(v, valueAccessor), groupAccessor),
       ([key, value]) => ({ key, value })
     );
   },
   
-  createHierarchy: (data: any[], parentKey: string, valueKey: string) => {
+  createHierarchy: <T extends Record<string, unknown>>(data: T[], parentKey: string, valueKey: string) => {
     return d3.hierarchy(data)
       .sum(d => d[valueKey])
       .sort((a, b) => (b.value || 0) - (a.value || 0));

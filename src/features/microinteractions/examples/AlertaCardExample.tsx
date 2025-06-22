@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {AlertTriangle} from 'lucide-react';
-import { BloomingAlert } from '../components/BloomingAlert';
-import { useASMRSound } from '../services/soundService';
-import { cn } from '../../../utils/utils';
+import { BloomingAlert} from '../components/BloomingAlert';
+
+import { cn} from '../../../utils/utils';
 
 interface AlertData {
   id: string;
@@ -12,11 +12,10 @@ interface AlertData {
 }
 
 export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }> = ({ 
-  alerta, 
-  isNew = false 
+  alerta, isNew = false 
 }) => {
   const [showBloom, setShowBloom] = useState(isNew);
-  const {playNotification, playOpen} = useASMRSound();
+  
 
   const handleClick = () => {
     playOpen();
@@ -36,8 +35,7 @@ export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }>
   };
 
   if (showBloom) {
-    return (
-      <BloomingAlert
+    return (<BloomingAlert
         status={alerta.tipo === 'normal' ? 'normal' : alerta.tipo === 'alerta' ? 'alert' : 'critical'}
         onBloomComplete={() => {
           setShowBloom(false);

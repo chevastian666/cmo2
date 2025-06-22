@@ -1,10 +1,11 @@
 import {useEffect, useState} from 'react';
-import { useAlertasStore } from '../store';
-import type { AlertaExtendida } from '../../types';
+import { useAlertasStore} from '../store';
+import type { AlertaExtendida} from '../../types';
 
 export const useAlertas = () => {
   const store = useAlertasStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.alertas.length === 0 && !store.loading) {
@@ -30,7 +31,8 @@ export const useAlertas = () => {
 
 export const useAlertasActivas = () => {
   const store = useAlertasStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.alertasActivas.length === 0 && !store.loading) {
@@ -67,14 +69,15 @@ export const useAlertaExtendida = (id: string) => {
   const store = useAlertasStore();
   const [alertaExtendida, setAlertaExtendida] = useState<AlertaExtendida | null>(null);
   const [loading, setLoading] = useState(true);
-  
+   
+
   useEffect(() => {
     const fetchAlerta = async () => {
       setLoading(true);
       try {
-        const _data = await store.fetchAlertaExtendida(id);
+
         setAlertaExtendida(_data);
-      } catch (_error) {
+      } catch {
         console.error('Error fetching extended alert:', _error);
       } finally {
         setLoading(false);
@@ -87,6 +90,8 @@ export const useAlertaExtendida = (id: string) => {
   }, [id]);
   
   // Subscribe to updates
+   
+
   useEffect(() => {
     const unsubscribe = useAlertasStore.subscribe((state) => {
       const updated = state.alertasExtendidas.get(id);
@@ -107,7 +112,7 @@ export const useAlertaExtendida = (id: string) => {
       resolver: (tipo: string, descripcion: string, acciones?: string[]) => 
         store.resolverAlerta(id, tipo, descripcion, acciones),
       refresh: async () => {
-        const _data = await store.fetchAlertaExtendida(id);
+
         setAlertaExtendida(_data);
       }
     }

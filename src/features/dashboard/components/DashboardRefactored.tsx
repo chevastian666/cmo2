@@ -1,36 +1,18 @@
 import React, { useState } from 'react';
+import { Card, CardHeader, CardContent, Tabs, AlertsPanel, TransitCard, InfoRow, InfoGrid, LoadingState, EmptyState, Badge, BadgeGroup} from '../../../components/ui';
+import { SystemStatusCard} from './SystemStatusCard';
+import { KPICards} from './KPICards';
+import { RealtimeIndicator} from './RealtimeIndicator';
 import { 
-  Card, 
-  CardHeader, 
-  CardContent,
-  Tabs,
-  AlertsPanel,
-  TransitCard,
-  StatusBadge,
-  InfoRow,
-  InfoGrid,
-  LoadingState,
-  EmptyState,
-  Badge,
-  BadgeGroup
-} from '../../../components/ui';
-import { SystemStatusCard } from './SystemStatusCard';
-import { KPICards } from './KPICards';
-import { RealtimeIndicator } from './RealtimeIndicator';
-import { 
-  usePrecintosActivos, 
-  useTransitosPendientes, 
-  useAlertasActivas, 
-  useSystemStatus 
-} from '../../../store/hooks';
-import { formatTimeAgo } from '../../../utils/formatters';
-import {Package,Truck,AlertTriangle, Activity} from 'lucide-react';
+  usePrecintosActivos, useTransitosPendientes, useAlertasActivas} from '../../../store/hooks';
+
+import {Package, Truck, AlertTriangle, Activity} from 'lucide-react';
 
 export const DashboardRefactored: React.FC = () => {
-  const {precintos,loading: precintosLoading} =  usePrecintosActivos();
-  const {estadisticas, smsPendientes, dbStats, apiStats, reportesPendientes} = useSystemStatus();
-  const {alertas,loading: alertasLoading} =  useAlertasActivas();
-  const {transitos,loading: transitosLoading} =  useTransitosPendientes();
+  const { loading: precintosLoading } = usePrecintosActivos();
+  
+  const { loading: alertasLoading } = useAlertasActivas();
+  const { loading: transitosLoading } = useTransitosPendientes();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Transform alerts for AlertsPanel
@@ -142,8 +124,7 @@ export const DashboardRefactored: React.FC = () => {
               <CardContent>
                 {alertasLoading ? (
                   <LoadingState variant="dots" />
-                ) : (
-                  <AlertsPanel
+                ) : (<AlertsPanel
                     alerts={alertItems}
                     variant="compact"
                     onAlertClick={(alert) => console.log('Alert clicked:', alert)}
@@ -186,24 +167,21 @@ export const DashboardRefactored: React.FC = () => {
         </div>
       )}
 
-      {activeTab === 'transits' && (
-        <Card>
+      {activeTab === 'transits' && (<Card>
           <CardContent>
             <EmptyState
               icon="truck"
               title="Sección de Tránsitos"
               description="Vista detallada de tránsitos próximamente"
               action={{
-                label: 'Ver tabla completa',
-                onClick: () => console.log('Navigate to transits')
+                label: 'Ver tabla completa', onClick: () => console.log('Navigate to transits')
               }}
             />
           </CardContent>
         </Card>
       )}
 
-      {activeTab === 'alerts' && (
-        <Card>
+      {activeTab === 'alerts' && (<Card>
           <CardContent>
             <AlertsPanel
               alerts={alertItems}
@@ -213,16 +191,14 @@ export const DashboardRefactored: React.FC = () => {
         </Card>
       )}
 
-      {activeTab === 'seals' && (
-        <Card>
+      {activeTab === 'seals' && (<Card>
           <CardContent>
             <EmptyState
               icon="package"
               title="Sección de Precintos"
               description="Vista detallada de precintos próximamente"
               action={{
-                label: 'Ver todos los precintos',
-                onClick: () => console.log('Navigate to seals')
+                label: 'Ver todos los precintos', onClick: () => console.log('Navigate to seals')
               }}
             />
           </CardContent>

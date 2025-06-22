@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import {Camera, Upload,X, Image as ImageIcon} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Camera, Upload, X} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface PhotoUploaderProps {
   onPhotosChange: (photos: File[]) => void;
@@ -10,10 +10,7 @@ interface PhotoUploaderProps {
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
-  onPhotosChange,
-  existingPhotos = [],
-  maxPhotos = 5,
-  maxSizeMB = 10
+  onPhotosChange, existingPhotos = [], maxPhotos = 5, maxSizeMB = 10
 }) => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -113,8 +110,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
 
   const totalPhotos = existingPhotos.length + photos.length;
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+  return (<div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-white flex items-center gap-2">
           <Camera className="h-5 w-5 text-blue-500" />
@@ -210,12 +206,10 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       </div>
 
       {/* New Photos Preview */}
-      {photos.length > 0 && (
-        <div className="mt-4">
+      {photos.length > 0 && (<div className="mt-4">
           <p className="text-sm text-gray-400 mb-2">Nuevas fotos:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {previews.map((preview, index) => (
-              <div key={`new-${index}`} className="relative group">
+            {previews.map((preview, index) => (<div key={`new-${index}`} className="relative group">
                 <img
                   src={preview}
                   alt={`Nueva foto ${index + 1}`}

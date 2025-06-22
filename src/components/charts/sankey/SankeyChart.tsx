@@ -6,13 +6,14 @@
 
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import * as d3 from 'd3';
-import { sankey, sankeyLinkHorizontal, sankeyLeft, sankeyRight, sankeyCenter, sankeyJustify } from 'd3-sankey';
-import { motion } from 'framer-motion';
-import { cn } from '@/utils/utils';
-import type { SankeyChartProps, SankeyNode, SankeyLink } from '../types/sankey.types';
+import { sankey, sankeyLinkHorizontal, sankeyLeft, sankeyRight, sankeyCenter, sankeyJustify} from 'd3-sankey';
+import { motion} from 'framer-motion';
+import { cn} from '@/utils/utils';
+import type { SankeyChartProps, SankeyNode, SankeyLink} from '../types/sankey.types';
 
 // Define D3 Sankey types locally since they're not exported
-interface D3SankeyNode<N, L> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+interface D3SankeyNode<N = any, L = any> {
   sourceLinks?: L[];
   targetLinks?: L[];
   value?: number;
@@ -22,8 +23,8 @@ interface D3SankeyNode<N, L> {
   y0?: number;
   y1?: number;
 }
-
-interface D3SankeyLink<N, L> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+interface D3SankeyLink<N = any, L = any> {
   source: N | number;
   target: N | number;
   value: number;
@@ -47,23 +48,7 @@ interface ExtendedLink extends D3SankeyLink<SankeyNode, SankeyLink> {
 }
 
 export const SankeyChart: React.FC<SankeyChartProps> = ({
-  data,
-  width = 800,
-  height = 600,
-  margin = { top: 20, right: 120, bottom: 20, left: 120 },
-  nodeWidth = 20,
-  nodePadding = 10,
-  nodeAlign = 'justify',
-  nodeSort = null,
-  linkSort = null,
-  iterations = 32,
-  colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'],
-  animated = true,
-  interactive = true,
-  showLabels = true,
-  showValues = true,
-  labelPosition = 'outside',
-  valueFormat = (v) => v.toLocaleString(),
+  data, width = 800, height = 600, margin = { top: 20, right: 120, bottom: 20, left: 120 }, nodeWidth = 20, nodePadding = 10, nodeAlign = 'justify', nodeSort = null, linkSort = null, iterations = 32, colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'], animated = true, interactive = true, showLabels = true, showValues = true, labelPosition = 'outside', valueFormat = (v) => v.toLocaleString(),
   onNodeClick,
   onNodeHover,
   onLinkClick,
@@ -72,7 +57,7 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [, setHoveredLink] = useState<string | null>(null);
 
   // Calculate inner dimensions
   const innerWidth = width - margin.left - margin.right;
@@ -85,8 +70,10 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       .domain(uniqueNodes)
       .range(colors);
   }, [data.nodes, colors]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     if (!svgRef.current || !data.nodes.length || !data.links.length) return;
 
     // Clear previous content
@@ -298,13 +285,13 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       .attr('class', 'tooltip')
       .style('display', 'none');
 
-    const tooltipRect = tooltip.append('rect')
+    tooltip.append('rect')
       .attr('rx', 4)
       .attr('ry', 4)
       .attr('fill', 'rgba(0, 0, 0, 0.9)')
       .attr('stroke', 'rgba(255, 255, 255, 0.1)');
 
-    const tooltipText = tooltip.append('text')
+    tooltip.append('text')
       .attr('fill', 'white')
       .attr('font-size', '12px')
       .attr('x', 8)

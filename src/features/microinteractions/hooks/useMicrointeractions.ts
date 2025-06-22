@@ -18,6 +18,7 @@ export const useMicrointeractions = () => {
     soundVolume: 0.1,
     reducedMotion: false
   });
+   
 
   useEffect(() => {
     // Load config

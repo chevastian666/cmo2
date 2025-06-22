@@ -1,13 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { useClipboard } from '../../hooks/useClipboard';
-import {
-  DocumentDuplicateIcon,
-  ClipboardDocumentIcon,
-  MagnifyingGlassIcon,
-  DocumentTextIcon,
-  ChatBubbleLeftIcon
-} from '@heroicons/react/24/outline';
+import { motion} from 'framer-motion';
+
+import { DocumentDuplicateIcon, MagnifyingGlassIcon, DocumentTextIcon, ChatBubbleLeftIcon} from '@heroicons/react/24/outline';
 
 interface ClipboardContextMenuProps {
   selection: string;
@@ -16,11 +10,9 @@ interface ClipboardContextMenuProps {
 }
 
 export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
-  selection,
-  position,
-  onClose
+  selection, position, onClose
 }) => {
-  const {copyToClipboard} = useClipboard();
+  
 
   const handleCopy = async (_context: string) => {
     await copyToClipboard(selection, {
@@ -53,8 +45,7 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
     }
   ];
 
-  return (
-    <motion.div
+  return (<motion.div
       className="fixed z-50 bg-gray-800 rounded-lg shadow-xl py-2 min-w-[200px]"
       style={{ left: position.x, top: position.y }}
       initial={{ opacity: 0, scale: 0.95 }}

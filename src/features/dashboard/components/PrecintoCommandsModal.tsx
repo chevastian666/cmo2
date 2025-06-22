@@ -4,10 +4,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {X, Unlock, RotateCcw, Zap,Clock, Compass, Trash2, Send,AlertTriangle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { PrecintoActivo } from '../../../types/monitoring';
+import { X, Unlock, RotateCcw, Zap, Clock, Compass, Trash2, AlertTriangle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { notificationService} from '../../../services/shared/notification.service';
+import type { PrecintoActivo} from '../../../types/monitoring';
 
 interface PrecintoCommandsModalProps {
   precinto: PrecintoActivo;
@@ -72,14 +72,14 @@ const COMMANDS: Command[] = [
 ];
 
 export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
-  precinto,
-  isOpen,
-  onClose
+  precinto, isOpen, onClose
 }) => {
   const [sendingCommand, setSendingCommand] = useState<string | null>(null);
   const [confirmCommand, setConfirmCommand] = useState<string | null>(null);
 
   // ESC key handler
+   
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -123,7 +123,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
       });
       
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error(
         `Error al enviar comando: ${error instanceof Error ? error.message : 'Error desconocido'}`
       );
@@ -201,8 +201,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
           {/* Commands */}
           <div className="p-6">
             <div className="grid grid-cols-2 gap-3">
-              {COMMANDS.map((command) => (
-                <div key={command.id}>
+              {COMMANDS.map((command) => (<div key={command.id}>
                   {confirmCommand === command.id ? (
                     <div className="bg-gray-700 rounded-lg p-4 border-2 border-red-500">
                       <div className="flex items-center gap-2 mb-2">
@@ -227,8 +226,7 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
                         </button>
                       </div>
                     </div>
-                  ) : (
-                    <button
+                  ) : (<button
                       onClick={() => handleCommand(command)}
                       disabled={sendingCommand !== null}
                       className={cn(

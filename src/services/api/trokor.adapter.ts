@@ -3,19 +3,39 @@
  * By Cheva
  */
 
-import { TROKOR_CONFIG } from '../../config/trokor.config';
+import { TROKOR_CONFIG} from '../../config/trokor.config';
+import type { AlarmSystem as TrokorAlarma, } from '../../types/api/maindb.types';
 import type { 
-  Precinto as TrokorPrecinto,
-  PrecintoViaje as TrokorViaje,
-  AlarmSystem as TrokorAlarma,
-  Empresa as TrokorEmpresa
-} from '../../types/api/maindb.types';
-import type { 
-  Transito,
-  TransitoPendiente,
-  Alerta,
-  PrecintoActivo
-} from '../../types';
+  Transito, TransitoPendiente, Alerta} from '../../types';
+
+// Import PrecintoActivo from trokor.service.ts
+import type { PrecintoActivo} from './trokor.service';
+
+// Interface for location data
+interface LocationData {
+  lat: number;
+  lng: number;
+  direccion?: string;
+  timestamp?: number;
+}
+
+// Interface for auxiliary database transit data
+interface AuxTransitData {
+  id?: string | number;
+  numero_viaje?: string;
+  pvid?: string;
+  mov?: number;
+  dua?: string;
+  tipo_carga?: string;
+  matricula?: string;
+  camion?: string;
+  origen?: string;
+  destino?: string;
+  despachante?: string;
+  empresa?: string;
+  fecha_ingreso?: number;
+  observaciones?: string;
+}
 
 export class TrokorAdapter {
   
@@ -57,7 +77,7 @@ export class TrokorAdapter {
   static precintoToPrecintoActivo(
     precinto: TrokorPrecinto, 
     viaje?: TrokorViaje,
-    ubicacion?: any
+    ubicacion?: LocationData
   ): PrecintoActivo {
     return {
       id: precinto.precintoid.toString(),
@@ -114,7 +134,7 @@ export class TrokorAdapter {
   /**
    * Convierte un tránsito pendiente de la base auxiliar
    */
-  static transitoPendienteFromAux(data: any): TransitoPendiente {
+  static transitoPendienteFromAux(data: AuxTransitData): TransitoPendiente {
     return {
       id: data.id?.toString() || Date.now().toString(),
       numeroViaje: data.numero_viaje || data.pvid || 'S/N',

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {X, Check,CheckCircle} from 'lucide-react';
-import { Card, CardHeader, CardContent } from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import type { Novedad } from '../types';
+import {X, Check, CheckCircle} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import type { Novedad} from '../types';
 
 interface ModalResolucionProps {
   novedad: Novedad | null;
@@ -12,10 +12,7 @@ interface ModalResolucionProps {
 }
 
 export const ModalResolucion: React.FC<ModalResolucionProps> = ({
-  novedad,
-  isOpen,
-  onClose,
-  onSubmit
+  novedad, isOpen, onClose, onSubmit
 }) => {
   const [comentario, setComentario] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +28,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
       await onSubmit(novedad.id, comentario.trim() || undefined);
       setComentario('');
       onClose();
-    } catch (_err) {
+    } catch {
       // Error manejado en el componente padre
     } finally {
       setLoading(false);

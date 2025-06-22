@@ -5,22 +5,11 @@
  */
 
 import type { 
-  Notification, 
-  NotificationPreferences, 
-  NotificationFilter, 
-  NotificationGroup, 
-  NotificationStats,
-  NotificationType,
-  NotificationPriority,
-  NotificationStatus,
-  NotificationEvent,
-  NotificationTemplate,
-  PushSubscription
-} from '../../types/notifications';
-import { NOTIFICATION_CONFIG, DEFAULT_SOUNDS } from '../../types/notifications';
-import { pushNotificationService } from './pushNotificationService';
-import { soundService } from './soundService';
-import { groupingService } from './groupingService';
+  Notification, NotificationPreferences, NotificationFilter, NotificationGroup, NotificationStats, NotificationType, NotificationPriority, NotificationStatus, NotificationEvent, NotificationTemplate} from '../../types/notifications';
+import { NOTIFICATION_CONFIG, DEFAULT_SOUNDS} from '../../types/notifications';
+import { pushNotificationService} from './pushNotificationService';
+import { soundService} from './soundService';
+import { groupingService} from './groupingService';
 
 type NotificationEventHandler = (event: NotificationEvent) => void;
 
@@ -119,7 +108,7 @@ export class NotificationService {
       }
     }
 
-    const { type, priority } = notification;
+    
 
     // In-app notifications
     if (this.shouldSendToChannel('in-app', type, priority)) {
@@ -242,7 +231,7 @@ export class NotificationService {
   async handleNotificationAction(
     notificationId: string, 
     action: string, 
-    payload?: any
+    payload?: unknown
   ): Promise<void> {
     const notification = this.notifications.get(notificationId);
     if (!notification) {
@@ -605,7 +594,7 @@ export class NotificationService {
   private setupAutoActions(notification: Notification): void {
     if (!this.preferences?.autoActions) return;
 
-    const { autoAcknowledgeAfter, autoEscalateAfter } = this.preferences.autoActions;
+    
 
     if (autoAcknowledgeAfter && notification.priority !== 'critical') {
       const timer = setTimeout(() => {
@@ -676,7 +665,7 @@ export class NotificationService {
   private async handleCustomAction(
     notification: Notification, 
     action: string, 
-    payload?: any
+    payload?: unknown
   ): Promise<void> {
     // Handle custom actions defined in notification.actions
     const actionDef = notification.actions.find(a => a.id === action);
@@ -695,7 +684,7 @@ export class NotificationService {
   private setupServiceWorkerListener(): void {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', (event) => {
-        const { type, payload } = event.data;
+        
         
         if (type === 'GET_TOKEN') {
           event.ports[0].postMessage({ 

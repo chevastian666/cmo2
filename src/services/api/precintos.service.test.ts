@@ -2,10 +2,10 @@
  * Precintos Service Tests
  * By Cheva
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { precintosService } from './precintos.service';
-import { server } from '@/test/mocks/server';
-import { http, HttpResponse } from 'msw';
+import { describe, it, expect, beforeEach, vi} from 'vitest';
+import { precintosService} from './precintos.service';
+import { server} from '@/test/mocks/server';
+import { http, HttpResponse} from 'msw';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -40,8 +40,7 @@ describe('PrecintosService', () => {
     });
 
     it('handles API errors gracefully', async () => {
-      server.use(
-        http.get(`${API_URL}/precintos`, () => {
+      server.use(http.get(`${API_URL}/precintos`, () => {
           return HttpResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }
@@ -72,8 +71,7 @@ describe('PrecintosService', () => {
     });
 
     it('handles not found error', async () => {
-      server.use(
-        http.get(`${API_URL}/precintos/:id`, () => {
+      server.use(http.get(`${API_URL}/precintos/:id`, () => {
           return HttpResponse.json(
             { error: 'Precinto not found' },
             { status: 404 }
@@ -101,8 +99,7 @@ describe('PrecintosService', () => {
     });
 
     it('handles validation errors', async () => {
-      server.use(
-        http.post(`${API_URL}/precintos`, () => {
+      server.use(http.post(`${API_URL}/precintos`, () => {
           return HttpResponse.json(
             { 
               error: 'Validation failed',
@@ -122,8 +119,7 @@ describe('PrecintosService', () => {
 
   describe('updatePrecinto', () => {
     it('updates precinto successfully', async () => {
-      server.use(
-        http.patch(`${API_URL}/precintos/:id`, async ({ params, request }) => {
+      server.use(http.patch(`${API_URL}/precintos/:id`, async ({ params, request }) => {
           const body = await request.json();
           return HttpResponse.json({
             data: {
@@ -143,8 +139,7 @@ describe('PrecintosService', () => {
 
   describe('activatePrecinto', () => {
     it('activates precinto successfully', async () => {
-      server.use(
-        http.post(`${API_URL}/precintos/:id/activar`, ({ params }) => {
+      server.use(http.post(`${API_URL}/precintos/:id/activar`, ({ params }) => {
           return HttpResponse.json({
             data: {
               id: params.id,
@@ -164,8 +159,7 @@ describe('PrecintosService', () => {
 
   describe('getPrecintoHistory', () => {
     it('fetches precinto history', async () => {
-      server.use(
-        http.get(`${API_URL}/precintos/:id/historial`, () => {
+      server.use(http.get(`${API_URL}/precintos/:id/historial`, () => {
           return HttpResponse.json({
             data: [
               {
@@ -193,8 +187,7 @@ describe('PrecintosService', () => {
 
   describe('exportPrecintos', () => {
     it('exports precintos to CSV', async () => {
-      server.use(
-        http.get(`${API_URL}/precintos/export`, () => {
+      server.use(http.get(`${API_URL}/precintos/export`, () => {
           return new HttpResponse('csv data', {
             headers: {
               'Content-Type': 'text/csv',
@@ -209,8 +202,7 @@ describe('PrecintosService', () => {
     });
 
     it('exports precintos to Excel', async () => {
-      server.use(
-        http.get(`${API_URL}/precintos/export`, () => {
+      server.use(http.get(`${API_URL}/precintos/export`, () => {
           return new HttpResponse(new ArrayBuffer(8), {
             headers: {
               'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

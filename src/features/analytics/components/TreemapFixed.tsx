@@ -5,16 +5,15 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {Package,Truck,AlertTriangle,TrendingUp} from 'lucide-react';
-import { usePrecintosStore, useTransitosStore, useAlertasStore } from '@/store/store';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import {Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react';
 
 const TreemapFixed: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const { precintos } = usePrecintosStore();
-  const { transitos } = useTransitosStore();
-  const { alertas } = useAlertasStore();
+  
+  
+  
 
   // Datos de ejemplo para visualización
   const mockData = {
@@ -38,7 +37,7 @@ const TreemapFixed: React.FC = () => {
     ]
   };
 
-  const TreemapBlock = ({ item, index }: { item: any; index: number }) => {
+  const TreemapBlock = ({ item, index }: { item: unknown; index: number }) => {
     const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-2', 'col-span-2 row-span-1', 'col-span-1 row-span-1'];
     const sizeClass = sizes[index % sizes.length];
     
@@ -70,8 +69,7 @@ const TreemapFixed: React.FC = () => {
     alertas: alertas.length || 89
   };
 
-  return (
-    <div className="p-6 space-y-6">
+  return (<div className="p-6 space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-3">

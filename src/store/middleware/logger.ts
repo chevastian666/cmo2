@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import type { StateCreator, StoreMutatorIdentifier } from './types';
+import type { StateCreator, StoreMutatorIdentifier} from './types';
 
 export interface LoggerConfig {
   name?: string;
@@ -14,7 +14,7 @@ export interface LoggerConfig {
   timestamp?: boolean;
   duration?: boolean;
   actionFilter?: (action: string) => boolean;
-  stateFilter?: (state: unknown) => any;
+  stateFilter?: (state: unknown) => unknown;
   colors?: {
     title?: string;
     prevState?: string;
@@ -36,25 +36,19 @@ type Logger = <
   T,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = []
->(
-  f: StateCreator<T, Mps, Mcs>,
-  options?: LoggerConfig
-) => StateCreator<T, Mps, Mcs>;
+>(f: StateCreator<T, Mps, Mcs>, options?: LoggerConfig) => StateCreator<T, Mps, Mcs>;
 
-type LoggerImpl = <T>(
-  f: StateCreator<T, [], []>,
-  options?: LoggerConfig
-) => StateCreator<T, [], []>;
+type LoggerImpl = <T>(f: StateCreator<T, [], []>, options?: LoggerConfig) => StateCreator<T, [], []>;
 
 const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
-  const {name = 'zustand', enabled = process.env.NODE_ENV === 'development', collapsed = true, diff = true, timestamp = true, duration = true, actionFilter = () => true, stateFilter = (state) => state, colors = defaultColors} = options;
+  
 
   const mergedColors = { ...defaultColors, ...colors };
   let startTime: number;
 
   const loggedSet: typeof set = (...args) => {
     const [nextStateOrUpdater] = args;
-    const action = (nextStateOrUpdater as unknown)?.type || 'anonymous';
+    const action = (nextStateOrUpdater as { type?: string })?.type || 'anonymous';
 
     if (!enabled || !actionFilter(action)) {
       return set(...args);
@@ -95,7 +89,7 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
     try {
       set(...args);
       log();
-    } catch (_error) {
+    } catch {
       console.group(`%c${name} | ERROR`, `color: ${mergedColors._error}; font-weight: bold;`);
       console._error('Error in action:', action);
       console._error(_error);
@@ -113,19 +107,22 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
 function getDiff(prev: unknown, next: unknown): Record<string, { from: unknown; to: unknown }> {
   const diff: Record<string, { from: unknown; to: unknown }> = {};
   
+  const prevObj = prev as Record<string, unknown>;
+  const nextObj = next as Record<string, unknown>;
+  
   // Revisar propiedades eliminadas o modificadas
-  for (const key in prev) {
-    if (!(key in next)) {
-      diff[key] = { from: prev[key], to: undefined };
-    } else if (prev[key] !== next[key]) {
-      diff[key] = { from: prev[key], to: next[key] };
+  for (const key in prevObj) {
+    if (!(key in nextObj)) {
+      diff[key] = { from: prevObj[key], to: undefined };
+    } else if (prevObj[key] !== nextObj[key]) {
+      diff[key] = { from: prevObj[key], to: nextObj[key] };
     }
   }
   
   // Revisar propiedades añadidas
-  for (const key in next) {
-    if (!(key in prev)) {
-      diff[key] = { from: undefined, to: next[key] };
+  for (const key in nextObj) {
+    if (!(key in prevObj)) {
+      diff[key] = { from: undefined, to: nextObj[key] };
     }
   }
   

@@ -1,18 +1,16 @@
 import {useEffect} from 'react';
-import { sharedStateService } from '../services/shared/sharedState.service';
-import { authService } from '../services/shared/auth.service';
+import { sharedStateService} from '../services/shared/sharedState.service';
+import { authService} from '../services/shared/auth.service';
 import {
-  usePrecintosStore,
-  useTransitosStore,
-  useAlertasStore,
-  useSystemStatusStore
-} from '../store';
+  usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../store';
 
 /**
  * Hook to integrate shared state with local Zustand stores
  * This provides a bridge between the shared state and the existing store architecture
  */
 export function useSharedIntegration() {
+   
+
   useEffect(() => {
     // Initialize shared services
     authService.initialize();
@@ -22,29 +20,25 @@ export function useSharedIntegration() {
     const unsubscribers: (() => void)[] = [];
 
     // Sync Transitos
-    unsubscribers.push(
-      sharedStateService.subscribeToKey('transitosPendientes', (transitos) => {
+    unsubscribers.push(sharedStateService.subscribeToKey('transitosPendientes', (transitos) => {
         useTransitosStore.getState().setTransitosPendientes(transitos);
       })
     );
 
     // Sync Precintos
-    unsubscribers.push(
-      sharedStateService.subscribeToKey('precintosActivos', (precintos) => {
+    unsubscribers.push(sharedStateService.subscribeToKey('precintosActivos', (precintos) => {
         usePrecintosStore.getState().setPrecintosActivos(precintos);
       })
     );
 
     // Sync Alertas
-    unsubscribers.push(
-      sharedStateService.subscribeToKey('alertasActivas', (alertas) => {
+    unsubscribers.push(sharedStateService.subscribeToKey('alertasActivas', (alertas) => {
         useAlertasStore.getState().setAlertasActivas(alertas);
       })
     );
 
     // Sync System Status
-    unsubscribers.push(
-      sharedStateService.subscribeToKey('systemStatus', (status) => {
+    unsubscribers.push(sharedStateService.subscribeToKey('systemStatus', (status) => {
         if (status) {
           useSystemStatusStore.getState().updateSystemStatus({
             smsPendientes: status.smsPendientes || 0,
@@ -69,6 +63,8 @@ export function useSharedIntegration() {
  * This ensures that actions performed through local stores update the shared state
  */
 export function useSyncStoreActions() {
+   
+
   useEffect(() => {
     // Override store actions to sync with shared state
     const stores = [

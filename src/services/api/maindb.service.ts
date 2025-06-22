@@ -3,21 +3,13 @@
  * By Cheva
  */
 
-import { sharedApiService } from '../shared/sharedApi.service';
-import { TROKOR_CONFIG, buildTrokorUrl, getTrokorHeaders } from '../../config/trokor.config';
-import { TrokorAdapter } from './trokor.adapter';
+import { sharedApiService} from '../shared/sharedApi.service';
+import { TROKOR_CONFIG, buildTrokorUrl, getTrokorHeaders} from '../../config/trokor.config';
+// TrokorAdapter import removed - not currently used
 import type { 
-  Precinto, 
-  PrecintoViaje, 
-  AlarmSystem, 
-  Empresa, 
-  AppUser,
-  PrecintoLocation,
-  PrecintoAduanaAlarma,
-  PrecintoAduanaReport 
-} from '../../types/api/maindb.types';
-import type { Transito } from '../../features/transitos/types';
-import type { Alerta } from '../../types';
+  Precinto, PrecintoViaje, AlarmSystem, Empresa, AppUser, PrecintoLocation, PrecintoAduanaAlarma, PrecintoAduanaReport} from '../../types/api/maindb.types';
+import type { Transito} from '../../features/transitos/types';
+import type { Alerta} from '../../types';
 
 class MainDBService {
   private readonly API_BASE = import.meta.env.VITE_USE_REAL_API ? TROKOR_CONFIG.MAINDB_BASE : '/api/maindb';

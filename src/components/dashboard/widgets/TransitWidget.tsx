@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
-import {Truck,MapPin,Clock,AlertTriangle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
-import { useTransitosStore } from '../../../store/store';
+import {Truck, MapPin, Clock, AlertTriangle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
+import { useTransitosStore} from '../../../store/store';
 
 export const TransitWidget: React.FC = () => {
   const transitos = useTransitosStore(state => state.transitos);
@@ -44,8 +44,7 @@ export const TransitWidget: React.FC = () => {
     );
   }
 
-  return (
-    <div className="h-full flex flex-col">
+  return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-2 overflow-auto">
         {activosTransitos.map((transito, index) => (
           <motion.div

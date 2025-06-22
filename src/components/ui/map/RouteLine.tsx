@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 
 interface RoutePoint {
   lat: number;
@@ -20,16 +21,7 @@ interface RouteLineProps {
 }
 
 export const RouteLine: React.FC<RouteLineProps> = ({
-  points,
-  color = '#3b82f6',
-  width = 3,
-  style = 'solid',
-  animated = false,
-  opacity = 0.8,
-  className,
-  showArrows = false,
-  showProgress = false,
-  progress = 0
+  points, color = '#3b82f6', width = 3, style = 'solid', animated = false, opacity = 0.8, className, showArrows = false, showProgress = false, progress = 0
 }) => {
   if (points.length < 2) return null;
 
@@ -172,15 +164,7 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
   pulseEffect?: boolean;
   flowSpeed?: number;
 }> = ({
-  points,
-  color = '#3b82f6',
-  width = 3,
-  opacity = 0.8,
-  className,
-  glowEffect = true,
-  pulseEffect = true,
-  flowSpeed = 2,
-  ...props
+  points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ...props
 }) => {
   if (points.length < 2) return null;
 

@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {Search, Plus,Truck,Filter, Image,Calendar,AlertTriangle} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, EmptyState, LoadingState } from '../../../components/ui';
-import { useCamionesStore } from '../../../store/camionesStore';
-import { FichaCamion } from './FichaCamion';
-import { FormularioCamion } from './FormularioCamion';
-import { cn } from '../../../utils/utils';
-import type { FiltrosCamion, EstadoCamion } from '../types';
-import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT } from '../types';
+import { Search, Plus, Truck, Image, Calendar} from 'lucide-react';
+import { Card, CardContent, Badge, EmptyState, LoadingState} from '../../../components/ui';
+
+import { FichaCamion} from './FichaCamion';
+import { FormularioCamion} from './FormularioCamion';
+
+import type { FiltrosCamion, EstadoCamion} from '../types';
+import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT} from '../types';
 
 export const ListaCamiones: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosCamion>(FILTROS_CAMION_DEFAULT);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null);
-  
-  const {camiones, loading, fetchCamiones, updateEstadoCamion} = useCamionesStore();
+   
 
   useEffect(() => {
     fetchCamiones(filtros);
@@ -28,16 +27,14 @@ export const ListaCamiones: React.FC = () => {
   };
 
   if (camionSeleccionado) {
-    return (
-      <FichaCamion 
+    return (<FichaCamion 
         matricula={camionSeleccionado} 
         onClose={() => setCamionSeleccionado(null)} 
       />
     );
   }
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -111,8 +108,7 @@ export const ListaCamiones: React.FC = () => {
           title="No se encontraron camiones"
           description="No hay camiones que coincidan con los filtros aplicados"
         />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      ) : (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {camiones.map(camion => {
             const estadoConfig = ESTADOS_CAMION[camion.estado];
             return (
@@ -190,8 +186,7 @@ export const ListaCamiones: React.FC = () => {
       )}
 
       {/* Modal de formulario */}
-      {mostrarFormulario && (
-        <FormularioCamion onClose={() => setMostrarFormulario(false)} />
+      {mostrarFormulario && (<FormularioCamion onClose={() => setMostrarFormulario(false)} />
       )}
     </div>
   );

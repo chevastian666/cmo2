@@ -16,7 +16,7 @@ export interface NotificationAction {
   icon?: string;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   requiresConfirmation?: boolean;
-  payload?: Record<string, any>;
+  payload?: Record<string, unknown>;
 }
 
 export interface NotificationSound {
@@ -37,7 +37,7 @@ export interface NotificationMetadata {
     lng: number;
     address?: string;
   };
-  additionalData?: Record<string, any>;
+  additionalData?: Record<string, unknown>;
 }
 
 export interface Notification {
@@ -108,7 +108,7 @@ export interface NotificationPreferences {
           enabled: boolean;
           priority: NotificationPriority[];
           sound?: NotificationSound;
-          customSettings?: Record<string, any>;
+          customSettings?: Record<string, unknown>;
         };
       };
     };
@@ -185,7 +185,7 @@ export interface NotificationTemplate {
   actions: NotificationAction[];
   sound?: NotificationSound;
   icon?: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 // Event types for notification system
@@ -194,7 +194,7 @@ export interface NotificationEvent {
   notification: Notification;
   userId?: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Configuration for different notification types

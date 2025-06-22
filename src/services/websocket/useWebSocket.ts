@@ -1,13 +1,9 @@
 import {useEffect, useState} from 'react';
-import { wsService } from './WebSocketService';
+import { wsService} from './WebSocketService';
 import { 
-  usePrecintosStore, 
-  useTransitosStore, 
-  useAlertasStore, 
-  useSystemStatusStore 
-} from '../../store';
-import type { ConnectionData } from './types';
-import { emitNotification } from '../../features/common/components/RealtimeNotifications';
+  usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../../store';
+import type { ConnectionData} from './types';
+import { emitNotification} from '../../features/common/components/RealtimeNotifications';
 
 export interface WebSocketStatus {
   isConnected: boolean;
@@ -20,10 +16,10 @@ export const useWebSocket = () => {
     isConnected: false,
     status: 'disconnected'
   });
-
+  
   useEffect(() => {
     // Set up event handlers
-    wsService.on('onConnectionChange', (_data) => {
+    wsService.on('onConnectionChange', (data) => {
       setConnectionStatus({
         isConnected: data.status === 'connected',
         status: data.status,
@@ -48,29 +44,31 @@ export const useWebSocket = () => {
     });
 
     // Handle precinto updates
-    wsService.on('onPrecintoUpdate', (_data) => {
+    wsService.on('onPrecintoUpdate', (data) => {
       const store = usePrecintosStore.getState();
       
       switch (data.action) {
-        case 'update':
+        case 'update': {
           store.updatePrecinto(data.precinto.id, data.precinto);
           break;
-        case 'create':
+        }
+        case 'create': {
           // Add new precinto to both lists if active
-          const newPrecinto = data.precinto as unknown;
+          const newPrecinto = data.precinto as any;
           store.setPrecintos([...store.precintos, newPrecinto]);
           if (['SAL', 'LLE', 'FMF', 'CFM', 'CNP'].includes(newPrecinto.estado)) {
             store.setPrecintosActivos([...store.precintosActivos, newPrecinto]);
           }
           break;
-        case 'delete':
+        }
+        case 'delete': {
           store.removePrecinto(data.precinto.id);
           break;
-      }
+        }
     });
 
     // Handle transito updates
-    wsService.on('onTransitoUpdate', (_data) => {
+    wsService.on('onTransitoUpdate', (data) => {
       const store = useTransitosStore.getState();
       
       switch (data.action) {
@@ -78,17 +76,18 @@ export const useWebSocket = () => {
           store.updateTransito(data.transito.id, data.transito);
           break;
         case 'create': {
-          const 
-            newTransito = data.transito as unknown;
+          const newTransito = data.transito;
           store.setTransitos([...store.transitos, newTransito]);
           if (newTransito.estado === 'pendiente') {
             store.setTransitosPendientes([...store.transitosPendientes, newTransito]);
           }
           break;
+        }
         case 'delete':
           store.removeTransito(data.transito.id);
           break;
-        case 'precintado':
+        }
+        case 'precintado': {
           // Remove from pending and update status
           store.updateTransito(data.transito.id, { estado: 'precintado' });
           store.setTransitosPendientes(
@@ -99,7 +98,7 @@ export const useWebSocket = () => {
     });
 
     // Handle new alerts
-    wsService.on('onAlertaNueva', (_data) => {
+    wsService.on('onAlertaNueva', (data) => {
       const store = useAlertasStore.getState();
       store.addAlerta(data.alerta);
       
@@ -130,7 +129,7 @@ export const useWebSocket = () => {
     });
 
     // Handle alert updates
-    wsService.on('onAlertaUpdate', (_data) => {
+    wsService.on('onAlertaUpdate', (data) => {
       const store = useAlertasStore.getState();
       
       if (data.action === 'atender') {
@@ -144,9 +143,9 @@ export const useWebSocket = () => {
     });
 
     // Handle system updates
-    wsService.on('onSistemaUpdate', (_data) => {
+    wsService.on('onSistemaUpdate', (data) => {
       const store = useSystemStatusStore.getState();
-      store.updateSystemStatus(_data);
+      store.updateSystemStatus(data);
     });
 
     // Connect WebSocket

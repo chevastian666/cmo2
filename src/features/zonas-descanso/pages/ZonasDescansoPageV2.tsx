@@ -5,35 +5,23 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import {MapPin, Search, Navigation, ExternalLink, Map, ChevronDown, ChevronRight,Truck, Info,Clock,Filter, Download, Star, Coffee, Fuel} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Filter, Download, Coffee, Fuel} from 'lucide-react';
+
+import { Input} from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+import { Separator} from '@/components/ui/separator';
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import { 
-  PageTransition, 
-  AnimatedHeader, 
-  AnimatedSection,
-  AnimatedGrid 
-} from '@/components/animations/PageTransitions';
-import {
-  AnimatedCard,
-  AnimatedButton,
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem,
-  AnimatedDiv,
-  AnimatedSpinner
-} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/utils/utils';
-import { zonasDescansoData } from '../data/zonasDescansoData';
-import type { RutaZonas, ZonaDescanso } from '../data/zonasDescansoData';
-import { InteractiveMap } from '@/components/maps/InteractiveMap';
-import type { MapMarker, MapRoute } from '@/components/maps/InteractiveMap';
-import {staggerContainer, staggerItem, fadeInUp, scaleIn, slideInRight} from '@/components/animations/AnimationPresets';
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem} from '@/components/animations/AnimatedComponents';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/utils/utils';
+import { zonasDescansoData} from '../data/zonasDescansoData';
+import type { RutaZonas} from '../data/zonasDescansoData';
+import { InteractiveMap} from '@/components/maps/InteractiveMap';
+import type { MapMarker, MapRoute} from '@/components/maps/InteractiveMap';
+import { staggerContainer, staggerItem} from '@/components/animations/AnimationPresets';
 
 export const ZonasDescansoPageV2: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -93,14 +81,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
   };
 
   const exportData = () => {
-    const _data = zonasDescansoData.flatMap(ruta => 
-      ruta.zonas.map(zona => ({
-        Ruta: ruta.ruta,
-        Ubicación: zona.ubicacion,
-        'Link Maps': zona.maps
-      }))
-    );
-    
+
     const csv = [
       Object.keys(data[0]).join(','),
       ...data.map(row => Object.values(row).map(v => `"${v}"`).join(','))
@@ -114,8 +95,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
     a.click();
   };
 
-  return (
-    <PageTransition>
+  return (<PageTransition>
       <div className="max-w-7xl mx-auto space-y-6">
         <AnimatedHeader
           title="Zonas de descanso para camioneros"
@@ -216,8 +196,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
                 </div>
               </div>
               
-              {searchTerm && (
-                <motion.div
+              {searchTerm && (<motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-3 flex items-center justify-between"
@@ -309,15 +288,13 @@ const RutasListView: React.FC<{
     );
   }
 
-  return (
-    <motion.div
+  return (<motion.div
       variants={staggerContainer}
       initial="hidden"
       animate="visible"
       className="space-y-4"
     >
-      {data.map((rutaData, index) => (
-        <motion.div key={rutaData.ruta} variants={staggerItem}>
+      {data.map((rutaData, index) => (<motion.div key={rutaData.ruta} variants={staggerItem}>
           <AnimatedCard 
             className="overflow-hidden"
             whileHover={{ scale: 1.01 }}
@@ -353,8 +330,7 @@ const RutasListView: React.FC<{
             </div>
 
             <AnimatePresence>
-              {expandedRoutes.has(rutaData.ruta) && (
-                <motion.div
+              {expandedRoutes.has(rutaData.ruta) && (<motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
@@ -363,8 +339,7 @@ const RutasListView: React.FC<{
                   <Separator />
                   <div className="p-4">
                     <AnimatedList className="space-y-3">
-                      {rutaData.zonas.map((zona, zoneIndex) => (
-                        <AnimatedListItem
+                      {rutaData.zonas.map((zona, zoneIndex) => (<AnimatedListItem
                           key={zona.ubicacion}
                           index={zoneIndex}
                           onMouseEnter={() => onHighlightZone(zona.ubicacion)}
@@ -492,7 +467,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       
       // Default to center of Uruguay
       return { lat: -32.5228, lng: -55.7658 };
-    } catch (_error) {
+    } catch {
       console.error('Error extracting coordinates:', _error);
       return null;
     }
@@ -566,8 +541,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
     }
   ];
 
-  return (
-    <InteractiveMap
+  return (<InteractiveMap
       markers={markers}
       routes={routes}
       height="600px"

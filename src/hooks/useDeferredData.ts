@@ -1,4 +1,4 @@
-import {useDeferredValue, useEffect,  useRef, useState} from 'react';
+import {useDeferredValue, useEffect, useRef, useState} from 'react';
 
 interface UseDeferredDataOptions {
   timeoutMs?: number;
@@ -18,7 +18,7 @@ export function useDeferredData<T>(
   isPending: boolean;
   shouldShowLoading: boolean;
 } {
-  const {timeoutMs = 500, enableDeferral = true} = options;
+  
   
   const deferredData = enableDeferral ? useDeferredValue(data) : data;
   const [showLoading, setShowLoading] = useState(false);
@@ -26,6 +26,7 @@ export function useDeferredData<T>(
 
   const isStale = enableDeferral && data !== deferredData;
   const isPending = isStale;
+   
 
   useEffect(() => {
     if (isPending) {

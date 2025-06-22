@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
-import type { SankeyData } from '@/components/charts/types/sankey.types';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
+import type { SankeyData} from '@/components/charts/types/sankey.types';
 
 const SankeyMinimal: React.FC = () => {
   // Simple test data

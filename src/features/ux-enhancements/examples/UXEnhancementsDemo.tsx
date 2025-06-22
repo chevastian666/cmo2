@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { RadialMenu } from '../components/RadialMenu/RadialMenu';
-import { SmartClipboard } from '../components/SmartClipboard/SmartClipboard';
-import { useClipboard } from '../hooks/useClipboard';
-import { useRadialMenuStore } from '../stores/radialMenuStore';
+import { RadialMenu} from '../components/RadialMenu/RadialMenu';
+import { SmartClipboard} from '../components/SmartClipboard/SmartClipboard';
+
+
 import {LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline';
 
 export const UXEnhancementsDemo: React.FC = () => {
@@ -10,8 +10,8 @@ export const UXEnhancementsDemo: React.FC = () => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null);
   
-  const {copyToClipboard} = useClipboard();
-  const {setUserPermissions} = useRadialMenuStore();
+  
+  
 
   // Simular datos de precintos
   const precintos = [
@@ -169,8 +169,7 @@ export const UXEnhancementsDemo: React.FC = () => {
 
         {/* Lista de Precintos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {precintos.map((precinto) => (
-            <div
+          {precintos.map((precinto) => (<div
               key={precinto.id}
               className="bg-gray-800 rounded-lg p-6 cursor-pointer hover:bg-gray-700 transition-colors"
               onContextMenu={(e) => handleContextMenu(e, precinto.id)}

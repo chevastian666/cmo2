@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import {X,Clock,User, Shield,Filter,FileText} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { useRolesStore } from '../../../store/rolesStore';
-import type { PermissionChange, Role, Section } from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS } from '../../../types/roles';
+import {X, Clock, User, Shield, Filter, FileText} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { useRolesStore} from '../../../store/rolesStore';
+import type { PermissionChange, Role, Section} from '../../../types/roles';
+import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles';
 
 interface ChangeHistoryProps {
   isOpen: boolean;
@@ -50,8 +50,7 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
     return parts.join(' | ');
   };
 
-  return (
-    <>
+  return (<>
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
@@ -108,8 +107,7 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
                   ))}
                 </select>
                 
-                {(filterRole || filterSection) && (
-                  <button
+                {(filterRole || filterSection) && (<button
                     onClick={() => {
                       setFilterRole('');
                       setFilterSection('');
@@ -129,8 +127,7 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
                   <FileText className="h-12 w-12 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No hay cambios registrados</p>
                 </div>
-              ) : (
-                <div className="divide-y divide-gray-700">
+              ) : (<div className="divide-y divide-gray-700">
                   {history.map((change) => (
                     <div key={change.id} className="p-4 hover:bg-gray-700/50 transition-colors">
                       <div className="flex items-start justify-between">

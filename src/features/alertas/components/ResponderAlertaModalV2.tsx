@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import type { Alerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { notificationService } from '../../../services/shared/notification.service';
+import { Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Label} from '@/components/ui/label';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Textarea} from '@/components/ui/textarea';
+import { cn} from '@/lib/utils';
+import type { Alerta} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { notificationService} from '../../../services/shared/notification.service';
 
 interface ResponderAlertaModalProps {
   alerta: Alerta | null;
@@ -98,15 +98,13 @@ const COMANDOS_RAPIDOS = [
 ];
 
 export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onRespond
+  alerta, isOpen, onClose, onRespond
 }) => {
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('0');
   const [observaciones, setObservaciones] = useState('');
   const [loading, setLoading] = useState(false);
   const [sendingCommand, setSendingCommand] = useState<string | null>(null);
+   
 
   useEffect(() => {
     if (!isOpen) {
@@ -130,7 +128,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
       setLoading(true);
       await onRespond(alerta.id, Number(motivoSeleccionado), motivoDescripcion, observaciones);
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al responder la alerta');
     } finally {
       setLoading(false);
@@ -145,7 +143,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`);
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al enviar el comando');
     } finally {
       setSendingCommand(null);
@@ -156,8 +154,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
 
   const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || [];
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+  return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-800 border-gray-700">
         <DialogHeader>
           <DialogTitle>Responder Alerta</DialogTitle>
@@ -217,8 +214,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
             <div className="grid grid-cols-2 gap-2">
               {COMANDOS_RAPIDOS.map((comando) => {
                 const Icon = comando.icon;
-                return (
-                  <Button
+                return (<Button
                     key={comando.id}
                     type="button"
                     onClick={() => handleSendCommand(comando.id)}

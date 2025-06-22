@@ -5,30 +5,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion} from 'framer-motion';
 import {
-  Bell,
-  BellOff,
-  Mail,
-  Smartphone,
-  Monitor,
-  Volume2,
-  VolumeX,
-  Clock,
-  Users,
-  Settings,
-  Save,
-  RefreshCw,
-  TestTube2
-} from 'lucide-react';
+  Bell, BellOff, Mail, Smartphone, Monitor, Volume2, VolumeX, Clock, Settings, Save, RefreshCw, TestTube2} from 'lucide-react';
 import type {
-  NotificationPreferences,
-  NotificationType,
-  NotificationPriority,
-  NotificationChannel,
-  NotificationSound
-} from '../../types/notifications';
-import { DEFAULT_SOUNDS } from '../../types/notifications';
+  NotificationPreferences, NotificationType, NotificationPriority, NotificationChannel, } from '../../types/notifications';
+import { DEFAULT_SOUNDS} from '../../types/notifications';
 
 interface NotificationPreferencesProps {
   preferences: NotificationPreferences;
@@ -105,22 +87,23 @@ const priorities: { key: NotificationPriority; label: string; color: string }[] 
 ];
 
 export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
-  preferences,
-  onSave,
-  onTest,
-  className = ''
+  preferences, onSave, onTest, className = ''
 }) => {
   const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences);
   const [hasChanges, setHasChanges] = useState(false);
   const [activeTab, setActiveTab] = useState<'channels' | 'types' | 'sounds' | 'schedule'>('channels');
   const [testingChannel, setTestingChannel] = useState<{ channel: NotificationChannel; type: NotificationType } | null>(null);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     setLocalPreferences(preferences);
     setHasChanges(false);
   }, [preferences]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     const isDifferent = JSON.stringify(localPreferences) !== JSON.stringify(preferences);
     setHasChanges(isDifferent);
   }, [localPreferences, preferences]);
@@ -129,10 +112,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     setLocalPreferences(prev => ({ ...prev, ...updates }));
   };
 
-  const updateChannelPreferences = (
-    channel: NotificationChannel,
-    updates: Partial<typeof localPreferences.channels[NotificationChannel]>
-  ) => {
+  const updateChannelPreferences = (channel: NotificationChannel, updates: Partial<typeof localPreferences.channels[NotificationChannel]>) => {
     setLocalPreferences(prev => ({
       ...prev,
       channels: {
@@ -145,11 +125,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     }));
   };
 
-  const updateTypePreferences = (
-    channel: NotificationChannel,
-    type: NotificationType,
-    updates: Partial<typeof localPreferences.channels[NotificationChannel]['types'][NotificationType]>
-  ) => {
+  const updateTypePreferences = (channel: NotificationChannel, type: NotificationType, updates: Partial<typeof localPreferences.channels[NotificationChannel]['types'][NotificationType]>) => {
     setLocalPreferences(prev => ({
       ...prev,
       channels: {
@@ -323,10 +299,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             { key: 'types', label: 'Tipos', icon: Bell },
             { key: 'sounds', label: 'Sonidos', icon: Volume2 },
             { key: 'schedule', label: 'Horario', icon: Clock }
-          ].map(({ key, label, icon: Icon }) => (
-            <button
+          ].map(({ key, label, icon: Icon }) => (<button
               key={key}
-              onClick={() => setActiveTab(key as any)}
+              onClick={() => setActiveTab(key as 'channels' | 'types' | 'sounds' | 'schedule')}
               className={`flex items-center space-x-2 py-4 border-b-2 transition-colors ${
                 activeTab === key
                   ? 'border-blue-500 text-blue-400'
@@ -343,13 +318,11 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       {/* Tab Content */}
       <div className="p-6">
         {/* Channels Tab */}
-        {activeTab === 'channels' && (
-          <div className="space-y-6">
+        {activeTab === 'channels' && (<div className="space-y-6">
             {channels.map(({ key: channel, label, icon: Icon, description }) => {
               const channelPrefs = localPreferences.channels[channel];
               
-              return (
-                <motion.div
+              return (<motion.div
                   key={channel}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -390,13 +363,11 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     </div>
                   </div>
 
-                  {channelPrefs.enabled && (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {channelPrefs.enabled && (<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {notificationTypes.map((type) => {
                         const typePrefs = channelPrefs.types[type.key];
                         
-                        return (
-                          <div key={type.key} className="bg-gray-700 rounded p-3">
+                        return (<div key={type.key} className="bg-gray-700 rounded p-3">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center space-x-2">
                                 <span>{type.icon}</span>
@@ -417,8 +388,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                               />
                             </div>
                             
-                            {typePrefs.enabled && (
-                              <div className="space-y-2">
+                            {typePrefs.enabled && (<div className="space-y-2">
                                 <label className="text-xs text-gray-400">
                                   Prioridades activas:
                                 </label>
@@ -461,10 +431,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         )}
 
         {/* Types Tab */}
-        {activeTab === 'types' && (
-          <div className="space-y-4">
-            {notificationTypes.map((type) => (
-              <motion.div
+        {activeTab === 'types' && (<div className="space-y-4">
+            {notificationTypes.map((type) => (<motion.div
                 key={type.key}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -483,8 +451,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     const typePrefs = localPreferences.channels[channel].types[type.key];
                     const channelEnabled = localPreferences.channels[channel].enabled;
                     
-                    return (
-                      <div
+                    return (<div
                         key={channel}
                         className={`p-3 rounded border-2 transition-colors ${
                           channelEnabled && typePrefs.enabled
@@ -526,8 +493,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         )}
 
         {/* Sounds Tab */}
-        {activeTab === 'sounds' && (
-          <motion.div
+        {activeTab === 'sounds' && (<motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
@@ -585,8 +551,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             </div>
 
             {/* Default Sounds */}
-            {localPreferences.sounds.enabled && (
-              <div className="bg-gray-800 rounded-lg p-4">
+            {localPreferences.sounds.enabled && (<div className="bg-gray-800 rounded-lg p-4">
                 <h3 className="font-medium text-white mb-4">Sonidos Disponibles</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -624,8 +589,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         )}
 
         {/* Schedule Tab */}
-        {activeTab === 'schedule' && (
-          <motion.div
+        {activeTab === 'schedule' && (<motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
@@ -654,8 +618,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 <span className="text-white">Activar horario automático</span>
               </label>
 
-              {localPreferences.doNotDisturbSchedule?.enabled && (
-                <div className="space-y-4">
+              {localPreferences.doNotDisturbSchedule?.enabled && (<div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-400 mb-2">
@@ -747,8 +710,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                   <span className="text-white">Agrupar notificaciones similares</span>
                 </label>
 
-                {localPreferences.grouping.enabled && (
-                  <div className="grid grid-cols-2 gap-4">
+                {localPreferences.grouping.enabled && (<div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-400 mb-2">
                         Máximo por grupo:

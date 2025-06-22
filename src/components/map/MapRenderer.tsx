@@ -21,10 +21,7 @@ interface MapRendererProps {
 // This is a placeholder for the actual map implementation
 // In production, you would use Leaflet, Mapbox, or Google Maps
 const MapRenderer: React.FC<MapRendererProps> = memo(({ 
-  locations, 
-  zoom, 
-  center, 
-  onLocationClick 
+  locations, zoom, center: _center, onLocationClick 
 }) => {
   // Simulate heavy map rendering
   const calculateMapBounds = () => {

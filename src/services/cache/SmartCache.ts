@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter} from 'events';
 
 interface CacheEntry<T> {
   data: T;
@@ -25,7 +25,7 @@ interface CacheOptions {
 }
 
 export class SmartCache extends EventEmitter {
-  private cache = new Map<string, CacheEntry<any>>();
+  private cache = new Map<string, CacheEntry<unknown>>();
   private tagIndex = new Map<string, Set<string>>();
   private accessQueue: string[] = [];
   private currentSize = 0;
@@ -239,11 +239,11 @@ export class SmartCache extends EventEmitter {
   }
 
   // Private methods
-  private isExpired(entry: CacheEntry<any>): boolean {
+  private isExpired<T>(entry: CacheEntry<T>): boolean {
     return Date.now() - entry.timestamp > entry.ttl;
   }
 
-  private estimateSize(data: any): number {
+  private estimateSize(data: unknown): number {
     // Rough estimation of object size
     const str = JSON.stringify(data);
     return str.length * 2; // 2 bytes per character

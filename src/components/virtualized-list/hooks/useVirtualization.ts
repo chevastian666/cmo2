@@ -1,15 +1,9 @@
 import {useRef, useState, useCallback, useEffect, useMemo} from 'react';
-import { 
-  calculateVisibleRange, 
-  calculateTotalHeight,
-  calculateScrollVelocity,
-  calculatePrefetchRange,
-  VisibleRange
-} from '../utils/scrollCalculations';
-import { ScrollPredictor } from '../utils/prefetchStrategies';
-import { VirtualListMemoryManager } from '../utils/memoryManager';
-import { PerformanceMonitor } from '../utils/performanceMonitor';
-import type { VirtualListState, VirtualizedListConfig } from '../types/virtualization';
+import { calculateVisibleRange, calculateTotalHeight, calculateScrollVelocity, calculatePrefetchRange} from '../utils/scrollCalculations';
+import { ScrollPredictor} from '../utils/prefetchStrategies';
+import { VirtualListMemoryManager} from '../utils/memoryManager';
+import { PerformanceMonitor} from '../utils/performanceMonitor';
+import type { VirtualListState, VirtualizedListConfig} from '../types/virtualization';
 
 interface UseVirtualizationProps {
   items: unknown[];
@@ -43,12 +37,7 @@ const defaultConfig: VirtualizedListConfig = {
 };
 
 export function useVirtualization({
-  items,
-  itemHeight,
-  containerHeight,
-  overscan = 3,
-  config: userConfig,
-  onScroll
+  items, itemHeight, containerHeight, overscan = 3, config: userConfig, onScroll
 }: UseVirtualizationProps) {
   const config = useMemo(() => ({
     ...defaultConfig,
@@ -236,7 +225,10 @@ export function useVirtualization({
   }, [state.visibleRange]);
 
   // Cleanup on unmount
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     return () => {
       memoryManager.current.cleanup();
       performanceMonitor.current.destroy();

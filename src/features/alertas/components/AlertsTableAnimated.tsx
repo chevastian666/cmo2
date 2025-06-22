@@ -1,17 +1,13 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {AlertCircle,CheckCircle,XCircle,Clock,MapPin, Eye,MessageSquare} from 'lucide-react';
-import { format } from 'date-fns';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import type { Alerta } from '../types';
-import { 
-  AnimatedBadge,
-  AnimatedList,
-  AnimatedListItem 
-} from '@/components/animations/AnimatedComponents';
-import {alertCriticalVariants, transitions, staggerContainer, staggerItem, pulseVariants} from '@/components/animations/AnimationPresets';
+import { motion, AnimatePresence} from 'framer-motion';
+import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react';
+import { format} from 'date-fns';
+import { Button} from '@/components/ui/button';
+
+import { cn} from '@/lib/utils';
+import type { Alerta} from '../types';
+import { AnimatedBadge} from '@/components/animations/AnimatedComponents';
+import { alertCriticalVariants, transitions, staggerContainer, staggerItem} from '@/components/animations/AnimationPresets';
 
 interface AlertsTableAnimatedProps {
   alertas: Alerta[];
@@ -23,12 +19,7 @@ interface AlertsTableAnimatedProps {
 }
 
 export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
-  alertas,
-  loading,
-  onViewDetail,
-  onRespond,
-  onVerify,
-  onViewLocation
+  alertas, loading, onViewDetail, onRespond, onVerify, onViewLocation
 }) => {
   const getSeverityIcon = (severidad: string) => {
     switch (severidad) {
@@ -101,8 +92,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
   const criticalAlerts = alertas.filter(a => a.severidad === 'critica' && !a.atendida);
   const otherAlerts = alertas.filter(a => a.severidad !== 'critica' || a.atendida);
 
-  return (
-    <motion.div 
+  return (<motion.div 
       className="space-y-4"
       variants={staggerContainer}
       initial="hidden"
@@ -202,8 +192,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     </Button>
                   </motion.div>
                   
-                  {onViewLocation && alerta.ubicacion && (
-                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  {onViewLocation && alerta.ubicacion && (<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                       <Button
                         size="icon"
                         variant="ghost"
@@ -215,8 +204,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     </motion.div>
                   )}
                   
-                  {onRespond && !alerta.atendida && (
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  {onRespond && !alerta.atendida && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         size="sm"
                         variant="default"
@@ -228,8 +216,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     </motion.div>
                   )}
                   
-                  {onVerify && alerta.atendida && !alerta.verificada && (
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  {onVerify && alerta.atendida && !alerta.verificada && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         size="sm"
                         variant="outline"
@@ -327,8 +314,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   </Button>
                 </motion.div>
                 
-                {onViewLocation && alerta.ubicacion && (
-                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                {onViewLocation && alerta.ubicacion && (<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <Button
                       size="icon"
                       variant="ghost"
@@ -340,8 +326,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   </motion.div>
                 )}
                 
-                {onRespond && !alerta.atendida && (
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                {onRespond && !alerta.atendida && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
                       variant="default"
@@ -352,8 +337,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   </motion.div>
                 )}
                 
-                {onVerify && alerta.atendida && !alerta.verificada && (
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                {onVerify && alerta.atendida && !alerta.verificada && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
                       variant="outline"

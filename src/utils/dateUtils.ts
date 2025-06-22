@@ -2,8 +2,8 @@
  * Date utility functions
  * By Cheva
  */
-import { format, formatDistance, isToday as isTodayFns, isYesterday as isYesterdayFns, parseISO, isValid, differenceInDays, differenceInSeconds, addDays as addDaysFns, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { format, formatDistance, isToday as isTodayFns, isYesterday as isYesterdayFns, parseISO, isValid, differenceInDays, differenceInSeconds, addDays as addDaysFns, startOfDay, endOfDay, isWithinInterval} from 'date-fns';
+import { es} from 'date-fns/locale';
 
 export const formatDate = (date: Date | string | null | undefined, formatStr = 'dd/MM/yyyy'): string => {
   if (!date) return '-';

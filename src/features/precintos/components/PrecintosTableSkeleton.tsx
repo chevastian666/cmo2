@@ -1,13 +1,7 @@
 import React from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton} from '@/components/ui/skeleton';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table';
 
 export const PrecintosTableSkeleton: React.FC = () => {
   return (

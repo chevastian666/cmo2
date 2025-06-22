@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {Package, AlertCircle, Loader} from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { PrecintoSearch } from '../components/PrecintoSearchCompact';
-import { PrecintoStatus } from '../components/PrecintoStatusCompact';
-import { MapPreview } from '../components/MapPreview';
-import { ArmFormEnhanced } from '../components/ArmFormEnhanced';
-import { PhotoUploader } from '../components/PhotoUploaderCompact';
-import { ArmConfirmationModalEnhanced } from '../components/ArmConfirmationModalEnhanced';
-import { notificationService } from '../../../services/shared/notification.service';
-import { armadoService } from '../services/armado.service';
-import type { Precinto, TransitoPendiente } from '../../../types';
+import { useNavigate, useLocation} from 'react-router-dom';
+import { PrecintoSearch} from '../components/PrecintoSearchCompact';
+import { PrecintoStatus} from '../components/PrecintoStatusCompact';
+import { MapPreview} from '../components/MapPreview';
+import { ArmFormEnhanced} from '../components/ArmFormEnhanced';
+import { PhotoUploader} from '../components/PhotoUploaderCompact';
+import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced';
+import { notificationService} from '../../../services/shared/notification.service';
+import { armadoService} from '../services/armado.service';
+import type { Precinto} from '../../../types';
 
 interface TransitoFormData {
   // Datos del viaje
@@ -185,7 +185,7 @@ export const ArmadoPage: React.FC = () => {
 
   const validateArmado = (): string[] => {
     const errors: string[] = [];
-    const {precinto, transito} = armadoData;
+    
 
     if (!precinto) {
       errors.push('Debe buscar un precinto');
@@ -244,7 +244,7 @@ export const ArmadoPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const {precinto, transito, fotos} = armadoData;
+      
       
       if (!precinto) {
         throw new Error('No hay precinto seleccionado');
@@ -330,6 +330,8 @@ export const ArmadoPage: React.FC = () => {
   };
 
   // Show notification if we have prearm data
+   
+
   useEffect(() => {
     if (prearmData) {
       notificationService.info(

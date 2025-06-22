@@ -1,9 +1,10 @@
+ 
 import React, { useState, useEffect } from 'react';
-import { cn } from '../../utils/utils';
-import { Card } from './Card';
-import { StatusBadge } from './StatusBadge';
-import { InfoRow } from './InfoRow';
-import {Clock,User,Package, History, TruckIcon, Link2,AlertTriangle} from 'lucide-react';
+import { cn} from '../../utils/utils';
+import { Card} from './Card';
+import { StatusBadge} from './StatusBadge';
+import { InfoRow} from './InfoRow';
+import {Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react';
 
 export interface TransitInfo {
   id: string;
@@ -40,14 +41,10 @@ interface TransitCardProps {
 }
 
 export const TransitCard: React.FC<TransitCardProps> = ({
-  transit,
-  className,
-  onClick,
-  onViewHistory,
-  variant = 'default',
-  showProgress = true
+  transit, className, onClick, onViewHistory, variant = 'default', showProgress = true
 }) => {
   const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
+   
 
   useEffect(() => {
     const updateTimeRemaining = () => {
@@ -275,8 +272,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
       </div>
 
       {/* Footer Actions */}
-      {variant !== 'compact' && (
-        <div className="mt-4 pt-4 border-t border-gray-700 flex items-center justify-between">
+      {variant !== 'compact' && (<div className="mt-4 pt-4 border-t border-gray-700 flex items-center justify-between">
           <button className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />

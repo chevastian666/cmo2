@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import type { Notification, NotificationPreferences, PushSubscription } from '../../types/notifications';
+import type { Notification, PushSubscription} from '../../types/notifications';
 
 export class PushNotificationService {
   private vapidPublicKey: string;
@@ -240,7 +240,7 @@ export class PushNotificationService {
    * Get notification URL based on type
    */
   private getNotificationUrl(notification: Notification): string | null {
-    const { type, metadata } = notification;
+    
 
     switch (type) {
       case 'alert':

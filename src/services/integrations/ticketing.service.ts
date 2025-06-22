@@ -20,7 +20,7 @@ export interface TicketingConfig {
   };
   default_project?: string;
   default_assignee?: string;
-  custom_fields?: Record<string, any>;
+  custom_fields?: Record<string, unknown>;
   auto_create_tickets: boolean;
   alert_types: string[];
   active: boolean;
@@ -35,7 +35,7 @@ export interface TicketData {
   project?: string;
   assignee?: string;
   labels?: string[];
-  custom_fields?: Record<string, any>;
+  custom_fields?: Record<string, unknown>;
   attachments?: Array<{
     name: string;
     content: string;
@@ -104,7 +104,7 @@ class TicketingService {
   }
 
   // Ticket creation
-  async createTicketForAlert(alertType: string, alert: any): Promise<CreatedTicket[]> {
+  async createTicketForAlert(alertType: string, alert: unknown): Promise<CreatedTicket[]> {
     const activeConfigs = this.getActiveTicketingConfigs()
       .filter(config => 
         config.auto_create_tickets && 
@@ -187,7 +187,7 @@ class TicketingService {
   }
 
   // Platform-specific implementations
-  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): unknown {
     switch (config.type) {
       case 'jira':
         return this.formatJiraTicket(config, ticketData);
@@ -202,7 +202,7 @@ class TicketingService {
     }
   }
 
-  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -235,7 +235,7 @@ class TicketingService {
     };
   }
 
-  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -255,7 +255,7 @@ class TicketingService {
     };
   }
 
-  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown {
     const priorityMap: Record<string, number> = {
       'Critical': 4,
       'High': 3,
@@ -275,7 +275,7 @@ class TicketingService {
     };
   }
 
-  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown {
     const priorityMap: Record<string, string> = {
       'Critical': 'urgent',
       'High': 'high',
@@ -331,7 +331,8 @@ class TicketingService {
     const auth = config.authentication;
     
     switch (auth.type) {
-      case 'basic':
+      case 'basic': {
+        
         const credentials = btoa(`${auth.username}:${auth.password}`);
         return { 'Authorization': `Basic ${credentials}` };
       
@@ -351,7 +352,7 @@ class TicketingService {
   }
 
   // Response parsing
-  private parseTicketResponse(config: TicketingConfig, response: any): CreatedTicket {
+  private parseTicketResponse(config: TicketingConfig, response: unknown): CreatedTicket {
     switch (config.type) {
       case 'jira':
         return {
@@ -411,7 +412,7 @@ class TicketingService {
   }
 
   // Alert formatting
-  private formatAlertAsTicket(alert: any, alertType: string, config: TicketingConfig): TicketData {
+  private formatAlertAsTicket(alert: unknown, alertType: string, config: TicketingConfig): TicketData {
     const priority = this.mapAlertPriority(alert.priority || alert.severity);
     const type = this.mapAlertType(alertType);
     
@@ -432,7 +433,7 @@ class TicketingService {
     };
   }
 
-  private buildAlertDescription(alert: any, alertType: string): string {
+  private buildAlertDescription(alert: unknown, alertType: string): string {
     const sections = [
       `**Tipo de Alerta:** ${alertType}`,
       `**Descripción:** ${alert.message || alert.description}`,

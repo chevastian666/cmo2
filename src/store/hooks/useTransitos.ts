@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
-import { useTransitosStore } from '../store';
+import { useTransitosStore} from '../store';
 
 export const useTransitos = () => {
   const store = useTransitosStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.transitos.length === 0 && !store.loading) {
@@ -25,7 +26,8 @@ export const useTransitos = () => {
 
 export const useTransitosPendientes = () => {
   const store = useTransitosStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (store.transitosPendientes.length === 0 && !store.loading) {

@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef } from 'react';
-import {AlertTriangle,MapPin,Clock,User,CheckCircle, Circle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { Alert } from '../types/alerts';
+import { AlertTriangle, MapPin, User, CheckCircle, Circle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { Alert} from '../types/alerts';
 
 interface AlertListItemProps {
   alert: Alert;
@@ -13,32 +13,7 @@ interface AlertListItemProps {
   onHeightChange?: (height: number) => void;
 }
 
-const severityConfig = {
-  low: {
-    bg: 'bg-green-900/20',
-    border: 'border-green-600',
-    icon: 'text-green-500',
-    label: 'Baja'
-  },
-  medium: {
-    bg: 'bg-yellow-900/20',
-    border: 'border-yellow-600',
-    icon: 'text-yellow-500',
-    label: 'Media'
-  },
-  high: {
-    bg: 'bg-orange-900/20',
-    border: 'border-orange-600',
-    icon: 'text-orange-500',
-    label: 'Alta'
-  },
-  critical: {
-    bg: 'bg-red-900/20',
-    border: 'border-red-600',
-    icon: 'text-red-500',
-    label: 'Crítica'
-  }
-};
+// severityConfig removed - unused
 
 const statusConfig = {
   active: {
@@ -59,19 +34,15 @@ const statusConfig = {
 };
 
 export const AlertListItem = memo<AlertListItemProps>(({
-  alert,
-  index,
-  style,
-  onClick,
-  isHighlighted,
-  isScrolling,
-  onHeightChange
+  alert, index, style, onClick, isHighlighted, isScrolling, onHeightChange
 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
-  const _config = severityConfig[alert.severity];
+
   const StatusIcon = statusConfig[alert.status].icon;
 
   // Measure height on mount and updates
+   
+
   useEffect(() => {
     if (itemRef.current && onHeightChange) {
       const height = itemRef.current.getBoundingClientRect().height;

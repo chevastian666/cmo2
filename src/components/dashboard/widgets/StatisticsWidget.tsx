@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import {BarChart3,TrendingUp,Users,Package} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
+// No lucide-react icons currently used
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
 
 interface Stat {
   label: string;
@@ -43,8 +43,7 @@ export const StatisticsWidget: React.FC = () => {
     }
   ];
 
-  return (
-    <div className="h-full flex flex-col">
+  return (<div className="h-full flex flex-col">
       <div className="grid grid-cols-2 gap-3 flex-1">
         {stats.map((stat, index) => (
           <motion.div

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import {ChevronLeft, ChevronRight, Search, Download,Filter,X} from 'lucide-react';
-import { cn } from '../../utils/utils';
+import {ChevronLeft, ChevronRight, Search, Download, Filter, X} from 'lucide-react';
+import { cn} from '../../utils/utils';
 
 export interface Column<T> {
   key: keyof T | string;
@@ -30,18 +30,7 @@ export interface DataTableProps<T> {
 }
 
 export function DataTable<T extends Record<string, unknown>>({
-  data,
-  columns,
-  searchKeys = [],
-  searchPlaceholder = "Buscar...",
-  itemsPerPageOptions = [10, 25, 50, 100],
-  defaultItemsPerPage = 25,
-  onExport,
-  className,
-  rowClassName,
-  onRowClick,
-  emptyMessage = "No se encontraron datos",
-  title
+  data, columns, searchKeys = [], searchPlaceholder = "Buscar...", itemsPerPageOptions = [10, 25, 50, 100], defaultItemsPerPage = 25, onExport, className, rowClassName, onRowClick, emptyMessage = "No se encontraron datos", title
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -179,8 +168,7 @@ export function DataTable<T extends Record<string, unknown>>({
           
           <div className="flex flex-col sm:flex-row gap-3 flex-1 sm:max-w-xl">
             {/* Search */}
-            {searchKeys.length > 0 && (
-              <div className="relative flex-1">
+            {searchKeys.length > 0 && (<div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
@@ -193,8 +181,7 @@ export function DataTable<T extends Record<string, unknown>>({
             )}
 
             {/* Filter Toggle */}
-            {filterableColumns.length > 0 && (
-              <button
+            {filterableColumns.length > 0 && (<button
                 onClick={() => setShowFilters(!showFilters)}
                 className={cn(
                   "px-3 py-2 rounded-md border transition-colors flex items-center gap-2",
@@ -238,11 +225,9 @@ export function DataTable<T extends Record<string, unknown>>({
         </div>
 
         {/* Filters */}
-        {showFilters && filterableColumns.length > 0 && (
-          <div className="mt-4 p-4 bg-gray-700 rounded-md">
+        {showFilters && filterableColumns.length > 0 && (<div className="mt-4 p-4 bg-gray-700 rounded-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filterableColumns.map((column) => (
-                <div key={column.key as string}>
+              {filterableColumns.map((column) => (<div key={column.key as string}>
                   <label className="block text-base font-medium text-gray-300 mb-1">
                     {column.header}
                   </label>
@@ -259,8 +244,7 @@ export function DataTable<T extends Record<string, unknown>>({
                         </option>
                       ))}
                     </select>
-                  ) : (
-                    <input
+                  ) : (<input
                       type={column.filterType === 'number' ? 'number' : 'text'}
                       value={filters[column.key] || ''}
                       onChange={(e) => setFilters({ ...filters, [column.key]: e.target.value })}
@@ -271,8 +255,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 </div>
               ))}
             </div>
-            {Object.keys(filters).length > 0 && (
-              <button
+            {Object.keys(filters).length > 0 && (<button
                 onClick={() => setFilters({})}
                 className="mt-3 text-base text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
@@ -319,8 +302,7 @@ export function DataTable<T extends Record<string, unknown>>({
                   {emptyMessage}
                 </td>
               </tr>
-            ) : (
-              paginatedData.map((item, index) => (
+            ) : (paginatedData.map((item, index) => (
                 <tr
                   key={index}
                   className={cn(

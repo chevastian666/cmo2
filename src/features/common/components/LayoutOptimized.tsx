@@ -4,20 +4,20 @@
  */
 
 import React, { useState } from 'react';
-import {Activity, Bell, Menu,User,LogOut,Settings, ChevronDown} from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '../../../utils/utils';
-import { APP_CONFIG } from '../../../config';
-import { ConnectionStatus } from './ConnectionStatus';
-import { RealtimeNotifications } from './RealtimeNotifications';
-import { AlarmSummary } from './AlarmSummary';
-import { Sidebar } from './Sidebar';
-import { useAlertasActivas } from '../../../store/hooks';
-import {useAuth, useUserInfo} from '../../../hooks/useAuth';
-import { useConnectionStatus } from '../../../hooks/useSharedState';
-import { PanelSwitcher } from '../../../components/PanelSwitcher';
+import {Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react';
+import { Link, useLocation} from 'react-router-dom';
+import { cn} from '../../../utils/utils';
+import { APP_CONFIG} from '../../../config';
+import { ConnectionStatus} from './ConnectionStatus';
+import { RealtimeNotifications} from './RealtimeNotifications';
+import { AlarmSummary} from './AlarmSummary';
+import { Sidebar} from './Sidebar';
+import { useAlertasActivas} from '../../../store/hooks';
+import {useUserInfo} from '../../../hooks/useAuth';
+import { useConnectionStatus} from '../../../hooks/useSharedState';
+import { PanelSwitcher} from '../../../components/PanelSwitcher';
 import {MicrointeractionsSettings} from '../../microinteractions';
-import { BreadcrumbNav } from '@/components/ui/BreadcrumbNav';
+import { BreadcrumbNav} from '@/components/ui/BreadcrumbNav';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,12 +28,11 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const connectionStatus = useConnectionStatus();
-  const {count: alertCount} = useAlertasActivas();
-  const {logout} = useAuth();
+  
+  
   const userInfo = useUserInfo();
 
-  return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
+  return (<div className="min-h-screen bg-gray-950 text-gray-100">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
       
@@ -112,8 +111,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                   </button>
                   
                   {/* User dropdown */}
-                  {userMenuOpen && (
-                    <>
+                  {userMenuOpen && (<>
                       <div
                         className="fixed inset-0 z-10"
                         onClick={() => setUserMenuOpen(false)}

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Monitor, Volume2, VolumeX, Maximize2,Settings} from 'lucide-react';
-import { ProximosArribos } from './ProximosArribos';
-import { AlertasActivas } from './AlertasActivas';
-import { TransitosCriticos } from './TransitosCriticos';
-import { ConfiguracionModal } from './ConfiguracionModal';
-import { modoTvService } from '../services/modoTv.service';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV } from '../types';
-import { cn } from '../../../utils/utils';
+import {Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react';
+import { ProximosArribos} from './ProximosArribos';
+import { AlertasActivas} from './AlertasActivas';
+import { TransitosCriticos} from './TransitosCriticos';
+import { ConfiguracionModal} from './ConfiguracionModal';
+import { modoTvService} from '../services/modoTv.service';
+import { notificationService} from '../../../services/shared/notification.service';
+import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types';
+import { cn} from '../../../utils/utils';
 
 export const ModoTV: React.FC = () => {
   const [arribos, setArribos] = useState<ProximoArribo[]>([]);
@@ -54,12 +54,14 @@ export const ModoTV: React.FC = () => {
       nuevasAlertas.forEach(a => ultimasAlertasRef.current.add(a.id));
       
       setAlertas(nuevasAlertas);
-    } catch (_error) {
+    } catch {
       console.error('Error cargando datos:', _error);
     }
   };
 
   // Actualización automática
+   
+
   useEffect(() => {
     cargarDatos();
     
@@ -71,6 +73,8 @@ export const ModoTV: React.FC = () => {
   }, [configuracion.actualizacionSegundos, configuracion.puntoOperacion]);
 
   // Actualizar hora
+   
+
   useEffect(() => {
     const intervalo = setInterval(() => {
       setHoraActual(new Date());
@@ -85,20 +89,22 @@ export const ModoTV: React.FC = () => {
       try {
         await containerRef.current.requestFullscreen();
         setFullscreen(true);
-      } catch (_err) {
+      } catch {
         console.error('Error al entrar en fullscreen:', err);
       }
     } else if (fullscreen) {
       try {
         await document.exitFullscreen();
         setFullscreen(false);
-      } catch (_err) {
+      } catch {
         console.error('Error al salir de fullscreen:', err);
       }
     }
   };
 
   // Listener para cambios de fullscreen
+   
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setFullscreen(!!document.fullscreenElement);
@@ -250,8 +256,7 @@ export const ModoTV: React.FC = () => {
       </audio> */}
 
       {/* Modal de configuración */}
-      {mostrarConfig && (
-        <ConfiguracionModal
+      {mostrarConfig && (<ConfiguracionModal
           configuracion={configuracion}
           onClose={() => setMostrarConfig(false)}
           onChange={handleConfiguracionChange}

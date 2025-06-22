@@ -1,8 +1,9 @@
+ 
 import React, { useState, useMemo } from 'react';
-import { cn } from '../../utils/utils';
-import { Card } from './Card';
+import { cn} from '../../utils/utils';
+import { Card} from './Card';
 import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map';
-import type { MapFilters } from './map/MapHeader';
+import type { MapFilters} from './map/MapHeader';
 
 export interface MapMarker {
   id: string;
@@ -38,17 +39,8 @@ interface MapModuleProps {
 }
 
 export const MapModule: React.FC<MapModuleProps> = ({
-  markers = [],
-  routes = [],
-  center = { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
-  zoom = 10,
-  className,
-  height = '400px',
-  showControls = true,
-  showLegend = true,
-  onMarkerClick,
-  variant = 'default',
-  useDetailedIcons = false
+  markers = [], routes = [], center = { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
+  zoom = 10, className, height = '400px', showControls = true, showLegend = true, onMarkerClick, variant = 'default', useDetailedIcons = false
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
@@ -192,8 +184,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
     </div>
   );
 
-  const mapContent = (
-    <>
+  const mapContent = (<>
       <div style={{ height: variant === 'fullscreen' ? '100vh' : height }}>
         <MapPlaceholder />
       </div>
@@ -272,19 +263,11 @@ export const MapModule: React.FC<MapModuleProps> = ({
       {mapContent}
       
       {/* Fullscreen Modal */}
-      {isFullscreen && (
-        <div className="fixed inset-0 z-50 bg-gray-900">
+      {isFullscreen && (<div className="fixed inset-0 z-50 bg-gray-900">
           <div className="relative w-full h-full">
             <MapModule
               {...{ 
-                markers, 
-                routes, 
-                center, 
-                zoom, 
-                showControls, 
-                showLegend, 
-                onMarkerClick,
-                useDetailedIcons 
+                markers, routes, center, zoom, showControls, showLegend, onMarkerClick, useDetailedIcons 
               }}
               variant="fullscreen"
               height="100vh"

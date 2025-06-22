@@ -21,9 +21,9 @@ export interface ChatConfig {
 
 export interface ChatMessage {
   text: string;
-  blocks?: any[];
-  embeds?: any[];
-  attachments?: any[];
+  blocks?: unknown[];
+  embeds?: unknown[];
+  attachments?: unknown[];
   username?: string;
   icon_url?: string;
   channel?: string;
@@ -81,7 +81,7 @@ class ChatService {
   }
 
   // Message sending
-  async sendAlert(alertType: string, alert: any): Promise<void> {
+  async sendAlert(alertType: string, alert: unknown): Promise<void> {
     const activeConfigs = this.getActiveChatConfigs()
       .filter(config => config.alert_types.includes(alertType));
 
@@ -125,7 +125,7 @@ class ChatService {
   }
 
   // Message formatting
-  private formatAlertMessage(alert: any, alertType: string, config: ChatConfig): ChatMessage {
+  private formatAlertMessage(alert: unknown, alertType: string, config: ChatConfig): ChatMessage {
     const severity = this.getAlertSeverity(alert.priority || alert.severity);
     const emoji = this.getAlertEmoji(alertType, severity);
     
@@ -141,7 +141,7 @@ class ChatService {
     }
   }
 
-  private formatSlackMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatSlackMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     const mentions = this.formatSlackMentions(config);
     
     return {
@@ -219,7 +219,7 @@ class ChatService {
     };
   }
 
-  private formatDiscordMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatDiscordMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     const mentions = this.formatDiscordMentions(config);
     const color = this.getSeverityColor(severity);
     
@@ -259,7 +259,7 @@ class ChatService {
     };
   }
 
-  private formatTeamsMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatTeamsMessage(alert: unknown, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     return {
       text: `${emoji} **${alertType.toUpperCase()}** - ${alert.title}`,
       attachments: [
@@ -304,7 +304,7 @@ class ChatService {
   }
 
   // Helper methods
-  private formatMessageForPlatform(config: ChatConfig, message: ChatMessage): any {
+  private formatMessageForPlatform(config: ChatConfig, message: ChatMessage): unknown {
     switch (config.type) {
       case 'slack':
         return {

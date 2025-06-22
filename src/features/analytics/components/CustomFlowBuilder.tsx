@@ -5,16 +5,16 @@
  */
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Plus, Trash2, Play } from 'lucide-react';
-import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
-import type { SankeyData, FlowData } from '@/components/charts/types/sankey.types';
-import { aggregateFlows } from '@/components/charts/sankey/utils/dataTransformers';
-import { toast } from '@/hooks/use-toast';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+
+import { Plus, Trash2, Play} from 'lucide-react';
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
+import type { SankeyData, FlowData} from '@/components/charts/types/sankey.types';
+
+import { toast} from '@/hooks/use-toast';
 
 export const CustomFlowBuilder: React.FC = () => {
   const [flows, setFlows] = useState<FlowData[]>([
@@ -58,7 +58,6 @@ export const CustomFlowBuilder: React.FC = () => {
       return;
     }
 
-    const _data = aggregateFlows(flows);
     setChartData(_data);
   };
 
@@ -83,9 +82,7 @@ export const CustomFlowBuilder: React.FC = () => {
                 <p className="text-sm text-gray-500 text-center py-4">
                   No hay flujos definidos. Agrega uno para comenzar.
                 </p>
-              ) : (
-                flows.map((flow, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-gray-800 rounded-lg p-2">
+              ) : (flows.map((flow, index) => (<div key={index} className="flex items-center gap-2 bg-gray-800 rounded-lg p-2">
                     <span className="flex-1 text-sm">
                       {flow.from} → {flow.to}: <strong>{flow.value}</strong>
                     </span>

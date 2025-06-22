@@ -4,30 +4,26 @@
  */
 
 import React, { memo, useEffect, useState, useCallback } from 'react';
-import { SystemStatusCard } from './SystemStatusCard';
-import { PrecintosActivosTable } from './PrecintosActivosTable';
-import { TransitosPendientesWrapper } from '../../transitos';
-import { AlertsList } from '../../alertas';
-import { RealtimeIndicator } from './RealtimeIndicator';
-import { KPICards } from './KPICards';
+import { SystemStatusCard} from './SystemStatusCard';
+import { PrecintosActivosTable} from './PrecintosActivosTable';
+import { TransitosPendientesWrapper} from '../../transitos';
+import { AlertsList} from '../../alertas';
+import { RealtimeIndicator} from './RealtimeIndicator';
+import { KPICards} from './KPICards';
 import {NotificationSettings} from '../../../components/ui/NotificationSettings';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw} from 'lucide-react';
 import './dashboard.css';
-import { DataTransition } from '../../../components/animations/DataTransition';
-import { useSmootherRefresh } from '../../../hooks/useSmootherRefresh';
-import { SkeletonDashboard } from '@/components/ui/skeleton';
+import { DataTransition} from '../../../components/animations/DataTransition';
+import { useSmootherRefresh} from '../../../hooks/useSmootherRefresh';
+import { SkeletonDashboard} from '@/components/ui/skeleton';
 import { 
-  usePrecintosActivos, 
-  useTransitosPendientes, 
-  useAlertasActivas, 
-  useSystemStatus 
-} from '../../../store/hooks';
+  usePrecintosActivos, useTransitosPendientes, useAlertasActivas, useSystemStatus} from '../../../store/hooks';
 
 export const Dashboard: React.FC = memo(() => {
-  const {precintos, loading: loadingPrecintos, actions: precintosActions} = usePrecintosActivos();
-  const {estadisticas, smsPendientes, dbStats, apiStats, reportesPendientes, loading: loadingStatus, actions: statusActions} = useSystemStatus();
-  const {alertas, loading: loadingAlertas, actions: alertasActions} = useAlertasActivas();
-  const {transitos, loading: loadingTransitos, actions: transitosActions} = useTransitosPendientes();
+  const { loading: loadingPrecintos, actions: precintosActions } = usePrecintosActivos();
+  const { loading: loadingStatus, actions: statusActions } = useSystemStatus();
+  const { loading: loadingAlertas, actions: alertasActions } = useAlertasActivas();
+  const { loading: loadingTransitos, actions: transitosActions } = useTransitosPendientes();
   
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -93,7 +89,10 @@ export const Dashboard: React.FC = memo(() => {
   }, [smoothRefresh, isRefreshing]);
   
   // Auto-refresh cada 60 segundos
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     // Recargar inmediatamente al montar
     refreshData();
     

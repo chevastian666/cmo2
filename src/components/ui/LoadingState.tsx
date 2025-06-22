@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton' | 'progress';
 
@@ -13,12 +14,7 @@ interface LoadingStateProps {
 }
 
 export const LoadingState: React.FC<LoadingStateProps> = ({
-  variant = 'spinner',
-  size = 'md',
-  text,
-  className,
-  progress = 0,
-  rows = 3
+  variant = 'spinner', size = 'md', text, className, progress = 0, rows = 3
 }) => {
   const sizeStyles = {
     sm: {
@@ -71,8 +67,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     </svg>
   );
 
-  const renderDots = () => (
-    <div className="flex items-center gap-1">
+  const renderDots = () => (<div className="flex items-center gap-1">
       {[0, 1, 2].map((i) => (
         <div
           key={i}
@@ -164,11 +159,7 @@ interface LoadingOverlayProps {
 }
 
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
-  visible,
-  text,
-  variant = 'spinner',
-  fullScreen = false,
-  className
+  visible, text, variant = 'spinner', fullScreen = false, className
 }) => {
   if (!visible) return null;
 
@@ -193,11 +184,7 @@ interface SkeletonProps {
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
-  className,
-  variant = 'text',
-  width,
-  height,
-  animation = 'pulse'
+  className, variant = 'text', width, height, animation = 'pulse'
 }) => {
   const variantStyles = {
     text: 'rounded',

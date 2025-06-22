@@ -1,7 +1,7 @@
 import React from 'react';
 import {Wifi, WifiOff, RefreshCw} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { sharedWebSocketService } from '../../../services/shared/sharedWebSocket.service';
+import { cn} from '../../../utils/utils';
+import { sharedWebSocketService} from '../../../services/shared/sharedWebSocket.service';
 
 interface ConnectionStatusProps {
   status: 'connected' | 'disconnected' | 'reconnecting';
@@ -54,8 +54,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status }) =>
         <span className="text-sm font-medium">{getStatusText()}</span>
       </div>
       
-      {status === 'disconnected' && (
-        <button
+      {status === 'disconnected' && (<button
           onClick={() => sharedWebSocketService.connect()}
           className="text-sm text-blue-400 hover:text-blue-300 underline"
         >

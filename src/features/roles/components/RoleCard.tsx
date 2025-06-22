@@ -1,10 +1,10 @@
 import React from 'react';
-import { Shield, ChevronDown, ChevronUp } from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { PermissionCheckbox } from './PermissionCheckbox';
-import { useRolesStore } from '../../../store/rolesStore';
-import type { Role, Section, Permission } from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS } from '../../../types/roles';
+import { Shield, ChevronDown, ChevronUp} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { PermissionCheckbox} from './PermissionCheckbox';
+
+import type { Role, Section, Permission} from '../../../types/roles';
+import { SECTION_LABELS, ROLE_LABELS} from '../../../types/roles';
 
 interface RoleCardProps {
   role: Role;
@@ -29,11 +29,9 @@ const SECTIONS: Section[] = [
 const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
 
 export const RoleCard: React.FC<RoleCardProps> = ({ 
-  role, 
-  expanded = false, 
-  onToggleExpand 
+  role, expanded = false, onToggleExpand 
 }) => {
-  const {permissions, togglePermission} = useRolesStore();
+  
   
   const hasPermission = (section: Section, permission: Permission) => {
     return permissions[role][section].includes(permission);

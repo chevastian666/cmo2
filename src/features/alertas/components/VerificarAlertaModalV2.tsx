@@ -4,18 +4,18 @@
  */
 
 import React, { useState } from 'react';
-import {X,AlertTriangle,CheckCircle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package,User,MessageSquare, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/utils/utils';
-import { formatDateTime, formatTimeAgo } from '@/utils/formatters';
-import { notificationService } from '@/services/shared/notification.service';
-import type { Alerta } from '@/types';
+import { AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Textarea} from '@/components/ui/textarea';
+import { Badge} from '@/components/ui/badge';
+import { Alert, AlertDescription} from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Label} from '@/components/ui/label';
+import { cn} from '@/utils/utils';
+import { formatTimeAgo} from '@/utils/formatters';
+import { notificationService} from '@/services/shared/notification.service';
+import type { Alerta} from '@/types';
 
 interface VerificarAlertaModalProps {
   alerta: Alerta;
@@ -145,10 +145,7 @@ const COMANDOS_RAPIDOS = [
 ];
 
 export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onSuccess
+  alerta, isOpen, onClose, onSuccess
 }) => {
   const [verificando, setVerificando] = useState(false);
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('');
@@ -235,7 +232,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
         onSuccess();
       }
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al verificar la alerta');
       console.error('Error verifying alert:', _error);
     } finally {
@@ -249,7 +246,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.precintoId}`);
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al enviar el comando');
     } finally {
       setSendingCommand(null);
@@ -385,8 +382,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
             <div className="grid grid-cols-2 gap-2">
               {COMANDOS_RAPIDOS.map((comando) => {
                 const Icon = comando.icon;
-                return (
-                  <Button
+                return (<Button
                     key={comando.id}
                     type="button"
                     onClick={() => handleSendCommand(comando.id)}

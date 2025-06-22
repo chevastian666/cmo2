@@ -5,20 +5,20 @@
  */
 
 import React, { useMemo } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {Package,CheckCircle,XCircle, Zap,TrendingDown} from 'lucide-react';
-import { SankeyChart } from '@/components/charts/sankey/SankeyChart';
-import { transformPrecintoLifecycle } from '@/components/charts/sankey/utils/dataTransformers';
-import { usePrecintosStore } from '@/store/store';
-import type { PrecintoFlow } from '@/components/charts/types/sankey.types';
+import { Card, CardContent} from '@/components/ui/card';
+import { Badge} from '@/components/ui/badge';
+import {Package, CheckCircle, XCircle, Zap, TrendingDown} from 'lucide-react';
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
+import { transformPrecintoLifecycle} from '@/components/charts/sankey/utils/dataTransformers';
+
+import type { PrecintoFlow} from '@/components/charts/types/sankey.types';
 
 interface PrecintoLifecycleFlowProps {
   dateRange?: { from: Date; to: Date };
 }
 
 export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ dateRange }) => {
-  const {precintos} = usePrecintosStore();
+  
 
   // Calculate lifecycle stages from actual data
   const lifecycleData = useMemo(() => {
@@ -65,7 +65,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
     const rates = [];
     for (let i = 0; i < lifecycleData.length - 1; i++) {
       const current = lifecycleData[i];
-      const _next = lifecycleData[i + 1];
+
       if (current.count > 0) {
         rates.push({
           from: current.stage,
@@ -93,8 +93,7 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
     deactivated: 'bg-red-500'
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Stage Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {lifecycleData.map((stage) => (

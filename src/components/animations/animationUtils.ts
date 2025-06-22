@@ -3,12 +3,13 @@
  * By Cheva
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 
 // Hook para detectar cambios en los datos
-export const useDataChange = (data: any) => {
+export const useDataChange = <T>(data: T) => {
   const [hasChanged, setHasChanged] = useState(false);
   const [prevData, setPrevData] = useState(data);
+   
 
   useEffect(() => {
     if (JSON.stringify(data) !== JSON.stringify(prevData)) {

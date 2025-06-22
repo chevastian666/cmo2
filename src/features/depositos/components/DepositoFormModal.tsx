@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {X, Save, Building2} from 'lucide-react';
-import { DEPOSITO_TIPOS, DEPOSITO_ZONAS } from '../types';
-import type { Deposito } from '../types';
+import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types';
+import type { Deposito} from '../types';
 
 interface DepositoFormModalProps {
   deposito: Deposito | null;
@@ -11,10 +11,7 @@ interface DepositoFormModalProps {
 }
 
 export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
-  deposito,
-  isOpen,
-  onClose,
-  onSave
+  deposito, isOpen, onClose, onSave
 }) => {
   const [formData, setFormData] = useState({
     codigo: '',
@@ -35,6 +32,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>(_);
+   
 
   useEffect(() => {
     if (deposito) {
@@ -129,8 +127,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <>
+  return (<>
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 z-40"

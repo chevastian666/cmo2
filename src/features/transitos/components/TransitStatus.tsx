@@ -1,6 +1,6 @@
 import React from 'react';
-import {CheckCircle,Truck,AlertTriangle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import {CheckCircle, Truck, AlertTriangle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface TransitStatusProps {
   estado: 'en_viaje' | 'desprecintado' | 'con_alerta';
@@ -32,8 +32,6 @@ export const TransitStatus: React.FC<TransitStatusProps> = ({ estado }) => {
         };
     }
   };
-
-  const _config = getStatusConfig();
 
   return (
     <div className={cn(

@@ -1,12 +1,5 @@
 import type { 
-  WebSocketMessage, 
-  WebSocketEventHandlers,
-  PrecintoUpdateData,
-  TransitoUpdateData,
-  AlertaUpdateData,
-  SistemaUpdateData,
-  ConnectionData
-} from './types';
+  WebSocketMessage, WebSocketEventHandlers, PrecintoUpdateData, TransitoUpdateData, AlertaUpdateData, SistemaUpdateData, ConnectionData} from './types';
 
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -37,7 +30,7 @@ export class WebSocketService {
     try {
       this.ws = new WebSocket(this.url);
       this.setupEventListeners();
-    } catch (_error) {
+    } catch {
       console.error('WebSocket connection error:', error);
       this.handleReconnect();
     }
@@ -98,7 +91,7 @@ export class WebSocketService {
       try {
         const message: WebSocketMessage = JSON.parse(event.data);
         this.handleMessage(message);
-      } catch (_error) {
+      } catch {
         console.error('Failed to parse WebSocket message:', error);
       }
     };

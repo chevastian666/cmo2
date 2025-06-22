@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm} from 'react-hook-form';
+import { zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {Truck,User,Building,MapPin,FileText,Phone,Hash,Package} from 'lucide-react';
-import { ORIGENES_DESTINOS } from '../../../constants/locations';
+import { Truck, User, Phone, Hash, Package} from 'lucide-react';
+import { ORIGENES_DESTINOS} from '../../../constants/locations';
 
 // shadcn/ui components
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
-import {Form,FormControl,FormDescription, FormField,FormItem,FormLabel,FormMessage, } from '@/components/ui/form';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+
+import { Textarea} from '@/components/ui/textarea';
+import { Checkbox} from '@/components/ui/checkbox';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card';
 
 // Empresas con RUT
 const EMPRESAS = [
@@ -59,11 +59,7 @@ interface ArmFormV2Props {
 }
 
 export const ArmFormV2: React.FC<ArmFormV2Props> = ({ 
-  data, 
-  onChange, 
-  disabled = false, 
-  precintoId,
-  onSubmit 
+  data, onChange, disabled = false, precintoId, onSubmit 
 }) => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -83,6 +79,8 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
 
   // Watch form changes and propagate to parent
   const watchedValues = form.watch();
+   
+
   useEffect(() => {
     Object.entries(watchedValues).forEach(([key, value]) => {
       if (JSON.stringify(data[key as keyof FormData]) !== JSON.stringify(value)) {
@@ -92,6 +90,8 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   }, [watchedValues]);
 
   // Auto-complete precinto ID when provided
+   
+
   useEffect(() => {
     if (precintoId && form.getValues('precintoId') !== precintoId) {
       form.setValue('precintoId', precintoId);
@@ -100,6 +100,8 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
 
   // Auto-complete RUT when empresa is selected
   const selectedEmpresa = form.watch('empresa');
+   
+
   useEffect(() => {
     if (selectedEmpresa) {
       const empresa = EMPRESAS.find(e => e.nombre === selectedEmpresa);
@@ -210,8 +212,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                 <FormField
                   control={form.control}
                   name="empresa"
-                  render={({ field }) => (
-                    <FormItem>
+                  render={({ field }) => (<FormItem>
                       <FormLabel>Empresa *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -270,8 +271,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                 <FormField
                   control={form.control}
                   name="origen"
-                  render={({ field }) => (
-                    <FormItem>
+                  render={({ field }) => (<FormItem>
                       <FormLabel>Origen *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -299,8 +299,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                 <FormField
                   control={form.control}
                   name="destino"
-                  render={({ field }) => (
-                    <FormItem>
+                  render={({ field }) => (<FormItem>
                       <FormLabel>Destino *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -358,8 +357,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
                 <FormField
                   control={form.control}
                   name="tipoEslinga"
-                  render={() => (
-                    <FormItem>
+                  render={() => (<FormItem>
                       <FormLabel>Tipo de Eslinga *</FormLabel>
                       <div className="space-y-2">
                         <FormField

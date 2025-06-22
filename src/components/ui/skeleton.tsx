@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '@/utils/utils';
+import { cn} from '@/utils/utils';
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'text' | 'circular' | 'rectangular' | 'rounded';
@@ -9,13 +10,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
-  className,
-  variant = 'text',
-  animation = 'pulse',
-  width,
-  height,
-  style,
-  ...props
+  className, variant = 'text', animation = 'pulse', width, height, style, ...props
 }) => {
   const baseClasses = 'bg-gray-800 relative overflow-hidden';
   
@@ -65,8 +60,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 
 // Componentes específicos de skeleton
 export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
-  lines = 1, 
-  className 
+  lines = 1, className 
 }) => {
   return (
     <div className={cn("space-y-2", className)}>
@@ -98,9 +92,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
 };
 
 export const SkeletonTable: React.FC<{ rows?: number; columns?: number; className?: string }> = ({ 
-  rows = 5, 
-  columns = 4,
-  className 
+  rows = 5, columns = 4, className 
 }) => {
   return (
     <div className={cn("w-full", className)}>
@@ -131,8 +123,7 @@ export const SkeletonTable: React.FC<{ rows?: number; columns?: number; classNam
 };
 
 export const SkeletonList: React.FC<{ items?: number; className?: string }> = ({ 
-  items = 3, 
-  className 
+  items = 3, className 
 }) => {
   return (
     <div className={cn("space-y-3", className)}>

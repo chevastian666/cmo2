@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, Plus, Activity, Building2, MapPin, 
-  Search, Eye, EyeOff, Key, Settings 
-} from 'lucide-react';
+import { Users, Plus, Activity, Building2, MapPin, Search, EyeOff, Key, Settings} from 'lucide-react';
 
 export const SubPanelesPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   
   // Cerrar modal con Esc
+   
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && showModal) {
@@ -24,8 +23,7 @@ export const SubPanelesPage: React.FC = () => {
     };
   }, [showModal]);
   
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-2xl font-bold text-white">Sub Paneles</h1>
@@ -194,8 +192,7 @@ export const SubPanelesPage: React.FC = () => {
         </div>
       </div>
       
-      {showModal && (
-        <div 
+      {showModal && (<div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
           onClick={(e) => {
             if (e.target === e.currentTarget) {

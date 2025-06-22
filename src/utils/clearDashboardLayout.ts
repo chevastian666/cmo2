@@ -30,5 +30,5 @@ export const clearDashboardLayout = () => {
 
 // Make it available globally in development
 if (import.meta.env.DEV) {
-  (window as any).clearDashboardLayout = clearDashboardLayout;
+  (window as { clearDashboardLayout?: typeof clearDashboardLayout }).clearDashboardLayout = clearDashboardLayout;
 }

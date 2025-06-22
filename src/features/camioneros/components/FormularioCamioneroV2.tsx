@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import {X,User,Phone, Flag, AlertCircle} from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { User, Phone, Flag, AlertCircle} from 'lucide-react';
+import { useForm} from 'react-hook-form';
+import { zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import {Form,FormControl,FormDescription, FormField,FormItem,FormLabel,FormMessage, } from '@/components/ui/form';
-import { useCamionerosStore } from '../../../store/camionerosStore';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Textarea} from '@/components/ui/textarea';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Alert, AlertDescription} from '@/components/ui/alert';
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
-import type { Nacionalidad } from '../types';
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
+import type { Nacionalidad} from '../types';
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -52,7 +52,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
   const userInfo = useUserInfo();
-  const {createCamionero} = useCamionerosStore();
+  
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
 
@@ -94,7 +94,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
       
       form.reset();
       onClose();
-    } catch (_error) {
+    } catch {
       setGeneralError('Error al registrar el camionero');
     } finally {
       setLoading(false);
@@ -245,8 +245,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                 )}
               />
 
-              {nacionalidadValue === 'Otro' && (
-                <FormField
+              {nacionalidadValue === 'Otro' && (<FormField
                   control={form.control}
                   name="paisOrigen"
                   render={({ field }) => (

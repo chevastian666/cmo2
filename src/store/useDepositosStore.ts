@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { Deposito } from '../features/depositos/types';
+import { create} from 'zustand';
+import type { Deposito} from '../features/depositos/types';
 
 interface DepositosState {
   depositos: Deposito[];
@@ -2756,11 +2756,7 @@ const mockDepositos: Deposito[] = [
 ];
 
 export const useDepositosStore = create<DepositosState>((set) => ({
-  depositos: [],
-  loading: false,
-  error: null,
-  
-  fetchDepositos: async () => {
+  depositos: [], loading: false, error: null, fetchDepositos: async () => {
     set({ loading: true });
     // Simulate API call
     setTimeout(() => {

@@ -3,10 +3,10 @@
  * By Cheva
  */
 
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
-import type { Tenant, TenantUser, TenantContext } from '@/features/multiTenant/types';
+import { create} from 'zustand';
+import { devtools, persist} from 'zustand/middleware';
+import { immer} from 'zustand/middleware/immer';
+import type { Tenant, TenantUser, TenantContext} from '@/features/multiTenant/types';
 
 interface TenantStore {
   // State
@@ -32,20 +32,13 @@ interface TenantStore {
   clearTenant: () => void;
 }
 
-export const useTenantStore = create<TenantStore>()(
-  devtools(
+export const useTenantStore = create<TenantStore>()(devtools(
     persist(
       immer((set, get) => ({
         // Initial state
-        currentTenant: null,
-        currentUser: null,
-        tenants: [],
-        isLoading: false,
-        error: null,
-        
-        // Computed getters
+        currentTenant: null, currentUser: null, tenants: [], isLoading: false, error: null, // Computed getters
         get context() {
-          const {currentTenant, currentUser} = get();
+          
           if (!currentTenant || !currentUser) return null;
           
           return {
@@ -100,7 +93,7 @@ export const useTenantStore = create<TenantStore>()(
             
             // Reload app data for new tenant context
             window.location.reload();
-          } catch (_error) {
+          } catch {
             set((state) => {
               state.error = error instanceof Error ? error.message : 'Failed to switch tenant';
               state.isLoading = false;

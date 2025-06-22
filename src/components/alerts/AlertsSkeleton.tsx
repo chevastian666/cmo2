@@ -1,9 +1,9 @@
+ 
 import React from 'react';
 import {AlertTriangle} from 'lucide-react';
 
 export const CriticalAlertsSkeleton: React.FC = () => {
-  return (
-    <div className="space-y-4 animate-pulse">
+  return (<div className="space-y-4 animate-pulse">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-6 w-6 text-gray-600" />

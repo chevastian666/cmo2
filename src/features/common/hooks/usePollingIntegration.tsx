@@ -1,8 +1,8 @@
 import {useState, useCallback} from 'react';
-import { usePolling, usePollingWithDiff, useAutoReconnect } from '../../../hooks/usePolling';
-import type { MapMarker, MapRoute } from '../../../components/ui/MapModule';
-import type { TransitInfo } from '../../../components/ui/TransitCard';
-import type { Alert } from '../../../components/ui/AlertsPanel';
+import { usePolling, useAutoReconnect} from '../../../hooks/usePolling';
+import type { MapMarker, MapRoute} from '../../../components/ui/MapModule';
+import type { TransitInfo} from '../../../components/ui/TransitCard';
+import type { Alert} from '../../../components/ui/AlertsPanel';
 
 // Mock service imports - reemplazar con servicios reales
 const transitosService = {
@@ -22,12 +22,9 @@ const alertasService = {
 /**
  * Hook para integrar polling con el MapModule
  */
-export function useMapPolling(
-  initialMarkers: MapMarker[] = [],
-  initialRoutes: MapRoute[] = []
-) {
+export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: MapRoute[] = []) {
   const [markers, setMarkers] = useState<MapMarker[]>(initialMarkers);
-  const [routes, setRoutes] = useState<MapRoute[]>(initialRoutes);
+  const [routes] = useState<MapRoute[]>(initialRoutes);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -61,7 +58,7 @@ export function useMapPolling(
       }
 
       setError(null);
-    } catch (_err) {
+    } catch {
       setError(_err as Error);
       console.error('Error fetching map data:', _err);
     } finally {
@@ -70,12 +67,7 @@ export function useMapPolling(
   }, [markers]);
 
   // Configurar polling
-  const {startPolling, stopPolling, executeNow} = usePolling(fetchMapData, {
-    interval: 45000,
-    enabled: true,
-    immediateFirstCall: true,
-    onError: (_err) => setError(_err)
-  });
+  
 
   // Auto-reconexión
   useAutoReconnect(() => {
@@ -138,7 +130,7 @@ export function useTransitPolling(transitId: string) {
       }
       
       setError(null);
-    } catch (_err) {
+    } catch {
       setError(_err as Error);
       console.error('Error fetching transit data:', _err);
     } finally {
@@ -149,9 +141,7 @@ export function useTransitPolling(transitId: string) {
   // Polling con intervalo más corto para datos específicos
   usePolling(fetchTransitData, {
     interval: 30000, // 30 segundos para actualizaciones más frecuentes
-    enabled: true,
-    immediateFirstCall: true,
-    onError: (_err) => setError(_err)
+    enabled: true, immediateFirstCall: true, onError: (_err) => setError(_err)
   });
 
   return {
@@ -183,7 +173,7 @@ export function useAlertsPolling() {
         status: alert.estado || 'active',
         metadata: alert.metadata
       }));
-    } catch (_err) {
+    } catch {
       throw _err;
     }
   }, []);
@@ -211,16 +201,7 @@ export function useAlertsPolling() {
   }, [alerts]);
 
   // Polling con detección de cambios
-  const {startPolling, stopPolling, executeNow} = usePollingWithDiff(
-    fetchAlerts,
-    alerts,
-    handleAlertsChange,
-    {
-      interval: 45000,
-      enabled: true,
-      immediateFirstCall: true,
-      onError: (_err) => {
-        setError(_err);
+  
         console.error('Error fetching alerts:', _err);
       }
     }
@@ -243,7 +224,7 @@ export function useAlertsPolling() {
           ? { ...alert, status: 'acknowledged' as const }
           : alert
       ));
-    } catch (_err) {
+    } catch {
       console.error('Error acknowledging alert:', _err);
     }
   }, []);
@@ -267,7 +248,8 @@ export function useGlobalPolling() {
   const [isPollingActive, setIsPollingActive] = useState(true);
   
   // Pausar polling cuando la pestaña no está visible
-  useCallback(() => {
+  
+    useCallback(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         console.log('Tab hidden, pausing polling...');

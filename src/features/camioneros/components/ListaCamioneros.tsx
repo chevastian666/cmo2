@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {Search, Plus,User,Phone,MapPin,Calendar, Flag} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, EmptyState, LoadingState } from '../../../components/ui';
-import { useCamionerosStore } from '../../../store/camionerosStore';
-import { FichaCamionero } from './FichaCamionero';
-import { FormularioCamionero } from './FormularioCamionero';
-import { cn } from '../../../utils/utils';
-import type { FiltrosCamionero, Nacionalidad } from '../types';
-import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT } from '../types';
+import { Search, Plus, User, Phone, Calendar, Flag} from 'lucide-react';
+import { Card, CardContent, EmptyState, LoadingState} from '../../../components/ui';
+
+import { FichaCamionero} from './FichaCamionero';
+import { FormularioCamionero} from './FormularioCamionero';
+
+import type { FiltrosCamionero, Nacionalidad} from '../types';
+import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT} from '../types';
 
 export const ListaCamioneros: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosCamionero>(FILTROS_CAMIONERO_DEFAULT);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(null);
-  
-  const {camioneros, loading, fetchCamioneros} = useCamionerosStore();
+   
 
   useEffect(() => {
     fetchCamioneros(filtros);
@@ -24,16 +23,14 @@ export const ListaCamioneros: React.FC = () => {
   };
 
   if (camioneroSeleccionado) {
-    return (
-      <FichaCamionero 
+    return (<FichaCamionero 
         documento={camioneroSeleccionado} 
         onClose={() => setCamioneroSeleccionado(null)} 
       />
     );
   }
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -107,8 +104,7 @@ export const ListaCamioneros: React.FC = () => {
           title="No se encontraron camioneros"
           description="No hay camioneros que coincidan con los filtros aplicados"
         />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      ) : (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {camioneros.map(camionero => (
             <Card 
               key={camionero.id} 
@@ -187,8 +183,7 @@ export const ListaCamioneros: React.FC = () => {
       )}
 
       {/* Modal de formulario */}
-      {mostrarFormulario && (
-        <FormularioCamionero onClose={() => setMostrarFormulario(false)} />
+      {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(false)} />
       )}
     </div>
   );

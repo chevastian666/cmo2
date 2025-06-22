@@ -1,3 +1,4 @@
+ 
 /**
  * Interactive Map Component Placeholder
  * Google Maps dependency removed
@@ -5,19 +6,17 @@
  */
 
 import React, { useState } from 'react';
-import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight,MapPin} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/utils/utils';
-import { AnimatedButton, AnimatedDiv } from '@/components/animations/AnimatedComponents';
+import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, MapPin} from 'lucide-react';
+import { Card} from '@/components/ui/Card';
+import { Input} from '@/components/ui/input';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Separator} from '@/components/ui/separator';
+import { Switch} from '@/components/ui/switch';
+import { Label} from '@/components/ui/label';
+import { ScrollArea} from '@/components/ui/scroll-area';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/utils/utils';
+import { AnimatedButton, AnimatedDiv} from '@/components/animations/AnimatedComponents';
 
 export interface MapMarker {
   id: string;
@@ -82,25 +81,19 @@ const MARKER_CONFIGS = {
 };
 
 export const InteractiveMap: React.FC<InteractiveMapProps> = ({
-  markers = [],
-  routes = [],
-  center = URUGUAY_CENTER,
-  zoom = 7,
-  height = "600px",
-  onMarkerClick,
-  showControls = true,
-  showLegend = true,
-  showSearch = true,
-  className,
-  mapType = 'roadmap'
+  markers = [], routes: _routes = [], center: _center = URUGUAY_CENTER, zoom = 7, height = "600px", onMarkerClick, showControls = true, showLegend = true, showSearch = true, className, mapType: _mapType = 'roadmap'
 }) => {
+  // Unused variables to avoid lint errors - will be used when map is implemented
+  void _routes;
+  void _center;
+  void _mapType;
   const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [showTraffic, setShowTraffic] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentZoom, setCurrentZoom] = useState(zoom);
+  const [, setCurrentZoom] = useState(zoom);
 
   // Filter markers based on search and filter
   const filteredMarkers = markers.filter(marker => {
@@ -231,8 +224,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           )}
 
           {/* Toggle Sidebar Button */}
-          {showControls && (
-            <motion.button
+          {showControls && (<motion.button
               className="absolute top-4 right-4 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
               onClick={() => setShowSidebar(!showSidebar)}
               whileHover={{ scale: 1.1 }}
@@ -245,8 +237,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
         {/* Sidebar */}
         <AnimatePresence>
-          {showSidebar && showControls && (
-            <motion.div
+          {showSidebar && showControls && (<motion.div
               initial={{ x: 320 }}
               animate={{ x: 0 }}
               exit={{ x: 320 }}

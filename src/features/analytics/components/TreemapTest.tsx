@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
-import { SimpleTreemap } from '@/components/charts/treemap/SimpleTreemap';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
+import { SimpleTreemap} from '@/components/charts/treemap/SimpleTreemap';
 import TreemapErrorBoundary from '@/components/charts/treemap/TreemapErrorBoundary';
 
 const TreemapTest: React.FC = () => {

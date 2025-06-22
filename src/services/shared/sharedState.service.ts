@@ -1,12 +1,8 @@
-import { sharedWebSocketService } from './sharedWebSocket.service';
-import { sharedApiService } from './sharedApi.service';
-import { SHARED_CONFIG } from '../../config/shared.config';
+import { sharedWebSocketService} from './sharedWebSocket.service';
+import { sharedApiService} from './sharedApi.service';
+import { SHARED_CONFIG} from '../../config/shared.config';
 import type { 
-  Precinto, 
-  TransitoPendiente, 
-  Alerta,
-  Usuario 
-} from '../../types';
+  Precinto, TransitoPendiente, Alerta, Usuario} from '../../types';
 
 interface SharedState {
   // User & Auth
@@ -91,7 +87,7 @@ export class SharedStateService {
       this.setupAutoRefresh();
 
       this.isInitialized = true;
-    } catch (_error) {
+    } catch {
       console.error('Failed to initialize shared state:', _error);
       // Continue with initialization even if some parts fail
       this.isInitialized = true;
@@ -113,7 +109,7 @@ export class SharedStateService {
         alertasActivas: alertas,
         systemStatus: status
       });
-    } catch (_error) {
+    } catch (error) {
       console.error('Failed to load initial data:', error);
     }
   }
@@ -197,7 +193,7 @@ export class SharedStateService {
 
   // State updates
   private updateState(updates: Partial<SharedState>): void {
-    const oldState = { ...this.state };
+    // Previous state tracking removed - not currently used
     this.state = { ...this.state, ...updates };
 
     // Store certain state to localStorage
@@ -229,7 +225,7 @@ export class SharedStateService {
 
   // Event handlers
   private handleTransitUpdate(data: unknown): void {
-    const {transitId, action, transit} = data;
+    
 
     switch (action) {
       case 'update':
@@ -245,7 +241,7 @@ export class SharedStateService {
   }
 
   private handlePrecintoUpdate(data: unknown): void {
-    const {precintoId, action, precinto} = data;
+    
 
     switch (action) {
       case 'update':
@@ -286,7 +282,7 @@ export class SharedStateService {
   }
 
   private handleVehicleUpdate(data: unknown): void {
-    const {truckId, position} = data;
+    
     const vehiculosEnRuta = this.state.vehiculosEnRuta.map(v => 
       v.id === truckId ? { ...v, position, lastUpdate: Date.now() } : v
     );
@@ -345,7 +341,7 @@ export class SharedStateService {
       try {
         const data = JSON.parse(stored);
         this.state = { ...this.state, ...data };
-      } catch (_error) {
+      } catch {
         console.error('Failed to load stored state:', error);
       }
     }

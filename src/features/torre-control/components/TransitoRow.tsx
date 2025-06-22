@@ -1,8 +1,8 @@
 import React from 'react';
-import {Truck,CheckCircle,AlertTriangle,XCircle,Clock,User,MapPin,Package, ChevronRight, AlertCircle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { CountdownTimer } from './CountdownTimer';
-import type { TransitoTorreControl, EstadoSemaforo } from '../types';
+import { Truck, CheckCircle, AlertTriangle, XCircle, Clock, User, MapPin, ChevronRight, AlertCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { CountdownTimer} from './CountdownTimer';
+import type { TransitoTorreControl, EstadoSemaforo} from '../types';
 
 interface TransitoRowProps {
   transito: TransitoTorreControl;

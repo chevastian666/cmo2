@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import {Package,CheckCircle, AlertCircle,Clock,MapPin,Truck,User,Phone,Calendar,FileText, ExternalLink, Copy, Download, Loader,XCircle, RefreshCw} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { armadoService } from '../services/armado.service';
-import { notificationService } from '../../../services/shared/notification.service';
+import { useParams, useNavigate} from 'react-router-dom';
+import { Package, CheckCircle, AlertCircle, Clock, MapPin, User, Phone, Calendar, ExternalLink, Copy, Download, Loader, XCircle, RefreshCw} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+
+import { notificationService} from '../../../services/shared/notification.service';
 
 interface TransitData {
   pvid: string;
@@ -207,7 +207,7 @@ export const ArmadoWaitingPage: React.FC = () => {
         setExitConfirmed(true);
         setPollingActive(false);
       }
-    } catch (_error) {
+    } catch {
       console.error('Error fetching transit data:', _error);
       notificationService.error('Error', 'No se pudo cargar la información del tránsito');
       setLoading(false);
@@ -236,7 +236,7 @@ export const ArmadoWaitingPage: React.FC = () => {
       setTimeout(() => {
         navigate('/transitos');
       }, 2000);
-    } catch (_error) {
+    } catch {
       notificationService.error('Error', 'No se pudo confirmar la salida');
     }
   };
@@ -247,6 +247,8 @@ export const ArmadoWaitingPage: React.FC = () => {
   };
 
   // Polling effect
+   
+
   useEffect(() => {
     fetchTransitData();
 
@@ -268,8 +270,7 @@ export const ArmadoWaitingPage: React.FC = () => {
   }
 
   if (!transitData) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+    return (<div className="flex flex-col items-center justify-center min-h-screen space-y-4">
         <XCircle className="h-16 w-16 text-red-500" />
         <p className="text-xl text-gray-400">No se encontró información del tránsito</p>
         <button
@@ -456,8 +457,7 @@ export const ArmadoWaitingPage: React.FC = () => {
             Estados de Aduana
           </h3>
           
-          {transitData.aduana && transitData.aduana.length > 0 ? (
-            <div className="space-y-3">
+          {transitData.aduana && transitData.aduana.length > 0 ? (<div className="space-y-3">
               {transitData.aduana.map((status, index) => {
                 const isLast = index === transitData.aduana!.length - 1;
                 const statusColor = getStatusColor(status.OprId, status.Canal);

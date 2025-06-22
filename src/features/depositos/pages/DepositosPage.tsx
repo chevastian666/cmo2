@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import {Plus, Search,Filter, Download, Building2} from 'lucide-react';
-import { DepositoTable } from '../components/DepositoTable';
+import {Plus, Search, Filter, Download, Building2} from 'lucide-react';
+import { DepositoTable} from '../components/DepositoTable';
 import {DepositoFilters} from '../components/DepositoFilters';
-import { DepositoDetailModal } from '../components/DepositoDetailModal';
-import { DepositoFormModal } from '../components/DepositoFormModal';
-import { useDepositosStore } from '../../../store/useDepositosStore';
-import { exportToCSV } from '../../../utils/export';
-import type { Deposito } from '../types';
+import { DepositoDetailModal} from '../components/DepositoDetailModal';
+import { DepositoFormModal} from '../components/DepositoFormModal';
+
+import { exportToCSV} from '../../../utils/export';
+import type { Deposito} from '../types';
 
 export const DepositosPage: React.FC = () => {
-  const {depositos, loading, addDeposito, updateDeposito} = useDepositosStore();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
@@ -38,18 +38,7 @@ export const DepositosPage: React.FC = () => {
   }, [depositos, searchTerm, filters]);
 
   const handleExport = () => {
-    const _data = filteredDepositos.map(d => ({
-      Código: d.codigo,
-      Nombre: d.nombre,
-      Alias: d.alias,
-      Ubicación: `${d.lat}, ${d.lng}`,
-      Padre: d.padre,
-      Tipo: d.tipo,
-      Zona: d.zona,
-      Empresa: d.empresa || '-',
-      'Tránsitos Activos': d.transitosActivos,
-      Estado: d.estado
-    }));
+
     exportToCSV(_data, 'depositos');
   };
 
@@ -77,8 +66,7 @@ export const DepositosPage: React.FC = () => {
     setShowForm(false);
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold text-white">Depósitos</h1>
@@ -127,8 +115,7 @@ export const DepositosPage: React.FC = () => {
       </div>
 
       {/* Filters Panel */}
-      {showFilters && (
-        <DepositoFilters
+      {showFilters && (<DepositoFilters
           filters={filters}
           onFiltersChange={setFilters}
           onClose={() => setShowFilters(false)}
@@ -170,8 +157,7 @@ export const DepositosPage: React.FC = () => {
       />
 
       {/* Detail Modal */}
-      {showDetail && selectedDeposito && (
-        <DepositoDetailModal
+      {showDetail && selectedDeposito && (<DepositoDetailModal
           deposito={selectedDeposito}
           isOpen={showDetail}
           onClose={() => setShowDetail(false)}
@@ -183,8 +169,7 @@ export const DepositosPage: React.FC = () => {
       )}
 
       {/* Form Modal */}
-      {showForm && (
-        <DepositoFormModal
+      {showForm && (<DepositoFormModal
           deposito={editingDeposito}
           isOpen={showForm}
           onClose={() => setShowForm(false)}

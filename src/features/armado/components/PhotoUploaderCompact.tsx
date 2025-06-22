@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import {Camera, Upload,X, Image as ImageIcon} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { Camera, Upload, X} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface PhotoUploaderProps {
   onPhotosChange: (photos: File[]) => void;
@@ -10,10 +10,7 @@ interface PhotoUploaderProps {
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
-  onPhotosChange,
-  existingPhotos = [],
-  maxPhotos = 5,
-  maxSizeMB = 10
+  onPhotosChange, existingPhotos = [], maxPhotos = 5, maxSizeMB = 10
 }) => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -184,8 +181,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         {/* Preview Area */}
         <div className="space-y-2">
           {/* Existing Photos */}
-          {existingPhotos.length > 0 && (
-            <div>
+          {existingPhotos.length > 0 && (<div>
               <p className="text-xs text-gray-400 mb-1">Fotos existentes:</p>
               <div className="flex flex-wrap gap-2">
                 {existingPhotos.map((photo, index) => (
@@ -202,12 +198,10 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
           )}
 
           {/* New Photos */}
-          {photos.length > 0 && (
-            <div>
+          {photos.length > 0 && (<div>
               <p className="text-xs text-gray-400 mb-1">Nuevas fotos:</p>
               <div className="flex flex-wrap gap-2">
-                {previews.map((preview, index) => (
-                  <div key={`new-${index}`} className="relative group">
+                {previews.map((preview, index) => (<div key={`new-${index}`} className="relative group">
                     <img
                       src={preview}
                       alt={`Nueva foto ${index + 1}`}

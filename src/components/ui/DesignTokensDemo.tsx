@@ -1,6 +1,6 @@
 import React from 'react';
-import { designTokens } from '../../styles/design-tokens';
-import { tokenClasses, combineTokenClasses, getStateClasses } from '../../styles/useDesignTokens';
+import { designTokens} from '../../styles/design-tokens';
+import { tokenClasses, combineTokenClasses, getStateClasses} from '../../styles/useDesignTokens';
 
 export const DesignTokensDemo: React.FC = () => {
   const transitStates = ['active', 'pending', 'completed', 'cancelled', 'delayed'];

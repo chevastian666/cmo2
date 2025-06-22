@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState } from 'react';
-import {X, AlertCircle,AlertTriangle, Shield,CheckCircle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import {X, AlertCircle, AlertTriangle, Shield, CheckCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 export interface Notification {
   id: string;
@@ -17,12 +18,13 @@ interface RealtimeNotificationsProps {
 }
 
 export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
-  position = 'top-right',
-  maxNotifications = 5
+  position = 'top-right', maxNotifications = 5
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   // Listen for custom notification events
+   
+
   useEffect(() => {
     const handleNotification = (event: CustomEvent<Notification>) => {
       addNotification(event.detail);

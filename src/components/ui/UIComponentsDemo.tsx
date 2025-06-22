@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, _CardDescription, CardContent, _CardFooter, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, LoadingOverlay, Skeleton} from './index';
+import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, CardContent, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton} from './index';
 
 export const UIComponentsDemo: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('tabs');
@@ -61,8 +61,7 @@ export const UIComponentsDemo: React.FC = () => {
     { id: '4', lat: -33.0, lng: -61.0, type: 'alert', label: 'Alerta', status: 'alert' }
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-900 p-8">
+  return (<div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-100 mb-8">UI Components Demo</h1>
         

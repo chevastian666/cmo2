@@ -3,7 +3,7 @@
  * Implements request deduplication and intelligent caching
  */
 
-interface CacheEntry<T = any> {
+interface CacheEntry<T = unknown> {
   data: T;
   timestamp: number;
   ttl: number;
@@ -79,9 +79,7 @@ class CacheService {
   /**
    * Deduplicate concurrent requests
    */
-  async deduplicateRequest<T>(
-    key: string,
-    fetcher: () => Promise<T>
+  async deduplicateRequest<T>(key: string, fetcher: () => Promise<T>
   ): Promise<T> {
     // Check if there's already a pending request
     const pending = this.pendingRequests.get(key);
@@ -118,7 +116,7 @@ class CacheService {
     let expiredEntries = 0;
     let totalSize = 0;
 
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [, entry] of this.cache.entries()) {
       if (now - entry.timestamp <= entry.ttl) {
         validEntries++;
       } else {

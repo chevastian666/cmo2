@@ -1,15 +1,15 @@
+ 
 /**
  * Dashboard Grid con widgets arrastrables y redimensionables
  * By Cheva
  */
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import type { Layout, Layouts } from 'react-grid-layout';
+import { Responsive, WidthProvider} from 'react-grid-layout';
+import type { Layout, Layouts} from 'react-grid-layout';
 import {Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react';
-import { cn } from '../../utils/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useDashboardStore } from '../../store/dashboardStore';
+import { cn} from '../../utils/utils';
+import { motion, AnimatePresence} from 'framer-motion';
 
 // CSS de react-grid-layout
 import 'react-grid-layout/css/styles.css';
@@ -37,28 +37,27 @@ interface DashboardGridProps {
 const CURRENT_LAYOUT_VERSION = 2;
 
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
-  widgets,
-  renderWidget,
-  className = '',
-  onLayoutChange
+  widgets, renderWidget, className = '', onLayoutChange
 }) => {
-  const {layouts, layoutVersion, editMode, setLayouts, setEditMode, resetLayouts} = useDashboardStore();
+  
 
   const [isDragging, setIsDragging] = useState(false);
   
   // Reset layouts if version is outdated
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (layoutVersion < CURRENT_LAYOUT_VERSION) {
       resetLayouts();
     }
-  }, [layoutVersion, resetLayouts]);
+  }, []);
 
   // Generar layouts por defecto si no existen
   const defaultLayouts = useMemo(() => {
     const generateLayout = (cols: number): Layout[] => {
       // Layout personalizado para priorizar precintos activos y pendientes
-      const priorityWidgets = ['kpi-precintos', 'precinto-status', 'kpi-cumplimiento', 'chart-main', 'map', 'statistics', 'activity'];
-      const bottomWidgets = ['kpi-transitos', 'transits', 'kpi-alertas', 'alerts'];
+      // Layout personalizado para widgets
       
       return widgets.map((widget) => {
         let x = 0, y = 0, w = 4, h = 4;

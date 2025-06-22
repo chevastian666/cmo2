@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
-import {X, Upload,FileText, AlertCircle, Check} from 'lucide-react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '../../../utils/utils';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { TipoDocumento } from '../types';
-import { TIPOS_DOCUMENTO } from '../types';
+import { X, Upload, FileText} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '@/components/ui/card';
+import { Badge} from '@/components/ui/badge';
+import { cn} from '../../../utils/utils';
+import { notificationService} from '../../../services/shared/notification.service';
+import type { TipoDocumento} from '../types';
+import { TIPOS_DOCUMENTO} from '../types';
 
 interface SubirDocumentoModalProps {
   isOpen: boolean;
@@ -26,9 +26,7 @@ interface FormData {
 }
 
 export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit
+  isOpen, onClose, onSubmit
 }) => {
   const [formData, setFormData] = useState<Partial<FormData>>({
     tipo: 'DUA',
@@ -86,7 +84,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       });
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
     } finally {
       setLoading(false);
@@ -162,8 +160,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
               </div>
 
               {/* Número de DUA */}
-              {formData.tipo === 'DUA' && (
-                <div>
+              {formData.tipo === 'DUA' && (<div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Número de DUA *
                   </label>
@@ -286,8 +283,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                         Cambiar archivo
                       </button>
                     </div>
-                  ) : (
-                    <div className="space-y-2">
+                  ) : (<div className="space-y-2">
                       <Upload className="h-12 w-12 text-gray-500 mx-auto" />
                       <button
                         onClick={() => fileInputRef.current?.click()}

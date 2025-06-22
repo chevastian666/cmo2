@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, FileText, Download } from 'lucide-react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FiltrosDocumentosComponent } from './FiltrosDocumentos';
-import { TablaDocumentos } from './TablaDocumentos';
-import { SubirDocumentoModal } from './SubirDocumentoModal';
-import { VisualizadorPDF } from './VisualizadorPDF';
-import { useDocumentosStore } from '../../../store/documentosStore';
-import { useUserInfo } from '../../../hooks/useAuth';
-import { notificationService } from '../../../services/shared/notification.service';
-import { exportToCSV } from '../../../utils/export';
-import type { Documento, FiltrosDocumentos } from '../types';
-import { FILTROS_DEFAULT } from '../types';
+import { Plus, FileText, Download} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '@/components/ui/card';
+
+import { FiltrosDocumentosComponent} from './FiltrosDocumentos';
+import { TablaDocumentos} from './TablaDocumentos';
+import { SubirDocumentoModal} from './SubirDocumentoModal';
+import { VisualizadorPDF} from './VisualizadorPDF';
+
+import { useUserInfo} from '../../../hooks/useAuth';
+import { notificationService} from '../../../services/shared/notification.service';
+import { exportToCSV} from '../../../utils/export';
+import type { Documento, FiltrosDocumentos} from '../types';
+import { FILTROS_DEFAULT} from '../types';
 
 const STORAGE_KEY_FILTROS = 'cmo_documentacion_filtros';
 
@@ -27,7 +27,7 @@ export const CentroDocumentacion: React.FC = () => {
   const [showSubirModal, setShowSubirModal] = useState(false);
   const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null);
   
-  const { documentos, loading, estadisticas, fetchDocumentos, uploadDocumento, deleteDocumento } = useDocumentosStore();
+  
   const userInfo = useUserInfo();
   
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor';
@@ -36,12 +36,16 @@ export const CentroDocumentacion: React.FC = () => {
   console.log('User info:', userInfo);
   console.log('Can edit:', canEdit);
   console.log('Show modal state:', showSubirModal);
-  
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     fetchDocumentos();
   }, [fetchDocumentos]);
-  
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
   }, [filtros]);
   
@@ -85,15 +89,15 @@ export const CentroDocumentacion: React.FC = () => {
   const empresasUnicas = [...new Set(documentos.map(doc => doc.empresa))];
   
   // Handlers
-  const handleUpload = async (data: any) => {
+  const handleUpload = async (data: unknown) => {
     try {
       await uploadDocumento(data);
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
       setShowSubirModal(false);
       fetchDocumentos(); // Recargar documentos
-    } catch (_error) {
+    } catch (error) {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
-      throw _error; // Re-throw para que el modal maneje el estado de loading
+      throw error; // Re-throw para que el modal maneje el estado de loading
     }
   };
 
@@ -117,7 +121,7 @@ export const CentroDocumentacion: React.FC = () => {
     try {
       await deleteDocumento(doc.id);
       notificationService.success('Documento eliminado', 'El documento ha sido eliminado correctamente');
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al eliminar', 'No se pudo eliminar el documento');
     }
   };
@@ -171,8 +175,7 @@ export const CentroDocumentacion: React.FC = () => {
               Exportar
             </button>
           )}
-          {canEdit && (
-            <button
+          {canEdit && (<button
               onClick={() => {
                 console.log('Button clicked, setting showSubirModal to true');
                 setShowSubirModal(true);
@@ -285,8 +288,7 @@ export const CentroDocumentacion: React.FC = () => {
       </Card>
 
       {/* Modales */}
-      {showSubirModal && (
-        <SubirDocumentoModal
+      {showSubirModal && (<SubirDocumentoModal
           isOpen={showSubirModal}
           onClose={() => {
             console.log('Modal closing');
@@ -296,8 +298,7 @@ export const CentroDocumentacion: React.FC = () => {
         />
       )}
 
-      {documentoVisualizando && (
-        <VisualizadorPDF
+      {documentoVisualizando && (<VisualizadorPDF
           documento={documentoVisualizando}
           onClose={() => setDocumentoVisualizando(null)}
         />

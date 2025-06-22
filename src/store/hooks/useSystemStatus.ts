@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
-import { useSystemStatusStore } from '../store';
+import { useSystemStatusStore} from '../store';
 
 export const useSystemStatus = () => {
   const store = useSystemStatusStore();
-  
+   
+
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (!store.estadisticas && !store.loading) {

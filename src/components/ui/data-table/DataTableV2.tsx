@@ -1,23 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import {ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
-import {ChevronDown, Search,Filter, ChevronLeft, ChevronRight} from 'lucide-react';
+  DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
+import { ChevronDown, Search, ChevronLeft, ChevronRight} from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,14 +20,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTableV2<TData, TValue>({
-  columns,
-  data,
-  searchKey,
-  searchPlaceholder = 'Buscar...',
-  showColumnVisibility = true,
-  showPagination = true,
-  pageSize = 10,
-}: DataTableProps<TData, TValue>) {
+  columns, data, searchKey, searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(_);
@@ -71,8 +54,7 @@ export function DataTableV2<TData, TValue>({
     },
   });
 
-  return (
-    <div className="w-full space-y-4">
+  return (<div className="w-full space-y-4">
       {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
@@ -135,8 +117,7 @@ export function DataTableV2<TData, TValue>({
       <div className="rounded-md border border-gray-700">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-gray-700">
+            {table.getHeaderGroups().map((headerGroup) => (<TableRow key={headerGroup.id} className="border-gray-700">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id} className="text-gray-300">

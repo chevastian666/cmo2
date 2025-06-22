@@ -4,19 +4,19 @@
  */
 
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { AlertTriangle, Shield, TrendingUp, Clock, Users, CheckCircle, History, Bell, BellOff, Filter, RefreshCw, User, MessageSquare, XCircle, CheckCircle2, AlertCircle, Zap, Activity, Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAlertasStore, usePrecintosStore, useTransitosStore } from '@/store/store';
-import { cn } from '@/utils/utils';
-import type { Alerta } from '@/types';
-import { VerificarButton, VerificadoBadge } from '../components/VerificarButton';
+import { AlertTriangle, Shield, TrendingUp, Users, CheckCircle, History, Bell, BellOff, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap, Activity, Search} from 'lucide-react';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+import { Badge} from '@/components/ui/badge';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+
+import { useAlertasStore} from '@/store/store';
+import { cn} from '@/utils/utils';
+import type { Alerta} from '@/types';
+import { VerificarButton, VerificadoBadge} from '../components/VerificarButton';
 
 // Lazy load modals pesados
 const HistorialAlertasCriticasModal = lazy(() => 
@@ -187,7 +187,7 @@ const AlertRow = React.memo<{
       
       <td className="px-6 py-4 whitespace-nowrap">
         <Badge 
-          variant={severidadInfo.color as any}
+          variant={severidadInfo.color as "default" | "secondary" | "destructive" | "danger" | "warning" | "success"}
           className="flex items-center gap-1"
         >
           {severidadInfo.icon}
@@ -228,8 +228,7 @@ const AlertRow = React.memo<{
       
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center justify-end">
-          {!alerta.atendida ? (
-            <VerificarButton
+          {!alerta.atendida ? (<VerificarButton
               onClick={() => onVerificar(alerta)}
               variant="minimal"
               size="sm"
@@ -276,7 +275,8 @@ const AlertasPageV2: React.FC = () => {
   const itemsPerPage = 20;
 
   // Cargar datos solo una vez con loading state
-  useEffect(() => {
+  
+    useEffect(() => {
     const loadData = async () => {
       if (!isInitialLoad) return;
       
@@ -352,13 +352,7 @@ const AlertasPageV2: React.FC = () => {
   }, [alertas, alertasActivas]);
 
   // Filtrado optimizado con paginación y single pass
-  const { filteredAlertas, totalPages, totalItems } = React.useMemo(() => {
-    // Single pass filtering
-    const filtered = alertas.filter(a => {
-      // Tab filter
-      switch (selectedTab) {
-        case 'activas':
-          if (a.atendida) return false;
+  
           break;
         case 'criticas':
           if (a.severidad !== 'critica' || a.atendida) return false;
@@ -420,7 +414,8 @@ const AlertasPageV2: React.FC = () => {
   }, [fetchAlertas, fetchAlertasActivas]);
 
   // Reset page when changing filters
-  useEffect(() => {
+  
+    useEffect(() => {
     setCurrentPage(1);
   }, [selectedTab, searchTerm]);
 
@@ -574,8 +569,7 @@ const AlertasPageV2: React.FC = () => {
                           </div>
                         </td>
                       </tr>
-                    ) : (
-                      filteredAlertas.map((alerta, index) => (
+                    ) : (filteredAlertas.map((alerta, index) => (
                         <AlertRow
                           key={alerta.id}
                           alerta={alerta}
@@ -589,8 +583,7 @@ const AlertasPageV2: React.FC = () => {
               </div>
               
               {/* Paginación */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between px-6 py-3 border-t border-gray-700">
+              {totalPages > 1 && (<div className="flex items-center justify-between px-6 py-3 border-t border-gray-700">
                   <p className="text-sm text-gray-400">
                     Página {currentPage} de {totalPages}
                   </p>
@@ -628,8 +621,7 @@ const AlertasPageV2: React.FC = () => {
           onClose={() => setShowHistorialModal(false)}
         />
 
-        {selectedAlerta && (
-          <VerificarAlertaModalV2
+        {selectedAlerta && (<VerificarAlertaModalV2
             isOpen={showVerificarModal}
             onClose={() => {
               setShowVerificarModal(false);

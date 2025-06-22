@@ -1,9 +1,9 @@
 import React from 'react';
-import {Search,Calendar,MapPin,Filter, RotateCcw,User} from 'lucide-react';
-import { Badge } from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import type { FiltrosNovedades, TipoNovedad, EstadoNovedad } from '../types';
-import { PUNTOS_OPERACION, TIPOS_NOVEDAD, FILTROS_DEFAULT } from '../types';
+import { Search, Calendar, Filter, RotateCcw, User} from 'lucide-react';
+
+import { cn} from '../../../utils/utils';
+import type { FiltrosNovedades} from '../types';
+import { PUNTOS_OPERACION, TIPOS_NOVEDAD, FILTROS_DEFAULT} from '../types';
 
 interface FiltrosNovedadesProps {
   filtros: FiltrosNovedades;
@@ -12,9 +12,7 @@ interface FiltrosNovedadesProps {
 }
 
 export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
-  filtros,
-  onFiltrosChange,
-  className
+  filtros, onFiltrosChange, className
 }) => {
   const handleChange = (key: keyof FiltrosNovedades, value: unknown) => {
     onFiltrosChange({
@@ -156,8 +154,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
             />
           </div>
 
-          {(filtros.fechaDesde || filtros.fechaHasta) && (
-            <button
+          {(filtros.fechaDesde || filtros.fechaHasta) && (<button
               onClick={() => {
                 handleChange('fechaDesde', null);
                 handleChange('fechaHasta', null);

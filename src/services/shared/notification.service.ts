@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { SHARED_CONFIG } from '../../config/shared.config';
-import { toast } from '@/hooks/use-toast';
+// SHARED_CONFIG import removed - not currently used
+import { toast} from '@/hooks/use-toast';
 
 export interface Notification {
   id: string;
@@ -22,6 +22,14 @@ export interface Notification {
 
 type NotificationListener = (notification: Notification) => void;
 type NotificationsListener = (notifications: Notification[]) => void;
+
+
+interface NotificationOptions {
+  duration?: number;
+  persistent?: boolean;
+  actions?: Array<{ label: string; handler: () => void }>;
+  icon?: string;
+}
 
 class NotificationService {
   private notifications: Notification[] = [];
@@ -145,13 +153,8 @@ class NotificationService {
   }
 
   cmoMessage(message: unknown): void {
-    this.create(
-      'info',
-      'Nuevo Mensaje CMO',
-      message.subject || 'Tienes un nuevo mensaje del Centro de Monitoreo',
-      {
-        label: 'Leer Mensaje',
-        handler: () => {
+    this.create('info', 'Nuevo Mensaje CMO', message.subject || 'Tienes un nuevo mensaje del Centro de Monitoreo', {
+        label: 'Leer Mensaje', handler: () => {
           window.location.hash = `#/cmo/messages/${message.id}`;
         }
       }
@@ -358,7 +361,7 @@ class NotificationService {
             console.debug('Audio playback failed:', error.message);
           }
         });
-      } catch (_error) {
+      } catch (error) {
         console.debug('Failed to play audio:', error);
       }
     }
@@ -383,7 +386,7 @@ class NotificationService {
   private persist(): void {
     try {
       localStorage.setItem('notifications', JSON.stringify(this.notifications));
-    } catch (_error) {
+    } catch {
       console.error('Failed to persist notifications:', error);
     }
   }
@@ -396,7 +399,7 @@ class NotificationService {
         // Clean old notifications on load
         this.clearOld();
       }
-    } catch (_error) {
+    } catch {
       console.error('Failed to load notifications:', error);
       this.notifications = [];
     }

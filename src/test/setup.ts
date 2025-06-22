@@ -3,9 +3,9 @@
  * By Cheva
  */
 import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, afterAll, vi } from 'vitest';
-import { server } from './mocks/server';
+import { cleanup} from '@testing-library/react';
+import { afterEach, beforeAll, afterAll, vi} from 'vitest';
+import { server} from './mocks/server';
 
 // Establecer zona horaria para tests consistentes
 process.env.TZ = 'UTC';

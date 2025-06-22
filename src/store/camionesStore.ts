@@ -1,8 +1,8 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
-import { camionesService } from '../features/camiones/services/camiones.service';
-import { notificationService } from '../services/shared/notification.service';
-import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion } from '../features/camiones/types';
+import { create} from 'zustand';
+import { devtools} from 'zustand/middleware';
+import { camionesService} from '../features/camiones/services/camiones.service';
+import { notificationService} from '../services/shared/notification.service';
+import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion} from '../features/camiones/types';
 
 interface CamionesState {
   // Estado
@@ -23,24 +23,16 @@ interface CamionesState {
   clearSelection: () => void;
 }
 
-export const useCamionesStore = create<CamionesState>()(
-  devtools(
+export const useCamionesStore = create<CamionesState>()(devtools(
     (set, get) => ({
       // Estado inicial
-      camiones: [],
-      camionSeleccionado: null,
-      transitosCamion: [],
-      estadisticasCamion: null,
-      loading: false,
-      error: null,
-
-      // Acciones
+      camiones: [], camionSeleccionado: null, transitosCamion: [], estadisticasCamion: null, loading: false, error: null, // Acciones
       fetchCamiones: async (filtros?: FiltrosCamion) => {
         set({ loading: true, error: null });
         try {
           const camiones = await camionesService.getCamiones(filtros);
           set({ camiones, loading: false });
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al cargar camiones', loading: false });
           notificationService.error('Error', 'No se pudieron cargar los camiones');
         }
@@ -65,7 +57,7 @@ export const useCamionesStore = create<CamionesState>()(
             estadisticasCamion: estadisticas,
             loading: false
           });
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al cargar información del camión', loading: false });
           notificationService.error('Error', 'No se pudo cargar la información del camión');
         }
@@ -80,7 +72,7 @@ export const useCamionesStore = create<CamionesState>()(
             loading: false
           }));
           notificationService.success('Éxito', 'Camión registrado correctamente');
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al crear camión', loading: false });
           notificationService.error('Error', 'No se pudo registrar el camión');
         }
@@ -104,7 +96,7 @@ export const useCamionesStore = create<CamionesState>()(
             loading: false
           }));
           notificationService.success('Éxito', 'Camión actualizado correctamente');
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al actualizar camión', loading: false });
           notificationService.error('Error', 'No se pudo actualizar el camión');
         }
@@ -123,7 +115,7 @@ export const useCamionesStore = create<CamionesState>()(
               : state.camionSeleccionado
           }));
           notificationService.success('Éxito', 'Estado actualizado correctamente');
-        } catch (_error) {
+        } catch {
           notificationService.error('Error', 'No se pudo actualizar el estado');
         }
       },
@@ -133,7 +125,7 @@ export const useCamionesStore = create<CamionesState>()(
         try {
           const urlFoto = await camionesService.uploadFotoCamion(matricula, foto);
           await get().updateCamion(matricula, { foto: urlFoto });
-        } catch (_error) {
+        } catch {
           set({ error: 'Error al subir foto', loading: false });
           notificationService.error('Error', 'No se pudo subir la foto');
         }

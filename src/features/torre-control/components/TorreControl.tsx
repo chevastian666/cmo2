@@ -4,19 +4,19 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {Truck,AlertTriangle,CheckCircle,XCircle,Clock,MapPin,User, RefreshCw,Filter, ChevronRight, Activity} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { Card } from '../../../components/ui';
-import { TransitoRow } from './TransitoRow';
-import { TransitoDetailModal } from './TransitoDetailModal';
+import { Truck, AlertTriangle, CheckCircle, XCircle, Filter, Activity} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+
+import { TransitoRow} from './TransitoRow';
+import { TransitoDetailModal} from './TransitoDetailModal';
 import {TorreControlFilters} from './TorreControlFilters';
-import { TorreControlHeader } from './TorreControlHeader';
-import { CountdownTimer } from './CountdownTimer';
-import { CongestionPanel } from '../../prediccion';
-import { notificationService } from '../../../services/shared/notification.service';
-import { torreControlService } from '../services/torreControl.service';
-import type { TransitoTorreControl, EstadoSemaforo } from '../types';
-import type { CongestionAnalysis } from '../../prediccion/types';
+import { TorreControlHeader} from './TorreControlHeader';
+
+import { CongestionPanel} from '../../prediccion';
+import { notificationService} from '../../../services/shared/notification.service';
+import { torreControlService} from '../services/torreControl.service';
+import type { TransitoTorreControl, EstadoSemaforo} from '../types';
+import type { CongestionAnalysis} from '../../prediccion/types';
 
 interface TorreControlProps {
   className?: string;
@@ -28,7 +28,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);
   const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [showCongestionPanel, setShowCongestionPanel] = useState(true);
+  const [showCongestionPanel] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [lastCongestionNotification, setLastCongestionNotification] = useState<string[]>([]);
   const [filters, setFilters] = useState({
@@ -159,7 +159,10 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   }, []);
 
   // Auto-refresh every 10 seconds
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     fetchTransitos();
     const interval = setInterval(fetchTransitos, 10000);
     return () => clearInterval(interval);
@@ -304,8 +307,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
               <p className="text-gray-400 text-lg">No hay tránsitos activos</p>
             </div>
           </div>
-        ) : (
-          <div className="overflow-x-auto px-2 sm:px-4">
+        ) : (<div className="overflow-x-auto px-2 sm:px-4">
             <table className="w-full min-w-[800px] sm:min-w-[1000px] lg:min-w-[1200px]">
               <thead className="bg-gray-900 border-b border-gray-800">
                 <tr>
@@ -357,8 +359,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {sortedTransitos.map((transito, index) => (
-                  <TransitoRow
+                {sortedTransitos.map((transito, index) => (<TransitoRow
                     key={transito.id}
                     transito={transito}
                     index={index}

@@ -1,19 +1,15 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {ChevronUp, ChevronDown,MapPin, Eye, Send, History, Unlink,XCircle} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { PrecintoStatusBadge } from './PrecintoStatusBadge';
-import { BatteryIndicator } from './BatteryIndicator';
-import { SignalIndicator } from './SignalIndicator';
-import { PrecintoStatus } from '../types';
-import type { Precinto } from '../types';
-import { 
-  AnimatedList, 
-  AnimatedListItem,
-  AnimatedBadge 
-} from '@/components/animations/AnimatedComponents';
-import { hoverLiftVariants, transitions } from '@/components/animations/AnimationPresets';
+import { motion, AnimatePresence} from 'framer-motion';
+import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react';
+import { cn} from '@/lib/utils';
+import { Button} from '@/components/ui/button';
+import { PrecintoStatusBadge} from './PrecintoStatusBadge';
+import { BatteryIndicator} from './BatteryIndicator';
+import { SignalIndicator} from './SignalIndicator';
+import { PrecintoStatus} from '../types';
+import type { Precinto} from '../types';
+import { AnimatedBadge} from '@/components/animations/AnimatedComponents';
+import { transitions} from '@/components/animations/AnimationPresets';
 
 interface PrecintoTableAnimatedProps {
   precintos: Precinto[];
@@ -27,14 +23,7 @@ interface PrecintoTableAnimatedProps {
 }
 
 export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
-  precintos,
-  loading,
-  onViewDetail,
-  onViewMap,
-  onAssign,
-  onSendCommand,
-  onViewHistory,
-  onMarkAsBroken
+  precintos, loading, onViewDetail, onViewMap, onAssign, onSendCommand, onViewHistory, onMarkAsBroken
 }) => {
   const [sortField, setSortField] = React.useState<keyof Precinto>('id');
   const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
@@ -82,8 +71,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
       <ChevronDown className="h-4 w-4" />;
   };
 
-  const SortableHeader = ({ field, children }: { field: keyof Precinto; children: React.ReactNode }) => (
-    <motion.th 
+  const SortableHeader = ({ field, children }: { field: keyof Precinto; children: React.ReactNode }) => (<motion.th 
       onClick={() => handleSort(field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
       whileHover={{ scale: 1.02 }}
@@ -127,8 +115,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
     );
   }
 
-  return (
-    <motion.div 
+  return (<motion.div 
       className="bg-gray-800 rounded-lg border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -242,8 +229,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
                           <Eye className="h-4 w-4" />
                         </Button>
                       </motion.div>
-                      {precinto.gps && (
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                      {precinto.gps && (<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                           <Button
                             size="icon"
                             variant="ghost"
@@ -277,8 +263,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
                           <History className="h-4 w-4" />
                         </Button>
                       </motion.div>
-                      {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                      {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                           <Button
                             size="icon"
                             variant="ghost"

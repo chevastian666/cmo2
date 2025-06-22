@@ -3,7 +3,7 @@
  * Uses shallow comparison and update batching
  */
 
-import { StoreApi } from 'zustand';
+import { StoreApi} from 'zustand';
 
 interface OptimizationConfig {
   enableDeepComparison?: boolean;
@@ -13,7 +13,7 @@ interface OptimizationConfig {
 }
 
 export class StoreOptimizer<T extends object> {
-  private pendingUpdates = new Map<keyof T, any>();
+  private pendingUpdates = new Map<keyof T, unknown>();
   private updateTimer: NodeJS.Timeout | null = null;
   private config: OptimizationConfig;
   private store: StoreApi<T>;

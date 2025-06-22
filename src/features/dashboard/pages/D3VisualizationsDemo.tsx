@@ -5,12 +5,12 @@
  */
 
 import React, { useState } from 'react';
-import { D3VisualizationWidget } from '../../../components/charts/d3/D3VisualizationWidget';
-import { InteractiveLineChart, ActivityHeatmap, NetworkGraph, InteractiveTreemap } from '../../../components/charts/d3';
-import type { TimeSeriesData, HeatmapData, NetworkData, TreemapNode } from '../../../components/charts/d3';
+import { D3VisualizationWidget} from '../../../components/charts/d3/D3VisualizationWidget';
+import { InteractiveLineChart, ActivityHeatmap, NetworkGraph, InteractiveTreemap} from '../../../components/charts/d3';
+import type { TimeSeriesData, HeatmapData, NetworkData, TreemapNode} from '../../../components/charts/d3';
 
 export const D3VisualizationsDemo: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<any>(null);
+  const [selectedData, setSelectedData] = useState<unknown>(null);
 
   // Generate sample data
   const timeSeriesData: TimeSeriesData[] = Array.from({ length: 30 }, (_, i) => {
@@ -115,7 +115,7 @@ export const D3VisualizationsDemo: React.FC = () => {
     ]
   };
 
-  const handleDataPointClick = (data: any) => {
+  const handleDataPointClick = (data: unknown) => {
     setSelectedData(data);
     console.log('Data point clicked:', data);
   };

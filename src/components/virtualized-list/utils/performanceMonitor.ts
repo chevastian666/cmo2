@@ -226,10 +226,7 @@ export class PerformanceOptimizer {
   /**
    * Auto-apply optimizations if needed
    */
-  autoOptimize(
-    metrics: PerformanceMetrics,
-    config: unknown,
-    updateConfig: (updates: unknown) => void
+  autoOptimize(metrics: PerformanceMetrics, config: unknown, updateConfig: (updates: unknown) => void
   ): boolean {
     if (metrics.fps < 30) {
       this.degradedPerformanceCount++;

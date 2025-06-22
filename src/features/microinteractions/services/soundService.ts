@@ -34,7 +34,7 @@ class ASMRSoundService {
   private initializeAudioContext() {
     try {
       this.audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
-    } catch (_error) {
+    } catch {
       console.warn('Web Audio API not supported:', _error);
     }
   }
@@ -58,7 +58,7 @@ class ASMRSoundService {
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
         this.sounds.set(name, audioBuffer);
-      } catch (_error) {
+      } catch {
         // Silently fail in production, only log in development
         if (process.env.NODE_ENV === 'development') {
           console.debug(`Sound ${name} not available`);
@@ -117,7 +117,7 @@ class ASMRSoundService {
       source.detune.setValueAtTime(detune, this.audioContext.currentTime);
 
       source.start();
-    } catch (_error) {
+    } catch {
       console.warn('Error playing sound:', _error);
     }
   }

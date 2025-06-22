@@ -2,7 +2,7 @@
  * Types and interfaces for UX Enhancement Features
  */
 
-import { ComponentType } from 'react';
+import { ComponentType} from 'react';
 
 // Radial Menu Types
 export interface RadialMenuAction {

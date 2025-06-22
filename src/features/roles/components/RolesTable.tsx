@@ -1,10 +1,10 @@
 import React, { useMemo, useCallback } from 'react';
-import { Shield, Info } from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { PermissionCheckbox, BulkPermissionCheckbox } from './PermissionCheckbox';
-import { useRolesStore } from '../../../store/rolesStore';
-import type { Role, Section, Permission } from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS } from '../../../types/roles';
+import { Shield, Info} from 'lucide-react';
+
+import { PermissionCheckbox, BulkPermissionCheckbox} from './PermissionCheckbox';
+
+import type { Role, Section, Permission} from '../../../types/roles';
+import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles';
 
 const SECTIONS: Section[] = [
   'dashboard',
@@ -24,7 +24,7 @@ const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
 const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
 
 export const RolesTable: React.FC = () => {
-  const {permissions, togglePermission, setSectionPermissions, setRolePermissions} = useRolesStore();
+  
   
   // Calculate bulk checkbox states for sections
   const sectionBulkStates = useMemo(() => {
@@ -111,8 +111,7 @@ export const RolesTable: React.FC = () => {
     return !hasPermission(role, section, 'view');
   };
 
-  return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+  return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-900/50 border-b border-gray-700">

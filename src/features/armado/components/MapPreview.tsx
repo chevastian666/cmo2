@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {MapPin, Maximize2,X} from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import {MapPin, Maximize2, X} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 interface MapPreviewProps {
   lat: number;
@@ -10,10 +10,7 @@ interface MapPreviewProps {
 }
 
 export const MapPreview: React.FC<MapPreviewProps> = ({ 
-  lat, 
-  lng, 
-  title = 'Ubicación',
-  height = '300px' 
+  lat, lng, title = 'Ubicación', height = '300px' 
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 

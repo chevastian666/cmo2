@@ -1,6 +1,7 @@
+ 
 import React from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton} from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader} from '@/components/ui/card';
 
 interface CardSkeletonProps {
   showDescription?: boolean;
@@ -8,8 +9,7 @@ interface CardSkeletonProps {
 }
 
 export const CardSkeleton: React.FC<CardSkeletonProps> = ({ 
-  showDescription = true,
-  showChart = false 
+  showDescription = true, showChart = false 
 }) => {
   return (
     <Card>

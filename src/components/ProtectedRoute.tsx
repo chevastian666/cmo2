@@ -1,7 +1,8 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate} from 'react-router-dom';
 import {AlertTriangle} from 'lucide-react';
-import type { Section, Permission } from '../types/roles';
+import { useRolesStore} from '../store/rolesStore';
+import type { Section, Permission} from '../types/roles';
 
 interface ProtectedRouteProps {
   section: Section;
@@ -12,11 +13,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  section,
-  permission = 'view',
-  children,
-  fallback,
-  redirectTo = '/'
+  section, permission = 'view', children, fallback, redirectTo = '/'
 }) => {
   const canAccess = useRolesStore(state => state.canAccess);
   const hasAccess = canAccess(section, permission);
@@ -27,8 +24,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
     
     if (redirectTo === 'none') {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      return (<div className="min-h-screen flex items-center justify-center bg-gray-900">
           <div className="text-center p-8 bg-gray-800 rounded-lg border border-gray-700 max-w-md">
             <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Acceso Denegado</h2>
@@ -53,8 +49,3 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   return <>{children}</>;
 };
 
-// Export types and HOC from separate file to fix Fast Refresh warning
-export { withProtection, type Section, type Permission } from './protectionUtils';
-
-// Import the store
-import { useRolesStore } from '../store/rolesStore';

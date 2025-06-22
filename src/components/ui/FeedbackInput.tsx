@@ -1,13 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Input with enhanced visual feedback
  * By Cheva
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Input, InputProps } from '@/components/ui/input';
-import {Check,X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { Input, InputProps} from '@/components/ui/input';
+import {Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/lib/utils';
 
 export interface FeedbackInputProps extends Omit<InputProps, 'type'> {
   type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
@@ -23,20 +24,7 @@ export interface FeedbackInputProps extends Omit<InputProps, 'type'> {
 }
 
 export const FeedbackInput: React.FC<FeedbackInputProps> = ({
-  type = 'text',
-  validationFn,
-  validationMessage,
-  debounceMs = 500,
-  showValidationIcon = true,
-  showPasswordToggle = true,
-  onValidationChange,
-  showSearchIcon = true,
-  clearable = false,
-  onClear,
-  className,
-  onChange,
-  value,
-  ...props
+  type = 'text', validationFn, validationMessage, debounceMs = 500, showValidationIcon = true, showPasswordToggle = true, onValidationChange, showSearchIcon = true, clearable = false, onClear, className, onChange, value, ...props
 }) => {
   const [localValue, setLocalValue] = useState(value || '');
   const [isValidating, setIsValidating] = useState(false);
@@ -44,6 +32,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
+   
 
   useEffect(() => {
     if (value !== undefined) {
@@ -63,7 +52,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
       const result = await validationFn(val);
       setIsValid(result);
       onValidationChange?.(result);
-    } catch (_error) {
+    } catch {
       setIsValid(false);
       onValidationChange?.(false);
     } finally {
@@ -127,8 +116,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
 
   const inputType = type === 'password' && showPassword ? 'text' : type;
 
-  return (
-    <div className="relative">
+  return (<div className="relative">
       <div className="relative">
         <Input
           {...props}
@@ -174,8 +162,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
           </AnimatePresence>
 
           {/* Password toggle */}
-          {type === 'password' && showPasswordToggle && (
-            <button
+          {type === 'password' && showPasswordToggle && (<button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="p-1 hover:bg-gray-700 rounded transition-colors"

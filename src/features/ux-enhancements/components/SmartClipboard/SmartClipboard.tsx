@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '../../../../utils/utils';
-import { useClipboardStore } from '../../stores/clipboardStore';
-import { useClipboard } from '../../hooks/useClipboard';
-import type { SmartClipboardProps, ClipboardEntry } from '../../types';
-import {ClipboardIcon, ClockIcon, SearchIcon, TrashIcon, FilterIcon, CheckIcon, XMarkIcon, DocumentDuplicateIcon, TagIcon} from '@heroicons/react/24/outline';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '../../../../utils/utils';
+
+
+import type { SmartClipboardProps, ClipboardEntry} from '../../types';
+import { ClipboardIcon, SearchIcon, TrashIcon, CheckIcon, XMarkIcon} from '@heroicons/react/24/outline';
 
 const TYPE_COLORS = {
   precinto: 'bg-blue-500',
@@ -24,17 +24,14 @@ const TYPE_LABELS = {
 };
 
 export const SmartClipboard: React.FC<SmartClipboardProps> = ({
-  maxHistory = 50,
-  syncEnabled = true,
-  position = 'bottom-right',
-  hotkeys = true
+  maxHistory = 50, syncEnabled = true, position = 'bottom-right', hotkeys = true
 }) => {
   const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
-  const {searchQuery, selectedType, syncStatus, setSearchQuery, setSelectedType, clearHistory, removeEntry} = useClipboardStore();
   
-  const {history, isOpen, setIsOpen, copyToClipboard, pasteFromHistory} = useClipboard();
+  
+  
 
   // Position classes
   const positionClasses = {
@@ -64,6 +61,8 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   };
 
   // Focus search on open
+   
+
   useEffect(() => {
     if (isOpen && searchInputRef.current) {
       searchInputRef.current.focus();
@@ -135,8 +134,7 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
 
               {/* Type Filter */}
               <div className="flex gap-2 mt-3 overflow-x-auto">
-                {(['all', 'precinto', 'alerta', 'reporte', 'datos', 'custom'] as const).map((type) => (
-                  <button
+                {(['all', 'precinto', 'alerta', 'reporte', 'datos', 'custom'] as const).map((type) => (<button
                     key={type}
                     onClick={() => setSelectedType(type)}
                     className={cn(
@@ -160,10 +158,8 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                   <p>No hay elementos en el historial</p>
                   <p className="text-sm mt-1">Los elementos copiados aparecerán aquí</p>
                 </div>
-              ) : (
-                <div className="divide-y divide-gray-800">
-                  {history.map((entry) => (
-                    <motion.div
+              ) : (<div className="divide-y divide-gray-800">
+                  {history.map((entry) => (<motion.div
                       key={entry.id}
                       className="p-4 hover:bg-gray-800 cursor-pointer transition-colors"
                       onClick={() => handleEntryClick(entry)}

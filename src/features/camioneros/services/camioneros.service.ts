@@ -1,6 +1,6 @@
-import type { Camionero, TransitoCamionero, EstadisticasCamionero, FiltrosCamionero, MatriculaFrecuente } from '../types';
-import { transitosService } from '../../transitos/services/transitos.service';
-import { camionesService } from '../../camiones/services/camiones.service';
+import type { Camionero, TransitoCamionero, EstadisticasCamionero, FiltrosCamionero, MatriculaFrecuente} from '../types';
+import { transitosService} from '../../transitos/services/transitos.service';
+import { camionesService} from '../../camiones/services/camiones.service';
 
 class CamionerosService {
   private camioneros: Map<string, Camionero> = new Map();

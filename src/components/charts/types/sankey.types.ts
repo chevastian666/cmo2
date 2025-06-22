@@ -48,9 +48,9 @@ export interface SankeyChartProps {
   labelPosition?: 'inside' | 'outside';
   valueFormat?: (value: number) => string;
   onNodeClick?: (node: unknown, event: React.MouseEvent) => void;
-  onNodeHover?: (node: any | null, event: React.MouseEvent) => void;
+  onNodeHover?: (node: unknown | null, event: React.MouseEvent) => void;
   onLinkClick?: (link: unknown, event: React.MouseEvent) => void;
-  onLinkHover?: (link: any | null, event: React.MouseEvent) => void;
+  onLinkHover?: (link: unknown | null, event: React.MouseEvent) => void;
   className?: string;
 }
 

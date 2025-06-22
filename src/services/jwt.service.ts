@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { jwtDecode } from 'jwt-decode';
-import type { DecodedToken, TokenPair } from '@/types/jwt';
+import { jwtDecode} from 'jwt-decode';
+import type { DecodedToken, TokenPair} from '@/types/jwt';
 
 class JWTService {
   private readonly ACCESS_TOKEN_KEY = 'access_token';
@@ -50,7 +50,7 @@ class JWTService {
       if (!tokenToDecode) return null;
       
       return jwtDecode<DecodedToken>(tokenToDecode);
-    } catch (_error) {
+    } catch {
       console.error('Error decoding token:', _error);
       return null;
     }

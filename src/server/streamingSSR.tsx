@@ -2,33 +2,25 @@
  * Streaming SSR with React 18 for optimized initial load
  */
 
-import { renderToPipeableStream } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom/server';
-import { ConcurrentApp } from '../components/ConcurrentApp';
-import type { Response } from 'express';
+import { renderToPipeableStream} from 'react-dom/server';
+import { StaticRouter} from 'react-router-dom/server';
+import { ConcurrentApp} from '../components/ConcurrentApp';
+import type { Response} from 'express';
 
 interface StreamingOptions {
   bootstrapScripts?: string[];
   nonce?: string;
 }
 
-export function renderAppToStream(
-  url: string,
-  res: Response,
-  options: StreamingOptions = {}
-) {
-  const {bootstrapScripts = ['/static/js/bundle.js'], nonce} = options;
+export function renderAppToStream(url: string, res: Response, options: StreamingOptions = {}) {
+  
 
   let didError = false;
 
-  const stream = renderToPipeableStream(
-    <StaticRouter location={url}>
+  const stream = renderToPipeableStream(<StaticRouter location={url}>
       <ConcurrentApp />
-    </StaticRouter>,
-    {
-      bootstrapScripts,
-      nonce,
-      onShellReady() {
+    </StaticRouter>, {
+      bootstrapScripts, nonce, onShellReady() {
         // The content above the Suspense boundaries is ready.
         // Start streaming the response.
         res.statusCode = didError ? 500 : 200;
@@ -121,7 +113,7 @@ export function streamingSSRMiddleware(options: StreamingOptions = {}) {
 
     try {
       renderAppToStream(req.url, res, options);
-    } catch (_error) {
+    } catch {
       console.error('SSR error:', error);
       next(error);
     }

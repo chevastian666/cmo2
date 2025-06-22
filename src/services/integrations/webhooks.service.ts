@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter} from 'events';
 
 export interface WebhookConfig {
   id: string;
@@ -32,13 +32,13 @@ export interface WebhookEvent {
 export interface WebhookFilter {
   field: string;
   operator: '=' | '!=' | '>' | '<' | '>=' | '<=' | 'contains' | 'not_contains';
-  value: any;
+  value: unknown;
 }
 
 export interface WebhookPayload {
   event: string;
   timestamp: string;
-  data: any;
+  data: unknown;
   source: 'cmo' | 'trokor' | 'system';
   webhook_id: string;
   signature?: string;
@@ -125,7 +125,7 @@ class WebhooksService extends EventEmitter {
   // Event triggering
   async triggerEvent(
     eventType: WebhookEvent['type'], 
-    data: any, 
+    data: unknown, 
     source: WebhookPayload['source'] = 'cmo'
   ): Promise<void> {
     const activeWebhooks = this.getActiveWebhooks()
@@ -149,7 +149,7 @@ class WebhooksService extends EventEmitter {
   private async deliverWebhook(
     webhook: WebhookConfig,
     eventType: string,
-    data: any,
+    data: unknown,
     source: WebhookPayload['source']
   ): Promise<void> {
     const payload: WebhookPayload = {
@@ -350,7 +350,7 @@ class WebhooksService extends EventEmitter {
   }
 
   // Helper methods
-  private applyFilters(data: any, filters: WebhookFilter[]): boolean {
+  private applyFilters(data: unknown, filters: WebhookFilter[]): boolean {
     return filters.every(filter => {
       const value = this.getNestedValue(data, filter.field);
       
@@ -368,7 +368,7 @@ class WebhooksService extends EventEmitter {
     });
   }
 
-  private getNestedValue(obj: any, path: string): any {
+  private getNestedValue(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 

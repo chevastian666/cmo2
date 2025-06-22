@@ -6,9 +6,7 @@
 import React, { memo, useMemo } from 'react';
 
 // Factory for creating optimized components
-export function createOptimizedComponent<P extends object>(
-  Component: React.ComponentType<P>,
-  compareProps?: (prevProps: P, nextProps: P) => boolean
+export function createOptimizedComponent<P extends object>(Component: React.ComponentType<P>, compareProps?: (prevProps: P, nextProps: P) => boolean
 ): React.MemoExoticComponent<React.ComponentType<P>> {
   return memo(Component, compareProps);
 }
@@ -18,7 +16,10 @@ export function useOptimizedRender<T>(
   data: T,
   dependencies: React.DependencyList = []
 ): T {
-  return useMemo(() => data, dependencies);
+  return 
+   
+
+  useMemo(() => data, dependencies);
 }
 
 // Utility for component comparison
@@ -40,8 +41,7 @@ export const shallowCompare = <P extends object>(prevProps: P, nextProps: P): bo
 };
 
 // Performance measurement utilities
-export const measureRenderTime = <T extends any[]>(
-  fn: (...args: T) => any,
+export const measureRenderTime = <T extends any[]>(fn: (...args: T) => any,
   label = 'Render'
 ) => {
   return (...args: T) => {
@@ -54,9 +54,7 @@ export const measureRenderTime = <T extends any[]>(
 };
 
 // Higher order component for optimization
-export function withOptimization<P extends object>(
-  Component: React.ComponentType<P>,
-  options: {
+export function withOptimization<P extends object>(Component: React.ComponentType<P>, options: {
     compareProps?: (prevProps: P, nextProps: P) => boolean;
     debounceProps?: Array<keyof P>;
     throttleProps?: Array<keyof P>;

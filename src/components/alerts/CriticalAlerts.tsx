@@ -1,8 +1,8 @@
 import React, { useSyncExternalStore, memo } from 'react';
 import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react';
-import { cn } from '../../utils/utils';
-import { alertStore } from '../../stores/alertStore';
-import { PriorityBoundary } from '../priority/withPriority';
+import { cn} from '../../utils/utils';
+import { alertStore} from '../../stores/alertStore';
+import { PriorityBoundary} from '../priority/withPriority';
 
 interface Alert {
   id: string;
@@ -26,8 +26,7 @@ const AlertIcon: React.FC<{ type: Alert['type'] }> = memo(({ type }) => {
 });
 
 const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }> = memo(({ 
-  alert, 
-  onAcknowledge 
+  alert, onAcknowledge 
 }) => {
   const severityStyles = {
     critical: 'bg-red-900/50 border-red-600 text-red-100',
@@ -73,8 +72,7 @@ const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }>
           </div>
         </div>
         
-        {!alert.acknowledged && (
-          <button
+        {!alert.acknowledged && (<button
             onClick={() => onAcknowledge(alert.id)}
             className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 rounded transition-colors"
           >

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Search,Filter, Battery,MapPin,Calendar,X} from 'lucide-react';
-import { PrecintoStatus, PrecintoStatusText } from '../types';
-import type { PrecintoFilters as PrecintoFiltersType } from '../types';
+import {Search, Filter, Battery, MapPin, Calendar, X} from 'lucide-react';
+import { PrecintoStatusText} from '../types';
+import type { PrecintoFilters as PrecintoFiltersType} from '../types';
 
 interface PrecintoFiltersProps {
   filters: PrecintoFiltersType;
@@ -11,10 +11,7 @@ interface PrecintoFiltersProps {
 }
 
 export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
-  filters,
-  onFiltersChange,
-  empresas,
-  ubicaciones
+  filters, onFiltersChange, empresas, ubicaciones
 }) => {
   console.log('PrecintoFilters: Rendering with', { filters, empresasCount: empresas.length, ubicacionesCount: ubicaciones.length });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -30,8 +27,7 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
 
   const activeFiltersCount = Object.values(filters).filter(v => v !== undefined && v !== '').length;
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 space-y-4">
+  return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700 space-y-4">
       {/* Main search and toggle */}
       <div className="flex gap-4">
         <div className="flex-1 relative">
@@ -70,8 +66,7 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
       </div>
 
       {/* Advanced filters */}
-      {showAdvancedFilters && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-gray-700">
+      {showAdvancedFilters && (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-gray-700">
           {/* Status filter */}
           <div>
             <label className="block text-base font-medium text-gray-400 mb-2">

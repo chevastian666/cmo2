@@ -5,13 +5,10 @@
  */
 
 import React from 'react';
-import { TreemapProps } from './types';
+import { TreemapProps} from './types';
 
 export const SimpleTreemap: React.FC<TreemapProps> = ({
-  data,
-  width = 800,
-  height = 600,
-  className = ''
+  data, width = 800, height = 600, className = ''
 }) => {
   return (
     <div className={`treemap-container ${className}`}>

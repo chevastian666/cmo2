@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { VirtualizedAlertList } from '../VirtualizedAlertList';
-import {Search,Filter,AlertTriangle} from 'lucide-react';
-import type { Alert, AlertFilters } from '../types/alerts';
+import { VirtualizedAlertList} from '../VirtualizedAlertList';
+import {Search, Filter, AlertTriangle} from 'lucide-react';
+import type { Alert, AlertFilters} from '../types/alerts';
 
 // Mock data generator
 function generateMockAlerts(count: number, startId: number = 0): Alert[] {
@@ -75,8 +75,7 @@ export const VirtualizedListExample: React.FC = () => {
     console.log('Alert clicked:', alert, 'at index:', index);
   }, []);
 
-  return (
-    <div className="h-screen bg-gray-900 flex flex-col">
+  return (<div className="h-screen bg-gray-900 flex flex-col">
       {/* Header */}
       <div className="bg-gray-800 border-b border-gray-700 p-4">
         <div className="flex items-center justify-between mb-4">
@@ -108,8 +107,7 @@ export const VirtualizedListExample: React.FC = () => {
         </div>
 
         {/* Filters panel */}
-        {showFilters && (
-          <div className="mt-4 p-4 bg-gray-700 rounded-lg space-y-4">
+        {showFilters && (<div className="mt-4 p-4 bg-gray-700 rounded-lg space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Severity filter */}
               <div>

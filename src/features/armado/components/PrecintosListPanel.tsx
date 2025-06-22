@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Package, RefreshCw, Search, Battery,Clock,AlertTriangle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatTimeAgo } from '../../../utils/formatters';
+import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatTimeAgo} from '../../../utils/formatters';
 
 interface PrecintoListItem {
   nqr: string;
@@ -18,9 +18,7 @@ interface PrecintosListPanelProps {
 }
 
 export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
-  precintos,
-  onSelect,
-  onRefresh
+  precintos, onSelect, onRefresh
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -92,14 +90,12 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
               {searchTerm ? 'No se encontraron precintos' : 'No hay precintos pendientes'}
             </p>
           </div>
-        ) : (
-          <div className="divide-y divide-gray-700">
+        ) : (<div className="divide-y divide-gray-700">
             {filteredPrecintos.map((precinto) => {
               const hoursSinceReport = (Date.now() / 1000 - precinto.lastReport) / 3600;
               const hasWarnings = precinto.battery < 20 || hoursSinceReport > 1;
 
-              return (
-                <button
+              return (<button
                   key={precinto.nqr}
                   onClick={() => onSelect(precinto)}
                   className={cn(

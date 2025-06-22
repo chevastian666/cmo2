@@ -26,15 +26,15 @@ export interface APIParameter {
   type: 'string' | 'number' | 'boolean' | 'array' | 'object';
   required: boolean;
   description: string;
-  example?: any;
+  example?: unknown;
   enum?: string[];
 }
 
 export interface APIResponse {
   status: number;
   description: string;
-  example?: any;
-  schema?: any;
+  example?: unknown;
+  schema?: unknown;
 }
 
 export interface APIConfig {
@@ -69,7 +69,7 @@ export interface APIConfig {
 class RestAPIService {
   private config: APIConfig;
   private endpoints = new Map<string, APIEndpoint>();
-  private server: any = null;
+  private server: unknown = null;
   private requestStats = new Map<string, { count: number; lastReset: number }>();
 
   constructor() {
@@ -158,7 +158,7 @@ class RestAPIService {
   }
 
   // OpenAPI/Swagger specification generation
-  generateOpenAPISpec(): any {
+  generateOpenAPISpec(): unknown {
     const spec = {
       openapi: '3.0.0',
       info: {
@@ -263,7 +263,7 @@ class RestAPIService {
   }
 
   // Request handling (mock)
-  async handleRequest(path: string, method: string, params: any = {}, headers: any = {}): Promise<any> {
+  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> {
     const endpoint = this.findEndpoint(path, method);
     
     if (!endpoint) {
@@ -307,7 +307,7 @@ class RestAPIService {
   }
 
   // Data export functionality
-  async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: any = {}): Promise<string> {
+  async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: unknown = {}): Promise<string> {
     const data = await this.getExportData(filters);
     
     switch (format) {
@@ -417,7 +417,7 @@ class RestAPIService {
     });
   }
 
-  private generateSchemas(): any {
+  private generateSchemas(): unknown {
     return {
       Alert: {
         type: 'object',
@@ -455,7 +455,7 @@ class RestAPIService {
     };
   }
 
-  private generateTags(): any[] {
+  private generateTags(): unknown[] {
     const tags = new Set<string>();
     this.getEnabledEndpoints().forEach(endpoint => {
       endpoint.tags.forEach(tag => tags.add(tag));
@@ -467,7 +467,7 @@ class RestAPIService {
     }));
   }
 
-  private formatParameters(parameters: APIParameter[]): any[] {
+  private formatParameters(parameters: APIParameter[]): unknown[] {
     return parameters.map(param => ({
       name: param.name,
       in: param.in,
@@ -481,8 +481,8 @@ class RestAPIService {
     }));
   }
 
-  private formatResponses(responses: APIResponse[]): any {
-    const formatted: any = {};
+  private formatResponses(responses: APIResponse[]): unknown {
+    const formatted: unknown = {};
     responses.forEach(response => {
       formatted[response.status] = {
         description: response.description,
@@ -498,7 +498,7 @@ class RestAPIService {
     return formatted;
   }
 
-  private formatSecurity(authType: string): any[] {
+  private formatSecurity(authType: string): unknown[] {
     switch (authType) {
       case 'api_key':
         return [{ ApiKeyAuth: [] }];
@@ -515,15 +515,18 @@ class RestAPIService {
     ) || null;
   }
 
-  private checkAuthentication(authType: string, headers: any): { valid: boolean; error?: string } {
+  private checkAuthentication(authType: string, headers: unknown): { valid: boolean; error?: string } {
     switch (authType) {
-      case 'api_key':
+      case 'api_key': {
+        
         const apiKey = headers[this.config.authentication.apiKey.header.toLowerCase()];
         if (!apiKey || apiKey !== this.config.authentication.apiKey.key) {
           return { valid: false, error: 'Invalid API key' };
         }
+      }
         break;
-      case 'bearer':
+      case 'bearer': {
+        
         const authorization = headers.authorization;
         if (!authorization || !authorization.startsWith('Bearer ')) {
           return { valid: false, error: 'Invalid bearer token' };
@@ -552,7 +555,7 @@ class RestAPIService {
     return { allowed: true };
   }
 
-  private generateMockResponse(endpoint: APIEndpoint, params: any): any {
+  private generateMockResponse(endpoint: APIEndpoint, params: unknown): unknown {
     // Generate mock data based on endpoint path
     switch (endpoint.path) {
       case '/api/v1/alerts':
@@ -597,7 +600,7 @@ class RestAPIService {
     }
   }
 
-  private generateMockAlerts(count: number): any[] {
+  private generateMockAlerts(count: number): unknown[] {
     const alerts = [];
     const priorities = ['low', 'medium', 'high', 'critical'];
     const statuses = ['active', 'resolved', 'acknowledged'];
@@ -617,7 +620,7 @@ class RestAPIService {
     return alerts;
   }
 
-  private generateMockTransits(count: number): any[] {
+  private generateMockTransits(count: number): unknown[] {
     const transits = [];
     const origins = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago'];
     const destinations = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago'];
@@ -639,7 +642,7 @@ class RestAPIService {
     return transits;
   }
 
-  private generateMockPrecintos(count: number): any[] {
+  private generateMockPrecintos(count: number): unknown[] {
     const precintos = [];
     const statuses = ['active', 'inactive', 'violated'];
     
@@ -656,7 +659,7 @@ class RestAPIService {
     return precintos;
   }
 
-  private async getExportData(filters: any): Promise<any[]> {
+  private async getExportData(filters: unknown): Promise<any[]> {
     // Mock export data - in real implementation, this would fetch from database
     return [
       { id: 1, type: 'alert', data: 'Sample alert data' },
@@ -665,7 +668,7 @@ class RestAPIService {
     ];
   }
 
-  private convertToCSV(data: any[]): string {
+  private convertToCSV(data: unknown[]): string {
     if (data.length === 0) return '';
     
     const headers = Object.keys(data[0]);
@@ -682,7 +685,7 @@ class RestAPIService {
     return csvRows.join('\n');
   }
 
-  private convertToXML(data: any[]): string {
+  private convertToXML(data: unknown[]): string {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<data>\n';
     
     data.forEach(item => {

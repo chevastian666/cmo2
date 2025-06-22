@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Optimized Components with Memoization
  * High-performance components for large datasets
@@ -5,26 +6,22 @@
  */
 
 import React, { memo, useMemo, useCallback } from 'react';
-import { cn } from '@/utils/utils';
+import { cn} from '@/utils/utils';
 
 // Optimized table row with deep memo
 export const OptimizedTableRow = memo<{
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   columns: Array<{
     key: string;
     header: string;
-    render?: (value: any, row: any) => React.ReactNode;
+    render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
     width?: string;
   }>;
-  onClick?: (row: any) => void;
+  onClick?: (row: Record<string, unknown>) => void;
   selected?: boolean;
   className?: string;
 }>(({
-  data,
-  columns,
-  onClick,
-  selected = false,
-  className
+  data, columns, onClick, selected = false, className
 }) => {
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -79,13 +76,7 @@ export const OptimizedCard = memo<{
   onClick?: () => void;
   className?: string;
 }>(({
-  title,
-  value,
-  subtitle,
-  icon,
-  trend,
-  onClick,
-  className
+  title, value, subtitle, icon, trend, onClick, className
 }) => {
   return (
     <div
@@ -139,13 +130,7 @@ export const OptimizedListItem = memo<{
   onClick?: () => void;
   selected?: boolean;
 }>(({
-  primary,
-  secondary,
-  meta,
-  status,
-  actions,
-  onClick,
-  selected = false
+  primary, secondary, meta, status, actions, onClick, selected = false
 }) => {
   const statusColors = {
     active: 'bg-green-500',
@@ -200,19 +185,14 @@ OptimizedListItem.displayName = 'OptimizedListItem';
 
 // Optimized data grid cell
 export const OptimizedGridCell = memo<{
-  value: any;
+  value: unknown;
   type?: 'text' | 'number' | 'date' | 'boolean' | 'custom';
-  format?: (value: any) => string;
-  render?: (value: any) => React.ReactNode;
+  format?: (value: unknown) => string;
+  render?: (value: unknown) => React.ReactNode;
   align?: 'left' | 'center' | 'right';
   className?: string;
 }>(({
-  value,
-  type = 'text',
-  format,
-  render,
-  align = 'left',
-  className
+  value, type = 'text', format, render, align = 'left', className
 }) => {
   const formattedValue = useMemo(() => {
     if (render) return render(value);

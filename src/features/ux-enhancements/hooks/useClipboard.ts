@@ -1,16 +1,14 @@
 import {useCallback, useEffect} from 'react';
-import { useClipboardStore } from '../stores/clipboardStore';
-import { detectClipboardContent, generateSmartPaste } from '../utils/clipboardDetector';
-import type { ClipboardEntry } from '../types';
+
+import { detectClipboardContent, generateSmartPaste} from '../utils/clipboardDetector';
+import type { ClipboardEntry} from '../types';
 
 export function useClipboard() {
-  const {history, isOpen, addEntry, setIsOpen, getFilteredHistory, setSyncStatus} = useClipboardStore();
+  
 
   // Copy to clipboard with smart detection
   const copyToClipboard = useCallback(async (
-    content: string,
-    metadata?: Partial<ClipboardEntry['metadata']>
-  ) => {
+    content: string, metadata?: Partial<ClipboardEntry['metadata']>) => {
     try {
       await navigator.clipboard.writeText(content);
       
@@ -39,7 +37,7 @@ export function useClipboard() {
       
       // Show notification
       showNotification('Copiado al portapapeles', 'success');
-    } catch (_error) {
+    } catch {
       console.error('Error copying to clipboard:', _error);
       showNotification('Error al copiar', 'error');
     }
@@ -72,7 +70,7 @@ export function useClipboard() {
       });
       
       return formattedContent;
-    } catch (_error) {
+    } catch {
       console.error('Error pasting from clipboard:', _error);
       throw _error;
     }
@@ -80,9 +78,7 @@ export function useClipboard() {
 
   // Paste specific entry from history
   const pasteFromHistory = useCallback(async (
-    entryId: string,
-    targetContext: 'form' | 'search' | 'report' | 'message' = 'form'
-  ) => {
+    entryId: string, targetContext: 'form' | 'search' | 'report' | 'message' = 'form') => {
     const entry = history.find(e => e.id === entryId);
     if (!entry) return;
     
@@ -92,14 +88,17 @@ export function useClipboard() {
       await navigator.clipboard.writeText(content);
       showNotification('Pegado desde historial', 'success');
       return content;
-    } catch (_error) {
+    } catch {
       console.error('Error pasting from history:', _error);
       showNotification('Error al pegar', 'error');
     }
   }, [history]);
 
   // Listen for clipboard changes (experimental API)
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!('clipboard' in navigator) || !('read' in navigator.clipboard)) {
       return;
     }
@@ -133,7 +132,7 @@ export function useClipboard() {
             }
           }
         }
-      } catch (_error) {
+      } catch {
         // Permission denied or API not available
         console.debug('Clipboard auto-detection not available');
       }
@@ -147,7 +146,10 @@ export function useClipboard() {
   }, [isOpen, history, addEntry]);
 
   // Keyboard shortcuts
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd/Ctrl + Shift + V to open clipboard panel
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'v') {

@@ -1,12 +1,12 @@
 import React from 'react';
-import {AlertCircle,AlertTriangle, Shield, Battery,MapPin,Thermometer,Radio,Package} from 'lucide-react';
-import { useAlertas } from '../../../store/hooks';
-import { formatDateTime } from '../../../utils/formatters';
-import { cn } from '../../../utils/utils';
-import type { Alerta } from '../../../types';
+import {AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react';
+
+import { formatDateTime} from '../../../utils/formatters';
+import { cn} from '../../../utils/utils';
+import type { Alerta} from '../../../types';
 
 export const AlertasView: React.FC = () => {
-  const {alertas, loading, filter, actions} = useAlertas();
+  
   
   const getIcon = (tipo: Alerta['tipo']) => {
     switch (tipo) {
@@ -53,8 +53,7 @@ export const AlertasView: React.FC = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white">Centro de Alertas</h2>
         <p className="text-gray-400 mt-1">Gestión completa de todas las alertas del sistema</p>
@@ -231,8 +230,7 @@ export const AlertasView: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {!alerta.atendida && (
-                      <button
+                    {!alerta.atendida && (<button
                         onClick={() => actions.atenderAlerta(alerta.id)}
                         className="text-sm text-blue-400 hover:text-blue-300"
                       >

@@ -1,8 +1,9 @@
+ 
 import React, { useState, useEffect, useMemo } from 'react';
-import { cn } from '../../utils/utils';
-import { StatusBadge } from './StatusBadge';
-import { EmptyState } from './EmptyState';
-import {AlertTriangle,CheckCircle, Info, Bell,BellOff, ChevronDown, ChevronRight} from 'lucide-react';
+import { cn} from '../../utils/utils';
+import { StatusBadge} from './StatusBadge';
+import { EmptyState} from './EmptyState';
+import {AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
@@ -43,25 +44,17 @@ interface AlertGroup {
 }
 
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({
-  alerts,
-  className,
-  maxHeight = '400px',
-  onAlertClick,
-  onAlertAcknowledge,
-  showHeader = true,
-  title = 'Alertas Activas',
-  emptyMessage = 'No hay alertas activas',
-  variant = 'default',
-  groupByPriority = true,
-  enableSound = false,
-  enableVisualPulse = false
+  alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title = 'Alertas Activas', emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
 }) => {
   const [newAlertIds, setNewAlertIds] = useState<Set<string>>(new Set());
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
   const [previousAlertIds, setPreviousAlertIds] = useState<Set<string>>(new Set());
 
   // Detectar nuevas alertas
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     const currentAlertIds = new Set(alerts.map(a => a.id));
     const newIds = new Set<string>();
 
@@ -94,7 +87,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             const audio = new Audio('/sounds/alert.mp3');
             audio.volume = 0.5;
             audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e));
-          } catch (_e) {
+          } catch (e) {
             console.log('Error al crear audio:', e);
           }
         }
@@ -264,8 +257,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           </div>
           
           {/* Botón de marcar como atendida */}
-          {alert.status === 'active' && onAlertAcknowledge && (
-            <button
+          {alert.status === 'active' && onAlertAcknowledge && (<button
               onClick={(e) => {
                 e.stopPropagation();
                 onAlertAcknowledge(alert.id);
@@ -330,10 +322,8 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             icon="alert"
             className="py-8"
           />
-        ) : groupByPriority && groupedAlerts ? (
-          <div className="divide-y divide-gray-700">
-            {groupedAlerts.map((group) => (
-              <div key={group.severity} className="p-2">
+        ) : groupByPriority && groupedAlerts ? (<div className="divide-y divide-gray-700">
+            {groupedAlerts.map((group) => (<div key={group.severity} className="p-2">
                 <button
                   onClick={() => toggleGroup(group.severity)}
                   className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 rounded-lg transition-colors"

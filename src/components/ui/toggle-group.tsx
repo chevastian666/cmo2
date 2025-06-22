@@ -1,3 +1,4 @@
+ 
 /**
  * Toggle Group Component
  * Group of toggle buttons for selection
@@ -5,7 +6,7 @@
  */
 
 import React, { createContext, useContext } from 'react';
-import { cn } from '@/utils/utils';
+import { cn} from '@/utils/utils';
 
 interface ToggleGroupContextValue {
   value: string;
@@ -22,10 +23,7 @@ interface ToggleGroupProps {
 }
 
 export const ToggleGroup: React.FC<ToggleGroupProps> = ({
-  value,
-  onValueChange,
-  className,
-  children
+  value, onValueChange, className, children
 }) => {
   return (
     <ToggleGroupContext.Provider value={{ value, onValueChange }}>
@@ -44,21 +42,17 @@ interface ToggleGroupItemProps {
 }
 
 export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
-  value,
-  className,
-  children,
-  disabled = false
+  value, className, children, disabled = false
 }) => {
   const context = useContext(ToggleGroupContext);
   if (!context) {
     throw new Error('ToggleGroupItem must be used within ToggleGroup');
   }
 
-  const {value: selectedValue, onValueChange} = context;
+  const { value: selectedValue } = context;
   const isSelected = selectedValue === value;
 
-  return (
-    <button
+  return (<button
       type="button"
       disabled={disabled}
       onClick={() => !disabled && onValueChange(value)}

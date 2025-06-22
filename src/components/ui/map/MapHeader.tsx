@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Map,Filter, Layers, Search,X, Building2,Truck} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { DESPACHANTES } from '../../../constants/locations';
+import {Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { DESPACHANTES} from '../../../constants/locations';
 
 export interface MapFilters {
   searchTerm: string;
@@ -105,8 +105,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
         </div>
 
         {/* Filters Panel */}
-        {showFilters && (
-          <div className="mt-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+        {showFilters && (<div className="mt-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {/* Despachante Filter */}
               <div>

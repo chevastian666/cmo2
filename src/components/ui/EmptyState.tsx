@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 type EmptyStateIcon = 'default' | 'search' | 'folder' | 'alert' | 'data' | 'error';
 
@@ -16,12 +16,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  title,
-  message,
-  icon = 'default',
-  action,
-  className,
-  size = 'md'
+  title, message, icon = 'default', action, className, size = 'md'
 }) => {
   const sizeStyles = {
     sm: {

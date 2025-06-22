@@ -1,12 +1,12 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { PriorityProvider } from './priority/PriorityProvider';
-import { CriticalAlerts } from './alerts/CriticalAlerts';
-import { PrecintsGrid } from './dashboard/PrecintsGrid';
-import { MapView } from './map/MapView';
-import { PerformanceMonitor, ProfiledComponent } from './dashboard/PerformanceMonitor';
-import { CriticalAlertsSkeleton } from './alerts/AlertsSkeleton';
-import { DashboardSkeleton } from './dashboard/DashboardSkeleton';
-import { MapSkeleton } from './map/MapSkeleton';
+import { PriorityProvider} from './priority/PriorityProvider';
+import { CriticalAlerts} from './alerts/CriticalAlerts';
+import { PrecintsGrid} from './dashboard/PrecintsGrid';
+import { MapView} from './map/MapView';
+import { PerformanceMonitor, ProfiledComponent} from './dashboard/PerformanceMonitor';
+import { CriticalAlertsSkeleton} from './alerts/AlertsSkeleton';
+import { DashboardSkeleton} from './dashboard/DashboardSkeleton';
+import { MapSkeleton} from './map/MapSkeleton';
 
 // Mock data generators
 const generateMockPrecintos = (count: number) => {
@@ -41,6 +41,8 @@ export const ConcurrentApp: React.FC = () => {
   const [showPerformance, setShowPerformance] = useState(true);
 
   // Simulate real-time updates
+   
+
   useEffect(() => {
     const interval = setInterval(() => {
       // Update random precintos
@@ -80,8 +82,7 @@ export const ConcurrentApp: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <PriorityProvider enableMetrics>
+  return (<PriorityProvider enableMetrics>
       <div className="min-h-screen bg-gray-950 text-gray-100 p-4">
         {/* Header */}
         <header className="mb-6">

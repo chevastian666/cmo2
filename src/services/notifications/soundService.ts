@@ -4,8 +4,8 @@
  * By Cheva
  */
 
-import type { NotificationSound } from '../../types/notifications';
-import { DEFAULT_SOUNDS } from '../../types/notifications';
+import type { NotificationSound} from '../../types/notifications';
+import { DEFAULT_SOUNDS} from '../../types/notifications';
 
 export class SoundService {
   private audioContext: AudioContext | null = null;
@@ -14,7 +14,7 @@ export class SoundService {
   
   initialize(): void {
     try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      this.audioContext = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
       this.preloadDefaultSounds();
     } catch (error) {
       console.warn('Web Audio API not supported, falling back to HTML5 Audio:', error);
@@ -50,10 +50,10 @@ export class SoundService {
    * Stop all currently playing sounds
    */
   stopAllSounds(): void {
-    this.currentlyPlaying.forEach((source, url) => {
+    this.currentlyPlaying.forEach((source) => {
       try {
         source.stop();
-      } catch (error) {
+      } catch {
         // Sound may have already stopped
       }
     });

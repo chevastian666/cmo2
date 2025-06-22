@@ -1,7 +1,7 @@
 import React from 'react';
-import {Area, AreaChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, } from 'recharts';
-import { format } from 'date-fns';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle, } from '@/components/ui/card';
+import { Area, AreaChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, } from 'recharts';
+import { format} from 'date-fns';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle, } from '@/components/ui/card';
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart';
 
 interface NetworkChartProps {
@@ -16,10 +16,7 @@ interface NetworkChartProps {
 }
 
 export const NetworkChartV2: React.FC<NetworkChartProps> = ({
-  data,
-  title,
-  color = '#3B82F6',
-  type = 'line'
+  data, title, color = '#3B82F6', type = 'line'
 }) => {
   // Determine which field to use
   const dataKey = data[0]?.cantidad !== undefined ? "cantidad" : "value";
@@ -38,8 +35,7 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
     fullDate: format(new Date(item.timestamp * 1000), 'PPpp'),
   }));
 
-  return (
-    <Card className="bg-gray-800 border-gray-700">
+  return (<Card className="bg-gray-800 border-gray-700">
       <CardHeader>
         <CardTitle className="text-white">{title}</CardTitle>
         <CardDescription className="text-gray-400">
@@ -53,9 +49,7 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
               <AreaChart
                 data={formattedData}
                 margin={{
-                  left: 12,
-                  right: 12,
-                }}
+                  left: 12, right: 12, }}
               >
                 <XAxis
                   dataKey="time"
@@ -118,13 +112,10 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
                   strokeWidth={2}
                 />
               </AreaChart>
-            ) : (
-              <LineChart
+            ) : (<LineChart
                 data={formattedData}
                 margin={{
-                  left: 12,
-                  right: 12,
-                }}
+                  left: 12, right: 12, }}
               >
                 <XAxis
                   dataKey="time"

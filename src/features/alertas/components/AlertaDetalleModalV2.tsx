@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import {User,MessageSquare,CheckCircle,AlertTriangle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package, Navigation, Pause, Zap,X} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
-import type { AlertaExtendida, Usuario, ComentarioAlerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { usuariosService } from '../../../services/usuarios.service';
+import { User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield, Battery, Radio, Package, Navigation, Pause, Zap, X} from 'lucide-react';
+import { cn} from '@/lib/utils';
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
+import type { AlertaExtendida, Usuario} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { usuariosService} from '../../../services/usuarios.service';
 
 // shadcn/ui components
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue, } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import {Card, CardContent,CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+import { Textarea} from '@/components/ui/textarea';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
+import { Badge} from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card';
 
 interface AlertaDetalleModalProps {
   alerta: AlertaExtendida;
@@ -32,12 +27,7 @@ interface AlertaDetalleModalProps {
 }
 
 export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onAsignar,
-  onComentar,
-  onResolver
+  alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null);
@@ -49,6 +39,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   const [tipoResolucion, setTipoResolucion] = useState('resuelta');
   const [descripcionResolucion, setDescripcionResolucion] = useState('');
   const [accionesTomadas, setAccionesTomadas] = useState<string[]>(['']);
+   
 
   useEffect(() => {
     if (isOpen) {
@@ -278,8 +269,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                         </Button>
                       </div>
                     </div>
-                  ) : (
-                    <Button
+                  ) : (<Button
                       className="w-full"
                       onClick={() => setMostrarAsignacion(true)}
                     >
@@ -300,8 +290,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                 <div className="space-y-3 max-h-60 overflow-y-auto">
                   {alerta.comentarios.length === 0 ? (
                     <p className="text-muted-foreground">No hay comentarios aún</p>
-                  ) : (
-                    alerta.comentarios.map((comentario) => (
+                  ) : (alerta.comentarios.map((comentario) => (
                       <div key={comentario.id} className="bg-muted rounded-lg p-3">
                         <div className="flex items-start space-x-3">
                           <img
@@ -329,8 +318,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                 </div>
                 
                 {/* Add Comment */}
-                {!alerta.resolucion && (
-                  <div className="mt-4 flex space-x-2">
+                {!alerta.resolucion && (<div className="mt-4 flex space-x-2">
                     <Input
                       type="text"
                       value={nuevoComentario}
@@ -401,8 +389,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     <p className="text-sm">
                       {alerta.resolucion.descripcion}
                     </p>
-                    {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (
-                      <div className="mt-3">
+                    {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (<div className="mt-3">
                         <p className="text-sm text-muted-foreground mb-1">Acciones tomadas:</p>
                         <ul className="list-disc list-inside text-sm space-y-1">
                           {alerta.resolucion.accionesTomadas.map((accion, i) => (
@@ -422,8 +409,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                   </div>
                 </CardContent>
               </Card>
-            ) : !mostrarResolucion && alerta.asignacion && (
-              <Button
+            ) : !mostrarResolucion && alerta.asignacion && (<Button
                 className="w-full"
                 variant="default"
                 onClick={() => setMostrarResolucion(true)}
@@ -434,8 +420,7 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
             )}
 
             {/* Resolution Form */}
-            {mostrarResolucion && (
-              <Card>
+            {mostrarResolucion && (<Card>
                 <CardHeader>
                   <CardTitle>Resolver Alerta</CardTitle>
                 </CardHeader>
@@ -469,15 +454,13 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                   </div>
                   <div className="space-y-2">
                     <Label>Acciones tomadas</Label>
-                    {accionesTomadas.map((accion, index) => (
-                      <div key={index} className="flex space-x-2">
+                    {accionesTomadas.map((accion, index) => (<div key={index} className="flex space-x-2">
                         <Input
                           value={accion}
                           onChange={(e) => actualizarAccion(index, e.target.value)}
                           placeholder="Acción tomada..."
                         />
-                        {accionesTomadas.length > 1 && (
-                          <Button
+                        {accionesTomadas.length > 1 && (<Button
                             size="icon"
                             variant="ghost"
                             onClick={() => eliminarAccion(index)}

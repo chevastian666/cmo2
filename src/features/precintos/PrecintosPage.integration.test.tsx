@@ -2,13 +2,13 @@
  * PrecintosPage Integration Tests
  * By Cheva
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor, within } from '@/test/utils/test-utils';
+import { describe, it, expect, beforeEach, vi} from 'vitest';
+import { render, screen, waitFor, within} from '@/test/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { PrecintosPage } from './PrecintosPage';
-import { server } from '@/test/mocks/server';
-import { http, HttpResponse } from 'msw';
-import { createMockPrecinto } from '@/test/utils/test-utils';
+import { PrecintosPage} from './PrecintosPage';
+import { server} from '@/test/mocks/server';
+import { http, HttpResponse} from 'msw';
+import { createMockPrecinto} from '@/test/utils/test-utils';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -40,8 +40,7 @@ describe('PrecintosPage Integration', () => {
       createMockPrecinto({ id: '3', codigo: 'PRE-003', empresa: 'Empresa A' }),
     ];
 
-    server.use(
-      http.get(`${API_URL}/precintos`, () => {
+    server.use(http.get(`${API_URL}/precintos`, () => {
         return HttpResponse.json({
           data: mockPrecintos,
           pagination: { page: 1, limit: 10, total: 3, totalPages: 1 },
@@ -100,8 +99,7 @@ describe('PrecintosPage Integration', () => {
 
   it('handles pagination correctly', async () => {
     // Mock paginated response
-    server.use(
-      http.get(`${API_URL}/precintos`, ({ request }) => {
+    server.use(http.get(`${API_URL}/precintos`, ({ request }) => {
         const url = new URL(request.url);
         const page = parseInt(url.searchParams.get('page') || '1');
         
@@ -180,8 +178,7 @@ describe('PrecintosPage Integration', () => {
       estado: 'inactivo' 
     });
 
-    server.use(
-      http.get(`${API_URL}/precintos`, () => {
+    server.use(http.get(`${API_URL}/precintos`, () => {
         return HttpResponse.json({
           data: [mockPrecinto],
           pagination: { page: 1, limit: 10, total: 1, totalPages: 1 },
@@ -217,8 +214,7 @@ describe('PrecintosPage Integration', () => {
   });
 
   it('handles API errors gracefully', async () => {
-    server.use(
-      http.get(`${API_URL}/precintos`, () => {
+    server.use(http.get(`${API_URL}/precintos`, () => {
         return HttpResponse.json(
           { error: 'Server error' },
           { status: 500 }
@@ -250,8 +246,7 @@ describe('PrecintosPage Integration', () => {
     await user.click(exportButton);
     
     // Mock successful export
-    server.use(
-      http.get(`${API_URL}/precintos/export`, () => {
+    server.use(http.get(`${API_URL}/precintos/export`, () => {
         return new HttpResponse('csv data', {
           headers: {
             'Content-Type': 'text/csv',
@@ -278,8 +273,7 @@ describe('PrecintosPage Integration', () => {
       descripcion: 'Descripción original'
     });
 
-    server.use(
-      http.get(`${API_URL}/precintos`, () => {
+    server.use(http.get(`${API_URL}/precintos`, () => {
         return HttpResponse.json({
           data: [mockPrecinto],
           pagination: { page: 1, limit: 10, total: 1, totalPages: 1 },
@@ -325,8 +319,7 @@ describe('PrecintosPage Integration', () => {
       temperatura: 25.5
     });
 
-    server.use(
-      http.get(`${API_URL}/precintos`, () => {
+    server.use(http.get(`${API_URL}/precintos`, () => {
         return HttpResponse.json({
           data: [mockPrecinto],
           pagination: { page: 1, limit: 10, total: 1, totalPages: 1 },

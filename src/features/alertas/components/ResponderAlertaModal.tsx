@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {X, Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { Alerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { notificationService } from '../../../services/shared/notification.service';
+import { cn} from '../../../utils/utils';
+import type { Alerta} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { notificationService} from '../../../services/shared/notification.service';
 
 interface ResponderAlertaModalProps {
   alerta: Alerta | null;
@@ -93,15 +93,13 @@ const COMANDOS_RAPIDOS = [
 ];
 
 export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onRespond
+  alerta, isOpen, onClose, onRespond
 }) => {
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<number>(0);
   const [observaciones, setObservaciones] = useState('');
   const [loading, setLoading] = useState(false);
   const [sendingCommand, setSendingCommand] = useState<string | null>(null);
+   
 
   useEffect(() => {
     if (!isOpen) {
@@ -111,6 +109,8 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
   }, [isOpen]);
 
   // Handle ESC key to close modal
+   
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -141,7 +141,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
       setLoading(true);
       await onRespond(alerta.id, motivoSeleccionado, motivoDescripcion, observaciones);
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al responder la alerta');
     } finally {
       setLoading(false);
@@ -156,7 +156,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`);
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al enviar el comando');
     } finally {
       setSendingCommand(null);
@@ -167,8 +167,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
 
   const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || [];
 
-  return (
-    <>
+  return (<>
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 transition-opacity"
@@ -251,8 +250,7 @@ export const ResponderAlertaModal: React.FC<ResponderAlertaModalProps> = ({
                 <div className="grid grid-cols-2 gap-2">
                   {COMANDOS_RAPIDOS.map((comando) => {
                     const Icon = comando.icon;
-                    return (
-                      <button
+                    return (<button
                         key={comando.id}
                         type="button"
                         onClick={() => handleSendCommand(comando.id)}

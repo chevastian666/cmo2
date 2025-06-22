@@ -1,9 +1,9 @@
 import React from 'react';
-import {Clock,MapPin} from 'lucide-react';
-import { EmptyState, LoadingState } from '../../../components/ui';
-import { NovedadCard } from './NovedadCard';
-import { cn } from '../../../utils/utils';
-import type { Novedad } from '../types';
+import { MapPin} from 'lucide-react';
+import { EmptyState, LoadingState} from '../../../components/ui';
+import { NovedadCard} from './NovedadCard';
+import { cn} from '../../../utils/utils';
+import type { Novedad} from '../types';
 
 interface TimelineNovedadesProps {
   novedades: Novedad[];
@@ -18,15 +18,7 @@ interface TimelineNovedadesProps {
 }
 
 export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
-  novedades,
-  loading = false,
-  onMarcarResuelta,
-  onAgregarSeguimiento,
-  onEditar,
-  onVerDetalles,
-  canEdit = false,
-  userId,
-  className
+  novedades, loading = false, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, userId, className
 }) => {
   if (loading) {
     return <LoadingState variant="skeleton" rows={4} />;
@@ -58,8 +50,7 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
 
   return (
     <div className={cn("space-y-6", className)}>
-      {puntosOrdenados.map(([punto, novedadesPunto]) => (
-        <div key={punto} className="space-y-4">
+      {puntosOrdenados.map(([punto, novedadesPunto]) => (<div key={punto} className="space-y-4">
           {/* Header del punto */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-white">

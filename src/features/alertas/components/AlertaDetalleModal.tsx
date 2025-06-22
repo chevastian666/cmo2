@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {X,User,MessageSquare,CheckCircle,AlertTriangle,Clock,MapPin, Shield, Battery,Radio,Thermometer,Package, Navigation, Pause, Zap} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatDateTime, formatTimeAgo } from '../../../utils/formatters';
-import type { AlertaExtendida, Usuario, ComentarioAlerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { usuariosService } from '../../../services/usuarios.service';
+import { X, User, MessageSquare, CheckCircle, AlertTriangle, Clock, Shield, Battery, Radio, Package, Navigation, Pause, Zap} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
+import type { AlertaExtendida, Usuario} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { usuariosService} from '../../../services/usuarios.service';
 
 interface AlertaDetalleModalProps {
   alerta: AlertaExtendida;
@@ -16,12 +16,7 @@ interface AlertaDetalleModalProps {
 }
 
 export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
-  alerta,
-  isOpen,
-  onClose,
-  onAsignar,
-  onComentar,
-  onResolver
+  alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null);
@@ -33,6 +28,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   const [tipoResolucion, setTipoResolucion] = useState('resuelta');
   const [descripcionResolucion, setDescripcionResolucion] = useState('');
   const [accionesTomadas, setAccionesTomadas] = useState<string[]>(['']);
+   
 
   useEffect(() => {
     if (isOpen) {
@@ -232,8 +228,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       </p>
                     )}
                   </div>
-                ) : !alerta.resolucion && (
-                  <div className="bg-gray-900 rounded-lg p-4">
+                ) : !alerta.resolucion && (<div className="bg-gray-900 rounded-lg p-4">
                     {mostrarAsignacion ? (
                       <div className="space-y-4">
                         <h4 className="text-lg font-medium text-white">Asignar a Usuario</h4>
@@ -272,8 +267,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                           </button>
                         </div>
                       </div>
-                    ) : (
-                      <button
+                    ) : (<button
                         onClick={() => setMostrarAsignacion(true)}
                         className="w-full px-4 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2"
                       >
@@ -290,8 +284,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   <div className="space-y-3 max-h-60 overflow-y-auto">
                     {alerta.comentarios.length === 0 ? (
                       <p className="text-gray-400 text-base">No hay comentarios aún</p>
-                    ) : (
-                      alerta.comentarios.map((comentario) => (
+                    ) : (alerta.comentarios.map((comentario) => (
                         <div key={comentario.id} className="bg-gray-800 rounded-lg p-3">
                           <div className="flex items-start space-x-3">
                             <img
@@ -319,8 +312,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   </div>
                   
                   {/* Add Comment */}
-                  {!alerta.resolucion && (
-                    <div className="mt-4 flex space-x-2">
+                  {!alerta.resolucion && (<div className="mt-4 flex space-x-2">
                       <input
                         type="text"
                         value={nuevoComentario}
@@ -383,8 +375,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       <p className="text-base text-gray-300">
                         {alerta.resolucion.descripcion}
                       </p>
-                      {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (
-                        <div className="mt-3">
+                      {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (<div className="mt-3">
                           <p className="text-sm text-gray-400 mb-1">Acciones tomadas:</p>
                           <ul className="list-disc list-inside text-base text-gray-300 space-y-1">
                             {alerta.resolucion.accionesTomadas.map((accion, i) => (
@@ -403,8 +394,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       </div>
                     </div>
                   </div>
-                ) : !mostrarResolucion && alerta.asignacion && (
-                  <button
+                ) : !mostrarResolucion && alerta.asignacion && (<button
                     onClick={() => setMostrarResolucion(true)}
                     className="w-full px-4 py-2 bg-green-600 text-base text-white rounded-md hover:bg-green-700 flex items-center justify-center space-x-2"
                   >
@@ -414,8 +404,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                 )}
 
                 {/* Resolution Form */}
-                {mostrarResolucion && (
-                  <div className="bg-gray-900 rounded-lg p-4 space-y-4">
+                {mostrarResolucion && (<div className="bg-gray-900 rounded-lg p-4 space-y-4">
                     <h4 className="text-lg font-medium text-white">Resolver Alerta</h4>
                     <select
                       value={tipoResolucion}
@@ -436,8 +425,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                     />
                     <div>
                       <p className="text-base text-gray-400 mb-2">Acciones tomadas:</p>
-                      {accionesTomadas.map((accion, index) => (
-                        <div key={index} className="flex space-x-2 mb-2">
+                      {accionesTomadas.map((accion, index) => (<div key={index} className="flex space-x-2 mb-2">
                           <input
                             type="text"
                             value={accion}
@@ -445,8 +433,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                             placeholder="Acción tomada..."
                             className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-3 py-1 text-white text-base"
                           />
-                          {accionesTomadas.length > 1 && (
-                            <button
+                          {accionesTomadas.length > 1 && (<button
                               onClick={() => eliminarAccion(index)}
                               className="text-red-400 hover:text-red-300"
                             >

@@ -1,7 +1,8 @@
+ 
 import React, { memo } from 'react';
-import {Check,X, Lock} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { Permission } from '../../../types/roles';
+import { Check, Lock} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { Permission} from '../../../types/roles';
 
 interface PermissionCheckboxProps {
   checked: boolean;
@@ -14,13 +15,7 @@ interface PermissionCheckboxProps {
 }
 
 export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
-  checked,
-  onChange,
-  permission,
-  disabled = false,
-  loading = false,
-  showLabel = false,
-  size = 'md'
+  checked, onChange, permission, disabled = false, loading = false, showLabel = false, size = 'md'
 }) => {
   const sizeClasses = {
     sm: 'w-5 h-5',
@@ -106,11 +101,7 @@ interface BulkPermissionCheckboxProps {
 }
 
 export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = memo(({
-  checked,
-  indeterminate = false,
-  onChange,
-  disabled = false,
-  label
+  checked, indeterminate = false, onChange, disabled = false, label
 }) => {
   const handleClick = () => {
     if (!disabled) {

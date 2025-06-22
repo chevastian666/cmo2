@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import {Truck,User,Building,MapPin,FileText,Phone,Hash,Package,CreditCard, Globe, Home,Container} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { ORIGENES_DESTINOS } from '../../../constants/locations';
+import { Truck, User, Building, MapPin, FileText, Phone, Package, Globe, Home, Container} from 'lucide-react';
+import { cn} from '../../../utils/utils';
 
 // Empresas con RUT (from original system)
 const EMPRESAS = [
@@ -157,6 +156,8 @@ interface ArmFormProps {
 
 export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabled = false, precintoId }) => {
   // Auto-complete precinto ID when provided
+   
+
   useEffect(() => {
     if (precintoId && data.precintoId !== precintoId) {
       onChange('precintoId', precintoId);
@@ -164,6 +165,8 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
   }, [precintoId]);
 
   // Auto-complete RUT when empresa is selected
+   
+
   useEffect(() => {
     if (data.empresa) {
       const empresa = EMPRESAS.find(e => e.nombre === data.empresa);
@@ -174,6 +177,8 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
   }, [data.empresa]);
 
   // Auto-complete empresa when RUT is entered
+   
+
   useEffect(() => {
     if (data.rutEmpresa && data.rutEmpresa.length >= 11) {
       const empresa = EMPRESAS.find(e => e.rut === data.rutEmpresa);

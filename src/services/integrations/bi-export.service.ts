@@ -98,7 +98,7 @@ export interface BIDataMapping {
   data_type: 'string' | 'number' | 'date' | 'boolean' | 'json';
   transformation?: {
     type: 'format' | 'calculation' | 'lookup' | 'aggregation';
-    config: any;
+    config: unknown;
   };
   required: boolean;
 }
@@ -106,7 +106,7 @@ export interface BIDataMapping {
 export interface BIDataFilter {
   field: string;
   operator: '=' | '!=' | '>' | '<' | '>=' | '<=' | 'in' | 'not_in' | 'contains';
-  value: any;
+  value: unknown;
   description: string;
 }
 
@@ -131,7 +131,7 @@ export interface BIExportResult {
   records_exported: number;
   export_time: number;
   error?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 class BIExportService {
@@ -352,32 +352,38 @@ class BIExportService {
   }
 
   // BI Tool specific exports
-  private async exportToBITool(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToBITool(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     switch (connection.type) {
       case 'tableau':
         await this.exportToTableau(connection, data, dataset);
+      }
         break;
       case 'powerbi':
         await this.exportToPowerBI(connection, data, dataset);
+      }
         break;
       case 'qlik':
         await this.exportToQlik(connection, data, dataset);
+      }
         break;
       case 'looker':
         await this.exportToLooker(connection, data, dataset);
+      }
         break;
       case 'metabase':
         await this.exportToMetabase(connection, data, dataset);
+      }
         break;
       case 'generic':
         await this.exportToGeneric(connection, data, dataset);
+      }
         break;
       default:
         throw new Error(`Unsupported BI tool: ${connection.type}`);
     }
   }
 
-  private async exportToTableau(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToTableau(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.tableau!;
     
     // Mock implementation - in real scenario, use Tableau REST API
@@ -393,7 +399,7 @@ class BIExportService {
     // 4. Refresh extracts if needed
   }
 
-  private async exportToPowerBI(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToPowerBI(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.powerbi!;
     
     console.log(`Exporting ${data.length} records to Power BI workspace: ${config.workspace_id}`);
@@ -406,7 +412,7 @@ class BIExportService {
     // 3. Trigger dataset refresh
   }
 
-  private async exportToQlik(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToQlik(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.qlik!;
     
     console.log(`Exporting ${data.length} records to QlikSense app: ${config.app_id}`);
@@ -419,7 +425,7 @@ class BIExportService {
     // 3. Create or update data model
   }
 
-  private async exportToLooker(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToLooker(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.looker!;
     
     console.log(`Exporting ${data.length} records to Looker: ${config.base_url}`);
@@ -432,7 +438,7 @@ class BIExportService {
     // 3. Upload data to database
   }
 
-  private async exportToMetabase(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToMetabase(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.metabase!;
     
     console.log(`Exporting ${data.length} records to Metabase: ${config.server_url}`);
@@ -445,19 +451,22 @@ class BIExportService {
     // 3. Sync database schema if needed
   }
 
-  private async exportToGeneric(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToGeneric(connection: BIConnection, data: unknown[], dataset: BIDataset): Promise<void> {
     const config = connection.config.generic!;
     
     const headers = { ...config.headers };
     
     // Add authentication headers
     switch (config.auth_type) {
-      case 'basic':
+      case 'basic': {
+        
         const credentials = btoa(`${config.auth_config.username}:${config.auth_config.password}`);
         headers['Authorization'] = `Basic ${credentials}`;
+      }
         break;
       case 'bearer':
         headers['Authorization'] = `Bearer ${config.auth_config.token}`;
+      }
         break;
       case 'api_key':
         headers[config.auth_config.header] = config.auth_config.key;
@@ -513,9 +522,9 @@ class BIExportService {
     return filteredData;
   }
 
-  private transformData(data: any[], mappings: BIDataMapping[]): any[] {
+  private transformData(data: unknown[], mappings: BIDataMapping[]): unknown[] {
     return data.map(record => {
-      const transformed: any = {};
+      const transformed: unknown = {};
       
       mappings.forEach(mapping => {
         let value = record[mapping.source_field];
@@ -535,7 +544,7 @@ class BIExportService {
     });
   }
 
-  private applyFilters(data: any[], filters: BIDataFilter[]): any[] {
+  private applyFilters(data: unknown[], filters: BIDataFilter[]): unknown[] {
     return data.filter(record => {
       return filters.every(filter => {
         const value = record[filter.field];
@@ -556,7 +565,7 @@ class BIExportService {
     });
   }
 
-  private applyTransformation(value: any, transformation: any): any {
+  private applyTransformation(value: unknown, transformation: unknown): unknown {
     switch (transformation.type) {
       case 'format':
         if (transformation.config.type === 'date') {
@@ -571,7 +580,8 @@ class BIExportService {
         }
         return value;
       
-      case 'lookup':
+      case 'lookup': {
+        
         const lookup = transformation.config.mapping;
         return lookup[value] || value;
       
@@ -580,7 +590,7 @@ class BIExportService {
     }
   }
 
-  private convertDataType(value: any, targetType: string): any {
+  private convertDataType(value: unknown, targetType: string): unknown {
     switch (targetType) {
       case 'string':
         return String(value);
@@ -615,19 +625,19 @@ class BIExportService {
     }
   }
 
-  private async testTableauConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testTableauConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
     // Mock test - in real implementation, try to sign in to Tableau Server
     await this.simulateAPICall(500 + Math.random() * 1000);
     return { success: true };
   }
 
-  private async testPowerBIConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testPowerBIConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
     // Mock test - in real implementation, try to get OAuth token
     await this.simulateAPICall(400 + Math.random() * 800);
     return { success: true };
   }
 
-  private async testGenericConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testGenericConnection(config: unknown): Promise<{ success: boolean; error?: string }> {
     try {
       const response = await fetch(config.endpoint_url, {
         method: 'HEAD',
@@ -650,15 +660,19 @@ class BIExportService {
     switch (schedule.frequency) {
       case 'hourly':
         interval = 60 * 60 * 1000; // 1 hour
+      }
         break;
       case 'daily':
         interval = 24 * 60 * 60 * 1000; // 1 day
+      }
         break;
       case 'weekly':
         interval = 7 * 24 * 60 * 60 * 1000; // 1 week
+      }
         break;
       case 'monthly':
         interval = 30 * 24 * 60 * 60 * 1000; // 30 days
+      }
         break;
       default:
         return;

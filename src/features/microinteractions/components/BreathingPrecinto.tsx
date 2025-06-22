@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../../utils/utils';
+import { cn} from '../../../utils/utils';
 import '../animations/breathing.css';
 
 export type PrecintoStatus = 'normal' | 'alert' | 'critical';
@@ -12,10 +13,7 @@ interface BreathingPrecintoProps {
 }
 
 export const BreathingPrecinto: React.FC<BreathingPrecintoProps> = ({
-  status,
-  children,
-  className,
-  disabled = false
+  status, children, className, disabled = false
 }) => {
   const breathingClass = disabled ? '' : `seal-breathing-${status}`;
   

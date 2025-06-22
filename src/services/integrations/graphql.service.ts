@@ -31,7 +31,7 @@ export interface GraphQLArgument {
   name: string;
   type: string;
   description: string;
-  defaultValue?: any;
+  defaultValue?: unknown;
   required: boolean;
 }
 
@@ -83,16 +83,16 @@ export interface GraphQLConfig {
 }
 
 export interface GraphQLQueryResult {
-  data?: any;
+  data?: unknown;
   errors?: GraphQLError[];
-  extensions?: any;
+  extensions?: unknown;
 }
 
 export interface GraphQLError {
   message: string;
   locations?: Array<{ line: number; column: number }>;
   path?: Array<string | number>;
-  extensions?: any;
+  extensions?: unknown;
 }
 
 class GraphQLService {
@@ -189,7 +189,7 @@ class GraphQLService {
   }
 
   // Query execution
-  async executeQuery(query: string, variables: any = {}, context: any = {}): Promise<GraphQLQueryResult> {
+  async executeQuery(query: string, variables: unknown = {}, context: unknown = {}): Promise<GraphQLQueryResult> {
     try {
       // Parse and validate query
       const parsedQuery = this.parseQuery(query);
@@ -267,7 +267,7 @@ class GraphQLService {
     };
   }
 
-  publish(operationName: string, data: any): void {
+  publish(operationName: string, data: unknown): void {
     const subscribers = this.subscriptions.get(operationName);
     if (subscribers) {
       subscribers.forEach(callback => {
@@ -505,7 +505,7 @@ class GraphQLService {
   }
 
   // Mock resolvers
-  private async mockResolveAlerts(args: any): Promise<any[]> {
+  private async mockResolveAlerts(args: unknown): Promise<any[]> {
     const alerts = [];
     const limit = Math.min(args.limit || 10, 100);
     
@@ -525,7 +525,7 @@ class GraphQLService {
     return alerts;
   }
 
-  private async mockResolveAlert(args: any): Promise<any> {
+  private async mockResolveAlert(args: unknown): Promise<any> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -538,7 +538,7 @@ class GraphQLService {
     };
   }
 
-  private async mockResolveTransits(args: any): Promise<any[]> {
+  private async mockResolveTransits(args: unknown): Promise<any[]> {
     const transits = [];
     const limit = 10;
     
@@ -565,7 +565,7 @@ class GraphQLService {
     return transits;
   }
 
-  private async mockResolvePrecintos(args: any): Promise<any[]> {
+  private async mockResolvePrecintos(args: unknown): Promise<any[]> {
     const precintos = [];
     const limit = 20;
     
@@ -612,7 +612,7 @@ class GraphQLService {
     };
   }
 
-  private async mockAcknowledgeAlert(args: any): Promise<any> {
+  private async mockAcknowledgeAlert(args: unknown): Promise<any> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -624,7 +624,7 @@ class GraphQLService {
     };
   }
 
-  private async mockResolveAlertMutation(args: any): Promise<any> {
+  private async mockResolveAlertMutation(args: unknown): Promise<any> {
     return {
       id: args.id,
       title: `Alerta ${args.id}`,
@@ -636,7 +636,7 @@ class GraphQLService {
     };
   }
 
-  private async mockUpdateTransitStatus(args: any): Promise<any> {
+  private async mockUpdateTransitStatus(args: unknown): Promise<any> {
     return {
       id: args.id,
       origin: 'Montevideo',
@@ -647,16 +647,16 @@ class GraphQLService {
     };
   }
 
-  private mockSubscribeAlertCreated(args: any): () => void {
-    return this.subscribe('alertCreated', (data: any) => {
+  private mockSubscribeAlertCreated(args: unknown): () => void {
+    return this.subscribe('alertCreated', (data: unknown) => {
       if (!args.priority || data.priority === args.priority) {
         return data;
       }
     });
   }
 
-  private mockSubscribeTransitUpdated(args: any): () => void {
-    return this.subscribe('transitUpdated', (data: any) => {
+  private mockSubscribeTransitUpdated(args: unknown): () => void {
+    return this.subscribe('transitUpdated', (data: unknown) => {
       if (!args.id || data.id === args.id) {
         return data;
       }
@@ -688,9 +688,9 @@ class GraphQLService {
     return sdl;
   }
 
-  private generateFieldSDL(field: any): string {
+  private generateFieldSDL(field: unknown): string {
     const args = field.args && field.args.length > 0 
-      ? `(${field.args.map((arg: any) => `${arg.name}: ${arg.type}`).join(', ')})`
+      ? `(${field.args.map((arg: unknown) => `${arg.name}: ${arg.type}`).join(', ')})`
       : '';
     
     return `"""${field.description}"""\n  ${field.name}${args}: ${field.type}`;
@@ -710,7 +710,7 @@ class GraphQLService {
     return type;
   }
 
-  private parseQuery(query: string): any {
+  private parseQuery(query: string): unknown {
     // Simplified query parsing - in real implementation, use a proper GraphQL parser
     return {
       query,
@@ -731,7 +731,7 @@ class GraphQLService {
     return Math.max(1, braceCount);
   }
 
-  private checkAuthentication(context: any): { valid: boolean; error?: string } {
+  private checkAuthentication(context: unknown): { valid: boolean; error?: string } {
     if (!this.config.authentication.enabled) {
       return { valid: true };
     }
@@ -754,7 +754,7 @@ class GraphQLService {
     return { valid: true };
   }
 
-  private checkComplexity(parsedQuery: any): { valid: boolean; error?: string } {
+  private checkComplexity(parsedQuery: unknown): { valid: boolean; error?: string } {
     if (parsedQuery.complexity > this.config.rateLimit.maxComplexity) {
       return { valid: false, error: 'Query complexity exceeds limit' };
     }
@@ -766,7 +766,7 @@ class GraphQLService {
     return { valid: true };
   }
 
-  private async resolveQuery(parsedQuery: any, variables: any, context: any): Promise<any> {
+  private async resolveQuery(parsedQuery: unknown, variables: unknown, context: unknown): Promise<any> {
     // Simplified query resolution - in real implementation, use proper GraphQL execution
     const queryName = this.extractQueryName(parsedQuery.query);
     const resolver = this.getResolver(queryName);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart} from 'recharts';
-import { format } from 'date-fns';
+import { format} from 'date-fns';
 
 interface NetworkChartProps {
   data: Array<{
@@ -14,14 +14,10 @@ interface NetworkChartProps {
 }
 
 export const NetworkChart: React.FC<NetworkChartProps> = ({
-  data,
-  title,
-  color = '#3B82F6',
-  type = 'line'
+  data, title, color = '#3B82F6', type = 'line'
 }) => {
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+  return (<div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -51,8 +47,7 @@ export const NetworkChart: React.FC<NetworkChartProps> = ({
                 strokeWidth={2}
               />
             </AreaChart>
-          ) : (
-            <LineChart data={data}>
+          ) : (<LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis
                 dataKey="timestamp"

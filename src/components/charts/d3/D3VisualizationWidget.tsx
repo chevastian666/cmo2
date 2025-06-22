@@ -5,31 +5,25 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { InteractiveLineChart } from './InteractiveLineChart';
-import { ActivityHeatmap } from './ActivityHeatmap';
-import { NetworkGraph } from './NetworkGraph';
-import { InteractiveTreemap } from './InteractiveTreemap';
+import { InteractiveLineChart} from './InteractiveLineChart';
+import { ActivityHeatmap} from './ActivityHeatmap';
+import { NetworkGraph} from './NetworkGraph';
+import { InteractiveTreemap} from './InteractiveTreemap';
 import { 
-  TimeSeriesData, 
-  HeatmapData, 
-  NetworkData, 
-  TreemapNode, 
-  ChartConfig,
-  DEFAULT_CHART_CONFIG 
-} from './types';
+  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
 
 type VisualizationType = 'line' | 'heatmap' | 'network' | 'treemap';
 
 interface D3VisualizationWidgetProps {
   type: VisualizationType;
-  data: any;
+  data: TimeSeriesData[] | HeatmapData[] | NetworkData | TreemapNode;
   config?: Partial<ChartConfig>;
   title?: string;
   className?: string;
-  onDataPointClick?: (data: any) => void;
+  onDataPointClick?: (data: TimeSeriesData | HeatmapData | TreemapNode) => void;
   onZoomChange?: (domain: [Date, Date]) => void;
-  onNodeClick?: (node: any) => void;
-  onLinkClick?: (link: any) => void;
+  onNodeClick?: (node: NetworkNode | TreemapNode) => void;
+  onLinkClick?: (link: NetworkLink) => void;
 }
 
 // Mock data generators for demonstration
@@ -139,15 +133,7 @@ const generateTreemapData = (): TreemapNode => {
 };
 
 export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
-  type,
-  data: providedData,
-  config: userConfig,
-  title,
-  className = '',
-  onDataPointClick,
-  onZoomChange,
-  onNodeClick,
-  onLinkClick
+  type, data: providedData, config: userConfig, title, className = '', onDataPointClick, onZoomChange, onNodeClick, onLinkClick
 }) => {
   const [selectedType, setSelectedType] = useState<VisualizationType>(type);
   
@@ -221,8 +207,7 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
     { key: 'treemap', label: 'Treemap', icon: '🗂️' }
   ];
 
-  return (
-    <div className={`bg-gray-800 rounded-lg border border-gray-700 ${className}`}>
+  return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${className}`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-between">
@@ -232,8 +217,7 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
           
           {/* Type selector */}
           <div className="flex space-x-2">
-            {visualizationTypes.map(({ key, label, icon }) => (
-              <button
+            {visualizationTypes.map(({ key, label, icon }) => (<button
                 key={key}
                 onClick={() => setSelectedType(key as VisualizationType)}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${

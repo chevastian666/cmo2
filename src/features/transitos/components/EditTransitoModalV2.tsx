@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { notificationService } from '../../../services/shared/notification.service';
-import { transitosService } from '../services/transitos.service';
-import type { Transito } from '../types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Label} from '@/components/ui/label';
+import { Card} from '@/components/ui/card';
+import { notificationService} from '../../../services/shared/notification.service';
+import { transitosService} from '../services/transitos.service';
+import type { Transito} from '../types';
 
 interface EditTransitoModalProps {
   isOpen: boolean;
@@ -16,16 +16,14 @@ interface EditTransitoModalProps {
 }
 
 export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
-  isOpen,
-  onClose,
-  transito,
-  onSuccess
+  isOpen, onClose, transito, onSuccess
 }) => {
   const [formData, setFormData] = useState({
     dua: '',
     destino: ''
   });
   const [loading, setLoading] = useState(false);
+   
 
   useEffect(() => {
     if (transito) {
@@ -57,7 +55,7 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
 
       onSuccess?.();
       onClose();
-    } catch (_error) {
+    } catch {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'

@@ -5,17 +5,15 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
-import {Building,Package,TrendingUp} from 'lucide-react';
-import { InteractiveTreemap } from '@/components/charts/treemap/InteractiveTreemap';
-import { transformPrecintosByCompany, createHierarchy } from '@/components/charts/treemap/utils/dataTransformers';
-import { usePrecintosStore } from '@/store/store';
-import type { TreemapData } from '@/components/charts/treemap/types';
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Building, Package, TrendingUp} from 'lucide-react';
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
+import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers';
 
 export const PrecintosTreemap: React.FC = () => {
-  const {precintos} = usePrecintosStore();
+  
   const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company');
 
   const treemapData = useMemo(() => {
@@ -55,8 +53,7 @@ export const PrecintosTreemap: React.FC = () => {
     return { total, active, companies };
   }, [precintos]);
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>

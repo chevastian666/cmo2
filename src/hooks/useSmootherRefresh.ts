@@ -3,19 +3,18 @@
  * By Cheva
  */
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef} from 'react';
 
 interface UseSmootherRefreshOptions {
   onSuccess?: () => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
   minimumDelay?: number;
 }
 
-export const useSmootherRefresh = (
-  refreshFunctions: Array<(() => Promise<any>) | undefined>,
+export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknown>) | undefined>,
   options: UseSmootherRefreshOptions = {}
 ) => {
-  const { onSuccess, onError, minimumDelay = 300 } = options;
+  
   const isRefreshing = useRef(false);
 
   const refresh = useCallback(async () => {

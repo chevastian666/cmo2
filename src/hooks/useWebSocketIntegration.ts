@@ -1,20 +1,18 @@
 import {useEffect} from 'react';
-import { wsService } from '../services/websocket/WebSocketService';
+import { wsService} from '../services/websocket/WebSocketService';
 import { 
-  usePrecintosStore, 
-  useTransitosStore, 
-  useAlertasStore, 
-  useSystemStatusStore 
-} from '../store';
+  usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../store';
 
 export const useWebSocketIntegration = () => {
+   
+
   useEffect(() => {
     // Connect WebSocket service
     wsService.connect();
 
     // Set up event handlers
-    wsService.on('onPrecintoUpdate', (_data) => {
-      const {precinto, action} = data;
+    wsService.on('onPrecintoUpdate', (data) => {
+      
       const store = usePrecintosStore.getState();
       
       switch (action) {
@@ -30,8 +28,8 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onTransitoUpdate', (_data) => {
-      const {transito, action} = data;
+    wsService.on('onTransitoUpdate', (data) => {
+      
       const store = useTransitosStore.getState();
       
       switch (action) {
@@ -51,14 +49,14 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onAlertaNueva', (_data) => {
-      const {alerta} = data;
+    wsService.on('onAlertaNueva', (data) => {
+      
       const store = useAlertasStore.getState();
       store.addAlerta(alerta);
     });
 
-    wsService.on('onAlertaUpdate', (_data) => {
-      const {alerta, action, detalles} = data;
+    wsService.on('onAlertaUpdate', (data) => {
+      
       const store = useAlertasStore.getState();
       
       switch (action) {
@@ -127,12 +125,12 @@ export const useWebSocketIntegration = () => {
       }
     });
 
-    wsService.on('onSistemaUpdate', (_data) => {
+    wsService.on('onSistemaUpdate', (data) => {
       const store = useSystemStatusStore.getState();
-      store.updateSystemStatus(_data);
+      store.updateSystemStatus(data);
     });
 
-    wsService.on('onConnectionChange', (_data) => {
+    wsService.on('onConnectionChange', (data) => {
       console.log('WebSocket connection status:', data.status);
       if (data.message) {
         console.log('Message:', data.message);

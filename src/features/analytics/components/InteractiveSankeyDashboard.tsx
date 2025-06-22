@@ -5,29 +5,21 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {Settings, Download, Maximize2, Info,TrendingUp,Filter,Calendar, RefreshCw} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { motion} from 'framer-motion';
+import { Download, Maximize2, Info, TrendingUp, RefreshCw} from 'lucide-react';
+import { Card, CardContent} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
 import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LogisticsFlowChart } from './LogisticsFlowChart';
-import { PrecintoLifecycleFlow } from './PrecintoLifecycleFlow';
-import { AlertFlowAnalysis } from './AlertFlowAnalysis';
-import { CustomFlowBuilder } from './CustomFlowBuilder';
-import { DatePickerWithRange } from '@/components/ui/date-picker-range';
-import { toast } from '@/hooks/use-toast';
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import { LogisticsFlowChart} from './LogisticsFlowChart';
+import { PrecintoLifecycleFlow} from './PrecintoLifecycleFlow';
+import { AlertFlowAnalysis} from './AlertFlowAnalysis';
+import { CustomFlowBuilder} from './CustomFlowBuilder';
+import { DatePickerWithRange} from '@/components/ui/date-picker-range';
+import { toast} from '@/hooks/use-toast';
 
 const InteractiveSankeyDashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('logistics');
@@ -75,8 +67,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
     }
   };
 
-  return (
-    <div className="space-y-6">
+  return (<div className="space-y-6">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -143,7 +134,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-400">Volumen Total</p>
-                <p className="text-2xl font-bold">45,382</p>
+                <p className="text-2xl font-bold">45, 382</p>
                 <p className="text-xs text-green-500 mt-1">+8% vs mes anterior</p>
               </div>
               <div className="p-3 bg-green-500/10 rounded-lg">

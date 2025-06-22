@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import {Calendar,MapPin,FileText, Upload,X, Save, Paperclip} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge } from '../../../components/ui';
-import { cn } from '../../../utils/utils';
-import { notificationService } from '../../../services/shared/notification.service';
-import type { TipoNovedad } from '../types';
-import { PUNTOS_OPERACION, TIPOS_NOVEDAD } from '../types';
+import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react';
+import { Card, CardHeader, CardContent} from '../../../components/ui';
+import { cn} from '../../../utils/utils';
+import { notificationService} from '../../../services/shared/notification.service';
+import type { TipoNovedad} from '../types';
+import { PUNTOS_OPERACION, TIPOS_NOVEDAD} from '../types';
 
 interface FormularioNovedadProps {
   onSubmit: (data: FormData) => Promise<void>;
@@ -21,9 +21,7 @@ interface FormData {
 }
 
 export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
-  onSubmit,
-  puntoOperacionDefault = '',
-  className
+  onSubmit, puntoOperacionDefault = '', className
 }) => {
   const [formData, setFormData] = useState<FormData>({
     fecha: new Date().toISOString().split('T')[0],
@@ -108,8 +106,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     }
   };
 
-  return (
-    <Card variant="elevated" className={className}>
+  return (<Card variant="elevated" className={className}>
       <CardHeader>
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <FileText className="h-5 w-5 text-blue-500" />
@@ -166,8 +163,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
               Tipo de novedad
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {Object.entries(TIPOS_NOVEDAD).map(([key, config]) => (
-                <button
+              {Object.entries(TIPOS_NOVEDAD).map(([key, config]) => (<button
                   key={key}
                   type="button"
                   onClick={() => setFormData({ ...formData, tipoNovedad: key as TipoNovedad })}
@@ -237,10 +233,8 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
               Adjuntar imagen o PDF
             </button>
             
-            {archivos.length > 0 && (
-              <div className="mt-2 space-y-1">
-                {archivos.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+            {archivos.length > 0 && (<div className="mt-2 space-y-1">
+                {archivos.map((file, index) => (<div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                     <span className="text-sm text-gray-300 truncate flex-1">
                       {file.name}
                     </span>

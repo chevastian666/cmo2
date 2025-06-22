@@ -1,4 +1,4 @@
-import type { Precinto, TransitoPendiente, Alerta } from '../../types';
+import type { Precinto, TransitoPendiente, Alerta} from '../../types';
 
 export type WebSocketMessageType = 
   | 'precinto_update'
@@ -9,7 +9,7 @@ export type WebSocketMessageType =
   | 'connection'
   | 'heartbeat';
 
-export interface WebSocketMessage<T = any> {
+export interface WebSocketMessage<T = unknown> {
   type: WebSocketMessageType;
   timestamp: number;
   data: T;

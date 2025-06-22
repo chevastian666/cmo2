@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import {AlertTriangle, Shield, Battery,MapPin,Radio,Thermometer,Package,Clock,CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
-import type { Alerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { DataTable, type Column } from '../../../components/DataTable';
-import { useAlertasActivas, useAlertaExtendida } from '../../../store/hooks/useAlertas';
-import { AlertaDetalleModal } from './AlertaDetalleModal';
-import { ResponderAlertaModal } from './ResponderAlertaModal';
-import { notificationService } from '../../../services/shared/notification.service';
+import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
+import type { Alerta} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { DataTable} from '../../../components/DataTable';
+
+import { AlertaDetalleModal} from './AlertaDetalleModal';
+import { ResponderAlertaModal} from './ResponderAlertaModal';
+import { notificationService} from '../../../services/shared/notification.service';
 
 export const AlertsTable: React.FC = () => {
-  const {alertas, loading, error, actions} = useAlertasActivas();
+  
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
@@ -47,7 +47,7 @@ export const AlertsTable: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       });
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al responder la alerta');
       console.error('Error responding to alert:', _error);
       throw _error;
@@ -164,8 +164,7 @@ export const AlertsTable: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (item) => (
-        item.ubicacion ? (
+      accessor: (item) => (item.ubicacion ? (
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -218,8 +217,7 @@ export const AlertsTable: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (item) => (
-        <div className="flex items-center justify-center">
+      accessor: (item) => (<div className="flex items-center justify-center">
           <button
             onClick={(e) => handleVerificar(item, e)}
             disabled={item.atendida}
@@ -293,8 +291,7 @@ export const AlertsTable: React.FC = () => {
     );
   }
 
-  return (
-    <>
+  return (<>
       <DataTable
         data={alertas}
         columns={columns}
@@ -342,7 +339,7 @@ const AlertDetailModalWrapper: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ alertaId, isOpen, onClose }) => {
-  const {alerta, loading, actions} = useAlertaExtendida(alertaId);
+  
 
   if (!alerta || loading) {
     return null;

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import {AlertTriangle, Shield, Battery,MapPin,Radio,Thermometer,Package,Clock,CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatTimeAgo, formatDateTime } from '../../../utils/formatters';
-import type { Alerta } from '../../../types';
-import { TIPOS_ALERTA } from '../../../types/monitoring';
-import { DataTable, type Column } from '../../../components/DataTable';
-import { useAlertasActivas, useAlertaExtendida } from '../../../store/hooks/useAlertas';
-import { AlertaDetalleModalV2 } from './AlertaDetalleModalV2';
-import { ResponderAlertaModal } from './ResponderAlertaModal';
-import { notificationService } from '../../../services/shared/notification.service';
+import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
+import { cn} from '@/lib/utils';
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
+import type { Alerta} from '../../../types';
+import { TIPOS_ALERTA} from '../../../types/monitoring';
+import { DataTable} from '../../../components/DataTable';
+import { useAlertaExtendida} from '../../../store/hooks/useAlertas';
+import { AlertaDetalleModalV2} from './AlertaDetalleModalV2';
+import { ResponderAlertaModal} from './ResponderAlertaModal';
+import { notificationService} from '../../../services/shared/notification.service';
 
 // shadcn/ui components
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button} from '@/components/ui/button';
+import { Badge} from '@/components/ui/badge';
 
 export const AlertsTableV2: React.FC = () => {
-  const {alertas, loading, error, actions} = useAlertasActivas();
+  
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
@@ -50,7 +50,7 @@ export const AlertsTableV2: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       });
-    } catch (_error) {
+    } catch {
       notificationService.error('Error al responder la alerta');
       console.error('Error responding to alert:', _error);
       throw _error;
@@ -168,8 +168,7 @@ export const AlertsTableV2: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (item) => (
-        item.ubicacion ? (
+      accessor: (item) => (item.ubicacion ? (
           <Button
             size="sm"
             variant="default"
@@ -219,8 +218,7 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (item) => (
-        <div className="flex items-center justify-center">
+      accessor: (item) => (<div className="flex items-center justify-center">
           <Button
             size="sm"
             variant={item.atendida ? "secondary" : "default"}
@@ -278,8 +276,7 @@ export const AlertsTableV2: React.FC = () => {
 
   const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId);
 
-  return (
-    <>
+  return (<>
       <DataTable
         data={alertas}
         columns={columns}
@@ -290,9 +287,7 @@ export const AlertsTableV2: React.FC = () => {
         onRowClick={handleAlertClick}
         onExport={handleExport}
         emptyStateProps={{
-          icon: AlertTriangle,
-          title: "No hay alertas activas",
-          description: "No se han detectado alertas en el sistema"
+          icon: AlertTriangle, title: "No hay alertas activas", description: "No se han detectado alertas en el sistema"
         }}
         className="cursor-pointer"
       />
@@ -318,8 +313,7 @@ export const AlertsTableV2: React.FC = () => {
         />
       )}
 
-      {selectedAlertaForResponse && (
-        <ResponderAlertaModal
+      {selectedAlertaForResponse && (<ResponderAlertaModal
           alerta={selectedAlertaForResponse}
           isOpen={isResponseModalOpen}
           onClose={() => {

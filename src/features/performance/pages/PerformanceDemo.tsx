@@ -6,19 +6,7 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Database, 
-  Zap, 
-  Activity, 
-  TrendingUp,
-  Clock,
-  MemoryStick,
-  Cpu,
-  HardDrive,
-  Play,
-  Pause,
-  RefreshCw
-} from 'lucide-react';
+import { Database, Zap, Activity, TrendingUp, Clock, MemoryStick, Cpu, Play, RefreshCw } from 'lucide-react';
 import { VirtualizedList } from '@/components/optimized/VirtualizedList';
 import { OptimizedCard, OptimizedTableRow } from '@/components/optimized/OptimizedComponents';
 import { useServerPagination } from '@/hooks/useServerPagination';
@@ -99,7 +87,7 @@ export const PerformanceDemo: React.FC = () => {
       // Generate in chunks to avoid blocking UI
       const chunkSize = 100000;
       const chunks = Math.ceil(dataSize / chunkSize);
-      let allData: any[] = [];
+      let allData: unknown[] = [];
       
       for (let i = 0; i < chunks; i++) {
         const size = Math.min(chunkSize, dataSize - i * chunkSize);
@@ -117,7 +105,7 @@ export const PerformanceDemo: React.FC = () => {
   }, [dataSize, measurePerformance]);
 
   // Web Worker for processing
-  const { processLargeDataset, aggregateTimeSeries, isReady: workerReady } = useDataProcessor();
+  const { processLargeDataset } = useDataProcessor();
   
   // Smart cache
   const cache = useSmartCache('performance-demo');
@@ -182,8 +170,7 @@ export const PerformanceDemo: React.FC = () => {
   }, { delay: 100 });
 
   // Batched updates for real-time data
-  const { addUpdate, flush } = useBatchedUpdates<any>((updates) => {
-    console.log(`Processing ${updates.length} batched updates`);
+  
     // Process updates...
   }, { maxBatchSize: 1000, flushDelay: 100 });
 
@@ -204,12 +191,13 @@ export const PerformanceDemo: React.FC = () => {
   }, [dataset, processLargeDataset, workerReady, measurePerformance]);
 
   // Initial data generation
-  useEffect(() => {
+  
+    useEffect(() => {
     generateData();
   }, []);
 
   // Render virtualized list item
-  const renderVirtualizedItem = useCallback((item: any, index: number, style: React.CSSProperties) => (
+  const renderVirtualizedItem = useCallback((item: unknown, index: number, style: React.CSSProperties) => (
     <div style={style} className="flex items-center px-4 py-2 border-b border-gray-700 hover:bg-gray-800">
       <div className="flex-1">
         <div className="font-medium text-white">{item.id}</div>

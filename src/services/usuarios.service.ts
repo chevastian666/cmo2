@@ -1,4 +1,4 @@
-import type { Usuario } from '../types';
+import type { Usuario} from '../types';
 
 // Mock users for development
 const mockUsuarios: Usuario[] = [

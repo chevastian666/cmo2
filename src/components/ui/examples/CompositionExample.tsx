@@ -1,6 +1,6 @@
 import React from 'react';
-import {Card, CardHeader, CardContent, _CardFooter, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index';
-import {Package,Truck,AlertTriangle, Activity,MapPin} from 'lucide-react';
+import { Card, CardHeader, CardContent, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index';
+import { Truck, AlertTriangle, Activity, MapPin} from 'lucide-react';
 
 /**
  * This example demonstrates how to compose the modular UI components
@@ -56,8 +56,7 @@ export const CompositionExample: React.FC = () => {
     { id: 'map', label: 'Mapa', icon: <MapPin className="h-4 w-4" /> }
   ];
 
-  return (
-    <div className="space-y-6 p-6 bg-gray-900 min-h-screen">
+  return (<div className="space-y-6 p-6 bg-gray-900 min-h-screen">
       <h1 className="text-2xl font-bold text-white">Ejemplos de Composición de Componentes</h1>
       
       {/* Example 1: Dashboard Layout with Tabs */}
@@ -117,8 +116,7 @@ export const CompositionExample: React.FC = () => {
             </div>
           )}
           
-          {activeTab === 'alerts' && (
-            <AlertsPanel 
+          {activeTab === 'alerts' && (<AlertsPanel 
               alerts={[...mockAlerts, ...mockAlerts, ...mockAlerts]} 
               onAlertClick={(alert) => console.log('Alert clicked:', alert)}
             />

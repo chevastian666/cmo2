@@ -1,5 +1,6 @@
+ 
 import React from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 interface InfoRowProps {
   label: string;
@@ -12,13 +13,7 @@ interface InfoRowProps {
 }
 
 export const InfoRow: React.FC<InfoRowProps> = ({
-  label,
-  value,
-  className,
-  variant = 'default',
-  icon,
-  extra,
-  copyable = false
+  label, value, className, variant = 'default', icon, extra, copyable = false
 }) => {
   const [copied, setCopied] = React.useState(false);
 
@@ -108,9 +103,7 @@ interface InfoGridProps {
 }
 
 export const InfoGrid: React.FC<InfoGridProps> = ({
-  children,
-  className,
-  columns = 2
+  children, className, columns = 2
 }) => {
   const gridCols = {
     1: 'grid-cols-1',
@@ -135,11 +128,7 @@ interface InfoSectionProps {
 }
 
 export const InfoSection: React.FC<InfoSectionProps> = ({
-  title,
-  children,
-  className,
-  collapsible = false,
-  defaultOpen = true
+  title, children, className, collapsible = false, defaultOpen = true
 }) => {
   const [isOpen, setIsOpen] = React.useState(defaultOpen);
 

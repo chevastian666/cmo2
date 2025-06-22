@@ -1,19 +1,19 @@
+ 
 import React from 'react';
-import { MapModule } from '../../../components/ui/MapModule';
-import { TransitCard } from '../../../components/ui/TransitCard';
-import { AlertsPanel } from '../../../components/ui/AlertsPanel';
-import { useMapPolling, useTransitPolling, useAlertsPolling } from '../hooks/usePollingIntegration';
-import { Card } from '../../../components/ui/Card';
-import { RefreshCw } from 'lucide-react';
+import { MapModule} from '../../../components/ui/MapModule';
+import { TransitCard} from '../../../components/ui/TransitCard';
+import { AlertsPanel} from '../../../components/ui/AlertsPanel';
+
+import { Card} from '../../../components/ui/Card';
+import { RefreshCw} from 'lucide-react';
 
 /**
  * Ejemplo de MapModule con actualización automática
  */
 export const MapWithPolling: React.FC = () => {
-  const {markers, routes, isLoading, error, refresh} = useMapPolling();
+  
 
-  return (
-    <Card className="relative">
+  return (<Card className="relative">
       <div className="absolute top-4 right-4 z-10">
         <button
           onClick={refresh}
@@ -47,7 +47,7 @@ export const MapWithPolling: React.FC = () => {
  * Ejemplo de TransitCard con actualización automática
  */
 export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transitId }) => {
-  const {transit, isLoading, error} = useTransitPolling(_transitId);
+  
 
   if (isLoading && !transit) {
     return (
@@ -69,8 +69,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
     return null;
   }
 
-  return (
-    <TransitCard
+  return (<TransitCard
       transit={transit}
       onViewHistory={(plate) => {
         console.log('Ver historial de:', plate);
@@ -83,7 +82,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
  * Ejemplo de AlertsPanel con actualización automática
  */
 export const AlertsPanelWithPolling: React.FC = () => {
-  const {alerts, isLoading, error, hasNewCriticalAlert, acknowledgeAlert, refresh} = useAlertsPolling();
+  
 
   return (
     <div className="space-y-4">

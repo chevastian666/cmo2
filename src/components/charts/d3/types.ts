@@ -7,7 +7,7 @@ export interface TimeSeriesData {
   date: Date;
   value: number;
   category?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface HeatmapData {
@@ -22,7 +22,7 @@ export interface NetworkNode {
   label: string;
   value: number;
   group: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface NetworkLink {
@@ -42,11 +42,11 @@ export interface TreemapNode {
   value: number;
   children?: TreemapNode[];
   category?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface TooltipProps {
-  data: any;
+  data: TimeSeriesData | HeatmapData | NetworkNode | NetworkLink | TreemapNode;
   x: number;
   y: number;
   visible: boolean;

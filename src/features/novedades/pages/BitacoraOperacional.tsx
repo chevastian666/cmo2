@@ -5,32 +5,26 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  BookOpen, Plus, Download, Search, Calendar, Clock, User, 
-  AlertTriangle, Info, CheckCircle2, XCircle, MessageSquare,
-  Filter, ChevronDown, ChevronRight, Megaphone, Shield,
-  Activity, FileText, UserCheck, Pin
-} from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Skeleton, SkeletonText, SkeletonCard } from '@/components/ui/skeleton';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNovedadesStore } from '@/store/novedadesStore';
-import { useUserInfo } from '@/hooks/useAuth';
-import { notificationService } from '@/services/shared/notification.service';
-import { exportToCSV } from '@/utils/export';
-import { cn } from '@/utils/utils';
-import type { Novedad, TipoNovedad } from '../types';
-import { PUNTOS_OPERACION } from '../types';
+import { BookOpen, Plus, Download, Calendar, Clock, User, AlertTriangle, Info, XCircle, MessageSquare, Filter, Megaphone, Shield, Activity, UserCheck, Pin} from 'lucide-react';
+import { Card, CardContent, CardHeader} from '@/components/ui/card';
+import { Button} from '@/components/ui/button';
+import { Input} from '@/components/ui/input';
+import { Badge} from '@/components/ui/badge';
+import { Textarea} from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
+import { Label} from '@/components/ui/label';
+
+import { ScrollArea} from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback} from '@/components/ui/avatar';
+import { Skeleton, SkeletonText} from '@/components/ui/skeleton';
+import { motion, AnimatePresence} from 'framer-motion';
+
+import { useUserInfo} from '@/hooks/useAuth';
+import { notificationService} from '@/services/shared/notification.service';
+import { exportToCSV} from '@/utils/export';
+import { cn} from '@/utils/utils';
+import type { Novedad} from '../types';
 
 // Tipos de entrada para la bitácora
 const TIPOS_BITACORA = {
@@ -47,12 +41,14 @@ export const BitacoraOperacional: React.FC = () => {
   const [filtroTipo, setFiltroTipo] = useState<string>('todos');
   const [filtroBusqueda, setFiltroBusqueda] = useState('');
   const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(null);
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+  const [fechaSeleccionada] = useState(new Date());
   
-  const { novedades, loading, fetchNovedades, crearNovedad, agregarSeguimiento } = useNovedadesStore();
+  
   const userInfo = useUserInfo();
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     fetchNovedades();
   }, [fetchNovedades]);
 
@@ -79,7 +75,7 @@ export const BitacoraOperacional: React.FC = () => {
     });
   }, [novedades, filtroTipo, filtroBusqueda]);
 
-  const handleCrearEntrada = async (data: any) => {
+  const handleCrearEntrada = async (data: unknown) => {
     try {
       await crearNovedad({
         ...data,
@@ -108,8 +104,7 @@ export const BitacoraOperacional: React.FC = () => {
     notificationService.success('Exportación completada', 'La bitácora ha sido exportada');
   };
 
-  return (
-    <div className="min-h-screen bg-gray-950">
+  return (<div className="min-h-screen bg-gray-950">
       {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
@@ -309,9 +304,7 @@ export const BitacoraOperacional: React.FC = () => {
                       <p className="text-gray-400">No hay entradas en la bitácora</p>
                     </CardContent>
                   </Card>
-                ) : (
-                  entradasPorFecha.map(([fecha, entradas]) => (
-                    <div key={fecha} className="space-y-4">
+                ) : (entradasPorFecha.map(([fecha, entradas]) => (<div key={fecha} className="space-y-4">
                       {/* Separador de Fecha */}
                       <div className="flex items-center gap-4 sticky top-0 bg-gray-950 py-2 z-10">
                         <div className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-lg">
@@ -503,8 +496,7 @@ export const BitacoraOperacional: React.FC = () => {
 
       {/* Modal Detalle de Entrada */}
       <AnimatePresence>
-        {entradaSeleccionada && (
-          <Dialog open={!!entradaSeleccionada} onOpenChange={() => setEntradaSeleccionada(null)}>
+        {entradaSeleccionada && (<Dialog open={!!entradaSeleccionada} onOpenChange={() => setEntradaSeleccionada(null)}>
             <DialogContent className="bg-gray-900 border-gray-800 max-w-3xl">
               <DialogHeader>
                 <DialogTitle className="text-white">Detalle de Entrada</DialogTitle>
@@ -570,8 +562,7 @@ export const BitacoraOperacional: React.FC = () => {
                 )}
 
                 {/* Agregar seguimiento */}
-                {entradaSeleccionada.estado === 'activa' && (
-                  <form onSubmit={async (e) => {
+                {entradaSeleccionada.estado === 'activa' && (<form onSubmit={async (e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);
                     const comentario = formData.get('comentario') as string;

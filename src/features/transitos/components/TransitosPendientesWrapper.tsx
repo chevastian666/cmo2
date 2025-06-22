@@ -1,7 +1,7 @@
 import React from 'react';
-import { Truck } from 'lucide-react';
-import { TransitosPendientesTable } from './TransitosPendientesTable';
-import type { TransitoPendiente } from '../../../types/monitoring';
+import { Truck} from 'lucide-react';
+import { TransitosPendientesTable} from './TransitosPendientesTable';
+import type { TransitoPendiente} from '../../../types/monitoring';
 
 interface TransitosPendientesWrapperProps {
   transitos: TransitoPendiente[];

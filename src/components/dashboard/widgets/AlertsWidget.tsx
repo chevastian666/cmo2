@@ -4,18 +4,13 @@
  */
 
 import React from 'react';
-import {AlertCircle,AlertTriangle, Info,CheckCircle} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import { motion } from 'framer-motion';
-import { useAlertasStore } from '../../../store/store';
-import { AnimatedBadge } from '../../animations/AnimatedComponents';
+import {AlertCircle, AlertTriangle, Info, CheckCircle} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import { motion} from 'framer-motion';
+import { useAlertasStore} from '../../../store/store';
+import { AnimatedBadge} from '../../animations/AnimatedComponents';
 
-interface Alert {
-  id: string;
-  tipo: 'critica' | 'advertencia' | 'info' | 'exito';
-  mensaje: string;
-  tiempo: string;
-}
+// Alert interface removed - using data from store directly
 
 export const AlertsWidget: React.FC = () => {
   const alertas = useAlertasStore(state => state.alertas);
@@ -63,8 +58,7 @@ export const AlertsWidget: React.FC = () => {
     );
   }
 
-  return (
-    <div className="h-full flex flex-col">
+  return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-2 overflow-auto">
         {recentAlerts.map((alerta, index) => (
           <motion.div

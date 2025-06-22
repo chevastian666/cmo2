@@ -6,8 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { TimeSeriesData, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
-import { formatters, scales, animations, tooltip, responsive } from './utils';
+import { TimeSeriesData, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
+import { formatters, scales, animations, tooltip} from './utils';
 
 interface InteractiveLineChartProps {
   data: TimeSeriesData[];
@@ -17,10 +17,7 @@ interface InteractiveLineChartProps {
 }
 
 export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
-  data,
-  config: userConfig,
-  onDataPointClick,
-  onZoomChange
+  data, config: userConfig, onDataPointClick, onZoomChange
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,11 +26,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+    const resizeObserver = new ResizeObserver(() => {
+      const { width, height } = containerRef.current!.getBoundingClientRect();
       setDimensions({ width: width || 800, height: height || 400 });
     });
 
@@ -47,8 +47,8 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const { width, height } = dimensions;
-    const { margin } = config;
+    
+    
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -102,14 +102,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale)
         .tickSize(-innerHeight)
-        .tickFormat('' as any)
+        .tickFormat(() => '')
       );
 
     const yGrid = g.append('g')
       .attr('class', 'grid')
       .call(d3.axisLeft(yScale)
         .tickSize(-innerWidth)
-        .tickFormat('' as any)
+        .tickFormat(() => '')
       );
 
     // Style grid lines
@@ -224,12 +224,12 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     const xAxis = g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale)
-        .tickFormat(formatters.shortDate as any)
+        .tickFormat(formatters.shortDate)
       );
 
     const yAxis = g.append('g')
       .call(d3.axisLeft(yScale)
-        .tickFormat(formatters.number as any)
+        .tickFormat(formatters.number)
       );
 
     // Style axes
@@ -282,17 +282,17 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         .attr('cy', d => newYScale(d.value));
 
       // Update axes
-      xAxis.call(d3.axisBottom(newXScale).tickFormat(formatters.shortDate as any));
-      yAxis.call(d3.axisLeft(newYScale).tickFormat(formatters.number as any));
+      xAxis.call(d3.axisBottom(newXScale).tickFormat(formatters.shortDate));
+      yAxis.call(d3.axisLeft(newYScale).tickFormat(formatters.number));
 
       // Update grid
       xGrid.call(d3.axisBottom(newXScale)
         .tickSize(-innerHeight)
-        .tickFormat('' as any)
+        .tickFormat(() => '')
       );
       yGrid.call(d3.axisLeft(newYScale)
         .tickSize(-innerWidth)
-        .tickFormat('' as any)
+        .tickFormat(() => '')
       );
 
       // Notify zoom change
@@ -334,11 +334,13 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         .style('opacity', isZoomed ? 1 : 0);
     });
 
-  }, [data, dimensions, config, onDataPointClick, onZoomChange]);
+  }, [data, config, onDataPointClick, onZoomChange]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     drawChart();
-  }, [drawChart]);
+  }, [drawChart, dimensions]);
 
   return (
     <div 

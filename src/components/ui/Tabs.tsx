@@ -1,5 +1,6 @@
+ 
 import React, { createContext, useContext, useState } from 'react';
-import { cn } from '../../utils/utils';
+import { cn} from '../../utils/utils';
 
 interface TabsContextValue {
   activeTab: string;
@@ -17,11 +18,7 @@ interface TabsProps {
 }
 
 export const Tabs: React.FC<TabsProps> = ({
-  defaultValue,
-  value,
-  onValueChange,
-  className,
-  children
+  defaultValue, value, onValueChange, className, children
 }) => {
   const [activeTab, setActiveTab] = useState(value || defaultValue || '');
 
@@ -65,17 +62,14 @@ interface TabsTriggerProps {
 }
 
 export const TabsTrigger: React.FC<TabsTriggerProps> = ({ 
-  value, 
-  className, 
-  children,
-  disabled = false 
+  value, className, children, disabled = false 
 }) => {
   const context = useContext(TabsContext);
   if (!context) {
     throw new Error('TabsTrigger must be used within Tabs');
   }
 
-  const {activeTab, setActiveTab} = context;
+  
   const isActive = activeTab === value;
 
   return (
@@ -115,7 +109,7 @@ export const TabsContent: React.FC<TabsContentProps> = ({ value, className, chil
     throw new Error('TabsContent must be used within Tabs');
   }
 
-  const {activeTab} = context;
+  
 
   if (activeTab !== value) {
     return null;

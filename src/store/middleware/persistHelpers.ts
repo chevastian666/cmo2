@@ -3,8 +3,8 @@
  * By Cheva
  */
 
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { StateCreator, StateStorage } from './types';
+import { persist} from 'zustand/middleware';
+import type { StateCreator, StateStorage} from './types';
 
 export interface PersistOptions<T> {
   name: string;
@@ -19,7 +19,7 @@ export interface PersistOptions<T> {
  * Crea una configuración de persist con valores por defecto
  */
 export function createPersistConfig<T>(options: PersistOptions<T>) {
-  const {name, partialize, version = 1, migrate, storage = createJSONStorage(() => localStorage), skipHydration = false} = options;
+  
 
   return {
     name,
@@ -34,10 +34,7 @@ export function createPersistConfig<T>(options: PersistOptions<T>) {
 /**
  * Helper para crear un store con persist y configuración estándar
  */
-export function createPersistedStore<T>(
-  name: string,
-  createState: StateCreator<T>,
-  partialize?: (state: T) => Partial<T>
+export function createPersistedStore<T>(name: string, createState: StateCreator<T>, partialize?: (state: T) => Partial<T>
 ) {
   return persist(createState, createPersistConfig({
     name,
@@ -48,9 +45,7 @@ export function createPersistedStore<T>(
 /**
  * Helper para sincronización entre pestañas
  */
-export function enableCrossTabSync<T>(
-  storeName: string,
-  getState: () => T,
+export function enableCrossTabSync<T>(storeName: string, getState: () => T,
   setState: (state: Partial<T>) => void
 ) {
   if (typeof window === 'undefined') return;
@@ -63,7 +58,7 @@ export function enableCrossTabSync<T>(
         if (newState && typeof newState === 'object') {
           setState(newState);
         }
-      } catch (_error) {
+      } catch {
         console.error(`Error sincronizando ${storeName} entre pestañas:`, error);
       }
     }
@@ -96,7 +91,7 @@ export function exportAllPersistedStates(): Record<string, unknown> {
         if (value) {
           states[storeName] = JSON.parse(value);
         }
-      } catch (_error) {
+      } catch {
         console.error(`Error exportando ${key}:`, error);
       }
     }
@@ -114,7 +109,7 @@ export function importPersistedStates(states: Record<string, unknown>) {
   Object.entries(states).forEach(([storeName, state]) => {
     try {
       localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state));
-    } catch (_error) {
+    } catch {
       console.error(`Error importando ${storeName}:`, error);
     }
   });

@@ -5,25 +5,21 @@
  */
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, Users } from 'lucide-react';
-import type { NotificationGroup } from '../../types/notifications';
-import { NotificationItem } from './NotificationItem';
+import { motion, AnimatePresence} from 'framer-motion';
+import { ChevronDown, ChevronRight, Users} from 'lucide-react';
+import type { NotificationGroup} from '../../types/notifications';
+import { NotificationItem} from './NotificationItem';
 
 interface NotificationGroupItemProps {
   group: NotificationGroup;
   selectedNotifications: Set<string>;
   onSelect: (notificationId: string, selected: boolean) => void;
-  onAction: (notificationId: string, action: string, payload?: any) => void;
+  onAction: (notificationId: string, action: string, payload?: unknown) => void;
   expanded?: boolean;
 }
 
 export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
-  group,
-  selectedNotifications,
-  onSelect,
-  onAction,
-  expanded = false
+  group, selectedNotifications, onSelect, onAction, expanded = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(!group.collapsed);
 
@@ -120,8 +116,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
 
       {/* Group Content */}
       <AnimatePresence>
-        {isExpanded && (
-          <motion.div
+        {isExpanded && (<motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

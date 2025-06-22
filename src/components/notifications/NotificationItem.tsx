@@ -5,31 +5,19 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion} from 'framer-motion';
 import { 
-  Clock, 
-  MapPin, 
-  User, 
-  MoreHorizontal, 
-  Eye, 
-  EyeOff,
-  CheckCircle,
-  AlertTriangle,
-  Info,
-  XCircle,
-  Volume2,
-  VolumeX
-} from 'lucide-react';
-import type { Notification } from '../../types/notifications';
-import { QuickActions } from './QuickActions';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
+  Clock, MapPin, User, Eye, EyeOff, AlertTriangle, Info, XCircle, Volume2, VolumeX} from 'lucide-react';
+import type { Notification} from '../../types/notifications';
+import { QuickActions} from './QuickActions';
+import { formatDistanceToNow} from 'date-fns';
+import { es} from 'date-fns/locale';
 
 interface NotificationItemProps {
   notification: Notification;
   isSelected: boolean;
   onSelect: (selected: boolean) => void;
-  onAction: (action: string, payload?: any) => void;
+  onAction: (action: string, payload?: unknown) => void;
   expanded?: boolean;
 }
 
@@ -90,11 +78,7 @@ const statusConfig = {
 };
 
 export const NotificationItem: React.FC<NotificationItemProps> = ({
-  notification,
-  isSelected,
-  onSelect,
-  onAction,
-  expanded = false
+  notification, isSelected, onSelect, onAction, expanded = false
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -144,8 +128,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     }
   };
 
-  return (
-    <motion.div
+  return (<motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -315,8 +298,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
                 )}
 
                 {/* Details Toggle */}
-                {expanded && (
-                  <button
+                {expanded && (<button
                     onClick={() => setShowDetails(!showDetails)}
                     className="p-1 text-gray-400 hover:text-white transition-colors"
                     title={showDetails ? 'Ocultar detalles' : 'Ver detalles'}
@@ -346,10 +328,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
             )}
 
             {/* Action Buttons (expanded) */}
-            {notification.actions.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {notification.actions.map((action) => (
-                  <button
+            {notification.actions.length > 0 && (<div className="mt-3 flex flex-wrap gap-2">
+                {notification.actions.map((action) => (<button
                     key={action.id}
                     onClick={() => onAction(action.type, action.payload)}
                     className={`text-xs px-3 py-1 rounded transition-colors ${

@@ -1,8 +1,8 @@
 import React from 'react';
-import {AlertTriangle,Clock} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { AlertaTV } from '../types';
-import { TIPOS_ALERTA_TV } from '../types';
+import {AlertTriangle, Clock} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { AlertaTV} from '../types';
+import { TIPOS_ALERTA_TV} from '../types';
 
 interface AlertasActivasProps {
   alertas: AlertaTV[];
@@ -59,8 +59,7 @@ export const AlertasActivas: React.FC<AlertasActivasProps> = ({ alertas }) => {
               <p className="text-lg text-gray-500">Sin alertas activas</p>
             </div>
           </div>
-        ) : (
-          <div className="p-4 space-y-3">
+        ) : (<div className="p-4 space-y-3">
             {alertas.map((alerta, index) => {
               const tipoInfo = TIPOS_ALERTA_TV[alerta.tipo];
               return (

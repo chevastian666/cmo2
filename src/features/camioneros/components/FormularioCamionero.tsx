@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {X,User,Phone, Flag, AlertCircle} from 'lucide-react';
-import { useCamionerosStore } from '../../../store/camionerosStore';
+import {X, User, Phone, Flag, AlertCircle} from 'lucide-react';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { NACIONALIDADES, TIPOS_DOCUMENTO } from '../types';
-import type { Nacionalidad } from '../types';
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
+import type { Nacionalidad} from '../types';
 
 interface FormularioCamioneroProps {
   onClose: () => void;
@@ -11,7 +11,7 @@ interface FormularioCamioneroProps {
 
 export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const {createCamionero} = useCamionerosStore();
+  
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -86,7 +86,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
       });
       
       onClose();
-    } catch (_error) {
+    } catch {
       setErrors({ general: 'Error al registrar el camionero' });
     } finally {
       setLoading(false);
@@ -213,8 +213,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               </select>
             </div>
 
-            {formData.nacionalidad === 'Otro' && (
-              <div>
+            {formData.nacionalidad === 'Otro' && (<div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">
                   Especificar país *
                 </label>

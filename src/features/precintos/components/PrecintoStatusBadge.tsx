@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '../../../utils/utils';
-import { PrecintoStatus, PrecintoStatusText } from '../types';
+import { cn} from '../../../utils/utils';
+import { PrecintoStatus, PrecintoStatusText} from '../types';
 
 interface PrecintoStatusBadgeProps {
   status: PrecintoStatus;
@@ -9,9 +9,7 @@ interface PrecintoStatusBadgeProps {
 }
 
 export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({ 
-  status, 
-  size = 'md',
-  showText = true 
+  status, size = 'md', showText = true 
 }) => {
   const getStatusColor = () => {
     switch (status) {

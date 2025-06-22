@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {X,Truck, Camera, AlertCircle} from 'lucide-react';
-import { useCamionesStore } from '../../../store/camionesStore';
+import {X, Truck, Camera, AlertCircle} from 'lucide-react';
+
 import {useUserInfo} from '../../../hooks/useAuth';
-import { ESTADOS_CAMION } from '../types';
-import type { EstadoCamion } from '../types';
+import { ESTADOS_CAMION} from '../types';
+import type { EstadoCamion} from '../types';
 
 interface FormularioCamionProps {
   onClose: () => void;
@@ -11,7 +11,7 @@ interface FormularioCamionProps {
 
 export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) => {
   const userInfo = useUserInfo();
-  const {createCamion} = useCamionesStore();
+  
   
   const [formData, setFormData] = useState({
     matricula: '',
@@ -68,7 +68,7 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       });
       
       onClose();
-    } catch (_error) {
+    } catch {
       setErrors({ general: 'Error al registrar el camión' });
     } finally {
       setLoading(false);

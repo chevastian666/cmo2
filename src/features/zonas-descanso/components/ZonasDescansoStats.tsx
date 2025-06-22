@@ -1,5 +1,5 @@
 import React from 'react';
-import {MapPin, Route,Truck} from 'lucide-react';
+import {MapPin, Route, Truck} from 'lucide-react';
 
 interface ZonasDescansoStatsProps {
   totalZonas: number;
@@ -7,8 +7,7 @@ interface ZonasDescansoStatsProps {
 }
 
 export const ZonasDescansoStats: React.FC<ZonasDescansoStatsProps> = ({ 
-  totalZonas, 
-  totalRutas 
+  totalZonas, totalRutas 
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

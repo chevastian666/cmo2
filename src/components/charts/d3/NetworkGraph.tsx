@@ -6,8 +6,21 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { NetworkData, NetworkNode, NetworkLink, ChartConfig, DEFAULT_CHART_CONFIG } from './types';
-import { formatters, scales, animations, tooltip } from './utils';
+import { NetworkData, NetworkNode, NetworkLink, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
+import { formatters, scales, animations, tooltip} from './utils';
+
+// D3 Simulation types
+interface SimulationNode extends NetworkNode {
+  x?: number;
+  y?: number;
+  fx?: number | null;
+  fy?: number | null;
+}
+
+interface SimulationLink extends NetworkLink {
+  source: SimulationNode | string;
+  target: SimulationNode | string;
+}
 
 interface NetworkGraphProps {
   data: NetworkData;
@@ -17,10 +30,7 @@ interface NetworkGraphProps {
 }
 
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({
-  data,
-  config: userConfig,
-  onNodeClick,
-  onLinkClick
+  data, config: userConfig, onNodeClick, onLinkClick
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,11 +39,14 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig]);
 
   // Handle container resize
-  useEffect(() => {
+   
+
+
+    useEffect(() => {
     if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+    const resizeObserver = new ResizeObserver(() => {
+      const { width, height } = containerRef.current!.getBoundingClientRect();
       setDimensions({ width: width || 800, height: height || 600 });
     });
 
@@ -47,8 +60,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const { width, height } = dimensions;
-    const { margin } = config;
+    
 
     // Create scales
     const colorScale = scales.createColorScale(
@@ -65,10 +77,10 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       .range([1, 8]);
 
     // Create simulation
-    const simulation = d3.forceSimulation(data.nodes as any)
-      .force('link', d3.forceLink(data.links)
-        .id((d: any) => d.id)
-        .distance(d => 50 + (d as any).value * 2)
+    const simulation = d3.forceSimulation<SimulationNode>(data.nodes as SimulationNode[])
+      .force('link', d3.forceLink<SimulationNode, SimulationLink>(data.links as SimulationLink[])
+        .id(d => d.id)
+        .distance(d => 50 + d.value * 2)
         .strength(0.5)
       )
       .force('charge', d3.forceManyBody()
@@ -77,7 +89,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       )
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide()
-        .radius(d => sizeScale((d as any).value) + 5)
+        .radius(d => sizeScale(d.value) + 5)
       );
 
     // Create main group
@@ -222,15 +234,15 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
         // Highlight connected links
         links
           .style('stroke-opacity', l => 
-            (l.source as any).id === d.id || (l.target as any).id === d.id ? 1 : 0.2
+            ((l.source as SimulationNode).id === d.id || (l.target as SimulationNode).id === d.id) ? 1 : 0.2
           );
 
         // Highlight connected nodes
         circles
           .style('opacity', n => {
             const isConnected = data.links.some(l => 
-              ((l.source as any).id === d.id && (l.target as any).id === n.id) ||
-              ((l.target as any).id === d.id && (l.source as any).id === n.id)
+              ((l.source as SimulationNode).id === d.id && (l.target as SimulationNode).id === n.id) ||
+              ((l.target as SimulationNode).id === d.id && (l.source as SimulationNode).id === n.id)
             );
             return n.id === d.id || isConnected ? 1 : 0.3;
           });
@@ -373,37 +385,39 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     // Simulation tick function
     simulation.on('tick', () => {
       links
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
+        .attr('x1', d => (d.source as SimulationNode).x || 0)
+        .attr('y1', d => (d.source as SimulationNode).y || 0)
+        .attr('x2', d => (d.target as SimulationNode).x || 0)
+        .attr('y2', d => (d.target as SimulationNode).y || 0);
 
-      nodes.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+      nodes.attr('transform', d => `translate(${d.x || 0},${d.y || 0})`);
     });
 
     // Drag functions
-    function dragstarted(event: any, d: any) {
+    function dragstarted(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
 
-    function dragged(event: any, d: any) {
+    function dragged(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       d.fx = event.x;
       d.fy = event.y;
     }
 
-    function dragended(event: any, d: any) {
+    function dragended(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
     }
 
-  }, [data, dimensions, config, onNodeClick, onLinkClick]);
+  }, [data, config, onNodeClick, onLinkClick]);
+   
 
-  useEffect(() => {
+
+    useEffect(() => {
     drawNetwork();
-  }, [drawNetwork]);
+  }, [drawNetwork, dimensions]);
 
   return (
     <div 

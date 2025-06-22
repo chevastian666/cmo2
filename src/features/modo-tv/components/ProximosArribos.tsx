@@ -1,7 +1,7 @@
 import React from 'react';
-import {Truck,Clock,MapPin,User} from 'lucide-react';
-import { cn } from '../../../utils/utils';
-import type { ProximoArribo } from '../types';
+import {Truck, Clock, MapPin, User} from 'lucide-react';
+import { cn} from '../../../utils/utils';
+import type { ProximoArribo} from '../types';
 
 interface ProximosArribosProps {
   arribos: ProximoArribo[];
@@ -53,8 +53,7 @@ export const ProximosArribos: React.FC<ProximosArribosProps> = ({ arribos }) => 
               <p className="text-xl text-gray-500">No hay arribos programados</p>
             </div>
           </div>
-        ) : (
-          <div className="divide-y divide-gray-800">
+        ) : (<div className="divide-y divide-gray-800">
             {arribos.map((arribo, index) => (
               <div
                 key={arribo.id}

@@ -1,14 +1,15 @@
+ 
 /**
  * Button with enhanced visual feedback
  * By Cheva
  */
 
 import React, { useState } from 'react';
-import { Button, ButtonProps } from '@/components/ui/button';
-import {Loader2, Check,X} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { toast } from '@/hooks/use-toast';
+import { Button, ButtonProps} from '@/components/ui/button';
+import {Loader2, Check, X} from 'lucide-react';
+import { motion, AnimatePresence} from 'framer-motion';
+import { cn} from '@/lib/utils';
+import { toast} from '@/hooks/use-toast';
 
 export interface FeedbackButtonProps extends ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
@@ -29,25 +30,7 @@ export interface FeedbackButtonProps extends ButtonProps {
 type ButtonState = 'idle' | 'loading' | 'success' | 'error';
 
 export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
-  children,
-  onClick,
-  loadingText,
-  successText,
-  errorText,
-  showSuccessIcon = true,
-  showErrorIcon = true,
-  successDuration = 2000,
-  onSuccess,
-  onError,
-  disabled,
-  className,
-  variant = 'default',
-  size = 'default',
-  showToastOnSuccess = false,
-  showToastOnError = true,
-  toastSuccessMessage,
-  toastErrorMessage,
-  ...props
+  children, onClick, loadingText, successText, errorText, showSuccessIcon = true, showErrorIcon = true, successDuration = 2000, onSuccess, onError, disabled, className, variant = 'default', size = 'default', showToastOnSuccess = false, showToastOnError = true, toastSuccessMessage, toastErrorMessage, ...props
 }) => {
   const [state, setState] = useState<ButtonState>('idle');
 
@@ -74,7 +57,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
       setTimeout(() => {
         setState('idle');
       }, successDuration);
-    } catch (_error) {
+    } catch {
       setState('error');
       
       if (showToastOnError) {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { LoadingState } from '@/components/ui/LoadingState';
-import { cn } from '../../../utils/utils';
-import { formatFileSize, formatDate } from '../../../utils/formatters';
-import type { Documento, TipoDocumento } from '../types';
-import { TIPOS_DOCUMENTO } from '../types';
+import { Badge} from '@/components/ui/badge';
+import { EmptyState} from '@/components/ui/EmptyState';
+import { LoadingState} from '@/components/ui/LoadingState';
+import { cn} from '../../../utils/utils';
+import { formatFileSize, formatDate} from '../../../utils/formatters';
+import type { Documento, TipoDocumento} from '../types';
+import { TIPOS_DOCUMENTO} from '../types';
 
 interface TablaDocumentosProps {
   documentos: Documento[];
@@ -24,15 +24,7 @@ type OrdenColumna = 'fecha' | 'tipo' | 'descripcion' | 'empresa' | 'subidoPor';
 type DireccionOrden = 'asc' | 'desc';
 
 export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
-  documentos,
-  loading = false,
-  onDescargar,
-  onVisualizar,
-  onEliminar,
-  onArchivar,
-  onToggleDestacado,
-  canDelete = false,
-  canEdit = false
+  documentos, loading = false, onDescargar, onVisualizar, onEliminar, onArchivar, onToggleDestacado, canDelete = false, canEdit = false
 }) => {
   const [ordenColumna, setOrdenColumna] = useState<OrdenColumna>('fecha');
   const [direccionOrden, setDireccionOrden] = useState<DireccionOrden>('desc');
@@ -98,8 +90,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
     return 0;
   });
 
-  const ColumnaOrden = ({ columna, children }: { columna: OrdenColumna; children: React.ReactNode }) => (
-    <button
+  const ColumnaOrden = ({ columna, children }: { columna: OrdenColumna; children: React.ReactNode }) => (<button
       onClick={() => handleOrden(columna)}
       className="flex items-center gap-1 hover:text-white transition-colors"
     >
@@ -124,8 +115,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
     );
   }
 
-  return (
-    <div className="overflow-x-auto">
+  return (<div className="overflow-x-auto">
       <table className="w-full">
         <thead className="bg-gray-800 border-b border-gray-700">
           <tr>
@@ -291,8 +281,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                     <Download className="h-4 w-4 text-gray-400" />
                   </button>
 
-                  {(canEdit || canDelete) && (
-                    <div className="relative">
+                  {(canEdit || canDelete) && (<div className="relative">
                       <button
                         onClick={() => setMenuAbierto(menuAbierto === doc.id ? null : doc.id)}
                         className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -300,16 +289,14 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                         <MoreVertical className="h-4 w-4 text-gray-400" />
                       </button>
 
-                      {menuAbierto === doc.id && (
-                        <>
+                      {menuAbierto === doc.id && (<>
                           <div
                             className="fixed inset-0 z-10"
                             onClick={() => setMenuAbierto(null)}
                           />
                           <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-20">
                             <div className="py-1">
-                              {canEdit && (
-                                <>
+                              {canEdit && (<>
                                   <button
                                     onClick={() => {
                                       onToggleDestacado(doc);
@@ -337,8 +324,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                                 </>
                               )}
                               
-                              {canDelete && (
-                                <>
+                              {canDelete && (<>
                                   <div className="border-t border-gray-700 my-1" />
                                   <button
                                     onClick={() => {

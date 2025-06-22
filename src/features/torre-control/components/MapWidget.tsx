@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { MapVisualization } from './MapVisualization';
-import type { TransitoTorreControl } from '../types';
+import { MapVisualization} from './MapVisualization';
+import type { TransitoTorreControl} from '../types';
 
 interface MapWidgetProps {
   data: TransitoTorreControl[];
@@ -13,6 +13,7 @@ interface MapWidgetProps {
 
 export const MapWidget: React.FC<MapWidgetProps> = ({ data }) => {
   const [mounted, setMounted] = useState(false);
+   
 
   useEffect(() => {
     // Ensure component is properly mounted before rendering

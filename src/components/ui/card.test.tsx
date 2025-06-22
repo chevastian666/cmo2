@@ -2,9 +2,9 @@
  * Card Component Tests
  * By Cheva
  */
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@/test/utils/test-utils';
-import {Card, CardContent, _CardDescription, _CardFooter, CardHeader, CardTitle} from './card';
+import { describe, it, expect} from 'vitest';
+import { render, screen} from '@/test/utils/test-utils';
+import { Card, CardContent, CardHeader, CardTitle} from './card';
 
 describe('Card Components', () => {
   describe('Card', () => {

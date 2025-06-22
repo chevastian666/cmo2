@@ -1,36 +1,27 @@
 import React from 'react';
-import { Button } from './button';
-import { Input } from './input';
-import {Select, _SelectContent, _SelectItem, _SelectTrigger, _SelectValue, } from './select';
+import { Button} from './button';
+import { Input} from './input';
+import { Select, } from './select';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './dialog';
-import {AlertCircle, Check,X, ArrowRight,User, Table} from 'lucide-react';
-import {Card, CardContent, _CardDescription, CardHeader, CardTitle} from './Card';
-import { Alert, AlertDescription, AlertTitle } from './alert';
-import { FormularioCamioneroV2 } from '../../features/camioneros/components/FormularioCamioneroV2';
-import { PrecintosTableV2 } from '../../features/precintos/components/PrecintosTableV2';
-import { VerificarAlertaModalV2 } from '../../features/alertas/components/VerificarAlertaModalV2';
-import { EditTransitoModalV2 } from '../../features/transitos/components/EditTransitoModalV2';
-import { Label } from './label';
-import { Checkbox } from './checkbox';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from './dialog';
+import {AlertCircle, Check, X, ArrowRight, User, Table} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle} from './Card';
+import { Alert, AlertDescription, AlertTitle} from './alert';
+import { FormularioCamioneroV2} from '../../features/camioneros/components/FormularioCamioneroV2';
+import { PrecintosTableV2} from '../../features/precintos/components/PrecintosTableV2';
+import { VerificarAlertaModalV2} from '../../features/alertas/components/VerificarAlertaModalV2';
+import { EditTransitoModalV2} from '../../features/transitos/components/EditTransitoModalV2';
+import { Label} from './label';
+import { Checkbox} from './checkbox';
 import {RadioGroup, RadioGroupItem} from './radio-group';
-import { Switch } from './switch';
+import { Switch} from './switch';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from './popover';
-import { Info } from 'lucide-react';
-import { Skeleton } from './skeleton';
-import { CardSkeleton, DashboardSkeleton, ListItemSkeleton, FormSkeleton } from './CardSkeleton';
-import { BreadcrumbNav } from './BreadcrumbNav';
-import { NetworkChartV2 } from '../../features/dashboard/components/NetworkChartV2';
+  Popover, PopoverContent, PopoverTrigger, } from './popover';
+import { Info} from 'lucide-react';
+import { Skeleton} from './skeleton';
+import { CardSkeleton, ListItemSkeleton, FormSkeleton} from './CardSkeleton';
+import { BreadcrumbNav} from './BreadcrumbNav';
+import { NetworkChartV2} from '../../features/dashboard/components/NetworkChartV2';
 
 // Mock data for demos
 const mockAlerta = {
