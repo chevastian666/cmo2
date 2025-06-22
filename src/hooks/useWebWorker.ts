@@ -107,7 +107,7 @@ export function useDataProcessor() {
   
 
   const processLargeDataset = useCallback(async <T extends Record<string, unknown>>(
-    data: T[], options?: Parameters<typeof proxy.processLargeDataset>[1]) => {
+    _data: T[], options?: Parameters<typeof proxy.processLargeDataset>[1]) => {
     if (!proxy) {
       throw new Error('Data processor not ready');
     }

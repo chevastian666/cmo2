@@ -425,7 +425,7 @@ class WebhooksService extends EventEmitter {
     this.emit('delivery.updated', delivery);
   }
 
-  private updateWebhookStats(webhookId: string, result: 'success' | 'error'): void {
+  private updateWebhookStats(_webhookId: string, result: 'success' | 'error'): void {
     const webhook = this.webhooks.get(webhookId);
     if (!webhook) return;
 

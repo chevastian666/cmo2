@@ -185,7 +185,7 @@ export const NotificationSystemDemo: React.FC = () => {
               { key: 'demo', label: 'Demostración', icon: TestTube2 }, { key: 'preferences', label: 'Preferencias', icon: Settings }, { key: 'stats', label: 'Estadísticas', icon: TrendingUp }
             ].map(({ key, label, icon: Icon }) => (<button
                 key={key}
-                onClick={() => setActiveTab(key as any)}
+                onClick={() => setActiveTab(key as unknown)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   activeTab === key
                     ? 'bg-blue-600 text-white'

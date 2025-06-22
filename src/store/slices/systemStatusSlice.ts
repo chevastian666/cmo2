@@ -22,7 +22,7 @@ const mockEstadisticas = {
   reportesPendientes: 15
 };
 
-export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, get) => ({
+export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) => ({
   // State
   estadisticas: null, smsPendientes: 0, dbStats: {
     memoriaUsada: 0, discoUsado: 0, }, apiStats: {

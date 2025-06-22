@@ -190,8 +190,7 @@ export const VirtualizedListUtils = {
   },
 
   // Binary search for sorted lists
-  binarySearch: <T>(items: T[], target: T, compareFn: (a: T, b: T) => number
-  ): number => {
+  binarySearch: <T,>(items: T[], target: T, compareFn: (a: T, b: T) => number): number => {
     let left = 0;
     let right = items.length - 1;
 

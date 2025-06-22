@@ -229,6 +229,7 @@ export function useVirtualization({
 
 
     useEffect(() => {
+     
     return () => {
       memoryManager.current.cleanup();
       performanceMonitor.current.destroy();

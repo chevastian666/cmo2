@@ -162,7 +162,7 @@ class SharedApiService {
         return result;
       } catch {
         // If we have retries left and it's a network error, retry
-        if (retriesLeft > 0 && (_error instanceof TypeError || (_error as any).code === 'ECONNREFUSED')) {
+        if (retriesLeft > 0 && (_error instanceof TypeError || (_error as unknown).code === 'ECONNREFUSED')) {
           console.warn(`Request failed, retrying... (${retriesLeft} retries left)`);
           await new Promise(resolve => setTimeout(resolve, 1000 * (retries - retriesLeft + 1))); // Exponential backoff
           return executeWithRetry(retriesLeft - 1);

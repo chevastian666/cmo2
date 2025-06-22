@@ -16,7 +16,7 @@ export class SoundService {
     try {
       this.audioContext = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
       this.preloadDefaultSounds();
-    } catch (error) {
+    } catch (_error) {
       console.warn('Web Audio API not supported, falling back to HTML5 Audio:', error);
     }
   }
@@ -33,7 +33,7 @@ export class SoundService {
         // Fallback to HTML5 Audio
         await this.playWithHtml5Audio(url, volume);
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to play sound:', error);
     }
   }
@@ -104,7 +104,7 @@ export class SoundService {
    * Test if audio is supported
    */
   isAudioSupported(): boolean {
-    return !!(window.AudioContext || (window as any).webkitAudioContext || window.Audio);
+    return !!(window.AudioContext || (window as unknown).webkitAudioContext || window.Audio);
   }
 
   /**
@@ -167,7 +167,7 @@ export class SoundService {
       };
 
       // Track playing sound (simplified for HTML5 Audio)
-      this.currentlyPlaying.set(url, audio as any);
+      this.currentlyPlaying.set(url, audio as unknown);
       
       audio.play().catch(reject);
     });

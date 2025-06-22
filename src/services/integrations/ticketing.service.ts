@@ -157,7 +157,7 @@ class TicketingService {
   }
 
   // Ticket updates
-  async updateTicket(configId: string, ticketId: string, updates: Partial<TicketData>): Promise<void> {
+  async updateTicket(configId: string, _ticketId: string, updates: Partial<TicketData>): Promise<void> {
     const config = this.configs.get(configId);
     if (!config) {
       throw new Error('Ticketing configuration not found');

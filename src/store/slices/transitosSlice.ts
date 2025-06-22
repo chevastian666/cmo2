@@ -5,7 +5,7 @@ import { transitosService} from '../../services';
 import { generateMockTransito} from '../../utils/mockData';
 import { notificationService} from '../../services/shared/notification.service';
 
-export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => ({
+export const createTransitosSlice: StateCreator<TransitosStore> = (set) => ({
   // State
   transitos: [], transitosPendientes: [], loading: false, error: null, lastUpdate: null, // Computed getters
   get transitosEnCurso() {

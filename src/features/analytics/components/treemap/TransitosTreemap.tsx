@@ -112,7 +112,7 @@ export const TransitosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Análisis de Tránsitos</CardTitle>
-            <ToggleGroup value={viewMode} onValueChange={(value) => value && setViewMode(value as any)}>
+            <ToggleGroup value={viewMode} onValueChange={(value) => value && setViewMode(value as unknown)}>
               <ToggleGroupItem value="routes">Rutas</ToggleGroupItem>
               <ToggleGroupItem value="timeline">Línea de Tiempo</ToggleGroupItem>
               <ToggleGroupItem value="delays">Retrasos</ToggleGroupItem>

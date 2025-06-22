@@ -24,7 +24,7 @@ type NotificationListener = (notification: Notification) => void;
 type NotificationsListener = (notifications: Notification[]) => void;
 
 
-interface NotificationOptions {
+// interface NotificationOptions {
   duration?: number;
   persistent?: boolean;
   actions?: Array<{ label: string; handler: () => void }>;

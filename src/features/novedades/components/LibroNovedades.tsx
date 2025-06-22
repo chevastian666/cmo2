@@ -65,8 +65,8 @@ export const LibroNovedades: React.FC = () => {
   const handleCrearNovedad = async (_data: unknown) => {
     await crearNovedad(_data);
     // Si hay archivos, aquí se subirían
-    if ((_data as any).archivos) {
-      console.log('Archivos a subir:', (_data as any).archivos);
+    if ((_data as unknown).archivos) {
+      console.log('Archivos a subir:', (_data as unknown).archivos);
     }
   };
 

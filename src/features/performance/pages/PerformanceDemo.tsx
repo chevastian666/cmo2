@@ -52,14 +52,14 @@ export const PerformanceDemo: React.FC = () => {
   // Performance monitoring
   const measurePerformance = useCallback((fn: () => void | Promise<void>, metricName: keyof typeof metrics) => {
     const startTime = performance.now();
-    const startMemory = (performance as any).memory?.usedJSHeapSize || 0;
+    const startMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
     
     const result = fn();
     
     if (result instanceof Promise) {
       return result.then(() => {
         const endTime = performance.now();
-        const endMemory = (performance as any).memory?.usedJSHeapSize || 0;
+        const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
         
         setMetrics(prev => ({
           ...prev,
@@ -69,7 +69,7 @@ export const PerformanceDemo: React.FC = () => {
       });
     } else {
       const endTime = performance.now();
-      const endMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
       
       setMetrics(prev => ({
         ...prev,
@@ -318,7 +318,7 @@ export const PerformanceDemo: React.FC = () => {
             ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
-                onClick={() => setSelectedTab(key as any)}
+                onClick={() => setSelectedTab(key as unknown)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   selectedTab === key
                     ? 'bg-blue-600 text-white'

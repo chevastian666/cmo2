@@ -9,7 +9,7 @@ import type { PrecintosStore} from '../types';
 import { precintosService} from '../../services';
 import { generateMockPrecinto} from '../../utils/mockData';
 
-export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => ({
+export const createPrecintosSlice: StateCreator<PrecintosStore> = (set) => ({
   // State
   precintos: [],
   precintosActivos: [],

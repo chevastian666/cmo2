@@ -54,7 +54,7 @@ export const useWebSocket = () => {
         }
         case 'create': {
           // Add new precinto to both lists if active
-          const newPrecinto = data.precinto as any;
+          const newPrecinto = data.precinto as unknown;
           store.setPrecintos([...store.precintos, newPrecinto]);
           if (['SAL', 'LLE', 'FMF', 'CFM', 'CNP'].includes(newPrecinto.estado)) {
             store.setPrecintosActivos([...store.precintosActivos, newPrecinto]);
@@ -65,6 +65,7 @@ export const useWebSocket = () => {
           store.removePrecinto(data.precinto.id);
           break;
         }
+      }
     });
 
     // Handle transito updates
@@ -86,7 +87,6 @@ export const useWebSocket = () => {
         case 'delete':
           store.removeTransito(data.transito.id);
           break;
-        }
         case 'precintado': {
           // Remove from pending and update status
           store.updateTransito(data.transito.id, { estado: 'precintado' });
@@ -94,6 +94,7 @@ export const useWebSocket = () => {
             store.transitosPendientes.filter(t => t.id !== data.transito.id)
           );
           break;
+        }
       }
     });
 

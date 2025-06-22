@@ -67,7 +67,7 @@ export interface APIConfig {
 }
 
 class RestAPIService {
-  private config: APIConfig;
+  private _config: APIConfig;
   private endpoints = new Map<string, APIEndpoint>();
   private server: unknown = null;
   private requestStats = new Map<string, { count: number; lastReset: number }>();

@@ -5,7 +5,7 @@ interface UseAlertFilteringProps {
   alerts: Alert[];
   initialFilters?: AlertFilters;
   debounceMs?: number;
-  }
+}
 interface FilterResult {
   filteredAlerts: Alert[];
   filters: AlertFilters;
@@ -14,7 +14,7 @@ interface FilterResult {
   filterCount: number;
   isFiltering: boolean;
   highlightedIndices: Set<number>;
-  }
+}
 export function useAlertFiltering({
   alerts,
   initialFilters = {},
