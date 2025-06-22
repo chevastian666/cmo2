@@ -1,17 +1,16 @@
-import {useRef, useState, useCallback, useEffect, useMemo} from 'react';
-import { calculateVisibleRange, calculateTotalHeight, calculateScrollVelocity, calculatePrefetchRange} from '../utils/scrollCalculations';
-import { ScrollPredictor} from '../utils/prefetchStrategies';
-import { VirtualListMemoryManager} from '../utils/memoryManager';
-import { PerformanceMonitor} from '../utils/performanceMonitor';
-import type { VirtualListState, VirtualizedListConfig} from '../types/virtualization';
-
+import {useRef, useState, useCallback, useEffect, useMemo} from 'react'
+import { calculateVisibleRange, calculateTotalHeight, calculateScrollVelocity, calculatePrefetchRange} from '../utils/scrollCalculations'
+import { ScrollPredictor} from '../utils/prefetchStrategies'
+import { VirtualListMemoryManager} from '../utils/memoryManager'
+import { PerformanceMonitor} from '../utils/performanceMonitor'
+import type { VirtualListState, VirtualizedListConfig} from '../types/virtualization'
 interface UseVirtualizationProps {
-  items: unknown[];
-  itemHeight: number | ((index: number) => number);
-  containerHeight: number;
-  overscan?: number;
-  config?: Partial<VirtualizedListConfig>;
-  onScroll?: (scrollTop: number) => void;
+  items: unknown[]
+  itemHeight: number | ((index: number) => number)
+  containerHeight: number
+  overscan?: number
+  config?: Partial<VirtualizedListConfig>
+  onScroll?: (scrollTop: number) => void
 }
 
 const defaultConfig: VirtualizedListConfig = {
@@ -34,8 +33,7 @@ const defaultConfig: VirtualizedListConfig = {
     keyboardNavigation: true,
     screenReaderOptimized: false
   }
-};
-
+}
 export function useVirtualization({
   items, itemHeight, containerHeight, overscan = 3, config: userConfig, onScroll
 }: UseVirtualizationProps) {
@@ -45,18 +43,16 @@ export function useVirtualization({
     performance: { ...defaultConfig.performance, ...userConfig?.performance },
     scrolling: { ...defaultConfig.scrolling, ...userConfig?.scrolling },
     accessibility: { ...defaultConfig.accessibility, ...userConfig?.accessibility }
-  }), [userConfig]);
-
+  }), [userConfig])
   // Refs
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollPredictor = useRef(new ScrollPredictor());
-  const memoryManager = useRef(new VirtualListMemoryManager(config.performance.recycleThreshold));
-  const performanceMonitor = useRef(new PerformanceMonitor());
-  const scrollTimeout = useRef<NodeJS.Timeout>();
-  const lastScrollTime = useRef(0);
-  const lastScrollTop = useRef(0);
-  const isScrolling = useRef(false);
-
+  const containerRef = useRef<HTMLDivElement>(null)
+  const scrollPredictor = useRef(new ScrollPredictor())
+  const memoryManager = useRef(new VirtualListMemoryManager(config.performance.recycleThreshold))
+  const performanceMonitor = useRef(new PerformanceMonitor())
+  const scrollTimeout = useRef<NodeJS.Timeout>()
+  const lastScrollTime = useRef(0)
+  const lastScrollTop = useRef(0)
+  const isScrolling = useRef(false)
   // State
   const [state, setState] = useState<VirtualListState>({
     scrollTop: 0,
@@ -66,17 +62,15 @@ export function useVirtualization({
     isScrolling: false,
     scrollDirection: null,
     scrollVelocity: 0
-  });
-
+  })
   // Calculate total height
   const totalHeight = useMemo(() => 
     calculateTotalHeight(items.length, itemHeight, state.cachedHeights),
     [items.length, itemHeight, state.cachedHeights]
-  );
-
+  )
   // Calculate visible items
   const visibleItems = useMemo(() => {
-    const [start, end] = state.visibleRange;
+    const [start, end] = state.visibleRange
     return items.slice(start, end + 1).map((item, index) => ({
       item,
       index: start + index,
@@ -88,43 +82,37 @@ export function useVirtualization({
         transform: `translateY(${getItemOffset(start + index)}px)`,
         height: typeof itemHeight === 'function' ? itemHeight(start + index) : itemHeight
       }
-    }));
-  }, [items, state.visibleRange, itemHeight]);
-
+    }))
+  }, [items, state.visibleRange])
   // Get item offset
   const getItemOffset = useCallback((index: number): number => {
     if (typeof itemHeight === 'number') {
-      return index * itemHeight;
+      return index * itemHeight
     }
 
-    let offset = 0;
+    let offset = 0
     for (let i = 0; i < index; i++) {
-      offset += state.cachedHeights.get(i) ?? itemHeight(i);
+      offset += state.cachedHeights.get(i) ?? itemHeight(i)
     }
-    return offset;
-  }, [itemHeight, state.cachedHeights]);
-
+    return offset
+  }, [state.cachedHeights])
   // Handle scroll with performance optimization
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const scrollTop = e.currentTarget.scrollTop;
-    const now = performance.now();
-    
+    const scrollTop = e.currentTarget.scrollTop
+    const now = performance.now()
     // Calculate scroll metrics
-    const deltaTime = now - lastScrollTime.current;
-    const velocity = calculateScrollVelocity(scrollTop, lastScrollTop.current, deltaTime);
-    const direction = velocity > 0 ? 'down' : velocity < 0 ? 'up' : null;
-
+    const deltaTime = now - lastScrollTime.current
+    const velocity = calculateScrollVelocity(scrollTop, lastScrollTop.current, deltaTime)
+    const direction = velocity > 0 ? 'down' : velocity < 0 ? 'up' : null
     // Update refs
-    lastScrollTime.current = now;
-    lastScrollTop.current = scrollTop;
-    isScrolling.current = true;
-
+    lastScrollTime.current = now
+    lastScrollTop.current = scrollTop
+    isScrolling.current = true
     // Analyze scroll pattern
-    scrollPredictor.current.analyzeScrollPattern(scrollTop, now);
-
+    scrollPredictor.current.analyzeScrollPattern(scrollTop, now)
     // Clear existing timeout
     if (scrollTimeout.current) {
-      clearTimeout(scrollTimeout.current);
+      clearTimeout(scrollTimeout.current)
     }
 
     // Throttled update
@@ -136,8 +124,7 @@ export function useVirtualization({
           items.length,
           itemHeight,
           overscan
-        );
-
+        )
         // Calculate prefetch range
         const [prefetchStart, prefetchEnd] = calculatePrefetchRange(
           visibleRange,
@@ -145,12 +132,11 @@ export function useVirtualization({
           velocity,
           items.length,
           config.performance.prefetchThreshold
-        );
-
+        )
         // Update prefetched items
-        const newPrefetchedItems = new Set<number>();
+        const newPrefetchedItems = new Set<number>()
         for (let i = prefetchStart; i <= prefetchEnd; i++) {
-          newPrefetchedItems.add(i);
+          newPrefetchedItems.add(i)
         }
 
         setState(prev => ({
@@ -161,82 +147,69 @@ export function useVirtualization({
           isScrolling: true,
           scrollDirection: direction,
           scrollVelocity: velocity
-        }));
-      });
-
+        }))
+      })
       // Measure scroll latency
-      const latency = performance.now() - now;
-      performanceMonitor.current.measureScrollLatency(latency);
-    };
-
+      const latency = performance.now() - now
+      performanceMonitor.current.measureScrollLatency(latency)
+    }
     // Apply throttling based on performance
     if (deltaTime >= config.performance.scrollThrottleMs) {
-      updateVisibleRange();
+      updateVisibleRange()
     }
 
     // Debounced scroll end detection
     scrollTimeout.current = setTimeout(() => {
-      isScrolling.current = false;
-      setState(prev => ({ ...prev, isScrolling: false }));
-    }, 150);
-
+      isScrolling.current = false
+      setState(prev => ({ ...prev, isScrolling: false }))
+    }, 150)
     // Call user's onScroll handler
-    onScroll?.(scrollTop);
-  }, [containerHeight, items.length, itemHeight, overscan, config.performance, onScroll]);
-
+    onScroll?.(scrollTop)
+  }, [items.length, overscan, config.performance])
   // Scroll to item
   const scrollToItem = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
-    if (!containerRef.current) return;
-
-    const offset = getItemOffset(index);
+    if (!containerRef.current) return
+    const offset = getItemOffset(index)
     containerRef.current.scrollTo({
       top: offset,
       behavior
-    });
-  }, [getItemOffset]);
-
+    })
+  }, [])
   // Scroll to offset
   const scrollToOffset = useCallback((offset: number, behavior: ScrollBehavior = 'smooth') => {
-    if (!containerRef.current) return;
-
+    if (!containerRef.current) return
     containerRef.current.scrollTo({
       top: offset,
       behavior
-    });
-  }, []);
-
+    })
+  }, [])
   // Update item height cache
   const updateItemHeight = useCallback((index: number, height: number) => {
     setState(prev => {
-      const newCachedHeights = new Map(prev.cachedHeights);
-      newCachedHeights.set(index, height);
-      return { ...prev, cachedHeights: newCachedHeights };
-    });
-  }, []);
-
+      const newCachedHeights = new Map(prev.cachedHeights)
+      newCachedHeights.set(index, height)
+      return { ...prev, cachedHeights: newCachedHeights }
+    })
+  }, [])
   // Get performance metrics
   const getPerformanceMetrics = useCallback(() => {
-    const recycleStats = memoryManager.current.getStats();
+    const recycleStats = memoryManager.current.getStats()
     return performanceMonitor.current.getMetrics({
       itemsRendered: state.visibleRange[1] - state.visibleRange[0] + 1,
       cacheHitRate: recycleStats.hitRate,
       recycleRate: recycleStats.recycled / (recycleStats.created || 1)
-    });
-  }, [state.visibleRange]);
-
+    })
+  }, [state.visibleRange])
   // Cleanup on unmount
-   
-
 
     useEffect(() => {
      
     return () => {
-      memoryManager.current.cleanup();
-      performanceMonitor.current.destroy();
-      scrollPredictor.current.reset();
-    };
-  }, []);
-
+      memoryManager.current.cleanup()
+      performanceMonitor.current.destroy()
+      scrollPredictor.current.reset()
+    }
+  }, [])
   return {
     containerRef,
     containerProps: {
@@ -265,5 +238,5 @@ export function useVirtualization({
     getPerformanceMetrics,
     isScrolling: state.isScrolling,
     scrollDirection: state.scrollDirection
-  };
+  }
 }

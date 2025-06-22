@@ -4,47 +4,46 @@
  * By Cheva
  */
 
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import { debounce } from 'lodash-es';
-
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
+import { debounce } from 'lodash-es'
 interface PaginationOptions<T> {
-  queryKey: string[];
-  queryFn: (params: PaginationParams) => Promise<PaginatedResponse<T>>;
-  pageSize?: number;
-  prefetchPages?: number;
-  cacheTime?: number;
-  staleTime?: number;
-  keepPreviousData?: boolean;
-  onError?: (error: Error) => void;
+  queryKey: string[]
+  queryFn: (params: PaginationParams) => Promise<PaginatedResponse<T>>
+  pageSize?: number
+  prefetchPages?: number
+  cacheTime?: number
+  staleTime?: number
+  keepPreviousData?: boolean
+  onError?: (error: Error) => void
 }
 
 interface PaginationParams {
-  page: number;
-  pageSize: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, unknown>;
-  search?: string;
+  page: number
+  pageSize: number
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  filters?: Record<string, unknown>
+  search?: string
 }
 
 interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  data: T[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
 }
 
 interface PaginationState {
-  page: number;
-  pageSize: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  filters: Record<string, unknown>;
-  search: string;
+  page: number
+  pageSize: number
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  filters: Record<string, unknown>
+  search: string
 }
 
 export function useServerPagination<T>({
@@ -57,9 +56,8 @@ export function useServerPagination<T>({
   keepPreviousData: keepPrevious = true,
   onError
 }: PaginationOptions<T>) {
-  const queryClient = useQueryClient();
-  const abortControllerRef = useRef<AbortController | null>(null);
-
+  const queryClient = useQueryClient()
+  const abortControllerRef = useRef<AbortController | null>(null)
   // Pagination state
   const [state, setState] = useState<PaginationState>({
     page: 1,
@@ -68,8 +66,7 @@ export function useServerPagination<T>({
     sortOrder: undefined,
     filters: {},
     search: ''
-  });
-
+  })
   // Create query key with all parameters
   const fullQueryKey = useMemo(() => [
     ...queryKey,
@@ -79,8 +76,7 @@ export function useServerPagination<T>({
     state.sortOrder,
     state.filters,
     state.search
-  ], [queryKey, state]);
-
+  ], [queryKey, state])
   // Main query
   const {
     data,
@@ -94,12 +90,11 @@ export function useServerPagination<T>({
     queryFn: async () => {
       // Cancel previous request
       if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+        abortControllerRef.current.abort()
       }
 
       // Create new abort controller
-      abortControllerRef.current = new AbortController();
-
+      abortControllerRef.current = new AbortController()
       try {
         const response = await queryFn({
           page: state.page,
@@ -108,12 +103,11 @@ export function useServerPagination<T>({
           sortOrder: state.sortOrder,
           filters: state.filters,
           search: state.search
-        });
-
+        })
         // Prefetch next pages
         if (response.hasNextPage && prefetchPages > 0) {
           for (let i = 1; i <= prefetchPages; i++) {
-            const nextPage = state.page + i;
+            const nextPage = state.page + i
             if (nextPage <= response.totalPages) {
               queryClient.prefetchQuery({
                 queryKey: [
@@ -130,17 +124,17 @@ export function useServerPagination<T>({
                   page: nextPage
                 }),
                 staleTime
-              });
+              })
             }
           }
         }
 
-        return response;
+        return response
       } catch (error) {
         if (error instanceof Error && error.name !== 'AbortError') {
-          throw error;
+          throw error
         }
-        throw new Error('Request aborted');
+        throw new Error('Request aborted')
       }
     },
     staleTime,
@@ -148,53 +142,43 @@ export function useServerPagination<T>({
     placeholderData: keepPrevious ? keepPreviousData : undefined,
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
-  });
-
+  })
   // Handle errors
-   
-
 
     useEffect(() => {
     if (isError && error && onError) {
-      onError(error as Error);
+      onError(error as Error)
     }
-  }, [isError, error, onError]);
-
+  }, [error])
   // Debounced search
   const debouncedSearch = useMemo(
     () => debounce((search: string) => {
-      setState(prev => ({ ...prev, search, page: 1 }));
+      setState(prev => ({ ...prev, search, page: 1 }))
     }, 300),
     []
-  );
-
+  )
   // Page navigation
   const goToPage = useCallback((page: number) => {
-    setState(prev => ({ ...prev, page }));
-  }, []);
-
+    setState(prev => ({ ...prev, page }))
+  }, [])
   const nextPage = useCallback(() => {
     if (data?.hasNextPage) {
-      setState(prev => ({ ...prev, page: prev.page + 1 }));
+      setState(prev => ({ ...prev, page: prev.page + 1 }))
     }
-  }, [data?.hasNextPage]);
-
+  }, [data?.hasNextPage])
   const previousPage = useCallback(() => {
     if (data?.hasPreviousPage) {
-      setState(prev => ({ ...prev, page: prev.page - 1 }));
+      setState(prev => ({ ...prev, page: prev.page - 1 }))
     }
-  }, [data?.hasPreviousPage]);
-
+  }, [data?.hasPreviousPage])
   const firstPage = useCallback(() => {
-    setState(prev => ({ ...prev, page: 1 }));
-  }, []);
-
+    setState(prev => ({ ...prev, page: 1 }))
+  }, [])
   const lastPage = useCallback(() => {
     if (data?.totalPages) {
-      setState(prev => ({ ...prev, page: data.totalPages }));
+      setState(prev => ({ ...prev, page: data.totalPages }))
     }
-  }, [data?.totalPages]);
-
+  }, [data?.totalPages])
   // Sorting
   const setSort = useCallback((sortBy: string, sortOrder?: 'asc' | 'desc') => {
     setState(prev => ({
@@ -202,61 +186,54 @@ export function useServerPagination<T>({
       sortBy,
       sortOrder: sortOrder || (prev.sortBy === sortBy && prev.sortOrder === 'asc' ? 'desc' : 'asc'),
       page: 1
-    }));
-  }, []);
-
+    }))
+  }, [])
   // Filtering
   const setFilter = useCallback((key: string, value: unknown) => {
     setState(prev => ({
       ...prev,
       filters: { ...prev.filters, [key]: value },
       page: 1
-    }));
-  }, []);
-
+    }))
+  }, [])
   const setFilters = useCallback((filters: Record<string, unknown>) => {
     setState(prev => ({
       ...prev,
       filters,
       page: 1
-    }));
-  }, []);
-
+    }))
+  }, [])
   const clearFilter = useCallback((key: string) => {
     setState(prev => {
-      const newFilters = { ...prev.filters };
-      delete newFilters[key];
+      const newFilters = { ...prev.filters }
+      delete newFilters[key]
       return {
         ...prev,
         filters: newFilters,
         page: 1
-      };
-    });
-  }, []);
-
+      }
+    })
+  }, [])
   const clearAllFilters = useCallback(() => {
     setState(prev => ({
       ...prev,
       filters: {},
       search: '',
       page: 1
-    }));
-  }, []);
-
+    }))
+  }, [])
   // Page size
   const setPageSize = useCallback((pageSize: number) => {
     setState(prev => ({
       ...prev,
       pageSize,
       page: 1
-    }));
-  }, []);
-
+    }))
+  }, [])
   // Invalidate cache
   const invalidate = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey });
-  }, [queryClient, queryKey]);
-
+    queryClient.invalidateQueries({ queryKey })
+  }, [])
   // Reset all
   const reset = useCallback(() => {
     setState({
@@ -266,22 +243,18 @@ export function useServerPagination<T>({
       sortOrder: undefined,
       filters: {},
       search: ''
-    });
-  }, [pageSize]);
-
+    })
+  }, [])
   // Cleanup on unmount
-   
-
 
     useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+        abortControllerRef.current.abort()
       }
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
-
+      debouncedSearch.cancel()
+    }
+  }, [])
   return {
     // Data
     data: data?.data || [],
@@ -320,5 +293,5 @@ export function useServerPagination<T>({
     setSearch: debouncedSearch,
     invalidate,
     reset
-  };
+  }
 }

@@ -5,21 +5,19 @@
  * By Cheva
  */
 
-import React, { createContext, useContext } from 'react';
-import { cn} from '@/utils/utils';
-
+import React, { createContext, useContext } from 'react'
+import { cn} from '@/utils/utils'
 interface ToggleGroupContextValue {
-  value: string;
-  onValueChange: (value: string) => void;
+  value: string
+  onValueChange: (value: string) => void
 }
 
-const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(undefined);
-
+const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(undefined)
 interface ToggleGroupProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  className?: string;
-  children: React.ReactNode;
+  value: string
+  onValueChange: (value: string) => void
+  className?: string
+  children: React.ReactNode
 }
 
 export const ToggleGroup: React.FC<ToggleGroupProps> = ({
@@ -31,27 +29,25 @@ export const ToggleGroup: React.FC<ToggleGroupProps> = ({
         {children}
       </div>
     </ToggleGroupContext.Provider>
-  );
-};
-
+  )
+}
 interface ToggleGroupItemProps {
-  value: string;
-  className?: string;
-  children: React.ReactNode;
-  disabled?: boolean;
+  value: string
+  className?: string
+  children: React.ReactNode
+  disabled?: boolean
 }
 
 export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
   value, className, children, disabled = false
 }) => {
-  const context = useContext(ToggleGroupContext);
+  const context = useContext(ToggleGroupContext)
   if (!context) {
-    throw new Error('ToggleGroupItem must be used within ToggleGroup');
+    throw new Error('ToggleGroupItem must be used within ToggleGroup')
   }
 
-  const { value: selectedValue } = context;
-  const isSelected = selectedValue === value;
-
+  const { value: selectedValue } = context
+  const isSelected = selectedValue === value
   return (<button
       type="button"
       disabled={disabled}
@@ -70,5 +66,5 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
     >
       {children}
     </button>
-  );
-};
+  )
+}

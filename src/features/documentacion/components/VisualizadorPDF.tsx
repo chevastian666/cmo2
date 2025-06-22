@@ -1,48 +1,40 @@
-import React, { useState } from 'react';
-import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '@/components/ui/card';
-import { LoadingState} from '@/components/ui/LoadingState';
-import { cn} from '../../../utils/utils';
-import type { Documento} from '../types';
-import { TIPOS_DOCUMENTO} from '../types';
-
+import React, { useState } from 'react'
+import {X, Download, ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, ChevronLeft, ChevronRight, FileText} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '@/components/ui/card'
+import { LoadingState} from '@/components/ui/LoadingState'
+import { cn} from '../../../utils/utils'
+import type { Documento} from '../types'
+import { TIPOS_DOCUMENTO} from '../types'
 interface VisualizadorPDFProps {
-  documento: Documento | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onDescargar: (doc: Documento) => void;
+  documento: Documento | null
+  isOpen: boolean
+  onClose: () => void
+  onDescargar: (doc: Documento) => void
 }
 
 export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
   documento, isOpen, onClose, onDescargar
 }) => {
-  const [zoom, setZoom] = useState(100);
-  const [rotation, setRotation] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [fullscreen, setFullscreen] = useState(false);
-
-  if (!isOpen || !documento) return null;
-
+  const [zoom, setZoom] = useState(100)
+  const [rotation, setRotation] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [fullscreen, setFullscreen] = useState(false)
+  if (!isOpen || !documento) return null
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 25, 200));
-  };
-
+    setZoom(prev => Math.min(prev + 25, 200))
+  }
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 25, 50));
-  };
-
+    setZoom(prev => Math.max(prev - 25, 50))
+  }
   const handleRotate = () => {
-    setRotation(prev => (prev + 90) % 360);
-  };
-
+    setRotation(prev => (prev + 90) % 360)
+  }
   const toggleFullscreen = () => {
-    setFullscreen(!fullscreen);
-  };
-
-  const tipoConfig = TIPOS_DOCUMENTO[documento.tipo];
-
+    setFullscreen(!fullscreen)
+  }
+  const tipoConfig = TIPOS_DOCUMENTO[documento.tipo]
   return (
     <>
       {/* Backdrop */}
@@ -216,5 +208,5 @@ export const VisualizadorPDF: React.FC<VisualizadorPDFProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

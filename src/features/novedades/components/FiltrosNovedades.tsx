@@ -1,14 +1,12 @@
-import React from 'react';
-import { Search, Calendar, Filter, RotateCcw, User} from 'lucide-react';
-
-import { cn} from '../../../utils/utils';
-import type { FiltrosNovedades} from '../types';
-import { PUNTOS_OPERACION, TIPOS_NOVEDAD, FILTROS_DEFAULT} from '../types';
-
+import React from 'react'
+import { Search, Calendar, Filter, RotateCcw, User} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { FiltrosNovedades} from '../types'
+import { PUNTOS_OPERACION, TIPOS_NOVEDAD, FILTROS_DEFAULT} from '../types'
 interface FiltrosNovedadesProps {
-  filtros: FiltrosNovedades;
-  onFiltrosChange: (filtros: FiltrosNovedades) => void;
-  className?: string;
+  filtros: FiltrosNovedades
+  onFiltrosChange: (filtros: FiltrosNovedades) => void
+  className?: string
 }
 
 export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
@@ -18,13 +16,11 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
     onFiltrosChange({
       ...filtros,
       [key]: value
-    });
-  };
-
+    })
+  }
   const handleReset = () => {
-    onFiltrosChange(FILTROS_DEFAULT);
-  };
-
+    onFiltrosChange(FILTROS_DEFAULT)
+  }
   const tienesFiltrosActivos = () => {
     return filtros.busqueda !== '' ||
            filtros.puntoOperacion !== '' ||
@@ -32,9 +28,8 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
            filtros.estado !== '' ||
            filtros.fechaDesde !== null ||
            filtros.fechaHasta !== null ||
-           filtros.soloMias;
-  };
-
+           filtros.soloMias
+  }
   return (
     <div className={cn("space-y-4", className)}>
       {/* Búsqueda */}
@@ -156,9 +151,9 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
 
           {(filtros.fechaDesde || filtros.fechaHasta) && (<button
               onClick={() => {
-                handleChange('fechaDesde', null);
-                handleChange('fechaHasta', null);
-                handleChange('fecha', null);
+                handleChange('fechaDesde', null)
+                handleChange('fechaHasta', null)
+                handleChange('fecha', null)
               }}
               className="text-xs text-gray-400 hover:text-white"
             >
@@ -168,5 +163,5 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         </div>
       </details>
     </div>
-  );
-};
+  )
+}

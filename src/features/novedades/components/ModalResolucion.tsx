@@ -1,40 +1,34 @@
-import React, { useState } from 'react';
-import {X, Check, CheckCircle} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import type { Novedad} from '../types';
-
+import React, { useState } from 'react'
+import {X, Check, CheckCircle} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import type { Novedad} from '../types'
 interface ModalResolucionProps {
-  novedad: Novedad | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (novedadId: string, comentario?: string) => Promise<void>;
+  novedad: Novedad | null
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (novedadId: string, comentario?: string) => Promise<void>
 }
 
 export const ModalResolucion: React.FC<ModalResolucionProps> = ({
   novedad, isOpen, onClose, onSubmit
 }) => {
-  const [comentario, setComentario] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  if (!isOpen || !novedad) return null;
-
+  const [comentario, setComentario] = useState('')
+  const [loading, setLoading] = useState(false)
+  if (!isOpen || !novedad) return null
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    setLoading(true);
-    
+    e.preventDefault()
+    setLoading(true)
     try {
-      await onSubmit(novedad.id, comentario.trim() || undefined);
-      setComentario('');
-      onClose();
+      await onSubmit(novedad.id, comentario.trim() || undefined)
+      setComentario('')
+      onClose()
     } catch {
       // Error manejado en el componente padre
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   return (
     <>
       {/* Backdrop */}
@@ -139,5 +133,5 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

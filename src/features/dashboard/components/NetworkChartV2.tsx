@@ -1,40 +1,36 @@
-import React from 'react';
-import { Area, AreaChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, } from 'recharts';
-import { format} from 'date-fns';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle, } from '@/components/ui/card';
-import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart';
-
+import React from 'react'
+import { Area, AreaChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, } from 'recharts'
+import { format} from 'date-fns'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle, } from '@/components/ui/card'
+import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from '@/components/ui/chart'
 interface NetworkChartProps {
   data: Array<{
-    timestamp: number;
-    cantidad?: number;
-    value?: number;
-  }>;
-  title: string;
-  color?: string;
-  type?: 'line' | 'area';
+    timestamp: number
+    cantidad?: number
+    value?: number
+  }>
+  title: string
+  color?: string
+  type?: 'line' | 'area'
 }
 
 export const NetworkChartV2: React.FC<NetworkChartProps> = ({
   data, title, color = '#3B82F6', type = 'line'
 }) => {
   // Determine which field to use
-  const dataKey = data[0]?.cantidad !== undefined ? "cantidad" : "value";
-
+  const dataKey = data[0]?.cantidad !== undefined ? "cantidad" : "value"
   const chartConfig = {
     [dataKey]: {
       label: dataKey === "cantidad" ? "Cantidad" : "Valor",
       color: color,
     },
-  } satisfies ChartConfig;
-
+  } satisfies ChartConfig
   // Format data for the chart
   const formattedData = data.map(item => ({
     ...item,
     time: format(new Date(item.timestamp * 1000), 'HH:mm'),
     fullDate: format(new Date(item.timestamp * 1000), 'PPpp'),
-  }));
-
+  }))
   return (<Card className="bg-gray-800 border-gray-700">
       <CardHeader>
         <CardTitle className="text-white">{title}</CardTitle>
@@ -168,5 +164,5 @@ export const NetworkChartV2: React.FC<NetworkChartProps> = ({
         </ChartContainer>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

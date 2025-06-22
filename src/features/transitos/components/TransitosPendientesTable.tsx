@@ -1,34 +1,31 @@
-import React from 'react';
-import { formatTimeAgo} from '../../../utils/formatters';
-import type { TransitoPendiente} from '../../../types/monitoring';
-import { cn} from '../../../utils/utils';
-import { Clock, MessageSquare} from 'lucide-react';
-import { THRESHOLDS} from '../../../constants';
-import { DataTable} from '../../../components/DataTable';
-
+import React from 'react'
+import { formatTimeAgo} from '../../../utils/formatters'
+import type { TransitoPendiente} from '../../../types/monitoring'
+import { cn} from '../../../utils/utils'
+import { Clock, MessageSquare} from 'lucide-react'
+import { THRESHOLDS} from '../../../constants'
+import { DataTable} from '../../../components/DataTable'
 interface TransitosPendientesTableProps {
-  transitos: TransitoPendiente[];
+  transitos: TransitoPendiente[]
 }
 
 export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> = ({ transitos }) => {
   const getTiempoColor = (timestamp: number) => {
-    const now = Math.floor(Date.now() / 1000);
-    const diff = now - timestamp;
-    
+    const now = Math.floor(Date.now() / 1000)
+    const diff = now - timestamp
     // 0-30 minutos: verde
     if (diff <= THRESHOLDS.TIEMPO_PENDIENTE_VERDE) {
-      return 'text-green-400';
+      return 'text-green-400'
     } 
     // 31-60 minutos: amarillo
     else if (diff <= THRESHOLDS.TIEMPO_PENDIENTE_AMARILLO) {
-      return 'text-yellow-400';
+      return 'text-yellow-400'
     } 
     // 60+ minutos: rojo
     else {
-      return 'text-red-400';
+      return 'text-red-400'
     }
-  };
-
+  }
   const columns: Column<TransitoPendiente>[] = [
     {
       key: 'numeroViaje',
@@ -153,14 +150,12 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         </div>
       )
     }
-  ];
-
+  ]
   const handleExport = (_data: TransitoPendiente[], format: 'csv' | 'json') => {
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `transitos-pendientes-${timestamp}`;
-    
+    const timestamp = new Date().toISOString().split('T')[0]
+    const filename = `transitos-pendientes-${timestamp}`
     if (format === 'csv') {
-      const headers = ['N° Viaje', 'MOV', 'DUA', 'Tipo de Carga', 'Matrícula', 'Origen', 'Destino', 'Despachante', 'Fecha Ingreso'];
+      const headers = ['N° Viaje', 'MOV', 'DUA', 'Tipo de Carga', 'Matrícula', 'Origen', 'Destino', 'Despachante', 'Fecha Ingreso']
       const rows = data.map(t => [
         t.numeroViaje,
         t.mov,
@@ -171,26 +166,23 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         t.destino,
         t.despachante,
         new Date(t.fechaIngreso * 1000).toLocaleString('es-UY')
-      ]);
-      
+      ])
       const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
-        map(row => row.join(',')).join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${filename}.csv`;
-      link.click();
+        map(row => row.join(',')).join('\n')
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.csv`
+      link.click()
     } else {
-      const jsonData = JSON.stringify(_data, null, 2);
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${filename}.json`;
-      link.click();
+      const jsonData = JSON.stringify(_data, null, 2)
+      const blob = new Blob([jsonData], { type: 'application/json' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.json`
+      link.click()
     }
-  };
-
+  }
   return (
     <DataTable
       data={transitos}
@@ -203,5 +195,5 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       defaultItemsPerPage={25}
       itemsPerPageOptions={[10, 25, 50, 100]}
     />
-  );
-};
+  )
+}

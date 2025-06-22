@@ -1,27 +1,24 @@
-import { create} from 'zustand';
-import { persist} from 'zustand/middleware';
-import type { ClipboardEntry, ClipboardContentType} from '../types';
-
+import { create} from 'zustand'
+import { persist} from 'zustand/middleware'
+import type { ClipboardEntry, ClipboardContentType} from '../types'
 interface ClipboardStore {
-  history: ClipboardEntry[];
-  maxHistory: number;
-  searchQuery: string;
-  selectedType: ClipboardContentType | 'all';
-  isOpen: boolean;
-  syncStatus: 'idle' | 'syncing' | 'error';
-  
+  history: ClipboardEntry[]
+  maxHistory: number
+  searchQuery: string
+  selectedType: ClipboardContentType | 'all'
+  isOpen: boolean
+  syncStatus: 'idle' | 'syncing' | 'error'
   // Actions
-  addEntry: (entry: Omit<ClipboardEntry, 'id' | 'timestamp'>) => void;
-  removeEntry: (id: string) => void;
-  clearHistory: () => void;
-  setSearchQuery: (query: string) => void;
-  setSelectedType: (type: ClipboardContentType | 'all') => void;
-  setIsOpen: (isOpen: boolean) => void;
-  setSyncStatus: (status: 'idle' | 'syncing' | 'error') => void;
-  
+  addEntry: (entry: Omit<ClipboardEntry, 'id' | 'timestamp'>) => void
+  removeEntry: (id: string) => void
+  clearHistory: () => void
+  setSearchQuery: (query: string) => void
+  setSelectedType: (type: ClipboardContentType | 'all') => void
+  setIsOpen: (isOpen: boolean) => void
+  setSyncStatus: (status: 'idle' | 'syncing' | 'error') => void
   // Getters
-  getFilteredHistory: () => ClipboardEntry[];
-  getEntryById: (id: string) => ClipboardEntry | undefined;
+  getFilteredHistory: () => ClipboardEntry[]
+  getEntryById: (id: string) => ClipboardEntry | undefined
 }
 
 export const useClipboardStore = create<ClipboardStore>()(persist(
@@ -31,13 +28,12 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
           ...entry,
           id: crypto.randomUUID(),
           timestamp: new Date()
-        };
-        
+        }
         set((state) => {
-          const newHistory = [newEntry, ...state.history];
+          const newHistory = [newEntry, ...state.history]
           // Keep only maxHistory items
           if (newHistory.length > state.maxHistory) {
-            newHistory.pop();
+            newHistory.pop()
           }
           
           // Broadcast to other tabs
@@ -45,36 +41,34 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
             window.localStorage.setItem(
               'clipboard-sync',
               JSON.stringify({ type: 'add', entry: newEntry, timestamp: Date.now() })
-            );
+            )
           }
           
-          return { history: newHistory };
-        });
+          return { history: newHistory }
+        })
       },
       
       removeEntry: (id) => {
         set((state) => ({
           history: state.history.filter(entry => entry.id !== id)
-        }));
-        
+        }))
         // Broadcast to other tabs
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(
             'clipboard-sync',
             JSON.stringify({ type: 'remove', id, timestamp: Date.now() })
-          );
+          )
         }
       },
       
       clearHistory: () => {
-        set({ history: [] });
-        
+        set({ history: [] })
         // Broadcast to other tabs
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(
             'clipboard-sync',
             JSON.stringify({ type: 'clear', timestamp: Date.now() })
-          );
+          )
         }
       },
       
@@ -87,12 +81,11 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
       setSyncStatus: (status) => set({ syncStatus: status }),
       
       getFilteredHistory: () => {
-        
-        
+
         return history.filter(entry => {
           // Type filter
           if (selectedType !== 'all' && entry.type !== selectedType) {
-            return false;
+            return false
           }
           
           // Search filter
@@ -103,15 +96,15 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
               entry.tags.some(tag => tag.toLowerCase().includes(_query)) ||
               entry.metadata.source.toLowerCase().includes(_query) ||
               (entry.metadata.precintoId && entry.metadata.precintoId.toLowerCase().includes(_query))
-            );
+            )
           }
           
-          return true;
-        });
+          return true
+        })
       },
       
       getEntryById: (id) => {
-        return get().history.find(entry => entry.id === id);
+        return get().history.find(entry => entry.id === id)
       }
     }),
     {
@@ -122,33 +115,33 @@ export const useClipboardStore = create<ClipboardStore>()(persist(
       })
     }
   )
-);
-
+)
 // Cross-tab synchronization
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
     if (e.key === 'clipboard-sync' && e.newValue) {
       try {
-        const sync = JSON.parse(e.newValue);
-        const store = useClipboardStore.getState();
-        
+        const sync = JSON.parse(e.newValue)
+        const store = useClipboardStore.getState()
         switch (sync.type) {
-          case 'add':
-            // Check if entry already exists
+          case 'add': {
+  // Check if entry already exists
             if (!store.history.find(entry => entry.id === sync.entry.id)) {
-              store.addEntry(sync.entry);
+              store.addEntry(sync.entry)
             }
-            break;
-          case 'remove':
-            store.removeEntry(sync.id);
-            break;
-          case 'clear':
-            store.clearHistory();
-            break;
+            break
+    }
+    case 'remove':
+            store.removeEntry(sync.id)
+            break
+    }
+    case 'clear':
+            store.clearHistory()
+            break
         }
       } catch {
-        console.error('Clipboard sync error:', _error);
+        console.error('Clipboard sync error:', _error)
       }
     }
-  });
+  })
 }

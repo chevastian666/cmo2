@@ -1,6 +1,5 @@
-import React from 'react';
-import { Map} from 'lucide-react';
-
+import React from 'react'
+import { Map} from 'lucide-react'
 export const MapSkeleton: React.FC = () => {
   return (
     <div className="relative bg-gray-900 rounded-lg overflow-hidden h-full animate-pulse">
@@ -36,5 +35,5 @@ export const MapSkeleton: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

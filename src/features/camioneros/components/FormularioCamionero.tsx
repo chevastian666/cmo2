@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
-import {X, User, Phone, Flag, AlertCircle} from 'lucide-react';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
-import type { Nacionalidad} from '../types';
-
+import React, { useState } from 'react'
+import {X, User, Phone, Flag, AlertCircle} from 'lucide-react'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
+import type { Nacionalidad} from '../types'
 interface FormularioCamioneroProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClose }) => {
-  const userInfo = useUserInfo();
-  
-  
+  const userInfo = useUserInfo()
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -23,51 +19,44 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
     telefonoUruguayo: '',
     telefonoPais: '',
     comentario: ''
-  });
-  
-  const [errors, setErrors] = useState<Record<string, string>>(_);
-  const [loading, setLoading] = useState(false);
-
+  })
+  const [errors, setErrors] = useState<Record<string, string>>(_)
+  const [loading, setLoading] = useState(false)
   const handleChange = (field: string, value: unknown) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors(prev => ({ ...prev, [field]: '' }))
     }
-  };
-
+  }
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-    
+    const newErrors: Record<string, string> = {}
     if (!formData.nombre.trim()) {
-      newErrors.nombre = 'El nombre es obligatorio';
+      newErrors.nombre = 'El nombre es obligatorio'
     }
     
     if (!formData.apellido.trim()) {
-      newErrors.apellido = 'El apellido es obligatorio';
+      newErrors.apellido = 'El apellido es obligatorio'
     }
     
     if (!formData.documento.trim()) {
-      newErrors.documento = 'El documento es obligatorio';
+      newErrors.documento = 'El documento es obligatorio'
     }
     
     if (formData.nacionalidad === 'Otro' && !formData.paisOrigen.trim()) {
-      newErrors.paisOrigen = 'Debe especificar el país';
+      newErrors.paisOrigen = 'Debe especificar el país'
     }
     
     if (!formData.telefonoUruguayo && !formData.telefonoPais) {
-      newErrors.telefono = 'Debe proporcionar al menos un teléfono de contacto';
+      newErrors.telefono = 'Debe proporcionar al menos un teléfono de contacto'
     }
     
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validate()) return;
-    
-    setLoading(true);
+    e.preventDefault()
+    if (!validate()) return
+    setLoading(true)
     try {
       await createCamionero({
         nombre: formData.nombre.trim(),
@@ -83,16 +72,14 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
           id: userInfo.id,
           nombre: userInfo.name
         }
-      });
-      
-      onClose();
+      })
+      onClose()
     } catch {
-      setErrors({ general: 'Error al registrar el camionero' });
+      setErrors({ general: 'Error al registrar el camionero' })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -309,5 +296,5 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
         </form>
       </div>
     </div>
-  );
-};
+  )
+}

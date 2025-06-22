@@ -1,60 +1,51 @@
-import React, { useState } from 'react';
-import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react';
-import type { Deposito} from '../types';
-import { cn} from '../../../utils/utils';
-
+import React, { useState } from 'react'
+import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react'
+import type { Deposito} from '../types'
+import { cn} from '../../../utils/utils'
 interface DepositoTableProps {
-  depositos: Deposito[];
-  loading: boolean;
-  onView: (deposito: Deposito) => void;
-  onEdit: (deposito: Deposito) => void;
+  depositos: Deposito[]
+  loading: boolean
+  onView: (deposito: Deposito) => void
+  onEdit: (deposito: Deposito) => void
 }
 
-type SortField = 'codigo' | 'nombre' | 'zona' | 'transitosActivos';
-type SortOrder = 'asc' | 'desc';
-
+type SortField = 'codigo' | 'nombre' | 'zona' | 'transitosActivos'
+type SortOrder = 'asc' | 'desc'
 export const DepositoTable: React.FC<DepositoTableProps> = ({
   depositos, loading, onView, onEdit
 }) => {
-  const [sortField, setSortField] = useState<SortField>('codigo');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
+  const [sortField, setSortField] = useState<SortField>('codigo')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field);
-      setSortOrder('asc');
+      setSortField(field)
+      setSortOrder('asc')
     }
-  };
-
+  }
   const sortedDepositos = [...depositos].sort((a, b) => {
-    const aValue = a[sortField];
-    const bValue = b[sortField];
-    
+    const aValue = a[sortField]
+    const bValue = b[sortField]
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortOrder === 'asc' 
         ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+        : bValue.localeCompare(aValue)
     }
     
     if (typeof aValue === 'number' && typeof bValue === 'number') {
-      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue
     }
     
-    return 0;
-  });
-
+    return 0
+  })
   const paginatedDepositos = sortedDepositos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  );
-
-  const totalPages = Math.ceil(sortedDepositos.length / itemsPerPage);
-
-
+  )
+  const totalPages = Math.ceil(sortedDepositos.length / itemsPerPage)
   if (loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-8">
@@ -63,7 +54,7 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
           <span className="ml-3 text-gray-400">Cargando depósitos...</span>
         </div>
       </div>
-    );
+    )
   }
 
   return (<div className="bg-gray-800 rounded-lg overflow-hidden">
@@ -239,5 +230,5 @@ export const DepositoTable: React.FC<DepositoTableProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

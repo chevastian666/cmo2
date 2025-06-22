@@ -4,12 +4,11 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
-import { SimpleTreemap} from '@/components/charts/treemap/SimpleTreemap';
-import TreemapErrorBoundary from '@/components/charts/treemap/TreemapErrorBoundary';
-
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
+import { SimpleTreemap} from '@/components/charts/treemap/SimpleTreemap'
+import TreemapErrorBoundary from '@/components/charts/treemap/TreemapErrorBoundary'
 const TreemapTest: React.FC = () => {
   // Simple test data
   const testData = {
@@ -31,8 +30,7 @@ const TreemapTest: React.FC = () => {
         ]
       }
     ]
-  };
-
+  }
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Treemap Test</h1>
@@ -70,7 +68,6 @@ const TreemapTest: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
-export default TreemapTest;
+  )
+}
+export default TreemapTest

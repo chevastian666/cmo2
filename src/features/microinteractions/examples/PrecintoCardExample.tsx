@@ -1,34 +1,32 @@
-import React from 'react';
-import {Package} from 'lucide-react';
-import { BreathingPrecinto} from '../components/BreathingPrecinto';
-
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import {Package} from 'lucide-react'
+import { BreathingPrecinto} from '../components/BreathingPrecinto'
+import { cn} from '../../../utils/utils'
 interface PrecintoData {
-  id: string;
-  codigo: string;
-  estado: 'activo' | 'alerta' | 'critico';
-  ubicacion: string;
+  id: string
+  codigo: string
+  estado: 'activo' | 'alerta' | 'critico'
+  ubicacion: string
 }
 
 export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ precinto }) => {
-  
 
   const getStatus = (estado: string): 'normal' | 'alert' | 'critical' => {
     switch (estado) {
-      case 'activo': return 'normal';
-      case 'alerta': return 'alert';
-      case 'critico': return 'critical';
-      default: return 'normal';
+      case 'activo': {
+  return 'normal'
+      case 'alerta': {
+  return 'alert'
+      case 'critico': {
+  return 'critical'
+      default: return 'normal'
     }
-  };
-
+  }
   const statusColors = {
     activo: 'border-green-500 bg-green-900/20',
     alerta: 'border-yellow-500 bg-yellow-900/20',
     critico: 'border-red-500 bg-red-900/20'
-  };
-
+  }
   return (
     <BreathingPrecinto 
       status={getStatus(precinto.estado)}
@@ -62,5 +60,5 @@ export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ prec
         </div>
       </div>
     </BreathingPrecinto>
-  );
-};
+  )
+}

@@ -2,28 +2,24 @@
  * Vitest setup file
  * By Cheva
  */
-import '@testing-library/jest-dom';
-import { cleanup} from '@testing-library/react';
-import { afterEach, beforeAll, afterAll, vi} from 'vitest';
-import { server} from './mocks/server';
-
+import '@testing-library/jest-dom'
+import { cleanup} from '@testing-library/react'
+import { afterEach, beforeAll, afterAll, vi} from 'vitest'
+import { server} from './mocks/server'
 // Establecer zona horaria para tests consistentes
-process.env.TZ = 'UTC';
-
+process.env.TZ = 'UTC'
 // Mock de IntersectionObserver
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}));
-
+}))
 // Mock de ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}));
-
+}))
 // Mock de matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -37,8 +33,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-});
-
+})
 // Mock de navigator.geolocation
 Object.defineProperty(navigator, 'geolocation', {
   value: {
@@ -46,8 +41,7 @@ Object.defineProperty(navigator, 'geolocation', {
     watchPosition: vi.fn(),
   },
   writable: true,
-});
-
+})
 // Mock de Google Maps
 (global as unknown).google = {
   maps: {
@@ -70,48 +64,43 @@ Object.defineProperty(navigator, 'geolocation', {
       removeListener: vi.fn(),
     },
   },
-} as unknown;
-
+} as unknown
 // Setup MSW
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => {
-  cleanup();
-  server.resetHandlers();
-});
-afterAll(() => server.close());
-
+  cleanup()
+  server.resetHandlers()
+})
+afterAll(() => server.close())
 // Mock de localStorage
 const localStorageMock: Storage = (function() {
-  let store: Record<string, string> = {};
-
+  let store: Record<string, string> = {}
   return {
     getItem(key: string) {
-      return store[key] || null;
+      return store[key] || null
     },
     setItem(key: string, value: string) {
-      store[key] = value.toString();
+      store[key] = value.toString()
     },
     removeItem(key: string) {
-      delete store[key];
+      delete store[key]
     },
     clear() {
-      store = {};
+      store = {}
     },
     get length() {
-      return Object.keys(store).length;
+      return Object.keys(store).length
     },
     key(index: number) {
-      const keys = Object.keys(store);
-      return keys[index] || null;
+      const keys = Object.keys(store)
+      return keys[index] || null
     },
-  };
-})();
-
+  }
+})()
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
-});
-
+})
 // Mock de sessionStorage
 Object.defineProperty(window, 'sessionStorage', {
   value: localStorageMock,
-});
+})

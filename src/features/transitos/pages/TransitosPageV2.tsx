@@ -4,27 +4,24 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Truck, Download, RefreshCw, MapPin, CheckCircle2, Clock, AlertTriangle, Package, Search, Calendar, Building2, Shield, Route, Timer, Eye, Activity} from 'lucide-react';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Card, CardContent} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs';
-
-import { useTransitosStore, useAlertasStore, usePrecintosStore} from '@/store/store';
-import { cn} from '@/utils/utils';
-import type { Transito} from '../types';
-import { exportToExcel} from '@/utils/export';
-
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react'
+import { Truck, Download, RefreshCw, MapPin, CheckCircle2, Clock, AlertTriangle, Package, Search, Calendar, Building2, Shield, Route, Timer, Eye, Activity} from 'lucide-react'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Card, CardContent} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs'
+import { useTransitosStore, useAlertasStore, usePrecintosStore} from '@/store/store'
+import { cn} from '@/utils/utils'
+import type { Transito} from '../types'
+import { exportToExcel} from '@/utils/export'
 // Lazy load el modal pesado
 const TransitDetailModalEnhanced = lazy(() => 
   import('../components/TransitoDetailModalEnhanced').then(m => ({ 
     default: m.TransitDetailModalEnhanced 
   }))
-);
-
+)
 // Estado del tránsito con información clara - Memoizado globalmente
 const ESTADO_INFO_MAP = {
   'EN_TRANSITO': { 
@@ -51,17 +48,15 @@ const ESTADO_INFO_MAP = {
     label: 'Con Alerta',
     dotColor: 'bg-red-500'
   }
-};
-
+}
 const getEstadoInfo = (estado: string) => {
   return ESTADO_INFO_MAP[estado as keyof typeof ESTADO_INFO_MAP] || {
     color: 'bg-gray-900/20 text-gray-400 border-gray-800', 
     icon: <Package className="h-4 w-4" />, 
     label: estado,
     dotColor: 'bg-gray-500'
-  };
-};
-
+  }
+}
 // Loading skeleton optimizado
 const TransitoSkeleton = () => (
   <Card className="bg-gray-900 border-gray-800">
@@ -88,17 +83,16 @@ const TransitoSkeleton = () => (
       </div>
     </CardContent>
   </Card>
-);
-
+)
 // Tarjeta de resumen optimizada con React.memo
 const ResumenCard = React.memo<{
-  title: string;
-  value: number;
-  total?: number;
-  icon: React.ReactNode;
-  color: string;
-  description?: string;
-}>(({ title, value, total, icon, color, description }) => (
+  title: string
+  value: number
+  total?: number
+  icon: React.ReactNode
+  color: string
+  description?: string
+}>((title, value, total, icon, color, description ) => (
   <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors">
     <CardContent className="p-6">
       <div className="flex items-start justify-between">
@@ -133,31 +127,27 @@ const ResumenCard = React.memo<{
       )}
     </CardContent>
   </Card>
-));
-
+))
 // Componente de fila de tránsito optimizado
 const TransitoCard = React.memo<{
-  transito: Transito;
-  onView: (transito: Transito) => void;
-  onViewMap: (transito: Transito) => void;
+  transito: Transito
+  onView: (transito: Transito) => void
+  onViewMap: (transito: Transito) => void
 }>(({ transito, onView, onViewMap }) => {
-  const estadoInfo = getEstadoInfo(transito.estado);
+  const estadoInfo = getEstadoInfo(transito.estado)
   const tiempoTranscurrido = React.useMemo(() => {
-    const ahora = new Date();
-    const salida = new Date(transito.fechaSalida);
-    const horas = Math.floor((ahora.getTime() - salida.getTime()) / (1000 * 60 * 60));
-    const dias = Math.floor(horas / 24);
-    const horasRestantes = horas % 24;
-    
+    const ahora = new Date()
+    const salida = new Date(transito.fechaSalida)
+    const horas = Math.floor((ahora.getTime() - salida.getTime()) / (1000 * 60 * 60))
+    const dias = Math.floor(horas / 24)
+    const horasRestantes = horas % 24
     if (dias > 0) {
-      return `${dias}d ${horasRestantes}h`;
+      return `${dias}d ${horasRestantes}h`
     }
-    return `${horas}h`;
-  }, [transito.fechaSalida]);
-
-  const handleView = useCallback(() => onView(transito), [onView, transito]);
-  const handleViewMap = useCallback(() => onViewMap(transito), [onViewMap, transito]);
-
+    return `${horas}h`
+  }, [transito.fechaSalida])
+  const handleView = useCallback(() => onView(transito), [onView, transito])
+  const handleViewMap = useCallback(() => onViewMap(transito), [onViewMap, transito])
   return (
     <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all duration-200 group">
       <CardContent className="p-6">
@@ -278,149 +268,138 @@ const TransitoCard = React.memo<{
         )}
       </CardContent>
     </Card>
-  );
+  )
 }, (prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
     prevProps.transito.id === nextProps.transito.id &&
     prevProps.transito.estado === nextProps.transito.estado &&
     prevProps.transito.progreso === nextProps.transito.progreso
-  );
-});
-
+  )
+})
 const TransitosPageV2: React.FC = () => {
   // Optimized store subscriptions
-  const transitos = useTransitosStore(state => state.transitos);
-  const loading = useTransitosStore(state => state.loading);
-  const fetchTransitos = useTransitosStore(state => state.fetchTransitos);
-  const transitosEnCurso = useTransitosStore(state => state.transitosEnCurso);
-  const transitosCompletados = useTransitosStore(state => state.transitosCompletados);
-  const transitosPendientes = useTransitosStore(state => state.transitosPendientes);
-  
-  const alertasActivas = useAlertasStore(state => state.alertasActivas);
-  const precintosActivos = usePrecintosStore(state => state.precintosActivos);
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [empresaFilter, setEmpresaFilter] = useState('todas');
-  const [fechaFilter, setFechaFilter] = useState('todos');
-  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('activos');
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  
+  const transitos = useTransitosStore(state => state.transitos)
+  const loading = useTransitosStore(state => state.loading)
+  const fetchTransitos = useTransitosStore(state => state.fetchTransitos)
+  const transitosEnCurso = useTransitosStore(state => state.transitosEnCurso)
+  const transitosCompletados = useTransitosStore(state => state.transitosCompletados)
+  const transitosPendientes = useTransitosStore(state => state.transitosPendientes)
+  const alertasActivas = useAlertasStore(state => state.alertasActivas)
+  const precintosActivos = usePrecintosStore(state => state.precintosActivos)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [empresaFilter, setEmpresaFilter] = useState('todas')
+  const [fechaFilter, setFechaFilter] = useState('todos')
+  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [activeTab, setActiveTab] = useState('activos')
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20
   // Load data once with loading state
   
     useEffect(() => {
     const loadData = async () => {
-      if (!isInitialLoad) return;
-      
+      if (!isInitialLoad) return
       try {
-        await fetchTransitos();
+        await fetchTransitos()
       } finally {
-        setIsInitialLoad(false);
+        setIsInitialLoad(false)
       }
-    };
-    loadData();
-  }, [isInitialLoad, fetchTransitos]);
-
+    }
+    loadData()
+  }, [])
   // Obtener lista única de empresas - memoizado
   const empresas = React.useMemo(() => {
-    const uniqueEmpresas = new Set(transitos.map(t => t.empresa));
-    return Array.from(uniqueEmpresas).sort();
-  }, [transitos]);
-
+    const uniqueEmpresas = new Set(transitos.map(t => t.empresa))
+    return Array.from(uniqueEmpresas).sort()
+  }, [transitos])
   // Filtrar tránsitos - optimizado con paginación
   const { filteredTransitos, totalPages, totalItems } = React.useMemo(() => {
-    let filtered = transitos;
-
+    let filtered = transitos
     // Filtro por pestaña activa
     switch (activeTab) {
-      case 'activos':
-        filtered = transitosEnCurso;
-        break;
-      case 'pendientes':
-        filtered = transitosPendientes;
-        break;
-      case 'completados':
-        filtered = transitosCompletados;
-        break;
-      case 'alertas':
-        filtered = transitos.filter(t => t.estado === 'ALERTA');
-        break;
+      case 'activos': {
+  filtered = transitosEnCurso
+        break
+    }
+    case 'pendientes':
+        filtered = transitosPendientes
+        break
+    }
+    case 'completados':
+        filtered = transitosCompletados
+        break
+    }
+    case 'alertas':
+        filtered = transitos.filter(t => t.estado === 'ALERTA')
+        break
     }
 
     // Single pass filtering
     filtered = filtered.filter(t => {
       // Filtro por búsqueda
       if (searchTerm) {
-        const search = searchTerm.toLowerCase();
+        const search = searchTerm.toLowerCase()
         const matches = 
           t.dua.toLowerCase().includes(search) ||
           t.precinto.toLowerCase().includes(search) ||
           t.empresa.toLowerCase().includes(search) ||
           t.origen.toLowerCase().includes(search) ||
-          t.destino.toLowerCase().includes(search);
-        if (!matches) return false;
+          t.destino.toLowerCase().includes(search)
+        if (!matches) return false
       }
 
       // Filtro por empresa
       if (empresaFilter !== 'todas' && t.empresa !== empresaFilter) {
-        return false;
+        return false
       }
 
       // Filtro por fecha
       if (fechaFilter !== 'todos') {
-        const fecha = new Date(t.fechaSalida);
-        const ahora = new Date();
-        
+        const fecha = new Date(t.fechaSalida)
+        const ahora = new Date()
         switch (fechaFilter) {
-          case 'hoy':
-            if (fecha.toDateString() !== ahora.toDateString()) return false;
-            break;
-          case 'semana': {
-            const unaSemanaAtras = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000);
-            if (fecha < unaSemanaAtras) return false;
-            break;
+          case 'hoy': {
+  if (fecha.toDateString() !== ahora.toDateString()) return false
+            break
+    }
+    case 'semana': {
+            const unaSemanaAtras = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000)
+            if (fecha < unaSemanaAtras) return false
+            break
           }
           case 'mes': {
-            const unMesAtras = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
-            if (fecha < unMesAtras) return false;
-            break;
+            const unMesAtras = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000)
+            if (fecha < unMesAtras) return false
+            break
           }
         }
 
-      return true;
-    });
-
+      return true
+    })
     // Calculate pagination
-    const total = Math.ceil(filtered.length / itemsPerPage);
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    
+    const total = Math.ceil(filtered.length / itemsPerPage)
+    const start = (currentPage - 1) * itemsPerPage
+    const end = start + itemsPerPage
     // Sort and paginate
     const sortedPage = filtered
       .sort((a, b) => new Date(b.fechaSalida).getTime() - new Date(a.fechaSalida).getTime())
-      .slice(start, end);
-
+      .slice(start, end)
     return { 
       filteredTransitos: sortedPage, 
       totalPages: total,
       totalItems: filtered.length 
-    };
-  }, [transitos, transitosEnCurso, transitosCompletados, transitosPendientes, searchTerm, empresaFilter, fechaFilter, activeTab, currentPage, itemsPerPage]);
-
+    }
+  }, [transitos])
   // Estadísticas - optimizadas
   const stats = React.useMemo(() => {
-    const alertas = transitos.filter(t => t.estado === 'ALERTA');
+    const alertas = transitos.filter(t => t.estado === 'ALERTA')
     const demorados = transitosEnCurso.filter(t => {
-      if (!t.eta) return false;
-      return new Date() > new Date(t.eta);
-    });
-
+      if (!t.eta) return false
+      return new Date() > new Date(t.eta)
+    })
     return {
       total: transitos.length,
       enCurso: transitosEnCurso.length,
@@ -430,32 +409,26 @@ const TransitosPageV2: React.FC = () => {
       demorados: demorados.length,
       precintosActivos: precintosActivos.length,
       alertasActivas: alertasActivas.length
-    };
-  }, [transitos, transitosEnCurso, transitosCompletados, transitosPendientes, precintosActivos, alertasActivas]);
-
+    }
+  }, [transitos])
   const handleExport = useCallback(() => {
-    exportToExcel(filteredTransitos, 'transitos');
-  }, [filteredTransitos]);
-
+    exportToExcel(filteredTransitos, 'transitos')
+  }, [])
   const handleViewTransito = useCallback((transito: Transito) => {
-    setSelectedTransito(transito);
-    setShowDetailModal(true);
-  }, []);
-
+    setSelectedTransito(transito)
+    setShowDetailModal(true)
+  }, [])
   const handleViewMap = useCallback((transito: Transito) => {
-    window.open(`/torre-control?transito=${transito.id}`, '_blank');
-  }, []);
-
+    window.open(`/torre-control?transito=${transito.id}`, '_blank')
+  }, [])
   const handleRefresh = useCallback(async () => {
-    await fetchTransitos();
-  }, [fetchTransitos]);
-
+    await fetchTransitos()
+  }, [])
   // Reset page when changing filters
   
     useEffect(() => {
-    setCurrentPage(1);
-  }, [activeTab, searchTerm, empresaFilter, fechaFilter]);
-
+    setCurrentPage(1)
+  }, [])
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -686,15 +659,14 @@ const TransitosPageV2: React.FC = () => {
         {selectedTransito && (<TransitDetailModalEnhanced
             isOpen={showDetailModal}
             onClose={() => {
-              setShowDetailModal(false);
-              setSelectedTransito(null);
+              setShowDetailModal(false)
+              setSelectedTransito(null)
             }}
             transito={selectedTransito}
           />
         )}
       </Suspense>
     </div>
-  );
-};
-
-export default TransitosPageV2;
+  )
+}
+export default TransitosPageV2

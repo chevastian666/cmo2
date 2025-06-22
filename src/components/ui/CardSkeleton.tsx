@@ -1,11 +1,10 @@
  
-import React from 'react';
-import { Skeleton} from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader} from '@/components/ui/card';
-
+import React from 'react'
+import { Skeleton} from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader} from '@/components/ui/card'
 interface CardSkeletonProps {
-  showDescription?: boolean;
-  showChart?: boolean;
+  showDescription?: boolean
+  showChart?: boolean
 }
 
 export const CardSkeleton: React.FC<CardSkeletonProps> = ({ 
@@ -36,9 +35,8 @@ export const CardSkeleton: React.FC<CardSkeletonProps> = ({
         )}
       </CardContent>
     </Card>
-  );
-};
-
+  )
+}
 export const DashboardSkeleton: React.FC = () => {
   return (
     <div className="space-y-6">
@@ -88,9 +86,8 @@ export const DashboardSkeleton: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
+  )
+}
 export const ListItemSkeleton: React.FC = () => {
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg">
@@ -106,9 +103,8 @@ export const ListItemSkeleton: React.FC = () => {
         <Skeleton className="h-8 w-8 rounded" />
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const FormSkeleton: React.FC = () => {
   return (
     <div className="space-y-6">
@@ -140,5 +136,5 @@ export const FormSkeleton: React.FC = () => {
         <Skeleton className="h-10 w-24" />
       </div>
     </div>
-  );
-};
+  )
+}

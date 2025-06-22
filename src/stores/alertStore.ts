@@ -4,54 +4,49 @@
  */
 
 interface Alert {
-  id: string;
-  type: 'violation' | 'tamper' | 'security' | 'system';
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  precintoId: string;
-  message: string;
-  timestamp: Date;
-  location?: { lat: number; lng: number; address: string };
-  acknowledged: boolean;
+  id: string
+  type: 'violation' | 'tamper' | 'security' | 'system'
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  precintoId: string
+  message: string
+  timestamp: Date
+  location?: { lat: number; lng: number; address: string }
+  acknowledged: boolean
 }
 
-type Listener = () => void;
-
+type Listener = () => void
 class AlertStore {
-  private alerts: Alert[] = [];
-  private listeners: Set<Listener> = new Set();
-  private serverSnapshot: Alert[] = [];
-
+  private alerts: Alert[] = []
+  private listeners: Set<Listener> = new Set()
+  private serverSnapshot: Alert[] = []
   constructor() {
     // Initialize with some mock data in development
     if (process.env.NODE_ENV === 'development') {
-      this.initializeMockData();
+      this.initializeMockData()
     }
 
     // Set up WebSocket connection for real-time updates
-    this.setupWebSocket();
+    this.setupWebSocket()
   }
 
   // Subscribe to store changes
   subscribe = (listener: Listener): (() => void) => {
-    this.listeners.add(listener);
+    this.listeners.add(listener)
     return () => {
-      this.listeners.delete(listener);
-    };
-  };
-
+      this.listeners.delete(listener)
+    }
+  }
   // Get current snapshot
   getSnapshot = (): Alert[] => {
-    return this.alerts;
-  };
-
+    return this.alerts
+  }
   // Get server snapshot for SSR
   getServerSnapshot = (): Alert[] => {
-    return this.serverSnapshot;
-  };
-
+    return this.serverSnapshot
+  }
   // Notify all listeners
   private notifyListeners() {
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach(listener => listener())
   }
 
   // Add new alert
@@ -61,14 +56,12 @@ class AlertStore {
       id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       acknowledged: false
-    };
-
-    this.alerts = [newAlert, ...this.alerts];
-    this.notifyListeners();
-
+    }
+    this.alerts = [newAlert, ...this.alerts]
+    this.notifyListeners()
     // Play sound for critical alerts
     if (alert.severity === 'critical') {
-      this.playAlertSound();
+      this.playAlertSound()
     }
   }
 
@@ -78,45 +71,45 @@ class AlertStore {
       alert.id === alertId
         ? { ...alert, acknowledged: true }
         : alert
-    );
-    this.notifyListeners();
+    )
+    this.notifyListeners()
   }
 
   // Remove alert
   removeAlert(alertId: string) {
-    this.alerts = this.alerts.filter(alert => alert.id !== alertId);
-    this.notifyListeners();
+    this.alerts = this.alerts.filter(alert => alert.id !== alertId)
+    this.notifyListeners()
   }
 
   // Clear all alerts
   clearAlerts() {
-    this.alerts = [];
-    this.notifyListeners();
+    this.alerts = []
+    this.notifyListeners()
   }
 
   // Clear acknowledged alerts
   clearAcknowledged() {
-    this.alerts = this.alerts.filter(alert => !alert.acknowledged);
-    this.notifyListeners();
+    this.alerts = this.alerts.filter(alert => !alert.acknowledged)
+    this.notifyListeners()
   }
 
   // Get alerts by severity
   getAlertsBySeverity(severity: Alert['severity']): Alert[] {
-    return this.alerts.filter(alert => alert.severity === severity);
+    return this.alerts.filter(alert => alert.severity === severity)
   }
 
   // Get unacknowledged count
   getUnacknowledgedCount(): number {
-    return this.alerts.filter(alert => !alert.acknowledged).length;
+    return this.alerts.filter(alert => !alert.acknowledged).length
   }
 
   // Play alert sound
   private playAlertSound() {
     // Implementation depends on your audio setup
     if ('Audio' in window) {
-      const audio = new Audio('/sounds/critical-alert.mp3');
-      audio.volume = 0.5;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      const audio = new Audio('/sounds/critical-alert.mp3')
+      audio.volume = 0.5
+      audio.play().catch(e => console.log('Audio play failed:', e))
     }
   }
 
@@ -127,17 +120,17 @@ class AlertStore {
     if (process.env.NODE_ENV === 'development') {
       setInterval(() => {
         if (Math.random() > 0.95) {
-          this.simulateRandomAlert();
+          this.simulateRandomAlert()
         }
-      }, 5000);
+      }, 5000)
     }
   }
 
   // Simulate random alert for testing
   private simulateRandomAlert() {
-    const types: Alert['type'][] = ['violation', 'tamper', 'security', 'system'];
-    const severities: Alert['severity'][] = ['critical', 'high', 'medium', 'low'];
-    const precintos = ['PRECINTO-001', 'PRECINTO-002', 'PRECINTO-003', 'PRECINTO-004'];
+    const types: Alert['type'][] = ['violation', 'tamper', 'security', 'system']
+    const severities: Alert['severity'][] = ['critical', 'high', 'medium', 'low']
+    const precintos = ['PRECINTO-001', 'PRECINTO-002', 'PRECINTO-003', 'PRECINTO-004']
     const messages = [
       'Unauthorized seal opening detected',
       'Temperature threshold exceeded',
@@ -145,8 +138,7 @@ class AlertStore {
       'Tampering attempt detected',
       'Route deviation detected',
       'Battery critically low'
-    ];
-
+    ]
     this.addAlert({
       type: types[Math.floor(Math.random() * types.length)],
       severity: severities[Math.floor(Math.random() * severities.length)],
@@ -157,7 +149,7 @@ class AlertStore {
         lng: -58.3816 + (Math.random() - 0.5) * 0.1,
         address: 'Buenos Aires, Argentina'
       } : undefined
-    });
+    })
   }
 
   // Initialize with mock data
@@ -192,12 +184,11 @@ class AlertStore {
         location: { lat: -34.6137, lng: -58.3916, address: 'Retiro, Buenos Aires' },
         acknowledged: true
       }
-    ];
-
-    this.alerts = mockAlerts;
-    this.serverSnapshot = mockAlerts;
+    ]
+    this.alerts = mockAlerts
+    this.serverSnapshot = mockAlerts
   }
 }
 
 // Create singleton instance
-export const alertStore = new AlertStore();
+export const alertStore = new AlertStore()

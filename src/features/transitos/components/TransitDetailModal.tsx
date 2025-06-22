@@ -1,22 +1,18 @@
-import React from 'react';
-import { X, Truck, User, Building, MapPin, Clock, AlertTriangle, Phone} from 'lucide-react';
-
-import { TransitStatus} from './TransitStatus';
-import type { Transito} from '../types';
-
+import React from 'react'
+import { X, Truck, User, Building, MapPin, Clock, AlertTriangle, Phone} from 'lucide-react'
+import { TransitStatus} from './TransitStatus'
+import type { Transito} from '../types'
 interface TransitDetailModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  transito: Transito;
+  isOpen: boolean
+  onClose: () => void
+  transito: Transito
 }
 
 export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
   isOpen, onClose, transito
 }) => {
-  if (!isOpen) return null;
-
-  const progressPercentage = transito.progreso || 0;
-
+  if (!isOpen) return null
+  const progressPercentage = transito.progreso || 0
   return (
     <>
       {/* Backdrop */}
@@ -213,5 +209,5 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}

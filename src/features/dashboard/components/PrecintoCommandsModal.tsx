@@ -3,25 +3,24 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { X, Unlock, RotateCcw, Zap, Clock, Compass, Trash2, AlertTriangle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { notificationService} from '../../../services/shared/notification.service';
-import type { PrecintoActivo} from '../../../types/monitoring';
-
+import React, { useState, useEffect } from 'react'
+import { X, Unlock, RotateCcw, Zap, Clock, Compass, Trash2, AlertTriangle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { notificationService} from '../../../services/shared/notification.service'
+import type { PrecintoActivo} from '../../../types/monitoring'
 interface PrecintoCommandsModalProps {
-  precinto: PrecintoActivo;
-  isOpen: boolean;
-  onClose: () => void;
+  precinto: PrecintoActivo
+  isOpen: boolean
+  onClose: () => void
 }
 
 interface Command {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ElementType;
-  color: string;
-  dangerous?: boolean;
+  id: string
+  name: string
+  description: string
+  icon: React.ElementType
+  color: string
+  dangerous?: boolean
 }
 
 const COMMANDS: Command[] = [
@@ -69,75 +68,63 @@ const COMMANDS: Command[] = [
     color: 'text-red-400',
     dangerous: true
   }
-];
-
+]
 export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
   precinto, isOpen, onClose
 }) => {
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null);
-  const [confirmCommand, setConfirmCommand] = useState<string | null>(null);
-
+  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
+  const [confirmCommand, setConfirmCommand] = useState<string | null>(null)
   // ESC key handler
-   
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
-        onClose();
+        onClose()
       }
-    };
-
+    }
     if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('keydown', handleEscKey)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
-  }, [isOpen, onClose]);
-
+      document.removeEventListener('keydown', handleEscKey)
+    }
+  }, [])
   const handleCommand = async (command: Command) => {
     // If command is dangerous, show confirmation
     if (command.dangerous && confirmCommand !== command.id) {
-      setConfirmCommand(command.id);
-      return;
+      setConfirmCommand(command.id)
+      return
     }
 
-    setSendingCommand(command.id);
-    setConfirmCommand(null);
-
+    setSendingCommand(command.id)
+    setConfirmCommand(null)
     try {
       // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise(resolve => setTimeout(resolve, 2000))
       notificationService.success(
         `Comando "${command.name}" enviado al precinto ${precinto.nqr}`
-      );
-      
+      )
       // Log the command
       console.log('Command sent:', {
         precintoId: precinto.id,
         precintoNQR: precinto.nqr,
         command: command.id,
         timestamp: new Date().toISOString()
-      });
-      
-      onClose();
+      })
+      onClose()
     } catch {
       notificationService.error(
         `Error al enviar comando: ${error instanceof Error ? error.message : 'Error desconocido'}`
-      );
+      )
     } finally {
-      setSendingCommand(null);
+      setSendingCommand(null)
     }
-  };
-
+  }
   const cancelConfirmation = () => {
-    setConfirmCommand(null);
-  };
-
-  if (!isOpen) return null;
-
+    setConfirmCommand(null)
+  }
+  if (!isOpen) return null
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -282,5 +269,5 @@ export const PrecintoCommandsModal: React.FC<PrecintoCommandsModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

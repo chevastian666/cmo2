@@ -1,95 +1,91 @@
-import React, { useState } from 'react';
-import {FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown} from 'lucide-react';
-import { Badge} from '@/components/ui/badge';
-import { EmptyState} from '@/components/ui/EmptyState';
-import { LoadingState} from '@/components/ui/LoadingState';
-import { cn} from '../../../utils/utils';
-import { formatFileSize, formatDate} from '../../../utils/formatters';
-import type { Documento, TipoDocumento} from '../types';
-import { TIPOS_DOCUMENTO} from '../types';
-
+import React, { useState } from 'react'
+import {FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown} from 'lucide-react'
+import { Badge} from '@/components/ui/badge'
+import { EmptyState} from '@/components/ui/EmptyState'
+import { LoadingState} from '@/components/ui/LoadingState'
+import { cn} from '../../../utils/utils'
+import { formatFileSize, formatDate} from '../../../utils/formatters'
+import type { Documento, TipoDocumento} from '../types'
+import { TIPOS_DOCUMENTO} from '../types'
 interface TablaDocumentosProps {
-  documentos: Documento[];
-  loading?: boolean;
-  onDescargar: (doc: Documento) => void;
-  onVisualizar: (doc: Documento) => void;
-  onEliminar: (doc: Documento) => void;
-  onArchivar: (doc: Documento) => void;
-  onToggleDestacado: (doc: Documento) => void;
-  canDelete?: boolean;
-  canEdit?: boolean;
+  documentos: Documento[]
+  loading?: boolean
+  onDescargar: (doc: Documento) => void
+  onVisualizar: (doc: Documento) => void
+  onEliminar: (doc: Documento) => void
+  onArchivar: (doc: Documento) => void
+  onToggleDestacado: (doc: Documento) => void
+  canDelete?: boolean
+  canEdit?: boolean
 }
 
-type OrdenColumna = 'fecha' | 'tipo' | 'descripcion' | 'empresa' | 'subidoPor';
-type DireccionOrden = 'asc' | 'desc';
-
+type OrdenColumna = 'fecha' | 'tipo' | 'descripcion' | 'empresa' | 'subidoPor'
+type DireccionOrden = 'asc' | 'desc'
 export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
   documentos, loading = false, onDescargar, onVisualizar, onEliminar, onArchivar, onToggleDestacado, canDelete = false, canEdit = false
 }) => {
-  const [ordenColumna, setOrdenColumna] = useState<OrdenColumna>('fecha');
-  const [direccionOrden, setDireccionOrden] = useState<DireccionOrden>('desc');
-  const [menuAbierto, setMenuAbierto] = useState<string | null>(null);
-
+  const [ordenColumna, setOrdenColumna] = useState<OrdenColumna>('fecha')
+  const [direccionOrden, setDireccionOrden] = useState<DireccionOrden>('desc')
+  const [menuAbierto, setMenuAbierto] = useState<string | null>(null)
   const getIconoTipo = (tipo: TipoDocumento) => {
     switch (tipo) {
-      case 'DUA':
-        return <FileText className="h-5 w-5" />;
-      case 'Autorizacion':
-        return <CheckSquare className="h-5 w-5" />;
-      case 'Comunicacion':
-        return <Mail className="h-5 w-5" />;
-      case 'Resolucion':
-        return <Gavel className="h-5 w-5" />;
+      case 'DUA': {
+  return <FileText className="h-5 w-5" />
+      case 'Autorizacion': {
+  return <CheckSquare className="h-5 w-5" />
+      case 'Comunicacion': {
+  return <Mail className="h-5 w-5" />
+      case 'Resolucion': {
+  return <Gavel className="h-5 w-5" />
       default:
-        return <File className="h-5 w-5" />;
+        return <File className="h-5 w-5" />
     }
-  };
-
+  }
   const getColorTipo = (tipo: TipoDocumento) => {
-    return TIPOS_DOCUMENTO[tipo]?.color || 'gray';
-  };
-
+    return TIPOS_DOCUMENTO[tipo]?.color || 'gray'
+  }
   const handleOrden = (columna: OrdenColumna) => {
     if (columna === ordenColumna) {
-      setDireccionOrden(direccionOrden === 'asc' ? 'desc' : 'asc');
+      setDireccionOrden(direccionOrden === 'asc' ? 'desc' : 'asc')
     } else {
-      setOrdenColumna(columna);
-      setDireccionOrden('asc');
+      setOrdenColumna(columna)
+      setDireccionOrden('asc')
     }
-  };
-
+  }
   const documentosOrdenados = [...documentos].sort((a, b) => {
-    let valorA: unknown;
-    let valorB: unknown;
-
+    let valorA: unknown
+    let valorB: unknown
     switch (ordenColumna) {
-      case 'fecha':
-        valorA = a.fechaDocumento.getTime();
-        valorB = b.fechaDocumento.getTime();
-        break;
-      case 'tipo':
-        valorA = a.tipo;
-        valorB = b.tipo;
-        break;
-      case 'descripcion':
-        valorA = a.descripcion.toLowerCase();
-        valorB = b.descripcion.toLowerCase();
-        break;
-      case 'empresa':
-        valorA = a.empresa?.toLowerCase() || '';
-        valorB = b.empresa?.toLowerCase() || '';
-        break;
-      case 'subidoPor':
-        valorA = a.subidoPor.nombre.toLowerCase();
-        valorB = b.subidoPor.nombre.toLowerCase();
-        break;
+      case 'fecha': {
+  valorA = a.fechaDocumento.getTime()
+        valorB = b.fechaDocumento.getTime()
+        break
+    }
+    case 'tipo':
+        valorA = a.tipo
+        valorB = b.tipo
+        break
+    }
+    case 'descripcion':
+        valorA = a.descripcion.toLowerCase()
+        valorB = b.descripcion.toLowerCase()
+        break
+    }
+    case 'empresa':
+        valorA = a.empresa?.toLowerCase() || ''
+        valorB = b.empresa?.toLowerCase() || ''
+        break
+    }
+    case 'subidoPor':
+        valorA = a.subidoPor.nombre.toLowerCase()
+        valorB = b.subidoPor.nombre.toLowerCase()
+        break
     }
 
-    if (valorA < valorB) return direccionOrden === 'asc' ? -1 : 1;
-    if (valorA > valorB) return direccionOrden === 'asc' ? 1 : -1;
-    return 0;
-  });
-
+    if (valorA < valorB) return direccionOrden === 'asc' ? -1 : 1
+    if (valorA > valorB) return direccionOrden === 'asc' ? 1 : -1
+    return 0
+  })
   const ColumnaOrden = ({ columna, children }: { columna: OrdenColumna; children: React.ReactNode }) => (<button
       onClick={() => handleOrden(columna)}
       className="flex items-center gap-1 hover:text-white transition-colors"
@@ -99,10 +95,9 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
         direccionOrden === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />
       )}
     </button>
-  );
-
+  )
   if (loading) {
-    return <LoadingState variant="skeleton" rows={5} />;
+    return <LoadingState variant="skeleton" rows={5} />
   }
 
   if (documentos.length === 0) {
@@ -112,7 +107,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
         title="No se encontraron documentos"
         description="Intente ajustar los filtros o suba un nuevo documento"
       />
-    );
+    )
   }
 
   return (<div className="overflow-x-auto">
@@ -299,8 +294,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                               {canEdit && (<>
                                   <button
                                     onClick={() => {
-                                      onToggleDestacado(doc);
-                                      setMenuAbierto(null);
+                                      onToggleDestacado(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                                   >
@@ -313,8 +308,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                                   
                                   <button
                                     onClick={() => {
-                                      onArchivar(doc);
-                                      setMenuAbierto(null);
+                                      onArchivar(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                                   >
@@ -328,8 +323,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                                   <div className="border-t border-gray-700 my-1" />
                                   <button
                                     onClick={() => {
-                                      onEliminar(doc);
-                                      setMenuAbierto(null);
+                                      onEliminar(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-gray-700 text-left"
                                   >
@@ -351,5 +346,5 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}

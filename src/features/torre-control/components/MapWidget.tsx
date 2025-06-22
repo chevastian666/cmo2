@@ -3,37 +3,32 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { MapVisualization} from './MapVisualization';
-import type { TransitoTorreControl} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import { MapVisualization} from './MapVisualization'
+import type { TransitoTorreControl} from '../types'
 interface MapWidgetProps {
-  data: TransitoTorreControl[];
+  data: TransitoTorreControl[]
 }
 
 export const MapWidget: React.FC<MapWidgetProps> = ({ data }) => {
-  const [mounted, setMounted] = useState(false);
-   
-
+  const [mounted, setMounted] = useState(false)
   useEffect(() => {
     // Ensure component is properly mounted before rendering
     const timer = setTimeout(() => {
-      setMounted(true);
-    }, 50);
-
+      setMounted(true)
+    }, 50)
     return () => {
-      clearTimeout(timer);
-      setMounted(false);
-    };
-  }, []);
-
+      clearTimeout(timer)
+      setMounted(false)
+    }
+  }, [])
   if (!mounted) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
-    );
+    )
   }
 
-  return <MapVisualization data={data || []} />;
-};
+  return <MapVisualization data={data || []} />
+}

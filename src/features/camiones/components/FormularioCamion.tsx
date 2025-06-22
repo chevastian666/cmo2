@@ -1,61 +1,49 @@
-import React, { useState } from 'react';
-import {X, Truck, Camera, AlertCircle} from 'lucide-react';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { ESTADOS_CAMION} from '../types';
-import type { EstadoCamion} from '../types';
-
+import React, { useState } from 'react'
+import {X, Truck, Camera, AlertCircle} from 'lucide-react'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { ESTADOS_CAMION} from '../types'
+import type { EstadoCamion} from '../types'
 interface FormularioCamionProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) => {
-  const userInfo = useUserInfo();
-  
-  
+  const userInfo = useUserInfo()
   const [formData, setFormData] = useState({
     matricula: '',
     observaciones: '',
     estado: 'normal' as EstadoCamion,
     foto: null as File | null
-  });
-  
-  const [errors, setErrors] = useState<Record<string, string>>(_);
-  const [loading, setLoading] = useState(false);
-
+  })
+  const [errors, setErrors] = useState<Record<string, string>>(_)
+  const [loading, setLoading] = useState(false)
   const handleChange = (field: string, value: unknown) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors(prev => ({ ...prev, [field]: '' }))
     }
-  };
-
+  }
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      handleChange('foto', file);
+      handleChange('foto', file)
     }
-  };
-
+  }
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-    
+    const newErrors: Record<string, string> = {}
     if (!formData.matricula.trim()) {
-      newErrors.matricula = 'La matrícula es obligatoria';
+      newErrors.matricula = 'La matrícula es obligatoria'
     } else if (formData.matricula.length < 6) {
-      newErrors.matricula = 'La matrícula debe tener al menos 6 caracteres';
+      newErrors.matricula = 'La matrícula debe tener al menos 6 caracteres'
     }
     
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validate()) return;
-    
-    setLoading(true);
+    e.preventDefault()
+    if (!validate()) return
+    setLoading(true)
     try {
       await createCamion({
         matricula: formData.matricula.toUpperCase().trim(),
@@ -65,16 +53,14 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
           id: userInfo.id,
           nombre: userInfo.name
         }
-      });
-      
-      onClose();
+      })
+      onClose()
     } catch {
-      setErrors({ general: 'Error al registrar el camión' });
+      setErrors({ general: 'Error al registrar el camión' })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -195,5 +181,5 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
         </form>
       </div>
     </div>
-  );
-};
+  )
+}

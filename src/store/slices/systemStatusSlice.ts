@@ -1,6 +1,5 @@
-import type { StateCreator} from 'zustand';
-import type { SystemStatusStore} from '../types';
-
+import type { StateCreator} from 'zustand'
+import type { SystemStatusStore} from '../types'
 const mockEstadisticas = {
   precintosActivos: 1247,
   precintosEnTransito: 892,
@@ -20,8 +19,7 @@ const mockEstadisticas = {
     discoUsado: 23.1
   },
   reportesPendientes: 15
-};
-
+}
 export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) => ({
   // State
   estadisticas: null, smsPendientes: 0, dbStats: {
@@ -47,30 +45,28 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) =>
   setError: (error) => set({ error }),
   
   fetchEstadisticas: async () => {
-    
-    setLoading(true);
-    setError(null);
-    
+
+    setLoading(true)
+    setError(null)
     try {
 
-      setEstadisticas(_data);
+      setEstadisticas(_data)
     } catch {
       // En desarrollo, usar datos mock
-      setEstadisticas(mockEstadisticas);
-      console.warn('Using mock data for estadisticas:', _error);
+      setEstadisticas(mockEstadisticas)
+      console.warn('Using mock data for estadisticas:', _error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   },
   
   fetchSystemStatus: async () => {
-    
-    setLoading(true);
-    setError(null);
-    
+
+    setLoading(true)
+    setError(null)
     try {
 
-      updateSystemStatus(_data);
+      updateSystemStatus(_data)
     } catch {
       // En desarrollo, usar datos mock
       updateSystemStatus({
@@ -78,10 +74,10 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set) =>
         dbStats: mockEstadisticas.dbStats,
         apiStats: mockEstadisticas.apiStats,
         reportesPendientes: mockEstadisticas.reportesPendientes,
-      });
-      console.warn('Using mock data for system status:', _error);
+      })
+      console.warn('Using mock data for system status:', _error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   },
-});
+})

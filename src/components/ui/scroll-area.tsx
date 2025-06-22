@@ -1,10 +1,9 @@
-import * as React from "react";
-import { cn} from "@/utils/utils";
-
+import * as React from "react"
+import { cn} from "@/utils/utils"
 interface ScrollAreaProps {
-  className?: string;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
+  className?: string
+  children?: React.ReactNode
+  style?: React.CSSProperties
 }
 
 const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(({ className, children, style, ...props }, ref) => (
@@ -19,7 +18,6 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(({ classNam
       </div>
     </div>
   )
-);
-ScrollArea.displayName = "ScrollArea";
-
-export { ScrollArea };
+)
+ScrollArea.displayName = "ScrollArea"
+export { ScrollArea }

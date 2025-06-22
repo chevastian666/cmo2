@@ -1,1 +1,1 @@
-export { DespachantesPage } from './pages/DespachantesPage';
+export { DespachantesPage } from './pages/DespachantesPage'

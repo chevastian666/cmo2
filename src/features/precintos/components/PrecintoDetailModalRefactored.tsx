@@ -1,32 +1,28 @@
-import React from 'react';
-import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react';
+import React from 'react'
+import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react'
 import { 
-  Card, CardHeader, CardContent, StatusBadge, InfoRow, InfoGrid, InfoSection, Badge, BadgeGroup, Tabs, MapModule, LoadingState} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import { getStatusInfo} from '../types';
-import type { Precinto} from '../../../types';
-
+  Card, CardHeader, CardContent, StatusBadge, InfoRow, InfoGrid, InfoSection, Badge, BadgeGroup, Tabs, MapModule, LoadingState} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import { getStatusInfo} from '../types'
+import type { Precinto} from '../../../types'
 interface PrecintoDetailModalRefactoredProps {
-  precinto: Precinto;
-  isOpen: boolean;
-  onClose: () => void;
+  precinto: Precinto
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactoredProps> = ({
   precinto, isOpen, onClose
 }) => {
-  const [activeTab, setActiveTab] = React.useState('info');
-  const statusInfo = getStatusInfo(precinto.estado as unknown);
-
-  if (!isOpen) return null;
-
+  const [activeTab, setActiveTab] = React.useState('info')
+  const statusInfo = getStatusInfo(precinto.estado as unknown)
+  if (!isOpen) return null
   const tabs = [
     { id: 'info', label: 'Información', icon: <Package className="h-4 w-4" /> },
     { id: 'location', label: 'Ubicación', icon: <MapPin className="h-4 w-4" /> },
     { id: 'sensors', label: 'Sensores', icon: <Activity className="h-4 w-4" /> },
     { id: 'history', label: 'Historial', icon: <AlertTriangle className="h-4 w-4" /> }
-  ];
-
+  ]
   // Create map markers
   const mapMarkers: MapModuleProps['markers'] = precinto.ubicacionActual ? [{
     id: precinto.id,
@@ -36,8 +32,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
       title: precinto.codigo,
       description: precinto.ubicacionActual.direccion || 'Ubicación actual'
     }
-  }] : [];
-
+  }] : []
   // Create route if we have origin and destination
   const mapRoute: MapModuleProps['route'] = precinto.ruta ? {
     id: 'main-route',
@@ -46,8 +41,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
       [precinto.ubicacionActual?.lat || -34.9011, precinto.ubicacionActual?.lng || -56.1645]
     ],
     color: '#3B82F6'
-  } : undefined;
-
+  } : undefined
   return (
     <>
       {/* Backdrop */}
@@ -264,5 +258,5 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

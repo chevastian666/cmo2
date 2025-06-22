@@ -2,12 +2,11 @@
  * Testing utilities and custom render
  * By Cheva
  */
-import React, { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { vi } from 'vitest';
-
+import React, { ReactElement } from 'react'
+import { render, RenderOptions } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { vi } from 'vitest'
 // Create a custom render that includes providers
 const createTestQueryClient = () =>
   new QueryClient({
@@ -21,11 +20,10 @@ const createTestQueryClient = () =>
         retry: false,
       },
     },
-  });
-
+  })
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  route?: string;
-  queryClient?: QueryClient;
+  route?: string
+  queryClient?: QueryClient
 }
 
 export const customRender = (
@@ -36,8 +34,7 @@ export const customRender = (
     ...renderOptions
   }: CustomRenderOptions = {}
 ) => {
-  window.history.pushState(_, 'Test page', route);
-
+  window.history.pushState(_, 'Test page', route)
   const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     return (
       <QueryClientProvider client={queryClient}>
@@ -45,33 +42,28 @@ export const customRender = (
           {children}
         </BrowserRouter>
       </QueryClientProvider>
-    );
-  };
-
-  return render(ui, { wrapper: AllTheProviders, ...renderOptions });
-};
-
+    )
+  }
+  return render(ui, { wrapper: AllTheProviders, ...renderOptions })
+}
 // Re-export everything
 // eslint-disable-next-line react-refresh/only-export-components
-export * from '@testing-library/react';
-export { customRender as render };
-
+export * from '@testing-library/react'
+export { customRender as render }
 // Test helpers
 export const waitForLoadingToFinish = () =>
   screen.findByText((content, element) => {
-    return !element?.className?.includes('loading');
-  });
-
+    return !element?.className?.includes('loading')
+  })
 // Mock navigation
-export const mockNavigate = vi.fn();
+export const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+  const actual = await vi.importActual('react-router-dom')
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-  };
-});
-
+  }
+})
 // Mock Zustand stores
 export const createMockStore = (initialState: unknown) => {
   return {
@@ -79,12 +71,10 @@ export const createMockStore = (initialState: unknown) => {
     setState: vi.fn(),
     subscribe: vi.fn(),
     destroy: vi.fn(),
-  };
-};
-
+  }
+}
 // Date helpers for consistent testing
-export const TEST_DATE = new Date('2024-01-01T00:00:00.000Z');
-
+export const TEST_DATE = new Date('2024-01-01T00:00:00.000Z')
 // Mock auth context
 export const mockAuthContext = {
   user: {
@@ -99,30 +89,27 @@ export const mockAuthContext = {
   logout: vi.fn(),
   canAccess: vi.fn(() => true),
   canAccessCMO: vi.fn(() => true),
-};
-
+}
 // Mock WebSocket
 export class MockWebSocket {
-  static CONNECTING = 0;
-  static OPEN = 1;
-  static CLOSING = 2;
-  static CLOSED = 3;
-
-  url: string;
-  readyState: number = MockWebSocket.CONNECTING;
-  onopen: ((event: Event) => void) | null = null;
-  onclose: ((event: CloseEvent) => void) | null = null;
-  onerror: ((event: Event) => void) | null = null;
-  onmessage: ((event: MessageEvent) => void) | null = null;
-
+  static CONNECTING = 0
+  static OPEN = 1
+  static CLOSING = 2
+  static CLOSED = 3
+  url: string
+  readyState: number = MockWebSocket.CONNECTING
+  onopen: ((event: Event) => void) | null = null
+  onclose: ((event: CloseEvent) => void) | null = null
+  onerror: ((event: Event) => void) | null = null
+  onmessage: ((event: MessageEvent) => void) | null = null
   constructor(url: string) {
-    this.url = url;
+    this.url = url
     setTimeout(() => {
-      this.readyState = MockWebSocket.OPEN;
+      this.readyState = MockWebSocket.OPEN
       if (this.onopen) {
-        this.onopen(new Event('open'));
+        this.onopen(new Event('open'))
       }
-    }, 0);
+    }, 0)
   }
 
   send(data: string | ArrayBuffer | Blob | ArrayBufferView) {
@@ -130,15 +117,14 @@ export class MockWebSocket {
   }
 
   close() {
-    this.readyState = MockWebSocket.CLOSED;
+    this.readyState = MockWebSocket.CLOSED
     if (this.onclose) {
-      this.onclose(new CloseEvent('close'));
+      this.onclose(new CloseEvent('close'))
     }
   }
 }
 
-global.WebSocket = MockWebSocket as unknown;
-
+global.WebSocket = MockWebSocket as unknown
 // Helper to create mock data
 export const createMockPrecinto = (overrides: Record<string, unknown> = {}) => ({
   id: '1',
@@ -151,8 +137,7 @@ export const createMockPrecinto = (overrides: Record<string, unknown> = {}) => (
   bateria: 85,
   temperatura: 25.5,
   ...overrides,
-});
-
+})
 export const createMockTransito = (overrides = {}) => ({
   id: '1',
   codigo: 'TRN-001',
@@ -172,8 +157,7 @@ export const createMockTransito = (overrides = {}) => ({
     documento: '12345678',
   },
   ...overrides,
-});
-
+})
 export const createMockAlerta = (overrides = {}) => ({
   id: '1',
   tipo: 'temperatura',
@@ -183,4 +167,4 @@ export const createMockAlerta = (overrides = {}) => ({
   precinto_id: '1',
   estado: 'activa',
   ...overrides,
-});
+})

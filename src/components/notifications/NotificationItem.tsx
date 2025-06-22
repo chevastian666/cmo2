@@ -4,21 +4,20 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion} from 'framer-motion';
+import React, { useState } from 'react'
+import { motion} from 'framer-motion'
 import { 
-  Clock, MapPin, User, Eye, EyeOff, AlertTriangle, Info, XCircle, Volume2, VolumeX} from 'lucide-react';
-import type { Notification} from '../../types/notifications';
-import { QuickActions} from './QuickActions';
-import { formatDistanceToNow} from 'date-fns';
-import { es} from 'date-fns/locale';
-
+  Clock, MapPin, User, Eye, EyeOff, AlertTriangle, Info, XCircle, Volume2, VolumeX} from 'lucide-react'
+import type { Notification} from '../../types/notifications'
+import { QuickActions} from './QuickActions'
+import { formatDistanceToNow} from 'date-fns'
+import { es} from 'date-fns/locale'
 interface NotificationItemProps {
-  notification: Notification;
-  isSelected: boolean;
-  onSelect: (selected: boolean) => void;
-  onAction: (action: string, payload?: unknown) => void;
-  expanded?: boolean;
+  notification: Notification
+  isSelected: boolean
+  onSelect: (selected: boolean) => void
+  onAction: (action: string, payload?: unknown) => void
+  expanded?: boolean
 }
 
 const priorityConfig = {
@@ -42,8 +41,7 @@ const priorityConfig = {
     bg: 'bg-red-900',
     icon: XCircle
   }
-};
-
+}
 const statusConfig = {
   unread: {
     color: 'text-blue-400',
@@ -75,59 +73,53 @@ const statusConfig = {
     bg: 'bg-gray-800',
     label: 'Descartado'
   }
-};
-
+}
 export const NotificationItem: React.FC<NotificationItemProps> = ({
   notification, isSelected, onSelect, onAction, expanded = false
 }) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const priority = priorityConfig[notification.priority];
-  const status = statusConfig[notification.status];
-  const PriorityIcon = priority.icon;
-
+  const [showDetails, setShowDetails] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const priority = priorityConfig[notification.priority]
+  const status = statusConfig[notification.status]
+  const PriorityIcon = priority.icon
   const handlePlaySound = async () => {
     if (notification.sound && !isPlaying) {
       try {
-        setIsPlaying(true);
-        const audio = new Audio(notification.sound.url);
-        audio.volume = notification.sound.volume || 0.5;
-        await audio.play();
-        setTimeout(() => setIsPlaying(false), notification.sound.duration);
+        setIsPlaying(true)
+        const audio = new Audio(notification.sound.url)
+        audio.volume = notification.sound.volume || 0.5
+        await audio.play()
+        setTimeout(() => setIsPlaying(false), notification.sound.duration)
       } catch (error) {
-        console.error('Failed to play notification sound:', error);
-        setIsPlaying(false);
+        console.error('Failed to play notification sound:', error)
+        setIsPlaying(false)
       }
     }
-  };
-
+  }
   const formatTimestamp = (date: Date) => {
     return formatDistanceToNow(date, { 
       addSuffix: true, 
       locale: es 
-    });
-  };
-
+    })
+  }
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'alert':
-        return '🚨';
-      case 'transit':
-        return '🚛';
-      case 'precinto':
-        return '🔒';
-      case 'system':
-        return '⚙️';
-      case 'user':
-        return '👤';
-      case 'maintenance':
-        return '🔧';
+      case 'alert': {
+  return '🚨'
+      case 'transit': {
+  return '🚛'
+      case 'precinto': {
+  return '🔒'
+      case 'system': {
+  return '⚙️'
+      case 'user': {
+  return '👤'
+      case 'maintenance': {
+  return '🔧'
       default:
-        return '📢';
+        return '📢'
     }
-  };
-
+  }
   return (<motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
@@ -350,5 +342,5 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         </div>
       </div>
     </motion.div>
-  );
-};
+  )
+}

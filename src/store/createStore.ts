@@ -3,20 +3,19 @@
  * By Cheva
  */
 
-import { create} from 'zustand';
-import { devtools, persist, subscribeWithSelector} from 'zustand/middleware';
-import { immer} from 'zustand/middleware/immer';
-import { logger} from './middleware/logger';
-import { createPersistConfig} from './middleware/persistHelpers';
-import type { StateCreator} from './middleware/types';
-
+import { create} from 'zustand'
+import { devtools, persist, subscribeWithSelector} from 'zustand/middleware'
+import { immer} from 'zustand/middleware/immer'
+import { logger} from './middleware/logger'
+import { createPersistConfig} from './middleware/persistHelpers'
+import type { StateCreator} from './middleware/types'
 export interface CreateStoreOptions<T> {
-  name: string;
-  enableDevtools?: boolean;
-  enableLogger?: boolean | LoggerConfig;
-  enableImmer?: boolean;
-  enableSubscribeWithSelector?: boolean;
-  persist?: Omit<PersistOptions<T>, 'name'>;
+  name: string
+  enableDevtools?: boolean
+  enableLogger?: boolean | LoggerConfig
+  enableImmer?: boolean
+  enableSubscribeWithSelector?: boolean
+  persist?: Omit<PersistOptions<T>, 'name'>
 }
 
 /**
@@ -27,23 +26,20 @@ export function createStore<T>(stateCreator: StateCreator<
       ['zustand/devtools', never], ['zustand/persist', T], ['zustand/immer', never], ['zustand/subscribeWithSelector', never]
     ], [], T
   >, options: CreateStoreOptions<T>) {
-  const { enableLogger: enableLogger = process.env.NODE_ENV === 'development', enableImmer: enableImmer = true, enableSubscribeWithSelector: enableSelector = true, persist: persistOptions } = options;
-
+  const { enableLogger: enableLogger = process.env.NODE_ENV === 'development', enableImmer: enableImmer = true, enableSubscribeWithSelector: enableSelector = true, persist: persistOptions } = options
   // Construir la cadena de middlewares dinámicamente
-  let enhancedCreator = stateCreator;
-
+  let enhancedCreator = stateCreator
   // Immer debe ser el más interno para que funcione correctamente
   if (enableImmer) {
-    enhancedCreator = immer(enhancedCreator) as unknown;
+    enhancedCreator = immer(enhancedCreator) as unknown
   }
 
   // Logger
   if (enableLogger) {
     const loggerConfig: LoggerConfig = typeof enableLogger === 'boolean' 
       ? { name } 
-      : { name, ...enableLogger };
-    
-    enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown;
+      : { name, ...enableLogger }
+    enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown
   }
 
   // Persist
@@ -51,21 +47,21 @@ export function createStore<T>(stateCreator: StateCreator<
     const persistConfig = createPersistConfig({
       name,
       ...persistOptions
-    });
-    enhancedCreator = persist(enhancedCreator, persistConfig as unknown) as unknown;
+    })
+    enhancedCreator = persist(enhancedCreator, persistConfig as unknown) as unknown
   }
 
   // DevTools
   if (enableDevtools) {
-    enhancedCreator = devtools(enhancedCreator, { name }) as unknown;
+    enhancedCreator = devtools(enhancedCreator, { name }) as unknown
   }
 
   // Subscribe with selector
   if (enableSelector) {
-    enhancedCreator = subscribeWithSelector(enhancedCreator) as unknown;
+    enhancedCreator = subscribeWithSelector(enhancedCreator) as unknown
   }
 
-  return create(enhancedCreator);
+  return create(enhancedCreator)
 }
 
 /**
@@ -73,9 +69,9 @@ export function createStore<T>(stateCreator: StateCreator<
  */
 export function createSimpleStore<T>(stateCreator: StateCreator<T>, name?: string) {
   if (process.env.NODE_ENV === 'development' && name) {
-    return create(devtools(stateCreator, { name }));
+    return create(devtools(stateCreator, { name }))
   }
-  return create(stateCreator);
+  return create(stateCreator)
 }
 
 /**
@@ -89,7 +85,7 @@ export function createTemporaryStore<T>(stateCreator: StateCreator<T>, name: str
     enableImmer: true,
     enableSubscribeWithSelector: true
     // Sin persist
-  });
+  })
 }
 
 /**
@@ -100,16 +96,15 @@ export function createSyncedStore<T>(stateCreator: StateCreator<T>, name: string
   const store = createStore(stateCreator as unknown, {
     name,
     persist: { partialize }
-  });
-
+  })
   // Habilitar sincronización entre pestañas
   if (typeof window !== 'undefined') {
     window.addEventListener('storage', (e) => {
       if (e.key === `cmo_${name}` && e.newValue) {
-        store.persist.rehydrate();
+        store.persist.rehydrate()
       }
-    });
+    })
   }
 
-  return store;
+  return store
 }

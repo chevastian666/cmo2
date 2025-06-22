@@ -128,28 +128,25 @@ export const SHARED_CONFIG = {
     CMO_MESSAGING: true,
     STATISTICS: true
   }
-};
-
+}
 // Helper to get authenticated headers
 export const getAuthHeaders = (): HeadersInit => {
-  const token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY);
+  const token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY)
   return {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` })
-  };
-};
-
+  }
+}
 // Helper to check if user has role
 export const hasRole = (userRole: string, requiredRoles: string[]): boolean => {
-  return requiredRoles.includes(userRole);
-};
-
+  return requiredRoles.includes(userRole)
+}
 // Helper to format API endpoint
 export const formatApiEndpoint = (endpoint: string): string => {
   if (!endpoint) {
-    console.error('formatApiEndpoint called with undefined endpoint');
-    return SHARED_CONFIG.API_BASE_URL;
+    console.error('formatApiEndpoint called with undefined endpoint')
+    return SHARED_CONFIG.API_BASE_URL
   }
-  const baseUrl = SHARED_CONFIG.API_BASE_URL;
-  return endpoint.startsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`;
-};
+  const baseUrl = SHARED_CONFIG.API_BASE_URL
+  return endpoint.startsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`
+}

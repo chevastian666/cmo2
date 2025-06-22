@@ -1,114 +1,97 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { X, Truck, User, MapPin, Clock, Package, AlertTriangle, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Building, Phone} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import { TransitStatus} from './TransitStatus';
-import type { Transito} from '../types';
-
-
+import React, { useEffect, useRef, useState } from 'react'
+import { X, Truck, User, MapPin, Clock, Package, AlertTriangle, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Building, Phone} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import { TransitStatus} from './TransitStatus'
+import type { Transito} from '../types'
 interface TransitDetailModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  transito: Transito;
+  isOpen: boolean
+  onClose: () => void
+  transito: Transito
 }
 
 export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
   isOpen, onClose, transito
 }) => {
-  const [mapError] = useState(false);
-  const [showFullImage, setShowFullImage] = useState(false);
+  const [mapError] = useState(false)
+  const [showFullImage, setShowFullImage] = useState(false)
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
-  const [selectedTime, setSelectedTime] = useState<Date>(new Date());
-  const [isPlayingTimeline, setIsPlayingTimeline] = useState(false);
-  const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
-   
-
+  const [selectedTime, setSelectedTime] = useState<Date>(new Date())
+  const [isPlayingTimeline, setIsPlayingTimeline] = useState(false)
+  const playIntervalRef = useRef<NodeJS.Timeout | null>(null)
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
-        onClose();
+        onClose()
       }
-    };
-
+    }
     if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
+      document.addEventListener('keydown', handleEsc)
       // Map initialization removed - using placeholder
       
       // Set initial timeline position based on progress
-      setTimelinePosition(transito.progreso || 0);
-      
+      setTimelinePosition(transito.progreso || 0)
       return () => {
-        document.removeEventListener('keydown', handleEsc);
-      };
+        document.removeEventListener('keydown', handleEsc)
+      }
     }
-  }, [isOpen, onClose, transito]);
-
-
+  }, [transito])
   const handleTimelineChange = (value: number) => {
-    setTimelinePosition(value);
-    
+    setTimelinePosition(value)
     // Calculate the time based on position
     const totalDuration = transito.eta ? 
       new Date(transito.eta).getTime() - new Date(transito.fechaSalida).getTime() :
       6 * 60 * 60 * 1000; // Default 6 hours
-    const currentDuration = (totalDuration * value) / 100;
-    const currentTime = new Date(new Date(transito.fechaSalida).getTime() + currentDuration);
-    setSelectedTime(currentTime);
-  };
-
+    const currentDuration = (totalDuration * value) / 100
+    const currentTime = new Date(new Date(transito.fechaSalida).getTime() + currentDuration)
+    setSelectedTime(currentTime)
+  }
   const togglePlayTimeline = () => {
     if (isPlayingTimeline) {
       // Stop playing
       if (playIntervalRef.current) {
-        clearInterval(playIntervalRef.current);
-        playIntervalRef.current = null;
+        clearInterval(playIntervalRef.current)
+        playIntervalRef.current = null
       }
-      setIsPlayingTimeline(false);
+      setIsPlayingTimeline(false)
     } else {
       // Start playing
-      setIsPlayingTimeline(true);
-      let currentPos = timelinePosition;
-      
+      setIsPlayingTimeline(true)
+      let currentPos = timelinePosition
       playIntervalRef.current = setInterval(() => {
         currentPos += 2; // Move 2% each interval
         if (currentPos >= 100) {
           currentPos = 0; // Loop back to start
         }
-        handleTimelineChange(currentPos);
+        handleTimelineChange(currentPos)
       }, 100); // Update every 100ms
     }
-  };
-   
-
+  }
   useEffect(() => {
     return () => {
       if (playIntervalRef.current) {
-        clearInterval(playIntervalRef.current);
+        clearInterval(playIntervalRef.current)
       }
-    };
-  }, []);
-
-  if (!isOpen) return null;
-
+    }
+  }, [])
+  if (!isOpen) return null
   const formatDateTime = (date: Date | string) => {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const dateObj = typeof date === 'string' ? new Date(date) : date
     return dateObj.toLocaleString('es-UY', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
-
+    })
+  }
   const calculateDuration = () => {
-    if (!transito.eta) return 'N/A';
-    const duration = new Date(transito.eta).getTime() - new Date(transito.fechaSalida).getTime();
-    const hours = Math.floor(duration / (1000 * 60 * 60));
-    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}h ${minutes}m`;
-  };
-
+    if (!transito.eta) return 'N/A'
+    const duration = new Date(transito.eta).getTime() - new Date(transito.fechaSalida).getTime()
+    const hours = Math.floor(duration / (1000 * 60 * 60))
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
+    return `${hours}h ${minutes}m`
+  }
   // Mock additional data for enhanced view
   const enhancedTransito = {
     ...transito,
@@ -119,8 +102,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
     fotoPrecintado: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
     bateria: 85,
     temperatura: transito.tipoCarga === 'Refrigerado' ? -18 : undefined
-  };
-
+  }
   return (
     <>
       {/* Backdrop */}
@@ -379,12 +361,12 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
                       <p className="text-xs text-gray-400">Click para ampliar</p>
                       <button
                         onClick={(e) => {
-                          e.stopPropagation();
+                          e.stopPropagation()
                           // Download functionality
-                          const link = document.createElement('a');
-                          link.href = enhancedTransito.fotoPrecintado!;
-                          link.download = `precinto-${transito.precinto}.jpg`;
-                          link.click();
+                          const link = document.createElement('a')
+                          link.href = enhancedTransito.fotoPrecintado!
+                          link.download = `precinto-${transito.precinto}.jpg`
+                          link.click()
                         }}
                         className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
                       >
@@ -622,11 +604,11 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
                   </div>
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
-                      const link = document.createElement('a');
-                      link.href = enhancedTransito.fotoPrecintado!;
-                      link.download = `precinto-${transito.precinto}-full.jpg`;
-                      link.click();
+                      e.stopPropagation()
+                      const link = document.createElement('a')
+                      link.href = enhancedTransito.fotoPrecintado!
+                      link.download = `precinto-${transito.precinto}-full.jpg`
+                      link.click()
                     }}
                     className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
@@ -640,5 +622,5 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
         </>
       )}
     </>
-  );
-};
+  )
+}

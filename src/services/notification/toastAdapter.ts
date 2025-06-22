@@ -1,11 +1,10 @@
-import { toast} from '@/hooks/use-toast';
-
+import { toast} from '@/hooks/use-toast'
 interface NotificationOptions {
-  duration?: number;
+  duration?: number
   action?: {
-    label: string;
-    onClick: () => void;
-  };
+    label: string
+    onClick: () => void
+  }
 }
 
 export class ToastNotificationAdapter {
@@ -19,7 +18,7 @@ export class ToastNotificationAdapter {
         onClick: options.action.onClick,
         children: options.action.label
       } : undefined,
-    });
+    })
   }
 
   error(title: string, description?: string, options?: NotificationOptions) {
@@ -33,7 +32,7 @@ export class ToastNotificationAdapter {
         onClick: options.action.onClick,
         children: options.action.label
       } : undefined,
-    });
+    })
   }
 
   warning(title: string, description?: string, options?: NotificationOptions) {
@@ -46,7 +45,7 @@ export class ToastNotificationAdapter {
         onClick: options.action.onClick,
         children: options.action.label
       } : undefined,
-    });
+    })
   }
 
   info(title: string, description?: string, options?: NotificationOptions) {
@@ -59,23 +58,25 @@ export class ToastNotificationAdapter {
         onClick: options.action.onClick,
         children: options.action.label
       } : undefined,
-    });
+    })
   }
 
   // Compatibility methods for existing notification service
   show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', options?: NotificationOptions) {
     switch (type) {
-      case 'success':
-        this.success(message, undefined, options);
-        break;
-      case 'error':
-        this.error(message, undefined, options);
-        break;
-      case 'warning':
-        this.warning(message, undefined, options);
-        break;
+      case 'success': {
+  this.success(message, undefined, options)
+        break
+    }
+    case 'error':
+        this.error(message, undefined, options)
+        break
+    }
+    case 'warning':
+        this.warning(message, undefined, options)
+        break
       default:
-        this.info(message, undefined, options);
+        this.info(message, undefined, options)
     }
   }
 
@@ -86,8 +87,8 @@ export class ToastNotificationAdapter {
       title: '',
       description: '',
       duration: 1,
-    });
+    })
   }
 }
 
-export const toastAdapter = new ToastNotificationAdapter();
+export const toastAdapter = new ToastNotificationAdapter()

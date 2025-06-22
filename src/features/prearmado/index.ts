@@ -1,1 +1,1 @@
-export { PrearmadoPage } from './pages/PrearmadoPage';
+export { PrearmadoPage } from './pages/PrearmadoPage'

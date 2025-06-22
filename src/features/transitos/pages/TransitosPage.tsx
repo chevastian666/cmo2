@@ -3,30 +3,26 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { Truck, Download} from 'lucide-react';
-import { TransitTable} from '../components/TransitTable';
-import {TransitFilters} from '../components/TransitFilters';
-
-import { EditTransitoModal} from '../components/EditTransitoModal';
-import { notificationService} from '../../../services/shared/notification.service';
-import { transitosService} from '../services/transitos.service';
-import type { Transito} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import { Truck, Download} from 'lucide-react'
+import { TransitTable} from '../components/TransitTable'
+import {TransitFilters} from '../components/TransitFilters'
+import { EditTransitoModal} from '../components/EditTransitoModal'
+import { notificationService} from '../../../services/shared/notification.service'
+import { transitosService} from '../services/transitos.service'
+import type { Transito} from '../types'
 export const TransitosPage: React.FC = () => {
-  const [transitos, setTransitos] = useState<Transito[]>([]);
-  const [totalTransitos, setTotalTransitos] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  
+  const [transitos, setTransitos] = useState<Transito[]>([])
+  const [totalTransitos, setTotalTransitos] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [sortField, setSortField] = useState<string>('fechaSalida');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [sortField, setSortField] = useState<string>('fechaSalida')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   // Filters state
   const [filters, setFilters] = useState({
     estado: '',
@@ -37,132 +33,109 @@ export const TransitosPage: React.FC = () => {
     origen: '',
     destino: '',
     searchText: ''
-  });
-  
+  })
   // Debounce timer for filters
-  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(null);
-
+  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(null)
   // Load transitos with server-side pagination
   const loadTransitos = async () => {
     try {
-      setLoading(true);
-      
+      setLoading(true)
       // Build filters object for API
-      const apiFilters: Record<string, unknown> = {};
+      const apiFilters: Record<string, unknown> = {}
       Object.entries(filters).forEach(([key, value]) => {
         if (value && value !== '') {
-          apiFilters[key] = value;
+          apiFilters[key] = value
         }
-      });
-      
+      })
       const response = await transitosService.getTransitos({
         page: currentPage,
         limit: itemsPerPage,
         sortBy: sortField,
         sortOrder: sortOrder,
         filters: apiFilters
-      });
-      
-      setTransitos(response._data);
-      setTotalTransitos(response.total);
+      })
+      setTransitos(response._data)
+      setTotalTransitos(response.total)
     } catch {
-      console.error('Error loading transitos:', _error);
-      notificationService.error('Error', 'No se pudieron cargar los tránsitos');
+      console.error('Error loading transitos:', _error)
+      notificationService.error('Error', 'No se pudieron cargar los tránsitos')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   // Load data on mount and when pagination/sort changes
-   
 
   useEffect(() => {
-    loadTransitos();
-  }, [currentPage, itemsPerPage, sortField, sortOrder]);
-
+    loadTransitos()
+  }, [])
   // Debounced filter loading
-   
 
   useEffect(() => {
     if (filterDebounce) {
-      clearTimeout(filterDebounce);
+      clearTimeout(filterDebounce)
     }
     
     const timeout = setTimeout(() => {
       setCurrentPage(1); // Reset to first page when filters change
-      loadTransitos();
+      loadTransitos()
     }, 500); // 500ms debounce
     
-    setFilterDebounce(timeout);
-    
+    setFilterDebounce(timeout)
     return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [filters]);
-
+      if (timeout) clearTimeout(timeout)
+    }
+  }, [filters])
   // Auto-refresh every 30 seconds
-   
 
   useEffect(() => {
-    const interval = setInterval(loadTransitos, 30000);
-    return () => clearInterval(interval);
-  }, [currentPage, itemsPerPage, sortField, sortOrder, filters]);
-
-
+    const interval = setInterval(loadTransitos, 30000)
+    return () => clearInterval(interval)
+  }, [filters])
   const handleFilterChange = (newFilters: typeof filters) => {
-    setFilters(newFilters);
-  };
-  
+    setFilters(newFilters)
+  }
   const handleSort = (field: string) => {
     if (field === sortField) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field);
-      setSortOrder('asc');
+      setSortField(field)
+      setSortOrder('asc')
     }
-  };
-  
+  }
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-  
+    setCurrentPage(page)
+  }
   const handleItemsPerPageChange = (items: number) => {
-    setItemsPerPage(items);
+    setItemsPerPage(items)
     setCurrentPage(1); // Reset to first page
-  };
-
+  }
   const handleViewDetail = (transito: Transito) => {
-    setSelectedTransito(transito);
-    setShowDetailModal(true);
-  };
-
+    setSelectedTransito(transito)
+    setShowDetailModal(true)
+  }
   const handleViewMap = (transito: Transito) => {
     // Open map in new tab or modal
-    window.open(`/map/${transito.id}`, 'blank');
-  };
-
+    window.open(`/map/${transito.id}`, 'blank')
+  }
   const handleMarkDesprecintado = async (transito: Transito) => {
     try {
-      await transitosService.markDesprecintado(transito.id);
-      notificationService.success('Éxito', `Tránsito ${transito.dua} marcado como desprecintado`);
-      loadTransitos();
+      await transitosService.markDesprecintado(transito.id)
+      notificationService.success('Éxito', `Tránsito ${transito.dua} marcado como desprecintado`)
+      loadTransitos()
     } catch {
-      notificationService.error('Error', 'No se pudo actualizar el tránsito');
+      notificationService.error('Error', 'No se pudo actualizar el tránsito')
     }
-  };
-
+  }
   const handleEdit = (transito: Transito) => {
-    setSelectedTransito(transito);
-    setShowEditModal(true);
-  };
-
+    setSelectedTransito(transito)
+    setShowEditModal(true)
+  }
   const handleExport = () => {
-    const csvContent = generateCSV(transitos);
-    downloadCSV(csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`);
-  };
-
+    const csvContent = generateCSV(transitos)
+    downloadCSV(csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`)
+  }
   const generateCSV = (_data: Transito[]) => {
-    const headers = ['DUA', 'Precinto', 'Estado', 'Fecha Salida', 'ETA', 'Origen', 'Destino', 'Empresa', 'Encargado'];
+    const headers = ['DUA', 'Precinto', 'Estado', 'Fecha Salida', 'ETA', 'Origen', 'Destino', 'Empresa', 'Encargado']
     const rows = data.map(t => [
       t.dua,
       t.precinto,
@@ -173,19 +146,16 @@ export const TransitosPage: React.FC = () => {
       t.destino,
       t.empresa,
       t.encargado
-    ]);
-    
-    return [headers, ...rows].map(row => row.join(',')).join('\n');
-  };
-
+    ])
+    return [headers, ...rows].map(row => row.join(',')).join('\n')
+  }
   const downloadCSV = (content: string, filename: string) => {
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-  };
-
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = filename
+    link.click()
+  }
   return (<div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -239,8 +209,8 @@ export const TransitosPage: React.FC = () => {
         <TransitDetailModal
           isOpen={showDetailModal}
           onClose={() => {
-            setShowDetailModal(false);
-            setSelectedTransito(null);
+            setShowDetailModal(false)
+            setSelectedTransito(null)
           }}
           transito={selectedTransito}
         />
@@ -250,8 +220,8 @@ export const TransitosPage: React.FC = () => {
       <EditTransitoModal
         isOpen={showEditModal}
         onClose={() => {
-          setShowEditModal(false);
-          setSelectedTransito(null);
+          setShowEditModal(false)
+          setSelectedTransito(null)
         }}
         transito={selectedTransito}
         onSuccess={() => {
@@ -259,5 +229,5 @@ export const TransitosPage: React.FC = () => {
         }}
       />
     </div>
-  );
-};
+  )
+}

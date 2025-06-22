@@ -4,22 +4,20 @@
  * By Cheva
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Database, Zap, Activity, TrendingUp, Clock, MemoryStick, Cpu, Play, RefreshCw } from 'lucide-react';
-import { VirtualizedList } from '@/components/optimized/VirtualizedList';
-import { OptimizedCard, OptimizedTableRow } from '@/components/optimized/OptimizedComponents';
-import { useServerPagination } from '@/hooks/useServerPagination';
-import { useDataProcessor } from '@/hooks/useWebWorker';
-import { useDebouncedCallback, useThrottledCallback, useBatchedUpdates } from '@/hooks/useOptimizedUpdates';
-import { useSmartCache } from '@/services/cache/SmartCache';
-
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Database, Zap, Activity, TrendingUp, Clock, MemoryStick, Cpu, Play, RefreshCw } from 'lucide-react'
+import { VirtualizedList } from '@/components/optimized/VirtualizedList'
+import { OptimizedCard, OptimizedTableRow } from '@/components/optimized/OptimizedComponents'
+import { useServerPagination } from '@/hooks/useServerPagination'
+import { useDataProcessor } from '@/hooks/useWebWorker'
+import { useDebouncedCallback, useThrottledCallback, useBatchedUpdates } from '@/hooks/useOptimizedUpdates'
+import { useSmartCache } from '@/services/cache/SmartCache'
 // Generate large dataset
 function generateLargeDataset(count: number) {
-  const dataset = [];
-  const statuses = ['active', 'pending', 'completed', 'failed'];
-  const locations = ['NYC', 'LAX', 'CHI', 'HOU', 'PHX', 'PHL', 'SAT', 'SAN', 'DAL', 'SJC'];
-  
+  const dataset = []
+  const statuses = ['active', 'pending', 'completed', 'failed']
+  const locations = ['NYC', 'LAX', 'CHI', 'HOU', 'PHX', 'PHL', 'SAT', 'SAN', 'DAL', 'SJC']
   for (let i = 0; i < count; i++) {
     dataset.push({
       id: `REC-${i.toString().padStart(8, '0')}`,
@@ -31,121 +29,105 @@ function generateLargeDataset(count: number) {
       location: locations[Math.floor(Math.random() * locations.length)],
       user: `user-${Math.floor(Math.random() * 1000)}`,
       description: `Transaction ${i} - Lorem ipsum dolor sit amet`
-    });
+    })
   }
   
-  return dataset;
+  return dataset
 }
 
 export const PerformanceDemo: React.FC = () => {
   const [dataSize, setDataSize] = useState(1000000); // 1 million records
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [dataset, setDataset] = useState<any[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [dataset, setDataset] = useState<any[]>([])
   const [metrics, setMetrics] = useState({
     generationTime: 0,
     processingTime: 0,
     renderTime: 0,
     memoryUsage: 0
-  });
-  const [selectedTab, setSelectedTab] = useState<'virtualized' | 'paginated' | 'analytics'>('virtualized');
-
+  })
+  const [selectedTab, setSelectedTab] = useState<'virtualized' | 'paginated' | 'analytics'>('virtualized')
   // Performance monitoring
   const measurePerformance = useCallback((fn: () => void | Promise<void>, metricName: keyof typeof metrics) => {
-    const startTime = performance.now();
-    const startMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
-    
-    const result = fn();
-    
+    const startTime = performance.now()
+    const startMemory = (performance as unknown).memory?.usedJSHeapSize || 0
+    const result = fn()
     if (result instanceof Promise) {
       return result.then(() => {
-        const endTime = performance.now();
-        const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
-        
+        const endTime = performance.now()
+        const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0
         setMetrics(prev => ({
           ...prev,
           [metricName]: endTime - startTime,
           memoryUsage: (endMemory - startMemory) / (1024 * 1024) // MB
-        }));
-      });
+        }))
+      })
     } else {
-      const endTime = performance.now();
-      const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
-      
+      const endTime = performance.now()
+      const endMemory = (performance as unknown).memory?.usedJSHeapSize || 0
       setMetrics(prev => ({
         ...prev,
         [metricName]: endTime - startTime,
         memoryUsage: (endMemory - startMemory) / (1024 * 1024) // MB
-      }));
+      }))
     }
-  }, []);
-
+  }, [])
   // Generate data
   const generateData = useCallback(async () => {
-    setIsGenerating(true);
-    
+    setIsGenerating(true)
     await measurePerformance(async () => {
       // Generate in chunks to avoid blocking UI
-      const chunkSize = 100000;
-      const chunks = Math.ceil(dataSize / chunkSize);
-      let allData: unknown[] = [];
-      
+      const chunkSize = 100000
+      const chunks = Math.ceil(dataSize / chunkSize)
+      let allData: unknown[] = []
       for (let i = 0; i < chunks; i++) {
-        const size = Math.min(chunkSize, dataSize - i * chunkSize);
-        const chunk = generateLargeDataset(size);
-        allData = [...allData, ...chunk];
-        
+        const size = Math.min(chunkSize, dataSize - i * chunkSize)
+        const chunk = generateLargeDataset(size)
+        allData = [...allData, ...chunk]
         // Allow UI to update
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise(resolve => setTimeout(resolve, 0))
       }
       
-      setDataset(allData);
-    }, 'generationTime');
-    
-    setIsGenerating(false);
-  }, [dataSize, measurePerformance]);
-
+      setDataset(allData)
+    }, 'generationTime')
+    setIsGenerating(false)
+  }, [])
   // Web Worker for processing
-  const { processLargeDataset } = useDataProcessor();
-  
+  const { processLargeDataset } = useDataProcessor()
   // Smart cache
-  const cache = useSmartCache('performance-demo');
-  
+  const cache = useSmartCache('performance-demo')
   // Server pagination mock
   const paginatedData = useServerPagination({
     queryKey: ['performance-demo', 'paginated'],
     queryFn: async ({ page, pageSize, sortBy, sortOrder, filters, search }) => {
       // Simulate server delay
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      let filtered = dataset;
-      
+      await new Promise(resolve => setTimeout(resolve, 100))
+      let filtered = dataset
       // Apply search
       if (search) {
         filtered = filtered.filter(item => 
           item.id.includes(search) || 
           item.description.toLowerCase().includes(search.toLowerCase())
-        );
+        )
       }
       
       // Apply filters
       if (filters.status) {
-        filtered = filtered.filter(item => item.status === filters.status);
+        filtered = filtered.filter(item => item.status === filters.status)
       }
       
       // Sort
       if (sortBy) {
         filtered.sort((a, b) => {
-          const aVal = a[sortBy];
-          const bVal = b[sortBy];
-          const order = sortOrder === 'asc' ? 1 : -1;
-          return aVal < bVal ? -1 * order : aVal > bVal ? 1 * order : 0;
-        });
+          const aVal = a[sortBy]
+          const bVal = b[sortBy]
+          const order = sortOrder === 'asc' ? 1 : -1
+          return aVal < bVal ? -1 * order : aVal > bVal ? 1 * order : 0
+        })
       }
       
       // Paginate
-      const start = (page - 1) * pageSize;
-      const end = start + pageSize;
-      
+      const start = (page - 1) * pageSize
+      const end = start + pageSize
       return {
         data: filtered.slice(start, end),
         total: filtered.length,
@@ -154,48 +136,40 @@ export const PerformanceDemo: React.FC = () => {
         totalPages: Math.ceil(filtered.length / pageSize),
         hasNextPage: end < filtered.length,
         hasPreviousPage: page > 1
-      };
+      }
     },
     pageSize: 50
-  });
-
+  })
   // Debounced search
   const handleSearch = useDebouncedCallback((search: string) => {
-    paginatedData.setSearch(search);
-  }, { delay: 300 });
-
+    paginatedData.setSearch(search)
+  }, { delay: 300 })
   // Throttled scroll handler
   const handleScroll = useThrottledCallback((scrollOffset: number) => {
-    console.log('Scroll offset:', scrollOffset);
-  }, { delay: 100 });
-
+    console.log('Scroll offset:', scrollOffset)
+  }, { delay: 100 })
   // Batched updates for real-time data
   
     // Process updates...
-  }, { maxBatchSize: 1000, flushDelay: 100 });
-
+  }, { maxBatchSize: 1000, flushDelay: 100 })
   // Process data with Web Worker
   const processData = useCallback(async () => {
-    if (!workerReady || dataset.length === 0) return;
-    
+    if (!workerReady || dataset.length === 0) return
     await measurePerformance(async () => {
       const result = await processLargeDataset(dataset, {
         groupBy: 'status',
         aggregateFields: ['value', 'quantity'],
         sortBy: { field: 'value', order: 'desc' },
         limit: 100
-      });
-      
-      console.log('Processing result:', result);
-    }, 'processingTime');
-  }, [dataset, processLargeDataset, workerReady, measurePerformance]);
-
+      })
+      console.log('Processing result:', result)
+    }, 'processingTime')
+  }, [])
   // Initial data generation
   
     useEffect(() => {
-    generateData();
-  }, []);
-
+    generateData()
+  }, [])
   // Render virtualized list item
   const renderVirtualizedItem = useCallback((item: unknown, index: number, style: React.CSSProperties) => (
     <div style={style} className="flex items-center px-4 py-2 border-b border-gray-700 hover:bg-gray-800">
@@ -208,8 +182,7 @@ export const PerformanceDemo: React.FC = () => {
         <div className="text-sm text-gray-400">{item.status}</div>
       </div>
     </div>
-  ), []);
-
+  ), [])
   return (
     <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
@@ -315,7 +288,7 @@ export const PerformanceDemo: React.FC = () => {
               { key: 'virtualized', label: 'Virtualized List', icon: Activity },
               { key: 'paginated', label: 'Server Pagination', icon: Database },
               { key: 'analytics', label: 'Analytics', icon: TrendingUp }
-            ].map(({ key, label, icon: Icon }) => (
+            ].map((key, label, icon: Icon ) => (
               <button
                 key={key}
                 onClick={() => setSelectedTab(key as unknown)}
@@ -462,5 +435,5 @@ export const PerformanceDemo: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

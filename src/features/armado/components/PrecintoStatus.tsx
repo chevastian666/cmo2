@@ -1,20 +1,18 @@
-import React from 'react';
-import {Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
-import type { Precinto} from '../../../types';
-
+import React from 'react'
+import {Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
+import type { Precinto} from '../../../types'
 interface PrecintoStatusProps {
-  precinto: Precinto;
+  precinto: Precinto
 }
 
 export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   const getBatteryColor = (level: number) => {
-    if (level < 20) return 'text-red-400';
-    if (level < 50) return 'text-yellow-400';
-    return 'text-green-400';
-  };
-
+    if (level < 20) return 'text-red-400'
+    if (level < 50) return 'text-yellow-400'
+    return 'text-green-400'
+  }
   const getBatteryIcon = (level: number) => {
     return (
       <div className="relative">
@@ -23,39 +21,36 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
           <AlertTriangle className="h-3 w-3 text-red-400 absolute -top-1 -right-1" />
         )}
       </div>
-    );
-  };
-
+    )
+  }
   const getEslingaStatus = () => {
     switch (precinto.eslinga.estado) {
-      case 'cerrada':
-        return {
+      case 'cerrada': {
+  return {
           icon: <Lock className="h-5 w-5" />,
           text: 'Cerrada',
           color: 'text-green-400',
           bg: 'bg-green-900/20'
-        };
+        }
       case 'abierta':
         return {
           icon: <LockOpen className="h-5 w-5" />,
           text: 'Abierta',
           color: 'text-yellow-400',
           bg: 'bg-yellow-900/20'
-        };
+        }
       case 'violada':
         return {
           icon: <ShieldAlert className="h-5 w-5" />,
           text: 'Violada',
           color: 'text-red-400',
           bg: 'bg-red-900/20'
-        };
+        }
     }
-  };
-
-  const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura;
+  }
+  const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura
   const isOldReport = timeSinceLastReport > 3600; // More than 1 hour
-  const eslingaStatus = getEslingaStatus();
-
+  const eslingaStatus = getEslingaStatus()
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <div className="flex items-center justify-between mb-6">
@@ -223,5 +218,5 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

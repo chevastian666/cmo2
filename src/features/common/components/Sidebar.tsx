@@ -1,31 +1,28 @@
-import React, { useState } from 'react';
-import { Link, useLocation} from 'react-router-dom';
-import { Activity, LayoutDashboard, Map, Truck, AlertTriangle, History, FileText, Package, Users, Building2, Palmtree, Monitor, HardHat, ChevronLeft, ChevronRight, X, Shield} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { useAlertasActivas} from '../../../store/hooks';
-import { useAccess} from '../../../hooks/useAccess';
-import type { Section} from '../../../types/roles';
-
+import React, { useState } from 'react'
+import { Link, useLocation} from 'react-router-dom'
+import { Activity, LayoutDashboard, Map, Truck, AlertTriangle, History, FileText, Package, Users, Building2, Palmtree, Monitor, HardHat, ChevronLeft, ChevronRight, X, Shield} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { useAlertasActivas} from '../../../store/hooks'
+import { useAccess} from '../../../hooks/useAccess'
+import type { Section} from '../../../types/roles'
 interface NavItem {
-  id: string;
-  label: string;
-  path: string;
-  icon: React.ReactNode;
-  badge?: number;
-  group?: string;
-  section?: Section;
+  id: string
+  label: string
+  path: string
+  icon: React.ReactNode
+  badge?: number
+  group?: string
+  section?: Section
 }
 
 interface SidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
+  isOpen: boolean
+  onToggle: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
-  const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  
-
+  const location = useLocation()
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const allNavItems: NavItem[] = [
     // Módulos principales
     {
@@ -165,28 +162,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       icon: <Monitor className="h-5 w-5" />,
       group: 'otros'
     }
-  ];
-  
+  ]
   // Filter items based on access permissions
   const navItems = allNavItems.filter(item => {
     if (!item.section) return true; // Always show items without section control
-    return useAccess(item.section);
-  });
-
+    return useAccess(item.section)
+  })
   const groups = {
     principal: 'Módulos Principales',
     operaciones: 'Gestión y Operaciones',
     datos: 'Bases de Datos',
     admin: 'Administrador',
     otros: 'Otros'
-  };
-
+  }
   const isActive = (path: string) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
-    return false;
-  };
-
+    if (path === '/' && location.pathname === '/') return true
+    if (path !== '/' && location.pathname.startsWith(path)) return true
+    return false
+  }
   return (
     <>
       {/* Mobile backdrop */}
@@ -242,9 +235,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
           {Object.entries(groups).map(([groupKey, groupLabel]) => {
-            const groupItems = navItems.filter(item => item.group === groupKey);
-            if (groupItems.length === 0) return null;
-
+            const groupItems = navItems.filter(item => item.group === groupKey)
+            if (groupItems.length === 0) return null
             return (
               <div key={groupKey} className="mb-6">
                 {!isCollapsed && (
@@ -301,7 +293,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                   ))}
                 </ul>
               </div>
-            );
+            )
           })}
         </nav>
 
@@ -323,5 +315,5 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         </div>
       </aside>
     </>
-  );
-};
+  )
+}

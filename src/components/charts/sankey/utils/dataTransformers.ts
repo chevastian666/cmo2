@@ -5,29 +5,25 @@
  */
 
 import type { 
-  SankeyData, FlowData, LogisticsFlow, PrecintoFlow, AlertFlow} from '../types/sankey.types';
-
+  SankeyData, FlowData, LogisticsFlow, PrecintoFlow, AlertFlow} from '../types/sankey.types'
 /**
  * Transform logistics flow data into Sankey format
  */
 export function transformLogisticsFlow(flows: LogisticsFlow[]): SankeyData {
-  const nodes = new Map<string, number>();
-  const links: SankeyData['links'] = [];
-
+  const nodes = new Map<string, number>()
+  const links: SankeyData['links'] = []
   // Extract unique locations and calculate totals
   flows.forEach(flow => {
     // Add origin node
     if (!nodes.has(flow.origin)) {
-      nodes.set(flow.origin, 0);
+      nodes.set(flow.origin, 0)
     }
-    nodes.set(flow.origin, nodes.get(flow.origin)! + flow.transitCount);
-
+    nodes.set(flow.origin, nodes.get(flow.origin)! + flow.transitCount)
     // Add destination node
     if (!nodes.has(flow.destination)) {
-      nodes.set(flow.destination, 0);
+      nodes.set(flow.destination, 0)
     }
-    nodes.set(flow.destination, nodes.get(flow.destination)! + flow.transitCount);
-
+    nodes.set(flow.destination, nodes.get(flow.destination)! + flow.transitCount)
     // Create link
     links.push({
       source: flow.origin,
@@ -38,17 +34,15 @@ export function transformLogisticsFlow(flows: LogisticsFlow[]): SankeyData {
         avgTime: flow.avgTime,
         successRate: flow.successRate
       }
-    });
-  });
-
+    })
+  })
   // Convert nodes map to array
   const nodeArray = Array.from(nodes.entries()).map(([id, value]) => ({
     id,
     name: id,
     value
-  }));
-
-  return { nodes: nodeArray, links };
+  }))
+  return { nodes: nodeArray, links }
 }
 
 /**
@@ -59,39 +53,34 @@ export function transformPrecintoLifecycle(stages: PrecintoFlow[]): SankeyData {
     id: stage.stage,
     name: formatStageName(stage.stage),
     value: stage.count
-  }));
-
+  }))
   const links = stages
     .filter(stage => stage.nextStage)
     .map(stage => ({
       source: stage.stage,
       target: stage.nextStage!,
       value: stage.count - (stage.dropoffCount || 0)
-    }));
-
-  return { nodes, links };
+    }))
+  return { nodes, links }
 }
 
 /**
  * Transform alert flow data into Sankey format
  */
 export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
-  const sourceNodes = new Map<string, number>();
-  const typeNodes = new Map<string, number>();
-  const resolutionNodes = new Map<string, number>();
-  const links: SankeyData['links'] = [];
-
+  const sourceNodes = new Map<string, number>()
+  const typeNodes = new Map<string, number>()
+  const resolutionNodes = new Map<string, number>()
+  const links: SankeyData['links'] = []
   alerts.forEach(alert => {
     // Count by source
-    sourceNodes.set(alert.source, (sourceNodes.get(alert.source) || 0) + alert.count);
-    
+    sourceNodes.set(alert.source, (sourceNodes.get(alert.source) || 0) + alert.count)
     // Count by type
-    const typeKey = `${alert.alertType}_${alert.severity}`;
-    typeNodes.set(typeKey, (typeNodes.get(typeKey) || 0) + alert.count);
-    
+    const typeKey = `${alert.alertType}_${alert.severity}`
+    typeNodes.set(typeKey, (typeNodes.get(typeKey) || 0) + alert.count)
     // Count by resolution if exists
     if (alert.resolution) {
-      resolutionNodes.set(alert.resolution, (resolutionNodes.get(alert.resolution) || 0) + alert.count);
+      resolutionNodes.set(alert.resolution, (resolutionNodes.get(alert.resolution) || 0) + alert.count)
     }
 
     // Create source -> type link
@@ -100,8 +89,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
       target: typeKey,
       value: alert.count,
       color: getSeverityColor(alert.severity)
-    });
-
+    })
     // Create type -> resolution link if exists
     if (alert.resolution) {
       links.push({
@@ -109,10 +97,9 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
         target: alert.resolution,
         value: alert.count,
         color: getSeverityColor(alert.severity)
-      });
+      })
     }
-  });
-
+  })
   // Combine all nodes
   const nodes = [
     ...Array.from(sourceNodes.entries()).map(([id, value]) => ({
@@ -122,13 +109,13 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
       color: '#3b82f6' // Blue for sources
     })),
     ...Array.from(typeNodes.entries()).map(([id, value]) => {
-      const [type, severity] = id.split('_');
+      const [type, severity] = id.split('_')
       return {
         id,
         name: `${formatAlertType(type)} (${severity})`,
         value,
         color: getSeverityColor(severity as 'low' | 'medium' | 'high' | 'critical')
-      };
+      }
     }),
     ...Array.from(resolutionNodes.entries()).map(([id, value]) => ({
       id,
@@ -136,9 +123,8 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
       value,
       color: '#10b981' // Green for resolutions
     }))
-  ];
-
-  return { nodes, links };
+  ]
+  return { nodes, links }
 }
 
 /**
@@ -146,56 +132,49 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
  */
 export function transformTimeBasedFlow(
   data: Array<{
-    timestamp: Date;
-    from: string;
-    to: string;
-    value: number;
+    timestamp: Date
+    from: string
+    to: string
+    value: number
   }>,
   timeInterval: 'hour' | 'day' | 'week' | 'month'
 ): SankeyData {
-  const timeGroups = new Map<string, Map<string, number>>();
-  
+  const timeGroups = new Map<string, Map<string, number>>()
   data.forEach(item => {
-    const timeKey = getTimeKey(item.timestamp, timeInterval);
+    const timeKey = getTimeKey(item.timestamp, timeInterval)
     if (!timeGroups.has(timeKey)) {
-      timeGroups.set(timeKey, new Map());
+      timeGroups.set(timeKey, new Map())
     }
     
-    const flowKey = `${item.from}-${item.to}`;
-    const flows = timeGroups.get(timeKey)!;
-    flows.set(flowKey, (flows.get(flowKey) || 0) + item.value);
-  });
-
-  const nodes = new Set<string>();
-  const links: SankeyData['links'] = [];
-
+    const flowKey = `${item.from}-${item.to}`
+    const flows = timeGroups.get(timeKey)!
+    flows.set(flowKey, (flows.get(flowKey) || 0) + item.value)
+  })
+  const nodes = new Set<string>()
+  const links: SankeyData['links'] = []
   timeGroups.forEach((flows, timeKey) => {
     flows.forEach((value, flowKey) => {
-      const [from, to] = flowKey.split('-');
-      const fromNode = `${from}_${timeKey}`;
-      const toNode = `${to}_${timeKey}`;
-      
-      nodes.add(fromNode);
-      nodes.add(toNode);
-      
+      const [from, to] = flowKey.split('-')
+      const fromNode = `${from}_${timeKey}`
+      const toNode = `${to}_${timeKey}`
+      nodes.add(fromNode)
+      nodes.add(toNode)
       links.push({
         source: fromNode,
         target: toNode,
         value
-      });
-    });
-  });
-
+      })
+    })
+  })
   const nodeArray = Array.from(nodes).map(id => {
-    const [name, time] = id.split('_');
+    const [name, time] = id.split('_')
     return {
       id,
       name: `${name} (${time})`,
       value: 0 // Will be calculated by D3
-    };
-  });
-
-  return { nodes: nodeArray, links };
+    }
+  })
+  return { nodes: nodeArray, links }
 }
 
 /**
@@ -203,8 +182,8 @@ export function transformTimeBasedFlow(
  */
 export function createHierarchicalFlow(
   levels: Array<{
-    level: number;
-    items: Array<{ id: string; name: string; value: number }>;
+    level: number
+    items: Array<{ id: string; name: string; value: number }>
   }>,
   connections: Array<{ from: string; to: string; value: number }>
 ): SankeyData {
@@ -213,15 +192,13 @@ export function createHierarchicalFlow(
       ...item,
       color: getColorByLevel(level.level)
     }))
-  );
-
+  )
   const links = connections.map(conn => ({
     source: conn.from,
     target: conn.to,
     value: conn.value
-  }));
-
-  return { nodes, links };
+  }))
+  return { nodes, links }
 }
 
 // Helper functions
@@ -232,14 +209,14 @@ function formatStageName(stage: string): string {
     in_transit: 'En Tránsito',
     completed: 'Completado',
     deactivated: 'Desactivado'
-  };
-  return stageNames[stage] || stage;
+  }
+  return stageNames[stage] || stage
 }
 
 function formatAlertType(type: string): string {
   return type.split('_').map(word => 
     word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ');
+  ).join(' ')
 }
 
 function getSeverityColor(severity: 'low' | 'medium' | 'high' | 'critical'): string {
@@ -248,8 +225,8 @@ function getSeverityColor(severity: 'low' | 'medium' | 'high' | 'critical'): str
     medium: '#f59e0b', // Yellow
     high: '#f97316',   // Orange
     critical: '#ef4444' // Red
-  };
-  return colors[severity];
+  }
+  return colors[severity]
 }
 
 function getColorByLevel(level: number): string {
@@ -259,24 +236,23 @@ function getColorByLevel(level: number): string {
     '#ec4899', // Pink
     '#f59e0b', // Yellow
     '#10b981'  // Green
-  ];
-  return colors[level % colors.length];
+  ]
+  return colors[level % colors.length]
 }
 
 function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): string {
-  const d = new Date(date);
-  
+  const d = new Date(date)
   switch (interval) {
     case 'hour':
-      return `${d.toLocaleDateString()} ${d.getHours()}:00`;
+      return `${d.toLocaleDateString()} ${d.getHours()}:00`
     case 'day':
-      return d.toLocaleDateString();
+      return d.toLocaleDateString()
     case 'week': {
-      const week = Math.ceil((d.getDate() + 6 - d.getDay()) / 7);
-      return `Week ${week}, ${d.getFullYear()}`;
+      const week = Math.ceil((d.getDate() + 6 - d.getDay()) / 7)
+      return `Week ${week}, ${d.getFullYear()}`
     }
     case 'month':
-      return `${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}`;
+      return `${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}`
   }
 }
 
@@ -284,28 +260,24 @@ function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): st
  * Aggregate flow data by grouping similar paths
  */
 export function aggregateFlows(flows: FlowData[], threshold = 0): SankeyData {
-  const aggregated = new Map<string, number>();
-  const nodes = new Set<string>();
-
+  const aggregated = new Map<string, number>()
+  const nodes = new Set<string>()
   flows.forEach(flow => {
-    const key = `${flow.from}-${flow.to}`;
-    aggregated.set(key, (aggregated.get(key) || 0) + flow.value);
-    nodes.add(flow.from);
-    nodes.add(flow.to);
-  });
-
+    const key = `${flow.from}-${flow.to}`
+    aggregated.set(key, (aggregated.get(key) || 0) + flow.value)
+    nodes.add(flow.from)
+    nodes.add(flow.to)
+  })
   const nodeArray = Array.from(nodes).map(id => ({
     id,
     name: id,
     value: 0
-  }));
-
+  }))
   const links = Array.from(aggregated.entries())
     .filter(([, value]) => value > threshold)
     .map(([key, value]) => {
-      const [source, target] = key.split('-');
-      return { source, target, value };
-    });
-
-  return { nodes: nodeArray, links };
+      const [source, target] = key.split('-')
+      return { source, target, value }
+    })
+  return { nodes: nodeArray, links }
 }

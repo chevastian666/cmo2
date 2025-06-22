@@ -3,32 +3,28 @@
  * By Cheva
  */
 
-import { createStore} from '../createStore';
-import { executeAsyncAction, LoadingState} from '../middleware/errorHandling';
-import { Precinto} from '../../types/precinto';
-import { precintosService} from '../../services/precintos.service';
-
+import { createStore} from '../createStore'
+import { executeAsyncAction, LoadingState} from '../middleware/errorHandling'
+import { Precinto} from '../../types/precinto'
+import { precintosService} from '../../services/precintos.service'
 interface PrecintosState {
   // Datos
-  precintos: Precinto[];
-  selectedPrecinto: Precinto | null;
+  precintos: Precinto[]
+  selectedPrecinto: Precinto | null
   filters: {
-    estado?: string;
-    search?: string;
-  };
-  
+    estado?: string
+    search?: string
+  }
   // Estado de UI
-  loadingState: LoadingState;
-  
+  loadingState: LoadingState
   // Acciones
-  fetchPrecintos: () => Promise<void>;
-  selectPrecinto: (precinto: Precinto | null) => void;
-  updatePrecinto: (id: string, updates: Partial<Precinto>) => Promise<void>;
-  setFilters: (filters: Partial<PrecintosState['filters']>) => void;
-  
+  fetchPrecintos: () => Promise<void>
+  selectPrecinto: (precinto: Precinto | null) => void
+  updatePrecinto: (id: string, updates: Partial<Precinto>) => Promise<void>
+  setFilters: (filters: Partial<PrecintosState['filters']>) => void
   // Computed selectors
-  getFilteredPrecintos: () => Precinto[];
-  getPrecintosCount: () => number;
+  getFilteredPrecintos: () => Precinto[]
+  getPrecintosCount: () => number
 }
 
 export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) => ({
@@ -38,9 +34,9 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) 
       await executeAsyncAction(async () => {
 
           set((state) => {
-            state.precintos = _data;
-          });
-          return _data;
+            state.precintos = _data
+          })
+          return _data
         },
         (loadingState) => set({ loadingState }),
         {
@@ -48,28 +44,28 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) 
           successMessage: 'Precintos cargados exitosamente',
           showSuccessNotification: false
         }
-      );
+      )
     },
     
     selectPrecinto: (precinto) => {
       set((state) => {
-        state.selectedPrecinto = precinto;
-      });
+        state.selectedPrecinto = precinto
+      })
     },
     
     updatePrecinto: async (id, updates) => {
       await executeAsyncAction(async () => {
-          const updated = await precintosService.updatePrecinto(id, updates);
+          const updated = await precintosService.updatePrecinto(id, updates)
           set((state) => {
-            const index = state.precintos.findIndex(p => p.id === id);
+            const index = state.precintos.findIndex(p => p.id === id)
             if (index !== -1) {
-              state.precintos[index] = updated;
+              state.precintos[index] = updated
             }
             if (state.selectedPrecinto?.id === id) {
-              state.selectedPrecinto = updated;
+              state.selectedPrecinto = updated
             }
-          });
-          return updated;
+          })
+          return updated
         },
         (loadingState) => set({ loadingState }),
         {
@@ -77,37 +73,36 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) 
           successMessage: 'Precinto actualizado exitosamente',
           showSuccessNotification: true
         }
-      );
+      )
     },
     
     setFilters: (filters) => {
       set((state) => {
-        state.filters = { ...state.filters, ...filters };
-      });
+        state.filters = { ...state.filters, ...filters }
+      })
     },
     
     // Computed selectors
     getFilteredPrecintos: () => {
-      
-      let filtered = [...precintos];
-      
+
+      let filtered = [...precintos]
       if (filters.estado) {
-        filtered = filtered.filter(p => p.estado === filters.estado);
+        filtered = filtered.filter(p => p.estado === filters.estado)
       }
       
       if (filters.search) {
-        const search = filters.search.toLowerCase();
+        const search = filters.search.toLowerCase()
         filtered = filtered.filter(p => 
           p.codigo.toLowerCase().includes(search) ||
           p.descripcion?.toLowerCase().includes(search)
-        );
+        )
       }
       
-      return filtered;
+      return filtered
     },
     
     getPrecintosCount: () => {
-      return get().precintos.length;
+      return get().precintos.length
     }
   }),
   {
@@ -126,35 +121,30 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) 
       })
     }
   }
-);
-
+)
 // Suscripciones con selector para optimización
 export const subscribeToPrecintos = (callback: (precintos: Precinto[]) => void) => {
   return useEnhancedPrecintosStore.subscribe((state) => state.precintos,
     callback
-  );
-};
-
+  )
+}
 export const subscribeToSelectedPrecinto = (callback: (precinto: Precinto | null) => void) => {
   return useEnhancedPrecintosStore.subscribe((state) => state.selectedPrecinto,
     callback
-  );
-};
-
+  )
+}
 // Hooks específicos para casos de uso comunes
 export const useFilteredPrecintos = () => {
-  return useEnhancedPrecintosStore((state) => state.getFilteredPrecintos());
-};
-
+  return useEnhancedPrecintosStore((state) => state.getFilteredPrecintos())
+}
 export const usePrecintosLoading = () => {
-  const loadingState = useEnhancedPrecintosStore((state) => state.loadingState);
+  const loadingState = useEnhancedPrecintosStore((state) => state.loadingState)
   return {
     isLoading: loadingState.status === 'loading',
     isError: loadingState.status === 'error',
     error: loadingState.status === 'error' ? loadingState.error : null
-  };
-};
-
+  }
+}
 export const useSelectedPrecinto = () => {
-  return useEnhancedPrecintosStore((state) => state.selectedPrecinto);
-};
+  return useEnhancedPrecintosStore((state) => state.selectedPrecinto)
+}

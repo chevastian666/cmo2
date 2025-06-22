@@ -1,12 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { forwardRef} from 'react';
-import { Button as ShadcnButton} from './button';
-import { cn} from '@/lib/utils';
-
+import { forwardRef} from 'react'
+import { Button as ShadcnButton} from './button'
+import { cn} from '@/lib/utils'
 export interface ButtonMigrationProps extends ShadcnButtonProps {
   // Additional props to help with migration
-  fullWidth?: boolean;
-  loading?: boolean;
+  fullWidth?: boolean
+  loading?: boolean
 }
 
 /**
@@ -15,46 +14,45 @@ export interface ButtonMigrationProps extends ShadcnButtonProps {
  */
 export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProps>(({ className, variant, size, fullWidth, loading, disabled, children, ...props }, ref) => {
     // Map common class patterns to shadcn/ui variants
-    let mappedVariant = variant;
-    let mappedSize = size;
-
+    let mappedVariant = variant
+    let mappedSize = size
     if (!variant && className) {
       // Primary button pattern
       if (className.includes('bg-blue-600') || className.includes('bg-blue-500')) {
-        mappedVariant = 'default';
+        mappedVariant = 'default'
       }
       // Secondary button pattern
       else if (className.includes('bg-gray-700') || className.includes('bg-gray-600')) {
-        mappedVariant = 'secondary';
+        mappedVariant = 'secondary'
       }
       // Danger button pattern
       else if (className.includes('bg-red-600') || className.includes('bg-red-500')) {
-        mappedVariant = 'destructive';
+        mappedVariant = 'destructive'
       }
       // Success button pattern (map to default with custom class)
       else if (className.includes('bg-green-600') || className.includes('bg-green-500')) {
-        mappedVariant = 'default';
+        mappedVariant = 'default'
       }
       // Ghost/Text button pattern
       else if (className.includes('hover:bg-gray-600') && !className.includes('bg-')) {
-        mappedVariant = 'ghost';
+        mappedVariant = 'ghost'
       }
       // Outline pattern
       else if (className.includes('border') && !className.includes('bg-')) {
-        mappedVariant = 'outline';
+        mappedVariant = 'outline'
       }
     }
 
     // Map size patterns
     if (!size && className) {
       if (className.includes('px-2 py-1') || className.includes('text-sm')) {
-        mappedSize = 'sm';
+        mappedSize = 'sm'
       }
       else if (className.includes('p-1') && !className.includes('px-') && !className.includes('py-')) {
-        mappedSize = 'icon';
+        mappedSize = 'icon'
       }
       else if (className.includes('px-6') || className.includes('py-3') || className.includes('text-lg')) {
-        mappedSize = 'lg';
+        mappedSize = 'lg'
       }
     }
 
@@ -75,8 +73,7 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
         !cls.startsWith('focus:') &&
         !cls.startsWith('transition')
       ).join(' ')
-    );
-
+    )
     return (
       <ShadcnButton
         ref={ref}
@@ -100,36 +97,33 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
           children
         )}
       </ShadcnButton>
-    );
+    )
   }
-);
-
-ButtonMigration.displayName = 'ButtonMigration';
-
+)
+ButtonMigration.displayName = 'ButtonMigration'
 // Export a simple function to help with migration
 export const migrateButtonClass = (className: string): { variant?: string; size?: string; className?: string } => {
-  const result: { variant?: string; size?: string; className?: string } = {};
-
+  const result: { variant?: string; size?: string; className?: string } = {}
   // Variant mapping
   if (className.includes('bg-blue-600') || className.includes('bg-blue-500')) {
-    result.variant = 'default';
+    result.variant = 'default'
   } else if (className.includes('bg-gray-700') || className.includes('bg-gray-600')) {
-    result.variant = 'secondary';
+    result.variant = 'secondary'
   } else if (className.includes('bg-red-600') || className.includes('bg-red-500')) {
-    result.variant = 'destructive';
+    result.variant = 'destructive'
   } else if (className.includes('hover:bg-gray-600') && !className.includes('bg-')) {
-    result.variant = 'ghost';
+    result.variant = 'ghost'
   } else if (className.includes('border') && !className.includes('bg-')) {
-    result.variant = 'outline';
+    result.variant = 'outline'
   }
 
   // Size mapping
   if (className.includes('px-2 py-1') || className.includes('text-sm')) {
-    result.size = 'sm';
+    result.size = 'sm'
   } else if (className.includes('p-1') && !className.includes('px-') && !className.includes('py-')) {
-    result.size = 'icon';
+    result.size = 'icon'
   } else if (className.includes('px-6') || className.includes('py-3') || className.includes('text-lg')) {
-    result.size = 'lg';
+    result.size = 'lg'
   }
 
   // Preserve non-style classes
@@ -143,11 +137,10 @@ export const migrateButtonClass = (className: string): { variant?: string; size?
     !cls.startsWith('disabled:') &&
     !cls.startsWith('focus:') &&
     !cls.startsWith('transition')
-  ).join(' ');
-
+  ).join(' ')
   if (preservedClasses) {
-    result.className = preservedClasses;
+    result.className = preservedClasses
   }
 
-  return result;
-};
+  return result
+}

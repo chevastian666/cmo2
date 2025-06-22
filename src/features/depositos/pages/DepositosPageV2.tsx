@@ -4,77 +4,67 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import { Plus, Search, Filter, Download, Building2, MapPin, Phone, Clock, Package, Edit2, Eye, X, Hash, Activity, Map} from 'lucide-react';
-
-import { Input} from '@/components/ui/input';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Label} from '@/components/ui/label';
-import { Separator} from '@/components/ui/separator';
-import { Progress} from '@/components/ui/progress';
+import React, { useState, useMemo } from 'react'
+import { Plus, Search, Filter, Download, Building2, MapPin, Phone, Clock, Package, Edit2, Eye, X, Hash, Activity, Map} from 'lucide-react'
+import { Input} from '@/components/ui/input'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Label} from '@/components/ui/label'
+import { Separator} from '@/components/ui/separator'
+import { Progress} from '@/components/ui/progress'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import { exportToCSV} from '@/utils/export';
-import { cn} from '@/utils/utils';
-import type { Deposito, DepositoFilters} from '../types';
-import { DepositoDetailModal} from '../components/DepositoDetailModal';
-import { DepositoFormModal} from '../components/DepositoFormModal';
-import { InteractiveMap} from '@/components/maps/InteractiveMap';
-import type { MapMarker} from '@/components/maps/InteractiveMap';
-import { staggerItem, fadeInUp} from '@/components/animations/AnimationPresets';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { exportToCSV} from '@/utils/export'
+import { cn} from '@/utils/utils'
+import type { Deposito, DepositoFilters} from '../types'
+import { DepositoDetailModal} from '../components/DepositoDetailModal'
+import { DepositoFormModal} from '../components/DepositoFormModal'
+import { InteractiveMap} from '@/components/maps/InteractiveMap'
+import type { MapMarker} from '@/components/maps/InteractiveMap'
+import { staggerItem, fadeInUp} from '@/components/animations/AnimationPresets'
 export const DepositosPageV2: React.FC = () => {
-  
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null);
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-  const [selectedView, setSelectedView] = useState<'grid' | 'table' | 'map'>('table');
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null)
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+  const [selectedView, setSelectedView] = useState<'grid' | 'table' | 'map'>('table')
   const [filters, setFilters] = useState<DepositoFilters>({
     tipo: '',
     zona: '',
     padre: ''
-  });
-
+  })
   const filteredDepositos = useMemo(() => {
     return depositos.filter(deposito => {
       const matchesSearch = searchTerm === '' || 
         deposito.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         deposito.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deposito.codigo.toString().includes(searchTerm);
-        
-      const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo;
-      const matchesZona = !filters.zona || deposito.zona === filters.zona;
-      const matchesPadre = !filters.padre || deposito.padre === filters.padre;
-      
-      return matchesSearch && matchesTipo && matchesZona && matchesPadre;
-    });
-  }, [depositos, searchTerm, filters]);
-
-  const activeFiltersCount = Object.values(filters).filter(v => v !== '').length;
-
+        deposito.codigo.toString().includes(searchTerm)
+      const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo
+      const matchesZona = !filters.zona || deposito.zona === filters.zona
+      const matchesPadre = !filters.padre || deposito.padre === filters.padre
+      return matchesSearch && matchesTipo && matchesZona && matchesPadre
+    })
+  }, [depositos, filters])
+  const activeFiltersCount = Object.values(filters).filter(v => v !== '').length
   const stats = useMemo(() => {
-    const totalTransitos = depositos.reduce((acc, d) => acc + d.transitosActivos, 0);
-    const activeDepositos = depositos.filter(d => d.estado === 'activo').length;
-    const totalCapacity = depositos.reduce((acc, d) => acc + d.capacidad, 0);
-    const avgOccupancy = totalCapacity > 0 ? (totalTransitos / totalCapacity) * 100 : 0;
-
+    const totalTransitos = depositos.reduce((acc, d) => acc + d.transitosActivos, 0)
+    const activeDepositos = depositos.filter(d => d.estado === 'activo').length
+    const totalCapacity = depositos.reduce((acc, d) => acc + d.capacidad, 0)
+    const avgOccupancy = totalCapacity > 0 ? (totalTransitos / totalCapacity) * 100 : 0
     return {
       total: depositos.length,
       active: activeDepositos,
       transitos: totalTransitos,
       avgOccupancy: Math.round(avgOccupancy)
-    };
-  }, [depositos]);
-
+    }
+  }, [depositos])
   const handleExport = () => {
     const data = filteredDepositos.map(d => ({
       Código: d.codigo,
@@ -87,49 +77,42 @@ export const DepositosPageV2: React.FC = () => {
       Empresa: d.empresa || '-',
       'Tránsitos Activos': d.transitosActivos,
       Estado: d.estado
-    }));
-    exportToCSV(data, 'depositos');
-  };
-
+    }))
+    exportToCSV(data, 'depositos')
+  }
   const handleView = (deposito: Deposito) => {
-    setSelectedDeposito(deposito);
-    setShowDetail(true);
-  };
-
+    setSelectedDeposito(deposito)
+    setShowDetail(true)
+  }
   const handleEdit = (deposito: Deposito) => {
-    setEditingDeposito(deposito);
-    setShowForm(true);
-  };
-
+    setEditingDeposito(deposito)
+    setShowForm(true)
+  }
   const handleAdd = () => {
-    setEditingDeposito(null);
-    setShowForm(true);
-  };
-
+    setEditingDeposito(null)
+    setShowForm(true)
+  }
   const handleSave = (_data: Partial<Deposito>) => {
     if (editingDeposito) {
-      updateDeposito(editingDeposito.id, data);
+      updateDeposito(editingDeposito.id, data)
     } else {
-      addDeposito(data as Omit<Deposito, 'id'>);
+      addDeposito(data as Omit<Deposito, 'id'>)
     }
-    setShowForm(false);
-  };
-
+    setShowForm(false)
+  }
   const toggleRowExpand = (id: string) => {
-    const newExpanded = new Set(expandedRows);
+    const newExpanded = new Set(expandedRows)
     if (newExpanded.has(id)) {
-      newExpanded.delete(id);
+      newExpanded.delete(id)
     } else {
-      newExpanded.add(id);
+      newExpanded.add(id)
     }
-    setExpandedRows(newExpanded);
-  };
-
+    setExpandedRows(newExpanded)
+  }
   const clearFilters = () => {
-    setFilters({ tipo: '', zona: '', padre: '' });
-    setSearchTerm('');
-  };
-
+    setFilters({ tipo: '', zona: '', padre: '' })
+    setSearchTerm('')
+  }
   return (
     <PageTransition>
       <div className="space-y-6">
@@ -366,8 +349,8 @@ export const DepositosPageV2: React.FC = () => {
             isOpen={showDetail}
             onClose={() => setShowDetail(false)}
             onEdit={() => {
-              setShowDetail(false);
-              handleEdit(selectedDeposito);
+              setShowDetail(false)
+              handleEdit(selectedDeposito)
             }}
           />
         )}
@@ -381,17 +364,16 @@ export const DepositosPageV2: React.FC = () => {
         )}
       </div>
     </PageTransition>
-  );
-};
-
+  )
+}
 // Stats Card Component
 const StatsCard: React.FC<{
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  color: string;
-  trend?: string;
-}> = ({ title, value, icon, color, trend }) => (
+  title: string
+  value: string | number
+  icon: React.ReactNode
+  color: string
+  trend?: string
+}> = (title, value, icon, color, trend ) => (
   <AnimatedCard whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
@@ -411,16 +393,15 @@ const StatsCard: React.FC<{
       )}
     </CardContent>
   </AnimatedCard>
-);
-
+)
 // Table Component
 const DepositosTable: React.FC<{
-  depositos: Deposito[];
-  loading: boolean;
-  onView: (deposito: Deposito) => void;
-  onEdit: (deposito: Deposito) => void;
-  expandedRows: Set<string>;
-  onToggleExpand: (id: string) => void;
+  depositos: Deposito[]
+  loading: boolean
+  onView: (deposito: Deposito) => void
+  onEdit: (deposito: Deposito) => void
+  expandedRows: Set<string>
+  onToggleExpand: (id: string) => void
 }> = ({ depositos, loading, onView, onEdit, expandedRows, onToggleExpand }) => {
   if (loading) {
     return (
@@ -431,7 +412,7 @@ const DepositosTable: React.FC<{
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   if (depositos.length === 0) {
@@ -442,7 +423,7 @@ const DepositosTable: React.FC<{
           <p className="text-gray-400">No se encontraron depósitos</p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (<Card>
@@ -628,15 +609,14 @@ const DepositosTable: React.FC<{
         </div>
       </CardContent>
     </Card>
-  );
-};
-
+  )
+}
 // Grid Component
 const DepositosGrid: React.FC<{
-  depositos: Deposito[];
-  loading: boolean;
-  onView: (deposito: Deposito) => void;
-  onEdit: (deposito: Deposito) => void;
+  depositos: Deposito[]
+  loading: boolean
+  onView: (deposito: Deposito) => void
+  onEdit: (deposito: Deposito) => void
 }> = ({ depositos, loading, onView, onEdit }) => {
   if (loading) {
     return (
@@ -645,7 +625,7 @@ const DepositosGrid: React.FC<{
           <AnimatedSkeleton key={i} className="h-64" />
         ))}
       </AnimatedGrid>
-    );
+    )
   }
 
   return (<AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -726,14 +706,13 @@ const DepositosGrid: React.FC<{
         </AnimatedCard>
       ))}
     </AnimatedGrid>
-  );
-};
-
+  )
+}
 // Map Component
 const DepositosMap: React.FC<{
-  depositos: Deposito[];
-  loading: boolean;
-  onView: (deposito: Deposito) => void;
+  depositos: Deposito[]
+  loading: boolean
+  onView: (deposito: Deposito) => void
 }> = ({ depositos, loading, onView }) => {
   if (loading) {
     return (
@@ -744,7 +723,7 @@ const DepositosMap: React.FC<{
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   // Convert depositos to map markers
@@ -766,8 +745,7 @@ const DepositosMap: React.FC<{
       direccion: deposito.direccion,
       empresa: deposito.empresa
     }
-  }));
-
+  }))
   return (<InteractiveMap
       markers={markers}
       height="600px"
@@ -775,11 +753,10 @@ const DepositosMap: React.FC<{
       showLegend={true}
       showSearch={true}
       onMarkerClick={(marker) => {
-        const deposito = depositos.find(d => d.id === marker.id);
-        if (deposito) onView(deposito);
+        const deposito = depositos.find(d => d.id === marker.id)
+        if (deposito) onView(deposito)
       }}
     />
-  );
-};
-
-export default DepositosPageV2;
+  )
+}
+export default DepositosPageV2

@@ -4,25 +4,23 @@
  * By Cheva
  */
 
-import React from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import {fadeVariants, scaleVariants, slideUpVariants, slideDownVariants, hoverScaleVariants, hoverLiftVariants, staggerContainer, staggerItem, modalVariants, overlayVariants} from './AnimationPresets';
-import { tokenClasses} from '../../styles/useDesignTokens';
-
+import React from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import {fadeVariants, scaleVariants, slideUpVariants, slideDownVariants, hoverScaleVariants, hoverLiftVariants, staggerContainer, staggerItem, modalVariants, overlayVariants} from './AnimationPresets'
+import { tokenClasses} from '../../styles/useDesignTokens'
 // ==========================================
 // COMPONENTES BASE ANIMADOS
 // ==========================================
 
 interface AnimatedDivProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
   [key: string]: unknown; // Allow all motion props
 }
 
 // Div con fade animation
-export const FadeDiv: React.FC<AnimatedDivProps> = ({ 
-  children, className = "", ...props 
-}) => (
+export const FadeDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+) => (
   <motion.div
     variants={fadeVariants}
     initial="hidden"
@@ -33,12 +31,10 @@ export const FadeDiv: React.FC<AnimatedDivProps> = ({
   >
     {children}
   </motion.div>
-);
-
+)
 // Div con scale animation
-export const ScaleDiv: React.FC<AnimatedDivProps> = ({ 
-  children, className = "", ...props 
-}) => (
+export const ScaleDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+) => (
   <motion.div
     variants={scaleVariants}
     initial="hidden"
@@ -49,12 +45,10 @@ export const ScaleDiv: React.FC<AnimatedDivProps> = ({
   >
     {children}
   </motion.div>
-);
-
+)
 // Div con slide up animation
-export const SlideUpDiv: React.FC<AnimatedDivProps> = ({ 
-  children, className = "", ...props 
-}) => (
+export const SlideUpDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+) => (
   <motion.div
     variants={slideUpVariants}
     initial="hidden"
@@ -65,12 +59,10 @@ export const SlideUpDiv: React.FC<AnimatedDivProps> = ({
   >
     {children}
   </motion.div>
-);
-
+)
 // Div con slide down animation
-export const SlideDownDiv: React.FC<AnimatedDivProps> = ({ 
-  children, className = "", ...props 
-}) => (
+export const SlideDownDiv: React.FC<AnimatedDivProps> = (children, className = "", ...props 
+) => (
   <motion.div
     variants={slideDownVariants}
     initial="hidden"
@@ -81,25 +73,23 @@ export const SlideDownDiv: React.FC<AnimatedDivProps> = ({
   >
     {children}
   </motion.div>
-);
-
+)
 // ==========================================
 // COMPONENTES DE UI ANIMADOS
 // ==========================================
 
 interface AnimatedCardProps {
-  children: React.ReactNode;
-  className?: string;
-  hover?: boolean;
-  onClick?: () => void;
+  children: React.ReactNode
+  className?: string
+  hover?: boolean
+  onClick?: () => void
 }
 
 // Card animada con hover effect
 export const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
   children, className = "", hover = true, onClick 
 }) => {
-  const baseClasses = `${tokenClasses.components.card} ${className}`;
-  
+  const baseClasses = `${tokenClasses.components.card} ${className}`
   return (
     <motion.div
       className={baseClasses}
@@ -113,15 +103,14 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
     >
       {children}
     </motion.div>
-  );
-};
-
+  )
+}
 interface AnimatedButtonProps {
-  children: React.ReactNode;
-  className?: string;
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
-  onClick?: () => void;
-  disabled?: boolean;
+  children: React.ReactNode
+  className?: string
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
+  onClick?: () => void
+  disabled?: boolean
 }
 
 // Botón animado
@@ -133,10 +122,8 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     secondary: tokenClasses.components.button.secondary,
     danger: tokenClasses.components.button.danger,
     ghost: tokenClasses.components.button.ghost
-  };
-
-  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${className}`;
-  
+  }
+  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${className}`
   return (
     <motion.button
       className={baseClasses}
@@ -149,21 +136,19 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     >
       {children}
     </motion.button>
-  );
-};
-
+  )
+}
 // ==========================================
 // LISTA ANIMADA
 // ==========================================
 
 interface AnimatedListProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
-export const AnimatedList: React.FC<AnimatedListProps> = ({ 
-  children, className = "" 
-}) => (
+export const AnimatedList: React.FC<AnimatedListProps> = (children, className = "" 
+) => (
   <motion.div
     variants={staggerContainer}
     initial="hidden"
@@ -172,33 +157,30 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   >
     {children}
   </motion.div>
-);
-
+)
 interface AnimatedListItemProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
-export const AnimatedListItem: React.FC<AnimatedListItemProps> = ({ 
-  children, className = "" 
-}) => (
+export const AnimatedListItem: React.FC<AnimatedListItemProps> = (children, className = "" 
+) => (
   <motion.div
     variants={staggerItem}
     className={className}
   >
     {children}
   </motion.div>
-);
-
+)
 // ==========================================
 // MODAL ANIMADO
 // ==========================================
 
 interface AnimatedModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  className?: string;
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+  className?: string
 }
 
 export const AnimatedModal: React.FC<AnimatedModalProps> = ({ 
@@ -238,26 +220,24 @@ export const AnimatedModal: React.FC<AnimatedModalProps> = ({
         </>
       )}
     </AnimatePresence>
-  );
-};
-
+  )
+}
 // ==========================================
 // BADGE ANIMADO
 // ==========================================
 
 interface AnimatedBadgeProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'success' | 'warning' | 'danger' | 'gray';
-  pulse?: boolean;
-  className?: string;
+  children: React.ReactNode
+  variant?: 'primary' | 'success' | 'warning' | 'danger' | 'gray'
+  pulse?: boolean
+  className?: string
 }
 
 export const AnimatedBadge: React.FC<AnimatedBadgeProps> = ({ 
   children, variant = 'gray', pulse = false, className = "" 
 }) => {
-  const variantClasses = tokenClasses.components.badge[variant];
-  const baseClasses = `${tokenClasses.components.badge.base} ${variantClasses} ${className}`;
-  
+  const variantClasses = tokenClasses.components.badge[variant]
+  const baseClasses = `${tokenClasses.components.badge.base} ${variantClasses} ${className}`
   return (
     <motion.span
       className={baseClasses}
@@ -280,16 +260,15 @@ export const AnimatedBadge: React.FC<AnimatedBadgeProps> = ({
     >
       {children}
     </motion.span>
-  );
-};
-
+  )
+}
 // ==========================================
 // LOADING SPINNER ANIMADO
 // ==========================================
 
 interface AnimatedSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
 }
 
 export const AnimatedSpinner: React.FC<AnimatedSpinnerProps> = ({ 
@@ -299,8 +278,7 @@ export const AnimatedSpinner: React.FC<AnimatedSpinnerProps> = ({
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
     lg: 'h-12 w-12'
-  };
-  
+  }
   return (
     <motion.div
       className={`${sizeClasses[size]} ${className}`}
@@ -328,16 +306,15 @@ export const AnimatedSpinner: React.FC<AnimatedSpinnerProps> = ({
         />
       </svg>
     </motion.div>
-  );
-};
-
+  )
+}
 // ==========================================
 // SKELETON ANIMADO
 // ==========================================
 
 interface AnimatedSkeletonProps {
-  className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
+  className?: string
+  variant?: 'text' | 'circular' | 'rectangular'
 }
 
 export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({ 
@@ -347,8 +324,7 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
     text: 'h-4 w-full',
     circular: 'h-12 w-12 rounded-full',
     rectangular: 'h-32 w-full'
-  };
-  
+  }
   return (
     <motion.div
       className={`bg-gray-700 ${variantClasses[variant]} ${className}`}
@@ -361,17 +337,16 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
         ease: "easeInOut"
       }}
     />
-  );
-};
-
+  )
+}
 // ==========================================
 // ANIMATED DIV - CONTENEDOR GENÉRICO
 // ==========================================
 
 interface AnimatedDivProps {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
+  children: React.ReactNode
+  className?: string
+  delay?: number
   [key: string]: unknown; // Allow all motion props
 }
 
@@ -388,17 +363,16 @@ export const AnimatedDiv: React.FC<AnimatedDivProps> = ({
     >
       {children}
     </motion.div>
-  );
-};
-
+  )
+}
 // ==========================================
 // PROGRESS BAR ANIMADO
 // ==========================================
 
 interface AnimatedProgressProps {
-  value: number;
-  className?: string;
-  color?: string;
+  value: number
+  className?: string
+  color?: string
 }
 
 export const AnimatedProgress: React.FC<AnimatedProgressProps> = ({ 
@@ -413,9 +387,8 @@ export const AnimatedProgress: React.FC<AnimatedProgressProps> = ({
         transition={{ duration: 0.5, ease: "easeOut" }}
       />
     </div>
-  );
-};
-
+  )
+}
 export default {
   FadeDiv,
   ScaleDiv,
@@ -431,4 +404,4 @@ export default {
   AnimatedSpinner,
   AnimatedSkeleton,
   AnimatedProgress
-};
+}

@@ -4,19 +4,16 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { D3VisualizationWidget} from '../../../components/charts/d3/D3VisualizationWidget';
-import { InteractiveLineChart, ActivityHeatmap, NetworkGraph, InteractiveTreemap} from '../../../components/charts/d3';
-import type { TimeSeriesData, HeatmapData, NetworkData, TreemapNode} from '../../../components/charts/d3';
-
+import React, { useState } from 'react'
+import { D3VisualizationWidget} from '../../../components/charts/d3/D3VisualizationWidget'
+import { InteractiveLineChart, ActivityHeatmap, NetworkGraph, InteractiveTreemap} from '../../../components/charts/d3'
+import type { TimeSeriesData, HeatmapData, NetworkData, TreemapNode} from '../../../components/charts/d3'
 export const D3VisualizationsDemo: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<unknown>(null);
-
+  const [selectedData, setSelectedData] = useState<unknown>(null)
   // Generate sample data
   const timeSeriesData: TimeSeriesData[] = Array.from({ length: 30 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (30 - i));
-    
+    const date = new Date()
+    date.setDate(date.getDate() - (30 - i))
     return {
       date,
       value: Math.floor(Math.random() * 200) + 100 + Math.sin(i * 0.2) * 50,
@@ -25,10 +22,9 @@ export const D3VisualizationsDemo: React.FC = () => {
         empresa: ['ACME Corp', 'Global Logistics', 'Fast Shipping'][Math.floor(Math.random() * 3)],
         tipo: ['Import', 'Export', 'Transit'][Math.floor(Math.random() * 3)]
       }
-    };
-  });
-
-  const heatmapData: HeatmapData[] = [];
+    }
+  })
+  const heatmapData: HeatmapData[] = []
   for (let day = 0; day < 7; day++) {
     for (let hour = 0; hour < 24; hour++) {
       heatmapData.push({
@@ -36,7 +32,7 @@ export const D3VisualizationsDemo: React.FC = () => {
         hour,
         value: Math.floor(Math.random() * 80) + (hour >= 8 && hour <= 18 ? 40 : 10),
         label: `${Math.floor(Math.random() * 50)} transacciones`
-      });
+      })
     }
   }
 
@@ -64,8 +60,7 @@ export const D3VisualizationsDemo: React.FC = () => {
       { source: 'DEP1', target: 'CLI2', value: 25, label: 'Entrega Final' },
       { source: 'DEP2', target: 'CLI2', value: 15, label: 'Entrega Final' }
     ]
-  };
-
+  }
   const treemapData: TreemapNode = {
     name: 'Sistema CMO',
     value: 0,
@@ -113,17 +108,14 @@ export const D3VisualizationsDemo: React.FC = () => {
         ]
       }
     ]
-  };
-
+  }
   const handleDataPointClick = (data: unknown) => {
-    setSelectedData(data);
-    console.log('Data point clicked:', data);
-  };
-
+    setSelectedData(data)
+    console.log('Data point clicked:', data)
+  }
   const handleZoomChange = (domain: [Date, Date]) => {
-    console.log('Zoom changed:', domain);
-  };
-
+    console.log('Zoom changed:', domain)
+  }
   return (
     <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
@@ -313,5 +305,5 @@ export const D3VisualizationsDemo: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

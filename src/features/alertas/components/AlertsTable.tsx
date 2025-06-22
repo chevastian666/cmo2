@@ -1,44 +1,37 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
-import type { Alerta} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-import { DataTable} from '../../../components/DataTable';
-
-import { AlertaDetalleModal} from './AlertaDetalleModal';
-import { ResponderAlertaModal} from './ResponderAlertaModal';
-import { notificationService} from '../../../services/shared/notification.service';
-
+import React, { useState } from 'react'
+import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
+import type { Alerta} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { DataTable} from '../../../components/DataTable'
+import { AlertaDetalleModal} from './AlertaDetalleModal'
+import { ResponderAlertaModal} from './ResponderAlertaModal'
+import { notificationService} from '../../../services/shared/notification.service'
 export const AlertsTable: React.FC = () => {
-  
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false);
 
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
-    setSelectedAlertaId(alerta.id);
-    setIsModalOpen(true);
-  };
-
+    setSelectedAlertaId(alerta.id)
+    setIsModalOpen(true)
+  }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
-    event.stopPropagation();
-    
+    event.stopPropagation()
     if (alerta.atendida) {
-      notificationService.info('Esta alerta ya fue atendida');
-      return;
+      notificationService.info('Esta alerta ya fue atendida')
+      return
     }
     
-    setSelectedAlertaForResponse(alerta);
-    setIsResponseModalOpen(true);
-  };
-
+    setSelectedAlertaForResponse(alerta)
+    setIsResponseModalOpen(true)
+  }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId);
-      notificationService.success('Alerta respondida correctamente');
-      
+      await actions.atenderAlerta(alertaId)
+      notificationService.success('Alerta respondida correctamente')
       // Log the response details (in a real app, this would be sent to the backend)
       console.log('Alert response:', {
         alertaId,
@@ -46,59 +39,64 @@ export const AlertsTable: React.FC = () => {
         motivoDescripcion,
         observaciones,
         timestamp: new Date().toISOString()
-      });
+      })
     } catch {
-      notificationService.error('Error al responder la alerta');
-      console.error('Error responding to alert:', _error);
-      throw _error;
+      notificationService.error('Error al responder la alerta')
+      console.error('Error responding to alert:', _error)
+      throw _error
     }
-  };
-
+  }
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedAlertaId(null);
-  };
-
+    setIsModalOpen(false)
+    setSelectedAlertaId(null)
+  }
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'AAR': // Atraso en arribo de reporte
-        return <Clock className="h-4 w-4" />;
-      case 'BBJ': // Batería baja
-        return <Battery className="h-4 w-4" />;
-      case 'DEM': // Demorado
-        return <Pause className="h-4 w-4" />;
-      case 'DNR': // Desvío de ruta
-        return <Navigation className="h-4 w-4" />;
-      case 'DTN': // Detenido
-        return <Shield className="h-4 w-4" />;
-      case 'NPG': // Sin señal GPS
-        return <Satellite className="h-4 w-4" />;
-      case 'NPN': // Sin reporte del precinto
-        return <WifiOff className="h-4 w-4" />;
-      case 'PTN': // Precinto abierto no autorizado
-        return <Package className="h-4 w-4" />;
-      case 'SNA': // Salida no autorizada
-        return <Zap className="h-4 w-4" />;
+      case 'AAR': {
+  // Atraso en arribo de reporte
+        return <Clock className="h-4 w-4" />
+      case 'BBJ': {
+  // Batería baja
+        return <Battery className="h-4 w-4" />
+      case 'DEM': {
+  // Demorado
+        return <Pause className="h-4 w-4" />
+      case 'DNR': {
+  // Desvío de ruta
+        return <Navigation className="h-4 w-4" />
+      case 'DTN': {
+  // Detenido
+        return <Shield className="h-4 w-4" />
+      case 'NPG': {
+  // Sin señal GPS
+        return <Satellite className="h-4 w-4" />
+      case 'NPN': {
+  // Sin reporte del precinto
+        return <WifiOff className="h-4 w-4" />
+      case 'PTN': {
+  // Precinto abierto no autorizado
+        return <Package className="h-4 w-4" />
+      case 'SNA': {
+  // Salida no autorizada
+        return <Zap className="h-4 w-4" />
       default:
-        return <AlertTriangle className="h-4 w-4" />;
+        return <AlertTriangle className="h-4 w-4" />
     }
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20'
       default:
-        return 'text-gray-400 bg-gray-900/20';
+        return 'text-gray-400 bg-gray-900/20'
     }
-  };
-
+  }
   const columns: Column<Alerta>[] = [
     {
       key: 'tipo',
@@ -167,9 +165,9 @@ export const AlertsTable: React.FC = () => {
       accessor: (item) => (item.ubicacion ? (
           <button
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation()
               // TODO: Implement map view functionality
-              notificationService.info('Función de mapa próximamente');
+              notificationService.info('Función de mapa próximamente')
             }}
             className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
           >
@@ -235,14 +233,12 @@ export const AlertsTable: React.FC = () => {
         </div>
       )
     }
-  ];
-
+  ]
   const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `alertas-${timestamp}`;
-    
+    const timestamp = new Date().toISOString().split('T')[0]
+    const filename = `alertas-${timestamp}`
     if (format === 'csv') {
-      const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado'];
+      const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
         a.tipo.replace('_', ' '),
         a.codigoPrecinto,
@@ -251,26 +247,23 @@ export const AlertsTable: React.FC = () => {
         a.ubicacion ? `${a.ubicacion.lat.toFixed(4)}, ${a.ubicacion.lng.toFixed(4)}` : '',
         new Date(a.timestamp * 1000).toLocaleString('es-UY'),
         a.atendida ? 'Atendida' : 'Activa'
-      ]);
-      
+      ])
       const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
-        map(row => row.join(',')).join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${filename}.csv`;
-      link.click();
+        map(row => row.join(',')).join('\n')
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.csv`
+      link.click()
     } else {
-      const jsonData = JSON.stringify(_data, null, 2);
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${filename}.json`;
-      link.click();
+      const jsonData = JSON.stringify(_data, null, 2)
+      const blob = new Blob([jsonData], { type: 'application/json' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.json`
+      link.click()
     }
-  };
-
+  }
   if (loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-4">
@@ -280,7 +273,7 @@ export const AlertsTable: React.FC = () => {
           ))}
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -288,7 +281,7 @@ export const AlertsTable: React.FC = () => {
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
         <p className="text-red-400">Error cargando alertas: {error}</p>
       </div>
-    );
+    )
   }
 
   return (<>
@@ -324,25 +317,23 @@ export const AlertsTable: React.FC = () => {
         alerta={selectedAlertaForResponse}
         isOpen={isResponseModalOpen}
         onClose={() => {
-          setIsResponseModalOpen(false);
-          setSelectedAlertaForResponse(null);
+          setIsResponseModalOpen(false)
+          setSelectedAlertaForResponse(null)
         }}
         onRespond={handleResponderAlerta}
       />
     </>
-  );
-};
-
+  )
+}
 // Wrapper component to handle the extended alert data
 const AlertDetailModalWrapper: React.FC<{
-  alertaId: string;
-  isOpen: boolean;
-  onClose: () => void;
+  alertaId: string
+  isOpen: boolean
+  onClose: () => void
 }> = ({ alertaId, isOpen, onClose }) => {
-  
 
   if (!alerta || loading) {
-    return null;
+    return null
   }
 
   return (
@@ -354,5 +345,5 @@ const AlertDetailModalWrapper: React.FC<{
       onComentar={actions.comentar}
       onResolver={actions.resolver}
     />
-  );
-};
+  )
+}

@@ -4,9 +4,8 @@
  * By Cheva
  */
 
-import type { TreemapData, TreemapNode } from '../types';
-import type { Precinto, Transito, Alerta } from '@/types';
-
+import type { TreemapData, TreemapNode } from '../types'
+import type { Precinto, Transito, Alerta } from '@/types'
 /**
  * Transform precintos by company and status
  */
@@ -21,23 +20,20 @@ export const transformPrecintosByCompany = (
         value: 1,
         color: '#6b7280'
       }]
-    };
+    }
   }
 
-  const companiesMap = new Map<string, Map<string, number>>();
-
+  const companiesMap = new Map<string, Map<string, number>>()
   precintos.forEach(precinto => {
-    const company = precinto.empresa || 'Sin Empresa';
-    const status = precinto.estado;
-
+    const company = precinto.empresa || 'Sin Empresa'
+    const status = precinto.estado
     if (!companiesMap.has(company)) {
-      companiesMap.set(company, new Map());
+      companiesMap.set(company, new Map())
     }
 
-    const statusMap = companiesMap.get(company)!;
-    statusMap.set(status, (statusMap.get(status) || 0) + 1);
-  });
-
+    const statusMap = companiesMap.get(company)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
+  })
   const children: TreemapNode[] = Array.from(companiesMap.entries()).map(
     ([company, statusMap]) => ({
       name: company,
@@ -47,8 +43,7 @@ export const transformPrecintosByCompany = (
         color: getStatusColor(status)
       }))
     })
-  );
-
+  )
   return {
     name: 'Precintos',
     children: children.length > 0 ? children : [{
@@ -56,9 +51,8 @@ export const transformPrecintosByCompany = (
       value: 1,
       color: '#6b7280'
     }]
-  };
-};
-
+  }
+}
 /**
  * Transform transits by route and status
  */
@@ -73,23 +67,20 @@ export const transformTransitsByRoute = (
         value: 1,
         color: '#6b7280'
       }]
-    };
+    }
   }
 
-  const routesMap = new Map<string, Map<string, number>>();
-
+  const routesMap = new Map<string, Map<string, number>>()
   transitos.forEach(transito => {
-    const route = `${transito.origen} → ${transito.destino}`;
-    const status = transito.estado;
-
+    const route = `${transito.origen} → ${transito.destino}`
+    const status = transito.estado
     if (!routesMap.has(route)) {
-      routesMap.set(route, new Map());
+      routesMap.set(route, new Map())
     }
 
-    const statusMap = routesMap.get(route)!;
-    statusMap.set(status, (statusMap.get(status) || 0) + 1);
-  });
-
+    const statusMap = routesMap.get(route)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
+  })
   const children: TreemapNode[] = Array.from(routesMap.entries()).map(
     ([route, statusMap]) => ({
       name: route,
@@ -99,8 +90,7 @@ export const transformTransitsByRoute = (
         color: getTransitStatusColor(status)
       }))
     })
-  );
-
+  )
   return {
     name: 'Tránsitos',
     children: children.length > 0 ? children : [{
@@ -108,9 +98,8 @@ export const transformTransitsByRoute = (
       value: 1,
       color: '#6b7280'
     }]
-  };
-};
-
+  }
+}
 /**
  * Transform alerts by type and severity
  */
@@ -125,23 +114,20 @@ export const transformAlertsBySeverity = (
         value: 1,
         color: '#10b981'
       }]
-    };
+    }
   }
 
-  const severityMap = new Map<string, Map<string, number>>();
-
+  const severityMap = new Map<string, Map<string, number>>()
   alertas.forEach(alerta => {
-    const severity = alerta.tipo;
-    const status = alerta.estado || 'activa';
-
+    const severity = alerta.tipo
+    const status = alerta.estado || 'activa'
     if (!severityMap.has(severity)) {
-      severityMap.set(severity, new Map());
+      severityMap.set(severity, new Map())
     }
 
-    const statusMap = severityMap.get(severity)!;
-    statusMap.set(status, (statusMap.get(status) || 0) + 1);
-  });
-
+    const statusMap = severityMap.get(severity)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
+  })
   const children: TreemapNode[] = Array.from(severityMap.entries()).map(
     ([severity, statusMap]) => ({
       name: severity,
@@ -152,8 +138,7 @@ export const transformAlertsBySeverity = (
       })),
       color: getSeverityColor(severity)
     })
-  );
-
+  )
   return {
     name: 'Alertas',
     children: children.length > 0 ? children : [{
@@ -161,9 +146,8 @@ export const transformAlertsBySeverity = (
       value: 1,
       color: '#10b981'
     }]
-  };
-};
-
+  }
+}
 /**
  * Transform data by time periods (daily, weekly, monthly)
  */
@@ -172,37 +156,34 @@ export const transformByTimePeriod = (
   dateField: string,
   groupBy: 'day' | 'week' | 'month' = 'day'
 ): TreemapData => {
-  const timeMap = new Map<string, Map<string, number>>();
-
+  const timeMap = new Map<string, Map<string, number>>()
   data.forEach(item => {
-    const date = new Date(item[dateField]);
-    let period = '';
-
+    const date = new Date(item[dateField])
+    let period = ''
     switch (groupBy) {
-      case 'day':
-        period = date.toLocaleDateString();
-        break;
-      case 'week': {
-        const weekStart = new Date(date);
-        weekStart.setDate(date.getDate() - date.getDay());
-        period = `Semana del ${weekStart.toLocaleDateString()}`;
-        break;
+      case 'day': {
+  period = date.toLocaleDateString()
+        break
+    }
+    case 'week': {
+        const weekStart = new Date(date)
+        weekStart.setDate(date.getDate() - date.getDay())
+        period = `Semana del ${weekStart.toLocaleDateString()}`
+        break
       }
       case 'month':
-        period = date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
-        break;
+        period = date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
+        break
     }
 
-    const type = item.tipo || item.estado || 'otros';
-
+    const type = item.tipo || item.estado || 'otros'
     if (!timeMap.has(period)) {
-      timeMap.set(period, new Map());
+      timeMap.set(period, new Map())
     }
 
-    const typeMap = timeMap.get(period)!;
-    typeMap.set(type, (typeMap.get(type) || 0) + 1);
-  });
-
+    const typeMap = timeMap.get(period)!
+    typeMap.set(type, (typeMap.get(type) || 0) + 1)
+  })
   const children: TreemapNode[] = Array.from(timeMap.entries()).map(
     ([period, typeMap]) => ({
       name: period,
@@ -211,14 +192,12 @@ export const transformByTimePeriod = (
         value: count
       }))
     })
-  );
-
+  )
   return {
     name: 'Datos por Período',
     children
-  };
-};
-
+  }
+}
 /**
  * Create hierarchical data from flat structure
  */
@@ -229,53 +208,43 @@ export const createHierarchy = (
   const root: TreemapNode = {
     name: 'Root',
     children: []
-  };
-
+  }
   data.forEach(item => {
-    let currentLevel = root;
-
+    let currentLevel = root
     levels.forEach((level, index) => {
-      const value = item[level] || 'Sin Definir';
-      
-      let child = currentLevel.children?.find(c => c.name === value);
-      
+      const value = item[level] || 'Sin Definir'
+      let child = currentLevel.children?.find(c => c.name === value)
       if (!child) {
         child = {
           name: value,
           children: index < levels.length - 1 ? [] : undefined,
           value: index === levels.length - 1 ? 1 : undefined
-        };
-        
-        if (!currentLevel.children) {
-          currentLevel.children = [];
         }
-        currentLevel.children.push(child);
+        if (!currentLevel.children) {
+          currentLevel.children = []
+        }
+        currentLevel.children.push(child)
       } else if (index === levels.length - 1 && child.value) {
-        child.value += 1;
+        child.value += 1
       }
 
-      currentLevel = child;
-    });
-  });
-
+      currentLevel = child
+    })
+  })
   // Calculate values for parent nodes
   const calculateValues = (node: TreemapNode): number => {
-    if (node.value) return node.value;
-    
+    if (node.value) return node.value
     if (node.children) {
       node.value = node.children.reduce((sum, child) => 
         sum + calculateValues(child), 0
-      );
+      )
     }
     
-    return node.value || 0;
-  };
-
-  calculateValues(root);
-
-  return root as TreemapData;
-};
-
+    return node.value || 0
+  }
+  calculateValues(root)
+  return root as TreemapData
+}
 // Helper functions for colors
 const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
@@ -285,10 +254,9 @@ const getStatusColor = (status: string): string => {
     'completado': '#10b981',
     'desactivado': '#ef4444',
     'alarma': '#dc2626'
-  };
-  return colors[status] || '#6b7280';
-};
-
+  }
+  return colors[status] || '#6b7280'
+}
 const getTransitStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
     'pendiente': '#6b7280',
@@ -296,26 +264,24 @@ const getTransitStatusColor = (status: string): string => {
     'completado': '#10b981',
     'cancelado': '#ef4444',
     'retrasado': '#f59e0b'
-  };
-  return colors[status] || '#6b7280';
-};
-
+  }
+  return colors[status] || '#6b7280'
+}
 const getAlertStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
     'activa': '#ef4444',
     'reconocida': '#f59e0b',
     'resuelta': '#10b981',
     'descartada': '#6b7280'
-  };
-  return colors[status] || '#6b7280';
-};
-
+  }
+  return colors[status] || '#6b7280'
+}
 const getSeverityColor = (severity: string): string => {
   const colors: Record<string, string> = {
     'critica': '#dc2626',
     'alta': '#ef4444',
     'media': '#f59e0b',
     'baja': '#3b82f6'
-  };
-  return colors[severity] || '#6b7280';
-};
+  }
+  return colors[severity] || '#6b7280'
+}

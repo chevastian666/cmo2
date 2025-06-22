@@ -4,74 +4,65 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { Package, Shield, Truck, User, Building, MapPin, Camera, CheckCircle2, ChevronRight, FileText, QrCode, Search, X, Battery} from 'lucide-react';
-import { useNavigate, useLocation} from 'react-router-dom';
-
-import { Input} from '@/components/ui/input';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Label} from '@/components/ui/label';
-import { Textarea} from '@/components/ui/textarea';
-import { Checkbox} from '@/components/ui/checkbox';
-
-import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
-import { Separator} from '@/components/ui/separator';
-import { PageTransition, AnimatedHeader, AnimatedSection} from '@/components/animations/PageTransitions';
-import { AnimatedButton, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import { cn} from '@/utils/utils';
-import { notificationService} from '@/services/shared/notification.service';
-
-import type { Precinto} from '@/types';
-
-import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced';
-
+import React, { useState, useEffect } from 'react'
+import { Package, Shield, Truck, User, Building, MapPin, Camera, CheckCircle2, ChevronRight, FileText, QrCode, Search, X, Battery} from 'lucide-react'
+import { useNavigate, useLocation} from 'react-router-dom'
+import { Input} from '@/components/ui/input'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Label} from '@/components/ui/label'
+import { Textarea} from '@/components/ui/textarea'
+import { Checkbox} from '@/components/ui/checkbox'
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
+import { Separator} from '@/components/ui/separator'
+import { PageTransition, AnimatedHeader, AnimatedSection} from '@/components/animations/PageTransitions'
+import { AnimatedButton, AnimatedSpinner} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import { notificationService} from '@/services/shared/notification.service'
+import type { Precinto} from '@/types'
+import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced'
 // Precinto Search Enhanced Component
 const PrecintoSearchEnhanced: React.FC<{
-  onSelect: (precinto: Precinto) => void;
-  value: string;
-  onChange: (value: string) => void;
+  onSelect: (precinto: Precinto) => void
+  value: string
+  onChange: (value: string) => void
 }> = ({ onSelect, value, onChange }) => {
-  const [searching, setSearching] = useState(false);
-  const [results, setResults] = useState<Precinto[]>([]);
-  const [hasSearched, setHasSearched] = useState(false);
-   
-
+  const [searching, setSearching] = useState(false)
+  const [results, setResults] = useState<Precinto[]>([])
+  const [hasSearched, setHasSearched] = useState(false)
+  const fetchPrecintos = async () => {
+    // Mock function - implement real fetching logic
+  }
+  
   useEffect(() => {
-    fetchPrecintos();
-  }, [fetchPrecintos]);
-
+    fetchPrecintos()
+  }, [fetchPrecintos])
   const handleSearch = async () => {
-    if (!value.trim()) return;
-    
-    setSearching(true);
-    setHasSearched(true);
+    if (!value.trim()) return
+    setSearching(true)
+    setHasSearched(true)
     try {
       // Simular búsqueda
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const filtered = precintos.filter(p => 
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const precintos = []; const filtered = precintos.filter(p => 
         p.codigo.toLowerCase().includes(value.toLowerCase()) &&
         ['SAL', 'LLE'].includes(p.estado) // Solo precintos disponibles para armar
-      );
-      setResults(filtered);
+      )
+      setResults(filtered)
     } finally {
-      setSearching(false);
+      setSearching(false)
     }
-  };
-
+  }
   // Clear results when value is empty
-   
 
   useEffect(() => {
     if (!value.trim()) {
-      setResults([]);
-      setHasSearched(false);
+      setResults([])
+      setHasSearched(false)
     }
-  }, [value]);
-
+  }, [value])
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3">
@@ -88,8 +79,8 @@ const PrecintoSearchEnhanced: React.FC<{
             {value && (<button
                 type="button"
                 onClick={() => {
-                  onChange('');
-                  setResults([]);
+                  onChange('')
+                  setResults([])
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-700 rounded-md transition-colors"
               >
@@ -138,21 +129,21 @@ const PrecintoSearchEnhanced: React.FC<{
             key={prefix}
             type="button"
             onClick={async () => {
-              onChange(prefix);
+              onChange(prefix)
               // Esperar un tick para que se actualice el valor antes de buscar
-              await new Promise(resolve => setTimeout(resolve, 0));
+              await new Promise(resolve => setTimeout(resolve, 0))
               // Buscar directamente con el prefijo
-              setSearching(true);
+              setSearching(true)
               try {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const filtered = precintos.filter(p => 
+                await new Promise(resolve => setTimeout(resolve, 500))
+                const precintos = []; const filtered = precintos.filter(p => 
                   p.codigo.toLowerCase().includes(prefix.toLowerCase()) &&
                   ['SAL', 'LLE'].includes(p.estado)
-                );
-                setResults(filtered);
-                setHasSearched(true);
+                )
+                setResults(filtered)
+                setHasSearched(true)
               } finally {
-                setSearching(false);
+                setSearching(false)
               }
             }}
             className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 rounded-md transition-colors text-gray-300"
@@ -182,8 +173,8 @@ const PrecintoSearchEnhanced: React.FC<{
               <button
                 type="button"
                 onClick={() => {
-                  setResults([]);
-                  onChange('');
+                  setResults([])
+                  onChange('')
                 }}
                 className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
               >
@@ -263,19 +254,17 @@ const PrecintoSearchEnhanced: React.FC<{
         </motion.div>
       )}
     </div>
-  );
-};
-
+  )
+}
 // Main Component
 export const ArmadoPageV2: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [loading, setLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null);
-  const [precintoSearch, setPrecintoSearch] = useState('');
-  const [photos] = useState<File[]>([]);
-  
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [loading, setLoading] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null)
+  const [precintoSearch, setPrecintoSearch] = useState('')
+  const [photos] = useState<File[]>([])
   const [formData, setFormData] = useState({
     // Datos del viaje
     precintoId: '',
@@ -312,51 +301,45 @@ export const ArmadoPageV2: React.FC = () => {
       corta: false,
     },
     observaciones: ''
-  });
-
+  })
   const handlePrecintoSelect = (precinto: Precinto) => {
-    setSelectedPrecinto(precinto);
-    setFormData(prev => ({ ...prev, precintoId: precinto.id }));
-    notificationService.success('Precinto seleccionado', `Precinto ${precinto.codigo} seleccionado correctamente`);
-  };
-
+    setSelectedPrecinto(precinto)
+    setFormData(prev => ({ ...prev, precintoId: precinto.id }))
+    notificationService.success('Precinto seleccionado', `Precinto ${precinto.codigo} seleccionado correctamente`)
+  }
   const handleSubmit = async () => {
     // Validaciones básicas
     if (!selectedPrecinto) {
-      notificationService.error('Error', 'Debes seleccionar un precinto');
-      return;
+      notificationService.error('Error', 'Debes seleccionar un precinto')
+      return
     }
     if (!formData.tipoViaje || !formData.dua || !formData.matricula || !formData.nombreConductor) {
-      notificationService.error('Error', 'Completa todos los campos obligatorios');
-      return;
+      notificationService.error('Error', 'Completa todos los campos obligatorios')
+      return
     }
-    setShowConfirmation(true);
-  };
-
+    setShowConfirmation(true)
+  }
   const handleConfirmArm = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       // Simular envío
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise(resolve => setTimeout(resolve, 2000))
       notificationService.success(
         'Precinto Armado',
         `El precinto ${selectedPrecinto?.codigo} ha sido armado exitosamente`
-      );
-      
+      )
       // Navegar a página de espera
-      navigate(`/armado/waiting/${selectedPrecinto?.id}`);
+      navigate(`/armado/waiting/${selectedPrecinto?.id}`)
     } catch {
       notificationService.error(
         'Error',
         'No se pudo completar el armado del precinto'
-      );
+      )
     } finally {
-      setLoading(false);
-      setShowConfirmation(false);
+      setLoading(false)
+      setShowConfirmation(false)
     }
-  };
-
+  }
   return (<PageTransition>
       <div className="max-w-6xl mx-auto space-y-6">
         <AnimatedHeader
@@ -810,7 +793,6 @@ export const ArmadoPageV2: React.FC = () => {
         />
       </div>
     </PageTransition>
-  );
-};
-
-export default ArmadoPageV2;
+  )
+}
+export default ArmadoPageV2

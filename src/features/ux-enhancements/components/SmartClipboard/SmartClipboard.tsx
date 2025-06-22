@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '../../../../utils/utils';
-
-
-import type { SmartClipboardProps, ClipboardEntry} from '../../types';
-import { ClipboardIcon, SearchIcon, TrashIcon, CheckIcon, XMarkIcon} from '@heroicons/react/24/outline';
-
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '../../../../utils/utils'
+import type { SmartClipboardProps, ClipboardEntry} from '../../types'
+import { ClipboardIcon, SearchIcon, TrashIcon, CheckIcon, XMarkIcon} from '@heroicons/react/24/outline'
 const TYPE_COLORS = {
   precinto: 'bg-blue-500',
   alerta: 'bg-red-500',
   reporte: 'bg-green-500',
   datos: 'bg-purple-500',
   custom: 'bg-gray-500'
-};
-
+}
 const TYPE_LABELS = {
   precinto: 'Precinto',
   alerta: 'Alerta',
@@ -21,54 +17,42 @@ const TYPE_LABELS = {
   datos: 'Datos',
   custom: 'Personalizado',
   all: 'Todos'
-};
-
+}
 export const SmartClipboard: React.FC<SmartClipboardProps> = ({
   maxHistory = 50, syncEnabled = true, position = 'bottom-right', hotkeys = true
 }) => {
-  const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  
-  
-  
-  
-
+  const [showToast, setShowToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   // Position classes
   const positionClasses = {
     'top-right': 'top-20 right-4',
     'bottom-right': 'bottom-4 right-4',
     'top-left': 'top-20 left-4',
     'bottom-left': 'bottom-4 left-4'
-  };
-
+  }
   // Handle entry click
   const handleEntryClick = async (entry: ClipboardEntry) => {
-    await pasteFromHistory(entry.id);
-    setShowToast({ message: 'Copiado al portapapeles', type: 'success' });
-    setTimeout(() => setShowToast(null), 2000);
-  };
-
+    await pasteFromHistory(entry.id)
+    setShowToast({ message: 'Copiado al portapapeles', type: 'success' })
+    setTimeout(() => setShowToast(null), 2000)
+  }
   // Format timestamp
   const formatTimestamp = (date: Date) => {
-    const now = new Date();
-    const timestamp = new Date(date);
-    const diff = now.getTime() - timestamp.getTime();
-    
-    if (diff < 60000) return 'Hace un momento';
-    if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} min`;
-    if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} h`;
-    return timestamp.toLocaleDateString('es-ES');
-  };
-
+    const now = new Date()
+    const timestamp = new Date(date)
+    const diff = now.getTime() - timestamp.getTime()
+    if (diff < 60000) return 'Hace un momento'
+    if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} min`
+    if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} h`
+    return timestamp.toLocaleDateString('es-ES')
+  }
   // Focus search on open
-   
 
   useEffect(() => {
     if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus()
     }
-  }, [isOpen]);
-
+  }, [])
   return (
     <>
       {/* Floating Button */}
@@ -208,8 +192,8 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                         
                         <button
                           onClick={(e) => {
-                            e.stopPropagation();
-                            removeEntry(entry.id);
+                            e.stopPropagation()
+                            removeEntry(entry.id)
                           }}
                           className="text-gray-500 hover:text-red-500 transition-colors"
                         >
@@ -246,7 +230,7 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
                   <button
                     onClick={() => {
                       if (confirm('¿Limpiar todo el historial?')) {
-                        clearHistory();
+                        clearHistory()
                       }
                     }}
                     className="text-sm text-red-400 hover:text-red-300 transition-colors"
@@ -283,5 +267,5 @@ export const SmartClipboard: React.FC<SmartClipboardProps> = ({
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}

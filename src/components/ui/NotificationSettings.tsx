@@ -1,70 +1,60 @@
  
-import React, { useState, useEffect } from 'react';
-import {Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react';
-import { cn} from '../../utils/utils';
-import { notificationService} from '../../services/shared/notification.service';
-
+import React, { useState, useEffect } from 'react'
+import {Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react'
+import { cn} from '../../utils/utils'
+import { notificationService} from '../../services/shared/notification.service'
 export interface NotificationSettingsProps {
-  className?: string;
-  compact?: boolean;
+  className?: string
+  compact?: boolean
 }
 
 export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ 
   className, compact = false 
 }) => {
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [criticalOnly, setCriticalOnly] = useState(false);
-   
-
+  const [soundEnabled, setSoundEnabled] = useState(true)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
+  const [criticalOnly, setCriticalOnly] = useState(false)
   useEffect(() => {
     // Load saved preferences
-    const savedPrefs = localStorage.getItem('notificationPreferences');
+    const savedPrefs = localStorage.getItem('notificationPreferences')
     if (savedPrefs) {
-      const prefs = JSON.parse(savedPrefs);
-      setSoundEnabled(prefs.soundEnabled ?? true);
-      setNotificationsEnabled(prefs.notificationsEnabled ?? true);
-      setCriticalOnly(prefs.criticalOnly ?? false);
-      
+      const prefs = JSON.parse(savedPrefs)
+      setSoundEnabled(prefs.soundEnabled ?? true)
+      setNotificationsEnabled(prefs.notificationsEnabled ?? true)
+      setCriticalOnly(prefs.criticalOnly ?? false)
       // Apply settings
-      notificationService.setSoundEnabled(prefs.soundEnabled ?? true);
+      notificationService.setSoundEnabled(prefs.soundEnabled ?? true)
     }
-  }, []);
-
+  }, [])
   const savePreferences = (updates: Partial<{
-    soundEnabled: boolean;
-    notificationsEnabled: boolean;
-    criticalOnly: boolean;
+    soundEnabled: boolean
+    notificationsEnabled: boolean
+    criticalOnly: boolean
   }>) => {
     const prefs = {
       soundEnabled,
       notificationsEnabled,
       criticalOnly,
       ...updates
-    };
-    
-    localStorage.setItem('notificationPreferences', JSON.stringify(prefs));
-  };
-
+    }
+    localStorage.setItem('notificationPreferences', JSON.stringify(prefs))
+  }
   const handleSoundToggle = () => {
-    const newValue = !soundEnabled;
-    setSoundEnabled(newValue);
-    notificationService.setSoundEnabled(newValue);
-    savePreferences({ soundEnabled: newValue });
-  };
-
+    const newValue = !soundEnabled
+    setSoundEnabled(newValue)
+    notificationService.setSoundEnabled(newValue)
+    savePreferences({ soundEnabled: newValue })
+  }
   const handleNotificationsToggle = () => {
-    const newValue = !notificationsEnabled;
-    setNotificationsEnabled(newValue);
-    savePreferences({ notificationsEnabled: newValue });
-  };
-
+    const newValue = !notificationsEnabled
+    setNotificationsEnabled(newValue)
+    savePreferences({ notificationsEnabled: newValue })
+  }
   const handleCriticalOnlyToggle = () => {
-    const newValue = !criticalOnly;
-    setCriticalOnly(newValue);
-    savePreferences({ criticalOnly: newValue });
-  };
-
+    const newValue = !criticalOnly
+    setCriticalOnly(newValue)
+    savePreferences({ criticalOnly: newValue })
+  }
   if (compact) {
     return (
       <div className={cn('flex items-center gap-2', className)}>
@@ -94,7 +84,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           {notificationsEnabled ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
         </button>
       </div>
-    );
+    )
   }
 
   return (
@@ -183,5 +173,5 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

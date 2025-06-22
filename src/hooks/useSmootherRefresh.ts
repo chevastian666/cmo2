@@ -3,52 +3,45 @@
  * By Cheva
  */
 
-import { useCallback, useRef} from 'react';
-
+import { useCallback, useRef} from 'react'
 interface UseSmootherRefreshOptions {
-  onSuccess?: () => void;
-  onError?: (error: unknown) => void;
-  minimumDelay?: number;
+  onSuccess?: () => void
+  onError?: (error: unknown) => void
+  minimumDelay?: number
 }
 
 export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknown>) | undefined>,
   options: UseSmootherRefreshOptions = {}
 ) => {
-  
-  const isRefreshing = useRef(false);
 
+  const isRefreshing = useRef(false)
   const refresh = useCallback(async () => {
-    if (isRefreshing.current) return;
-    
-    isRefreshing.current = true;
-    const startTime = Date.now();
-
+    if (isRefreshing.current) return
+    isRefreshing.current = true
+    const startTime = Date.now()
     try {
       // Filtrar funciones válidas
-      const validFunctions = refreshFunctions.filter(fn => typeof fn === 'function');
-      
+      const validFunctions = refreshFunctions.filter(fn => typeof fn === 'function')
       if (validFunctions.length === 0) {
-        console.warn('No hay funciones de actualización disponibles');
-        return;
+        console.warn('No hay funciones de actualización disponibles')
+        return
       }
 
       // Ejecutar todas las actualizaciones en paralelo
-      await Promise.all(validFunctions.map(fn => fn!()));
-      
+      await Promise.all(validFunctions.map(fn => fn!()))
       // Asegurar un delay mínimo para evitar parpadeos
-      const elapsedTime = Date.now() - startTime;
+      const elapsedTime = Date.now() - startTime
       if (elapsedTime < minimumDelay) {
-        await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsedTime));
+        await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsedTime))
       }
       
-      onSuccess?.();
+      onSuccess?.()
     } catch (error) {
-      console.error('Error en actualización suave:', error);
-      onError?.(error);
+      console.error('Error en actualización suave:', error)
+      onError?.(error)
     } finally {
-      isRefreshing.current = false;
+      isRefreshing.current = false
     }
-  }, [refreshFunctions, onSuccess, onError, minimumDelay]);
-
-  return { refresh, isRefreshing: isRefreshing.current };
-};
+  }, [])
+  return { refresh, isRefreshing: isRefreshing.current }
+}

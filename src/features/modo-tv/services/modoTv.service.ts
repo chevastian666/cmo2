@@ -1,7 +1,6 @@
-import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types';
-import { transitosService} from '../../transitos/services/transitos.service';
-import { alertasService} from '../../../services/alertas.service';
-
+import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types'
+import { transitosService} from '../../transitos/services/transitos.service'
+import { alertasService} from '../../../services/alertas.service'
 class ModoTvService {
   private configuracion: ConfiguracionTV = {
     puntoOperacion: undefined,
@@ -9,41 +8,38 @@ class ModoTvService {
     sonidoAlertas: true,
     actualizacionSegundos: 10,
     columnas: 2
-  };
-
+  }
   async getProximosArribos(limite: number = 15): Promise<ProximoArribo[]> {
     try {
       // Obtener todos los tránsitos en curso
-      const transitos = await transitosService.getTransitos();
-      const ahora = new Date();
-      
+      const transitos = await transitosService.getTransitos()
+      const ahora = new Date()
       // Filtrar y mapear próximos arribos
       const arribos: ProximoArribo[] = transitos
         .filter(t => t.estado === 'en_viaje' && t.eta)
         .map(t => {
-          const horaArribo = new Date(t.eta!);
-          const minutosRestantes = Math.max(0, Math.floor((horaArribo.getTime() - ahora.getTime()) / 60000));
-          
+          const horaArribo = new Date(t.eta!)
+          const minutosRestantes = Math.max(0, Math.floor((horaArribo.getTime() - ahora.getTime()) / 60000))
           // Determinar punto de operación basado en el destino
-          let puntoOperacion = 'Otros';
+          let puntoOperacion = 'Otros'
           if (t.destino.includes('TCP') || t.destino.includes('Terminal Cuenca')) {
-            puntoOperacion = 'TCP - Terminal Cuenca del Plata';
+            puntoOperacion = 'TCP - Terminal Cuenca del Plata'
           } else if (t.destino.includes('Montecon')) {
-            puntoOperacion = 'Montecon';
+            puntoOperacion = 'Montecon'
           } else if (t.destino.includes('Paso de los Toros')) {
-            puntoOperacion = 'Paso de los Toros';
+            puntoOperacion = 'Paso de los Toros'
           } else if (t.destino.includes('Rivera')) {
-            puntoOperacion = 'Rivera';
+            puntoOperacion = 'Rivera'
           } else if (t.destino.includes('Fray Bentos')) {
-            puntoOperacion = 'Fray Bentos';
+            puntoOperacion = 'Fray Bentos'
           }
           
           // Determinar estado semáforo
-          let estado: 'verde' | 'amarillo' | 'rojo' = 'verde';
+          let estado: 'verde' | 'amarillo' | 'rojo' = 'verde'
           if (t.alertas && t.alertas.length > 0) {
-            estado = 'rojo';
+            estado = 'rojo'
           } else if (minutosRestantes < 30) {
-            estado = 'amarillo';
+            estado = 'amarillo'
           }
           
           return {
@@ -57,23 +53,22 @@ class ModoTvService {
             minutosRestantes,
             estado,
             distanciaKm: t.progreso ? Math.round((100 - t.progreso) * 2) : undefined
-          };
+          }
         })
         // Filtrar por punto de operación si está configurado
         .filter(a => {
           if (this.configuracion.mostrarTodos || !this.configuracion.puntoOperacion) {
-            return true;
+            return true
           }
-          return a.puntoOperacion === this.configuracion.puntoOperacion;
+          return a.puntoOperacion === this.configuracion.puntoOperacion
         })
         // Ordenar por tiempo de arribo
         .sort((a, b) => a.minutosRestantes - b.minutosRestantes)
-        .slice(0, limite);
-      
-      return arribos;
+        .slice(0, limite)
+      return arribos
     } catch {
-      console.error('Error obteniendo próximos arribos:', _error);
-      return this.getMockArribos();
+      console.error('Error obteniendo próximos arribos:', _error)
+      return this.getMockArribos()
     }
   }
 
@@ -81,33 +76,32 @@ class ModoTvService {
     try {
       // En desarrollo o si hay _error, usar mock data
       if (import.meta.env.DEV) {
-        return this.getMockAlertas().slice(0, limite);
+        return this.getMockAlertas().slice(0, limite)
       }
       
-      const alertas = await alertasService.getActivas();
-      
+      const alertas = await alertasService.getActivas()
       return alertas
         .map(a => {
           // Mapear tipo de alerta
-          let tipo: AlertaTV['tipo'] = 'datos_incorrectos';
+          let tipo: AlertaTV['tipo'] = 'datos_incorrectos'
           if (a.tipo === 'violacion' || a.tipo === 'intrusion') {
-            tipo = 'precinto_abierto';
+            tipo = 'precinto_abierto'
           } else if (a.mensaje.includes('chofer') || a.mensaje.includes('conductor')) {
-            tipo = 'chofer_no_identificado';
+            tipo = 'chofer_no_identificado'
           } else if (a.mensaje.includes('punto') || a.mensaje.includes('ubicación')) {
-            tipo = 'punto_equivocado';
+            tipo = 'punto_equivocado'
           } else if (a.mensaje.includes('tiempo') || a.mensaje.includes('retraso')) {
-            tipo = 'tiempo_excesivo';
+            tipo = 'tiempo_excesivo'
           }
           
           // Determinar nivel
-          let nivel: AlertaTV['nivel'] = 'bajo';
+          let nivel: AlertaTV['nivel'] = 'bajo'
           if (a.severidad === 'critica') {
-            nivel = 'critico';
+            nivel = 'critico'
           } else if (a.severidad === 'alta') {
-            nivel = 'alto';
+            nivel = 'alto'
           } else if (a.severidad === 'media') {
-            nivel = 'medio';
+            nivel = 'medio'
           }
           
           return {
@@ -117,41 +111,37 @@ class ModoTvService {
             transitoAfectado: a.codigoPrecinto,
             descripcion: a.mensaje,
             nivel
-          };
+          }
         })
-        .slice(0, limite);
+        .slice(0, limite)
     } catch {
-      console.error('Error obteniendo alertas, usando datos mock:', _error);
-      return this.getMockAlertas().slice(0, limite);
+      console.error('Error obteniendo alertas, usando datos mock:', _error)
+      return this.getMockAlertas().slice(0, limite)
     }
   }
 
   async getTransitosCriticos(limite: number = 4): Promise<TransitoCritico[]> {
     try {
-      const transitos = await transitosService.getTransitos();
-      const ahora = new Date();
-      
-      const criticos: TransitoCritico[] = [];
-      
+      const transitos = await transitosService.getTransitos()
+      const ahora = new Date()
+      const criticos: TransitoCritico[] = []
       // Buscar tránsitos con problemas
       transitos.forEach(t => {
-        let problema: string | null = null;
-        let nivel: TransitoCritico['nivel'] = 'bajo';
-        let tiempoEnProblema = 0;
-        
+        let problema: string | null = null
+        let nivel: TransitoCritico['nivel'] = 'bajo'
+        let tiempoEnProblema = 0
         // Verificar diferentes tipos de problemas
         if (t.estado === 'con_alerta' && t.alertas && t.alertas.length > 0) {
-          problema = t.alertas[0];
-          nivel = 'alto';
+          problema = t.alertas[0]
+          nivel = 'alto'
           tiempoEnProblema = 30; // Simulado
         } else if (t.estado === 'en_viaje' && t.eta) {
-          const horaEstimada = new Date(t.eta);
-          const minutosRetraso = Math.floor((ahora.getTime() - horaEstimada.getTime()) / 60000);
-          
+          const horaEstimada = new Date(t.eta)
+          const minutosRetraso = Math.floor((ahora.getTime() - horaEstimada.getTime()) / 60000)
           if (minutosRetraso > 60) {
-            problema = `Retraso de ${minutosRetraso} minutos`;
-            nivel = minutosRetraso > 120 ? 'critico' : 'alto';
-            tiempoEnProblema = minutosRetraso;
+            problema = `Retraso de ${minutosRetraso} minutos`
+            nivel = minutosRetraso > 120 ? 'critico' : 'alto'
+            tiempoEnProblema = minutosRetraso
           }
         }
         
@@ -166,26 +156,25 @@ class ModoTvService {
             tiempoEnProblema,
             nivel,
             accionRequerida: nivel === 'critico' ? 'Contactar supervisor' : 'Monitorear'
-          });
+          })
         }
-      });
-      
+      })
       // Ordenar por nivel de criticidad y limitar
       return criticos
         .sort((a, b) => {
-          const niveles = { bajo: 0, medio: 1, alto: 2, critico: 3 };
-          return niveles[b.nivel] - niveles[a.nivel];
+          const niveles = { bajo: 0, medio: 1, alto: 2, critico: 3 }
+          return niveles[b.nivel] - niveles[a.nivel]
         })
-        .slice(0, limite);
+        .slice(0, limite)
     } catch {
-      console.error('Error obteniendo tránsitos críticos:', _error);
-      return this.getMockCriticos();
+      console.error('Error obteniendo tránsitos críticos:', _error)
+      return this.getMockCriticos()
     }
   }
 
   // Mock data para desarrollo
   private getMockArribos(): ProximoArribo[] {
-    const ahora = new Date();
+    const ahora = new Date()
     return [
       {
         id: '1',
@@ -223,11 +212,11 @@ class ModoTvService {
         estado: 'rojo',
         distanciaKm: 180
       }
-    ];
+    ]
   }
 
   private getMockAlertas(): AlertaTV[] {
-    const ahora = new Date();
+    const ahora = new Date()
     return [
       {
         id: '1',
@@ -245,7 +234,7 @@ class ModoTvService {
         descripcion: 'Conductor no registrado en el sistema',
         nivel: 'alto'
       }
-    ];
+    ]
   }
 
   private getMockCriticos(): TransitoCritico[] {
@@ -271,17 +260,17 @@ class ModoTvService {
         nivel: 'alto',
         accionRequerida: 'Verificar último punto conocido'
       }
-    ];
+    ]
   }
 
   // Configuración
   setConfiguracion(config: Partial<ConfiguracionTV>) {
-    this.configuracion = { ...this.configuracion, ...config };
+    this.configuracion = { ...this.configuracion, ...config }
   }
 
   getConfiguracion(): ConfiguracionTV {
-    return this.configuracion;
+    return this.configuracion
   }
 }
 
-export const modoTvService = new ModoTvService();
+export const modoTvService = new ModoTvService()

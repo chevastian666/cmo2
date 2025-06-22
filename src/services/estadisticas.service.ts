@@ -1,11 +1,10 @@
-import type { EstadisticasMonitoreo} from '../types/monitoring';
-import { unifiedAPIService} from './api/unified.service';
-import { trokorService} from './api/trokor.service';
-
+import type { EstadisticasMonitoreo} from '../types/monitoring'
+import { unifiedAPIService} from './api/unified.service'
+import { trokorService} from './api/trokor.service'
 export interface EstadisticasFilters {
-  desde?: number;
-  hasta?: number;
-  intervalo?: 'hora' | 'dia' | 'semana' | 'mes';
+  desde?: number
+  hasta?: number
+  intervalo?: 'hora' | 'dia' | 'semana' | 'mes'
 }
 
 export const estadisticasService = {
@@ -13,7 +12,7 @@ export const estadisticasService = {
     try {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
-        console.log('Using mock data for estadisticas in development mode');
+        console.log('Using mock data for estadisticas in development mode')
         return {
           precintosActivos: 156,
           precintosEnTransito: 89,
@@ -33,13 +32,13 @@ export const estadisticasService = {
             discoUsado: 30
           },
           reportesPendientes: 3
-        };
+        }
       }
 
       // Primero intentar con Trokor API si está habilitada
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
-          const stats = await trokorService.getEstadisticas();
+          const stats = await trokorService.getEstadisticas()
           return {
             ...stats,
             precintosEnTransito: stats.transitosEnCurso,
@@ -55,16 +54,16 @@ export const estadisticasService = {
               discoUsado: 30
             },
             reportesPendientes: 0 // TODO: obtener de API
-          };
+          }
         } catch (trokorError) {
-          console.error('Error con Trokor API, intentando con unified API:', trokorError);
+          console.error('Error con Trokor API, intentando con unified API:', trokorError)
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
-      return await unifiedAPIService.getEstadisticas();
+      return await unifiedAPIService.getEstadisticas()
     } catch {
-      console.error('Error fetching estadisticas:', _error);
+      console.error('Error fetching estadisticas:', _error)
       // Return default values
       return {
         precintosActivos: 0,
@@ -85,7 +84,7 @@ export const estadisticasService = {
           discoUsado: 0
         },
         reportesPendientes: 0
-      };
+      }
     }
   },
 
@@ -93,22 +92,22 @@ export const estadisticasService = {
     try {
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         // Generate mock data
-        const now = Date.now() / 1000;
-        const data = [];
+        const now = Date.now() / 1000
+        const data = []
         for (let i = 0; i < horas; i++) {
           data.push({
             timestamp: now - (i * 3600),
             cantidad: 4000 + Math.floor(Math.random() * 1000)
-          });
+          })
         }
-        return data.reverse();
+        return data.reverse()
       }
       
       // TODO: Implement real API call
-      return [];
+      return []
     } catch {
-      console.error('Error fetching historico lecturas:', _error);
-      return [];
+      console.error('Error fetching historico lecturas:', _error)
+      return []
     }
   },
 
@@ -116,33 +115,32 @@ export const estadisticasService = {
     try {
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
         // Generate mock data
-        const now = Date.now() / 1000;
-        const tipos = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'temperatura', 'sin_signal'];
-        const data = [];
-        
+        const now = Date.now() / 1000
+        const tipos = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'temperatura', 'sin_signal']
+        const data = []
         for (let i = 0; i < horas; i++) {
           data.push({
             timestamp: now - (i * 3600),
             cantidad: Math.floor(Math.random() * 10),
             tipo: tipos[Math.floor(Math.random() * tipos.length)]
-          });
+          })
         }
-        return data.reverse();
+        return data.reverse()
       }
       
       // TODO: Implement real API call
-      return [];
+      return []
     } catch {
-      console.error('Error fetching historico alertas:', _error);
-      return [];
+      console.error('Error fetching historico alertas:', _error)
+      return []
     }
   },
 
   getRendimiento: async (_filters?: EstadisticasFilters): Promise<{
-    tasaExito: number;
-    tiempoPromedioTransito: number;
-    lecturasPromedioPorHora: number;
-    alertasPromedioPorDia: number;
+    tasaExito: number
+    tiempoPromedioTransito: number
+    lecturasPromedioPorHora: number
+    alertasPromedioPorDia: number
   }> => {
     try {
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
@@ -151,40 +149,40 @@ export const estadisticasService = {
           tiempoPromedioTransito: 48,
           lecturasPromedioPorHora: 4320,
           alertasPromedioPorDia: 12
-        };
+        }
       }
       
-      const stats = await unifiedAPIService.getEstadisticas();
+      const stats = await unifiedAPIService.getEstadisticas()
       return {
         tasaExito: stats.tasaExito,
         tiempoPromedioTransito: stats.tiempoPromedioTransito,
         lecturasPromedioPorHora: stats.lecturasPorHora,
         alertasPromedioPorDia: Math.round(stats.alertasActivas * 24 / 7) // Rough estimate
-      };
+      }
     } catch {
-      console.error('Error fetching rendimiento:', _error);
+      console.error('Error fetching rendimiento:', _error)
       return {
         tasaExito: 0,
         tiempoPromedioTransito: 0,
         lecturasPromedioPorHora: 0,
         alertasPromedioPorDia: 0
-      };
+      }
     }
   },
 
   getEstadoSistema: async (): Promise<{
-    smsPendientes: number;
+    smsPendientes: number
     dbStats: {
-      memoriaUsada: number;
-      discoUsado: number;
-      conexionesActivas: number;
-    };
+      memoriaUsada: number
+      discoUsado: number
+      conexionesActivas: number
+    }
     apiStats: {
-      memoriaUsada: number;
-      discoUsado: number;
-      solicitudesPorMinuto: number;
-    };
-    reportesPendientes: number;
+      memoriaUsada: number
+      discoUsado: number
+      solicitudesPorMinuto: number
+    }
+    reportesPendientes: number
   }> => {
     try {
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
@@ -201,10 +199,10 @@ export const estadisticasService = {
             solicitudesPorMinuto: 120
           },
           reportesPendientes: 3
-        };
+        }
       }
       
-      const stats = await unifiedAPIService.getEstadisticas();
+      const stats = await unifiedAPIService.getEstadisticas()
       return {
         smsPendientes: stats.smsPendientes,
         dbStats: {
@@ -216,9 +214,9 @@ export const estadisticasService = {
           solicitudesPorMinuto: 120 // Mock value
         },
         reportesPendientes: stats.reportesPendientes
-      };
+      }
     } catch {
-      console.error('Error fetching estado sistema:', _error);
+      console.error('Error fetching estado sistema:', _error)
       return {
         smsPendientes: 0,
         dbStats: {
@@ -232,7 +230,7 @@ export const estadisticasService = {
           solicitudesPorMinuto: 0
         },
         reportesPendientes: 0
-      };
+      }
     }
   },
-};
+}

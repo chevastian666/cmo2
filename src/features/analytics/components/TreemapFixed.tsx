@@ -4,17 +4,12 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react';
-
+import React, { useState, useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import {Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react'
 const TreemapFixed: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  
-  
-  
-
+  const [activeTab, setActiveTab] = useState('overview')
   // Datos de ejemplo para visualización
   const mockData = {
     precintos: [
@@ -35,12 +30,10 @@ const TreemapFixed: React.FC = () => {
       { name: 'Medias', value: 32, color: '#f59e0b', percentage: 36 },
       { name: 'Bajas', value: 34, color: '#3b82f6', percentage: 38 }
     ]
-  };
-
+  }
   const TreemapBlock = ({ item, index }: { item: unknown; index: number }) => {
-    const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-2', 'col-span-2 row-span-1', 'col-span-1 row-span-1'];
-    const sizeClass = sizes[index % sizes.length];
-    
+    const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-2', 'col-span-2 row-span-1', 'col-span-1 row-span-1']
+    const sizeClass = sizes[index % sizes.length]
     return (
       <div
         className={`${sizeClass} relative rounded-lg p-4 text-white transition-all hover:scale-105 hover:shadow-xl cursor-pointer`}
@@ -56,19 +49,16 @@ const TreemapFixed: React.FC = () => {
           </div>
         </div>
       </div>
-    );
-  };
-
+    )
+  }
   const currentData = activeTab === 'precintos' ? mockData.precintos : 
                      activeTab === 'transitos' ? mockData.transitos : 
-                     mockData.alertas;
-
+                     mockData.alertas
   const stats = {
     precintos: precintos.length || 450,
     transitos: transitos.length || 162,
     alertas: alertas.length || 89
-  };
-
+  }
   return (<div className="p-6 space-y-6">
       {/* Header */}
       <div>
@@ -221,7 +211,6 @@ const TreemapFixed: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
-export default TreemapFixed;
+  )
+}
+export default TreemapFixed

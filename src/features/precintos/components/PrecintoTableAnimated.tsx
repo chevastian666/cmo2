@@ -1,76 +1,67 @@
-import React from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react';
-import { cn} from '@/lib/utils';
-import { Button} from '@/components/ui/button';
-import { PrecintoStatusBadge} from './PrecintoStatusBadge';
-import { BatteryIndicator} from './BatteryIndicator';
-import { SignalIndicator} from './SignalIndicator';
-import { PrecintoStatus} from '../types';
-import type { Precinto} from '../types';
-import { AnimatedBadge} from '@/components/animations/AnimatedComponents';
-import { transitions} from '@/components/animations/AnimationPresets';
-
+import React from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react'
+import { cn} from '@/lib/utils'
+import { Button} from '@/components/ui/button'
+import { PrecintoStatusBadge} from './PrecintoStatusBadge'
+import { BatteryIndicator} from './BatteryIndicator'
+import { SignalIndicator} from './SignalIndicator'
+import { PrecintoStatus} from '../types'
+import type { Precinto} from '../types'
+import { AnimatedBadge} from '@/components/animations/AnimatedComponents'
+import { transitions} from '@/components/animations/AnimationPresets'
 interface PrecintoTableAnimatedProps {
-  precintos: Precinto[];
-  loading: boolean;
-  onViewDetail: (precinto: Precinto) => void;
-  onViewMap: (precinto: Precinto) => void;
-  onAssign: (precinto: Precinto) => void;
-  onSendCommand: (precinto: Precinto) => void;
-  onViewHistory: (precinto: Precinto) => void;
-  onMarkAsBroken?: (precinto: Precinto) => void;
+  precintos: Precinto[]
+  loading: boolean
+  onViewDetail: (precinto: Precinto) => void
+  onViewMap: (precinto: Precinto) => void
+  onAssign: (precinto: Precinto) => void
+  onSendCommand: (precinto: Precinto) => void
+  onViewHistory: (precinto: Precinto) => void
+  onMarkAsBroken?: (precinto: Precinto) => void
 }
 
 export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
   precintos, loading, onViewDetail, onViewMap, onAssign, onSendCommand, onViewHistory, onMarkAsBroken
 }) => {
-  const [sortField, setSortField] = React.useState<keyof Precinto>('id');
-  const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
-
+  const [sortField, setSortField] = React.useState<keyof Precinto>('id')
+  const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc')
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const itemsPerPage = 10
   const handleSort = (field: keyof Precinto) => {
     if (field === sortField) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field);
-      setSortDirection('asc');
+      setSortField(field)
+      setSortDirection('asc')
     }
-  };
-
+  }
   const sortedPrecintos = [...precintos].sort((a, b) => {
-    let aValue = a[sortField];
-    let bValue = b[sortField];
-
-    if (aValue === undefined) aValue = '';
-    if (bValue === undefined) bValue = '';
-
+    let aValue = a[sortField]
+    let bValue = b[sortField]
+    if (aValue === undefined) aValue = ''
+    if (bValue === undefined) bValue = ''
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortDirection === 'asc' 
         ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+        : bValue.localeCompare(aValue)
     }
 
-    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-    return 0;
-  });
-
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
+    return 0
+  })
   const paginatedPrecintos = sortedPrecintos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  );
-
-  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage));
-
+  )
+  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
   const SortIcon = ({ field }: { field: keyof Precinto }) => {
-    if (sortField !== field) return <div className="w-4 h-4" />;
+    if (sortField !== field) return <div className="w-4 h-4" />
     return sortDirection === 'asc' ? 
       <ChevronUp className="h-4 w-4" /> : 
-      <ChevronDown className="h-4 w-4" />;
-  };
-
+      <ChevronDown className="h-4 w-4" />
+  }
   const SortableHeader = ({ field, children }: { field: keyof Precinto; children: React.ReactNode }) => (<motion.th 
       onClick={() => handleSort(field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
@@ -82,8 +73,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
         <SortIcon field={field} />
       </div>
     </motion.th>
-  );
-
+  )
   if (loading) {
     return (
       <motion.div 
@@ -98,7 +88,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
         />
         <p className="text-gray-400 mt-4">Cargando precintos...</p>
       </motion.div>
-    );
+    )
   }
 
   if (precintos.length === 0) {
@@ -112,7 +102,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
         <Unlink className="h-12 w-12 text-gray-600 mx-auto mb-4" />
         <p className="text-gray-400">No se encontraron precintos</p>
       </motion.div>
-    );
+    )
   }
 
   return (<motion.div 
@@ -340,5 +330,5 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
         </div>
       </motion.div>
     </motion.div>
-  );
-};
+  )
+}

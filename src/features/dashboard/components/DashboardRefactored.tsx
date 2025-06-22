@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardContent, Tabs, AlertsPanel, TransitCard, InfoRow, InfoGrid, LoadingState, EmptyState, Badge, BadgeGroup} from '../../../components/ui';
-import { SystemStatusCard} from './SystemStatusCard';
-import { KPICards} from './KPICards';
-import { RealtimeIndicator} from './RealtimeIndicator';
+import React, { useState } from 'react'
+import { Card, CardHeader, CardContent, Tabs, AlertsPanel, TransitCard, InfoRow, InfoGrid, LoadingState, EmptyState, Badge, BadgeGroup} from '../../../components/ui'
+import { SystemStatusCard} from './SystemStatusCard'
+import { KPICards} from './KPICards'
+import { RealtimeIndicator} from './RealtimeIndicator'
 import { 
-  usePrecintosActivos, useTransitosPendientes, useAlertasActivas} from '../../../store/hooks';
-
-import {Package, Truck, AlertTriangle, Activity} from 'lucide-react';
-
+  usePrecintosActivos, useTransitosPendientes, useAlertasActivas} from '../../../store/hooks'
+import {Package, Truck, AlertTriangle, Activity} from 'lucide-react'
 export const DashboardRefactored: React.FC = () => {
-  const { loading: precintosLoading } = usePrecintosActivos();
-  
-  const { loading: alertasLoading } = useAlertasActivas();
-  const { loading: transitosLoading } = useTransitosPendientes();
-  const [activeTab, setActiveTab] = useState('overview');
-
+  const { loading: precintosLoading } = usePrecintosActivos()
+  const { loading: alertasLoading } = useAlertasActivas()
+  const { loading: transitosLoading } = useTransitosPendientes()
+  const [activeTab, setActiveTab] = useState('overview')
   // Transform alerts for AlertsPanel
   const alertItems = alertas.map(alerta => ({
     id: alerta.id,
@@ -23,18 +19,15 @@ export const DashboardRefactored: React.FC = () => {
     severity: alerta.severidad,
     timestamp: alerta.timestamp,
     meta: alerta.ubicacion ? `${alerta.ubicacion.lat.toFixed(4)}, ${alerta.ubicacion.lng.toFixed(4)}` : undefined
-  }));
-
+  }))
   // Transform transits for TransitCard
-  const activeTransits = transitos.filter(t => t.estado === 'en_proceso').slice(0, 5);
-
+  const activeTransits = transitos.filter(t => t.estado === 'en_proceso').slice(0, 5)
   const tabs = [
     { id: 'overview', label: 'Vista General', icon: <Activity className="h-4 w-4" /> },
     { id: 'transits', label: 'Tránsitos', icon: <Truck className="h-4 w-4" /> },
     { id: 'alerts', label: 'Alertas', icon: <AlertTriangle className="h-4 w-4" /> },
     { id: 'seals', label: 'Precintos', icon: <Package className="h-4 w-4" /> }
-  ];
-
+  ]
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -205,5 +198,5 @@ export const DashboardRefactored: React.FC = () => {
         </Card>
       )}
     </div>
-  );
-};
+  )
+}

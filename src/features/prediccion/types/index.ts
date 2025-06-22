@@ -1,27 +1,27 @@
 export interface CongestionAnalysis {
-  destino: string;
-  ventanaInicio: Date;
-  ventanaFin: Date;
-  camiones: CamionProyectado[];
-  severidad: 'baja' | 'media' | 'alta' | 'critica';
-  cantidadCamiones: number;
+  destino: string
+  ventanaInicio: Date
+  ventanaFin: Date
+  camiones: CamionProyectado[]
+  severidad: 'baja' | 'media' | 'alta' | 'critica'
+  cantidadCamiones: number
 }
 
 export interface CamionProyectado {
-  id: string;
-  matricula: string;
-  eta: Date;
-  origen: string;
-  chofer: string;
+  id: string
+  matricula: string
+  eta: Date
+  origen: string
+  chofer: string
 }
 
 export interface ProyeccionPorHora {
-  hora: string;
+  hora: string
   destinos: {
-    nombre: string;
-    cantidad: number;
-    camiones: CamionProyectado[];
-  }[];
+    nombre: string
+    cantidad: number
+    camiones: CamionProyectado[]
+  }[]
 }
 
 export interface ConfiguracionPrediccion {
@@ -29,7 +29,7 @@ export interface ConfiguracionPrediccion {
   umbralBajo: number; // cantidad camiones (default: 3)
   umbralMedio: number; // cantidad camiones (default: 5)
   umbralAlto: number; // cantidad camiones (default: 8)
-  destinosMonitoreados: string[];
+  destinosMonitoreados: string[]
   horasProyeccion: number; // cuántas horas hacia adelante proyectar (default: 1)
 }
 
@@ -40,4 +40,4 @@ export const CONFIGURACION_DEFAULT: ConfiguracionPrediccion = {
   umbralAlto: 8,
   destinosMonitoreados: ['TCP', 'Montecon', 'Montevideo', 'Rivera', 'Chuy'],
   horasProyeccion: 1
-};
+}

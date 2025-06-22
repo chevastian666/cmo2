@@ -3,35 +3,31 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import {Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react';
-import { Link, useLocation} from 'react-router-dom';
-import { cn} from '../../../utils/utils';
-import { APP_CONFIG} from '../../../config';
-import { ConnectionStatus} from './ConnectionStatus';
-import { RealtimeNotifications} from './RealtimeNotifications';
-import { AlarmSummary} from './AlarmSummary';
-import { Sidebar} from './Sidebar';
-import { useAlertasActivas} from '../../../store/hooks';
-import {useUserInfo} from '../../../hooks/useAuth';
-import { useConnectionStatus} from '../../../hooks/useSharedState';
-import { PanelSwitcher} from '../../../components/PanelSwitcher';
-import {MicrointeractionsSettings} from '../../microinteractions';
-import { BreadcrumbNav} from '@/components/ui/BreadcrumbNav';
-
+import React, { useState } from 'react'
+import {Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react'
+import { Link, useLocation} from 'react-router-dom'
+import { cn} from '../../../utils/utils'
+import { APP_CONFIG} from '../../../config'
+import { ConnectionStatus} from './ConnectionStatus'
+import { RealtimeNotifications} from './RealtimeNotifications'
+import { AlarmSummary} from './AlarmSummary'
+import { Sidebar} from './Sidebar'
+import { useAlertasActivas} from '../../../store/hooks'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { useConnectionStatus} from '../../../hooks/useSharedState'
+import { PanelSwitcher} from '../../../components/PanelSwitcher'
+import {MicrointeractionsSettings} from '../../microinteractions'
+import { BreadcrumbNav} from '@/components/ui/BreadcrumbNav'
 interface LayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const location = useLocation();
-  const connectionStatus = useConnectionStatus();
-  
-  
-  const userInfo = useUserInfo();
-
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const location = useLocation()
+  const connectionStatus = useConnectionStatus()
+  const userInfo = useUserInfo()
   return (<div className="min-h-screen bg-gray-950 text-gray-100">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
@@ -141,8 +137,8 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                           <hr className="my-2 border-gray-700" />
                           <button
                             onClick={() => {
-                              setUserMenuOpen(false);
-                              logout();
+                              setUserMenuOpen(false)
+                              logout()
                             }}
                             className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
                           >
@@ -174,5 +170,5 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
       {/* Microinteractions Settings */}
       <MicrointeractionsSettings />
     </div>
-  );
-};
+  )
+}

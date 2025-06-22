@@ -1,17 +1,14 @@
  
-import React from 'react';
-import { MapModule} from '../../../components/ui/MapModule';
-import { TransitCard} from '../../../components/ui/TransitCard';
-import { AlertsPanel} from '../../../components/ui/AlertsPanel';
-
-import { Card} from '../../../components/ui/Card';
-import { RefreshCw} from 'lucide-react';
-
+import React from 'react'
+import { MapModule} from '../../../components/ui/MapModule'
+import { TransitCard} from '../../../components/ui/TransitCard'
+import { AlertsPanel} from '../../../components/ui/AlertsPanel'
+import { Card} from '../../../components/ui/Card'
+import { RefreshCw} from 'lucide-react'
 /**
  * Ejemplo de MapModule con actualización automática
  */
 export const MapWithPolling: React.FC = () => {
-  
 
   return (<Card className="relative">
       <div className="absolute top-4 right-4 z-10">
@@ -30,7 +27,7 @@ export const MapWithPolling: React.FC = () => {
         height="500px"
         useDetailedIcons
         onMarkerClick={(marker) => {
-          console.log('Marker clicked:', marker);
+          console.log('Marker clicked:', marker)
         }}
       />
       
@@ -40,21 +37,19 @@ export const MapWithPolling: React.FC = () => {
         </div>
       )}
     </Card>
-  );
-};
-
+  )
+}
 /**
  * Ejemplo de TransitCard con actualización automática
  */
 export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transitId }) => {
-  
 
   if (isLoading && !transit) {
     return (
       <Card className="animate-pulse">
         <div className="h-32 bg-gray-700 rounded"></div>
       </Card>
-    );
+    )
   }
 
   if (error) {
@@ -62,27 +57,25 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
       <Card className="text-red-400">
         Error cargando tránsito
       </Card>
-    );
+    )
   }
 
   if (!transit) {
-    return null;
+    return null
   }
 
   return (<TransitCard
       transit={transit}
       onViewHistory={(plate) => {
-        console.log('Ver historial de:', plate);
+        console.log('Ver historial de:', plate)
       }}
     />
-  );
-};
-
+  )
+}
 /**
  * Ejemplo de AlertsPanel con actualización automática
  */
 export const AlertsPanelWithPolling: React.FC = () => {
-  
 
   return (
     <div className="space-y-4">
@@ -113,7 +106,7 @@ export const AlertsPanelWithPolling: React.FC = () => {
         <AlertsPanel
           alerts={alerts}
           onAlertClick={(alert) => {
-            console.log('Alert clicked:', alert);
+            console.log('Alert clicked:', alert)
           }}
           onAlertAcknowledge={acknowledgeAlert}
           groupByPriority
@@ -129,9 +122,8 @@ export const AlertsPanelWithPolling: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
-
+  )
+}
 /**
  * Dashboard con todos los componentes integrados con polling
  */
@@ -165,5 +157,5 @@ export const DashboardWithPolling: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

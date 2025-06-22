@@ -1,14 +1,13 @@
-import React from 'react';
-import { Search, Calendar, Star, Lock, RotateCcw} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { FiltrosDocumentos} from '../types';
-import { TIPOS_DOCUMENTO, FILTROS_DEFAULT} from '../types';
-
+import React from 'react'
+import { Search, Calendar, Star, Lock, RotateCcw} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { FiltrosDocumentos} from '../types'
+import { TIPOS_DOCUMENTO, FILTROS_DEFAULT} from '../types'
 interface FiltrosDocumentosProps {
-  filtros: FiltrosDocumentos;
-  onFiltrosChange: (filtros: FiltrosDocumentos) => void;
-  empresas: string[];
-  className?: string;
+  filtros: FiltrosDocumentos
+  onFiltrosChange: (filtros: FiltrosDocumentos) => void
+  empresas: string[]
+  className?: string
 }
 
 export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
@@ -18,13 +17,11 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
     onFiltrosChange({
       ...filtros,
       [key]: value
-    });
-  };
-
+    })
+  }
   const handleReset = () => {
-    onFiltrosChange(FILTROS_DEFAULT);
-  };
-
+    onFiltrosChange(FILTROS_DEFAULT)
+  }
   const tienesFiltrosActivos = () => {
     return filtros.busqueda !== '' ||
            filtros.tipo !== '' ||
@@ -34,9 +31,8 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
            filtros.fechaHasta !== null ||
            filtros.soloDestacados ||
            !filtros.incluirConfidenciales ||
-           filtros.estado !== 'activo';
-  };
-
+           filtros.estado !== 'activo'
+  }
   return (
     <div className={cn("space-y-4", className)}>
       {/* Búsqueda global */}
@@ -173,5 +169,5 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

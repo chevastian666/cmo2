@@ -3,15 +3,14 @@
  * By Cheva
  */
 
-import React from 'react';
-import {Calendar} from 'lucide-react';
-import { Button} from './button';
-import { cn} from '@/utils/utils';
-
+import React from 'react'
+import {Calendar} from 'lucide-react'
+import { Button} from './button'
+import { cn} from '@/utils/utils'
 interface DatePickerWithRangeProps {
-  value: { from: Date; to: Date };
-  onChange: (range: { from: Date; to: Date }) => void;
-  className?: string;
+  value: { from: Date; to: Date }
+  onChange: (range: { from: Date; to: Date }) => void
+  className?: string
 }
 
 export const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({
@@ -22,5 +21,5 @@ export const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({
       <Calendar className="mr-2 h-4 w-4" />
       {value.from.toLocaleDateString()} - {value.to.toLocaleDateString()}
     </Button>
-  );
-};
+  )
+}

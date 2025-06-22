@@ -3,20 +3,19 @@
  * By Cheva
  */
 
-import React from 'react';
-import {TrendingUp, TrendingDown, Minus} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-
+import React from 'react'
+import {TrendingUp, TrendingDown, Minus} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
 interface KPIWidgetProps {
-  title: string;
-  value: number | string;
-  unit?: string;
-  change?: number;
-  trend?: 'up' | 'down' | 'neutral';
-  icon?: React.ReactNode;
-  color?: 'blue' | 'green' | 'red' | 'yellow' | 'purple';
-  description?: string;
+  title: string
+  value: number | string
+  unit?: string
+  change?: number
+  trend?: 'up' | 'down' | 'neutral'
+  icon?: React.ReactNode
+  color?: 'blue' | 'green' | 'red' | 'yellow' | 'purple'
+  description?: string
 }
 
 export const KPIWidget: React.FC<KPIWidgetProps> = ({
@@ -28,20 +27,17 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
     red: 'bg-red-500/10 text-red-400 border-red-500/20',
     yellow: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
     purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-  };
-
+  }
   const trendIcons = {
     up: <TrendingUp className="h-4 w-4" />,
     down: <TrendingDown className="h-4 w-4" />,
     neutral: <Minus className="h-4 w-4" />
-  };
-
+  }
   const trendColors = {
     up: 'text-green-400',
     down: 'text-red-400',
     neutral: 'text-gray-400'
-  };
-
+  }
   return (
     <div className="h-full flex flex-col">
       {/* Ícono opcional */}
@@ -86,5 +82,5 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

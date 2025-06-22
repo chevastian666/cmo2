@@ -1,36 +1,30 @@
-import React, { useState } from 'react';
-import { Shield, Loader, AlertCircle} from 'lucide-react';
-
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-import { Alert, AlertDescription} from '@/components/ui/alert';
-
+import React, { useState } from 'react'
+import { Shield, Loader, AlertCircle} from 'lucide-react'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Alert, AlertDescription} from '@/components/ui/alert'
 export const LoginPage: React.FC = () => {
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [localError, setLocalError] = useState('');
 
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [localError, setLocalError] = useState('')
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLocalError('');
-
+    e.preventDefault()
+    setLocalError('')
     if (!email || !password) {
-      setLocalError('Por favor completa todos los campos');
-      return;
+      setLocalError('Por favor completa todos los campos')
+      return
     }
 
     try {
-      await login(email, password);
+      await login(email, password)
       // Navigation will be handled by the auth state change
     } catch (err: unknown) {
-      setLocalError(err.message || 'Error al iniciar sesión');
+      setLocalError(err.message || 'Error al iniciar sesión')
     }
-  };
-
-  const displayError = localError || error;
-
+  }
+  const displayError = localError || error
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
@@ -135,5 +129,5 @@ export const LoginPage: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

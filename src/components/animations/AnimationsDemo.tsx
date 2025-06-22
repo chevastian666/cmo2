@@ -1,36 +1,32 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react';
+import React, { useState } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react'
 import { 
-  AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedModal, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton, AnimatedProgress, FadeDiv, ScaleDiv, SlideUpDiv, SlideDownDiv} from './AnimatedComponents';
+  AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedModal, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton, AnimatedProgress, FadeDiv, ScaleDiv, SlideUpDiv, SlideDownDiv} from './AnimatedComponents'
 import {
-  PageTransition, AnimatedSection, AnimatedHeader, AnimatedTabPanel, AnimatedGrid} from './PageTransitions';
+  PageTransition, AnimatedSection, AnimatedHeader, AnimatedTabPanel, AnimatedGrid} from './PageTransitions'
 import {
-  rotateScaleVariants, pulseVariants, shakeVariants, glowVariants, hoverScaleVariants, hoverLiftVariants, alertCriticalVariants, transitMovingVariants, precintoActiveVariants} from './AnimationPresets';
-
+  rotateScaleVariants, pulseVariants, shakeVariants, glowVariants, hoverScaleVariants, hoverLiftVariants, alertCriticalVariants, transitMovingVariants, precintoActiveVariants} from './AnimationPresets'
 export const AnimationsDemo: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('basics');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [showGrid, setShowGrid] = useState(false);
-
+  const [activeTab, setActiveTab] = useState('basics')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [progress, setProgress] = useState(0)
+  const [showGrid, setShowGrid] = useState(false)
   // Simulador de progreso
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setProgress(prev => (prev >= 100 ? 0 : prev + 10));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
+      setProgress(prev => (prev >= 100 ? 0 : prev + 10))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
   const tabs = [
     { id: 'basics', label: 'Básicas', icon: Layers },
     { id: 'advanced', label: 'Avanzadas', icon: Zap },
     { id: 'gestures', label: 'Gestos', icon: Move },
     { id: 'layouts', label: 'Layouts', icon: Maximize2 },
     { id: 'domain', label: 'Dominio', icon: Settings }
-  ];
-
+  ]
   return (<PageTransition variant="fade">
       <div className="min-h-screen bg-gray-900 p-8">
         <AnimatedHeader 
@@ -532,5 +528,5 @@ export const AnimationsDemo: React.FC = () => {
         </AnimatedModal>
       </div>
     </PageTransition>
-  );
-};
+  )
+}

@@ -4,28 +4,25 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { BookOpen, Plus, Download, Calendar, Clock, User, AlertTriangle, Info, XCircle, MessageSquare, Filter, Megaphone, Shield, Activity, UserCheck, Pin} from 'lucide-react';
-import { Card, CardContent, CardHeader} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Badge} from '@/components/ui/badge';
-import { Textarea} from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
-import { Label} from '@/components/ui/label';
-
-import { ScrollArea} from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback} from '@/components/ui/avatar';
-import { Skeleton, SkeletonText} from '@/components/ui/skeleton';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import { useUserInfo} from '@/hooks/useAuth';
-import { notificationService} from '@/services/shared/notification.service';
-import { exportToCSV} from '@/utils/export';
-import { cn} from '@/utils/utils';
-import type { Novedad} from '../types';
-
+import React, { useState, useEffect, useMemo } from 'react'
+import { BookOpen, Plus, Download, Calendar, Clock, User, AlertTriangle, Info, XCircle, MessageSquare, Filter, Megaphone, Shield, Activity, UserCheck, Pin} from 'lucide-react'
+import { Card, CardContent, CardHeader} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Badge} from '@/components/ui/badge'
+import { Textarea} from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog'
+import { Label} from '@/components/ui/label'
+import { ScrollArea} from '@/components/ui/scroll-area'
+import { Avatar, AvatarFallback} from '@/components/ui/avatar'
+import { Skeleton, SkeletonText} from '@/components/ui/skeleton'
+import { motion, AnimatePresence} from 'framer-motion'
+import { useUserInfo} from '@/hooks/useAuth'
+import { notificationService} from '@/services/shared/notification.service'
+import { exportToCSV} from '@/utils/export'
+import { cn} from '@/utils/utils'
+import type { Novedad} from '../types'
 // Tipos de entrada para la bitácora
 const TIPOS_BITACORA = {
   aviso: { label: 'Aviso General', icon: Megaphone, color: 'text-blue-400 bg-blue-900/20' },
@@ -34,47 +31,37 @@ const TIPOS_BITACORA = {
   incidente: { label: 'Incidente', icon: XCircle, color: 'text-red-400 bg-red-900/20' },
   cambio_turno: { label: 'Cambio de Turno', icon: UserCheck, color: 'text-purple-400 bg-purple-900/20' },
   mantenimiento: { label: 'Mantenimiento', icon: Shield, color: 'text-orange-400 bg-orange-900/20' }
-} as const;
-
+} as const
 export const BitacoraOperacional: React.FC = () => {
-  const [showNuevaEntrada, setShowNuevaEntrada] = useState(false);
-  const [filtroTipo, setFiltroTipo] = useState<string>('todos');
-  const [filtroBusqueda, setFiltroBusqueda] = useState('');
-  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(null);
-  const [fechaSeleccionada] = useState(new Date());
-  
-  
-  const userInfo = useUserInfo();
-   
-
-
+  const [showNuevaEntrada, setShowNuevaEntrada] = useState(false)
+  const [filtroTipo, setFiltroTipo] = useState<string>('todos')
+  const [filtroBusqueda, setFiltroBusqueda] = useState('')
+  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(null)
+  const [fechaSeleccionada] = useState(new Date())
+  const userInfo = useUserInfo()
     useEffect(() => {
-    fetchNovedades();
-  }, [fetchNovedades]);
-
+    fetchNovedades()
+  }, [])
   // Agrupar entradas por fecha
   const entradasPorFecha = useMemo(() => {
     const filtered = novedades.filter(n => {
-      if (filtroTipo !== 'todos' && n.tipoNovedad !== filtroTipo) return false;
-      if (filtroBusqueda && !n.descripcion.toLowerCase().includes(filtroBusqueda.toLowerCase())) return false;
-      return true;
-    });
-
+      if (filtroTipo !== 'todos' && n.tipoNovedad !== filtroTipo) return false
+      if (filtroBusqueda && !n.descripcion.toLowerCase().includes(filtroBusqueda.toLowerCase())) return false
+      return true
+    })
     const grouped = filtered.reduce((acc, novedad) => {
-      const fecha = new Date(novedad.fecha).toLocaleDateString('es-UY');
-      if (!acc[fecha]) acc[fecha] = [];
-      acc[fecha].push(novedad);
-      return acc;
-    }, {} as Record<string, Novedad[]>);
-
+      const fecha = new Date(novedad.fecha).toLocaleDateString('es-UY')
+      if (!acc[fecha]) acc[fecha] = []
+      acc[fecha].push(novedad)
+      return acc
+    }, {} as Record<string, Novedad[]>)
     // Ordenar por fecha más reciente
     return Object.entries(grouped).sort(([a], [b]) => {
-      const dateA = new Date(a.split('/').reverse().join('-'));
-      const dateB = new Date(b.split('/').reverse().join('-'));
-      return dateB.getTime() - dateA.getTime();
-    });
-  }, [novedades, filtroTipo, filtroBusqueda]);
-
+      const dateA = new Date(a.split('/').reverse().join('-'))
+      const dateB = new Date(b.split('/').reverse().join('-'))
+      return dateB.getTime() - dateA.getTime()
+    })
+  }, [novedades])
   const handleCrearEntrada = async (data: unknown) => {
     try {
       await crearNovedad({
@@ -82,14 +69,13 @@ export const BitacoraOperacional: React.FC = () => {
         fecha: new Date(),
         puntoOperacion: userInfo.office || 'CMO Central',
         tipoNovedad: data.tipo
-      });
-      setShowNuevaEntrada(false);
-      notificationService.success('Entrada registrada', 'La entrada se ha agregado a la bitácora');
+      })
+      setShowNuevaEntrada(false)
+      notificationService.success('Entrada registrada', 'La entrada se ha agregado a la bitácora')
     } catch (error) {
-      notificationService.error('Error', 'No se pudo registrar la entrada');
+      notificationService.error('Error', 'No se pudo registrar la entrada')
     }
-  };
-
+  }
   const handleExportar = () => {
     const datos = novedades.map(n => ({
       Fecha: new Date(n.fecha).toLocaleString('es-UY'),
@@ -98,12 +84,10 @@ export const BitacoraOperacional: React.FC = () => {
       Usuario: n.creadoPor.nombre,
       'Punto Operación': n.puntoOperacion,
       Estado: n.estado
-    }));
-    
-    exportToCSV(datos, `bitacora_${new Date().toISOString().split('T')[0]}`);
-    notificationService.success('Exportación completada', 'La bitácora ha sido exportada');
-  };
-
+    }))
+    exportToCSV(datos, `bitacora_${new Date().toISOString().split('T')[0]}`)
+    notificationService.success('Exportación completada', 'La bitácora ha sido exportada')
+  }
   return (<div className="min-h-screen bg-gray-950">
       {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
@@ -317,9 +301,8 @@ export const BitacoraOperacional: React.FC = () => {
                       {/* Entradas del día */}
                       <div className="space-y-3">
                         {entradas.map((entrada) => {
-                          const tipoConfig = TIPOS_BITACORA[entrada.tipoNovedad as keyof typeof TIPOS_BITACORA] || TIPOS_BITACORA.evento;
-                          const Icon = tipoConfig.icon;
-                          
+                          const tipoConfig = TIPOS_BITACORA[entrada.tipoNovedad as keyof typeof TIPOS_BITACORA] || TIPOS_BITACORA.evento
+                          const Icon = tipoConfig.icon
                           return (
                             <motion.div
                               key={entrada.id}
@@ -392,7 +375,7 @@ export const BitacoraOperacional: React.FC = () => {
                                 </CardContent>
                               </Card>
                             </motion.div>
-                          );
+                          )
                         })}
                       </div>
                     </div>
@@ -415,13 +398,13 @@ export const BitacoraOperacional: React.FC = () => {
           </DialogHeader>
           
           <form onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
+            e.preventDefault()
+            const formData = new FormData(e.currentTarget)
             handleCrearEntrada({
               tipo: formData.get('tipo'),
               descripcion: formData.get('descripcion'),
               destacado: formData.get('destacado') === 'on'
-            });
+            })
           }}>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
@@ -518,8 +501,8 @@ export const BitacoraOperacional: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         {(() => {
-                          const tipo = TIPOS_BITACORA[entradaSeleccionada.tipoNovedad as keyof typeof TIPOS_BITACORA];
-                          const Icon = tipo?.icon || Activity;
+                          const tipo = TIPOS_BITACORA[entradaSeleccionada.tipoNovedad as keyof typeof TIPOS_BITACORA]
+                          const Icon = tipo?.icon || Activity
                           return (
                             <>
                               <div className={cn("p-1.5 rounded", tipo?.color)}>
@@ -527,7 +510,7 @@ export const BitacoraOperacional: React.FC = () => {
                               </div>
                               <span className="text-sm font-medium text-white">{tipo?.label}</span>
                             </>
-                          );
+                          )
                         })()}
                         <Badge variant="outline">{entradaSeleccionada.puntoOperacion}</Badge>
                       </div>
@@ -563,13 +546,13 @@ export const BitacoraOperacional: React.FC = () => {
 
                 {/* Agregar seguimiento */}
                 {entradaSeleccionada.estado === 'activa' && (<form onSubmit={async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    const comentario = formData.get('comentario') as string;
+                    e.preventDefault()
+                    const formData = new FormData(e.currentTarget)
+                    const comentario = formData.get('comentario') as string
                     if (comentario) {
-                      await agregarSeguimiento(entradaSeleccionada.id, comentario);
-                      setEntradaSeleccionada(null);
-                      notificationService.success('Seguimiento agregado', 'El comentario ha sido registrado');
+                      await agregarSeguimiento(entradaSeleccionada.id, comentario)
+                      setEntradaSeleccionada(null)
+                      notificationService.success('Seguimiento agregado', 'El comentario ha sido registrado')
                     }
                   }}>
                     <div className="space-y-2">
@@ -595,5 +578,5 @@ export const BitacoraOperacional: React.FC = () => {
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}

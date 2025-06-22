@@ -1,6 +1,5 @@
  
-import React from 'react';
-
+import React from 'react'
 export const RolesTableSkeleton: React.FC = () => {
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div className="animate-pulse">
@@ -32,9 +31,8 @@ export const RolesTableSkeleton: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const RoleCardSkeleton: React.FC = () => {
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -48,5 +46,5 @@ export const RoleCardSkeleton: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

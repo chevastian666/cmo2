@@ -1,13 +1,12 @@
  
-import React from 'react';
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import { cn} from '../../../utils/utils'
 interface TruckIconProps {
-  status?: 'normal' | 'warning' | 'critical' | 'inactive';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-  animated?: boolean;
-  showTrafficLight?: boolean;
+  status?: 'normal' | 'warning' | 'critical' | 'inactive'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  className?: string
+  animated?: boolean
+  showTrafficLight?: boolean
   direction?: number; // Rotation angle in degrees
 }
 
@@ -19,43 +18,38 @@ export const TruckIcon: React.FC<TruckIconProps> = ({
     md: 'w-8 h-8',
     lg: 'w-10 h-10',
     xl: 'w-12 h-12'
-  };
-
+  }
   const trafficLightSizes = {
     sm: 'w-2 h-2',
     md: 'w-2.5 h-2.5',
     lg: 'w-3 h-3',
     xl: 'w-3.5 h-3.5'
-  };
-
+  }
   const getStatusColor = () => {
     switch (status) {
-      case 'critical':
-        return 'text-red-500';
-      case 'warning':
-        return 'text-yellow-500';
-      case 'inactive':
-        return 'text-gray-500';
+      case 'critical': {
+  return 'text-red-500'
+      case 'warning': {
+  return 'text-yellow-500'
+      case 'inactive': {
+  return 'text-gray-500'
       default:
-        return 'text-green-500';
+        return 'text-green-500'
     }
-  };
-
+  }
   const getTrafficLightColor = () => {
     switch (status) {
-      case 'critical':
-        return 'bg-red-500';
-      case 'warning':
-        return 'bg-yellow-500';
-      case 'inactive':
-        return 'bg-gray-500';
+      case 'critical': {
+  return 'bg-red-500'
+      case 'warning': {
+  return 'bg-yellow-500'
+      case 'inactive': {
+  return 'bg-gray-500'
       default:
-        return 'bg-green-500';
+        return 'bg-green-500'
     }
-  };
-
-  const shouldAnimate = animated && (status === 'critical' || status === 'warning');
-
+  }
+  const shouldAnimate = animated && (status === 'critical' || status === 'warning')
   return (
     <div className={cn('relative inline-flex items-center justify-center', className)}>
       <svg
@@ -102,9 +96,8 @@ export const TruckIcon: React.FC<TruckIconProps> = ({
         />
       )}
     </div>
-  );
-};
-
+  )
+}
 // Variant with more detailed truck icon
 export const TruckIconDetailed: React.FC<TruckIconProps> = ({
   status = 'normal', size = 'md', className, animated = false, showTrafficLight = true, direction = 0
@@ -114,23 +107,20 @@ export const TruckIconDetailed: React.FC<TruckIconProps> = ({
     md: 'w-12 h-12',
     lg: 'w-16 h-16',
     xl: 'w-20 h-20'
-  };
-
+  }
   const getStatusColor = () => {
     switch (status) {
-      case 'critical':
-        return '#ef4444'; // red-500
-      case 'warning':
-        return '#f59e0b'; // yellow-500
-      case 'inactive':
-        return '#6b7280'; // gray-500
+      case 'critical': {
+  return '#ef4444'; // red-500
+      case 'warning': {
+  return '#f59e0b'; // yellow-500
+      case 'inactive': {
+  return '#6b7280'; // gray-500
       default:
         return '#10b981'; // green-500
     }
-  };
-
-  const shouldAnimate = animated && (status === 'critical' || status === 'warning');
-
+  }
+  const shouldAnimate = animated && (status === 'critical' || status === 'warning')
   return (
     <div className={cn('relative inline-flex items-center justify-center', className)}>
       <svg
@@ -180,5 +170,5 @@ export const TruckIconDetailed: React.FC<TruckIconProps> = ({
         </>
       )}
     </div>
-  );
-};
+  )
+}

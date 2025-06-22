@@ -1,75 +1,73 @@
-import {useEffect} from 'react';
-import { wsService} from '../services/websocket/WebSocketService';
+import {useEffect} from 'react'
+import { wsService} from '../services/websocket/WebSocketService'
 import { 
-  usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../store';
-
+  usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore} from '../store'
 export const useWebSocketIntegration = () => {
-   
 
   useEffect(() => {
     // Connect WebSocket service
-    wsService.connect();
-
+    wsService.connect()
     // Set up event handlers
     wsService.on('onPrecintoUpdate', (data) => {
-      
-      const store = usePrecintosStore.getState();
-      
+
+      const store = usePrecintosStore.getState()
       switch (action) {
-        case 'update':
-          store.updatePrecinto(precinto.id, precinto);
-          break;
-        case 'create':
+        case 'update': {
+  store.updatePrecinto(precinto.id, precinto)
+          break
+    }
+    case 'create':
           // Add new precinto if needed
-          break;
-        case 'delete':
-          store.removePrecinto(precinto.id);
-          break;
+          break
+    }
+    case 'delete':
+          store.removePrecinto(precinto.id)
+          break
       }
-    });
-
+    })
     wsService.on('onTransitoUpdate', (data) => {
-      
-      const store = useTransitosStore.getState();
-      
+
+      const store = useTransitosStore.getState()
       switch (action) {
-        case 'update':
-          store.updateTransito(transito.id, transito);
-          break;
-        case 'create':
+        case 'update': {
+  store.updateTransito(transito.id, transito)
+          break
+    }
+    case 'create':
           // Add new transito if needed
-          break;
-        case 'delete':
-          store.removeTransito(transito.id);
-          break;
-        case 'precintado':
+          break
+    }
+    case 'delete':
+          store.removeTransito(transito.id)
+          break
+    }
+    case 'precintado':
           // Remove from pending
-          store.removeTransito(transito.id);
-          break;
+          store.removeTransito(transito.id)
+          break
       }
-    });
-
+    })
     wsService.on('onAlertaNueva', (data) => {
-      
-      const store = useAlertasStore.getState();
-      store.addAlerta(alerta);
-    });
 
+      const store = useAlertasStore.getState()
+      store.addAlerta(alerta)
+    })
     wsService.on('onAlertaUpdate', (data) => {
-      
-      const store = useAlertasStore.getState();
-      
+
+      const store = useAlertasStore.getState()
       switch (action) {
-        case 'update':
-          store.updateAlerta(alerta.id, alerta);
-          break;
-        case 'atender':
-          store.atenderAlerta(alerta.id);
-          break;
-        case 'asignar':
+        case 'update': {
+  store.updateAlerta(alerta.id, alerta)
+          break
+    }
+    case 'atender':
+          store.atenderAlerta(alerta.id)
+          break
+    }
+    case 'asignar':
           if (detalles?.asignacion) {
             // Update extended alert if it's cached
-            const extendedAlerta = store.alertasExtendidas.get(alerta.id);
+            const extendedAlerta = store.alertasExtendidas.get(alerta.id)
             if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 asignacion: detalles.asignacion,
@@ -80,14 +78,15 @@ export const useWebSocketIntegration = () => {
                   timestamp: Math.floor(Date.now() / 1000),
                   detalles: detalles.asignacion
                 }]
-              });
+              })
             }
           }
-          break;
-        case 'comentar':
+          break
+    }
+    case 'comentar':
           if (detalles?.comentario) {
             // Update extended alert if it's cached
-            const extendedAlerta = store.alertasExtendidas.get(alerta.id);
+            const extendedAlerta = store.alertasExtendidas.get(alerta.id)
             if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 comentarios: [...(extendedAlerta.comentarios || []), detalles.comentario],
@@ -98,14 +97,15 @@ export const useWebSocketIntegration = () => {
                   timestamp: Math.floor(Date.now() / 1000),
                   detalles: detalles.comentario
                 }]
-              });
+              })
             }
           }
-          break;
-        case 'resolver':
+          break
+    }
+    case 'resolver':
           if (detalles?.resolucion) {
             // Update extended alert if it's cached
-            const extendedAlerta = store.alertasExtendidas.get(alerta.id);
+            const extendedAlerta = store.alertasExtendidas.get(alerta.id)
             if (extendedAlerta) {
               store.updateAlertaExtendida(alerta.id, {
                 resolucion: detalles.resolucion,
@@ -116,34 +116,30 @@ export const useWebSocketIntegration = () => {
                   timestamp: Math.floor(Date.now() / 1000),
                   detalles: detalles.resolucion
                 }]
-              });
+              })
             }
             // Remove from active alerts
-            store.setAlertasActivas(store.alertasActivas.filter(a => a.id !== alerta.id));
+            store.setAlertasActivas(store.alertasActivas.filter(a => a.id !== alerta.id))
           }
-          break;
+          break
       }
-    });
-
+    })
     wsService.on('onSistemaUpdate', (data) => {
-      const store = useSystemStatusStore.getState();
-      store.updateSystemStatus(data);
-    });
-
+      const store = useSystemStatusStore.getState()
+      store.updateSystemStatus(data)
+    })
     wsService.on('onConnectionChange', (data) => {
-      console.log('WebSocket connection status:', data.status);
+      console.log('WebSocket connection status:', data.status)
       if (data.message) {
-        console.log('Message:', data.message);
+        console.log('Message:', data.message)
       }
-    });
-
+    })
     wsService.on('onError', (_error) => {
-      console.error('WebSocket error:', _error);
-    });
-
+      console.error('WebSocket error:', _error)
+    })
     // Cleanup on unmount
     return () => {
-      wsService.disconnect();
-    };
-  }, []);
-};
+      wsService.disconnect()
+    }
+  }, [])
+}

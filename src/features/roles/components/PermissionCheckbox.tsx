@@ -1,17 +1,16 @@
  
-import React, { memo } from 'react';
-import { Check, Lock} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { Permission} from '../../../types/roles';
-
+import React, { memo } from 'react'
+import { Check, Lock} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { Permission} from '../../../types/roles'
 interface PermissionCheckboxProps {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  permission: Permission;
-  disabled?: boolean;
-  loading?: boolean;
-  showLabel?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  checked: boolean
+  onChange: (checked: boolean) => void
+  permission: Permission
+  disabled?: boolean
+  loading?: boolean
+  showLabel?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
@@ -21,35 +20,31 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
     sm: 'w-5 h-5',
     md: 'w-6 h-6',
     lg: 'w-8 h-8'
-  };
-
+  }
   const iconSizes = {
     sm: 'h-3 w-3',
     md: 'h-4 w-4',
     lg: 'h-5 w-5'
-  };
-
+  }
   const getPermissionColor = () => {
     switch (permission) {
-      case 'view':
-        return checked ? 'bg-blue-600 border-blue-600' : 'border-gray-600 hover:border-blue-500';
-      case 'create':
-        return checked ? 'bg-green-600 border-green-600' : 'border-gray-600 hover:border-green-500';
-      case 'edit':
-        return checked ? 'bg-yellow-600 border-yellow-600' : 'border-gray-600 hover:border-yellow-500';
-      case 'delete':
-        return checked ? 'bg-red-600 border-red-600' : 'border-gray-600 hover:border-red-500';
+      case 'view': {
+  return checked ? 'bg-blue-600 border-blue-600' : 'border-gray-600 hover:border-blue-500'
+      case 'create': {
+  return checked ? 'bg-green-600 border-green-600' : 'border-gray-600 hover:border-green-500'
+      case 'edit': {
+  return checked ? 'bg-yellow-600 border-yellow-600' : 'border-gray-600 hover:border-yellow-500'
+      case 'delete': {
+  return checked ? 'bg-red-600 border-red-600' : 'border-gray-600 hover:border-red-500'
       default:
-        return checked ? 'bg-gray-600 border-gray-600' : 'border-gray-600';
+        return checked ? 'bg-gray-600 border-gray-600' : 'border-gray-600'
     }
-  };
-
+  }
   const handleClick = () => {
     if (!disabled && !loading) {
-      onChange(!checked);
+      onChange(!checked)
     }
-  };
-
+  }
   return (
     <div className="flex items-center gap-2">
       <button
@@ -86,18 +81,16 @@ export const PermissionCheckbox: React.FC<PermissionCheckboxProps> = memo(({
         </span>
       )}
     </div>
-  );
-});
-
-PermissionCheckbox.displayName = 'PermissionCheckbox';
-
+  )
+})
+PermissionCheckbox.displayName = 'PermissionCheckbox'
 // Bulk checkbox component for headers
 interface BulkPermissionCheckboxProps {
-  checked: boolean;
-  indeterminate?: boolean;
-  onChange: (checked: boolean) => void;
-  disabled?: boolean;
-  label?: string;
+  checked: boolean
+  indeterminate?: boolean
+  onChange: (checked: boolean) => void
+  disabled?: boolean
+  label?: string
 }
 
 export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = memo(({
@@ -105,10 +98,9 @@ export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = mem
 }) => {
   const handleClick = () => {
     if (!disabled) {
-      onChange(!checked);
+      onChange(!checked)
     }
-  };
-
+  }
   return (
     <div className="flex items-center gap-2">
       <button
@@ -136,7 +128,6 @@ export const BulkPermissionCheckbox: React.FC<BulkPermissionCheckboxProps> = mem
         </span>
       )}
     </div>
-  );
-});
-
-BulkPermissionCheckbox.displayName = 'BulkPermissionCheckbox';
+  )
+})
+BulkPermissionCheckbox.displayName = 'BulkPermissionCheckbox'

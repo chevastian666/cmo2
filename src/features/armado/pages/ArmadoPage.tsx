@@ -1,71 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import {Package, AlertCircle, Loader} from 'lucide-react';
-import { useNavigate, useLocation} from 'react-router-dom';
-import { PrecintoSearch} from '../components/PrecintoSearchCompact';
-import { PrecintoStatus} from '../components/PrecintoStatusCompact';
-import { MapPreview} from '../components/MapPreview';
-import { ArmFormEnhanced} from '../components/ArmFormEnhanced';
-import { PhotoUploader} from '../components/PhotoUploaderCompact';
-import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced';
-import { notificationService} from '../../../services/shared/notification.service';
-import { armadoService} from '../services/armado.service';
-import type { Precinto} from '../../../types';
-
+import React, { useState, useEffect } from 'react'
+import {Package, AlertCircle, Loader} from 'lucide-react'
+import { useNavigate, useLocation} from 'react-router-dom'
+import { PrecintoSearch} from '../components/PrecintoSearchCompact'
+import { PrecintoStatus} from '../components/PrecintoStatusCompact'
+import { MapPreview} from '../components/MapPreview'
+import { ArmFormEnhanced} from '../components/ArmFormEnhanced'
+import { PhotoUploader} from '../components/PhotoUploaderCompact'
+import { ArmConfirmationModalEnhanced} from '../components/ArmConfirmationModalEnhanced'
+import { notificationService} from '../../../services/shared/notification.service'
+import { armadoService} from '../services/armado.service'
+import type { Precinto} from '../../../types'
 interface TransitoFormData {
   // Datos del viaje
-  precintoId: string;
-  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | '';
-  dua: string;
-  
+  precintoId: string
+  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | ''
+  dua: string
   // Datos del vehículo
-  matricula: string;
-  matriculaRemolque: string;
-  contenedorId: string;
-  
+  matricula: string
+  matriculaRemolque: string
+  contenedorId: string
   // Datos del conductor
-  nombreConductor: string;
-  tipoDocumentoConductor: string;
-  numeroDocumentoConductor: string;
-  origenDocumentoConductor: string;
-  telefonoConductor: string;
-  
+  nombreConductor: string
+  tipoDocumentoConductor: string
+  numeroDocumentoConductor: string
+  origenDocumentoConductor: string
+  telefonoConductor: string
   // Datos de la empresa
-  empresa: string;
-  rutEmpresa: string;
-  empresaSecundaria?: string;
-  rutEmpresaSecundaria?: string;
-  
+  empresa: string
+  rutEmpresa: string
+  empresaSecundaria?: string
+  rutEmpresaSecundaria?: string
   // Ruta y ubicaciones
-  origen: string;
-  destino: string;
-  depositoInicio: string;
-  depositoFin: string;
-  
+  origen: string
+  destino: string
+  depositoInicio: string
+  depositoFin: string
   // Eslinga y observaciones
   tipoEslinga: {
-    larga: boolean;
-    corta: boolean;
-  };
-  observaciones: string;
+    larga: boolean
+    corta: boolean
+  }
+  observaciones: string
 }
 
 interface ArmadoData {
-  precinto: Precinto | null;
-  transito: Partial<TransitoFormData>;
-  fotos: File[];
-  fotosExistentes: string[];
+  precinto: Precinto | null
+  transito: Partial<TransitoFormData>
+  fotos: File[]
+  fotosExistentes: string[]
 }
 
 export const ArmadoPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [loading, setLoading] = useState(false);
-  const [searchError, setSearchError] = useState<string | null>(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [loading, setLoading] = useState(false)
+  const [searchError, setSearchError] = useState<string | null>(null)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
   // Check if we have prearm data from navigation state
-  const prearmData = location.state?.prearmData;
-
+  const prearmData = location.state?.prearmData
   const [armadoData, setArmadoData] = useState<ArmadoData>({
     precinto: null,
     transito: {
@@ -107,42 +99,37 @@ export const ArmadoPage: React.FC = () => {
     },
     fotos: [],
     fotosExistentes: []
-  });
-
-
+  })
   const handleSearchPrecinto = async (nqr: string) => {
-    setLoading(true);
-    setSearchError(null);
-    
+    setLoading(true)
+    setSearchError(null)
     try {
-      const precinto = await armadoService.searchPrecinto(nqr);
-      
+      const precinto = await armadoService.searchPrecinto(nqr)
       if (!precinto) {
-        setSearchError('Precinto no encontrado');
-        return;
+        setSearchError('Precinto no encontrado')
+        return
       }
 
       // Check precinto status
-      const warnings = [];
+      const warnings = []
       if (precinto.bateria < 20) {
-        warnings.push(`Batería baja: ${precinto.bateria}%`);
+        warnings.push(`Batería baja: ${precinto.bateria}%`)
       }
       
-      const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura;
+      const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura
       if (timeSinceLastReport > 3600) { // More than 1 hour
-        warnings.push(`Sin reportar hace ${Math.floor(timeSinceLastReport / 3600)} horas`);
+        warnings.push(`Sin reportar hace ${Math.floor(timeSinceLastReport / 3600)} horas`)
       }
 
       if (warnings.length > 0) {
         notificationService.warning(
           'Advertencias del Precinto',
           warnings.join('. ')
-        );
+        )
       }
 
       // Load existing photos - for now, mock empty array
-      const fotos: string[] = [];
-
+      const fotos: string[] = []
       setArmadoData(prev => ({
         ...prev,
         precinto,
@@ -151,20 +138,18 @@ export const ArmadoPage: React.FC = () => {
           ...prev.transito,
           precintoId: precinto.codigo
         }
-      }));
-
+      }))
       notificationService.success(
         'Precinto Encontrado',
         `Precinto ${nqr} cargado correctamente`
-      );
+      )
     } catch (error: unknown) {
-      setSearchError(error.message || 'Error al buscar precinto');
-      notificationService.error('Error', error.message || 'Error al buscar precinto');
+      setSearchError(error.message || 'Error al buscar precinto')
+      notificationService.error('Error', error.message || 'Error al buscar precinto')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const handleTransitoUpdate = (field: string, value: unknown) => {
     setArmadoData(prev => ({
       ...prev,
@@ -172,87 +157,73 @@ export const ArmadoPage: React.FC = () => {
         ...prev.transito,
         [field]: value
       }
-    }));
-  };
-
+    }))
+  }
   const handlePhotosChange = (fotos: File[]) => {
     setArmadoData(prev => ({
       ...prev,
       fotos
-    }));
-  };
-
-
+    }))
+  }
   const validateArmado = (): string[] => {
-    const errors: string[] = [];
-    
-
+    const errors: string[] = []
     if (!precinto) {
-      errors.push('Debe buscar un precinto');
-      return errors;
+      errors.push('Debe buscar un precinto')
+      return errors
     }
 
     // Datos del viaje
-    if (!transito.tipoViaje) errors.push('Tipo de viaje es requerido');
-    if (!transito.dua?.trim()) errors.push('DUA es requerido');
-    
+    if (!transito.tipoViaje) errors.push('Tipo de viaje es requerido')
+    if (!transito.dua?.trim()) errors.push('DUA es requerido')
     // Datos del vehículo
-    if (!transito.matricula?.trim()) errors.push('Matrícula del camión es requerida');
-    
+    if (!transito.matricula?.trim()) errors.push('Matrícula del camión es requerida')
     // Datos del conductor
-    if (!transito.nombreConductor?.trim()) errors.push('Nombre del conductor es requerido');
-    if (!transito.numeroDocumentoConductor?.trim()) errors.push('Número de documento del conductor es requerido');
-    if (!transito.telefonoConductor?.trim()) errors.push('Teléfono del conductor es requerido');
-    
+    if (!transito.nombreConductor?.trim()) errors.push('Nombre del conductor es requerido')
+    if (!transito.numeroDocumentoConductor?.trim()) errors.push('Número de documento del conductor es requerido')
+    if (!transito.telefonoConductor?.trim()) errors.push('Teléfono del conductor es requerido')
     // Datos de la empresa
-    if (!transito.empresa?.trim()) errors.push('Empresa es requerida');
-    if (!transito.rutEmpresa?.trim()) errors.push('RUT de la empresa es requerido');
-    
+    if (!transito.empresa?.trim()) errors.push('Empresa es requerida')
+    if (!transito.rutEmpresa?.trim()) errors.push('RUT de la empresa es requerido')
     // Ruta
-    if (!transito.origen?.trim()) errors.push('Origen es requerido');
-    if (!transito.destino?.trim()) errors.push('Destino es requerido');
-    if (!transito.depositoFin?.trim()) errors.push('Depósito de destino es requerido');
-
+    if (!transito.origen?.trim()) errors.push('Origen es requerido')
+    if (!transito.destino?.trim()) errors.push('Destino es requerido')
+    if (!transito.depositoFin?.trim()) errors.push('Depósito de destino es requerido')
     // Validate RUT format
     if (transito.rutEmpresa && !armadoService.validateRUT(transito.rutEmpresa)) {
-      errors.push('El RUT de la empresa no es válido');
+      errors.push('El RUT de la empresa no es válido')
     }
     if (transito.rutEmpresaSecundaria && !armadoService.validateRUT(transito.rutEmpresaSecundaria)) {
-      errors.push('El RUT de la empresa secundaria no es válido');
+      errors.push('El RUT de la empresa secundaria no es válido')
     }
 
     // Validate at least one eslinga type is selected
     if (!transito.tipoEslinga?.larga && !transito.tipoEslinga?.corta) {
-      errors.push('Debe seleccionar al menos un tipo de eslinga');
+      errors.push('Debe seleccionar al menos un tipo de eslinga')
     }
 
-    return errors;
-  };
-
+    return errors
+  }
   const handleConfirmArmado = () => {
-    const errors = validateArmado();
+    const errors = validateArmado()
     if (errors.length > 0) {
-      notificationService.error('Errores de Validación', errors.join('. '));
-      return;
+      notificationService.error('Errores de Validación', errors.join('. '))
+      return
     }
 
-    setShowConfirmModal(true);
-  };
-
+    setShowConfirmModal(true)
+  }
   const handleExecuteArmado = async () => {
-    setShowConfirmModal(false);
-    setLoading(true);
-
+    setShowConfirmModal(false)
+    setLoading(true)
     try {
-      
-      
+
       if (!precinto) {
-        throw new Error('No hay precinto seleccionado');
+        throw new Error('No hay precinto seleccionado')
       }
 
       // Upload photos if any
       if (fotos.length > 0) {
-        await armadoService.uploadPhotos(precinto.id, fotos);
+        await armadoService.uploadPhotos(precinto.id, fotos)
       }
 
       // Execute armado command
@@ -260,18 +231,16 @@ export const ArmadoPage: React.FC = () => {
         precintoId: precinto.id,
         transitoData: transito,
         fotos
-      });
-
+      })
       if (result.success) {
         notificationService.success(
           'Armado Exitoso',
           `Precinto ${precinto.codigo} armado correctamente`
-        );
-
+        )
         // Navigate to waiting page with transitId
-        navigate(`/armado/waiting/${result.transitId}`);
+        navigate(`/armado/waiting/${result.transitId}`)
       } else {
-        throw new Error('El armado no se completó exitosamente');
+        throw new Error('El armado no se completó exitosamente')
       }
 
       // Reset form (this won't execute if navigation happens, but keep for safety)
@@ -316,31 +285,26 @@ export const ArmadoPage: React.FC = () => {
         },
         fotos: [],
         fotosExistentes: []
-      });
-
-
+      })
     } catch (error: unknown) {
       notificationService.error(
         'Error en Armado',
         error.message || 'Error al ejecutar el armado'
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   // Show notification if we have prearm data
-   
 
   useEffect(() => {
     if (prearmData) {
       notificationService.info(
         'Datos precargados',
         `Se han cargado los datos del viaje ${prearmData.viajeId} - Movimiento ${prearmData.movimientoId}`
-      );
+      )
     }
-  }, []);
-
+  }, [])
   return (
     <div className="space-y-6">
       <div>
@@ -452,5 +416,5 @@ export const ArmadoPage: React.FC = () => {
         transito={armadoData.transito}
       />
     </div>
-  );
-};
+  )
+}

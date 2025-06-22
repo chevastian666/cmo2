@@ -3,15 +3,13 @@
  * By Cheva
  */
 
-import React from 'react';
-import {Shield, Battery, Thermometer, Signal} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-import { usePrecintosStore} from '../../../store/store';
-
+import React from 'react'
+import {Shield, Battery, Thermometer, Signal} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
+import { usePrecintosStore} from '../../../store/store'
 export const PrecintoStatusWidget: React.FC = () => {
-  const precintos = usePrecintosStore(state => state.precintos);
-  
+  const precintos = usePrecintosStore(state => state.precintos)
   // Estadísticas de precintos
   const stats = {
     total: precintos.length,
@@ -20,8 +18,7 @@ export const PrecintoStatusWidget: React.FC = () => {
     inactivos: precintos.filter(p => p.estado === 'INACTIVO').length,
     conAlertas: precintos.filter(p => p.alertas && p.alertas.length > 0).length,
     bateriaBaja: precintos.filter(p => p.bateria && p.bateria < 20).length
-  };
-
+  }
   const statusItems = [
     {
       label: 'Activos',
@@ -51,16 +48,14 @@ export const PrecintoStatusWidget: React.FC = () => {
       color: 'text-red-400',
       bgColor: 'bg-red-500/10'
     }
-  ];
-
+  ]
   // Precintos críticos (con alertas o batería baja)
   const precintoCriticos = precintos
     .filter(p => 
       (p.alertas && p.alertas.length > 0) || 
       (p.bateria && p.bateria < 20)
     )
-    .slice(0, 3);
-
+    .slice(0, 3)
   return (<div className="h-full flex flex-col">
       {/* Estadísticas Grid */}
       <div className="grid grid-cols-2 gap-2 mb-3">
@@ -139,5 +134,5 @@ export const PrecintoStatusWidget: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

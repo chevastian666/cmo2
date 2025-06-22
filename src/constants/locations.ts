@@ -64,8 +64,7 @@ export const ORIGENES_DESTINOS = [
   'Terminal de Cargas Uruguay',
   'Puerto Sauce',
   'Puerto Fray Bentos'
-];
-
+]
 export const DESPACHANTES = [
   'SKUNCA SPINELLI CAROLINA',
   'SCHRAMM CANABAL AGUSTINA',
@@ -73,4 +72,4 @@ export const DESPACHANTES = [
   'QUEROL CAVANI CARLOS RAFAEL',
   'LUIS LAUREIRO',
   'LAMANNA ACEVEDO MARIO NELSON'
-];
+]

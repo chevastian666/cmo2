@@ -3,36 +3,34 @@
  * By Cheva
  */
 
-import React from 'react';
-import {Truck, MapPin, Clock, AlertTriangle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-import { useTransitosStore} from '../../../store/store';
-
+import React from 'react'
+import {Truck, MapPin, Clock, AlertTriangle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
+import { useTransitosStore} from '../../../store/store'
 export const TransitWidget: React.FC = () => {
-  const transitos = useTransitosStore(state => state.transitos);
-  
+  const transitos = useTransitosStore(state => state.transitos)
   // Filtrar solo tránsitos activos
   const activosTransitos = transitos
     .filter(t => t.estado === 'EN_TRANSITO')
-    .slice(0, 4);
-
+    .slice(0, 4)
   const getEstadoColor = (estado: string) => {
     switch (estado) {
-      case 'EN_TRANSITO': return 'text-green-400 bg-green-500/10';
-      case 'DETENIDO': return 'text-yellow-400 bg-yellow-500/10';
-      case 'COMPLETADO': return 'text-blue-400 bg-blue-500/10';
-      default: return 'text-gray-400 bg-gray-500/10';
+      case 'EN_TRANSITO': {
+  return 'text-green-400 bg-green-500/10'
+      case 'DETENIDO': {
+  return 'text-yellow-400 bg-yellow-500/10'
+      case 'COMPLETADO': {
+  return 'text-blue-400 bg-blue-500/10'
+      default: return 'text-gray-400 bg-gray-500/10'
     }
-  };
-
+  }
   const calcularProgreso = (inicio: Date, estimado: Date) => {
-    const ahora = new Date();
-    const tiempoTotal = estimado.getTime() - inicio.getTime();
-    const tiempoTranscurrido = ahora.getTime() - inicio.getTime();
-    return Math.min(Math.round((tiempoTranscurrido / tiempoTotal) * 100), 100);
-  };
-
+    const ahora = new Date()
+    const tiempoTotal = estimado.getTime() - inicio.getTime()
+    const tiempoTranscurrido = ahora.getTime() - inicio.getTime()
+    return Math.min(Math.round((tiempoTranscurrido / tiempoTotal) * 100), 100)
+  }
   if (activosTransitos.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -41,7 +39,7 @@ export const TransitWidget: React.FC = () => {
           <p className="text-gray-500">Sin tránsitos activos</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (<div className="h-full flex flex-col">
@@ -134,5 +132,5 @@ export const TransitWidget: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

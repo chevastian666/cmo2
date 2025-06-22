@@ -4,20 +4,18 @@
  * By Cheva
  */
 
-import type { NotificationSound} from '../../types/notifications';
-import { DEFAULT_SOUNDS} from '../../types/notifications';
-
+import type { NotificationSound} from '../../types/notifications'
+import { DEFAULT_SOUNDS} from '../../types/notifications'
 export class SoundService {
-  private audioContext: AudioContext | null = null;
-  private sounds: Map<string, AudioBuffer> = new Map();
-  private currentlyPlaying: Map<string, AudioBufferSourceNode> = new Map();
-  
+  private audioContext: AudioContext | null = null
+  private sounds: Map<string, AudioBuffer> = new Map()
+  private currentlyPlaying: Map<string, AudioBufferSourceNode> = new Map()
   initialize(): void {
     try {
-      this.audioContext = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
-      this.preloadDefaultSounds();
+      this.audioContext = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)()
+      this.preloadDefaultSounds()
     } catch (_error) {
-      console.warn('Web Audio API not supported, falling back to HTML5 Audio:', error);
+      console.warn('Web Audio API not supported, falling back to HTML5 Audio:', error)
     }
   }
 
@@ -28,13 +26,13 @@ export class SoundService {
     try {
       if (this.audioContext && this.sounds.has(url)) {
         // Use Web Audio API for better control
-        await this.playWithWebAudio(url, volume);
+        await this.playWithWebAudio(url, volume)
       } else {
         // Fallback to HTML5 Audio
-        await this.playWithHtml5Audio(url, volume);
+        await this.playWithHtml5Audio(url, volume)
       }
     } catch (_error) {
-      console.error('Failed to play sound:', error);
+      console.error('Failed to play sound:', error)
     }
   }
 
@@ -42,8 +40,8 @@ export class SoundService {
    * Play notification sound
    */
   async playNotificationSound(sound: NotificationSound, volume: number = 0.7): Promise<void> {
-    const actualVolume = Math.min(1, Math.max(0, volume * (sound.volume || 1)));
-    await this.playSound(sound.url, actualVolume);
+    const actualVolume = Math.min(1, Math.max(0, volume * (sound.volume || 1)))
+    await this.playSound(sound.url, actualVolume)
   }
 
   /**
@@ -52,26 +50,26 @@ export class SoundService {
   stopAllSounds(): void {
     this.currentlyPlaying.forEach((source) => {
       try {
-        source.stop();
+        source.stop()
       } catch {
         // Sound may have already stopped
       }
-    });
-    this.currentlyPlaying.clear();
+    })
+    this.currentlyPlaying.clear()
   }
 
   /**
    * Stop specific sound
    */
   stopSound(url: string): void {
-    const source = this.currentlyPlaying.get(url);
+    const source = this.currentlyPlaying.get(url)
     if (source) {
       try {
-        source.stop();
-      } catch (error) {
+        source.stop()
+      } catch (_error) {
         // Sound may have already stopped
       }
-      this.currentlyPlaying.delete(url);
+      this.currentlyPlaying.delete(url)
     }
   }
 
@@ -80,16 +78,16 @@ export class SoundService {
    */
   async preloadSound(url: string): Promise<void> {
     if (!this.audioContext || this.sounds.has(url)) {
-      return;
+      return
     }
 
     try {
-      const response = await fetch(url);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
-      this.sounds.set(url, audioBuffer);
-    } catch (error) {
-      console.error(`Failed to preload sound ${url}:`, error);
+      const response = await fetch(url)
+      const arrayBuffer = await response.arrayBuffer()
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer)
+      this.sounds.set(url, audioBuffer)
+    } catch (_error) {
+      console.error(`Failed to preload sound ${url}:`, error)
     }
   }
 
@@ -97,14 +95,14 @@ export class SoundService {
    * Get available sounds
    */
   getAvailableSounds(): NotificationSound[] {
-    return DEFAULT_SOUNDS;
+    return DEFAULT_SOUNDS
   }
 
   /**
    * Test if audio is supported
    */
   isAudioSupported(): boolean {
-    return !!(window.AudioContext || (window as unknown).webkitAudioContext || window.Audio);
+    return !!(window.AudioContext || (window as unknown).webkitAudioContext || window.Audio)
   }
 
   /**
@@ -112,40 +110,35 @@ export class SoundService {
    */
   private async playWithWebAudio(url: string, volume: number): Promise<void> {
     if (!this.audioContext) {
-      throw new Error('AudioContext not available');
+      throw new Error('AudioContext not available')
     }
 
-    const audioBuffer = this.sounds.get(url);
+    const audioBuffer = this.sounds.get(url)
     if (!audioBuffer) {
-      throw new Error('Sound not preloaded');
+      throw new Error('Sound not preloaded')
     }
 
     // Resume audio context if suspended
     if (this.audioContext.state === 'suspended') {
-      await this.audioContext.resume();
+      await this.audioContext.resume()
     }
 
     // Create source and gain nodes
-    const source = this.audioContext.createBufferSource();
-    const gainNode = this.audioContext.createGain();
-
-    source.buffer = audioBuffer;
-    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
-
+    const source = this.audioContext.createBufferSource()
+    const gainNode = this.audioContext.createGain()
+    source.buffer = audioBuffer
+    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime)
     // Connect nodes
-    source.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
-
+    source.connect(gainNode)
+    gainNode.connect(this.audioContext.destination)
     // Track playing sound
-    this.currentlyPlaying.set(url, source);
-
+    this.currentlyPlaying.set(url, source)
     // Clean up when finished
     source.onended = () => {
-      this.currentlyPlaying.delete(url);
-    };
-
+      this.currentlyPlaying.delete(url)
+    }
     // Start playback
-    source.start(0);
+    source.start(0)
   }
 
   /**
@@ -153,24 +146,20 @@ export class SoundService {
    */
   private async playWithHtml5Audio(url: string, volume: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      const audio = new Audio(url);
-      audio.volume = volume;
-      
+      const audio = new Audio(url)
+      audio.volume = volume
       audio.onended = () => {
-        this.currentlyPlaying.delete(url);
-        resolve();
-      };
-      
+        this.currentlyPlaying.delete(url)
+        resolve()
+      }
       audio.onerror = () => {
-        this.currentlyPlaying.delete(url);
-        reject(new Error('Failed to play audio'));
-      };
-
+        this.currentlyPlaying.delete(url)
+        reject(new Error('Failed to play audio'))
+      }
       // Track playing sound (simplified for HTML5 Audio)
-      this.currentlyPlaying.set(url, audio as unknown);
-      
-      audio.play().catch(reject);
-    });
+      this.currentlyPlaying.set(url, audio as unknown)
+      audio.play().catch(reject)
+    })
   }
 
   /**
@@ -181,9 +170,8 @@ export class SoundService {
       this.preloadSound(sound.url).catch(error => 
         console.warn(`Failed to preload sound ${sound.name}:`, error)
       )
-    );
-    
-    await Promise.allSettled(preloadPromises);
+    )
+    await Promise.allSettled(preloadPromises)
   }
 
   /**
@@ -196,51 +184,44 @@ export class SoundService {
     volume: number = 1.0
   ): Promise<NotificationSound> {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      
+      const reader = new FileReader()
       reader.onload = async (event) => {
         try {
-          const arrayBuffer = event.target?.result as ArrayBuffer;
-          
+          const arrayBuffer = event.target?.result as ArrayBuffer
           // Validate audio file
           if (this.audioContext) {
-            await this.audioContext.decodeAudioData(arrayBuffer.slice(0));
+            await this.audioContext.decodeAudioData(arrayBuffer.slice(0))
           }
           
           // Create blob URL
-          const blob = new Blob([arrayBuffer], { type: file.type });
-          const url = URL.createObjectURL(blob);
-          
+          const blob = new Blob([arrayBuffer], { type: file.type })
+          const url = URL.createObjectURL(blob)
           const sound: NotificationSound = {
             id,
             name,
             url,
             duration: 0, // Would need to be determined from audio metadata
             volume
-          };
-          
+          }
           // Preload the sound
-          await this.preloadSound(url);
-          
-          resolve(sound);
-        } catch (error) {
-          reject(error);
+          await this.preloadSound(url)
+          resolve(sound)
+        } catch (_error) {
+          reject(error)
         }
-      };
-      
+      }
       reader.onerror = () => {
-        reject(new Error('Failed to read audio file'));
-      };
-      
-      reader.readAsArrayBuffer(file);
-    });
+        reject(new Error('Failed to read audio file'))
+      }
+      reader.readAsArrayBuffer(file)
+    })
   }
 
   /**
    * Get sound duration (if available)
    */
   getSoundDuration(url: string): number {
-    const audioBuffer = this.sounds.get(url);
+    const audioBuffer = this.sounds.get(url)
     return audioBuffer ? audioBuffer.duration * 1000 : 0; // Convert to milliseconds
   }
 
@@ -258,16 +239,15 @@ export class SoundService {
    * Clean up resources
    */
   dispose(): void {
-    this.stopAllSounds();
-    
+    this.stopAllSounds()
     if (this.audioContext && this.audioContext.state !== 'closed') {
-      this.audioContext.close();
+      this.audioContext.close()
     }
     
-    this.sounds.clear();
-    this.currentlyPlaying.clear();
+    this.sounds.clear()
+    this.currentlyPlaying.clear()
   }
 }
 
 // Export singleton instance
-export const soundService = new SoundService();
+export const soundService = new SoundService()

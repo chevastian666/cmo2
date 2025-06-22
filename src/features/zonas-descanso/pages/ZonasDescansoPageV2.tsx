@@ -4,97 +4,85 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Filter, Download, Coffee, Fuel} from 'lucide-react';
-
-import { Input} from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Separator} from '@/components/ui/separator';
-import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+import React, { useState, useMemo } from 'react'
+import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Filter, Download, Coffee, Fuel} from 'lucide-react'
+import { Input} from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Separator} from '@/components/ui/separator'
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/utils/utils';
-import { zonasDescansoData} from '../data/zonasDescansoData';
-import type { RutaZonas} from '../data/zonasDescansoData';
-import { InteractiveMap} from '@/components/maps/InteractiveMap';
-import type { MapMarker, MapRoute} from '@/components/maps/InteractiveMap';
-import { staggerContainer, staggerItem} from '@/components/animations/AnimationPresets';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import { zonasDescansoData} from '../data/zonasDescansoData'
+import type { RutaZonas} from '../data/zonasDescansoData'
+import { InteractiveMap} from '@/components/maps/InteractiveMap'
+import type { MapMarker, MapRoute} from '@/components/maps/InteractiveMap'
+import { staggerContainer, staggerItem} from '@/components/animations/AnimationPresets'
 export const ZonasDescansoPageV2: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedView, setSelectedView] = useState<'list' | 'map'>('list');
-  const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set(['Ruta 1']));
-  const [highlightedZone, setHighlightedZone] = useState<string | null>(null);
-
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedView, setSelectedView] = useState<'list' | 'map'>('list')
+  const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set(['Ruta 1']))
+  const [highlightedZone, setHighlightedZone] = useState<string | null>(null)
   // Filter zones based on search term
   const filteredData = useMemo(() => {
-    if (!searchTerm) return zonasDescansoData;
-
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    
+    if (!searchTerm) return zonasDescansoData
+    const lowerSearchTerm = searchTerm.toLowerCase()
     return zonasDescansoData.map(rutaData => {
       const filteredZonas = rutaData.zonas.filter(zona => 
         zona.ubicacion.toLowerCase().includes(lowerSearchTerm) ||
         rutaData.ruta.toLowerCase().includes(lowerSearchTerm)
-      );
-
+      )
       return {
         ...rutaData,
         zonas: filteredZonas
-      };
-    }).filter(rutaData => rutaData.zonas.length > 0);
-  }, [searchTerm]);
-
+      }
+    }).filter(rutaData => rutaData.zonas.length > 0)
+  }, [])
   // Calculate stats
   const stats = useMemo(() => {
-    const totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0);
-    const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0);
-    const totalRutas = zonasDescansoData.length;
+    const totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+    const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+    const totalRutas = zonasDescansoData.length
     const departamentos = new Set(
       zonasDescansoData.flatMap(ruta => 
         ruta.zonas.map(zona => {
-          const parts = zona.ubicacion.split(',');
-          return parts[parts.length - 1]?.trim() || '';
+          const parts = zona.ubicacion.split(',')
+          return parts[parts.length - 1]?.trim() || ''
         })
       )
-    ).size;
-
+    ).size
     return {
       totalZonas,
       filteredZonas,
       totalRutas,
       departamentos
-    };
-  }, [filteredData]);
-
-  const toggleRoute = (ruta: string) => {
-    const newExpanded = new Set(expandedRoutes);
-    if (newExpanded.has(ruta)) {
-      newExpanded.delete(ruta);
-    } else {
-      newExpanded.add(ruta);
     }
-    setExpandedRoutes(newExpanded);
-  };
-
+  }, [])
+  const toggleRoute = (ruta: string) => {
+    const newExpanded = new Set(expandedRoutes)
+    if (newExpanded.has(ruta)) {
+      newExpanded.delete(ruta)
+    } else {
+      newExpanded.add(ruta)
+    }
+    setExpandedRoutes(newExpanded)
+  }
   const exportData = () => {
 
     const csv = [
       Object.keys(data[0]).join(','),
       ...data.map(row => Object.values(row).map(v => `"${v}"`).join(','))
-    ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'zonas-descanso.csv';
-    a.click();
-  };
-
+    ].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'zonas-descanso.csv'
+    a.click()
+  }
   return (<PageTransition>
       <div className="max-w-7xl mx-auto space-y-6">
         <AnimatedHeader
@@ -234,17 +222,16 @@ export const ZonasDescansoPageV2: React.FC = () => {
         </AnimatedSection>
       </div>
     </PageTransition>
-  );
-};
-
+  )
+}
 // Stats Card Component
 const StatsCard: React.FC<{
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  color: string;
-  subtitle?: string;
-}> = ({ title, value, icon, color, subtitle }) => (
+  title: string
+  value: string | number
+  icon: React.ReactNode
+  color: string
+  subtitle?: string
+}> = (title, value, icon, color, subtitle ) => (
   <AnimatedCard whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
@@ -264,16 +251,15 @@ const StatsCard: React.FC<{
       )}
     </CardContent>
   </AnimatedCard>
-);
-
+)
 // List View Component
 const RutasListView: React.FC<{
-  data: RutaZonas[];
-  expandedRoutes: Set<string>;
-  onToggleRoute: (ruta: string) => void;
-  highlightedZone: string | null;
-  onHighlightZone: (zone: string | null) => void;
-  searchTerm: string;
+  data: RutaZonas[]
+  expandedRoutes: Set<string>
+  onToggleRoute: (ruta: string) => void
+  highlightedZone: string | null
+  onHighlightZone: (zone: string | null) => void
+  searchTerm: string
 }> = ({ data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
   if (data.length === 0) {
     return (
@@ -285,7 +271,7 @@ const RutasListView: React.FC<{
           </p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (<motion.div
@@ -399,8 +385,8 @@ const RutasListView: React.FC<{
                                 variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
-                                  e.stopPropagation();
-                                  window.open(zona.maps, '_blank');
+                                  e.stopPropagation()
+                                  window.open(zona.maps, '_blank')
                                 }}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
@@ -420,25 +406,23 @@ const RutasListView: React.FC<{
         </motion.div>
       ))}
     </motion.div>
-  );
-};
-
+  )
+}
 // Map View Component
 const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
   const allZones = data.flatMap(ruta => 
     ruta.zonas.map(zona => ({ ...zona, ruta: ruta.ruta }))
-  );
-
+  )
   // Function to extract coordinates from Google Maps URL
   const extractCoordinates = (mapsUrl: string, ubicacion: string): { lat: number; lng: number } | null => {
     try {
       // Try to extract from query parameter
-      const queryMatch = mapsUrl.match(/query=([^,]+),([^,&]+)/);
+      const queryMatch = mapsUrl.match(/query=([^,]+),([^,&]+)/)
       if (queryMatch) {
-        const lat = parseFloat(queryMatch[1]);
-        const lng = parseFloat(queryMatch[2]);
+        const lat = parseFloat(queryMatch[1])
+        const lng = parseFloat(queryMatch[2])
         if (!isNaN(lat) && !isNaN(lng)) {
-          return { lat, lng };
+          return { lat, lng }
         }
       }
       
@@ -456,30 +440,27 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
         'Artigas': { lat: -30.4000, lng: -56.4667 },
         'Chuy': { lat: -33.6975, lng: -53.4594 },
         'Colonia': { lat: -34.4626, lng: -57.8400 }
-      };
-      
+      }
       // Find matching location
       for (const [location, coords] of Object.entries(locationMap)) {
         if (mapsUrl.includes(location) || ubicacion.includes(location)) {
-          return coords;
+          return coords
         }
       }
       
       // Default to center of Uruguay
-      return { lat: -32.5228, lng: -55.7658 };
+      return { lat: -32.5228, lng: -55.7658 }
     } catch {
-      console.error('Error extracting coordinates:', _error);
-      return null;
+      console.error('Error extracting coordinates:', _error)
+      return null
     }
-  };
-
+  }
   // Convert zones to map markers
   const markers: MapMarker[] = allZones.map((zona, index) => {
-    const coords = extractCoordinates(zona.maps, zona.ubicacion);
-    const hasAncap = zona.ubicacion.toLowerCase().includes('ancap');
-    const hasParador = zona.ubicacion.toLowerCase().includes('parador');
-    const hasBalanza = zona.ubicacion.toLowerCase().includes('balanza');
-    
+    const coords = extractCoordinates(zona.maps, zona.ubicacion)
+    const hasAncap = zona.ubicacion.toLowerCase().includes('ancap')
+    const hasParador = zona.ubicacion.toLowerCase().includes('parador')
+    const hasBalanza = zona.ubicacion.toLowerCase().includes('balanza')
     return {
       id: `zona-${index}`,
       position: coords || { lat: -32.5228, lng: -55.7658 },
@@ -496,9 +477,8 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
           balanza: hasBalanza
         }
       }
-    };
-  });
-
+    }
+  })
   // Create routes for major highways
   const routes: MapRoute[] = [
     {
@@ -539,8 +519,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       color: '#8B5CF6',
       strokeWeight: 3
     }
-  ];
-
+  ]
   return (<InteractiveMap
       markers={markers}
       routes={routes}
@@ -550,11 +529,10 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       showSearch={true}
       onMarkerClick={(marker) => {
         if (marker.data?.mapsUrl) {
-          window.open(marker.data.mapsUrl, 'blank');
+          window.open(marker.data.mapsUrl, 'blank')
         }
       }}
     />
-  );
-};
-
-export default ZonasDescansoPageV2;
+  )
+}
+export default ZonasDescansoPageV2

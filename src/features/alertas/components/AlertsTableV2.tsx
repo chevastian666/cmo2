@@ -1,111 +1,108 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react';
-import { cn} from '@/lib/utils';
-import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
-import type { Alerta} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-import { DataTable} from '../../../components/DataTable';
-import { useAlertaExtendida} from '../../../store/hooks/useAlertas';
-import { AlertaDetalleModalV2} from './AlertaDetalleModalV2';
-import { ResponderAlertaModal} from './ResponderAlertaModal';
-import { notificationService} from '../../../services/shared/notification.service';
-
+import React, { useState } from 'react'
+import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation, Pause, Zap, WifiOff, Satellite, Eye} from 'lucide-react'
+import { cn} from '@/lib/utils'
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
+import type { Alerta} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { DataTable} from '../../../components/DataTable'
+import { useAlertaExtendida} from '../../../store/hooks/useAlertas'
+import { AlertaDetalleModalV2} from './AlertaDetalleModalV2'
+import { ResponderAlertaModal} from './ResponderAlertaModal'
+import { notificationService} from '../../../services/shared/notification.service'
 // shadcn/ui components
-import { Button} from '@/components/ui/button';
-import { Badge} from '@/components/ui/badge';
-
+import { Button} from '@/components/ui/button'
+import { Badge} from '@/components/ui/badge'
 export const AlertsTableV2: React.FC = () => {
-  
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null);
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false);
 
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
-    setSelectedAlertaId(alerta.id);
-    setIsModalOpen(true);
-  };
-
+    setSelectedAlertaId(alerta.id)
+    setIsModalOpen(true)
+  }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
-    event.stopPropagation();
-    
+    event.stopPropagation()
     if (alerta.atendida) {
-      notificationService.info('Esta alerta ya fue atendida');
-      return;
+      notificationService.info('Esta alerta ya fue atendida')
+      return
     }
     
-    setSelectedAlertaForResponse(alerta);
-    setIsResponseModalOpen(true);
-  };
-
+    setSelectedAlertaForResponse(alerta)
+    setIsResponseModalOpen(true)
+  }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId);
-      notificationService.success('Alerta respondida correctamente');
-      
+      await actions.atenderAlerta(alertaId)
+      notificationService.success('Alerta respondida correctamente')
       console.log('Alert response:', {
         alertaId,
         motivoId,
         motivoDescripcion,
         observaciones,
         timestamp: new Date().toISOString()
-      });
+      })
     } catch {
-      notificationService.error('Error al responder la alerta');
-      console.error('Error responding to alert:', _error);
-      throw _error;
+      notificationService.error('Error al responder la alerta')
+      console.error('Error responding to alert:', _error)
+      throw _error
     }
-  };
-
+  }
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedAlertaId(null);
-  };
-
+    setIsModalOpen(false)
+    setSelectedAlertaId(null)
+  }
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'AAR': return <Clock className="h-4 w-4" />;
-      case 'BBJ': return <Battery className="h-4 w-4" />;
-      case 'DEM': return <Pause className="h-4 w-4" />;
-      case 'DNR': return <Navigation className="h-4 w-4" />;
-      case 'DTN': return <Shield className="h-4 w-4" />;
-      case 'NPG': return <Satellite className="h-4 w-4" />;
-      case 'NPN': return <WifiOff className="h-4 w-4" />;
-      case 'PTN': return <Package className="h-4 w-4" />;
-      case 'SNA': return <Zap className="h-4 w-4" />;
-      default: return <AlertTriangle className="h-4 w-4" />;
+      case 'AAR': {
+  return <Clock className="h-4 w-4" />
+      case 'BBJ': {
+  return <Battery className="h-4 w-4" />
+      case 'DEM': {
+  return <Pause className="h-4 w-4" />
+      case 'DNR': {
+  return <Navigation className="h-4 w-4" />
+      case 'DTN': {
+  return <Shield className="h-4 w-4" />
+      case 'NPG': {
+  return <Satellite className="h-4 w-4" />
+      case 'NPN': {
+  return <WifiOff className="h-4 w-4" />
+      case 'PTN': {
+  return <Package className="h-4 w-4" />
+      case 'SNA': {
+  return <Zap className="h-4 w-4" />
+      default: return <AlertTriangle className="h-4 w-4" />
     }
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20'
       default:
-        return 'text-gray-400 bg-gray-900/20';
+        return 'text-gray-400 bg-gray-900/20'
     }
-  };
-
+  }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
     switch (severidad) {
-      case 'critica':
-      case 'alta':
-        return 'destructive';
-      case 'media':
-        return 'secondary';
-      case 'baja':
-        return 'outline';
+      case 'critica': {
+  case 'alta':
+        return 'destructive'
+      case 'media': {
+  return 'secondary'
+      case 'baja': {
+  return 'outline'
       default:
-        return 'default';
+        return 'default'
     }
-  };
-
+  }
   const columns: Column<Alerta>[] = [
     {
       key: 'tipo',
@@ -173,8 +170,8 @@ export const AlertsTableV2: React.FC = () => {
             size="sm"
             variant="default"
             onClick={(e) => {
-              e.stopPropagation();
-              notificationService.info('Función de mapa próximamente');
+              e.stopPropagation()
+              notificationService.info('Función de mapa próximamente')
             }}
           >
             <Eye className="mr-1 h-3.5 w-3.5" />
@@ -232,14 +229,12 @@ export const AlertsTableV2: React.FC = () => {
         </div>
       )
     }
-  ];
-
+  ]
   const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `alertas-${timestamp}`;
-    
+    const timestamp = new Date().toISOString().split('T')[0]
+    const filename = `alertas-${timestamp}`
     if (format === 'csv') {
-      const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado'];
+      const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
         a.tipo.replace('_', ' '),
         a.codigoPrecinto,
@@ -248,34 +243,30 @@ export const AlertsTableV2: React.FC = () => {
         a.ubicacion ? `${a.ubicacion.lat}, ${a.ubicacion.lng}` : '',
         formatDateTime(a.timestamp),
         a.atendida ? 'Atendida' : 'Activa'
-      ]);
-      
+      ])
       const csvContent = [
         headers.join(','),
         ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-      ].join('\n');
-      
-      const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${filename}.csv`;
-      link.click();
-      URL.revokeObjectURL(url);
+      ].join('\n')
+      const blob = new Blob([csvContent], { type: 'text/csv' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${filename}.csv`
+      link.click()
+      URL.revokeObjectURL(url)
     } else {
-      const jsonContent = JSON.stringify(_data, null, 2);
-      const blob = new Blob([jsonContent], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${filename}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
+      const jsonContent = JSON.stringify(_data, null, 2)
+      const blob = new Blob([jsonContent], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${filename}.json`
+      link.click()
+      URL.revokeObjectURL(url)
     }
-  };
-
-  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId);
-
+  }
+  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId)
   return (<>
       <DataTable
         data={alertas}
@@ -298,17 +289,17 @@ export const AlertsTableV2: React.FC = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           onAsignar={(usuarioId, notas) => {
-            console.log('Asignar:', { usuarioId, notas });
-            notificationService.success('Alerta asignada correctamente');
+            console.log('Asignar:', { usuarioId, notas })
+            notificationService.success('Alerta asignada correctamente')
           }}
           onComentar={(mensaje) => {
-            console.log('Comentar:', mensaje);
-            notificationService.success('Comentario agregado');
+            console.log('Comentar:', mensaje)
+            notificationService.success('Comentario agregado')
           }}
           onResolver={(tipo, descripcion, acciones) => {
-            console.log('Resolver:', { tipo, descripcion, acciones });
-            notificationService.success('Alerta resuelta correctamente');
-            closeModal();
+            console.log('Resolver:', { tipo, descripcion, acciones })
+            notificationService.success('Alerta resuelta correctamente')
+            closeModal()
           }}
         />
       )}
@@ -317,12 +308,12 @@ export const AlertsTableV2: React.FC = () => {
           alerta={selectedAlertaForResponse}
           isOpen={isResponseModalOpen}
           onClose={() => {
-            setIsResponseModalOpen(false);
-            setSelectedAlertaForResponse(null);
+            setIsResponseModalOpen(false)
+            setSelectedAlertaForResponse(null)
           }}
           onResponder={handleResponderAlerta}
         />
       )}
     </>
-  );
-};
+  )
+}

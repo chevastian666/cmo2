@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import {Monitor, Truck, ChevronDown, ExternalLink} from 'lucide-react';
-
-import { cn} from '../utils/utils';
-
+import React, { useState } from 'react'
+import {Monitor, Truck, ChevronDown, ExternalLink} from 'lucide-react'
+import { cn} from '../utils/utils'
 interface PanelSwitcherProps {
-  currentPanel: 'cmo' | 'encargados';
+  currentPanel: 'cmo' | 'encargados'
 }
 
 export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) => {
-  
-  const [isOpen, setIsOpen] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(false)
   const panels = [
     {
       id: 'cmo',
@@ -26,22 +23,19 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
       url: import.meta.env.VITE_ENCARGADOS_URL || 'https://encargados.blocktracker.uy',
       canAccess: canAccessEncargados()
     }
-  ];
-
-  const availablePanels = panels.filter(p => p.canAccess);
-  const currentPanelInfo = panels.find(p => p.id === currentPanel);
-
+  ]
+  const availablePanels = panels.filter(p => p.canAccess)
+  const currentPanelInfo = panels.find(p => p.id === currentPanel)
   if (availablePanels.length <= 1) {
     return null; // Don't show switcher if user only has access to one panel
   }
 
   const handlePanelSwitch = (panel: typeof panels[0]) => {
     if (panel.id !== currentPanel) {
-      window.location.href = panel.url;
+      window.location.href = panel.url
     }
-    setIsOpen(false);
-  };
-
+    setIsOpen(false)
+  }
   return (<div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -97,5 +91,5 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
         </>
       )}
     </div>
-  );
-};
+  )
+}

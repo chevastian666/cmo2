@@ -4,19 +4,13 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { TreemapChart} from '@/components/charts/treemap/TreemapChart';
-
-import {Package, Truck, AlertTriangle} from 'lucide-react';
-
+import React, { useState, useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { TreemapChart} from '@/components/charts/treemap/TreemapChart'
+import {Package, Truck, AlertTriangle} from 'lucide-react'
 const TreemapDashboardSimple: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('precintos');
-  
-  
-  
-
+  const [activeTab, setActiveTab] = useState('precintos')
   // Transform precintos data
   const precintosData = useMemo(() => {
     // Use mock data if no real data available
@@ -29,25 +23,22 @@ const TreemapDashboardSimple: React.FC = () => {
           { name: 'Completados', value: 85 },
           { name: 'Inactivos', value: 20 }
         ]
-      };
+      }
     }
 
-    const grouped = new Map<string, number>();
-    
+    const grouped = new Map<string, number>()
     precintos.forEach(p => {
-      const key = p.estado || 'unknown';
-      grouped.set(key, (grouped.get(key) || 0) + 1);
-    });
-
+      const key = p.estado || 'unknown'
+      grouped.set(key, (grouped.get(key) || 0) + 1)
+    })
     return {
       name: 'Precintos',
       children: Array.from(grouped.entries()).map(([estado, count]) => ({
         name: estado,
         value: count
       }))
-    };
-  }, [precintos]);
-
+    }
+  }, [])
   // Transform transitos data
   const transitosData = useMemo(() => {
     // Use mock data if no real data available
@@ -60,25 +51,22 @@ const TreemapDashboardSimple: React.FC = () => {
           { name: 'Retrasados', value: 15 },
           { name: 'Pendientes', value: 35 }
         ]
-      };
+      }
     }
 
-    const grouped = new Map<string, number>();
-    
+    const grouped = new Map<string, number>()
     transitos.forEach(t => {
-      const key = t.estado || 'unknown';
-      grouped.set(key, (grouped.get(key) || 0) + 1);
-    });
-
+      const key = t.estado || 'unknown'
+      grouped.set(key, (grouped.get(key) || 0) + 1)
+    })
     return {
       name: 'Tránsitos',
       children: Array.from(grouped.entries()).map(([estado, count]) => ({
         name: estado,
         value: count
       }))
-    };
-  }, [transitos]);
-
+    }
+  }, [])
   // Transform alertas data
   const alertasData = useMemo(() => {
     // Use mock data if no real data available
@@ -91,25 +79,22 @@ const TreemapDashboardSimple: React.FC = () => {
           { name: 'Medias', value: 28 },
           { name: 'Bajas', value: 45 }
         ]
-      };
+      }
     }
 
-    const grouped = new Map<string, number>();
-    
+    const grouped = new Map<string, number>()
     alertas.forEach(a => {
-      const key = a.tipo || 'unknown';
-      grouped.set(key, (grouped.get(key) || 0) + 1);
-    });
-
+      const key = a.tipo || 'unknown'
+      grouped.set(key, (grouped.get(key) || 0) + 1)
+    })
     return {
       name: 'Alertas',
       children: Array.from(grouped.entries()).map(([tipo, count]) => ({
         name: tipo,
         value: count
       }))
-    };
-  }, [alertas]);
-
+    }
+  }, [])
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -191,7 +176,6 @@ const TreemapDashboardSimple: React.FC = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
-
-export default TreemapDashboardSimple;
+  )
+}
+export default TreemapDashboardSimple

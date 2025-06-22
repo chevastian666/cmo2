@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
-import {Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { DESPACHANTES} from '../../../constants/locations';
-
+import React, { useState } from 'react'
+import {Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { DESPACHANTES} from '../../../constants/locations'
 export interface MapFilters {
-  searchTerm: string;
-  selectedDespachante: string;
-  showRoutes: boolean;
-  showAlerts: boolean;
-  showInactive: boolean;
+  searchTerm: string
+  selectedDespachante: string
+  showRoutes: boolean
+  showAlerts: boolean
+  showInactive: boolean
 }
 
 interface MapHeaderProps {
-  title?: string;
-  subtitle?: string;
-  onFilterChange?: (filters: MapFilters) => void;
-  onLayerToggle?: (layer: string) => void;
-  activeLayers?: string[];
-  availableDespachantes?: string[];
-  className?: string;
+  title?: string
+  subtitle?: string
+  onFilterChange?: (filters: MapFilters) => void
+  onLayerToggle?: (layer: string) => void
+  activeLayers?: string[]
+  availableDespachantes?: string[]
+  className?: string
 }
 
 const defaultFilters: MapFilters = {
@@ -27,8 +26,7 @@ const defaultFilters: MapFilters = {
   showRoutes: true,
   showAlerts: true,
   showInactive: false
-};
-
+}
 const MapHeader: React.FC<MapHeaderProps> = ({
   title = 'Mapa de Tránsitos',
   subtitle = 'Monitoreo en tiempo real',
@@ -38,22 +36,18 @@ const MapHeader: React.FC<MapHeaderProps> = ({
   availableDespachantes = DESPACHANTES.slice(0, 6),
   className
 }) => {
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState<MapFilters>(defaultFilters);
-
+  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState<MapFilters>(defaultFilters)
   const handleFilterChange = (key: keyof MapFilters, value: unknown) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFilterChange?.(newFilters);
-  };
-
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
+  }
   const handleClearFilters = () => {
-    setFilters(defaultFilters);
-    onFilterChange?.(defaultFilters);
-  };
-
-  const hasActiveFilters = filters.searchTerm || filters.selectedDespachante || !filters.showInactive;
-
+    setFilters(defaultFilters)
+    onFilterChange?.(defaultFilters)
+  }
+  const hasActiveFilters = filters.searchTerm || filters.selectedDespachante || !filters.showInactive
   return (
     <div className={cn("bg-gray-900 border-b border-gray-800", className)}>
       <div className="px-4 py-3">
@@ -214,7 +208,6 @@ const MapHeader: React.FC<MapHeaderProps> = ({
         </div>
       </div>
     </div>
-  );
-};
-
-export { MapHeader };
+  )
+}
+export { MapHeader }

@@ -4,69 +4,66 @@
  * By Cheva
  */
 
-import {useEffect, lazy, Suspense} from 'react';
-import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import { LayoutOptimized} from './features/common';
-import { Dashboard} from './features/dashboard/components/Dashboard';
-import { LoginPage} from './features/auth/LoginPage';
-import { LoadingOverlay} from './components/ui/LoadingState';
-import { ProtectedRoute} from './components/ProtectedRoute';
-import './utils/clearDashboardLayout';
-
+import {useEffect, lazy, Suspense} from 'react'
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
+import { LayoutOptimized} from './features/common'
+import { Dashboard} from './features/dashboard/components/Dashboard'
+import { LoginPage} from './features/auth/LoginPage'
+import { LoadingOverlay} from './components/ui/LoadingState'
+import { ProtectedRoute} from './components/ProtectedRoute'
+import './utils/clearDashboardLayout'
 // Lazy load heavy components
-// const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })));
-const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'));
-const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })));
-const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })));
-const TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'));
-const PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })));
-const ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })));
-const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'));
-const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })));
-const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })));
-const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })));
-// const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })));
-const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'));
-const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })));
-// const LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'));
-const BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })));
-const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })));
-const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })));
-const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })));
-const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })));
-const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })));
-const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })));
-const SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })));
-const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'));
-const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'));
-const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'));
-const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'));
-const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'));
-const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'));
-// const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'));
-const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'));
-// const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'));
-const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'));
-const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'));
-const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'));
-const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'));
-const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })));
-const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })));
-const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })));
-const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })));
-import { initializeStores, setupAutoRefresh} from './store';
-import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedIntegration';
-
-import { useWebSocket} from './hooks/useWebSocket';
-import { notificationService} from './services/shared/notification.service';
-import { sharedWebSocketService} from './services/shared/sharedWebSocket.service';
-import { SHARED_CONFIG} from './config/shared.config';
-import { Toaster} from '@/components/ui/toaster';
-import GlobalErrorBoundary from './components/GlobalErrorBoundary';
-// import TreemapDirect from './features/analytics/components/TreemapDirect';
-import './App.css';
-
+// const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })))
+const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'))
+const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })))
+const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })))
+const TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'))
+const PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })))
+const ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })))
+const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'))
+const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })))
+const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })))
+const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })))
+// const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })))
+const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
+const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
+// const LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'))
+const BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
+const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
+const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })))
+const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })))
+const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })))
+const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })))
+const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })))
+const SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })))
+const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'))
+const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'))
+const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'))
+const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'))
+const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'))
+const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'))
+// const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'))
+const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'))
+// const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'))
+const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'))
+const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'))
+const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'))
+const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'))
+const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })))
+const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })))
+const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })))
+const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })))
+import { initializeStores, setupAutoRefresh} from './store'
+import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedIntegration'
+import { useWebSocket} from './hooks/useWebSocket'
+import { notificationService} from './services/shared/notification.service'
+import { sharedWebSocketService} from './services/shared/sharedWebSocket.service'
+import { SHARED_CONFIG} from './config/shared.config'
+import { Toaster} from '@/components/ui/toaster'
+import GlobalErrorBoundary from './components/GlobalErrorBoundary'
+// import TreemapDirect from './features/analytics/components/TreemapDirect'
+import './App.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -75,66 +72,54 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-});
-
+})
 function App() {
-  
-  
+
   // Initialize shared services integration
-  useSharedIntegration();
-  useSyncStoreActions();
-  
+  useSharedIntegration()
+  useSyncStoreActions()
   // Initialize WebSocket with authentication
   useWebSocket({
     onConnect: () => {
-      console.log('Connected to real-time updates');
+      console.log('Connected to real-time updates')
     },
     onDisconnect: () => {
-      console.log('Disconnected from real-time updates');
+      console.log('Disconnected from real-time updates')
     },
     onReconnect: () => {
-      console.log('Reconnected to real-time updates');
-      notificationService.info('Conexión Restaurada', 'La conexión en tiempo real ha sido restaurada');
+      console.log('Reconnected to real-time updates')
+      notificationService.info('Conexión Restaurada', 'La conexión en tiempo real ha sido restaurada')
     }
-  });
-   
-
+  })
   useEffect(() => {
     // Set up notification handlers for real-time events
-    const unsubscribers: (() => void)[] = [];
-    
+    const unsubscribers: (() => void)[] = []
     // New alert notifications
     unsubscribers.push(sharedWebSocketService.onAlertNew((_data) => {
-        notificationService.newAlert(_data.alert || _data);
+        notificationService.newAlert(_data.alert || _data)
       })
-    );
-    
+    )
     // Transit delay notifications
     unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (_data) => {
         if (_data.status === 'delayed') {
-          notificationService.transitDelayed(_data.transit);
+          notificationService.transitDelayed(_data.transit)
         }
       })
-    );
-    
+    )
     // CMO message notifications
     unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (_data) => {
-        notificationService.cmoMessage(_data.message || _data);
+        notificationService.cmoMessage(_data.message || _data)
       })
-    );
-    
+    )
     // Initialize stores and fetch initial data
-    initializeStores();
-    
+    initializeStores()
     // Set up auto-refresh intervals (as fallback)
-    const cleanup = setupAutoRefresh();
-    
+    const cleanup = setupAutoRefresh()
     return () => {
-      unsubscribers.forEach(unsub => unsub());
-      cleanup?.();
-    };
-  }, []);
-  
+      unsubscribers.forEach(unsub => unsub())
+      cleanup?.()
+    }
+  }, [])
   // Show login if not authenticated
   if (!isAuthenticated) {
     return (
@@ -143,7 +128,7 @@ function App() {
           <LoginPage />
         </BrowserRouter>
       </QueryClientProvider>
-    );
+    )
   }
   
   // Check authorization for CMO panel
@@ -162,11 +147,10 @@ function App() {
           </LayoutOptimized>
         </BrowserRouter>
       </QueryClientProvider>
-    );
+    )
   }
 
-  console.log('App: Rendering authenticated user routes');
-  
+  console.log('App: Rendering authenticated user routes')
   return (
     <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -244,7 +228,7 @@ function App() {
         </BrowserRouter>
       </QueryClientProvider>
     </GlobalErrorBoundary>
-  );
+  )
 }
 
-export default App;
+export default App

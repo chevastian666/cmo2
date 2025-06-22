@@ -4,97 +4,87 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { Palette, Upload, Save, RotateCcw, Eye} from 'lucide-react';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-import { Textarea} from '@/components/ui/textarea';
-import { Switch} from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { ColorPicker} from '@/components/ui/color-picker';
-import { toast} from '@/hooks/use-toast';
-
-import type { TenantCustomization as TCustomization} from '../types';
-
+import React, { useState } from 'react'
+import { Palette, Upload, Save, RotateCcw, Eye} from 'lucide-react'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Textarea} from '@/components/ui/textarea'
+import { Switch} from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { ColorPicker} from '@/components/ui/color-picker'
+import { toast} from '@/hooks/use-toast'
+import type { TenantCustomization as TCustomization} from '../types'
 export const TenantCustomization: React.FC = () => {
   
   const [customization, setCustomization] = useState<TCustomization>(
     currentTenant?.customization || {} as TCustomization
-  );
-  const [loading, setLoading] = useState(false);
-  const [previewMode, setPreviewMode] = useState(false);
-
-  const canWhiteLabel = checkFeature('whiteLabeling');
-
+  )
+  const [loading, setLoading] = useState(false)
+  const [previewMode, setPreviewMode] = useState(false)
+  const canWhiteLabel = checkFeature('whiteLabeling')
   const handleSave = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      await updateTenantCustomization(customization);
+      await updateTenantCustomization(customization)
       toast({
         title: 'Customization saved',
         description: 'Your branding changes have been applied successfully.'
-      });
-      
+      })
       // Apply theme changes immediately
-      applyTheme(customization.branding);
+      applyTheme(customization.branding)
     } catch {
       toast({
         title: 'Error saving customization',
         description: 'Please try again later.',
         variant: 'destructive'
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const handleReset = () => {
     if (currentTenant) {
-      setCustomization(currentTenant.customization);
-      applyTheme(currentTenant.customization.branding);
+      setCustomization(currentTenant.customization)
+      applyTheme(currentTenant.customization.branding)
     }
-  };
-
+  }
   const applyTheme = (branding: TCustomization['branding']) => {
-    const root = document.documentElement;
-    
+    const root = document.documentElement
     // Apply color variables
     if (branding.primaryColor) {
-      root.style.setProperty('--primary', branding.primaryColor);
+      root.style.setProperty('--primary', branding.primaryColor)
     }
     if (branding.secondaryColor) {
-      root.style.setProperty('--secondary', branding.secondaryColor);
+      root.style.setProperty('--secondary', branding.secondaryColor)
     }
     if (branding.accentColor) {
-      root.style.setProperty('--accent', branding.accentColor);
+      root.style.setProperty('--accent', branding.accentColor)
     }
     
     // Apply dark mode
     if (branding.darkMode !== undefined) {
-      root.classList.toggle('dark', branding.darkMode);
+      root.classList.toggle('dark', branding.darkMode)
     }
     
     // Apply custom CSS
     if (branding.customCss) {
-      let styleEl = document.getElementById('tenant-custom-styles');
+      let styleEl = document.getElementById('tenant-custom-styles')
       if (!styleEl) {
-        styleEl = document.createElement('style');
-        styleEl.id = 'tenant-custom-styles';
-        document.head.appendChild(styleEl);
+        styleEl = document.createElement('style')
+        styleEl.id = 'tenant-custom-styles'
+        document.head.appendChild(styleEl)
       }
-      styleEl.textContent = branding.customCss;
+      styleEl.textContent = branding.customCss
     }
-  };
-
+  }
   const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+    const file = event.target.files?.[0]
+    if (!file) return
     // In production, upload to storage service
     // For now, convert to base64
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onloadend = () => {
       setCustomization(prev => ({
         ...prev,
@@ -102,11 +92,10 @@ export const TenantCustomization: React.FC = () => {
           ...prev.branding,
           logo: reader.result as string
         }
-      }));
-    };
-    reader.readAsDataURL(file);
-  };
-
+      }))
+    }
+    reader.readAsDataURL(file)
+  }
   if (!canWhiteLabel) {
     return (
       <Card>
@@ -126,7 +115,7 @@ export const TenantCustomization: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (<div className="space-y-6">
@@ -396,5 +385,5 @@ export const TenantCustomization: React.FC = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
+  )
+}

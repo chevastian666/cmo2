@@ -5,102 +5,101 @@
  */
 
 export interface GraphQLSchema {
-  types: GraphQLType[];
-  queries: GraphQLQuery[];
-  mutations: GraphQLMutation[];
-  subscriptions: GraphQLSubscription[];
+  types: GraphQLType[]
+  queries: GraphQLQuery[]
+  mutations: GraphQLMutation[]
+  subscriptions: GraphQLSubscription[]
 }
 
 export interface GraphQLType {
-  name: string;
-  description: string;
-  fields: GraphQLField[];
-  kind: 'OBJECT' | 'INPUT' | 'ENUM' | 'INTERFACE' | 'UNION' | 'SCALAR';
+  name: string
+  description: string
+  fields: GraphQLField[]
+  kind: 'OBJECT' | 'INPUT' | 'ENUM' | 'INTERFACE' | 'UNION' | 'SCALAR'
 }
 
 export interface GraphQLField {
-  name: string;
-  type: string;
-  description: string;
-  args?: GraphQLArgument[];
-  nullable: boolean;
-  list: boolean;
+  name: string
+  type: string
+  description: string
+  args?: GraphQLArgument[]
+  nullable: boolean
+  list: boolean
 }
 
 export interface GraphQLArgument {
-  name: string;
-  type: string;
-  description: string;
-  defaultValue?: unknown;
-  required: boolean;
+  name: string
+  type: string
+  description: string
+  defaultValue?: unknown
+  required: boolean
 }
 
 export interface GraphQLQuery {
-  name: string;
-  description: string;
-  type: string;
-  args: GraphQLArgument[];
+  name: string
+  description: string
+  type: string
+  args: GraphQLArgument[]
   resolver: string; // Function name to resolve the query
 }
 
 export interface GraphQLMutation {
-  name: string;
-  description: string;
-  type: string;
-  args: GraphQLArgument[];
-  resolver: string;
+  name: string
+  description: string
+  type: string
+  args: GraphQLArgument[]
+  resolver: string
 }
 
 export interface GraphQLSubscription {
-  name: string;
-  description: string;
-  type: string;
-  args: GraphQLArgument[];
-  resolver: string;
+  name: string
+  description: string
+  type: string
+  args: GraphQLArgument[]
+  resolver: string
 }
 
 export interface GraphQLConfig {
-  endpoint: string;
-  introspection: boolean;
-  playground: boolean;
+  endpoint: string
+  introspection: boolean
+  playground: boolean
   authentication: {
-    enabled: boolean;
-    type: 'api_key' | 'bearer' | 'basic';
-    key?: string;
-    header?: string;
-  };
+    enabled: boolean
+    type: 'api_key' | 'bearer' | 'basic'
+    key?: string
+    header?: string
+  }
   rateLimit: {
-    enabled: boolean;
-    maxDepth: number;
-    maxComplexity: number;
-    requests: number;
-    window: number;
-  };
+    enabled: boolean
+    maxDepth: number
+    maxComplexity: number
+    requests: number
+    window: number
+  }
   subscriptions: {
-    enabled: boolean;
-    path: string;
-  };
+    enabled: boolean
+    path: string
+  }
 }
 
 export interface GraphQLQueryResult {
-  data?: unknown;
-  errors?: GraphQLError[];
-  extensions?: unknown;
+  data?: unknown
+  errors?: GraphQLError[]
+  extensions?: unknown
 }
 
 export interface GraphQLError {
-  message: string;
-  locations?: Array<{ line: number; column: number }>;
-  path?: Array<string | number>;
-  extensions?: unknown;
+  message: string
+  locations?: Array<{ line: number; column: number }>
+  path?: Array<string | number>
+  extensions?: unknown
 }
 
 class GraphQLService {
-  private config: GraphQLConfig;
-  private schema: GraphQLSchema;
-  private resolvers = new Map<string, Function>();
-  private subscriptions = new Map<string, Set<Function>>();
-
+  private config: GraphQLConfig
+  private schema: GraphQLSchema
+  private resolvers = new Map<string, Function>()
+  private subscriptions = new Map<string, Set<Function>>()
   constructor() {
     this.config = {
       endpoint: '/graphql',
@@ -123,108 +122,103 @@ class GraphQLService {
         enabled: true,
         path: '/subscriptions'
       }
-    };
-
-    this.schema = this.initializeSchema();
-    this.initializeResolvers();
+    }
+    this.schema = this.initializeSchema()
+    this.initializeResolvers()
   }
 
   // Configuration
   updateConfig(updates: Partial<GraphQLConfig>): void {
-    this.config = { ...this.config, ...updates };
-    this.saveConfig();
+    this.config = { ...this.config, ...updates }
+    this.saveConfig()
   }
 
   getConfig(): GraphQLConfig {
-    return this.config;
+    return this.config
   }
 
   // Schema management
   getSchema(): GraphQLSchema {
-    return this.schema;
+    return this.schema
   }
 
   updateSchema(schema: Partial<GraphQLSchema>): void {
-    this.schema = { ...this.schema, ...schema };
-    this.saveSchema();
+    this.schema = { ...this.schema, ...schema }
+    this.saveSchema()
   }
 
   // SDL (Schema Definition Language) generation
   generateSDL(): string {
-    let sdl = '';
-
+    let sdl = ''
     // Generate types
     this.schema.types.forEach(type => {
-      sdl += this.generateTypeSDL(type) + '\n\n';
-    });
-
+      sdl += this.generateTypeSDL(type) + '\n\n'
+    })
     // Generate Query type
     if (this.schema.queries.length > 0) {
-      sdl += 'type Query {\n';
+      sdl += 'type Query {\n'
       this.schema.queries.forEach(query => {
-        sdl += `  ${this.generateFieldSDL(query)}\n`;
-      });
-      sdl += '}\n\n';
+        sdl += `  ${this.generateFieldSDL(query)}\n`
+      })
+      sdl += '}\n\n'
     }
 
     // Generate Mutation type
     if (this.schema.mutations.length > 0) {
-      sdl += 'type Mutation {\n';
+      sdl += 'type Mutation {\n'
       this.schema.mutations.forEach(mutation => {
-        sdl += `  ${this.generateFieldSDL(mutation)}\n`;
-      });
-      sdl += '}\n\n';
+        sdl += `  ${this.generateFieldSDL(mutation)}\n`
+      })
+      sdl += '}\n\n'
     }
 
     // Generate Subscription type
     if (this.schema.subscriptions.length > 0) {
-      sdl += 'type Subscription {\n';
+      sdl += 'type Subscription {\n'
       this.schema.subscriptions.forEach(subscription => {
-        sdl += `  ${this.generateFieldSDL(subscription)}\n`;
-      });
-      sdl += '}\n\n';
+        sdl += `  ${this.generateFieldSDL(subscription)}\n`
+      })
+      sdl += '}\n\n'
     }
 
-    return sdl;
+    return sdl
   }
 
   // Query execution
   async executeQuery(query: string, variables: unknown = {}, context: unknown = {}): Promise<GraphQLQueryResult> {
     try {
       // Parse and validate query
-      const parsedQuery = this.parseQuery(query);
-      
+      const parsedQuery = this.parseQuery(query)
       // Check authentication
       if (this.config.authentication.enabled) {
-        const authResult = this.checkAuthentication(context);
+        const authResult = this.checkAuthentication(context)
         if (!authResult.valid) {
           return {
             errors: [{ message: authResult.error || 'Authentication failed' }]
-          };
+          }
         }
       }
 
       // Check rate limiting and complexity
       if (this.config.rateLimit.enabled) {
-        const complexityCheck = this.checkComplexity(parsedQuery);
+        const complexityCheck = this.checkComplexity(parsedQuery)
         if (!complexityCheck.valid) {
           return {
             errors: [{ message: complexityCheck.error || 'Query too complex' }]
-          };
+          }
         }
       }
 
       // Execute query
-      const result = await this.resolveQuery(parsedQuery, variables, context);
-      return { data: result };
-
+      const result = await this.resolveQuery(parsedQuery, variables, context)
+      return { data: result }
     } catch (error) {
       return {
         errors: [{
           message: (error as Error).message,
           extensions: { code: 'EXECUTION_ERROR' }
         }]
-      };
+      }
     }
   }
 
@@ -250,43 +244,42 @@ class GraphQLService {
         mutationType: this.schema.mutations.length > 0 ? { name: 'Mutation' } : null,
         subscriptionType: this.schema.subscriptions.length > 0 ? { name: 'Subscription' } : null
       }
-    };
+    }
   }
 
   // Subscription management
   subscribe(operationName: string, callback: Function): () => void {
     if (!this.subscriptions.has(operationName)) {
-      this.subscriptions.set(operationName, new Set());
+      this.subscriptions.set(operationName, new Set())
     }
     
-    this.subscriptions.get(operationName)!.add(callback);
-    
+    this.subscriptions.get(operationName)!.add(callback)
     // Return unsubscribe function
     return () => {
-      this.subscriptions.get(operationName)?.delete(callback);
-    };
+      this.subscriptions.get(operationName)?.delete(callback)
+    }
   }
 
   publish(operationName: string, data: unknown): void {
-    const subscribers = this.subscriptions.get(operationName);
+    const subscribers = this.subscriptions.get(operationName)
     if (subscribers) {
       subscribers.forEach(callback => {
         try {
-          callback(data);
+          callback(data)
         } catch (error) {
-          console.error(`Subscription callback error for ${operationName}:`, error);
+          console.error(`Subscription callback error for ${operationName}:`, error)
         }
-      });
+      })
     }
   }
 
   // Resolver management
   addResolver(name: string, resolver: Function): void {
-    this.resolvers.set(name, resolver);
+    this.resolvers.set(name, resolver)
   }
 
   getResolver(name: string): Function | null {
-    return this.resolvers.get(name) || null;
+    return this.resolvers.get(name) || null
   }
 
   // Private methods
@@ -483,32 +476,29 @@ class GraphQLService {
           resolver: 'subscribeTransitUpdated'
         }
       ]
-    };
+    }
   }
 
   private initializeResolvers(): void {
     // Query resolvers
-    this.addResolver('resolveAlerts', this.mockResolveAlerts.bind(this));
-    this.addResolver('resolveAlert', this.mockResolveAlert.bind(this));
-    this.addResolver('resolveTransits', this.mockResolveTransits.bind(this));
-    this.addResolver('resolvePrecintos', this.mockResolvePrecintos.bind(this));
-    this.addResolver('resolveStatistics', this.mockResolveStatistics.bind(this));
-
+    this.addResolver('resolveAlerts', this.mockResolveAlerts.bind(this))
+    this.addResolver('resolveAlert', this.mockResolveAlert.bind(this))
+    this.addResolver('resolveTransits', this.mockResolveTransits.bind(this))
+    this.addResolver('resolvePrecintos', this.mockResolvePrecintos.bind(this))
+    this.addResolver('resolveStatistics', this.mockResolveStatistics.bind(this))
     // Mutation resolvers
-    this.addResolver('acknowledgeAlert', this.mockAcknowledgeAlert.bind(this));
-    this.addResolver('resolveAlertMutation', this.mockResolveAlertMutation.bind(this));
-    this.addResolver('updateTransitStatus', this.mockUpdateTransitStatus.bind(this));
-
+    this.addResolver('acknowledgeAlert', this.mockAcknowledgeAlert.bind(this))
+    this.addResolver('resolveAlertMutation', this.mockResolveAlertMutation.bind(this))
+    this.addResolver('updateTransitStatus', this.mockUpdateTransitStatus.bind(this))
     // Subscription resolvers
-    this.addResolver('subscribeAlertCreated', this.mockSubscribeAlertCreated.bind(this));
-    this.addResolver('subscribeTransitUpdated', this.mockSubscribeTransitUpdated.bind(this));
+    this.addResolver('subscribeAlertCreated', this.mockSubscribeAlertCreated.bind(this))
+    this.addResolver('subscribeTransitUpdated', this.mockSubscribeTransitUpdated.bind(this))
   }
 
   // Mock resolvers
   private async mockResolveAlerts(args: unknown): Promise<any[]> {
-    const alerts = [];
-    const limit = Math.min(args.limit || 10, 100);
-    
+    const alerts = []
+    const limit = Math.min(args.limit || 10, 100)
     for (let i = 0; i < limit; i++) {
       alerts.push({
         id: `alert_${i + 1}`,
@@ -519,10 +509,10 @@ class GraphQLService {
         timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(),
         source: 'CMO',
         metadata: { generated: true }
-      });
+      })
     }
     
-    return alerts;
+    return alerts
   }
 
   private async mockResolveAlert(args: unknown): Promise<any> {
@@ -535,13 +525,12 @@ class GraphQLService {
       timestamp: new Date().toISOString(),
       source: 'CMO',
       metadata: { detailed: true }
-    };
+    }
   }
 
   private async mockResolveTransits(args: unknown): Promise<any[]> {
-    const transits = [];
-    const limit = 10;
-    
+    const transits = []
+    const limit = 10
     for (let i = 0; i < limit; i++) {
       transits.push({
         id: `transit_${i + 1}`,
@@ -559,16 +548,15 @@ class GraphQLService {
             lastUpdate: new Date().toISOString()
           }
         ]
-      });
+      })
     }
     
-    return transits;
+    return transits
   }
 
   private async mockResolvePrecintos(args: unknown): Promise<any[]> {
-    const precintos = [];
-    const limit = 20;
-    
+    const precintos = []
+    const limit = 20
     for (let i = 0; i < limit; i++) {
       precintos.push({
         id: `precinto_${i + 1}`,
@@ -581,10 +569,10 @@ class GraphQLService {
           origin: 'Montevideo',
           destination: 'Buenos Aires'
         }
-      });
+      })
     }
     
-    return precintos;
+    return precintos
   }
 
   private async mockResolveStatistics(): Promise<any> {
@@ -609,7 +597,7 @@ class GraphQLService {
         violated: 5
       },
       lastUpdated: new Date().toISOString()
-    };
+    }
   }
 
   private async mockAcknowledgeAlert(args: unknown): Promise<any> {
@@ -621,7 +609,7 @@ class GraphQLService {
       status: 'ACKNOWLEDGED',
       timestamp: new Date().toISOString(),
       source: 'CMO'
-    };
+    }
   }
 
   private async mockResolveAlertMutation(args: unknown): Promise<any> {
@@ -633,7 +621,7 @@ class GraphQLService {
       status: 'RESOLVED',
       timestamp: new Date().toISOString(),
       source: 'CMO'
-    };
+    }
   }
 
   private async mockUpdateTransitStatus(args: unknown): Promise<any> {
@@ -644,70 +632,66 @@ class GraphQLService {
       status: args.status,
       departure: new Date(Date.now() - 86400000).toISOString(),
       arrival: new Date(Date.now() + 86400000).toISOString()
-    };
+    }
   }
 
   private mockSubscribeAlertCreated(args: unknown): () => void {
     return this.subscribe('alertCreated', (data: unknown) => {
       if (!args.priority || data.priority === args.priority) {
-        return data;
+        return data
       }
-    });
+    })
   }
 
   private mockSubscribeTransitUpdated(args: unknown): () => void {
     return this.subscribe('transitUpdated', (data: unknown) => {
       if (!args.id || data.id === args.id) {
-        return data;
+        return data
       }
-    });
+    })
   }
 
   private generateTypeSDL(type: GraphQLType): string {
-    let sdl = `"""${type.description}"""\n`;
-    
+    let sdl = `"""${type.description}"""\n`
     switch (type.kind) {
       case 'ENUM':
-        sdl += `enum ${type.name} {\n`;
+        sdl += `enum ${type.name} {\n`
         type.fields.forEach(field => {
-          sdl += `  """${field.description}"""\n`;
-          sdl += `  ${field.name}\n`;
-        });
-        sdl += '}';
-        break;
-      
+          sdl += `  """${field.description}"""\n`
+          sdl += `  ${field.name}\n`
+        })
+        sdl += '}'
+        break
       default:
-        sdl += `type ${type.name} {\n`;
+        sdl += `type ${type.name} {\n`
         type.fields.forEach(field => {
-          sdl += `  """${field.description}"""\n`;
-          sdl += `  ${field.name}: ${this.formatType(field)}\n`;
-        });
-        sdl += '}';
+          sdl += `  """${field.description}"""\n`
+          sdl += `  ${field.name}: ${this.formatType(field)}\n`
+        })
+        sdl += '}'
     }
     
-    return sdl;
+    return sdl
   }
 
   private generateFieldSDL(field: unknown): string {
     const args = field.args && field.args.length > 0 
       ? `(${field.args.map((arg: unknown) => `${arg.name}: ${arg.type}`).join(', ')})`
-      : '';
-    
-    return `"""${field.description}"""\n  ${field.name}${args}: ${field.type}`;
+      : ''
+    return `"""${field.description}"""\n  ${field.name}${args}: ${field.type}`
   }
 
   private formatType(field: GraphQLField): string {
-    let type = field.type;
-    
+    let type = field.type
     if (field.list) {
-      type = `[${type}]`;
+      type = `[${type}]`
     }
     
     if (!field.nullable) {
-      type += '!';
+      type += '!'
     }
     
-    return type;
+    return type
   }
 
   private parseQuery(query: string): unknown {
@@ -716,122 +700,121 @@ class GraphQLService {
       query,
       complexity: this.calculateComplexity(query),
       depth: this.calculateDepth(query)
-    };
+    }
   }
 
   private calculateComplexity(query: string): number {
     // Simplified complexity calculation
-    const fieldCount = (query.match(/\w+/g) || []).length;
-    return Math.max(1, fieldCount / 10);
+    const fieldCount = (query.match(/\w+/g) || []).length
+    return Math.max(1, fieldCount / 10)
   }
 
   private calculateDepth(query: string): number {
     // Simplified depth calculation
-    const braceCount = (query.match(/{/g) || []).length;
-    return Math.max(1, braceCount);
+    const braceCount = (query.match(/{/g) || []).length
+    return Math.max(1, braceCount)
   }
 
   private checkAuthentication(context: unknown): { valid: boolean; error?: string } {
     if (!this.config.authentication.enabled) {
-      return { valid: true };
+      return { valid: true }
     }
 
-    const authHeader = context.headers?.[this.config.authentication.header?.toLowerCase() || 'authorization'];
-    
+    const authHeader = context.headers?.[this.config.authentication.header?.toLowerCase() || 'authorization']
     switch (this.config.authentication.type) {
       case 'api_key':
         if (!authHeader || authHeader !== this.config.authentication.key) {
-          return { valid: false, error: 'Invalid API key' };
+          return { valid: false, error: 'Invalid API key' }
         }
-        break;
-      case 'bearer':
+        break
+    }
+    case 'bearer':
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return { valid: false, error: 'Invalid bearer token' };
+          return { valid: false, error: 'Invalid bearer token' }
         }
-        break;
+        break
     }
     
-    return { valid: true };
+    return { valid: true }
   }
 
   private checkComplexity(parsedQuery: unknown): { valid: boolean; error?: string } {
     if (parsedQuery.complexity > this.config.rateLimit.maxComplexity) {
-      return { valid: false, error: 'Query complexity exceeds limit' };
+      return { valid: false, error: 'Query complexity exceeds limit' }
     }
     
     if (parsedQuery.depth > this.config.rateLimit.maxDepth) {
-      return { valid: false, error: 'Query depth exceeds limit' };
+      return { valid: false, error: 'Query depth exceeds limit' }
     }
     
-    return { valid: true };
+    return { valid: true }
   }
 
   private async resolveQuery(parsedQuery: unknown, variables: unknown, context: unknown): Promise<any> {
     // Simplified query resolution - in real implementation, use proper GraphQL execution
-    const queryName = this.extractQueryName(parsedQuery.query);
-    const resolver = this.getResolver(queryName);
-    
+    const queryName = this.extractQueryName(parsedQuery.query)
+    const resolver = this.getResolver(queryName)
     if (!resolver) {
-      throw new Error(`No resolver found for query: ${queryName}`);
+      throw new Error(`No resolver found for query: ${queryName}`)
     }
     
-    return await resolver(variables, context);
+    return await resolver(variables, context)
   }
 
   private extractQueryName(query: string): string {
     // Simplified query name extraction
-    const match = query.match(/query\s*{\s*(\w+)/);
-    return match ? match[1] : 'unknown';
+    const match = query.match(/query\s*{\s*(\w+)/)
+    return match ? match[1] : 'unknown'
   }
 
   private getTypeKind(typeName: string): string {
-    const type = this.schema.types.find(t => t.name === typeName);
-    return type?.kind || 'SCALAR';
+    const type = this.schema.types.find(t => t.name === typeName)
+    return type?.kind || 'SCALAR'
   }
 
   // Persistence
   private saveConfig(): void {
     try {
-      localStorage.setItem('cmo_graphql_config', JSON.stringify(this.config));
+      localStorage.setItem('cmo_graphql_config', JSON.stringify(this.config))
     } catch (error) {
-      console.error('Failed to save GraphQL config:', error);
+      console.error('Failed to save GraphQL config:', error)
     }
   }
 
   private saveSchema(): void {
     try {
-      localStorage.setItem('cmo_graphql_schema', JSON.stringify(this.schema));
+      localStorage.setItem('cmo_graphql_schema', JSON.stringify(this.schema))
     } catch (error) {
-      console.error('Failed to save GraphQL schema:', error);
+      console.error('Failed to save GraphQL schema:', error)
     }
   }
 
   loadConfig(): void {
     try {
-      const stored = localStorage.getItem('cmo_graphql_config');
+      const stored = localStorage.getItem('cmo_graphql_config')
       if (stored) {
-        this.config = { ...this.config, ...JSON.parse(stored) };
+        this.config = { ...this.config, ...JSON.parse(stored) }
       }
     } catch (error) {
-      console.error('Failed to load GraphQL config:', error);
+      console.error('Failed to load GraphQL config:', error)
     }
   }
 
   loadSchema(): void {
     try {
-      const stored = localStorage.getItem('cmo_graphql_schema');
+      const stored = localStorage.getItem('cmo_graphql_schema')
       if (stored) {
-        this.schema = JSON.parse(stored);
+        this.schema = JSON.parse(stored)
       }
     } catch (error) {
-      console.error('Failed to load GraphQL schema:', error);
+      console.error('Failed to load GraphQL schema:', error)
     }
   }
 }
 
 // Singleton instance
-export const graphQLService = new GraphQLService();
-
+export const graphQLService = new GraphQLService()
 // Initialize on import
-graphQLService.loadConfig();
-graphQLService.loadSchema();
+graphQLService.loadConfig()
+graphQLService.loadSchema()
+}

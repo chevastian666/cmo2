@@ -1,84 +1,76 @@
-import React, { useState } from 'react';
-import { useNavigate} from 'react-router-dom';
-import {Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react';
-import { notificationService} from '../../../services/shared/notification.service';
-import { prearmadoService} from '../services/prearmado.service';
-
+import React, { useState } from 'react'
+import { useNavigate} from 'react-router-dom'
+import {Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react'
+import { notificationService} from '../../../services/shared/notification.service'
+import { prearmadoService} from '../services/prearmado.service'
 interface PrearmadoFormData {
-  viajeId: string;
-  movimientoId: string;
+  viajeId: string
+  movimientoId: string
 }
 
 interface TransitInfo {
-  track: string;
-  empresaid: string;
-  VjeId: string;
-  MovId: string;
-  precintoid: string[];
-  DUA: string;
-  fecha: number;
-  MatTra: string;
-  MatTraOrg: string;
-  MatZrr?: string;
-  MatRemo?: string;
-  ConNmb: string;
-  ConNDoc: string;
-  ConTDoc?: string;
-  ConODoc?: string;
-  ConTel: string;
-  plidEnd?: string;
-  depEnd?: string;
+  track: string
+  empresaid: string
+  VjeId: string
+  MovId: string
+  precintoid: string[]
+  DUA: string
+  fecha: number
+  MatTra: string
+  MatTraOrg: string
+  MatZrr?: string
+  MatRemo?: string
+  ConNmb: string
+  ConNDoc: string
+  ConTDoc?: string
+  ConODoc?: string
+  ConTel: string
+  plidEnd?: string
+  depEnd?: string
 }
 
 export const PrearmadoPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [searchPerformed, setSearchPerformed] = useState(false);
-  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(null);
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [searchPerformed, setSearchPerformed] = useState(false)
+  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(null)
   const [formData, setFormData] = useState<PrearmadoFormData>({
     viajeId: '',
     movimientoId: ''
-  });
-
+  })
   const handleInputChange = (field: keyof PrearmadoFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
-    }));
-  };
-
+    }))
+  }
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+    e.preventDefault()
     if (!formData.viajeId.trim() || !formData.movimientoId.trim()) {
-      notificationService.warning('Campos requeridos', 'Debe ingresar tanto el ID de viaje como el ID de movimiento');
-      return;
+      notificationService.warning('Campos requeridos', 'Debe ingresar tanto el ID de viaje como el ID de movimiento')
+      return
     }
 
-    setLoading(true);
-    setSearchPerformed(true);
-
+    setLoading(true)
+    setSearchPerformed(true)
     try {
-      const result = await prearmadoService.searchTransit(formData.viajeId, formData.movimientoId);
-      
+      const result = await prearmadoService.searchTransit(formData.viajeId, formData.movimientoId)
       if (result) {
-        setTransitInfo(result);
-        notificationService.success('Tránsito encontrado', `Viaje ${formData.viajeId} - Movimiento ${formData.movimientoId}`);
+        setTransitInfo(result)
+        notificationService.success('Tránsito encontrado', `Viaje ${formData.viajeId} - Movimiento ${formData.movimientoId}`)
       } else {
-        setTransitInfo(null);
-        notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados');
+        setTransitInfo(null)
+        notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados')
       }
     } catch {
-      notificationService.error('Error', 'Error al buscar la información del tránsito');
-      setTransitInfo(null);
+      notificationService.error('Error', 'Error al buscar la información del tránsito')
+      setTransitInfo(null)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const handlePrearm = () => {
-    if (!transitInfo) return;
-    
+    if (!transitInfo) return
     // Navigate to armado page with pre-filled data
     navigate('/armado', { 
       state: { 
@@ -94,20 +86,18 @@ export const PrearmadoPage: React.FC = () => {
           depositoFin: transitInfo.depEnd || ''
         }
       } 
-    });
-  };
-
+    })
+  }
   const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * 1000)
     return date.toLocaleDateString('es-UY', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
-
+    })
+  }
   const getDocumentTypeLabel = (type?: string) => {
     const types: Record<string, string> = {
       '2': 'Cédula de identidad uruguaya',
@@ -119,10 +109,9 @@ export const PrearmadoPage: React.FC = () => {
       'LC': 'Libreta cívica extranjera',
       'LE': 'Libreta enrolamiento extranjera',
       'PAS': 'Pasaporte extranjero'
-    };
-    return type && types[type] ? types[type] : 'Documento';
-  };
-
+    }
+    return type && types[type] ? types[type] : 'Documento'
+  }
   return (<div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
@@ -339,5 +328,5 @@ export const PrearmadoPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

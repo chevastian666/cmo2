@@ -1,32 +1,30 @@
-import React, { useState, useMemo } from 'react';
-import {ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table';
+import React, { useState, useMemo } from 'react'
+import {ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table'
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
 import {
-  DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
-import { ChevronDown, Search, ChevronLeft, ChevronRight} from 'lucide-react';
-
+  DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import { ChevronDown, Search, ChevronLeft, ChevronRight} from 'lucide-react'
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  searchKey?: string;
-  searchPlaceholder?: string;
-  showColumnVisibility?: boolean;
-  showPagination?: boolean;
-  pageSize?: number;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  searchKey?: string
+  searchPlaceholder?: string
+  showColumnVisibility?: boolean
+  showPagination?: boolean
+  pageSize?: number
 }
 
 export function DataTableV2<TData, TValue>({
   columns, data, searchKey, searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(_);
-  const [rowSelection, setRowSelection] = useState(_);
-  const [globalFilter, setGlobalFilter] = useState('');
-
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(_)
+  const [rowSelection, setRowSelection] = useState(_)
+  const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
     data,
     columns,
@@ -52,8 +50,7 @@ export function DataTableV2<TData, TValue>({
         pageSize: pageSize,
       },
     },
-  });
-
+  })
   return (<div className="w-full space-y-4">
       {/* Toolbar */}
       <div className="flex items-center justify-between">
@@ -106,7 +103,7 @@ export function DataTableV2<TData, TValue>({
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  );
+                  )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -128,7 +125,7 @@ export function DataTableV2<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -178,7 +175,7 @@ export function DataTableV2<TData, TValue>({
               <Select
                 value={`${table.getState().pagination.pageSize}`}
                 onValueChange={(value) => {
-                  table.setPageSize(Number(value));
+                  table.setPageSize(Number(value))
                 }}
               >
                 <SelectTrigger className="h-8 w-[70px] bg-gray-800 border-gray-700">
@@ -219,5 +216,5 @@ export function DataTableV2<TData, TValue>({
         </div>
       )}
     </div>
-  );
+  )
 }

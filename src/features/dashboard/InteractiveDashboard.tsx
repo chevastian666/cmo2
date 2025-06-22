@@ -3,30 +3,27 @@
  * By Cheva
  */
 
-import React, { useMemo } from 'react';
-import { AlertCircle, TrendingUp, Truck, Shield} from 'lucide-react';
-import DashboardGrid, { type WidgetConfig } from '../../components/dashboard/DashboardGrid';
+import React, { useMemo } from 'react'
+import { AlertCircle, TrendingUp, Truck, Shield} from 'lucide-react'
+import DashboardGrid, { type WidgetConfig } from '../../components/dashboard/DashboardGrid'
 import {
-  KPIWidget, ChartWidget, AlertsWidget, MapWidget, ActivityWidget, StatisticsWidget, TransitWidget, PrecintoStatusWidget, PendingPrecintosWidget} from '../../components/dashboard/widgets';
-import { PageTransition, AnimatedHeader} from '../../components/animations/PageTransitions';
-import { usePrecintosStore} from '../../store/store';
-import { useTransitosStore} from '../../store/store';
-import { useAlertasStore} from '../../store/store';
-
+  KPIWidget, ChartWidget, AlertsWidget, MapWidget, ActivityWidget, StatisticsWidget, TransitWidget, PrecintoStatusWidget, PendingPrecintosWidget} from '../../components/dashboard/widgets'
+import { PageTransition, AnimatedHeader} from '../../components/animations/PageTransitions'
+import { usePrecintosStore} from '../../store/store'
+import { useTransitosStore} from '../../store/store'
+import { useAlertasStore} from '../../store/store'
 const InteractiveDashboard: React.FC = () => {
   // Datos de los stores
-  const precintos = usePrecintosStore(state => state.precintos);
-  const transitos = useTransitosStore(state => state.transitos);
-  const alertas = useAlertasStore(state => state.alertas);
-
+  const precintos = usePrecintosStore(state => state.precintos)
+  const transitos = useTransitosStore(state => state.transitos)
+  const alertas = useAlertasStore(state => state.alertas)
   // Calcular KPIs
   const kpis = useMemo(() => ({
     precintosActivos: precintos.filter(p => p.estado === 'ACTIVO').length,
     transitosEnRuta: transitos.filter(t => t.estado === 'EN_TRANSITO').length,
     alertasCriticas: alertas.filter(a => a.severidad === 'CRITICA').length,
     tasaCumplimiento: 94.5
-  }), [precintos, transitos, alertas]);
-
+  }), [precintos, transitos, alertas])
   // Configuración de widgets - ordenados por prioridad visual
   const widgets: WidgetConfig[] = [
     // Widgets prioritarios (parte superior)
@@ -120,8 +117,7 @@ const InteractiveDashboard: React.FC = () => {
       minW: 4,
       minH: 3
     }
-  ];
-
+  ]
   // Render de widgets según tipo
   const renderWidget = (widget: WidgetConfig) => {
     switch (widget.type) {
@@ -138,7 +134,7 @@ const InteractiveDashboard: React.FC = () => {
                 color="blue"
                 description="Precintos en operación"
               />
-            );
+            )
           case 'kpi-transitos':
             return (
               <KPIWidget
@@ -150,7 +146,7 @@ const InteractiveDashboard: React.FC = () => {
                 color="green"
                 description="En viaje / Pendientes"
               />
-            );
+            )
           case 'kpi-alertas':
             return (
               <KPIWidget
@@ -162,7 +158,7 @@ const InteractiveDashboard: React.FC = () => {
                 color="red"
                 description="Críticas / Medias / Bajas"
               />
-            );
+            )
           case 'kpi-cumplimiento':
             return (
               <KPIWidget
@@ -174,39 +170,30 @@ const InteractiveDashboard: React.FC = () => {
                 icon={<TrendingUp className="h-6 w-6" />}
                 color="purple"
               />
-            );
+            )
         }
-        break;
-      
-      case 'chart':
-        return <ChartWidget widgetId={widget.id} type="area" />;
-      
-      case 'map':
-        return <MapWidget showLegend showControls />;
-      
-      case 'alerts':
-        return <AlertsWidget />;
-      
-      case 'activity':
-        return <ActivityWidget />;
-      
-      case 'statistics':
-        return <StatisticsWidget />;
-      
-      case 'transits':
-        return <TransitWidget />;
-      
-      case 'precinto-status':
-        return <PrecintoStatusWidget />;
-      
-      case 'pending-precintos':
-        return <PendingPrecintosWidget />;
-      
-      default:
-        return <div>Widget no encontrado</div>;
+        break
     }
-  };
-
+    case 'chart':
+        return <ChartWidget widgetId={widget.id} type="area" />
+      case 'map':
+        return <MapWidget showLegend showControls />
+      case 'alerts':
+        return <AlertsWidget />
+      case 'activity':
+        return <ActivityWidget />
+      case 'statistics':
+        return <StatisticsWidget />
+      case 'transits':
+        return <TransitWidget />
+      case 'precinto-status':
+        return <PrecintoStatusWidget />
+      case 'pending-precintos':
+        return <PendingPrecintosWidget />
+      default:
+        return <div>Widget no encontrado</div>
+    }
+  }
   return (<PageTransition variant="fade">
       <div className="min-h-screen bg-gray-900 p-4">
         <AnimatedHeader
@@ -220,13 +207,12 @@ const InteractiveDashboard: React.FC = () => {
             renderWidget={renderWidget}
             className="w-full"
             onLayoutChange={(layouts) => {
-              console.log('Layouts cambiados:', layouts);
+              console.log('Layouts cambiados:', layouts)
             }}
           />
         </div>
       </div>
     </PageTransition>
-  );
-};
-
-export default InteractiveDashboard;
+  )
+}
+export default InteractiveDashboard

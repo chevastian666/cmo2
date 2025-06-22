@@ -4,79 +4,69 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { Button, ButtonProps} from '@/components/ui/button';
-import {Loader2, Check, X} from 'lucide-react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/lib/utils';
-import { toast} from '@/hooks/use-toast';
-
+import React, { useState } from 'react'
+import { Button, ButtonProps} from '@/components/ui/button'
+import {Loader2, Check, X} from 'lucide-react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/lib/utils'
+import { toast} from '@/hooks/use-toast'
 export interface FeedbackButtonProps extends ButtonProps {
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
-  loadingText?: string;
-  successText?: string;
-  errorText?: string;
-  showSuccessIcon?: boolean;
-  showErrorIcon?: boolean;
-  successDuration?: number;
-  onSuccess?: () => void;
-  onError?: (error: Error) => void;
-  showToastOnSuccess?: boolean;
-  showToastOnError?: boolean;
-  toastSuccessMessage?: string;
-  toastErrorMessage?: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
+  loadingText?: string
+  successText?: string
+  errorText?: string
+  showSuccessIcon?: boolean
+  showErrorIcon?: boolean
+  successDuration?: number
+  onSuccess?: () => void
+  onError?: (error: Error) => void
+  showToastOnSuccess?: boolean
+  showToastOnError?: boolean
+  toastSuccessMessage?: string
+  toastErrorMessage?: string
 }
 
-type ButtonState = 'idle' | 'loading' | 'success' | 'error';
-
+type ButtonState = 'idle' | 'loading' | 'success' | 'error'
 export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
   children, onClick, loadingText, successText, errorText, showSuccessIcon = true, showErrorIcon = true, successDuration = 2000, onSuccess, onError, disabled, className, variant = 'default', size = 'default', showToastOnSuccess = false, showToastOnError = true, toastSuccessMessage, toastErrorMessage, ...props
 }) => {
-  const [state, setState] = useState<ButtonState>('idle');
-
+  const [state, setState] = useState<ButtonState>('idle')
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!onClick || state !== 'idle') return;
-
-    setState('loading');
-
+    if (!onClick || state !== 'idle') return
+    setState('loading')
     try {
-      await onClick(e);
-      setState('success');
-      
+      await onClick(e)
+      setState('success')
       if (showToastOnSuccess && toastSuccessMessage) {
         toast({
           title: "Éxito",
           description: toastSuccessMessage,
           variant: "default"
-        });
+        })
       }
       
-      onSuccess?.();
-      
+      onSuccess?.()
       // Reset to idle after success duration
       setTimeout(() => {
-        setState('idle');
-      }, successDuration);
+        setState('idle')
+      }, successDuration)
     } catch {
-      setState('error');
-      
+      setState('error')
       if (showToastOnError) {
         toast({
           title: "Error",
           description: toastErrorMessage || (error as Error).message || "Ha ocurrido un error",
           variant: "destructive"
-        });
+        })
       }
       
-      onError?.(error as Error);
-      
+      onError?.(error as Error)
       // Reset to idle after error duration
       setTimeout(() => {
-        setState('idle');
-      }, 3000);
+        setState('idle')
+      }, 3000)
     }
-  };
-
+  }
   const getButtonContent = () => {
     switch (state) {
       case 'loading':
@@ -85,40 +75,35 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             {loadingText || children}
           </>
-        );
-      
+        )
       case 'success':
         return (
           <>
             {showSuccessIcon && <Check className="mr-2 h-4 w-4" />}
             {successText || children}
           </>
-        );
-      
+        )
       case 'error':
         return (
           <>
             {showErrorIcon && <X className="mr-2 h-4 w-4" />}
             {errorText || 'Error'}
           </>
-        );
-      
+        )
       default:
-        return children;
+        return children
     }
-  };
-
+  }
   const getButtonVariant = () => {
     switch (state) {
-      case 'success':
-        return 'default';
-      case 'error':
-        return 'destructive';
+      case 'success': {
+  return 'default'
+      case 'error': {
+  return 'destructive'
       default:
-        return variant;
+        return variant
     }
-  };
-
+  }
   return (
     <motion.div
       animate={state === 'success' ? { scale: [1, 1.05, 1] } : {}}
@@ -150,9 +135,8 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
         </AnimatePresence>
       </Button>
     </motion.div>
-  );
-};
-
+  )
+}
 // Preset configurations for common use cases
 export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
@@ -164,8 +148,7 @@ export const SaveButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'suc
   >
     Guardar
   </FeedbackButton>
-);
-
+)
 export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     variant="destructive"
@@ -177,8 +160,7 @@ export const DeleteButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
   >
     Eliminar
   </FeedbackButton>
-);
-
+)
 export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     loadingText="Enviando..."
@@ -189,8 +171,7 @@ export const SubmitButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 's
   >
     Enviar
   </FeedbackButton>
-);
-
+)
 export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | 'successText'>> = (props) => (
   <FeedbackButton
     variant="outline"
@@ -201,4 +182,4 @@ export const RefreshButton: React.FC<Omit<FeedbackButtonProps, 'loadingText' | '
   >
     Actualizar
   </FeedbackButton>
-);
+)

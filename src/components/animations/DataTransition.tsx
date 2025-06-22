@@ -4,30 +4,26 @@
  * By Cheva
  */
 
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-
+import React, { useEffect, useState } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
 interface DataTransitionProps {
-  children: React.ReactNode;
-  dataKey?: string | number;
-  className?: string;
+  children: React.ReactNode
+  dataKey?: string | number
+  className?: string
 }
 
 export const DataTransition: React.FC<DataTransitionProps> = ({ 
   children, dataKey, className = '' 
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-   
-
+  const [isVisible, setIsVisible] = useState(true)
   useEffect(() => {
     // Trigger re-animation when dataKey changes
     if (dataKey !== undefined) {
-      setIsVisible(false);
-      const timer = setTimeout(() => setIsVisible(true), 50);
-      return () => clearTimeout(timer);
+      setIsVisible(false)
+      const timer = setTimeout(() => setIsVisible(true), 50)
+      return () => clearTimeout(timer)
     }
-  }, [dataKey]);
-
+  }, [])
   return (
     <AnimatePresence mode="wait">
       {isVisible && (
@@ -46,13 +42,12 @@ export const DataTransition: React.FC<DataTransitionProps> = ({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
-
+  )
+}
 // Componente para transiciones de lista
 interface ListTransitionProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export const ListTransition: React.FC<ListTransitionProps> = ({ 
@@ -70,6 +65,5 @@ export const ListTransition: React.FC<ListTransitionProps> = ({
     >
       {children}
     </motion.div>
-  );
-};
-
+  )
+}

@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-import { Card} from '@/components/ui/card';
-import { notificationService} from '../../../services/shared/notification.service';
-import { transitosService} from '../services/transitos.service';
-import type { Transito} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Card} from '@/components/ui/card'
+import { notificationService} from '../../../services/shared/notification.service'
+import { transitosService} from '../services/transitos.service'
+import type { Transito} from '../types'
 interface EditTransitoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  transito: Transito | null;
-  onSuccess?: () => void;
+  isOpen: boolean
+  onClose: () => void
+  transito: Transito | null
+  onSuccess?: () => void
 }
 
 export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
@@ -21,52 +20,42 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
   const [formData, setFormData] = useState({
     dua: '',
     destino: ''
-  });
-  const [loading, setLoading] = useState(false);
-   
-
+  })
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (transito) {
       setFormData({
         dua: transito.dua || '',
         destino: transito.destino || ''
-      });
+      })
     }
-  }, [transito]);
-
+  }, [transito])
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!transito) return;
-
+    e.preventDefault()
+    if (!transito) return
     try {
-      setLoading(true);
-      
+      setLoading(true)
       // Call the update service
       await transitosService.updateTransito(transito.id, {
         dua: formData.dua,
         destino: formData.destino
-      });
-
+      })
       notificationService.success(
         'Tránsito Actualizado',
         `El tránsito ${formData.dua} ha sido actualizado exitosamente`
-      );
-
-      onSuccess?.();
-      onClose();
+      )
+      onSuccess?.()
+      onClose()
     } catch {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  if (!transito) return null;
-
+  }
+  if (!transito) return null
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-800 border-gray-700">
@@ -171,5 +160,5 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

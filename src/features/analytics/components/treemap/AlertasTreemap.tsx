@@ -4,19 +4,16 @@
  * By Cheva
  */
 
-import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-
-import { Label} from '@/components/ui/label';
-import {AlertTriangle, AlertCircle, CheckCircle, XCircle} from 'lucide-react';
-import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
-import { transformAlertsBySeverity, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers';
-
+import React, { useMemo, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group'
+import { Label} from '@/components/ui/label'
+import {AlertTriangle, AlertCircle, CheckCircle, XCircle} from 'lucide-react'
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
+import { transformAlertsBySeverity, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
 export const AlertasTreemap: React.FC = () => {
-  
-  const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity');
 
+  const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity')
   const treemapData = useMemo(() => {
     if (!alertas.length) {
       return {
@@ -28,56 +25,50 @@ export const AlertasTreemap: React.FC = () => {
             color: '#10b981'
           }
         ]
-      };
+      }
     }
 
     switch (groupBy) {
       case 'severity':
-        return transformAlertsBySeverity(alertas);
-      
+        return transformAlertsBySeverity(alertas)
       case 'source':
-        return createHierarchy(alertas, ['origen', 'tipo', 'estado']);
-      
+        return createHierarchy(alertas, ['origen', 'tipo', 'estado'])
       case 'time': {
-        
-        const now = new Date();
+
+        const now = new Date()
         const categorizedAlerts = alertas.map(alert => {
-          const alertTime = new Date(alert.timestamp);
-          const hoursDiff = (now.getTime() - alertTime.getTime()) / (1000 * 60 * 60);
-          
-          let timeCategory = 'Más de 48h';
-          if (hoursDiff < 1) timeCategory = 'Última hora';
-          else if (hoursDiff < 24) timeCategory = 'Últimas 24h';
-          else if (hoursDiff < 48) timeCategory = 'Últimas 48h';
-          
-          return { ...alert, timeCategory };
-        });
-        
-        return createHierarchy(categorizedAlerts, ['timeCategory', 'tipo']);
-      
+          const alertTime = new Date(alert.timestamp)
+          const hoursDiff = (now.getTime() - alertTime.getTime()) / (1000 * 60 * 60)
+          let timeCategory = 'Más de 48h'
+          if (hoursDiff < 1) timeCategory = 'Última hora'
+          else if (hoursDiff < 24) timeCategory = 'Últimas 24h'
+          else if (hoursDiff < 48) timeCategory = 'Últimas 48h'
+          return { ...alert, timeCategory }
+        })
+        return createHierarchy(categorizedAlerts, ['timeCategory', 'tipo'])
       default:
-        return transformAlertsBySeverity(alertas);
+        return transformAlertsBySeverity(alertas)
     }
-  }, [alertas, groupBy]);
-
+  )
+}, [alertas])
   const stats = useMemo(() => {
-    const total = alertas.length;
-    const critical = alertas.filter(a => a.tipo === 'critica').length;
-    const active = alertas.filter(a => a.estado === 'activa').length;
-    const resolved = alertas.filter(a => a.estado === 'resuelta').length;
-    
-    return { total, critical, active, resolved };
-  }, [alertas]);
-
+    const total = alertas.length
+    const critical = alertas.filter(a => a.tipo === 'critica').length
+    const active = alertas.filter(a => a.estado === 'activa').length
+    const resolved = alertas.filter(a => a.estado === 'resuelta').length
+    return { total, critical, active, resolved }
+  }, [alertas])
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'critica': return <AlertTriangle className="h-6 w-6 text-red-500" />;
-      case 'activa': return <AlertCircle className="h-6 w-6 text-yellow-500" />;
-      case 'resuelta': return <CheckCircle className="h-6 w-6 text-green-500" />;
-      default: return <XCircle className="h-6 w-6 text-gray-500" />;
+      case 'critica': {
+  return <AlertTriangle className="h-6 w-6 text-red-500" />
+      case 'activa': {
+  return <AlertCircle className="h-6 w-6 text-yellow-500" />
+      case 'resuelta': {
+  return <CheckCircle className="h-6 w-6 text-green-500" />
+      default: return <XCircle className="h-6 w-6 text-gray-500" />
     }
-  };
-
+  }
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
@@ -177,5 +168,6 @@ export const AlertasTreemap: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}
+}

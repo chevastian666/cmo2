@@ -1,28 +1,27 @@
-import React, { useState, useRef } from 'react';
-import { X, Upload, FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '@/components/ui/card';
-import { Badge} from '@/components/ui/badge';
-import { cn} from '../../../utils/utils';
-import { notificationService} from '../../../services/shared/notification.service';
-import type { TipoDocumento} from '../types';
-import { TIPOS_DOCUMENTO} from '../types';
-
+import React, { useState, useRef } from 'react'
+import { X, Upload, FileText} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '@/components/ui/card'
+import { Badge} from '@/components/ui/badge'
+import { cn} from '../../../utils/utils'
+import { notificationService} from '../../../services/shared/notification.service'
+import type { TipoDocumento} from '../types'
+import { TIPOS_DOCUMENTO} from '../types'
 interface SubirDocumentoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: FormData) => Promise<void>;
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (data: FormData) => Promise<void>
 }
 
 interface FormData {
-  tipo: TipoDocumento;
-  numeroDUA?: string;
-  fechaDocumento: string;
-  descripcion: string;
-  palabrasClave: string;
-  empresa?: string;
-  destacado: boolean;
-  confidencial: boolean;
-  archivo: File;
+  tipo: TipoDocumento
+  numeroDUA?: string
+  fechaDocumento: string
+  descripcion: string
+  palabrasClave: string
+  empresa?: string
+  destacado: boolean
+  confidencial: boolean
+  archivo: File
 }
 
 export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
@@ -33,78 +32,69 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
     destacado: false,
     confidencial: false,
     fechaDocumento: new Date().toISOString().split('T')[0]
-  });
-  const [archivo, setArchivo] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  if (!isOpen) return null;
-
+  })
+  const [archivo, setArchivo] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  if (!isOpen) return null
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
       if (file.type !== 'application/pdf') {
-        setErrors({ ...errors, archivo: 'Solo se permiten archivos PDF' });
-        return;
+        setErrors({ ...errors, archivo: 'Solo se permiten archivos PDF' })
+        return
       }
       if (file.size > 10 * 1024 * 1024) { // 10MB
-        setErrors({ ...errors, archivo: 'El archivo no puede superar los 10MB' });
-        return;
+        setErrors({ ...errors, archivo: 'El archivo no puede superar los 10MB' })
+        return
       }
-      setArchivo(file);
-      setErrors({ ...errors, archivo: '' });
+      setArchivo(file)
+      setErrors({ ...errors, archivo: '' })
     }
-  };
-
+  }
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.tipo) newErrors.tipo = 'El tipo de documento es requerido';
-    if (!formData.fechaDocumento) newErrors.fechaDocumento = 'La fecha es requerida';
-    if (!formData.descripcion?.trim()) newErrors.descripcion = 'La descripción es requerida';
-    if (!archivo) newErrors.archivo = 'Debe seleccionar un archivo PDF';
-
+    const newErrors: Record<string, string> = {}
+    if (!formData.tipo) newErrors.tipo = 'El tipo de documento es requerido'
+    if (!formData.fechaDocumento) newErrors.fechaDocumento = 'La fecha es requerida'
+    if (!formData.descripcion?.trim()) newErrors.descripcion = 'La descripción es requerida'
+    if (!archivo) newErrors.archivo = 'Debe seleccionar un archivo PDF'
     if (formData.tipo === 'DUA' && !formData.numeroDUA?.trim()) {
-      newErrors.numeroDUA = 'El número de DUA es requerido para este tipo';
+      newErrors.numeroDUA = 'El número de DUA es requerido para este tipo'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
   const handleSubmit = async () => {
-    if (!validateForm()) return;
-
-    setLoading(true);
+    if (!validateForm()) return
+    setLoading(true)
     try {
       await onSubmit({
         ...formData as FormData,
         archivo: archivo!
-      });
-      notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
-      onClose();
+      })
+      notificationService.success('Documento subido', 'El documento se ha guardado correctamente')
+      onClose()
     } catch {
-      notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
+      notificationService.error('Error al subir documento', 'Por favor intente nuevamente')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const handleReset = () => {
     setFormData({
       tipo: 'DUA',
       destacado: false,
       confidencial: false,
       fechaDocumento: new Date().toISOString().split('T')[0]
-    });
-    setArchivo(null);
-    setErrors({});
+    })
+    setArchivo(null)
+    setErrors({})
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = ''
     }
-  };
-
+  }
   return (
     <>
       {/* Backdrop */}
@@ -374,5 +364,5 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

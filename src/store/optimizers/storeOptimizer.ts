@@ -3,55 +3,52 @@
  * Uses shallow comparison and update batching
  */
 
-import { StoreApi} from 'zustand';
-
+import { StoreApi} from 'zustand'
 interface OptimizationConfig {
-  enableDeepComparison?: boolean;
-  batchUpdates?: boolean;
-  batchInterval?: number;
-  debugMode?: boolean;
+  enableDeepComparison?: boolean
+  batchUpdates?: boolean
+  batchInterval?: number
+  debugMode?: boolean
 }
 
 export class StoreOptimizer<T extends object> {
-  private pendingUpdates = new Map<keyof T, unknown>();
-  private updateTimer: NodeJS.Timeout | null = null;
-  private config: OptimizationConfig;
-  private store: StoreApi<T>;
-  private updateCount = 0;
-  private skipCount = 0;
-
+  private pendingUpdates = new Map<keyof T, unknown>()
+  private updateTimer: NodeJS.Timeout | null = null
+  private config: OptimizationConfig
+  private store: StoreApi<T>
+  private updateCount = 0
+  private skipCount = 0
   constructor(store: StoreApi<T>, config: OptimizationConfig = {}) {
-    this.store = store;
+    this.store = store
     this.config = {
       enableDeepComparison: false,
       batchUpdates: true,
       batchInterval: 16, // One frame (60fps)
       debugMode: false,
       ...config
-    };
+    }
   }
 
   /**
    * Optimized update that checks if update is necessary
    */
   update<K extends keyof T>(key: K, value: T[K]): void {
-    const currentState = this.store.getState();
-    const currentValue = currentState[key];
-
+    const currentState = this.store.getState()
+    const currentValue = currentState[key]
     // Skip if value hasn't changed
     if (this.areEqual(currentValue, value)) {
-      this.skipCount++;
+      this.skipCount++
       if (this.config.debugMode) {
-        console.log(`[StoreOptimizer] Skipped update for ${String(key)}: value unchanged`);
+        console.log(`[StoreOptimizer] Skipped update for ${String(key)}: value unchanged`)
       }
-      return;
+      return
     }
 
     // Batch updates if enabled
     if (this.config.batchUpdates) {
-      this.batchUpdate(key, value);
+      this.batchUpdate(key, value)
     } else {
-      this.immediateUpdate(key, value);
+      this.immediateUpdate(key, value)
     }
   }
 
@@ -59,17 +56,16 @@ export class StoreOptimizer<T extends object> {
    * Update multiple fields at once (more efficient)
    */
   updateMultiple(updates: Partial<T>): void {
-    const currentState = this.store.getState();
-    const actualUpdates: Partial<T> = {};
-    let hasChanges = false;
-
+    const currentState = this.store.getState()
+    const actualUpdates: Partial<T> = {}
+    let hasChanges = false
     // Filter out unchanged values
     for (const [key, value] of Object.entries(updates) as [keyof T, T[keyof T]][]) {
       if (!this.areEqual(currentState[key], value)) {
-        actualUpdates[key] = value;
-        hasChanges = true;
+        actualUpdates[key] = value
+        hasChanges = true
       } else {
-        this.skipCount++;
+        this.skipCount++
       }
     }
 
@@ -77,12 +73,12 @@ export class StoreOptimizer<T extends object> {
     if (hasChanges) {
       if (this.config.batchUpdates) {
         for (const [key, value] of Object.entries(actualUpdates) as [keyof T, T[keyof T]][]) {
-          this.pendingUpdates.set(key, value);
+          this.pendingUpdates.set(key, value)
         }
-        this.scheduleBatchUpdate();
+        this.scheduleBatchUpdate()
       } else {
-        this.store.setState(actualUpdates as T);
-        this.updateCount++;
+        this.store.setState(actualUpdates as T)
+        this.updateCount++
       }
     }
   }
@@ -92,96 +88,87 @@ export class StoreOptimizer<T extends object> {
    */
   private areEqual(a: unknown, b: unknown): boolean {
     // Same reference
-    if (a === b) return true;
-
+    if (a === b) return true
     // Different types
-    if (typeof a !== typeof b) return false;
-    if (a === null || b === null) return a === b;
-    if (a === undefined || b === undefined) return a === b;
-
+    if (typeof a !== typeof b) return false
+    if (a === null || b === null) return a === b
+    if (a === undefined || b === undefined) return a === b
     // Primitives
-    if (typeof a !== 'object') return a === b;
-
+    if (typeof a !== 'object') return a === b
     // Arrays
     if (Array.isArray(a) && Array.isArray(b)) {
-      if (a.length !== b.length) return false;
-      
+      if (a.length !== b.length) return false
       if (this.config.enableDeepComparison) {
-        return a.every((item, index) => this.areEqual(item, b[index]));
+        return a.every((item, index) => this.areEqual(item, b[index]))
       } else {
         // Shallow comparison for arrays
-        return a.every((item, index) => item === b[index]);
+        return a.every((item, index) => item === b[index])
       }
     }
 
     // Objects
     if (!Array.isArray(a) && !Array.isArray(b)) {
-      const keysA = Object.keys(a);
-      const keysB = Object.keys(b);
-      
-      if (keysA.length !== keysB.length) return false;
-      
+      const keysA = Object.keys(a)
+      const keysB = Object.keys(b)
+      if (keysA.length !== keysB.length) return false
       if (this.config.enableDeepComparison) {
-        return keysA.every(key => this.areEqual(a[key], b[key]));
+        return keysA.every(key => this.areEqual(a[key], b[key]))
       } else {
         // Shallow comparison for objects
-        return keysA.every(key => a[key] === b[key]);
+        return keysA.every(key => a[key] === b[key])
       }
     }
 
-    return false;
+    return false
   }
 
   /**
    * Batch update implementation
    */
   private batchUpdate<K extends keyof T>(key: K, value: T[K]): void {
-    this.pendingUpdates.set(key, value);
-    this.scheduleBatchUpdate();
+    this.pendingUpdates.set(key, value)
+    this.scheduleBatchUpdate()
   }
 
   /**
    * Schedule batch update execution
    */
   private scheduleBatchUpdate(): void {
-    if (this.updateTimer) return;
-
+    if (this.updateTimer) return
     this.updateTimer = setTimeout(() => {
-      this.executeBatchUpdate();
-    }, this.config.batchInterval);
+      this.executeBatchUpdate()
+    }, this.config.batchInterval)
   }
 
   /**
    * Execute all pending updates
    */
   private executeBatchUpdate(): void {
-    if (this.pendingUpdates.size === 0) return;
-
-    const updates: Partial<T> = {};
+    if (this.pendingUpdates.size === 0) return
+    const updates: Partial<T> = {}
     for (const [key, value] of this.pendingUpdates.entries()) {
-      updates[key] = value;
+      updates[key] = value
     }
 
-    this.store.setState(updates as T);
-    this.updateCount++;
-
+    this.store.setState(updates as T)
+    this.updateCount++
     if (this.config.debugMode) {
       console.log(`[StoreOptimizer] Batch update executed:`, {
         fields: Array.from(this.pendingUpdates.keys()),
         updateCount: this.updateCount
-      });
+      })
     }
 
-    this.pendingUpdates.clear();
-    this.updateTimer = null;
+    this.pendingUpdates.clear()
+    this.updateTimer = null
   }
 
   /**
    * Immediate update without batching
    */
   private immediateUpdate<K extends keyof T>(key: K, value: T[K]): void {
-    this.store.setState({ [key]: value } as T);
-    this.updateCount++;
+    this.store.setState({ [key]: value } as T)
+    this.updateCount++
   }
 
   /**
@@ -189,10 +176,10 @@ export class StoreOptimizer<T extends object> {
    */
   flush(): void {
     if (this.updateTimer) {
-      clearTimeout(this.updateTimer);
-      this.updateTimer = null;
+      clearTimeout(this.updateTimer)
+      this.updateTimer = null
     }
-    this.executeBatchUpdate();
+    this.executeBatchUpdate()
   }
 
   /**
@@ -204,15 +191,15 @@ export class StoreOptimizer<T extends object> {
       skipCount: this.skipCount,
       pendingUpdates: this.pendingUpdates.size,
       efficiency: this.skipCount / (this.updateCount + this.skipCount) || 0
-    };
+    }
   }
 
   /**
    * Reset statistics
    */
   resetStats(): void {
-    this.updateCount = 0;
-    this.skipCount = 0;
+    this.updateCount = 0
+    this.skipCount = 0
   }
 }
 
@@ -221,5 +208,5 @@ export function createOptimizedUpdater<T extends object>(
   store: StoreApi<T>,
   config?: OptimizationConfig
 ): StoreOptimizer<T> {
-  return new StoreOptimizer(store, config);
+  return new StoreOptimizer(store, config)
 }

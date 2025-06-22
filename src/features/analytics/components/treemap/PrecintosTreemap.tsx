@@ -4,18 +4,15 @@
  * By Cheva
  */
 
-import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {Building, Package, TrendingUp} from 'lucide-react';
-import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
-import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers';
-
+import React, { useMemo, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {Building, Package, TrendingUp} from 'lucide-react'
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
+import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
 export const PrecintosTreemap: React.FC = () => {
-  
-  const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company');
 
+  const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company')
   const treemapData = useMemo(() => {
     if (!precintos.length) {
       return {
@@ -27,32 +24,26 @@ export const PrecintosTreemap: React.FC = () => {
             color: '#6b7280'
           }
         ]
-      };
+      }
     }
 
     switch (groupBy) {
-      case 'company':
-        return transformPrecintosByCompany(precintos);
-      
-      case 'type':
-        return createHierarchy(precintos, ['tipo', 'estado']);
-      
-      case 'status':
-        return createHierarchy(precintos, ['estado', 'tipo']);
-      
+      case 'company': {
+  return transformPrecintosByCompany(precintos)
+      case 'type': {
+  return createHierarchy(precintos, ['tipo', 'estado'])
+      case 'status': {
+  return createHierarchy(precintos, ['estado', 'tipo'])
       default:
-        return transformPrecintosByCompany(precintos);
+        return transformPrecintosByCompany(precintos)
     }
-  }, [precintos, groupBy]);
-
+  }, [])
   const stats = useMemo(() => {
-    const total = precintos.length;
-    const active = precintos.filter(p => p.estado === 'en_transito').length;
-    const companies = new Set(precintos.map(p => p.empresa || 'Sin Empresa')).size;
-    
-    return { total, active, companies };
-  }, [precintos]);
-
+    const total = precintos.length
+    const active = precintos.filter(p => p.estado === 'en_transito').length
+    const companies = new Set(precintos.map(p => p.empresa || 'Sin Empresa')).size
+    return { total, active, companies }
+  }, [precintos])
   return (<div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -121,11 +112,11 @@ export const PrecintosTreemap: React.FC = () => {
             showTooltip={true}
             animated={true}
             onNodeClick={(node, event) => {
-              console.log('Node clicked:', node);
+              console.log('Node clicked:', node)
             }}
           />
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

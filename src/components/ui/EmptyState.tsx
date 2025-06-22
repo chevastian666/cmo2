@@ -1,18 +1,16 @@
-import React from 'react';
-import { cn} from '../../utils/utils';
-
-type EmptyStateIcon = 'default' | 'search' | 'folder' | 'alert' | 'data' | 'error';
-
+import React from 'react'
+import { cn} from '../../utils/utils'
+type EmptyStateIcon = 'default' | 'search' | 'folder' | 'alert' | 'data' | 'error'
 interface EmptyStateProps {
-  title?: string;
-  message: string;
-  icon?: EmptyStateIcon | React.ReactNode;
+  title?: string
+  message: string
+  icon?: EmptyStateIcon | React.ReactNode
   action?: {
-    label: string;
-    onClick: () => void;
-  };
-  className?: string;
-  size?: 'sm' | 'md' | 'lg';
+    label: string
+    onClick: () => void
+  }
+  className?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -37,13 +35,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       title: 'text-xl',
       message: 'text-lg'
     }
-  };
-
-  const styles = sizeStyles[size];
-
+  }
+  const styles = sizeStyles[size]
   const getIcon = () => {
     if (React.isValidElement(icon)) {
-      return icon;
+      return icon
     }
 
     const iconMap = {
@@ -77,11 +73,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
-    };
-
-    return iconMap[icon as EmptyStateIcon] || iconMap.default;
-  };
-
+    }
+    return iconMap[icon as EmptyStateIcon] || iconMap.default
+  }
   return (
     <div className={cn(
       'flex flex-col items-center justify-center text-center',
@@ -115,5 +109,5 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         </button>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,17 +1,13 @@
-import {useEffect} from 'react';
-import { useSystemStatusStore} from '../store';
-
+import {useEffect} from 'react'
+import { useSystemStatusStore} from '../store'
 export const useSystemStatus = () => {
-  const store = useSystemStatusStore();
-   
-
+  const store = useSystemStatusStore()
   useEffect(() => {
     // Fetch data on mount if not already loaded
     if (!store.estadisticas && !store.loading) {
-      store.fetchEstadisticas();
+      store.fetchEstadisticas()
     }
-  }, []);
-
+  }, [])
   return {
     estadisticas: store.estadisticas,
     smsPendientes: store.smsPendientes,
@@ -24,16 +20,14 @@ export const useSystemStatus = () => {
       updateStatus: store.updateSystemStatus,
       refresh: store.fetchEstadisticas,
     }
-  };
-};
-
+  }
+}
 export const useEstadisticas = () => {
-  const estadisticas = useSystemStatusStore((state) => state.estadisticas);
-  const loading = useSystemStatusStore((state) => state.loading);
-  
+  const estadisticas = useSystemStatusStore((state) => state.estadisticas)
+  const loading = useSystemStatusStore((state) => state.loading)
   return {
     data: estadisticas,
     loading,
     isLoaded: !!estadisticas,
-  };
-};
+  }
+}

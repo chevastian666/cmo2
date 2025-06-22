@@ -1,10 +1,9 @@
-import React from 'react';
-import { Truck} from 'lucide-react';
-import { TransitosPendientesTable} from './TransitosPendientesTable';
-import type { TransitoPendiente} from '../../../types/monitoring';
-
+import React from 'react'
+import { Truck} from 'lucide-react'
+import { TransitosPendientesTable} from './TransitosPendientesTable'
+import type { TransitoPendiente} from '../../../types/monitoring'
 interface TransitosPendientesWrapperProps {
-  transitos: TransitoPendiente[];
+  transitos: TransitoPendiente[]
 }
 
 export const TransitosPendientesWrapper: React.FC<TransitosPendientesWrapperProps> = ({ transitos }) => {
@@ -30,5 +29,5 @@ export const TransitosPendientesWrapper: React.FC<TransitosPendientesWrapperProp
         <TransitosPendientesTable transitos={transitos} />
       </div>
     </div>
-  );
-};
+  )
+}

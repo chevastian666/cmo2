@@ -4,51 +4,43 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Layout, Save, RotateCcw} from 'lucide-react';
-
-import { Input} from '@/components/ui/input';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Progress} from '@/components/ui/progress';
-
-import { Switch} from '@/components/ui/switch';
-import { Label} from '@/components/ui/label';
+import React, { useState, useEffect, useCallback } from 'react'
+import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Layout, Save, RotateCcw} from 'lucide-react'
+import { Input} from '@/components/ui/input'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Progress} from '@/components/ui/progress'
+import { Switch} from '@/components/ui/switch'
+import { Label} from '@/components/ui/label'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-import { useDashboardStore} from '@/store/store';
-import { cn} from '@/utils/utils';
-import { torreControlService} from '../services/torreControl.service';
-import type { TransitoTorreControl, EstadoSemaforo} from '../types';
-
-import { CongestionPanel} from '../../prediccion';
-import { CountdownTimer} from './CountdownTimer';
-import { TransitoDetailModal} from './TransitoDetailModal';
-import { MapWidget} from './MapWidget';
-import { ErrorBoundary} from '@/components/ErrorBoundary';
-import { pulseVariants, alertCriticalVariants} from '@/components/animations/AnimationPresets';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { useDashboardStore} from '@/store/store'
+import { cn} from '@/utils/utils'
+import { torreControlService} from '../services/torreControl.service'
+import type { TransitoTorreControl, EstadoSemaforo} from '../types'
+import { CongestionPanel} from '../../prediccion'
+import { CountdownTimer} from './CountdownTimer'
+import { TransitoDetailModal} from './TransitoDetailModal'
+import { MapWidget} from './MapWidget'
+import { ErrorBoundary} from '@/components/ErrorBoundary'
+import { pulseVariants, alertCriticalVariants} from '@/components/animations/AnimationPresets'
 // Dashboard Grid Layout
-import { Responsive, WidthProvider} from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import '../styles/torre-control.css';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
-
+import { Responsive, WidthProvider} from 'react-grid-layout'
+import 'react-grid-layout/css/styles.css'
+import 'react-resizable/css/styles.css'
+import '../styles/torre-control.css'
+const ResponsiveGridLayout = WidthProvider(Responsive)
 // Widget Components para el Dashboard
 const SemaforoWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const counts = {
     verde: data.filter(t => t.semaforo === 'verde').length,
     amarillo: data.filter(t => t.semaforo === 'amarillo').length,
     rojo: data.filter(t => t.semaforo === 'rojo').length
-  };
-
-  const total = data.length;
-
+  }
+  const total = data.length
   return (
     <div className="h-full flex flex-col">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -109,12 +101,10 @@ const SemaforoWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
         </motion.div>
       </div>
     </div>
-  );
-};
-
+  )
+}
 const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
-  const recentTransitos = data.slice(0, 5);
-
+  const recentTransitos = data.slice(0, 5)
   return (<div className="h-full flex flex-col">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
         <Radio className="h-5 w-5 text-blue-400" />
@@ -152,17 +142,15 @@ const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
         ))}
       </AnimatedList>
     </div>
-  );
-};
-
+  )
+}
 const MetricsWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const metrics = {
     velocidadPromedio: Math.round(data.reduce((acc, t) => acc + (60), 0) / data.length),
     tiempoPromedio: Math.round(data.reduce((acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / data.length),
     eficiencia: Math.round((data.filter(t => t.semaforo === 'verde').length / data.length) * 100),
     alertasActivas: data.filter(t => t.alertas && t.alertas.length > 0).length
-  };
-
+  }
   return (
     <div className="h-full">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -210,24 +198,25 @@ const MetricsWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => 
         </AnimatedCard>
       </div>
     </div>
-  );
-};
-
+  )
+}
 // Transit Row Component
 const TransitoRowV2: React.FC<{
-  transito: TransitoTorreControl;
-  index: number;
-  onSelect: (transito: TransitoTorreControl) => void;
+  transito: TransitoTorreControl
+  index: number
+  onSelect: (transito: TransitoTorreControl) => void
 }> = ({ transito, index, onSelect }) => {
   const getSemaforoColor = (estado: EstadoSemaforo) => {
     switch (estado) {
-      case 'verde': return 'bg-green-500';
-      case 'amarillo': return 'bg-yellow-500';
-      case 'rojo': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'verde': {
+  return 'bg-green-500'
+      case 'amarillo': {
+  return 'bg-yellow-500'
+      case 'rojo': {
+  return 'bg-red-500'
+      default: return 'bg-gray-500'
     }
-  };
-
+  }
   return (<motion.tr
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
@@ -273,8 +262,8 @@ const TransitoRowV2: React.FC<{
             size="sm"
             variant="ghost"
             onClick={(e) => {
-              e.stopPropagation();
-              onSelect(transito);
+              e.stopPropagation()
+              onSelect(transito)
             }}
           >
             Ver detalles
@@ -282,30 +271,24 @@ const TransitoRowV2: React.FC<{
         </div>
       </td>
     </motion.tr>
-  );
-};
-
+  )
+}
 // Main Component
 export const TorreControlV2: React.FC = () => {
-  const [transitos, setTransitos] = useState<TransitoTorreControl[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showCongestionPanel] = useState(true);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both');
-  const [lastUpdate, setLastUpdate] = useState(new Date());
-  
-  
-  
-  const { setLayouts } = useDashboardStore();
-
+  const [transitos, setTransitos] = useState<TransitoTorreControl[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [showCongestionPanel] = useState(true)
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [selectedView, setSelectedView] = useState<'dashboard' | 'table' | 'both'>('both')
+  const [lastUpdate, setLastUpdate] = useState(new Date())
+  const { setLayouts } = useDashboardStore()
   const [filters, setFilters] = useState({
     origen: '',
     destino: '',
     estado: '' as EstadoSemaforo | ''
-  });
-
+  })
   // Default layouts for the dashboard
   const defaultLayouts = {
     lg: [
@@ -329,58 +312,50 @@ export const TorreControlV2: React.FC = () => {
       { i: 'congestion', x: 0, y: 11, w: 6, h: 3 },
       { i: 'map', x: 0, y: 14, w: 6, h: 5 }
     ]
-  };
-
+  }
   // Fetch data
   const fetchTransitos = useCallback(async () => {
     try {
-      setLoading(true);
-      const data = await torreControlService.getTransitosEnRuta();
-      setTransitos(data);
-      setLastUpdate(new Date());
+      setLoading(true)
+      const data = await torreControlService.getTransitosEnRuta()
+      setTransitos(data)
+      setLastUpdate(new Date())
     } catch (error) {
-      console.error('Error fetching transitos:', error);
+      console.error('Error fetching transitos:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
-   
-
-
+  }, [])
     useEffect(() => {
-    fetchTransitos();
-    const interval = setInterval(fetchTransitos, 30000);
-    return () => clearInterval(interval);
-  }, [fetchTransitos]);
-
+    fetchTransitos()
+    const interval = setInterval(fetchTransitos, 30000)
+    return () => clearInterval(interval)
+  }, [])
   // Filter data
   const filteredTransitos = React.useMemo(() => {
-    let filtered = [...transitos];
-    
+    let filtered = [...transitos]
     if (filters.origen) {
       filtered = filtered.filter(t => 
         t.origen.toLowerCase().includes(filters.origen.toLowerCase())
-      );
+      )
     }
     
     if (filters.destino) {
       filtered = filtered.filter(t => 
         t.destino.toLowerCase().includes(filters.destino.toLowerCase())
-      );
+      )
     }
     
     if (filters.estado) {
-      filtered = filtered.filter(t => t.semaforo === filters.estado);
+      filtered = filtered.filter(t => t.semaforo === filters.estado)
     }
     
-    return filtered;
-  }, [transitos, filters]);
-
+    return filtered
+  }, [transitos, filters])
   const handleLayoutChange = (layout: unknown, newLayouts: unknown) => {
-    if (!isEditMode) return;
-    setLayouts(newLayouts);
-  };
-
+    if (!isEditMode) return
+    setLayouts(newLayouts)
+  }
   // Create widgets array - ensure all have valid components
   const widgets = React.useMemo(() => {
     const widgetList = [
@@ -416,8 +391,7 @@ export const TorreControlV2: React.FC = () => {
           </ErrorBoundary>
         ) 
       }
-    ];
-
+    ]
     // Only add congestion panel if enabled
     if (showCongestionPanel) {
       widgetList.push({
@@ -427,15 +401,12 @@ export const TorreControlV2: React.FC = () => {
             <CongestionPanel transitos={filteredTransitos || []} />
           </ErrorBoundary>
         )
-      });
+      })
     }
 
-    return widgetList;
-  }, [filteredTransitos, showCongestionPanel]);
-
+    return widgetList
+  }, [])
   // Add debug info - only in development
-   
-
 
     useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
@@ -446,10 +417,9 @@ export const TorreControlV2: React.FC = () => {
         selectedView,
         hasLayouts: !!layouts,
         widgetsCount: widgets.length
-      });
+      })
     }
-  }, [transitos, filteredTransitos, loading, selectedView, layouts, widgets]);
-
+  }, [transitos, loading, layouts, widgets])
   return (
     <ErrorBoundary>
       <PageTransition>
@@ -719,18 +689,17 @@ export const TorreControlV2: React.FC = () => {
       </div>
     </PageTransition>
     </ErrorBoundary>
-  );
-};
-
+  )
+}
 // KPI Card Component
 const KPICard: React.FC<{
-  title: string;
-  value: number | string;
-  icon: React.ReactNode;
-  color: string;
-  subtitle?: string;
-  pulse?: boolean;
-}> = ({ title, value, icon, color, subtitle, pulse }) => (
+  title: string
+  value: number | string
+  icon: React.ReactNode
+  color: string
+  subtitle?: string
+  pulse?: boolean
+}> = (title, value, icon, color, subtitle, pulse ) => (
   <AnimatedCard 
     className={cn("relative overflow-hidden", pulse && "animate-pulse")}
     whileHover={{ scale: 1.02 }}
@@ -758,7 +727,5 @@ const KPICard: React.FC<{
       </div>
     </CardContent>
   </AnimatedCard>
-);
-
-
-export default TorreControlV2;
+)
+export default TorreControlV2

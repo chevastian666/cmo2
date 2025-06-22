@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { Truck, User, Building, MapPin, FileText, Phone, Package, Globe, Home, Container} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useEffect } from 'react'
+import { Truck, User, Building, MapPin, FileText, Phone, Package, Globe, Home, Container} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 // Empresas con RUT (from original system)
 const EMPRESAS = [
   { nombre: 'EDELAR SA (BlockTracker)', rut: '211107380011' },
@@ -24,8 +23,7 @@ const EMPRESAS = [
   { nombre: 'VILAS FERNANDEZ RAMON WALTER', rut: '216986640017' },
   { nombre: 'DEPAULO MARTINEZ MARIELA', rut: '215778490018' },
   { nombre: 'GONZALEZ Y CIA LTDA', rut: '210239830016' }
-];
-
+]
 // Depósitos organizados por ubicación
 const DEPOSITOS = [
   // Puerto (1)
@@ -54,8 +52,7 @@ const DEPOSITOS = [
   { id: '1947', nombre: 'Fadimax', ubicacion: '1' },
   { id: '1635', nombre: 'Bomport Contenedores', ubicacion: '1' },
   { id: '1673', nombre: 'Tebetur', ubicacion: '1' },
-];
-
+]
 // Ubicaciones (plid)
 const UBICACIONES = [
   { id: '1', nombre: 'Puerto' },
@@ -84,8 +81,7 @@ const UBICACIONES = [
   { id: '24', nombre: 'En Viaje' },
   { id: '25', nombre: 'Tacuarembo' },
   { id: '26', nombre: 'Encomienda' }
-];
-
+]
 // Tipos de documento
 const TIPOS_DOCUMENTO = [
   { codigo: 'CI', nombre: 'Cédula de Identidad' },
@@ -93,8 +89,7 @@ const TIPOS_DOCUMENTO = [
   { codigo: 'RUT', nombre: 'RUT' },
   { codigo: 'DNI', nombre: 'DNI' },
   { codigo: 'OTRO', nombre: 'Otro' }
-];
-
+]
 // Países para origen del documento
 const PAISES_DOCUMENTO = [
   { codigo: 'UY', nombre: 'Uruguay' },
@@ -107,105 +102,90 @@ const PAISES_DOCUMENTO = [
   { codigo: 'EC', nombre: 'Ecuador' },
   { codigo: 'CO', nombre: 'Colombia' },
   { codigo: 'VE', nombre: 'Venezuela' }
-];
-
+]
 interface TransitoFormData {
   // Datos del viaje
-  precintoId: string;
-  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | '';
-  dua: string;
-  
+  precintoId: string
+  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | ''
+  dua: string
   // Datos del vehículo
-  matricula: string;
-  matriculaRemolque: string;
-  contenedorId: string;
-  
+  matricula: string
+  matriculaRemolque: string
+  contenedorId: string
   // Datos del conductor
-  nombreConductor: string;
-  tipoDocumentoConductor: string;
-  numeroDocumentoConductor: string;
-  origenDocumentoConductor: string;
-  telefonoConductor: string;
-  
+  nombreConductor: string
+  tipoDocumentoConductor: string
+  numeroDocumentoConductor: string
+  origenDocumentoConductor: string
+  telefonoConductor: string
   // Datos de la empresa
-  empresa: string;
-  rutEmpresa: string;
-  empresaSecundaria?: string;
-  rutEmpresaSecundaria?: string;
-  
+  empresa: string
+  rutEmpresa: string
+  empresaSecundaria?: string
+  rutEmpresaSecundaria?: string
   // Ruta y ubicaciones
-  origen: string;
-  destino: string;
-  depositoInicio: string;
-  depositoFin: string;
-  
+  origen: string
+  destino: string
+  depositoInicio: string
+  depositoFin: string
   // Eslinga y observaciones
   tipoEslinga: {
-    larga: boolean;
-    corta: boolean;
-  };
-  observaciones: string;
+    larga: boolean
+    corta: boolean
+  }
+  observaciones: string
 }
 
 interface ArmFormProps {
-  data: Partial<TransitoFormData>;
-  onChange: (field: string, value: unknown) => void;
-  disabled?: boolean;
-  precintoId?: string;
+  data: Partial<TransitoFormData>
+  onChange: (field: string, value: unknown) => void
+  disabled?: boolean
+  precintoId?: string
 }
 
 export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabled = false, precintoId }) => {
   // Auto-complete precinto ID when provided
-   
 
   useEffect(() => {
     if (precintoId && data.precintoId !== precintoId) {
-      onChange('precintoId', precintoId);
+      onChange('precintoId', precintoId)
     }
-  }, [precintoId]);
-
+  }, [])
   // Auto-complete RUT when empresa is selected
-   
 
   useEffect(() => {
     if (data.empresa) {
-      const empresa = EMPRESAS.find(e => e.nombre === data.empresa);
+      const empresa = EMPRESAS.find(e => e.nombre === data.empresa)
       if (empresa && data.rutEmpresa !== empresa.rut) {
-        onChange('rutEmpresa', empresa.rut);
+        onChange('rutEmpresa', empresa.rut)
       }
     }
-  }, [data.empresa]);
-
+  }, [data.empresa])
   // Auto-complete empresa when RUT is entered
-   
 
   useEffect(() => {
     if (data.rutEmpresa && data.rutEmpresa.length >= 11) {
-      const empresa = EMPRESAS.find(e => e.rut === data.rutEmpresa);
+      const empresa = EMPRESAS.find(e => e.rut === data.rutEmpresa)
       if (empresa && data.empresa !== empresa.nombre) {
-        onChange('empresa', empresa.nombre);
+        onChange('empresa', empresa.nombre)
       }
     }
-  }, [data.rutEmpresa]);
-
+  }, [data.rutEmpresa])
   // Filter depositos based on selected ubicacion
   const getDepositosByUbicacion = (ubicacionId: string) => {
-    if (!ubicacionId) return DEPOSITOS;
-    return DEPOSITOS.filter(d => d.ubicacion === ubicacionId);
-  };
-
+    if (!ubicacionId) return DEPOSITOS
+    return DEPOSITOS.filter(d => d.ubicacion === ubicacionId)
+  }
   const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    onChange(field, value);
-  };
-
+    const value = e.target.value
+    onChange(field, value)
+  }
   const handleCheckboxChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange('tipoEslinga', {
       ...data.tipoEslinga,
       [field]: e.target.checked
-    });
-  };
-
+    })
+  }
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 space-y-6">
       {/* Sección 1: Datos del Viaje */}
@@ -755,5 +735,5 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
         * Campos obligatorios
       </div>
     </div>
-  );
-};
+  )
+}

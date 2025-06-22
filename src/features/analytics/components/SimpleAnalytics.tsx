@@ -4,11 +4,10 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import {TrendingUp, Download, RefreshCw} from 'lucide-react';
-
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import {TrendingUp, Download, RefreshCw} from 'lucide-react'
 const SimpleAnalytics: React.FC = () => {
   return (<div className="space-y-6">
       {/* Header */}
@@ -69,7 +68,6 @@ const SimpleAnalytics: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
-export default SimpleAnalytics;
+  )
+}
+export default SimpleAnalytics

@@ -1,13 +1,12 @@
-import React, { Suspense, useState, useEffect } from 'react';
-import { PriorityProvider} from './priority/PriorityProvider';
-import { CriticalAlerts} from './alerts/CriticalAlerts';
-import { PrecintsGrid} from './dashboard/PrecintsGrid';
-import { MapView} from './map/MapView';
-import { PerformanceMonitor, ProfiledComponent} from './dashboard/PerformanceMonitor';
-import { CriticalAlertsSkeleton} from './alerts/AlertsSkeleton';
-import { DashboardSkeleton} from './dashboard/DashboardSkeleton';
-import { MapSkeleton} from './map/MapSkeleton';
-
+import React, { Suspense, useState, useEffect } from 'react'
+import { PriorityProvider} from './priority/PriorityProvider'
+import { CriticalAlerts} from './alerts/CriticalAlerts'
+import { PrecintsGrid} from './dashboard/PrecintsGrid'
+import { MapView} from './map/MapView'
+import { PerformanceMonitor, ProfiledComponent} from './dashboard/PerformanceMonitor'
+import { CriticalAlertsSkeleton} from './alerts/AlertsSkeleton'
+import { DashboardSkeleton} from './dashboard/DashboardSkeleton'
+import { MapSkeleton} from './map/MapSkeleton'
 // Mock data generators
 const generateMockPrecintos = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
@@ -19,9 +18,8 @@ const generateMockPrecintos = (count: number) => {
     battery: 20 + Math.random() * 80,
     lastUpdate: new Date(Date.now() - Math.random() * 3600000),
     assignedTo: Math.random() > 0.5 ? `Driver ${Math.floor(Math.random() * 10)}` : undefined
-  }));
-};
-
+  }))
+}
 const generateMockLocations = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
     id: `location-${i}`,
@@ -32,56 +30,50 @@ const generateMockLocations = (count: number) => {
     lastUpdate: new Date(Date.now() - Math.random() * 300000),
     speed: Math.random() > 0.7 ? Math.random() * 100 : 0,
     heading: Math.random() * 360
-  }));
-};
-
+  }))
+}
 export const ConcurrentApp: React.FC = () => {
-  const [precintos, setPrecintos] = useState(() => generateMockPrecintos(1000));
-  const [locations, setLocations] = useState(() => generateMockLocations(1000));
-  const [showPerformance, setShowPerformance] = useState(true);
-
+  const [precintos, setPrecintos] = useState(() => generateMockPrecintos(1000))
+  const [locations, setLocations] = useState(() => generateMockLocations(1000))
+  const [showPerformance, setShowPerformance] = useState(true)
   // Simulate real-time updates
-   
 
   useEffect(() => {
     const interval = setInterval(() => {
       // Update random precintos
       setPrecintos(prev => {
-        const updated = [...prev];
+        const updated = [...prev]
         for (let i = 0; i < 50; i++) {
-          const index = Math.floor(Math.random() * updated.length);
+          const index = Math.floor(Math.random() * updated.length)
           updated[index] = {
             ...updated[index],
             temperature: 15 + Math.random() * 20,
             battery: Math.max(0, updated[index].battery - Math.random() * 0.5),
             lastUpdate: new Date()
-          };
+          }
         }
-        return updated;
-      });
-
+        return updated
+      })
       // Update random locations
       setLocations(prev => {
-        const updated = [...prev];
+        const updated = [...prev]
         for (let i = 0; i < 100; i++) {
-          const index = Math.floor(Math.random() * updated.length);
-          const loc = updated[index];
+          const index = Math.floor(Math.random() * updated.length)
+          const loc = updated[index]
           if (loc.speed > 0) {
             updated[index] = {
               ...loc,
               lat: loc.lat + (Math.random() - 0.5) * 0.001,
               lng: loc.lng + (Math.random() - 0.5) * 0.001,
               lastUpdate: new Date()
-            };
+            }
           }
         }
-        return updated;
-      });
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+        return updated
+      })
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
   return (<PriorityProvider enableMetrics>
       <div className="min-h-screen bg-gray-950 text-gray-100 p-4">
         {/* Header */}
@@ -143,5 +135,5 @@ export const ConcurrentApp: React.FC = () => {
         </div>
       </div>
     </PriorityProvider>
-  );
-};
+  )
+}

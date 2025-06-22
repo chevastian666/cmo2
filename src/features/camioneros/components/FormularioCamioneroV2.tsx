@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { User, Phone, Flag, AlertCircle} from 'lucide-react';
-import { useForm} from 'react-hook-form';
-import { zodResolver} from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Textarea} from '@/components/ui/textarea';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Alert, AlertDescription} from '@/components/ui/alert';
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
-import type { Nacionalidad} from '../types';
-
+import React, { useState } from 'react'
+import { User, Phone, Flag, AlertCircle} from 'lucide-react'
+import { useForm} from 'react-hook-form'
+import { zodResolver} from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Textarea} from '@/components/ui/textarea'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Alert, AlertDescription} from '@/components/ui/alert'
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
+import type { Nacionalidad} from '../types'
 // Define the form schema with Zod
 const formSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio').trim(),
@@ -28,34 +26,30 @@ const formSchema = z.object({
   comentario: z.string().optional(),
 }).refine((_data) => {
   // At least one phone is required
-  return data.telefonoUruguayo || data.telefonoPais;
+  return data.telefonoUruguayo || data.telefonoPais
 }, {
   message: 'Debe proporcionar al menos un teléfono de contacto',
   path: ['telefonoUruguayo'],
 }).refine((_data) => {
   // If nacionalidad is 'Otro', paisOrigen is required
   if (data.nacionalidad === 'Otro') {
-    return data.paisOrigen && data.paisOrigen.trim().length > 0;
+    return data.paisOrigen && data.paisOrigen.trim().length > 0
   }
-  return true;
+  return true
 }, {
   message: 'Debe especificar el país',
   path: ['paisOrigen'],
-});
-
-type FormData = z.infer<typeof formSchema>;
-
+})
+type FormData = z.infer<typeof formSchema>
 interface FormularioCamioneroProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
-  const userInfo = useUserInfo();
-  
-  const [loading, setLoading] = useState(false);
-  const [generalError, setGeneralError] = useState<string | null>(null);
-
+  const userInfo = useUserInfo()
+  const [loading, setLoading] = useState(false)
+  const [generalError, setGeneralError] = useState<string | null>(null)
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,12 +63,10 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
       telefonoPais: '',
       comentario: '',
     },
-  });
-
+  })
   const handleSubmit = async (_data: FormData) => {
-    setLoading(true);
-    setGeneralError(null);
-    
+    setLoading(true)
+    setGeneralError(null)
     try {
       await createCamionero({
         nombre: data.nombre.trim(),
@@ -90,19 +82,16 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
           id: userInfo.id,
           nombre: userInfo.name
         }
-      });
-      
-      form.reset();
-      onClose();
+      })
+      form.reset()
+      onClose()
     } catch {
-      setGeneralError('Error al registrar el camionero');
+      setGeneralError('Error al registrar el camionero')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const nacionalidadValue = form.watch('nacionalidad');
-
+  }
+  const nacionalidadValue = form.watch('nacionalidad')
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
@@ -127,7 +116,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="nombre"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>Nombre *</FormLabel>
                     <FormControl>
@@ -146,7 +135,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="apellido"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>Apellido *</FormLabel>
                     <FormControl>
@@ -168,7 +157,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="tipoDocumento"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>Tipo de documento *</FormLabel>
                     <Select
@@ -197,7 +186,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="documento"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem className="sm:col-span-2">
                     <FormLabel>Número de documento *</FormLabel>
                     <FormControl>
@@ -219,7 +208,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="nacionalidad"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>Nacionalidad *</FormLabel>
                     <Select
@@ -248,7 +237,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               {nacionalidadValue === 'Otro' && (<FormField
                   control={form.control}
                   name="paisOrigen"
-                  render={({ field }) => (
+                  render={(field ) => (
                     <FormItem>
                       <FormLabel>Especificar país *</FormLabel>
                       <FormControl>
@@ -271,7 +260,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="telefonoUruguayo"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>
                       <span className="flex items-center gap-2">
@@ -299,7 +288,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <FormField
                 control={form.control}
                 name="telefonoPais"
-                render={({ field }) => (
+                render={(field ) => (
                   <FormItem>
                     <FormLabel>
                       <span className="flex items-center gap-2">
@@ -326,7 +315,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
             <FormField
               control={form.control}
               name="comentario"
-              render={({ field }) => (
+              render={(field ) => (
                 <FormItem>
                   <FormLabel>Comentarios / Observaciones (opcional)</FormLabel>
                   <FormControl>
@@ -364,5 +353,5 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

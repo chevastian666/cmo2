@@ -4,35 +4,32 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import { InteractiveLineChart} from './InteractiveLineChart';
-import { ActivityHeatmap} from './ActivityHeatmap';
-import { NetworkGraph} from './NetworkGraph';
-import { InteractiveTreemap} from './InteractiveTreemap';
+import React, { useState, useMemo } from 'react'
+import { InteractiveLineChart} from './InteractiveLineChart'
+import { ActivityHeatmap} from './ActivityHeatmap'
+import { NetworkGraph} from './NetworkGraph'
+import { InteractiveTreemap} from './InteractiveTreemap'
 import { 
-  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG} from './types';
-
-type VisualizationType = 'line' | 'heatmap' | 'network' | 'treemap';
-
+  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG} from './types'
+type VisualizationType = 'line' | 'heatmap' | 'network' | 'treemap'
 interface D3VisualizationWidgetProps {
-  type: VisualizationType;
-  data: TimeSeriesData[] | HeatmapData[] | NetworkData | TreemapNode;
-  config?: Partial<ChartConfig>;
-  title?: string;
-  className?: string;
-  onDataPointClick?: (data: TimeSeriesData | HeatmapData | TreemapNode) => void;
-  onZoomChange?: (domain: [Date, Date]) => void;
-  onNodeClick?: (node: NetworkNode | TreemapNode) => void;
-  onLinkClick?: (link: NetworkLink) => void;
+  type: VisualizationType
+  data: TimeSeriesData[] | HeatmapData[] | NetworkData | TreemapNode
+  config?: Partial<ChartConfig>
+  title?: string
+  className?: string
+  onDataPointClick?: (data: TimeSeriesData | HeatmapData | TreemapNode) => void
+  onZoomChange?: (domain: [Date, Date]) => void
+  onNodeClick?: (node: NetworkNode | TreemapNode) => void
+  onLinkClick?: (link: NetworkLink) => void
 }
 
 // Mock data generators for demonstration
 const generateTimeSeriesData = (count = 30): TimeSeriesData[] => {
-  const now = new Date();
-  const data: TimeSeriesData[] = [];
-  
+  const now = new Date()
+  const data: TimeSeriesData[] = []
   for (let i = 0; i < count; i++) {
-    const date = new Date(now.getTime() - (count - i) * 24 * 60 * 60 * 1000);
+    const date = new Date(now.getTime() - (count - i) * 24 * 60 * 60 * 1000)
     data.push({
       date,
       value: Math.floor(Math.random() * 100) + 50 + Math.sin(i * 0.3) * 20,
@@ -41,15 +38,13 @@ const generateTimeSeriesData = (count = 30): TimeSeriesData[] => {
         id: `T${i + 1}`,
         status: ['completed', 'pending', 'processing'][Math.floor(Math.random() * 3)]
       }
-    });
+    })
   }
   
-  return data;
-};
-
+  return data
+}
 const generateHeatmapData = (): HeatmapData[] => {
-  const data: HeatmapData[] = [];
-  
+  const data: HeatmapData[] = []
   for (let day = 0; day < 7; day++) {
     for (let hour = 0; hour < 24; hour++) {
       data.push({
@@ -57,13 +52,12 @@ const generateHeatmapData = (): HeatmapData[] => {
         hour,
         value: Math.floor(Math.random() * 50) + (hour > 8 && hour < 18 ? 30 : 10),
         label: ['High', 'Medium', 'Low'][Math.floor(Math.random() * 3)]
-      });
+      })
     }
   }
   
-  return data;
-};
-
+  return data
+}
 const generateNetworkData = (): NetworkData => {
   const nodes = [
     { id: 'MVD', label: 'Montevideo', value: 100, group: 'Puerto' },
@@ -75,8 +69,7 @@ const generateNetworkData = (): NetworkData => {
     { id: 'WH2', label: 'Depósito B', value: 25, group: 'Depósito' },
     { id: 'CUST1', label: 'Cliente 1', value: 20, group: 'Cliente' },
     { id: 'CUST2', label: 'Cliente 2', value: 15, group: 'Cliente' }
-  ];
-
+  ]
   const links = [
     { source: 'MVD', target: 'TERM1', value: 40, label: 'Ruta Principal' },
     { source: 'MVD', target: 'TERM2', value: 35, label: 'Ruta Secundaria' },
@@ -88,11 +81,9 @@ const generateNetworkData = (): NetworkData => {
     { source: 'WH1', target: 'CUST1', value: 25, label: 'Entrega' },
     { source: 'WH1', target: 'CUST2', value: 15, label: 'Entrega' },
     { source: 'WH2', target: 'CUST1', value: 10, label: 'Entrega' }
-  ];
-
-  return { nodes, links };
-};
-
+  ]
+  return { nodes, links }
+}
 const generateTreemapData = (): TreemapNode => {
   return {
     name: 'Transacciones',
@@ -129,84 +120,78 @@ const generateTreemapData = (): TreemapNode => {
         ]
       }
     ]
-  };
-};
-
+  }
+}
 export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
   type, data: providedData, config: userConfig, title, className = '', onDataPointClick, onZoomChange, onNodeClick, onLinkClick
 }) => {
-  const [selectedType, setSelectedType] = useState<VisualizationType>(type);
-  
-  const config = { ...DEFAULT_CHART_CONFIG, ...userConfig };
-
+  const [selectedType, setSelectedType] = useState<VisualizationType>(type)
+  const config = { ...DEFAULT_CHART_CONFIG, ...userConfig }
   // Generate or use provided data
   const chartData = useMemo(() => {
-    if (providedData) return providedData;
-    
+    if (providedData) return providedData
     switch (selectedType) {
-      case 'line':
-        return generateTimeSeriesData();
-      case 'heatmap':
-        return generateHeatmapData();
-      case 'network':
-        return generateNetworkData();
-      case 'treemap':
-        return generateTreemapData();
-      default:
-        return [];
-    }
-  }, [selectedType, providedData]);
-
+      case 'line': {
+  
+  break;
+}
+  }, [])
   const renderVisualization = () => {
     switch (selectedType) {
-      case 'line':
-        return (
+      case 'line': {
+  return (
           <InteractiveLineChart
-            data={chartData}
+            data=
+  break;
+}
             config={config}
             onDataPointClick={onDataPointClick}
             onZoomChange={onZoomChange}
           />
-        );
-      case 'heatmap':
-        return (
+        )
+      case 'heatmap': {
+  return (
           <ActivityHeatmap
-            data={chartData}
+            data=
+  break;
+}
             config={config}
             onCellClick={onDataPointClick}
           />
-        );
-      case 'network':
-        return (
+        )
+      case 'network': {
+  return (
           <NetworkGraph
-            data={chartData}
+            data=
+  break;
+}
             config={config}
             onNodeClick={onNodeClick}
             onLinkClick={onLinkClick}
           />
-        );
-      case 'treemap':
-        return (
+        )
+      case 'treemap': {
+  return (
           <InteractiveTreemap
-            data={chartData}
+            data=
+  break;
+}
             config={config}
             onNodeClick={onNodeClick}
           />
-        );
+        )
       default:
         return <div className="flex items-center justify-center h-full text-gray-400">
           Tipo de visualización no soportado
-        </div>;
+        </div>
     }
-  };
-
+  }
   const visualizationTypes = [
     { key: 'line', label: 'Líneas Temporales', icon: '📈' },
     { key: 'heatmap', label: 'Mapa de Calor', icon: '🔥' },
     { key: 'network', label: 'Red de Conexiones', icon: '🕸️' },
     { key: 'treemap', label: 'Treemap', icon: '🗂️' }
-  ];
-
+  ]
   return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${className}`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
@@ -217,7 +202,7 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
           
           {/* Type selector */}
           <div className="flex space-x-2">
-            {visualizationTypes.map(({ key, label, icon }) => (<button
+            {visualizationTypes.map((key, label, icon ) => (<button
                 key={key}
                 onClick={() => setSelectedType(key as VisualizationType)}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
@@ -255,5 +240,5 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

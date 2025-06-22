@@ -3,50 +3,44 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Truck, AlertTriangle, CheckCircle, XCircle, Filter, Activity} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
-import { TransitoRow} from './TransitoRow';
-import { TransitoDetailModal} from './TransitoDetailModal';
-import {TorreControlFilters} from './TorreControlFilters';
-import { TorreControlHeader} from './TorreControlHeader';
-
-import { CongestionPanel} from '../../prediccion';
-import { notificationService} from '../../../services/shared/notification.service';
-import { torreControlService} from '../services/torreControl.service';
-import type { TransitoTorreControl, EstadoSemaforo} from '../types';
-import type { CongestionAnalysis} from '../../prediccion/types';
-
+import React, { useState, useEffect, useCallback } from 'react'
+import { Truck, AlertTriangle, CheckCircle, XCircle, Filter, Activity} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { TransitoRow} from './TransitoRow'
+import { TransitoDetailModal} from './TransitoDetailModal'
+import {TorreControlFilters} from './TorreControlFilters'
+import { TorreControlHeader} from './TorreControlHeader'
+import { CongestionPanel} from '../../prediccion'
+import { notificationService} from '../../../services/shared/notification.service'
+import { torreControlService} from '../services/torreControl.service'
+import type { TransitoTorreControl, EstadoSemaforo} from '../types'
+import type { CongestionAnalysis} from '../../prediccion/types'
 interface TorreControlProps {
-  className?: string;
+  className?: string
 }
 
 export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
-  const [transitos, setTransitos] = useState<TransitoTorreControl[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showCongestionPanel] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [lastCongestionNotification, setLastCongestionNotification] = useState<string[]>([]);
+  const [transitos, setTransitos] = useState<TransitoTorreControl[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [showCongestionPanel] = useState(true)
+  const [lastUpdate, setLastUpdate] = useState(new Date())
+  const [lastCongestionNotification, setLastCongestionNotification] = useState<string[]>([])
   const [filters, setFilters] = useState({
     origen: '',
     destino: '',
     estado: '' as EstadoSemaforo | ''
-  });
-
+  })
   // Fetch transitos data from API
   const fetchTransitos = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-      
-      const data = await torreControlService.getTransitosEnRuta();
-      setTransitos(data);
-      setLastUpdate(new Date());
-      
+      setLoading(true)
+      setError(null)
+      const data = await torreControlService.getTransitosEnRuta()
+      setTransitos(data)
+      setLastUpdate(new Date())
       // Mock data fallback (remove this when API is ready)
       if (data.length === 0) {
         const mockData: TransitoTorreControl[] = [
@@ -147,75 +141,65 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
           ubicacionActual: { lat: -31.3833, lng: -55.9667 },
           progreso: 60
         }
-        ];
-        setTransitos(mockData);
+        ]
+        setTransitos(mockData)
       }
     } catch (err) {
-      setError('Error al cargar los tránsitos');
-      console.error('Error fetching transitos:', err);
+      setError('Error al cargar los tránsitos')
+      console.error('Error fetching transitos:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
-
+  }, [])
   // Auto-refresh every 10 seconds
-   
-
 
     useEffect(() => {
-    fetchTransitos();
-    const interval = setInterval(fetchTransitos, 10000);
-    return () => clearInterval(interval);
-  }, [fetchTransitos]);
-
+    fetchTransitos()
+    const interval = setInterval(fetchTransitos, 10000)
+    return () => clearInterval(interval)
+  }, [])
   // Filter transitos
   const filteredTransitos = transitos.filter(transito => {
     if (filters.origen && !transito.origen.toLowerCase().includes(filters.origen.toLowerCase())) {
-      return false;
+      return false
     }
     if (filters.destino && !transito.destino.toLowerCase().includes(filters.destino.toLowerCase())) {
-      return false;
+      return false
     }
     if (filters.estado && transito.semaforo !== filters.estado) {
-      return false;
+      return false
     }
-    return true;
-  });
-
+    return true
+  })
   // Sort by ETA
   const sortedTransitos = [...filteredTransitos].sort((a, b) => 
     a.eta.getTime() - b.eta.getTime()
-  );
-
+  )
   const handleTransitoClick = (transito: TransitoTorreControl) => {
-    setSelectedTransito(transito);
-  };
-
+    setSelectedTransito(transito)
+  }
   const handleCloseModal = () => {
-    setSelectedTransito(null);
-  };
-
+    setSelectedTransito(null)
+  }
   const getSemaforoIcon = (semaforo: EstadoSemaforo) => {
     switch (semaforo) {
-      case 'verde':
-        return <CheckCircle className="h-6 w-6 text-green-500" />;
-      case 'amarillo':
-        return <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />;
-      case 'rojo':
-        return <XCircle className="h-6 w-6 text-red-500 animate-pulse" />;
+      case 'verde': {
+  return <CheckCircle className="h-6 w-6 text-green-500" />
+      case 'amarillo': {
+  return <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />
+      case 'rojo': {
+  return <XCircle className="h-6 w-6 text-red-500 animate-pulse" />
     }
-  };
-
+  }
   // Manejar detección de congestiones
   const handleCongestionDetected = useCallback((congestions: CongestionAnalysis[]) => {
     setLastCongestionNotification(prev => {
       // Filtrar congestiones críticas no notificadas
-      const criticas = congestions.filter(c => c.severidad === 'critica');
+      const criticas = congestions.filter(c => c.severidad === 'critica')
       const nuevasCriticas = criticas.filter(c => {
-        const key = `${c.destino}-${c.ventanaInicio.getTime()}`;
-        return !prev.includes(key);
-      });
-
+        const key = `${c.destino}-${c.ventanaInicio.getTime()}`
+        return !prev.includes(key)
+      })
       if (nuevasCriticas.length > 0) {
         // Notificar cada congestión crítica nueva
         nuevasCriticas.forEach(congestion => {
@@ -228,20 +212,18 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
               hour: '2-digit', 
               minute: '2-digit' 
             })}`
-          );
-        });
-
+          )
+        })
         // Retornar las notificaciones actualizadas
         return [
           ...prev,
           ...nuevasCriticas.map(c => `${c.destino}-${c.ventanaInicio.getTime()}`)
-        ];
+        ]
       }
       
       return prev; // No hay cambios
-    });
-  }, []);
-
+    })
+  }, [])
   return (
     <div className={cn("min-h-screen bg-gray-950 flex", className)}>
       <div className="flex-1 flex flex-col">
@@ -394,5 +376,5 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
         />
       )}
     </div>
-  );
-};
+  )
+}

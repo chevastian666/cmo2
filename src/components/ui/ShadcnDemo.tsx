@@ -1,28 +1,27 @@
-import React from 'react';
-import { Button} from './button';
-import { Input} from './input';
-import { Select, } from './select';
+import React from 'react'
+import { Button} from './button'
+import { Input} from './input'
+import { Select, } from './select'
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from './dialog';
-import {AlertCircle, Check, X, ArrowRight, User, Table} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle} from './Card';
-import { Alert, AlertDescription, AlertTitle} from './alert';
-import { FormularioCamioneroV2} from '../../features/camioneros/components/FormularioCamioneroV2';
-import { PrecintosTableV2} from '../../features/precintos/components/PrecintosTableV2';
-import { VerificarAlertaModalV2} from '../../features/alertas/components/VerificarAlertaModalV2';
-import { EditTransitoModalV2} from '../../features/transitos/components/EditTransitoModalV2';
-import { Label} from './label';
-import { Checkbox} from './checkbox';
-import {RadioGroup, RadioGroupItem} from './radio-group';
-import { Switch} from './switch';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from './dialog'
+import {AlertCircle, Check, X, ArrowRight, User, Table} from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle} from './Card'
+import { Alert, AlertDescription, AlertTitle} from './alert'
+import { FormularioCamioneroV2} from '../../features/camioneros/components/FormularioCamioneroV2'
+import { PrecintosTableV2} from '../../features/precintos/components/PrecintosTableV2'
+import { VerificarAlertaModalV2} from '../../features/alertas/components/VerificarAlertaModalV2'
+import { EditTransitoModalV2} from '../../features/transitos/components/EditTransitoModalV2'
+import { Label} from './label'
+import { Checkbox} from './checkbox'
+import {RadioGroup, RadioGroupItem} from './radio-group'
+import { Switch} from './switch'
 import {
-  Popover, PopoverContent, PopoverTrigger, } from './popover';
-import { Info} from 'lucide-react';
-import { Skeleton} from './skeleton';
-import { CardSkeleton, ListItemSkeleton, FormSkeleton} from './CardSkeleton';
-import { BreadcrumbNav} from './BreadcrumbNav';
-import { NetworkChartV2} from '../../features/dashboard/components/NetworkChartV2';
-
+  Popover, PopoverContent, PopoverTrigger, } from './popover'
+import { Info} from 'lucide-react'
+import { Skeleton} from './skeleton'
+import { CardSkeleton, ListItemSkeleton, FormSkeleton} from './CardSkeleton'
+import { BreadcrumbNav} from './BreadcrumbNav'
+import { NetworkChartV2} from '../../features/dashboard/components/NetworkChartV2'
 // Mock data for demos
 const mockAlerta = {
   id: '1',
@@ -33,8 +32,7 @@ const mockAlerta = {
   timestamp: new Date(),
   ubicacion: { lat: -34.9011, lng: -56.1645 },
   atendida: false
-};
-
+}
 const mockTransito = {
   id: '1',
   precinto: 'BT20240001',
@@ -45,16 +43,14 @@ const mockTransito = {
   eta: new Date(Date.now() + 5 * 60 * 60 * 1000),
   empresa: 'Transportes Uruguay',
   dua: '123456'
-};
-
+}
 export default function ShadcnDemo() {
-  const [open, setOpen] = React.useState(false);
-  const [formOpen, setFormOpen] = React.useState(false);
-  const [tableOpen, setTableOpen] = React.useState(false);
-  const [loadingDemo, setLoadingDemo] = React.useState(false);
-  const [verificarOpen, setVerificarOpen] = React.useState(false);
-  const [editTransitoOpen, setEditTransitoOpen] = React.useState(false);
-
+  const [open, setOpen] = React.useState(false)
+  const [formOpen, setFormOpen] = React.useState(false)
+  const [tableOpen, setTableOpen] = React.useState(false)
+  const [loadingDemo, setLoadingDemo] = React.useState(false)
+  const [verificarOpen, setVerificarOpen] = React.useState(false)
+  const [editTransitoOpen, setEditTransitoOpen] = React.useState(false)
   return (<>
     <div className="space-y-8 p-8">
       <h1 className="text-2xl font-bold mb-8">shadcn/ui Components Demo</h1>
@@ -431,8 +427,8 @@ export default function ShadcnDemo() {
                 <div>
                   <Button 
                     onClick={() => {
-                      setLoadingDemo(true);
-                      setTimeout(() => setLoadingDemo(false), 3000);
+                      setLoadingDemo(true)
+                      setTimeout(() => setLoadingDemo(false), 3000)
                     }}
                     disabled={loadingDemo}
                   >
@@ -657,8 +653,8 @@ export default function ShadcnDemo() {
       isOpen={verificarOpen}
       onClose={() => setVerificarOpen(false)}
       onVerificar={async () => {
-        console.log('Verificando alerta...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('Verificando alerta...')
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }}
     />
     
@@ -669,5 +665,5 @@ export default function ShadcnDemo() {
       onSuccess={() => console.log('Transito editado')}
     />
     </>
-  );
+  )
 }

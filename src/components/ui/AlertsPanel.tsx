@@ -1,111 +1,100 @@
  
-import React, { useState, useEffect, useMemo } from 'react';
-import { cn} from '../../utils/utils';
-import { StatusBadge} from './StatusBadge';
-import { EmptyState} from './EmptyState';
-import {AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react';
-
-export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
-
+import React, { useState, useEffect, useMemo } from 'react'
+import { cn} from '../../utils/utils'
+import { StatusBadge} from './StatusBadge'
+import { EmptyState} from './EmptyState'
+import {AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react'
+export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 export interface Alert {
-  id: string;
-  title: string;
-  description?: string;
-  severity: AlertSeverity;
-  timestamp: Date | string;
-  source?: string;
-  status?: 'active' | 'acknowledged' | 'resolved';
-  metadata?: Record<string, unknown>;
+  id: string
+  title: string
+  description?: string
+  severity: AlertSeverity
+  timestamp: Date | string
+  source?: string
+  status?: 'active' | 'acknowledged' | 'resolved'
+  metadata?: Record<string, unknown>
 }
 
 interface AlertsPanelProps {
-  alerts: Alert[];
-  className?: string;
-  maxHeight?: string;
-  onAlertClick?: (alert: Alert) => void;
-  onAlertAcknowledge?: (alertId: string) => void;
-  showHeader?: boolean;
-  title?: string;
-  emptyMessage?: string;
-  variant?: 'default' | 'compact';
-  groupByPriority?: boolean;
-  enableSound?: boolean;
-  enableVisualPulse?: boolean;
+  alerts: Alert[]
+  className?: string
+  maxHeight?: string
+  onAlertClick?: (alert: Alert) => void
+  onAlertAcknowledge?: (alertId: string) => void
+  showHeader?: boolean
+  title?: string
+  emptyMessage?: string
+  variant?: 'default' | 'compact'
+  groupByPriority?: boolean
+  enableSound?: boolean
+  enableVisualPulse?: boolean
 }
 
 interface AlertGroup {
-  severity: AlertSeverity;
-  title: string;
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  icon: React.ReactNode;
-  alerts: Alert[];
+  severity: AlertSeverity
+  title: string
+  color: string
+  bgColor: string
+  borderColor: string
+  icon: React.ReactNode
+  alerts: Alert[]
 }
 
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({
   alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title = 'Alertas Activas', emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
 }) => {
-  const [newAlertIds, setNewAlertIds] = useState<Set<string>>(new Set());
-  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
-  const [previousAlertIds, setPreviousAlertIds] = useState<Set<string>>(new Set());
-
+  const [newAlertIds, setNewAlertIds] = useState<Set<string>>(new Set())
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
+  const [previousAlertIds, setPreviousAlertIds] = useState<Set<string>>(new Set())
   // Detectar nuevas alertas
-   
-
 
     useEffect(() => {
-    const currentAlertIds = new Set(alerts.map(a => a.id));
-    const newIds = new Set<string>();
-
+    const currentAlertIds = new Set(alerts.map(a => a.id))
+    const newIds = new Set<string>()
     currentAlertIds.forEach(id => {
       if (!previousAlertIds.has(id)) {
-        newIds.add(id);
+        newIds.add(id)
       }
-    });
-
+    })
     if (newIds.size > 0) {
-      setNewAlertIds(newIds);
-      
+      setNewAlertIds(newIds)
       // Detectar si hay alertas críticas nuevas
       const hasCriticalAlert = alerts.some(
         alert => newIds.has(alert.id) && (alert.severity === 'critical' || alert.severity === 'high')
-      );
-
+      )
       if (hasCriticalAlert) {
         // Efecto visual de pulso
         if (enableVisualPulse) {
-          document.body.classList.add('critical-alert-pulse');
+          document.body.classList.add('critical-alert-pulse')
           setTimeout(() => {
-            document.body.classList.remove('critical-alert-pulse');
-          }, 3000);
+            document.body.classList.remove('critical-alert-pulse')
+          }, 3000)
         }
 
         // Reproducir sonido (si está habilitado)
         if (enableSound && typeof window !== 'undefined' && 'Audio' in window) {
           try {
-            const audio = new Audio('/sounds/alert.mp3');
-            audio.volume = 0.5;
-            audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e));
+            const audio = new Audio('/sounds/alert.mp3')
+            audio.volume = 0.5
+            audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e))
           } catch (e) {
-            console.log('Error al crear audio:', e);
+            console.log('Error al crear audio:', e)
           }
         }
       }
 
       // Limpiar animación después de 3 segundos
       setTimeout(() => {
-        setNewAlertIds(new Set());
-      }, 3000);
+        setNewAlertIds(new Set())
+      }, 3000)
     }
 
-    setPreviousAlertIds(currentAlertIds);
-  }, [alerts, enableSound, enableVisualPulse]);
-
+    setPreviousAlertIds(currentAlertIds)
+  }, [alerts])
   // Agrupar alertas por severidad
   const groupedAlerts = useMemo(() => {
-    if (!groupByPriority) return null;
-
+    if (!groupByPriority) return null
     const groups: AlertGroup[] = [
       {
         severity: 'critical',
@@ -134,23 +123,20 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
         icon: <Info className="h-5 w-5 text-gray-500" />,
         alerts: []
       }
-    ];
-
+    ]
     // Clasificar alertas en grupos
     alerts.forEach(alert => {
       if (alert.severity === 'critical' || alert.severity === 'high') {
-        groups[0].alerts.push(alert);
+        groups[0].alerts.push(alert)
       } else if (alert.severity === 'medium' || alert.severity === 'low') {
-        groups[1].alerts.push(alert);
+        groups[1].alerts.push(alert)
       } else {
-        groups[2].alerts.push(alert);
+        groups[2].alerts.push(alert)
       }
-    });
-
+    })
     // Filtrar grupos vacíos
-    return groups.filter(group => group.alerts.length > 0);
-  }, [alerts, groupByPriority]);
-
+    return groups.filter(group => group.alerts.length > 0)
+  }, [alerts])
   const getSeverityColor = (severity: AlertSeverity) => {
     const colors = {
       critical: 'border-red-500 bg-red-500/10',
@@ -158,10 +144,9 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       medium: 'border-yellow-500 bg-yellow-500/10',
       low: 'border-blue-500 bg-blue-500/10',
       info: 'border-gray-500 bg-gray-500/10'
-    };
-    return colors[severity];
-  };
-
+    }
+    return colors[severity]
+  }
   const getSeverityBadgeVariant = (severity: AlertSeverity): 'danger' | 'warning' | 'info' | 'default' => {
     const variants = {
       critical: 'danger' as const,
@@ -169,34 +154,29 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       medium: 'warning' as const,
       low: 'info' as const,
       info: 'default' as const
-    };
-    return variants[severity];
-  };
-
-  const formatTimestamp = (timestamp: Date | string) => {
-    const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    
-    if (diff < 60000) return 'Hace un momento';
-    if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} min`;
-    if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} horas`;
-    return date.toLocaleDateString();
-  };
-
-  const toggleGroup = (severity: string) => {
-    const newCollapsed = new Set(collapsedGroups);
-    if (newCollapsed.has(severity)) {
-      newCollapsed.delete(severity);
-    } else {
-      newCollapsed.add(severity);
     }
-    setCollapsedGroups(newCollapsed);
-  };
-
+    return variants[severity]
+  }
+  const formatTimestamp = (timestamp: Date | string) => {
+    const date = timestamp instanceof Date ? timestamp : new Date(timestamp)
+    const now = new Date()
+    const diff = now.getTime() - date.getTime()
+    if (diff < 60000) return 'Hace un momento'
+    if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} min`
+    if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} horas`
+    return date.toLocaleDateString()
+  }
+  const toggleGroup = (severity: string) => {
+    const newCollapsed = new Set(collapsedGroups)
+    if (newCollapsed.has(severity)) {
+      newCollapsed.delete(severity)
+    } else {
+      newCollapsed.add(severity)
+    }
+    setCollapsedGroups(newCollapsed)
+  }
   const renderAlert = (alert: Alert) => {
-    const isNew = newAlertIds.has(alert.id);
-    
+    const isNew = newAlertIds.has(alert.id)
     return (
       <div
         key={alert.id}
@@ -259,8 +239,8 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           {/* Botón de marcar como atendida */}
           {alert.status === 'active' && onAlertAcknowledge && (<button
               onClick={(e) => {
-                e.stopPropagation();
-                onAlertAcknowledge(alert.id);
+                e.stopPropagation()
+                onAlertAcknowledge(alert.id)
               }}
               className="flex-shrink-0 p-2 hover:bg-gray-600 rounded-lg transition-colors"
               title="Marcar como atendida"
@@ -286,9 +266,8 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           )}
         </div>
       </div>
-    );
-  };
-
+    )
+  }
   return (
     <div className={cn('bg-gray-800 rounded-lg', className)}>
       {showHeader && (
@@ -359,5 +338,5 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

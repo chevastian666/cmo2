@@ -1,27 +1,25 @@
-import { sharedApiService} from '../../../services/shared/sharedApi.service';
-import type { Precinto} from '../../../types';
-
+import { sharedApiService} from '../../../services/shared/sharedApi.service'
+import type { Precinto} from '../../../types'
 interface ArmadoCommand {
-  precintoId: string;
-  transitoData: unknown;
-  fotos: File[];
+  precintoId: string
+  transitoData: unknown
+  fotos: File[]
 }
 
 class ArmadoService {
-  private readonly API_BASE = '/api/armado';
-
+  private readonly API_BASE = '/api/armado'
   async searchPrecinto(nqr: string): Promise<Precinto | null> {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
-        return this.getMockPrecinto(nqr);
+        return this.getMockPrecinto(nqr)
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`);
-      return response.data;
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`)
+      return response.data
     } catch {
-      console.error('Error searching precinto:', error);
-      return null;
+      console.error('Error searching precinto:', error)
+      return null
     }
   }
 
@@ -29,39 +27,38 @@ class ArmadoService {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
-        return this.getMockPendingPrecintos();
+        return this.getMockPendingPrecintos()
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/pending`);
-      return response.data;
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/pending`)
+      return response.data
     } catch {
-      console.error('Error fetching pending precintos:', error);
-      return [];
+      console.error('Error fetching pending precintos:', error)
+      return []
     }
   }
 
   async uploadPhotos(precintoId: string, photos: File[]): Promise<string[]> {
     try {
-      const formData = new FormData();
-      formData.append('precintoId', precintoId);
+      const formData = new FormData()
+      formData.append('precintoId', precintoId)
       photos.forEach((photo, index) => {
-        formData.append(`photo_${index}`, photo);
-      });
-
+        formData.append(`photo_${index}`, photo)
+      })
       // In development, return mock URLs
       if (import.meta.env.DEV) {
-        return photos.map((_, index) => `/uploads/precinto_${precintoId}_${index}.jpg`);
+        return photos.map((_, index) => `/uploads/precinto_${precintoId}_${index}.jpg`)
       }
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/photos`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
-      return response.data.urls;
+      })
+      return response.data.urls
     } catch {
-      console.error('Error uploading photos:', error);
-      return [];
+      console.error('Error uploading photos:', error)
+      return []
     }
   }
 
@@ -69,37 +66,35 @@ class ArmadoService {
     try {
       // In development, simulate success
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const transitId = Math.floor(Math.random() * 900000 + 100000).toString();
-        return { success: true, transitId };
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        const transitId = Math.floor(Math.random() * 900000 + 100000).toString()
+        return { success: true, transitId }
       }
 
-      const response = await sharedApiService.request('POST', `${this.API_BASE}/execute`, command);
-      return response.data;
+      const response = await sharedApiService.request('POST', `${this.API_BASE}/execute`, command)
+      return response.data
     } catch {
-      console.error('Error executing armado:', error);
-      throw _error;
+      console.error('Error executing armado:', error)
+      throw _error
     }
   }
 
   async validateRUT(rut: string): Promise<boolean> {
     // Uruguayan RUT validation
-    const cleanRUT = rut.replace(/\D/g, '');
-    
+    const cleanRUT = rut.replace(/\D/g, '')
     if (cleanRUT.length !== 12) {
-      return false;
+      return false
     }
 
     // Basic validation - can be enhanced with checksum
-    return /^\d{12}$/.test(cleanRUT);
+    return /^\d{12}$/.test(cleanRUT)
   }
 
   // Mock data helpers for development
   private getMockPrecinto(nqr: string): Precinto {
-    const randomNum = parseInt(nqr.slice(-3)) || Math.floor(Math.random() * 1000) + 1;
-    const bateria = Math.floor(Math.random() * 80) + 20;
-    const estados = ['SAL', 'LLE', 'FMF', 'CFM', 'CNP'];
-    
+    const randomNum = parseInt(nqr.slice(-3)) || Math.floor(Math.random() * 1000) + 1
+    const bateria = Math.floor(Math.random() * 80) + 20
+    const estados = ['SAL', 'LLE', 'FMF', 'CFM', 'CNP']
     return {
       id: `p${randomNum}`,
       codigo: nqr,
@@ -131,16 +126,15 @@ class ArmadoService {
         movimiento: Math.random() > 0.8,
         luz: Math.random() > 0.5
       }
-    };
+    }
   }
 
   private getMockPendingPrecintos(): unknown[] {
-    const locations = ['Puerto de Montevideo', 'Nueva Palmira', 'Colonia', 'Rivera', 'Chuy'];
-    const precintos = [];
-    
+    const locations = ['Puerto de Montevideo', 'Nueva Palmira', 'Colonia', 'Rivera', 'Chuy']
+    const precintos = []
     for (let i = 0; i < 8; i++) {
-      const nqr = `NQR${Math.floor(Math.random() * 900000 + 100000)}`;
-      const battery = Math.floor(Math.random() * 80) + 20;
+      const nqr = `NQR${Math.floor(Math.random() * 900000 + 100000)}`
+      const battery = Math.floor(Math.random() * 80) + 20
       const lastReport = Date.now() / 1000 - Math.random() * 10800; // Up to 3 hours ago
       
       precintos.push({
@@ -149,11 +143,11 @@ class ArmadoService {
         lastReport,
         location: locations[Math.floor(Math.random() * locations.length)],
         status: battery < 30 || (Date.now() / 1000 - lastReport) > 7200 ? 'warning' : 'ready'
-      });
+      })
     }
     
-    return precintos;
+    return precintos
   }
 }
 
-export const armadoService = new ArmadoService();
+export const armadoService = new ArmadoService()

@@ -1,12 +1,10 @@
-import React from 'react';
-import { designTokens} from '../../styles/design-tokens';
-import { tokenClasses, combineTokenClasses, getStateClasses} from '../../styles/useDesignTokens';
-
+import React from 'react'
+import { designTokens} from '../../styles/design-tokens'
+import { tokenClasses, combineTokenClasses, getStateClasses} from '../../styles/useDesignTokens'
 export const DesignTokensDemo: React.FC = () => {
-  const transitStates = ['active', 'pending', 'completed', 'cancelled', 'delayed'];
-  const alertLevels = ['critical', 'high', 'medium', 'low', 'info'];
-  const precintoStates = ['active', 'inactive', 'broken', 'maintenance'];
-
+  const transitStates = ['active', 'pending', 'completed', 'cancelled', 'delayed']
+  const alertLevels = ['critical', 'high', 'medium', 'low', 'info']
+  const precintoStates = ['active', 'inactive', 'broken', 'maintenance']
   return (
     <div className="space-y-8 p-8">
       <h1 className="text-2xl font-bold text-white mb-8">Design Tokens Demo</h1>
@@ -307,5 +305,5 @@ export const DesignTokensDemo: React.FC = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}

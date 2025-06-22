@@ -1,17 +1,16 @@
-import React, { useTransition, useState, memo, useDeferredValue } from 'react';
-import {Package, Search, RefreshCw} from 'lucide-react';
-import { PriorityBoundary} from '../priority/withPriority';
-import { DashboardSkeleton} from './DashboardSkeleton';
-
+import React, { useTransition, useState, memo, useDeferredValue } from 'react'
+import {Package, Search, RefreshCw} from 'lucide-react'
+import { PriorityBoundary} from '../priority/withPriority'
+import { DashboardSkeleton} from './DashboardSkeleton'
 interface Precinto {
-  id: string;
-  code: string;
-  status: 'active' | 'inactive' | 'transit' | 'alert';
-  location: string;
-  temperature: number;
-  battery: number;
-  lastUpdate: Date;
-  assignedTo?: string;
+  id: string
+  code: string
+  status: 'active' | 'inactive' | 'transit' | 'alert'
+  location: string
+  temperature: number
+  battery: number
+  lastUpdate: Date
+  assignedTo?: string
 }
 
 const PrecintoCard: React.FC<{ precinto: Precinto }> = memo(({ precinto }) => {
@@ -20,15 +19,13 @@ const PrecintoCard: React.FC<{ precinto: Precinto }> = memo(({ precinto }) => {
     inactive: 'border-gray-600 bg-gray-900/20',
     transit: 'border-blue-600 bg-blue-900/20',
     alert: 'border-red-600 bg-red-900/20'
-  };
-
+  }
   const statusLabels = {
     active: 'Active',
     inactive: 'Inactive',
     transit: 'In Transit',
     alert: 'Alert'
-  };
-
+  }
   return (
     <div className={`p-4 rounded-lg border-2 transition-all hover:scale-[1.02] ${statusColors[precinto.status]}`}>
       <div className="flex items-start justify-between mb-3">
@@ -68,47 +65,40 @@ const PrecintoCard: React.FC<{ precinto: Precinto }> = memo(({ precinto }) => {
         Last update: {new Date(precinto.lastUpdate).toLocaleTimeString()}
       </div>
     </div>
-  );
-});
-
+  )
+})
 interface PrecintsGridProps {
-  precintos: Precinto[];
+  precintos: Precinto[]
 }
 
 export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [isPending, startTransition] = useTransition();
-  
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [isPending, startTransition] = useTransition()
   // Use deferred value for search to keep input responsive
-  const deferredSearchTerm = useDeferredValue(searchTerm);
-
+  const deferredSearchTerm = useDeferredValue(searchTerm)
   const filteredPrecintos = precintos.filter(precinto => {
     const matchesSearch = precinto.code.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
-                         precinto.location.toLowerCase().includes(deferredSearchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || precinto.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
-
+                         precinto.location.toLowerCase().includes(deferredSearchTerm.toLowerCase())
+    const matchesFilter = filterStatus === 'all' || precinto.status === filterStatus
+    return matchesSearch && matchesFilter
+  })
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     startTransition(() => {
-      setSearchTerm(e.target.value);
-    });
-  };
-
+      setSearchTerm(e.target.value)
+    })
+  }
   const handleFilterChange = (status: string) => {
     startTransition(() => {
-      setFilterStatus(status);
-    });
-  };
-
+      setFilterStatus(status)
+    })
+  }
   const handleRefresh = () => {
     startTransition(() => {
       // Trigger data refresh
-      console.log('Refreshing precintos data...');
-    });
-  };
-
+      console.log('Refreshing precintos data...')
+    })
+  }
   return (
     <PriorityBoundary priority="medium" fallback={<DashboardSkeleton />}>
       <div className="space-y-4">
@@ -181,5 +171,5 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
         )}
       </div>
     </PriorityBoundary>
-  );
-};
+  )
+}

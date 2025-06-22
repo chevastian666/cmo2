@@ -1,52 +1,46 @@
-import React, { useState } from 'react';
-import {X, MessageSquare, Send} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import type { Novedad} from '../types';
-
+import React, { useState } from 'react'
+import {X, MessageSquare, Send} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import type { Novedad} from '../types'
 interface ModalSeguimientoProps {
-  novedad: Novedad | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (novedadId: string, comentario: string) => Promise<void>;
+  novedad: Novedad | null
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (novedadId: string, comentario: string) => Promise<void>
 }
 
 export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
   novedad, isOpen, onClose, onSubmit
 }) => {
-  const [comentario, setComentario] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  if (!isOpen || !novedad) return null;
-
+  const [comentario, setComentario] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  if (!isOpen || !novedad) return null
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+    e.preventDefault()
     if (!comentario.trim()) {
-      setError('El comentario es requerido');
-      return;
+      setError('El comentario es requerido')
+      return
     }
 
     if (comentario.trim().length < 10) {
-      setError('El comentario debe tener al menos 10 caracteres');
-      return;
+      setError('El comentario debe tener al menos 10 caracteres')
+      return
     }
 
-    setLoading(true);
-    setError('');
-    
+    setLoading(true)
+    setError('')
     try {
-      await onSubmit(novedad.id, comentario.trim());
-      setComentario('');
-      onClose();
+      await onSubmit(novedad.id, comentario.trim())
+      setComentario('')
+      onClose()
     } catch {
-      setError('Error al guardar el seguimiento');
+      setError('Error al guardar el seguimiento')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   return (
     <>
       {/* Backdrop */}
@@ -95,8 +89,8 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
                 <textarea
                   value={comentario}
                   onChange={(e) => {
-                    setComentario(e.target.value);
-                    setError('');
+                    setComentario(e.target.value)
+                    setError('')
                   }}
                   rows={4}
                   placeholder="Describa el seguimiento o actualización..."
@@ -153,5 +147,5 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

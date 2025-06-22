@@ -1,33 +1,27 @@
-import React, { useEffect } from 'react';
-import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { exportToCSV} from '../../../utils/export';
-import { notificationService} from '../../../services/shared/notification.service';
-
-import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types';
-import { ESTADOS_CAMION} from '../../camiones/types';
-
+import React, { useEffect } from 'react'
+import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react'
+import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { exportToCSV} from '../../../utils/export'
+import { notificationService} from '../../../services/shared/notification.service'
+import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
+import { ESTADOS_CAMION} from '../../camiones/types'
 interface FichaCamioneroProps {
-  documento: string;
-  onClose: () => void;
+  documento: string
+  onClose: () => void
 }
 
 export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose }) => {
-  const userInfo = useUserInfo();
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-   
-
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamionero(documento);
-    return () => clearSelection();
-  }, [documento, selectCamionero, clearSelection]);
-
+    selectCamionero(documento)
+    return () => clearSelection()
+  }, [documento])
   const handleExportarHistorial = () => {
     if (!transitosCamionero.length) {
-      notificationService.warning('Sin datos', 'No hay tránsitos para exportar');
-      return;
+      notificationService.warning('Sin datos', 'No hay tránsitos para exportar')
+      return
     }
 
     const datos = transitosCamionero.map(t => ({
@@ -38,18 +32,15 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
       Destino: t.destino,
       Estado: t.estado,
       Precinto: t.precinto
-    }));
-
+    }))
     const nombreArchivo = camioneroSeleccionado 
       ? `historial_${camioneroSeleccionado.nombre}_${camioneroSeleccionado.apellido}_${new Date().toISOString().split('T')[0]}`
-      : 'historial_camionero';
-
-    exportToCSV(datos, nombreArchivo);
-    notificationService.success('Éxito', 'Historial exportado correctamente');
-  };
-
+      : 'historial_camionero'
+    exportToCSV(datos, nombreArchivo)
+    notificationService.success('Éxito', 'Historial exportado correctamente')
+  }
   if (loading || !camioneroSeleccionado) {
-    return <LoadingState message="Cargando información del camionero..." />;
+    return <LoadingState message="Cargando información del camionero..." />
   }
 
   return (
@@ -237,8 +228,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   {matriculasFrecuentes.map((matricula) => {
                     const estadoConfig = matricula.camion?.estado 
                       ? ESTADOS_CAMION[matricula.camion.estado as keyof typeof ESTADOS_CAMION]
-                      : null;
-                    
+                      : null
                     return (
                       <div key={matricula.matricula} className="p-4 bg-gray-800 rounded-lg">
                         <div className="flex items-start gap-3">
@@ -272,7 +262,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                           </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
                 </div>
               </CardContent>
@@ -349,5 +339,5 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

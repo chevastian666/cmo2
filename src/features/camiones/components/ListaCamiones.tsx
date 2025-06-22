@@ -1,37 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Plus, Truck, Image, Calendar} from 'lucide-react';
-import { Card, CardContent, Badge, EmptyState, LoadingState} from '../../../components/ui';
-
-import { FichaCamion} from './FichaCamion';
-import { FormularioCamion} from './FormularioCamion';
-
-import type { FiltrosCamion, EstadoCamion} from '../types';
-import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import { Search, Plus, Truck, Image, Calendar} from 'lucide-react'
+import { Card, CardContent, Badge, EmptyState, LoadingState} from '../../../components/ui'
+import { FichaCamion} from './FichaCamion'
+import { FormularioCamion} from './FormularioCamion'
+import type { FiltrosCamion, EstadoCamion} from '../types'
+import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT} from '../types'
 export const ListaCamiones: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamion>(FILTROS_CAMION_DEFAULT);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null);
-   
-
+  const [filtros, setFiltros] = useState<FiltrosCamion>(FILTROS_CAMION_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null)
   useEffect(() => {
-    fetchCamiones(filtros);
-  }, [fetchCamiones, filtros]);
-
+    fetchCamiones(filtros)
+  }, [filtros])
   const handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamion>) => {
-    setFiltros(prev => ({ ...prev, ...nuevosFiltros }));
-  };
-
+    setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
+  }
   const handleEstadoChange = async (matricula: string, estado: EstadoCamion) => {
-    await updateEstadoCamion(matricula, estado);
-  };
-
+    await updateEstadoCamion(matricula, estado)
+  }
   if (camionSeleccionado) {
     return (<FichaCamion 
         matricula={camionSeleccionado} 
         onClose={() => setCamionSeleccionado(null)} 
       />
-    );
+    )
   }
 
   return (<div className="space-y-6">
@@ -110,7 +102,7 @@ export const ListaCamiones: React.FC = () => {
         />
       ) : (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {camiones.map(camion => {
-            const estadoConfig = ESTADOS_CAMION[camion.estado];
+            const estadoConfig = ESTADOS_CAMION[camion.estado]
             return (
               <Card 
                 key={camion.id} 
@@ -165,8 +157,8 @@ export const ListaCamiones: React.FC = () => {
                     <select
                       value={camion.estado}
                       onChange={(e) => {
-                        e.stopPropagation();
-                        handleEstadoChange(camion.matricula, e.target.value as EstadoCamion);
+                        e.stopPropagation()
+                        handleEstadoChange(camion.matricula, e.target.value as EstadoCamion)
                       }}
                       onClick={(e) => e.stopPropagation()}
                       className="flex-1 px-2 py-1 text-xs bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -180,7 +172,7 @@ export const ListaCamiones: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-            );
+            )
           })}
         </div>
       )}
@@ -189,5 +181,5 @@ export const ListaCamiones: React.FC = () => {
       {mostrarFormulario && (<FormularioCamion onClose={() => setMostrarFormulario(false)} />
       )}
     </div>
-  );
-};
+  )
+}

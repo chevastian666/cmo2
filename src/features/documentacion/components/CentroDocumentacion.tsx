@@ -1,131 +1,108 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, FileText, Download} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '@/components/ui/card';
-
-import { FiltrosDocumentosComponent} from './FiltrosDocumentos';
-import { TablaDocumentos} from './TablaDocumentos';
-import { SubirDocumentoModal} from './SubirDocumentoModal';
-import { VisualizadorPDF} from './VisualizadorPDF';
-
-import { useUserInfo} from '../../../hooks/useAuth';
-import { notificationService} from '../../../services/shared/notification.service';
-import { exportToCSV} from '../../../utils/export';
-import type { Documento, FiltrosDocumentos} from '../types';
-import { FILTROS_DEFAULT} from '../types';
-
-const STORAGE_KEY_FILTROS = 'cmo_documentacion_filtros';
-
+import React, { useState, useEffect } from 'react'
+import { Plus, FileText, Download} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '@/components/ui/card'
+import { FiltrosDocumentosComponent} from './FiltrosDocumentos'
+import { TablaDocumentos} from './TablaDocumentos'
+import { SubirDocumentoModal} from './SubirDocumentoModal'
+import { VisualizadorPDF} from './VisualizadorPDF'
+import { useUserInfo} from '../../../hooks/useAuth'
+import { notificationService} from '../../../services/shared/notification.service'
+import { exportToCSV} from '../../../utils/export'
+import type { Documento, FiltrosDocumentos} from '../types'
+import { FILTROS_DEFAULT} from '../types'
+const STORAGE_KEY_FILTROS = 'cmo_documentacion_filtros'
 export const CentroDocumentacion: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosDocumentos>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
-      return saved ? JSON.parse(saved) : FILTROS_DEFAULT;
+      const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
+      return saved ? JSON.parse(saved) : FILTROS_DEFAULT
     } catch {
-      return FILTROS_DEFAULT;
+      return FILTROS_DEFAULT
     }
-  });
-  const [showSubirModal, setShowSubirModal] = useState(false);
-  const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null);
-  
-  
-  const userInfo = useUserInfo();
-  
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor';
-  const canDelete = userInfo.role === 'admin';
-  
-  console.log('User info:', userInfo);
-  console.log('Can edit:', canEdit);
-  console.log('Show modal state:', showSubirModal);
-   
-
-
+  })
+  const [showSubirModal, setShowSubirModal] = useState(false)
+  const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null)
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor'
+  const canDelete = userInfo.role === 'admin'
+  console.log('User info:', userInfo)
+  console.log('Can edit:', canEdit)
+  console.log('Show modal state:', showSubirModal)
     useEffect(() => {
-    fetchDocumentos();
-  }, [fetchDocumentos]);
-   
-
-
+    fetchDocumentos()
+  }, [])
     useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
-  }, [filtros]);
-  
+    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
+  }, [filtros])
   // Filtrar documentos
   const documentosFiltrados = documentos.filter(doc => {
     // Búsqueda global
     if (filtros.busqueda) {
-      const busqueda = filtros.busqueda.toLowerCase();
+      const busqueda = filtros.busqueda.toLowerCase()
       const coincide = doc.descripcion.toLowerCase().includes(busqueda) ||
                       doc.palabrasClave.some(p => p.toLowerCase().includes(busqueda)) ||
                       (doc.numeroDUA && doc.numeroDUA.toLowerCase().includes(busqueda)) ||
-                      doc.nombreArchivo.toLowerCase().includes(busqueda);
-      if (!coincide) return false;
+                      doc.nombreArchivo.toLowerCase().includes(busqueda)
+      if (!coincide) return false
     }
 
     // Filtros específicos
-    if (filtros.tipo && doc.tipo !== filtros.tipo) return false;
-    if (filtros.numeroDUA && !doc.numeroDUA?.includes(filtros.numeroDUA)) return false;
-    if (filtros.empresa && doc.empresa !== filtros.empresa) return false;
-    
+    if (filtros.tipo && doc.tipo !== filtros.tipo) return false
+    if (filtros.numeroDUA && !doc.numeroDUA?.includes(filtros.numeroDUA)) return false
+    if (filtros.empresa && doc.empresa !== filtros.empresa) return false
     // Fechas - con verificación de tipos
     if (filtros.fechaDesde && doc.fechaDocumento) {
-      const fechaDesde = new Date(filtros.fechaDesde);
-      const fechaDoc = new Date(doc.fechaDocumento);
-      if (fechaDoc < fechaDesde) return false;
+      const fechaDesde = new Date(filtros.fechaDesde)
+      const fechaDoc = new Date(doc.fechaDocumento)
+      if (fechaDoc < fechaDesde) return false
     }
     if (filtros.fechaHasta && doc.fechaDocumento) {
-      const fechaHasta = new Date(filtros.fechaHasta);
-      const fechaDoc = new Date(doc.fechaDocumento);
-      if (fechaDoc > fechaHasta) return false;
+      const fechaHasta = new Date(filtros.fechaHasta)
+      const fechaDoc = new Date(doc.fechaDocumento)
+      if (fechaDoc > fechaHasta) return false
     }
     
     // Otros filtros
-    if (filtros.soloDestacados && !doc.destacado) return false;
-    if (filtros.soloConfidenciales && !doc.confidencial) return false;
-    
-    return true;
-  });
-  
+    if (filtros.soloDestacados && !doc.destacado) return false
+    if (filtros.soloConfidenciales && !doc.confidencial) return false
+    return true
+  })
   // Obtener empresas únicas
-  const empresasUnicas = [...new Set(documentos.map(doc => doc.empresa))];
-  
+  const empresasUnicas = [...new Set(documentos.map(doc => doc.empresa))]
   // Handlers
   const handleUpload = async (data: unknown) => {
     try {
-      await uploadDocumento(data);
-      notificationService.success('Documento subido', 'El documento se ha guardado correctamente');
-      setShowSubirModal(false);
+      await uploadDocumento(data)
+      notificationService.success('Documento subido', 'El documento se ha guardado correctamente')
+      setShowSubirModal(false)
       fetchDocumentos(); // Recargar documentos
     } catch (error) {
-      notificationService.error('Error al subir documento', 'Por favor intente nuevamente');
+      notificationService.error('Error al subir documento', 'Por favor intente nuevamente')
       throw error; // Re-throw para que el modal maneje el estado de loading
     }
-  };
-
+  }
   const handleDescargar = (doc: Documento) => {
-    const downloadUrl = doc.rutaArchivo;
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = doc.nombreArchivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    notificationService.success('Descarga iniciada', `Descargando ${doc.nombreArchivo}`);
-  };
-
+    const downloadUrl = doc.rutaArchivo
+    const link = document.createElement('a')
+    link.href = downloadUrl
+    link.download = doc.nombreArchivo
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    notificationService.success('Descarga iniciada', `Descargando ${doc.nombreArchivo}`)
+  }
   const handleEliminar = async (doc: Documento) => {
     if (!window.confirm(`¿Estás seguro de eliminar "${doc.descripcion}"?`)) {
-      return;
+      return
     }
 
     try {
-      await deleteDocumento(doc.id);
-      notificationService.success('Documento eliminado', 'El documento ha sido eliminado correctamente');
+      await deleteDocumento(doc.id)
+      notificationService.success('Documento eliminado', 'El documento ha sido eliminado correctamente')
     } catch {
-      notificationService.error('Error al eliminar', 'No se pudo eliminar el documento');
+      notificationService.error('Error al eliminar', 'No se pudo eliminar el documento')
     }
-  };
-
+  }
   const handleExportar = () => {
     const datosExportar = documentosFiltrados.map(doc => ({
       Tipo: doc.tipo,
@@ -141,18 +118,16 @@ export const CentroDocumentacion: React.FC = () => {
       Estado: doc.estado,
       Destacado: doc.destacado ? 'Sí' : 'No',
       Confidencial: doc.confidencial ? 'Sí' : 'No'
-    }));
-
-    exportToCSV(datosExportar, `documentos_${new Date().toISOString().split('T')[0]}`);
-    notificationService.success('Exportación completada', 'Los documentos se han exportado correctamente');
-  };
-  
+    }))
+    exportToCSV(datosExportar, `documentos_${new Date().toISOString().split('T')[0]}`)
+    notificationService.success('Exportación completada', 'Los documentos se han exportado correctamente')
+  }
   if (loading) {
     return (
       <div className="p-6">
         <p className="text-white">Cargando documentos...</p>
       </div>
-    );
+    )
   }
   
   return (
@@ -177,8 +152,8 @@ export const CentroDocumentacion: React.FC = () => {
           )}
           {canEdit && (<button
               onClick={() => {
-                console.log('Button clicked, setting showSubirModal to true');
-                setShowSubirModal(true);
+                console.log('Button clicked, setting showSubirModal to true')
+                setShowSubirModal(true)
               }}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
             >
@@ -291,8 +266,8 @@ export const CentroDocumentacion: React.FC = () => {
       {showSubirModal && (<SubirDocumentoModal
           isOpen={showSubirModal}
           onClose={() => {
-            console.log('Modal closing');
-            setShowSubirModal(false);
+            console.log('Modal closing')
+            setShowSubirModal(false)
           }}
           onSubmit={handleUpload}
         />
@@ -304,5 +279,5 @@ export const CentroDocumentacion: React.FC = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}

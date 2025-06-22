@@ -1,47 +1,43 @@
-import { sharedApiService} from '../../../services/shared/sharedApi.service';
-import { unifiedAPIService} from '../../../services/api/unified.service';
-import type { Transito} from '../types';
-
+import { sharedApiService} from '../../../services/shared/sharedApi.service'
+import { unifiedAPIService} from '../../../services/api/unified.service'
+import type { Transito} from '../types'
 interface TransitosResponse {
-  data: Transito[];
-  total: number;
-  page: number;
-  limit: number;
+  data: Transito[]
+  total: number
+  page: number
+  limit: number
 }
 
 interface TransitosParams {
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, unknown>;
+  page?: number
+  limit?: number
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  filters?: Record<string, unknown>
 }
 
 class TransitosService {
-  private readonly API_BASE = '/api/transitos';
-  private cache = new Map<string, { data: unknown; timestamp: number }>();
+  private readonly API_BASE = '/api/transitos'
+  private cache = new Map<string, { data: unknown; timestamp: number }>()
   private readonly CACHE_TTL = 30000; // 30 seconds
 
   async getTransitos(params: TransitosParams = {}): Promise<TransitosResponse> {
     try {
-      
-      
+
       // In development, return mock data with pagination
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        const allData = this.getMockTransitos();
-        const filteredData = this.applyFilters(allData, filters);
-        const sortedData = this.applySorting(filteredData, sortBy, sortOrder);
-        
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        const paginatedData = sortedData.slice(startIndex, endIndex);
-        
+        const allData = this.getMockTransitos()
+        const filteredData = this.applyFilters(allData, filters)
+        const sortedData = this.applySorting(filteredData, sortBy, sortOrder)
+        const startIndex = (page - 1) * limit
+        const endIndex = startIndex + limit
+        const paginatedData = sortedData.slice(startIndex, endIndex)
         return {
           data: paginatedData,
           total: sortedData.length,
           page,
           limit
-        };
+        }
       }
       
       // Use unified API service for real data
@@ -52,11 +48,10 @@ class TransitosService {
         empresa: filters?.empresa,
         page,
         limit
-      });
-      
+      })
       // Apply client-side sorting if needed
       if (sortBy && response.data.length > 0) {
-        response.data = this.applySorting(response.data, sortBy, sortOrder);
+        response.data = this.applySorting(response.data, sortBy, sortOrder)
       }
       
       return {
@@ -64,73 +59,70 @@ class TransitosService {
         total: response.total,
         page,
         limit
-      };
+      }
     } catch {
-      console.error('Error fetching transitos:', error);
+      console.error('Error fetching transitos:', error)
       // Return paginated mock data on error
-      return this.getTransitos({ ...params });
+      return this.getTransitos({ ...params })
     }
   }
   
   private applyFilters(data: Transito[], filters?: Record<string, unknown>): Transito[] {
-    if (!filters || Object.keys(filters).length === 0) return data;
-    
+    if (!filters || Object.keys(filters).length === 0) return data
     return data.filter(item => {
       return Object.entries(filters).every(([key, value]) => {
-        if (!value) return true;
-        const itemValue = (item as unknown)[key];
+        if (!value) return true
+        const itemValue = (item as unknown)[key]
         if (typeof value === 'string') {
-          return itemValue?.toString().toLowerCase().includes(value.toLowerCase());
+          return itemValue?.toString().toLowerCase().includes(value.toLowerCase())
         }
-        return itemValue === value;
-      });
-    });
+        return itemValue === value
+      })
+    })
   }
   
   private applySorting(data: Transito[], sortBy?: string, sortOrder?: 'asc' | 'desc'): Transito[] {
-    if (!sortBy) return data;
-    
+    if (!sortBy) return data
     return [...data].sort((a, b) => {
-      const aValue = (a as unknown)[sortBy];
-      const bValue = (b as unknown)[sortBy];
-      
-      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
+      const aValue = (a as unknown)[sortBy]
+      const bValue = (b as unknown)[sortBy]
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1
+      return 0
+    })
   }
 
   async getTransitoById(id: string): Promise<Transito | null> {
     try {
       if (import.meta.env.DEV) {
-        const transitos = this.getMockTransitos();
-        return transitos.find(t => t.id === id) || null;
+        const transitos = this.getMockTransitos()
+        return transitos.find(t => t.id === id) || null
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`);
-      return response.data;
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/${id}`)
+      return response.data
     } catch {
-      console.error('Error fetching transito:', error);
-      return null;
+      console.error('Error fetching transito:', error)
+      return null
     }
   }
 
   async markDesprecintado(id: string): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000))
         this.clearCache(); // Clear cache after update
-        return true;
+        return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}/desprecintado`);
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}/desprecintado`)
       if (response.data.success) {
         this.clearCache(); // Clear cache after successful update
       }
-      return response.data.success;
+      return response.data.success
     } catch {
-      console.error('Error marking desprecintado:', error);
-      return false;
+      console.error('Error marking desprecintado:', error)
+      return false
     }
   }
 
@@ -138,24 +130,24 @@ class TransitosService {
     try {
       if (import.meta.env.DEV) {
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000))
         this.clearCache(); // Clear cache after update
-        return true;
+        return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data);
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data)
       if (response.data.success) {
         this.clearCache(); // Clear cache after successful update
       }
-      return response.data.success;
+      return response.data.success
     } catch {
-      console.error('Error updating transito:', error);
-      throw _error;
+      console.error('Error updating transito:', error)
+      throw _error
     }
   }
   
   clearCache(): void {
-    this.cache.clear();
+    this.cache.clear()
   }
 
   private getMockTransitos(): Transito[] {
@@ -166,8 +158,7 @@ class TransitosService {
       'QUEROL CAVANI CARLOS RAFAEL',
       'LUIS LAUREIRO',
       'LAMANNA ACEVEDO MARIO NELSON'
-    ];
-
+    ]
     const ubicaciones = [
       'Rilcomar',
       'Taminer',
@@ -282,36 +273,27 @@ class TransitosService {
       'Mercomar',
       'URU FOREST',
       'SUPRAMAR S.A.'
-    ];
-
-    const estados: Array<'en_viaje' | 'desprecintado' | 'con_alerta'> = ['en_viaje', 'desprecintado', 'con_alerta'];
-
-    const transitos: Transito[] = [];
-
+    ]
+    const estados: Array<'en_viaje' | 'desprecintado' | 'con_alerta'> = ['en_viaje', 'desprecintado', 'con_alerta']
+    const transitos: Transito[] = []
     for (let i = 1; i <= 50; i++) {
-      const fechaSalida = new Date();
-      fechaSalida.setDate(fechaSalida.getDate() - Math.floor(Math.random() * 30));
-      
-      const eta = new Date(fechaSalida);
-      eta.setDate(eta.getDate() + Math.floor(Math.random() * 5) + 1);
-
-      const estado = estados[Math.floor(Math.random() * estados.length)];
-      const progreso = estado === 'desprecintado' ? 100 : Math.floor(Math.random() * 90) + 10;
-
-      const precintoNum = Math.floor(Math.random() * 1000) + 1;
-      
+      const fechaSalida = new Date()
+      fechaSalida.setDate(fechaSalida.getDate() - Math.floor(Math.random() * 30))
+      const eta = new Date(fechaSalida)
+      eta.setDate(eta.getDate() + Math.floor(Math.random() * 5) + 1)
+      const estado = estados[Math.floor(Math.random() * estados.length)]
+      const progreso = estado === 'desprecintado' ? 100 : Math.floor(Math.random() * 90) + 10
+      const precintoNum = Math.floor(Math.random() * 1000) + 1
       // Generar datos de camión y conductor
-      const matriculas = ['STP1234', 'STP1234', 'STP1234', 'STP1234'];
+      const matriculas = ['STP1234', 'STP1234', 'STP1234', 'STP1234']
       const conductores = [
         { nombre: 'Juan Pérez', documento: '12345678' },
         { nombre: 'Sebastian Saucedo', documento: 'ARG987654' },
         { nombre: 'Pedro Silva', documento: 'BRA456789' },
         { nombre: 'Miguel Rodríguez', documento: '87654321' }
-      ];
-      
-      const matriculaSeleccionada = matriculas[Math.floor(Math.random() * matriculas.length)];
-      const conductorSeleccionado = conductores[Math.floor(Math.random() * conductores.length)];
-      
+      ]
+      const matriculaSeleccionada = matriculas[Math.floor(Math.random() * matriculas.length)]
+      const conductorSeleccionado = conductores[Math.floor(Math.random() * conductores.length)]
       transitos.push({
         id: `TR-${i.toString().padStart(5, '0')}`,
         dua: `${788553 + i}`,
@@ -344,11 +326,11 @@ class TransitosService {
           'Sin señal GPS por más de 1 hora'
         ] : undefined,
         observaciones: Math.random() > 0.7 ? 'Carga refrigerada - Mantener cadena de frío' : undefined
-      });
+      })
     }
 
-    return transitos;
+    return transitos
   }
 }
 
-export const transitosService = new TransitosService();
+export const transitosService = new TransitosService()

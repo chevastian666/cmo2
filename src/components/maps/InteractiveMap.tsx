@@ -5,53 +5,51 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, MapPin} from 'lucide-react';
-import { Card} from '@/components/ui/Card';
-import { Input} from '@/components/ui/input';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Separator} from '@/components/ui/separator';
-import { Switch} from '@/components/ui/switch';
-import { Label} from '@/components/ui/label';
-import { ScrollArea} from '@/components/ui/scroll-area';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/utils/utils';
-import { AnimatedButton, AnimatedDiv} from '@/components/animations/AnimatedComponents';
-
+import React, { useState } from 'react'
+import {Map, Navigation2, ZoomIn, ZoomOut, Maximize2, Search, ChevronLeft, ChevronRight, MapPin} from 'lucide-react'
+import { Card} from '@/components/ui/Card'
+import { Input} from '@/components/ui/input'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Separator} from '@/components/ui/separator'
+import { Switch} from '@/components/ui/switch'
+import { Label} from '@/components/ui/label'
+import { ScrollArea} from '@/components/ui/scroll-area'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import { AnimatedButton, AnimatedDiv} from '@/components/animations/AnimatedComponents'
 export interface MapMarker {
-  id: string;
-  position: { lat: number; lng: number };
-  title: string;
-  type: 'precinto' | 'transito' | 'deposito' | 'zona' | 'alerta';
-  data?: unknown;
-  icon?: string;
-  color?: string;
+  id: string
+  position: { lat: number; lng: number }
+  title: string
+  type: 'precinto' | 'transito' | 'deposito' | 'zona' | 'alerta'
+  data?: unknown
+  icon?: string
+  color?: string
 }
 
 export interface MapRoute {
-  id: string;
-  path: Array<{ lat: number; lng: number }>;
-  color?: string;
-  strokeWeight?: number;
-  name?: string;
+  id: string
+  path: Array<{ lat: number; lng: number }>
+  color?: string
+  strokeWeight?: number
+  name?: string
 }
 
 interface InteractiveMapProps {
-  markers?: MapMarker[];
-  routes?: MapRoute[];
-  center?: { lat: number; lng: number };
-  zoom?: number;
-  height?: string;
-  onMarkerClick?: (marker: MapMarker) => void;
-  showControls?: boolean;
-  showLegend?: boolean;
-  showSearch?: boolean;
-  className?: string;
-  mapType?: 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
+  markers?: MapMarker[]
+  routes?: MapRoute[]
+  center?: { lat: number; lng: number }
+  zoom?: number
+  height?: string
+  onMarkerClick?: (marker: MapMarker) => void
+  showControls?: boolean
+  showLegend?: boolean
+  showSearch?: boolean
+  className?: string
+  mapType?: 'roadmap' | 'satellite' | 'hybrid' | 'terrain'
 }
 
-const URUGUAY_CENTER = { lat: -32.5228, lng: -55.7658 };
-
+const URUGUAY_CENTER = { lat: -32.5228, lng: -55.7658 }
 const MARKER_CONFIGS = {
   precinto: {
     icon: '📍',
@@ -78,54 +76,46 @@ const MARKER_CONFIGS = {
     color: '#EF4444',
     zIndex: 300
   }
-};
-
+}
 export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   markers = [], routes: _routes = [], center: _center = URUGUAY_CENTER, zoom = 7, height = "600px", onMarkerClick, showControls = true, showLegend = true, showSearch = true, className, mapType: _mapType = 'roadmap'
 }) => {
   // Unused variables to avoid lint errors - will be used when map is implemented
-  void _routes;
-  void _center;
-  void _mapType;
-  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
-  const [showSidebar, setShowSidebar] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<string>('all');
-  const [showTraffic, setShowTraffic] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [, setCurrentZoom] = useState(zoom);
-
+  void _routes
+  void _center
+  void _mapType
+  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null)
+  const [showSidebar, setShowSidebar] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterType, setFilterType] = useState<string>('all')
+  const [showTraffic, setShowTraffic] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [, setCurrentZoom] = useState(zoom)
   // Filter markers based on search and filter
   const filteredMarkers = markers.filter(marker => {
     const matchesSearch = !searchTerm || 
-      marker.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterType === 'all' || marker.type === filterType;
-    return matchesSearch && matchesFilter;
-  });
-
+      marker.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesFilter = filterType === 'all' || marker.type === filterType
+    return matchesSearch && matchesFilter
+  })
   const handleZoomIn = () => {
-    setCurrentZoom(prev => Math.min(prev + 1, 20));
-  };
-
+    setCurrentZoom(prev => Math.min(prev + 1, 20))
+  }
   const handleZoomOut = () => {
-    setCurrentZoom(prev => Math.max(prev - 1, 1));
-  };
-
+    setCurrentZoom(prev => Math.max(prev - 1, 1))
+  }
   const handleCenter = () => {
-    setCurrentZoom(zoom);
-  };
-
+    setCurrentZoom(zoom)
+  }
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
-
+    setIsFullscreen(!isFullscreen)
+  }
   const handleMarkerClick = (marker: MapMarker) => {
-    setSelectedMarker(marker);
+    setSelectedMarker(marker)
     if (onMarkerClick) {
-      onMarkerClick(marker);
+      onMarkerClick(marker)
     }
-  };
-
+  }
   return (
     <Card className={cn("relative overflow-hidden", className)} style={{ height }}>
       <div className="absolute inset-0 flex">
@@ -370,7 +360,6 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         </AnimatePresence>
       </div>
     </Card>
-  );
-};
-
-export default InteractiveMap;
+  )
+}
+export default InteractiveMap

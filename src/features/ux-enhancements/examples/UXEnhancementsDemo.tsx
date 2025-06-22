@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
-import { RadialMenu} from '../components/RadialMenu/RadialMenu';
-import { SmartClipboard} from '../components/SmartClipboard/SmartClipboard';
-
-
-import {LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline';
-
+import React, { useState } from 'react'
+import { RadialMenu} from '../components/RadialMenu/RadialMenu'
+import { SmartClipboard} from '../components/SmartClipboard/SmartClipboard'
+import {LockClosedIcon, BellIcon, DocumentTextIcon, MapPinIcon, ChartBarIcon, CameraIcon, TruckIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline'
 export const UXEnhancementsDemo: React.FC = () => {
-  const [radialMenuOpen, setRadialMenuOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null);
-  
-  
-  
-
+  const [radialMenuOpen, setRadialMenuOpen] = useState(false)
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
+  const [selectedPrecinto, setSelectedPrecinto] = useState<string | null>(null)
   // Simular datos de precintos
   const precintos = [
     { 
@@ -33,8 +26,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       location: { lat: -34.598456, lng: -58.420134 },
       alerts: 0 
     }
-  ];
-
+  ]
   // Definir acciones del menú radial
   const radialActions = [
     {
@@ -42,11 +34,11 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Bloquear Precinto',
       icon: LockClosedIcon,
       action: (context: unknown) => {
-        console.log('Bloqueando precinto:', context.precintoId);
+        console.log('Bloqueando precinto:', context.precintoId)
         copyToClipboard(`BLOQUEO: Precinto ${context.precintoId} bloqueado`, {
           source: 'radial-menu',
           precintoId: context.precintoId
-        });
+        })
       },
       color: 'bg-red-600 hover:bg-red-500',
       shortcut: 'cmd+l',
@@ -58,13 +50,13 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Crear Alerta',
       icon: BellIcon,
       action: (context: unknown) => {
-        const alertId = Math.floor(Math.random() * 10000);
-        console.log('Creando alerta para:', context.precintoId);
+        const alertId = Math.floor(Math.random() * 10000)
+        console.log('Creando alerta para:', context.precintoId)
         copyToClipboard(`ALERTA #${alertId}: Precinto ${context.precintoId} - SEVERIDAD: ALTA`, {
           source: 'radial-menu',
           precintoId: context.precintoId,
           alertId: alertId.toString()
-        });
+        })
       },
       color: 'bg-yellow-600 hover:bg-yellow-500',
       shortcut: 'cmd+a',
@@ -75,12 +67,12 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Generar Reporte',
       icon: DocumentTextIcon,
       action: (context: unknown) => {
-        const reportNum = Math.floor(Math.random() * 1000);
-        console.log('Generando reporte:', context.precintoId);
+        const reportNum = Math.floor(Math.random() * 1000)
+        console.log('Generando reporte:', context.precintoId)
         copyToClipboard(
           `REPORTE #${reportNum}\nFECHA: ${new Date().toLocaleDateString()}\nPRECINTO: ${context.precintoId}\nOPERADOR: Demo User`,
           { source: 'radial-menu', precintoId: context.precintoId }
-        );
+        )
       },
       color: 'bg-green-600 hover:bg-green-500',
       shortcut: 'cmd+r',
@@ -91,12 +83,12 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Ver Ubicación',
       icon: MapPinIcon,
       action: (context: unknown) => {
-        const precinto = precintos.find(p => p.id === context.precintoId);
+        const precinto = precintos.find(p => p.id === context.precintoId)
         if (precinto) {
           copyToClipboard(
             `UBICACION: ${context.precintoId}\nLATITUDE: ${precinto.location.lat}\nLONGITUDE: ${precinto.location.lng}`,
             { source: 'radial-menu', precintoId: context.precintoId }
-          );
+          )
         }
       },
       color: 'bg-blue-600 hover:bg-blue-500',
@@ -108,7 +100,7 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Ver Estadísticas',
       icon: ChartBarIcon,
       action: (context: unknown) => {
-        console.log('Mostrando estadísticas:', context.precintoId);
+        console.log('Mostrando estadísticas:', context.precintoId)
       },
       color: 'bg-purple-600 hover:bg-purple-500',
       shortcut: 'cmd+s',
@@ -119,23 +111,21 @@ export const UXEnhancementsDemo: React.FC = () => {
       label: 'Tomar Foto',
       icon: CameraIcon,
       action: (context: unknown) => {
-        console.log('Tomando foto:', context.precintoId);
+        console.log('Tomando foto:', context.precintoId)
       },
       color: 'bg-indigo-600 hover:bg-indigo-500',
       shortcut: 'cmd+p',
       permissions: ['photo.take'],
       disabled: selectedPrecinto === 'PE11223344'
     }
-  ];
-
+  ]
   // Manejar click derecho
   const handleContextMenu = (e: React.MouseEvent, precintoId: string) => {
-    e.preventDefault();
-    setSelectedPrecinto(precintoId);
-    setMenuPosition({ x: e.clientX, y: e.clientY });
-    setRadialMenuOpen(true);
-  };
-
+    e.preventDefault()
+    setSelectedPrecinto(precintoId)
+    setMenuPosition({ x: e.clientX, y: e.clientY })
+    setRadialMenuOpen(true)
+  }
   // Simular permisos del usuario
   React.useEffect(() => {
     setUserPermissions([
@@ -145,9 +135,8 @@ export const UXEnhancementsDemo: React.FC = () => {
       'report.create',
       'stats.view',
       'photo.take'
-    ]);
-  }, [setUserPermissions]);
-
+    ])
+  }, [])
   return (
     <div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-6xl mx-auto">
@@ -251,5 +240,5 @@ export const UXEnhancementsDemo: React.FC = () => {
         hotkeys={true}
       />
     </div>
-  );
-};
+  )
+}

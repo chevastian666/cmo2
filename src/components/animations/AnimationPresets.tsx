@@ -56,8 +56,7 @@ export const transitions = {
     ease: "easeInOut",
     duration: 0.4
   }
-} as const;
-
+} as const
 // ==========================================
 // VARIANTES DE ANIMACIÓN
 // ==========================================
@@ -75,8 +74,7 @@ export const fadeVariants = {
     opacity: 0,
     transition: transitions.fast
   }
-};
-
+}
 // Scale + Fade
 export const scaleVariants = {
   hidden: { 
@@ -93,8 +91,7 @@ export const scaleVariants = {
     scale: 0.8,
     transition: transitions.fast
   }
-};
-
+}
 // Slide desde arriba
 export const slideDownVariants = {
   hidden: { 
@@ -111,8 +108,7 @@ export const slideDownVariants = {
     y: -20,
     transition: transitions.fast
   }
-};
-
+}
 // Slide desde abajo
 export const slideUpVariants = {
   hidden: { 
@@ -129,8 +125,7 @@ export const slideUpVariants = {
     y: 20,
     transition: transitions.fast
   }
-};
-
+}
 // Slide desde la izquierda
 export const slideLeftVariants = {
   hidden: { 
@@ -147,8 +142,7 @@ export const slideLeftVariants = {
     x: -20,
     transition: transitions.fast
   }
-};
-
+}
 // Slide desde la derecha
 export const slideRightVariants = {
   hidden: { 
@@ -165,8 +159,7 @@ export const slideRightVariants = {
     x: 20,
     transition: transitions.fast
   }
-};
-
+}
 // Rotación + Scale
 export const rotateScaleVariants = {
   hidden: { 
@@ -186,8 +179,7 @@ export const rotateScaleVariants = {
     rotate: 10,
     transition: transitions.fast
   }
-};
-
+}
 // Stagger para listas
 export const staggerContainer = {
   hidden: { opacity: 0 },
@@ -198,8 +190,7 @@ export const staggerContainer = {
       delayChildren: 0.2
     }
   }
-};
-
+}
 export const staggerItem = {
   hidden: { 
     opacity: 0, 
@@ -210,8 +201,7 @@ export const staggerItem = {
     y: 0,
     transition: transitions.smooth
   }
-};
-
+}
 // ==========================================
 // ANIMACIONES DE ESTADO
 // ==========================================
@@ -229,8 +219,7 @@ export const pulseVariants = {
       ease: "easeInOut"
     }
   }
-};
-
+}
 // Shake para errores
 export const shakeVariants = {
   initial: { x: 0 },
@@ -241,8 +230,7 @@ export const shakeVariants = {
       ease: "linear"
     }
   }
-};
-
+}
 // Glow para elementos importantes
 export const glowVariants = {
   initial: {
@@ -260,8 +248,7 @@ export const glowVariants = {
       ease: "easeInOut"
     }
   }
-};
-
+}
 // ==========================================
 // ANIMACIONES ESPECÍFICAS DEL DOMINIO
 // ==========================================
@@ -281,8 +268,7 @@ export const alertCriticalVariants = {
       ease: "easeInOut"
     }
   }
-};
-
+}
 // Animación para tránsitos en movimiento
 export const transitMovingVariants = {
   initial: {
@@ -296,8 +282,7 @@ export const transitMovingVariants = {
       ease: "easeInOut"
     }
   }
-};
-
+}
 // Animación para precintos activos
 export const precintoActiveVariants = {
   initial: {
@@ -311,8 +296,7 @@ export const precintoActiveVariants = {
       ease: "easeInOut"
     }
   }
-};
-
+}
 // ==========================================
 // GESTOS Y HOVER
 // ==========================================
@@ -327,8 +311,7 @@ export const hoverScaleVariants = {
     scale: 0.95,
     transition: { duration: 0.1 }
   }
-};
-
+}
 export const hoverLiftVariants = {
   initial: { 
     y: 0,
@@ -344,8 +327,7 @@ export const hoverLiftVariants = {
     boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.6)",
     transition: { duration: 0.1 }
   }
-};
-
+}
 // ==========================================
 // UTILIDADES
 // ==========================================
@@ -361,8 +343,7 @@ export const createDelayedVariants = (delay: number) => ({
       delay
     }
   }
-});
-
+})
 // Función para crear stagger personalizado
 export const createStaggerVariants = (staggerDelay: number = 0.1) => ({
   hidden: { opacity: 0 },
@@ -373,8 +354,7 @@ export const createStaggerVariants = (staggerDelay: number = 0.1) => ({
       delayChildren: 0.1
     }
   }
-});
-
+})
 // Preset para modales
 export const modalVariants = {
   hidden: {
@@ -394,8 +374,7 @@ export const modalVariants = {
     y: 10,
     transition: transitions.fast
   }
-};
-
+}
 // Preset para overlays
 export const overlayVariants = {
   hidden: { opacity: 0 },
@@ -407,8 +386,7 @@ export const overlayVariants = {
     opacity: 0,
     transition: { duration: 0.15 }
   }
-};
-
+}
 // Preset para notificaciones
 export const notificationVariants = {
   hidden: {
@@ -427,24 +405,19 @@ export const notificationVariants = {
     scale: 0.9,
     transition: transitions.fast
   }
-};
-
+}
 // ==========================================
 // ALIAS COMUNES
 // ==========================================
 
 // Alias para fadeInUp (slide desde abajo)
-export const fadeInUp = slideUpVariants;
-
+export const fadeInUp = slideUpVariants
 // Alias para staggerChildren
-export const staggerChildren = staggerContainer;
-
+export const staggerChildren = staggerContainer
 // Alias para scaleIn
-export const scaleIn = scaleVariants;
-
+export const scaleIn = scaleVariants
 // Alias para slideInRight
-export const slideInRight = slideRightVariants;
-
+export const slideInRight = slideRightVariants
 export default {
   transitions,
   fadeVariants,
@@ -474,4 +447,4 @@ export default {
   staggerChildren,
   scaleIn,
   slideInRight
-};
+}

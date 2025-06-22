@@ -4,23 +4,22 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/lib/utils';
-
+import React, { useState } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/lib/utils'
 interface Ripple {
-  x: number;
-  y: number;
-  size: number;
-  id: number;
+  x: number
+  y: number
+  size: number
+  id: number
 }
 
 interface RippleEffectProps {
-  children: React.ReactNode;
-  className?: string;
-  color?: string;
-  duration?: number;
-  disabled?: boolean;
+  children: React.ReactNode
+  className?: string
+  color?: string
+  duration?: number
+  disabled?: boolean
 }
 
 export const RippleEffect: React.FC<RippleEffectProps> = ({
@@ -30,31 +29,25 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
   duration = 600,
   disabled = false
 }) => {
-  const [ripples, setRipples] = useState<Ripple[]>([]);
-
+  const [ripples, setRipples] = useState<Ripple[]>([])
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 2;
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
-
+    if (disabled) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const size = Math.max(rect.width, rect.height) * 2
+    const x = e.clientX - rect.left - size / 2
+    const y = e.clientY - rect.top - size / 2
     const newRipple: Ripple = {
       x,
       y,
       size,
       id: Date.now()
-    };
-
-    setRipples(prev => [...prev, newRipple]);
-
+    }
+    setRipples(prev => [...prev, newRipple])
     // Remove ripple after animation completes
     setTimeout(() => {
-      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, duration);
-  };
-
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id))
+    }, duration)
+  }
   return (
     <div
       className={cn('relative overflow-hidden', className)}
@@ -81,33 +74,27 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
         ))}
       </AnimatePresence>
     </div>
-  );
-};
-
+  )
+}
 // Hook for adding ripple to any element
 export const useRipple = (color?: string, duration?: number) => {
-  const [ripples, setRipples] = useState<Ripple[]>([]);
-
+  const [ripples, setRipples] = useState<Ripple[]>([])
   const createRipple = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 2;
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
-
+    const rect = e.currentTarget.getBoundingClientRect()
+    const size = Math.max(rect.width, rect.height) * 2
+    const x = e.clientX - rect.left - size / 2
+    const y = e.clientY - rect.top - size / 2
     const newRipple: Ripple = {
       x,
       y,
       size,
       id: Date.now()
-    };
-
-    setRipples(prev => [...prev, newRipple]);
-
+    }
+    setRipples(prev => [...prev, newRipple])
     setTimeout(() => {
-      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, duration || 600);
-  };
-
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id))
+    }, duration || 600)
+  }
   const rippleElements = (
     <AnimatePresence>
       {ripples.map(ripple => (
@@ -128,7 +115,6 @@ export const useRipple = (color?: string, duration?: number) => {
         />
       ))}
     </AnimatePresence>
-  );
-
-  return { createRipple, rippleElements };
-};
+  )
+  return { createRipple, rippleElements }
+}

@@ -4,107 +4,86 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { FileText, Download, Plus, Filter, Search, Calendar, Clock, AlertCircle, CheckCircle, Eye, MessageSquare, Paperclip, User, ChevronRight, X} from 'lucide-react';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card';
-import { Badge} from '@/components/ui/badge';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Label} from '@/components/ui/label';
-import { Separator} from '@/components/ui/separator';
-import { Textarea} from '@/components/ui/textarea';
-import { Switch} from '@/components/ui/switch';
-import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
-
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
+import React, { useState, useEffect, useMemo } from 'react'
+import { FileText, Download, Plus, Filter, Search, Calendar, Clock, AlertCircle, CheckCircle, Eye, MessageSquare, Paperclip, User, ChevronRight, X} from 'lucide-react'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card'
+import { Badge} from '@/components/ui/badge'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Label} from '@/components/ui/label'
+import { Separator} from '@/components/ui/separator'
+import { Textarea} from '@/components/ui/textarea'
+import { Switch} from '@/components/ui/switch'
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import {useUserInfo} from '@/hooks/useAuth';
-import { notificationService} from '@/services/shared/notification.service';
-import { exportToCSV} from '@/utils/export';
-import { cn} from '@/utils/utils';
-import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad} from '../types';
-import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION} from '../types';
-import { pulseVariants} from '@/components/animations/AnimationPresets';
-
-const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import {useUserInfo} from '@/hooks/useAuth'
+import { notificationService} from '@/services/shared/notification.service'
+import { exportToCSV} from '@/utils/export'
+import { cn} from '@/utils/utils'
+import type { Novedad, FiltrosNovedades, TipoNovedad, EstadoNovedad} from '../types'
+import { FILTROS_DEFAULT, TIPOS_NOVEDAD, PUNTOS_OPERACION} from '../types'
+import { pulseVariants} from '@/components/animations/AnimationPresets'
+const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros'
 export const LibroNovedadesPageV2: React.FC = () => {
-  console.log('LibroNovedadesPageV2: Componente renderizando');
-  
+  console.log('LibroNovedadesPageV2: Componente renderizando')
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
+    const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
     if (saved) {
-      const parsed = JSON.parse(saved);
+      const parsed = JSON.parse(saved)
       return {
         ...parsed,
         fecha: parsed.fecha ? new Date(parsed.fecha) : null,
         fechaDesde: parsed.fechaDesde ? new Date(parsed.fechaDesde) : null,
         fechaHasta: parsed.fechaHasta ? new Date(parsed.fechaHasta) : null
-      };
+      }
     }
-    return FILTROS_DEFAULT;
-  });
-  
-  const [showFilters, setShowFilters] = useState(false);
-  const [showFormulario, setShowFormulario] = useState(false);
-  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null);
-  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas');
-  const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set());
-  
-  
-  const userInfo = useUserInfo();
-  
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-
+    return FILTROS_DEFAULT
+  })
+  const [showFilters, setShowFilters] = useState(false)
+  const [showFormulario, setShowFormulario] = useState(false)
+  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null)
+  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null)
+  const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas')
+  const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set())
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   // Cargar novedades al montar y cuando cambien los filtros
-   
-
 
     useEffect(() => {
-    fetchNovedades(filtros);
-  }, [fetchNovedades, filtros]);
-
+    fetchNovedades(filtros)
+  }, [filtros])
   // Guardar filtros en localStorage
-   
-
 
     useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
-  }, [filtros]);
-
+    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
+  }, [filtros])
   // Auto-refresh cada minuto
-   
-
 
     useEffect(() => {
     const interval = setInterval(() => {
-      fetchNovedades(filtros);
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [fetchNovedades, filtros]);
-
+      fetchNovedades(filtros)
+    }, 60000)
+    return () => clearInterval(interval)
+  }, [filtros])
   // Filtrar novedades por tab
   const filteredNovedades = useMemo(() => {
     switch (selectedTab) {
-      case 'activas':
-        return novedades.filter(n => n.estado === 'activa' || n.estado === 'seguimiento');
-      case 'resueltas':
-        return novedades.filter(n => n.estado === 'resuelta');
+      case 'activas': {
+  return novedades.filter(n => n.estado === 'activa' || n.estado === 'seguimiento')
+      case 'resueltas': {
+  return novedades.filter(n => n.estado === 'resuelta')
       default:
-        return novedades;
+        return novedades
     }
-  }, [novedades, selectedTab]);
-
+  }, [novedades])
   const activeFiltersCount = Object.values(filtros).filter(v => 
     v !== '' && v !== false && v !== null && v !== FILTROS_DEFAULT.fecha
-  ).length;
-
+  ).length
   const handleExport = () => {
     const data = novedades.map(n => ({
       Fecha: n.fecha.toLocaleDateString('es-UY'),
@@ -114,50 +93,44 @@ export const LibroNovedadesPageV2: React.FC = () => {
       Estado: n.estado,
       'Creado Por': n.creadoPor.nombre,
       Resolución: n.resolucion ? `${n.resolucion.fecha.toLocaleDateString('es-UY')} - ${n.resolucion.usuario.nombre}` : '-'
-    }));
-    exportToCSV(data, `novedades-${new Date().toISOString().split('T')[0]}`);
-  };
-
+    }))
+    exportToCSV(data, `novedades-${new Date().toISOString().split('T')[0]}`)
+  }
   const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(_data);
-    setShowFormulario(false);
-    notificationService.success('Novedad creada', 'La novedad se ha registrado correctamente');
-  };
-
+    await crearNovedad(_data)
+    setShowFormulario(false)
+    notificationService.success('Novedad creada', 'La novedad se ha registrado correctamente')
+  }
   const handleMarcarResuelta = async (novedadId: string, comentario?: string) => {
     try {
-      await marcarResuelta(novedadId, comentario);
-      notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
-      setNovedadResolucion(null);
+      await marcarResuelta(novedadId, comentario)
+      notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta')
+      setNovedadResolucion(null)
     } catch (error) {
-      notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
+      notificationService.error('Error', 'No se pudo marcar la novedad como resuelta')
     }
-  };
-
+  }
   const handleAgregarSeguimiento = async (novedadId: string, comentario: string) => {
     try {
-      await agregarSeguimiento(novedadId, comentario);
-      notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
-      setNovedadSeguimiento(null);
+      await agregarSeguimiento(novedadId, comentario)
+      notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente')
+      setNovedadSeguimiento(null)
     } catch (error) {
-      notificationService.error('Error', 'No se pudo agregar el seguimiento');
+      notificationService.error('Error', 'No se pudo agregar el seguimiento')
     }
-  };
-
+  }
   const toggleExpanded = (id: string) => {
-    const newExpanded = new Set(expandedNovedades);
+    const newExpanded = new Set(expandedNovedades)
     if (newExpanded.has(id)) {
-      newExpanded.delete(id);
+      newExpanded.delete(id)
     } else {
-      newExpanded.add(id);
+      newExpanded.add(id)
     }
-    setExpandedNovedades(newExpanded);
-  };
-
+    setExpandedNovedades(newExpanded)
+  }
   const clearFilters = () => {
-    setFiltros(FILTROS_DEFAULT);
-  };
-
+    setFiltros(FILTROS_DEFAULT)
+  }
   return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
@@ -355,18 +328,17 @@ export const LibroNovedadesPageV2: React.FC = () => {
         />
       </div>
     </PageTransition>
-  );
-};
-
+  )
+}
 // Stats Card Component
 const StatsCard: React.FC<{
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-  color: string;
-  trend?: string;
-  pulse?: boolean;
-}> = ({ title, value, icon, color, trend, pulse }) => (
+  title: string
+  value: number
+  icon: React.ReactNode
+  color: string
+  trend?: string
+  pulse?: boolean
+}> = (title, value, icon, color, trend, pulse ) => (
   <AnimatedCard className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors">
     <CardHeader className="px-6 pb-2 pt-4">
       <div className="flex items-center justify-between">
@@ -387,14 +359,13 @@ const StatsCard: React.FC<{
       )}
     </CardContent>
   </AnimatedCard>
-);
-
+)
 // Filter Panel Component
 const FilterPanel: React.FC<{
-  filtros: FiltrosNovedades;
-  onFiltersChange: (filtros: FiltrosNovedades) => void;
-  onClear: () => void;
-}> = ({ filtros, onFiltersChange, onClear }) => (<div className="space-y-4">
+  filtros: FiltrosNovedades
+  onFiltersChange: (filtros: FiltrosNovedades) => void
+  onClear: () => void
+}> = (filtros, onFiltersChange, onClear ) => (<div className="space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <Label htmlFor="puntoOperacion">Punto de Operación</Label>
@@ -476,20 +447,18 @@ const FilterPanel: React.FC<{
       </AnimatedButton>
     </div>
   </div>
-);
-
+)
 // Novedad Item Component
 const NovedadItem: React.FC<{
-  novedad: Novedad;
-  index: number;
-  isExpanded: boolean;
-  onToggleExpand: () => void;
-  onAddSeguimiento: () => void;
-  onResolve: () => void;
-  canEdit: boolean;
+  novedad: Novedad
+  index: number
+  isExpanded: boolean
+  onToggleExpand: () => void
+  onAddSeguimiento: () => void
+  onResolve: () => void
+  canEdit: boolean
 }> = ({ novedad, index, isExpanded, onToggleExpand, onAddSeguimiento, onResolve, canEdit }) => {
-  const tipo = TIPOS_NOVEDAD[novedad.tipoNovedad];
-  
+  const tipo = TIPOS_NOVEDAD[novedad.tipoNovedad]
   return (
     <AnimatedListItem index={index}>
       <AnimatedCard 
@@ -676,11 +645,10 @@ const NovedadItem: React.FC<{
         </AnimatePresence>
       </AnimatedCard>
     </AnimatedListItem>
-  );
-};
-
+  )
+}
 // Empty State Component
-const EmptyState: React.FC<{ tab: string }> = ({ tab }) => (
+const EmptyState: React.FC<{ tab: string }> = (tab ) => (
   <div className="py-12 text-center">
     <motion.div
       initial={{ scale: 0 }}
@@ -695,19 +663,18 @@ const EmptyState: React.FC<{ tab: string }> = ({ tab }) => (
        'No se encontraron novedades'}
     </p>
   </div>
-);
-
+)
 // Formulario Modal Component
 const FormularioNovedadModal: React.FC<{
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: unknown) => void;
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (data: unknown) => void
   userInfo: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
+    id: string
+    name: string
+    email: string
+    role: string
+  }
 }> = ({ isOpen, onClose, onSubmit, userInfo }) => {
   const [formData, setFormData] = useState({
     fecha: new Date(),
@@ -715,13 +682,12 @@ const FormularioNovedadModal: React.FC<{
     tipoNovedad: '' as TipoNovedad | '',
     descripcion: '',
     archivos: [] as File[]
-  });
-
+  })
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!formData.puntoOperacion || !formData.tipoNovedad || !formData.descripcion) {
-      notificationService.warning('Campos requeridos', 'Complete todos los campos obligatorios');
-      return;
+      notificationService.warning('Campos requeridos', 'Complete todos los campos obligatorios')
+      return
     }
     onSubmit({
       ...formData,
@@ -731,16 +697,15 @@ const FormularioNovedadModal: React.FC<{
         email: userInfo.email,
         rol: userInfo.role
       }
-    });
+    })
     setFormData({
       fecha: new Date(),
       puntoOperacion: '',
       tipoNovedad: '',
       descripcion: '',
       archivos: []
-    });
-  };
-
+    })
+  }
   return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
@@ -812,8 +777,8 @@ const FormularioNovedadModal: React.FC<{
                 multiple
                 accept="image/*,.pdf"
                 onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  setFormData(prev => ({ ...prev, archivos: files }));
+                  const files = Array.from(e.target.files || [])
+                  setFormData(prev => ({ ...prev, archivos: files }))
                 }}
                 className="flex-1"
               />
@@ -836,30 +801,27 @@ const FormularioNovedadModal: React.FC<{
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
-
+  )
+}
 // Seguimiento Modal Component
 const SeguimientoModal: React.FC<{
-  novedad: Novedad | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (novedadId: string, comentario: string) => void;
+  novedad: Novedad | null
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (novedadId: string, comentario: string) => void
 }> = ({ novedad, isOpen, onClose, onSubmit }) => {
-  const [comentario, setComentario] = useState('');
-
+  const [comentario, setComentario] = useState('')
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!comentario.trim()) {
-      notificationService.warning('Campo requerido', 'Ingrese un comentario');
-      return;
+      notificationService.warning('Campo requerido', 'Ingrese un comentario')
+      return
     }
     if (novedad) {
-      onSubmit(novedad.id, comentario);
-      setComentario('');
+      onSubmit(novedad.id, comentario)
+      setComentario('')
     }
-  };
-
+  }
   return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
@@ -892,26 +854,23 @@ const SeguimientoModal: React.FC<{
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
-
+  )
+}
 // Resolución Modal Component
 const ResolucionModal: React.FC<{
-  novedad: Novedad | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (novedadId: string, comentario?: string) => void;
+  novedad: Novedad | null
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (novedadId: string, comentario?: string) => void
 }> = ({ novedad, isOpen, onClose, onSubmit }) => {
-  const [comentario, setComentario] = useState('');
-
+  const [comentario, setComentario] = useState('')
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (novedad) {
-      onSubmit(novedad.id, comentario || undefined);
-      setComentario('');
+      onSubmit(novedad.id, comentario || undefined)
+      setComentario('')
     }
-  };
-
+  }
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -946,7 +905,6 @@ const ResolucionModal: React.FC<{
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export default LibroNovedadesPageV2;
+  )
+}
+export default LibroNovedadesPageV2

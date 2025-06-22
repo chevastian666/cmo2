@@ -1,131 +1,126 @@
-import React, { useState, useEffect } from 'react';
-import { X, User, MessageSquare, CheckCircle, AlertTriangle, Clock, Shield, Battery, Radio, Package, Navigation, Pause, Zap} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
-import type { AlertaExtendida, Usuario} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-import { usuariosService} from '../../../services/usuarios.service';
-
+import React, { useState, useEffect } from 'react'
+import { X, User, MessageSquare, CheckCircle, AlertTriangle, Clock, Shield, Battery, Radio, Package, Navigation, Pause, Zap} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters'
+import type { AlertaExtendida, Usuario} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { usuariosService} from '../../../services/usuarios.service'
 interface AlertaDetalleModalProps {
-  alerta: AlertaExtendida;
-  isOpen: boolean;
-  onClose: () => void;
-  onAsignar: (usuarioId: string, notas?: string) => void;
-  onComentar: (mensaje: string) => void;
-  onResolver: (tipo: string, descripcion: string, acciones?: string[]) => void;
+  alerta: AlertaExtendida
+  isOpen: boolean
+  onClose: () => void
+  onAsignar: (usuarioId: string, notas?: string) => void
+  onComentar: (mensaje: string) => void
+  onResolver: (tipo: string, descripcion: string, acciones?: string[]) => void
 }
 
 export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null);
-  const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
-  const [mostrarResolucion, setMostrarResolucion] = useState(false);
-  const [nuevoComentario, setNuevoComentario] = useState('');
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('');
-  const [notasAsignacion, setNotasAsignacion] = useState('');
-  const [tipoResolucion, setTipoResolucion] = useState('resuelta');
-  const [descripcionResolucion, setDescripcionResolucion] = useState('');
-  const [accionesTomadas, setAccionesTomadas] = useState<string[]>(['']);
-   
-
+  const [usuarios, setUsuarios] = useState<Usuario[]>([])
+  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
+  const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
+  const [mostrarResolucion, setMostrarResolucion] = useState(false)
+  const [nuevoComentario, setNuevoComentario] = useState('')
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
+  const [notasAsignacion, setNotasAsignacion] = useState('')
+  const [tipoResolucion, setTipoResolucion] = useState('resuelta')
+  const [descripcionResolucion, setDescripcionResolucion] = useState('')
+  const [accionesTomadas, setAccionesTomadas] = useState<string[]>([''])
   useEffect(() => {
     if (isOpen) {
-      cargarUsuarios();
+      cargarUsuarios()
     }
-  }, [isOpen]);
-
+  }, [])
   const cargarUsuarios = async () => {
     const [users, currentUser] = await Promise.all([
       usuariosService.getActivos(),
       usuariosService.getCurrentUser()
-    ]);
-    setUsuarios(users);
-    setUsuarioActual(currentUser);
-  };
-
+    ])
+    setUsuarios(users)
+    setUsuarioActual(currentUser)
+  }
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'AAR': // Atraso en arribo de reporte
-        return <Clock className="h-6 w-6" />;
-      case 'BBJ': // Batería baja
-        return <Battery className="h-6 w-6" />;
-      case 'DEM': // Demorado
-        return <Pause className="h-6 w-6" />;
-      case 'DNR': // Desvío de ruta
-        return <Navigation className="h-6 w-6" />;
-      case 'DTN': // Detenido
-        return <Shield className="h-6 w-6" />;
-      case 'NPG': // Sin señal GPS
-        return <Radio className="h-6 w-6" />;
-      case 'NPN': // Sin reporte del precinto
-        return <AlertTriangle className="h-6 w-6" />;
-      case 'PTN': // Precinto abierto no autorizado
-        return <Package className="h-6 w-6" />;
-      case 'SNA': // Salida no autorizada
-        return <Zap className="h-6 w-6" />;
+      case 'AAR': {
+  // Atraso en arribo de reporte
+        return <Clock className="h-6 w-6" />
+      case 'BBJ': {
+  // Batería baja
+        return <Battery className="h-6 w-6" />
+      case 'DEM': {
+  // Demorado
+        return <Pause className="h-6 w-6" />
+      case 'DNR': {
+  // Desvío de ruta
+        return <Navigation className="h-6 w-6" />
+      case 'DTN': {
+  // Detenido
+        return <Shield className="h-6 w-6" />
+      case 'NPG': {
+  // Sin señal GPS
+        return <Radio className="h-6 w-6" />
+      case 'NPN': {
+  // Sin reporte del precinto
+        return <AlertTriangle className="h-6 w-6" />
+      case 'PTN': {
+  // Precinto abierto no autorizado
+        return <Package className="h-6 w-6" />
+      case 'SNA': {
+  // Salida no autorizada
+        return <Zap className="h-6 w-6" />
       default:
-        return <AlertTriangle className="h-6 w-6" />;
+        return <AlertTriangle className="h-6 w-6" />
     }
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20'
       default:
-        return 'text-gray-400 bg-gray-900/20';
+        return 'text-gray-400 bg-gray-900/20'
     }
-  };
-
+  }
   const handleAsignar = () => {
     if (usuarioSeleccionado) {
-      onAsignar(usuarioSeleccionado, notasAsignacion);
-      setMostrarAsignacion(false);
-      setUsuarioSeleccionado('');
-      setNotasAsignacion('');
+      onAsignar(usuarioSeleccionado, notasAsignacion)
+      setMostrarAsignacion(false)
+      setUsuarioSeleccionado('')
+      setNotasAsignacion('')
     }
-  };
-
+  }
   const handleComentar = () => {
     if (nuevoComentario.trim()) {
-      onComentar(nuevoComentario);
-      setNuevoComentario('');
+      onComentar(nuevoComentario)
+      setNuevoComentario('')
     }
-  };
-
+  }
   const handleResolver = () => {
     if (descripcionResolucion.trim()) {
-      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()));
-      setMostrarResolucion(false);
-      setDescripcionResolucion('');
-      setAccionesTomadas(['']);
+      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
+      setMostrarResolucion(false)
+      setDescripcionResolucion('')
+      setAccionesTomadas([''])
     }
-  };
-
+  }
   const agregarAccion = () => {
-    setAccionesTomadas([...accionesTomadas, '']);
-  };
-
+    setAccionesTomadas([...accionesTomadas, ''])
+  }
   const actualizarAccion = (index: number, valor: string) => {
-    const nuevasAcciones = [...accionesTomadas];
-    nuevasAcciones[index] = valor;
-    setAccionesTomadas(nuevasAcciones);
-  };
-
+    const nuevasAcciones = [...accionesTomadas]
+    nuevasAcciones[index] = valor
+    setAccionesTomadas(nuevasAcciones)
+  }
   const eliminarAccion = (index: number) => {
-    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index));
-  };
-
-  if (!isOpen) return null;
-
+    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index))
+  }
+  if (!isOpen) return null
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -459,9 +454,9 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       </button>
                       <button
                         onClick={() => {
-                          setMostrarResolucion(false);
-                          setDescripcionResolucion('');
-                          setAccionesTomadas(['']);
+                          setMostrarResolucion(false)
+                          setDescripcionResolucion('')
+                          setAccionesTomadas([''])
                         }}
                         className="px-4 py-2 bg-gray-700 text-base text-white rounded-md hover:bg-gray-600"
                       >
@@ -503,5 +498,5 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

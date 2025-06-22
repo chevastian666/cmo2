@@ -123,31 +123,28 @@ export const TROKOR_CONFIG = {
     'PTN': 'precinto_abierto',
     'SNA': 'salida_no_autorizada'
   }
-};
-
+}
 // Helper para obtener headers con autenticación
 export const getTrokorHeaders = (): HeadersInit => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-  };
-  
+  }
   if (TROKOR_CONFIG.API_KEY) {
-    headers['X-API-Key'] = TROKOR_CONFIG.API_KEY;
+    headers['X-API-Key'] = TROKOR_CONFIG.API_KEY
   }
   
   if (TROKOR_CONFIG.API_SECRET) {
-    headers['X-API-Secret'] = TROKOR_CONFIG.API_SECRET;
+    headers['X-API-Secret'] = TROKOR_CONFIG.API_SECRET
   }
   
-  const token = localStorage.getItem('trokor_token');
+  const token = localStorage.getItem('trokor_token')
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers['Authorization'] = `Bearer ${token}`
   }
   
-  return headers;
-};
-
+  return headers
+}
 // Helper para construir URLs completas
 export const buildTrokorUrl = (endpoint: string, base: string = TROKOR_CONFIG.API_BASE): string => {
-  return `${base}${endpoint}`;
-};
+  return `${base}${endpoint}`
+}

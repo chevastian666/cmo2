@@ -1,14 +1,13 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-
+import React, { Component, ErrorInfo, ReactNode } from 'react'
 interface Props {
-  children: ReactNode;
-  componentName?: string;
+  children: ReactNode
+  componentName?: string
 }
 
 interface State {
-  hasError: boolean;
-  error: Error | null;
-  errorInfo: ErrorInfo | null;
+  hasError: boolean
+  error: Error | null
+  errorInfo: ErrorInfo | null
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -16,11 +15,10 @@ export class ErrorBoundary extends Component<Props, State> {
     hasError: false,
     error: null,
     errorInfo: null
-  };
-
+  }
   public static getDerivedStateFromError(error: Error): State {
-    console.error('ErrorBoundary: Error caught:', _error);
-    return { hasError: true, _error, errorInfo: null };
+    console.error('ErrorBoundary: Error caught:', _error)
+    return { hasError: true, _error, errorInfo: null }
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -28,8 +26,8 @@ export class ErrorBoundary extends Component<Props, State> {
       componentName: this.props.componentName,
       error: error,
       errorInfo: errorInfo
-    });
-    this.setState({ errorInfo });
+    })
+    this.setState({ errorInfo })
   }
 
   public render() {
@@ -53,9 +51,9 @@ export class ErrorBoundary extends Component<Props, State> {
             </details>
           )}
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }

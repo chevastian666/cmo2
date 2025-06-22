@@ -4,12 +4,11 @@
  * By Cheva
  */
 
-import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
-import * as d3 from 'd3';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/utils/utils';
-import { TreemapProps, TreemapNode, TreemapTooltipData} from './types';
-
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import * as d3 from 'd3'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import { TreemapProps, TreemapNode, TreemapTooltipData} from './types'
 export const InteractiveTreemap: React.FC<TreemapProps> = ({
   data, width = 800, height = 600, colorScheme = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'], valueFormat = (v) => v.toLocaleString(),
   onNodeClick,
@@ -23,110 +22,94 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
   minZoom = 1,
   maxZoom = 100
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [breadcrumb, setBreadcrumb] = useState<string[]>(['Root']);
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [breadcrumb, setBreadcrumb] = useState<string[]>(['Root'])
   const [, setCurrentRoot] = useState<unknown>(null);// Create color scale
   const colorScale = useMemo(() => {
-    const uniqueNames = new Set<string>();
+    const uniqueNames = new Set<string>()
     const extractNames = (node: TreemapNode) => {
       if (node && node.children) {
         node.children.forEach(child => {
           if (child && child.name) {
-            uniqueNames.add(child.name);
-            extractNames(child);
+            uniqueNames.add(child.name)
+            extractNames(child)
           }
-        });
+        })
       }
-    };
-    
+    }
     if (data && data.children) {
-      extractNames(data);
+      extractNames(data)
     }
     
     return d3.scaleOrdinal<string>()
       .domain(Array.from(uniqueNames))
-      .range(colorScheme);
-  }, [data, colorScheme]);
-
+      .range(colorScheme)
+  }, [data])
   // Build treemap layout
   const buildTreemap = useCallback(() => {
-    if (!svgRef.current || !data || !data.children || data.children.length === 0) return;
-
+    if (!svgRef.current || !data || !data.children || data.children.length === 0) return
     // Clear previous content
-    d3.select(svgRef.current).selectAll('*').remove();
-
+    d3.select(svgRef.current).selectAll('*').remove()
     // Create hierarchy
     const root = d3.hierarchy(data)
       .sum((d: unknown) => d.value || 0)
-      .sort((a, b) => (b.value || 0) - (a.value || 0));
-
+      .sort((a, b) => (b.value || 0) - (a.value || 0))
     // Create treemap layout
     const treemapLayout = d3.treemap<TreemapNode>()
       .size([width, height])
       .paddingInner(2)
       .paddingOuter(4)
-      .round(true);
-
-    treemapLayout(root);
-
+      .round(true)
+    treemapLayout(root)
     // Create main SVG groups
-    const svg = d3.select(svgRef.current);
-    
-    const defs = svg.append('defs');
-    
+    const svg = d3.select(svgRef.current)
+    const defs = svg.append('defs')
     // Add filter for shadow effect
     const filter = defs.append('filter')
       .attr('id', 'treemap-shadow')
       .attr('x', '-50%')
       .attr('y', '-50%')
       .attr('width', '200%')
-      .attr('height', '200%');
-    
+      .attr('height', '200%')
     filter.append('feDropShadow')
       .attr('dx', 0)
       .attr('dy', 2)
       .attr('stdDeviation', 3)
-      .attr('flood-opacity', 0.1);
-
+      .attr('flood-opacity', 0.1)
     // Create zoom behavior
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([minZoom, maxZoom])
       .on('zoom', (event) => {
-        g.attr('transform', event.transform.toString());
-      });
-
-    svg.call(zoom);
-
-    const g = svg.append('g');
-
+        g.attr('transform', event.transform.toString())
+      })
+    svg.call(zoom)
+    const g = svg.append('g')
     // Draw cells
     const cell = g.selectAll('g')
       .data(root.leaves())
       .enter()
       .append('g')
-      .attr('transform', (d: unknown) => `translate(${d.x0},${d.y0})`);
-
+      .attr('transform', (d: unknown) => `translate(${d.x0},${d.y0})`)
     // Add rectangles
     const rects = cell.append('rect')
       .attr('width', (d: unknown) => d.x1 - d.x0)
       .attr('height', (d: unknown) => d.y1 - d.y0)
       .attr('fill', (d: unknown) => {
-        const node = d.data as TreemapNode;
-        return node.color || colorScale(node.name);
+        const node = d.data as TreemapNode
+        return node.color || colorScale(node.name)
       })
       .attr('rx', 4)
       .attr('ry', 4)
       .attr('opacity', animated ? 0 : 1)
       .attr('filter', 'url(#treemap-shadow)')
-      .style('cursor', 'pointer');
-
+      .style('cursor', 'pointer')
     if (animated) {
       rects.transition()
         .duration(750)
         .delay((d, i) => i * 10)
-        .attr('opacity', 1);
+        .attr('opacity', 1)
     }
 
     // Add labels
@@ -137,50 +120,44 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .attr('fill', 'white')
       .attr('font-weight', '500')
       .style('pointer-events', 'none')
-      .attr('opacity', animated ? 0 : 1);
-
+      .attr('opacity', animated ? 0 : 1)
     labels.append('tspan')
       .text((d: unknown) => {
-        const node = d.data as TreemapNode;
-        const width = d.x1 - d.x0;
-        const maxChars = Math.floor(width / 8);
+        const node = d.data as TreemapNode
+        const width = d.x1 - d.x0
+        const maxChars = Math.floor(width / 8)
         return node.name.length > maxChars ? 
           node.name.substring(0, maxChars - 2) + '...' : 
-          node.name;
-      });
-
+          node.name
+      })
     labels.append('tspan')
       .attr('x', 4)
       .attr('dy', '1.2em')
       .attr('font-size', '12px')
       .attr('fill', 'rgba(255, 255, 255, 0.8)')
-      .text((d: unknown) => valueFormat(d.value));
-
+      .text((d: unknown) => valueFormat(d.value))
     if (animated) {
       labels.transition()
         .duration(750)
         .delay((d, i) => i * 10 + 100)
-        .attr('opacity', 1);
+        .attr('opacity', 1)
     }
 
     // Add interactivity
     cell
       .on('click', function(event, d: unknown) {
-        event.stopPropagation();
-        
+        event.stopPropagation()
         // Zoom to node
         const bounds = [
           [d.x0, d.y0],
           [d.x1, d.y1]
-        ] as [[number, number], [number, number]];
-        
-        const dx = bounds[1][0] - bounds[0][0];
-        const dy = bounds[1][1] - bounds[0][1];
-        const x = (bounds[0][0] + bounds[1][0]) / 2;
-        const y = (bounds[0][1] + bounds[1][1]) / 2;
-        const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
-        const translate = [width / 2 - scale * x, height / 2 - scale * y];
-
+        ] as [[number, number], [number, number]]
+        const dx = bounds[1][0] - bounds[0][0]
+        const dy = bounds[1][1] - bounds[0][1]
+        const x = (bounds[0][0] + bounds[1][0]) / 2
+        const y = (bounds[0][1] + bounds[1][1]) / 2
+        const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)))
+        const translate = [width / 2 - scale * x, height / 2 - scale * y]
         svg.transition()
           .duration(750)
           .call(
@@ -188,14 +165,12 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
             d3.zoomIdentity
               .translate(translate[0], translate[1])
               .scale(scale)
-          );
-
+          )
         // Update breadcrumb
-        const path = d.ancestors().reverse().map((node: unknown) => node.data.name);
-        setBreadcrumb(path);
-
+        const path = d.ancestors().reverse().map((node: unknown) => node.data.name)
+        setBreadcrumb(path)
         if (onNodeClick) {
-          onNodeClick(d.data, event);
+          onNodeClick(d.data, event)
         }
       })
       .on('mouseenter', function(event, d: unknown) {
@@ -203,65 +178,51 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         d3.select(this).select('rect')
           .transition()
           .duration(200)
-          .attr('opacity', 0.8);
-
+          .attr('opacity', 0.8)
         if (showTooltip) {
-          const ancestors = d.ancestors().reverse();
-          const path = ancestors.map((node: unknown) => node.data.name);
-          const rootValue = ancestors[0].value || 1;
-          
+          const ancestors = d.ancestors().reverse()
+          const path = ancestors.map((node: unknown) => node.data.name)
+          const rootValue = ancestors[0].value || 1
           setHoveredNode({
             name: d.data.name,
             value: d.value,
             percentage: (d.value / rootValue) * 100,
             path,
             data: d.data.data
-          });
-          
-          setMousePosition({ x: event.pageX, y: event.pageY });
+          })
+          setMousePosition({ x: event.pageX, y: event.pageY })
         }
 
         if (onNodeHover) {
-          onNodeHover(d.data, event);
+          onNodeHover(d.data, event)
         }
       })
       .on('mousemove', function(event) {
-        setMousePosition({ x: event.pageX, y: event.pageY });
+        setMousePosition({ x: event.pageX, y: event.pageY })
       })
       .on('mouseleave', function(event) {
         // Remove highlight
         d3.select(this).select('rect')
           .transition()
           .duration(200)
-          .attr('opacity', 1);
-
-        setHoveredNode(null);
-
+          .attr('opacity', 1)
+        setHoveredNode(null)
         if (onNodeHover) {
-          onNodeHover(null, event);
+          onNodeHover(null, event)
         }
-      });
-
+      })
     // Reset zoom on background click
     svg.on('click', function() {
       svg.transition()
         .duration(750)
-        .call(zoom.transform as unknown, d3.zoomIdentity);
-      
-      setBreadcrumb(['Root']);
-    });
-
-    setCurrentRoot(root);
-  }, [data, width, height, colorScale, valueFormat, animated, showTooltip, 
-      onNodeClick, onNodeHover, minZoom, maxZoom]);
-   
-
-
+        .call(zoom.transform as unknown, d3.zoomIdentity)
+      setBreadcrumb(['Root'])
+    })
+    setCurrentRoot(root)
+  }, [data, width, height, animated])
     useEffect(() => {
-    buildTreemap();
-  }, [buildTreemap]);
-
-
+    buildTreemap()
+  }, [buildTreemap])
   // Validate data
   if (!data || !data.children) {
     return (
@@ -270,11 +231,8 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
           <p className="text-gray-400">No hay datos disponibles para mostrar</p>
         </div>
       </div>
-    );
+    )
   }
-
-  
-
 
   return (
     <div className={cn('relative', className)}>
@@ -318,10 +276,10 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
           <button
             onClick={() => {
               if (svgRef.current) {
-                const svg = d3.select(svgRef.current);
-                const zoom = d3.zoom<SVGSVGElement, unknown>();
-                svg.call(zoom.transform as unknown, d3.zoomIdentity);
-                setBreadcrumb(['Root']);
+                const svg = d3.select(svgRef.current)
+                const zoom = d3.zoom<SVGSVGElement, unknown>()
+                svg.call(zoom.transform as unknown, d3.zoomIdentity)
+                setBreadcrumb(['Root'])
               }
             }}
             className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
@@ -387,5 +345,5 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}

@@ -3,15 +3,13 @@
  * By Cheva
  */
 
-import { designTokens} from './design-tokens';
-
+import { designTokens} from './design-tokens'
 /**
  * Hook para acceder a los tokens de diseño
  */
 export const useDesignTokens = () => {
-  return designTokens;
-};
-
+  return designTokens
+}
 /**
  * Clases CSS predefinidas usando los tokens de diseño
  */
@@ -166,29 +164,25 @@ export const tokenClasses = {
     // Disabled
     disabled: 'disabled:opacity-50 disabled:cursor-not-allowed',
   },
-} as const;
-
+} as const
 /**
  * Función helper para combinar clases de tokens
  */
 export const combineTokenClasses = (...classes: (string | undefined | null | false)[]): string => {
-  return classes.filter(Boolean).join(' ');
-};
-
+  return classes.filter(Boolean).join(' ')
+}
 /**
  * Función para obtener colores específicos del dominio
  */
 export const getDomainColor = (domain: 'transit' | 'alert' | 'precinto', status: string): string => {
-  const colors = designTokens.colors[domain];
-  return colors[status as keyof typeof colors] || designTokens.colors.gray[500];
-};
-
+  const colors = designTokens.colors[domain]
+  return colors[status as keyof typeof colors] || designTokens.colors.gray[500]
+}
 /**
  * Función para obtener clases de estado
  */
 export const getStateClasses = (domain: 'transit' | 'alert' | 'precinto', status: string): string => {
-  const states = tokenClasses.states[domain];
-  return states[status as keyof typeof states] || tokenClasses.states.precinto.inactive;
-};
-
-export default useDesignTokens;
+  const states = tokenClasses.states[domain]
+  return states[status as keyof typeof states] || tokenClasses.states.precinto.inactive
+}
+export default useDesignTokens

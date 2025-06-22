@@ -1,90 +1,76 @@
  
-import React, { useEffect, useState } from 'react';
-import {Activity, Zap, Clock, TrendingUp} from 'lucide-react';
-
+import React, { useEffect, useState } from 'react'
+import {Activity, Zap, Clock, TrendingUp} from 'lucide-react'
 interface RenderMetric {
-  id: string;
-  phase: 'mount' | 'update';
-  actualDuration: number;
-  baseDuration: number;
-  startTime: number;
-  commitTime: number;
-  interactions: Set<unknown>;
+  id: string
+  phase: 'mount' | 'update'
+  actualDuration: number
+  baseDuration: number
+  startTime: number
+  commitTime: number
+  interactions: Set<unknown>
 }
 
 interface PerformanceStats {
-  fps: number;
-  renderCount: number;
-  avgRenderTime: number;
-  slowRenders: number;
-  droppedFrames: number;
-  memoryUsage?: number;
+  fps: number
+  renderCount: number
+  avgRenderTime: number
+  slowRenders: number
+  droppedFrames: number
+  memoryUsage?: number
 }
 
 export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }) => {
-  const [metrics] = useState<RenderMetric[]>([]);
+  const [metrics] = useState<RenderMetric[]>([])
   const [stats, setStats] = useState<PerformanceStats>({
     fps: 60,
     renderCount: 0,
     avgRenderTime: 0,
     slowRenders: 0,
     droppedFrames: 0
-  });
-
+  })
   // FPS monitoring
-   
 
   useEffect(() => {
-    let frameCount = 0;
-    let lastTime = performance.now();
-    let rafId: number;
-
+    let frameCount = 0
+    let lastTime = performance.now()
+    let rafId: number
     const measureFPS = () => {
-      frameCount++;
-      const currentTime = performance.now();
-      
+      frameCount++
+      const currentTime = performance.now()
       if (currentTime >= lastTime + 1000) {
-        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-        setStats(prev => ({ ...prev, fps }));
-        frameCount = 0;
-        lastTime = currentTime;
+        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime))
+        setStats(prev => ({ ...prev, fps }))
+        frameCount = 0
+        lastTime = currentTime
       }
       
-      rafId = requestAnimationFrame(measureFPS);
-    };
-
-    rafId = requestAnimationFrame(measureFPS);
-
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
+      rafId = requestAnimationFrame(measureFPS)
+    }
+    rafId = requestAnimationFrame(measureFPS)
+    return () => cancelAnimationFrame(rafId)
+  }, [])
   // Memory monitoring
-   
 
   useEffect(() => {
     const measureMemory = () => {
       if ('memory' in performance && (performance as unknown).memory) {
-        const memory = (performance as unknown).memory;
-        const usedMB = Math.round(memory.usedJSHeapSize / 1048576);
-        setStats(prev => ({ ...prev, memoryUsage: usedMB }));
+        const memory = (performance as unknown).memory
+        const usedMB = Math.round(memory.usedJSHeapSize / 1048576)
+        setStats(prev => ({ ...prev, memoryUsage: usedMB }))
       }
-    };
-
-    const interval = setInterval(measureMemory, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
+    }
+    const interval = setInterval(measureMemory, 2000)
+    return () => clearInterval(interval)
+  }, [])
   // onRender callback removed - not currently used
   // Could be reactivated when wrapping components with React.Profiler
 
-  if (!show) return null;
-
+  if (!show) return null
   const fpsColor = stats.fps >= 55 ? 'text-green-400' : 
-                   stats.fps >= 30 ? 'text-yellow-400' : 'text-red-400';
-  
+                   stats.fps >= 30 ? 'text-yellow-400' : 'text-red-400'
   const renderTimeColor = stats.avgRenderTime <= 16 ? 'text-green-400' :
-                         stats.avgRenderTime <= 33 ? 'text-yellow-400' : 'text-red-400';
-
+                         stats.avgRenderTime <= 33 ? 'text-yellow-400' : 'text-red-400'
   return (
     <div className="fixed bottom-4 left-4 bg-gray-900/95 backdrop-blur border border-gray-800 rounded-lg p-4 shadow-lg z-50 min-w-[300px]">
       <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
@@ -148,10 +134,9 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
         </div>
         <div className="flex gap-px h-8">
           {metrics.slice(-30).map((metric, i) => {
-            const height = Math.min(100, (metric.actualDuration / 33) * 100);
+            const height = Math.min(100, (metric.actualDuration / 33) * 100)
             const color = metric.actualDuration <= 16 ? 'bg-green-500' :
-                         metric.actualDuration <= 33 ? 'bg-yellow-500' : 'bg-red-500';
-            
+                         metric.actualDuration <= 33 ? 'bg-yellow-500' : 'bg-red-500'
             return (
               <div
                 key={i}
@@ -159,19 +144,18 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
                 style={{ height: `${height}%`, alignSelf: 'flex-end' }}
                 title={`${metric.actualDuration.toFixed(2)}ms`}
               />
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
-};
-
+  )
+}
 // Profiler wrapper component
 interface ProfiledComponentProps {
-  id: string;
-  children: React.ReactNode;
-  onRender?: ProfilerOnRenderCallback;
+  id: string
+  children: React.ReactNode
+  onRender?: ProfilerOnRenderCallback
 }
 
 export const ProfiledComponent: React.FC<ProfiledComponentProps> = ({ 
@@ -180,5 +164,5 @@ export const ProfiledComponent: React.FC<ProfiledComponentProps> = ({
   return (<Profiler id={id} onRender={onRender || (() => {})}>
       {children}
     </Profiler>
-  );
-};
+  )
+}

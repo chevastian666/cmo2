@@ -1,16 +1,15 @@
-import React, { memo, useEffect, useRef } from 'react';
-import { AlertTriangle, MapPin, User, CheckCircle, Circle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { Alert} from '../types/alerts';
-
+import React, { memo, useEffect, useRef } from 'react'
+import { AlertTriangle, MapPin, User, CheckCircle, Circle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { Alert} from '../types/alerts'
 interface AlertListItemProps {
-  alert: Alert;
-  index: number;
-  style: React.CSSProperties;
-  onClick?: () => void;
-  isHighlighted?: boolean;
-  isScrolling?: boolean;
-  onHeightChange?: (height: number) => void;
+  alert: Alert
+  index: number
+  style: React.CSSProperties
+  onClick?: () => void
+  isHighlighted?: boolean
+  isScrolling?: boolean
+  onHeightChange?: (height: number) => void
 }
 
 // severityConfig removed - unused
@@ -31,37 +30,30 @@ const statusConfig = {
     color: 'text-green-500',
     label: 'Resuelta'
   }
-};
-
+}
 export const AlertListItem = memo<AlertListItemProps>(({
   alert, index, style, onClick, isHighlighted, isScrolling, onHeightChange
 }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-
-  const StatusIcon = statusConfig[alert.status].icon;
-
+  const itemRef = useRef<HTMLDivElement>(null)
+  const StatusIcon = statusConfig[alert.status].icon
   // Measure height on mount and updates
-   
 
   useEffect(() => {
     if (itemRef.current && onHeightChange) {
-      const height = itemRef.current.getBoundingClientRect().height;
-      onHeightChange(height);
+      const height = itemRef.current.getBoundingClientRect().height
+      onHeightChange(height)
     }
-  }, [alert, onHeightChange]);
-
+  }, [alert])
   // Format timestamp
   const formatTime = (date: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / 60000);
-    
-    if (minutes < 1) return 'Hace un momento';
-    if (minutes < 60) return `Hace ${minutes} min`;
-    if (minutes < 1440) return `Hace ${Math.floor(minutes / 60)} hr`;
-    return date.toLocaleDateString();
-  };
-
+    const now = new Date()
+    const diff = now.getTime() - date.getTime()
+    const minutes = Math.floor(diff / 60000)
+    if (minutes < 1) return 'Hace un momento'
+    if (minutes < 60) return `Hace ${minutes} min`
+    if (minutes < 1440) return `Hace ${Math.floor(minutes / 60)} hr`
+    return date.toLocaleDateString()
+  }
   return (
     <div
       ref={itemRef}
@@ -135,7 +127,7 @@ export const AlertListItem = memo<AlertListItemProps>(({
         </div>
       </div>
     </div>
-  );
+  )
 }, (prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
@@ -144,7 +136,6 @@ export const AlertListItem = memo<AlertListItemProps>(({
     prevProps.isHighlighted === nextProps.isHighlighted &&
     prevProps.isScrolling === nextProps.isScrolling &&
     prevProps.style.transform === nextProps.style.transform
-  );
-});
-
-AlertListItem.displayName = 'AlertListItem';
+  )
+})
+AlertListItem.displayName = 'AlertListItem'

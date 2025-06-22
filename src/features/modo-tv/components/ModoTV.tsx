@@ -1,27 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react';
-import { ProximosArribos} from './ProximosArribos';
-import { AlertasActivas} from './AlertasActivas';
-import { TransitosCriticos} from './TransitosCriticos';
-import { ConfiguracionModal} from './ConfiguracionModal';
-import { modoTvService} from '../services/modoTv.service';
-import { notificationService} from '../../../services/shared/notification.service';
-import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types';
-import { cn} from '../../../utils/utils';
-
+import React, { useState, useEffect, useRef } from 'react'
+import {Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react'
+import { ProximosArribos} from './ProximosArribos'
+import { AlertasActivas} from './AlertasActivas'
+import { TransitosCriticos} from './TransitosCriticos'
+import { ConfiguracionModal} from './ConfiguracionModal'
+import { modoTvService} from '../services/modoTv.service'
+import { notificationService} from '../../../services/shared/notification.service'
+import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types'
+import { cn} from '../../../utils/utils'
 export const ModoTV: React.FC = () => {
-  const [arribos, setArribos] = useState<ProximoArribo[]>([]);
-  const [alertas, setAlertas] = useState<AlertaTV[]>([]);
-  const [criticos, setCriticos] = useState<TransitoCritico[]>([]);
-  const [configuracion, setConfiguracion] = useState<ConfiguracionTV>(modoTvService.getConfiguracion());
-  const [mostrarConfig, setMostrarConfig] = useState(false);
-  const [horaActual, setHoraActual] = useState(new Date());
-  const [fullscreen, setFullscreen] = useState(false);
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const ultimasAlertasRef = useRef<Set<string>>(new Set());
-  const audioRef = useRef<HTMLAudioElement>(null);
-
+  const [arribos, setArribos] = useState<ProximoArribo[]>([])
+  const [alertas, setAlertas] = useState<AlertaTV[]>([])
+  const [criticos, setCriticos] = useState<TransitoCritico[]>([])
+  const [configuracion, setConfiguracion] = useState<ConfiguracionTV>(modoTvService.getConfiguracion())
+  const [mostrarConfig, setMostrarConfig] = useState(false)
+  const [horaActual, setHoraActual] = useState(new Date())
+  const [fullscreen, setFullscreen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const ultimasAlertasRef = useRef<Set<string>>(new Set())
+  const audioRef = useRef<HTMLAudioElement>(null)
   // Cargar datos
   const cargarDatos = async () => {
     try {
@@ -29,97 +26,80 @@ export const ModoTV: React.FC = () => {
         modoTvService.getProximosArribos(),
         modoTvService.getAlertasActivas(),
         modoTvService.getTransitosCriticos()
-      ]);
-
-      setArribos(nuevosArribos);
-      setCriticos(nuevosCriticos);
-      
+      ])
+      setArribos(nuevosArribos)
+      setCriticos(nuevosCriticos)
       // Verificar nuevas alertas para sonido
       if (configuracion.sonidoAlertas) {
         nuevasAlertas.forEach(alerta => {
           if (!ultimasAlertasRef.current.has(alerta.id)) {
             // Nueva alerta, reproducir sonido cuando esté disponible
-            // audioRef.current?.play().catch(e => console.log('No se pudo reproducir sonido:', e));
-            
+            // audioRef.current?.play().catch(e => console.log('No se pudo reproducir sonido:', e))
             // Notificación visual
             if (alerta.nivel === 'critico') {
-              notificationService.error('Alerta Crítica', alerta.descripcion);
+              notificationService.error('Alerta Crítica', alerta.descripcion)
             }
           }
-        });
+        })
       }
       
       // Actualizar set de alertas
-      ultimasAlertasRef.current.clear();
-      nuevasAlertas.forEach(a => ultimasAlertasRef.current.add(a.id));
-      
-      setAlertas(nuevasAlertas);
+      ultimasAlertasRef.current.clear()
+      nuevasAlertas.forEach(a => ultimasAlertasRef.current.add(a.id))
+      setAlertas(nuevasAlertas)
     } catch {
-      console.error('Error cargando datos:', _error);
+      console.error('Error cargando datos:', _error)
     }
-  };
-
+  }
   // Actualización automática
-   
 
   useEffect(() => {
-    cargarDatos();
-    
+    cargarDatos()
     const intervalo = setInterval(() => {
-      cargarDatos();
-    }, configuracion.actualizacionSegundos * 1000);
-    
-    return () => clearInterval(intervalo);
-  }, [configuracion.actualizacionSegundos, configuracion.puntoOperacion]);
-
+      cargarDatos()
+    }, configuracion.actualizacionSegundos * 1000)
+    return () => clearInterval(intervalo)
+  }, [configuracion.actualizacionSegundos, configuracion.puntoOperacion])
   // Actualizar hora
-   
 
   useEffect(() => {
     const intervalo = setInterval(() => {
-      setHoraActual(new Date());
-    }, 1000);
-    
-    return () => clearInterval(intervalo);
-  }, []);
-
+      setHoraActual(new Date())
+    }, 1000)
+    return () => clearInterval(intervalo)
+  }, [])
   // Manejo de fullscreen
   const toggleFullscreen = async () => {
     if (!fullscreen && containerRef.current) {
       try {
-        await containerRef.current.requestFullscreen();
-        setFullscreen(true);
+        await containerRef.current.requestFullscreen()
+        setFullscreen(true)
       } catch {
-        console.error('Error al entrar en fullscreen:', err);
+        console.error('Error al entrar en fullscreen:', err)
       }
     } else if (fullscreen) {
       try {
-        await document.exitFullscreen();
-        setFullscreen(false);
+        await document.exitFullscreen()
+        setFullscreen(false)
       } catch {
-        console.error('Error al salir de fullscreen:', err);
+        console.error('Error al salir de fullscreen:', err)
       }
     }
-  };
-
+  }
   // Listener para cambios de fullscreen
-   
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setFullscreen(!!document.fullscreenElement);
-    };
-    
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
-
+      setFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
   const handleConfiguracionChange = (nuevaConfig: Partial<ConfiguracionTV>) => {
-    const configActualizada = { ...configuracion, ...nuevaConfig };
-    setConfiguracion(configActualizada);
-    modoTvService.setConfiguracion(configActualizada);
-  };
-
+    const configActualizada = { ...configuracion, ...nuevaConfig }
+    setConfiguracion(configActualizada)
+    modoTvService.setConfiguracion(configActualizada)
+  }
   return (
     <div 
       ref={containerRef}
@@ -263,5 +243,5 @@ export const ModoTV: React.FC = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}

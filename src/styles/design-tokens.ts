@@ -113,8 +113,7 @@ export const colors = {
     broken: '#ef4444',
     maintenance: '#f59e0b'
   }
-} as const;
-
+} as const
 // ==========================================
 // ESPACIADO
 // ==========================================
@@ -155,8 +154,7 @@ export const spacing = {
   72: '18rem',     // 288px
   80: '20rem',     // 320px
   96: '24rem'      // 384px
-} as const;
-
+} as const
 // ==========================================
 // TIPOGRAFÍA
 // ==========================================
@@ -225,8 +223,7 @@ export const typography = {
     9: '2.25rem',
     10: '2.5rem'
   }
-} as const;
-
+} as const
 // ==========================================
 // BORDES Y ESQUINAS
 // ==========================================
@@ -253,8 +250,7 @@ export const borders = {
     4: '4px',
     8: '8px'
   }
-} as const;
-
+} as const
 // ==========================================
 // SOMBRAS
 // ==========================================
@@ -277,8 +273,7 @@ export const shadows = {
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.6)',
     xl: '0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6)'
   }
-} as const;
-
+} as const
 // ==========================================
 // ANIMACIONES Y TRANSICIONES
 // ==========================================
@@ -334,8 +329,7 @@ export const animations = {
       }
     }
   }
-} as const;
-
+} as const
 // ==========================================
 // BREAKPOINTS
 // ==========================================
@@ -346,8 +340,7 @@ export const breakpoints = {
   lg: '1024px',
   xl: '1280px',
   '2xl': '1536px'
-} as const;
-
+} as const
 // ==========================================
 // Z-INDEX
 // ==========================================
@@ -370,8 +363,7 @@ export const zIndex = {
   popover: '1060',
   tooltip: '1070',
   notification: '1080'
-} as const;
-
+} as const
 // ==========================================
 // COMPONENTES ESPECÍFICOS
 // ==========================================
@@ -441,30 +433,26 @@ export const components = {
     fontSize: typography.fontSize.xs,
     fontWeight: typography.fontWeight.medium
   }
-} as const;
-
+} as const
 // ==========================================
 // UTILIDADES
 // ==========================================
 
 // Función para obtener el valor de color por string path
 export const getColor = (path: string): string => {
-  const keys = path.split('.');
-  let value: unknown = colors;
-  
+  const keys = path.split('.')
+  let value: unknown = colors
   for (const key of keys) {
-    value = value[key];
-    if (!value) return '';
+    value = value[key]
+    if (!value) return ''
   }
   
-  return value;
-};
-
+  return value
+}
 // Función para obtener el valor de espaciado
 export const getSpacing = (value: number | string): string => {
-  return spacing[value as keyof typeof spacing] || '';
-};
-
+  return spacing[value as keyof typeof spacing] || ''
+}
 // Exportar todos los tokens como un objeto único
 export const designTokens = {
   colors,
@@ -476,6 +464,5 @@ export const designTokens = {
   breakpoints,
   zIndex,
   components
-} as const;
-
-export default designTokens;
+} as const
+export default designTokens

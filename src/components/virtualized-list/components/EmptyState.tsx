@@ -1,23 +1,21 @@
-import React from 'react';
-import { AlertTriangle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import { AlertTriangle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface EmptyStateProps {
-  title: string;
-  description?: string;
-  icon?: React.ReactNode;
+  title: string
+  description?: string
+  icon?: React.ReactNode
   action?: {
-    label: string;
-    onClick: () => void;
-  };
-  className?: string;
+    label: string
+    onClick: () => void
+  }
+  className?: string
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title, description, icon, action, className
 }) => {
-  const defaultIcon = <AlertTriangle className="h-12 w-12 text-gray-600" />;
-
+  const defaultIcon = <AlertTriangle className="h-12 w-12 text-gray-600" />
   return (
     <div className={cn('flex flex-col items-center text-center p-8', className)}>
       <div className="mb-4">
@@ -43,5 +41,5 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         </button>
       )}
     </div>
-  );
-};
+  )
+}

@@ -4,11 +4,10 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
-import type { SankeyData} from '@/components/charts/types/sankey.types';
-
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
+import type { SankeyData} from '@/components/charts/types/sankey.types'
 const SankeyMinimal: React.FC = () => {
   // Simple test data
   const testData: SankeyData = {
@@ -21,8 +20,7 @@ const SankeyMinimal: React.FC = () => {
       { source: 'A', target: 'B', value: 80 },
       { source: 'B', target: 'C', value: 60 }
     ]
-  };
-
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Sankey Diagram Test</h1>
@@ -44,7 +42,6 @@ const SankeyMinimal: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
-export default SankeyMinimal;
+  )
+}
+export default SankeyMinimal

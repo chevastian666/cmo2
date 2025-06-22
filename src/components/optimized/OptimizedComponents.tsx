@@ -5,30 +5,28 @@
  * By Cheva
  */
 
-import React, { memo, useMemo, useCallback } from 'react';
-import { cn} from '@/utils/utils';
-
+import React, { memo, useMemo, useCallback } from 'react'
+import { cn} from '@/utils/utils'
 // Optimized table row with deep memo
 export const OptimizedTableRow = memo<{
-  data: Record<string, unknown>;
+  data: Record<string, unknown>
   columns: Array<{
-    key: string;
-    header: string;
-    render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
-    width?: string;
-  }>;
-  onClick?: (row: Record<string, unknown>) => void;
-  selected?: boolean;
-  className?: string;
+    key: string
+    header: string
+    render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode
+    width?: string
+  }>
+  onClick?: (row: Record<string, unknown>) => void
+  selected?: boolean
+  className?: string
 }>(({
   data, columns, onClick, selected = false, className
 }) => {
   const handleClick = useCallback(() => {
     if (onClick) {
-      onClick(data);
+      onClick(data)
     }
-  }, [onClick, data]);
-
+  }, [data])
   return (
     <tr
       onClick={handleClick}
@@ -51,30 +49,28 @@ export const OptimizedTableRow = memo<{
         </td>
       ))}
     </tr>
-  );
+  )
 }, (prevProps, nextProps) => {
   // Custom comparison for deep equality
   return (
     prevProps.selected === nextProps.selected &&
     prevProps.className === nextProps.className &&
     JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data)
-  );
-});
-
-OptimizedTableRow.displayName = 'OptimizedTableRow';
-
+  )
+})
+OptimizedTableRow.displayName = 'OptimizedTableRow'
 // Optimized card component
 export const OptimizedCard = memo<{
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  icon?: React.ReactNode;
+  title: string
+  value: string | number
+  subtitle?: string
+  icon?: React.ReactNode
   trend?: {
-    value: number;
-    isPositive: boolean;
-  };
-  onClick?: () => void;
-  className?: string;
+    value: number
+    isPositive: boolean
+  }
+  onClick?: () => void
+  className?: string
 }>(({
   title, value, subtitle, icon, trend, onClick, className
 }) => {
@@ -114,21 +110,19 @@ export const OptimizedCard = memo<{
         )}
       </div>
     </div>
-  );
-});
-
-OptimizedCard.displayName = 'OptimizedCard';
-
+  )
+})
+OptimizedCard.displayName = 'OptimizedCard'
 // Optimized list item
 export const OptimizedListItem = memo<{
-  id: string;
-  primary: string;
-  secondary?: string;
-  meta?: string;
-  status?: 'active' | 'inactive' | 'pending' | 'error';
-  actions?: React.ReactNode;
-  onClick?: () => void;
-  selected?: boolean;
+  id: string
+  primary: string
+  secondary?: string
+  meta?: string
+  status?: 'active' | 'inactive' | 'pending' | 'error'
+  actions?: React.ReactNode
+  onClick?: () => void
+  selected?: boolean
 }>(({
   primary, secondary, meta, status, actions, onClick, selected = false
 }) => {
@@ -137,8 +131,7 @@ export const OptimizedListItem = memo<{
     inactive: 'bg-gray-500',
     pending: 'bg-yellow-500',
     error: 'bg-red-500'
-  };
-
+  }
   return (
     <div
       onClick={onClick}
@@ -178,38 +171,34 @@ export const OptimizedListItem = memo<{
         </div>
       )}
     </div>
-  );
-});
-
-OptimizedListItem.displayName = 'OptimizedListItem';
-
+  )
+})
+OptimizedListItem.displayName = 'OptimizedListItem'
 // Optimized data grid cell
 export const OptimizedGridCell = memo<{
-  value: unknown;
-  type?: 'text' | 'number' | 'date' | 'boolean' | 'custom';
-  format?: (value: unknown) => string;
-  render?: (value: unknown) => React.ReactNode;
-  align?: 'left' | 'center' | 'right';
-  className?: string;
+  value: unknown
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'custom'
+  format?: (value: unknown) => string
+  render?: (value: unknown) => React.ReactNode
+  align?: 'left' | 'center' | 'right'
+  className?: string
 }>(({
   value, type = 'text', format, render, align = 'left', className
 }) => {
   const formattedValue = useMemo(() => {
-    if (render) return render(value);
-    if (format) return format(value);
-    
+    if (render) return render(value)
+    if (format) return format(value)
     switch (type) {
-      case 'number':
-        return typeof value === 'number' ? value.toLocaleString() : value;
-      case 'date':
-        return value ? new Date(value).toLocaleString() : '';
-      case 'boolean':
-        return value ? '✓' : '✗';
+      case 'number': {
+  return typeof value === 'number' ? value.toLocaleString() : value
+      case 'date': {
+  return value ? new Date(value).toLocaleString() : ''
+      case 'boolean': {
+  return value ? '✓' : '✗'
       default:
-        return value;
+        return value
     }
-  }, [value, type, format, render]);
-
+  }, [value, type, format, render])
   return (
     <div className={cn(
       "px-2 py-1",
@@ -219,14 +208,12 @@ export const OptimizedGridCell = memo<{
     )}>
       {formattedValue}
     </div>
-  );
-});
-
-OptimizedGridCell.displayName = 'OptimizedGridCell';
-
+  )
+})
+OptimizedGridCell.displayName = 'OptimizedGridCell'
 // Export utilities from separate file to fix Fast Refresh warning
 export { 
   createOptimizedComponent, 
   useOptimizedRender, 
   withOptimization
-} from './optimizedUtils';
+} from './optimizedUtils'

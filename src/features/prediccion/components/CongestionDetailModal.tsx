@@ -1,45 +1,40 @@
-import React from 'react';
-import {X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react';
-import { Card, CardHeader, CardContent, InfoRow, InfoGrid, InfoSection, StatusBadge} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import type { CongestionAnalysis} from '../types';
-
+import React from 'react'
+import {X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react'
+import { Card, CardHeader, CardContent, InfoRow, InfoGrid, InfoSection, StatusBadge} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import type { CongestionAnalysis} from '../types'
 interface CongestionDetailModalProps {
-  congestion: CongestionAnalysis;
-  isOpen: boolean;
-  onClose: () => void;
+  congestion: CongestionAnalysis
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
   congestion, isOpen, onClose
 }) => {
-  if (!isOpen) return null;
-
+  if (!isOpen) return null
   const getSeverityBadge = () => {
     switch (congestion.severidad) {
-      case 'critica':
-        return <StatusBadge variant="danger" pulse>Crítica</StatusBadge>;
-      case 'alta':
-        return <StatusBadge variant="warning" pulse>Alta</StatusBadge>;
-      case 'media':
-        return <StatusBadge variant="warning">Media</StatusBadge>;
+      case 'critica': {
+  return <StatusBadge variant="danger" pulse>Crítica</StatusBadge>
+      case 'alta': {
+  return <StatusBadge variant="warning" pulse>Alta</StatusBadge>
+      case 'media': {
+  return <StatusBadge variant="warning">Media</StatusBadge>
       default:
-        return <StatusBadge variant="info">Baja</StatusBadge>;
+        return <StatusBadge variant="info">Baja</StatusBadge>
     }
-  };
-
+  }
   const timeRange = `${congestion.ventanaInicio.toLocaleTimeString('es-UY', { 
     hour: '2-digit', 
     minute: '2-digit' 
   })} - ${congestion.ventanaFin.toLocaleTimeString('es-UY', { 
     hour: '2-digit', 
     minute: '2-digit' 
-  })}`;
-
+  })}`
   const duracionVentana = Math.round(
     (congestion.ventanaFin.getTime() - congestion.ventanaInicio.getTime()) / (1000 * 60)
-  );
-
+  )
   return (
     <>
       {/* Backdrop */}
@@ -154,8 +149,7 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                     .map((camion) => {
                       const minutosHastaLlegada = Math.round(
                         (camion.eta.getTime() - Date.now()) / (1000 * 60)
-                      );
-                      
+                      )
                       return (
                         <div key={camion.id} className="grid grid-cols-5 gap-4 py-2 border-b border-gray-800">
                           <div className="flex items-center gap-2">
@@ -183,7 +177,7 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
                               : 'Ya llegó'}
                           </div>
                         </div>
-                      );
+                      )
                     })}
                 </div>
               </InfoSection>
@@ -236,5 +230,5 @@ export const CongestionDetailModal: React.FC<CongestionDetailModalProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

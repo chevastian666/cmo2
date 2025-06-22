@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Label} from '@/components/ui/label';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Textarea} from '@/components/ui/textarea';
-import { cn} from '@/lib/utils';
-import type { Alerta} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-import { notificationService} from '../../../services/shared/notification.service';
-
+import React, { useState, useEffect } from 'react'
+import { Send, Zap, RotateCw, Satellite, Trash2} from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Label} from '@/components/ui/label'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Textarea} from '@/components/ui/textarea'
+import { cn} from '@/lib/utils'
+import type { Alerta} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { notificationService} from '../../../services/shared/notification.service'
 interface ResponderAlertaModalProps {
-  alerta: Alerta | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onRespond: (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => Promise<void>;
+  alerta: Alerta | null
+  isOpen: boolean
+  onClose: () => void
+  onRespond: (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => Promise<void>
 }
 
 // Definir las opciones de respuesta por tipo de alerta
@@ -87,73 +86,61 @@ const OPCIONES_RESPUESTA: Record<string, Array<{ id: number; descripcion: string
     { id: 2, descripcion: 'Vehículo se retira sin salida Informática' },
     { id: 3, descripcion: 'Otro' }
   ]
-};
-
+}
 // Comandos rápidos disponibles
 const COMANDOS_RAPIDOS = [
   { id: 'despertar', label: 'Despertar', icon: Zap, color: 'bg-blue-600 hover:bg-blue-700' },
   { id: 'reiniciar', label: 'Reiniciar', icon: RotateCw, color: 'bg-green-600 hover:bg-green-700' },
   { id: 'arreglar_gps', label: 'Arreglar GPS', icon: Satellite, color: 'bg-orange-600 hover:bg-orange-700' },
   { id: 'borrar_memoria', label: 'Borrar Memoria', icon: Trash2, color: 'bg-red-600 hover:bg-red-700' }
-];
-
+]
 export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
   alerta, isOpen, onClose, onRespond
 }) => {
-  const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('0');
-  const [observaciones, setObservaciones] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null);
-   
-
+  const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('0')
+  const [observaciones, setObservaciones] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
   useEffect(() => {
     if (!isOpen) {
-      setMotivoSeleccionado('0');
-      setObservaciones('');
+      setMotivoSeleccionado('0')
+      setObservaciones('')
     }
-  }, [isOpen]);
-
+  }, [])
   const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    
+    e?.preventDefault()
     if (!alerta || motivoSeleccionado === '0') {
-      notificationService.error('Por favor seleccione un motivo de respuesta');
-      return;
+      notificationService.error('Por favor seleccione un motivo de respuesta')
+      return
     }
 
-    const opcionesAlerta = OPCIONES_RESPUESTA[alerta.tipo] || [];
-    const motivoDescripcion = opcionesAlerta.find(o => o.id === Number(motivoSeleccionado))?.descripcion || '';
-
+    const opcionesAlerta = OPCIONES_RESPUESTA[alerta.tipo] || []
+    const motivoDescripcion = opcionesAlerta.find(o => o.id === Number(motivoSeleccionado))?.descripcion || ''
     try {
-      setLoading(true);
-      await onRespond(alerta.id, Number(motivoSeleccionado), motivoDescripcion, observaciones);
-      onClose();
+      setLoading(true)
+      await onRespond(alerta.id, Number(motivoSeleccionado), motivoDescripcion, observaciones)
+      onClose()
     } catch {
-      notificationService.error('Error al responder la alerta');
+      notificationService.error('Error al responder la alerta')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const handleSendCommand = async (commandId: string) => {
-    if (!alerta) return;
-
+    if (!alerta) return
     try {
-      setSendingCommand(commandId);
+      setSendingCommand(commandId)
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`);
+      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.codigoPrecinto}`)
     } catch {
-      notificationService.error('Error al enviar el comando');
+      notificationService.error('Error al enviar el comando')
     } finally {
-      setSendingCommand(null);
+      setSendingCommand(null)
     }
-  };
-
-  if (!alerta) return null;
-
-  const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || [];
-
+  }
+  if (!alerta) return null
+  const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || []
   return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-800 border-gray-700">
         <DialogHeader>
@@ -213,7 +200,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
             <h3 className="text-sm font-medium text-gray-300">Comandos Rápidos</h3>
             <div className="grid grid-cols-2 gap-2">
               {COMANDOS_RAPIDOS.map((comando) => {
-                const Icon = comando.icon;
+                const Icon = comando.icon
                 return (<Button
                     key={comando.id}
                     type="button"
@@ -232,7 +219,7 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
                     )}
                     <span className="ml-2">{comando.label}</span>
                   </Button>
-                );
+                )
               })}
             </div>
           </div>
@@ -267,5 +254,5 @@ export const ResponderAlertaModalV2: React.FC<ResponderAlertaModalProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

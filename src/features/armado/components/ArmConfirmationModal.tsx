@@ -1,45 +1,42 @@
-import React from 'react';
-import { Package, AlertTriangle, CheckCircle, MapPin, Truck, User} from 'lucide-react';
-import { cn} from '@/lib/utils';
-import { Button} from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+import React from 'react'
+import { Package, AlertTriangle, CheckCircle, MapPin, Truck, User} from 'lucide-react'
+import { cn} from '@/lib/utils'
+import { Button} from '@/components/ui/button'
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
-import type { Precinto} from '../../../types';
-
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
+import type { Precinto} from '../../../types'
 interface TransitoFormData {
-  matricula: string;
-  nombreConductor: string;
-  telefonoConductor: string;
-  empresa: string;
-  rutEmpresa: string;
-  origen: string;
-  destino: string;
+  matricula: string
+  nombreConductor: string
+  telefonoConductor: string
+  empresa: string
+  rutEmpresa: string
+  origen: string
+  destino: string
   tipoEslinga: {
-    larga: boolean;
-    corta: boolean;
-  };
-  precintoId: string;
-  observaciones: string;
+    larga: boolean
+    corta: boolean
+  }
+  precintoId: string
+  observaciones: string
 }
 
 interface ArmConfirmationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  precinto: Precinto | null;
-  transito: Partial<TransitoFormData>;
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  precinto: Precinto | null
+  transito: Partial<TransitoFormData>
 }
 
 export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
   isOpen, onClose, onConfirm, precinto, transito
 }) => {
-  if (!precinto) return null;
-
+  if (!precinto) return null
   const hasWarnings = precinto.bateria < 20 || 
                       (Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 ||
-                      precinto.eslinga.estado === 'violada';
-
+                      precinto.eslinga.estado === 'violada'
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -213,5 +210,5 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,7 +1,6 @@
  
-import React from 'react';
-import {Package} from 'lucide-react';
-
+import React from 'react'
+import {Package} from 'lucide-react'
 export const DashboardSkeleton: React.FC = () => {
   return (
     <div className="space-y-4 animate-pulse">
@@ -32,9 +31,8 @@ export const DashboardSkeleton: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const PrecintoCardSkeleton: React.FC = () => {
   return (
     <div className="p-4 rounded-lg border-2 border-gray-800 bg-gray-900/20">
@@ -59,5 +57,5 @@ export const PrecintoCardSkeleton: React.FC = () => {
         <div className="h-3 w-32 bg-gray-800 rounded" />
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,14 +1,13 @@
  
-import React from 'react';
-import { Shield, CheckCircle2, Lock, Fingerprint} from 'lucide-react';
-import { motion} from 'framer-motion';
-import { cn} from '@/utils/utils';
-
+import React from 'react'
+import { Shield, CheckCircle2, Lock, Fingerprint} from 'lucide-react'
+import { motion} from 'framer-motion'
+import { cn} from '@/utils/utils'
 interface VerificarButtonProps {
-  onClick: () => void;
-  variant?: 'default' | 'minimal' | 'gradient' | 'glow';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
+  onClick: () => void
+  variant?: 'default' | 'minimal' | 'gradient' | 'glow'
+  size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
 }
 
 export const VerificarButton: React.FC<VerificarButtonProps> = ({
@@ -18,14 +17,12 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
     sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
     lg: 'px-6 py-3 text-base'
-  };
-
+  }
   const iconSize = {
     sm: 'h-3 w-3',
     md: 'h-4 w-4',
     lg: 'h-5 w-5'
-  };
-
+  }
   if (variant === 'minimal') {
     return (
       <motion.button
@@ -45,7 +42,7 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
         <Shield className={cn(iconSize[size], "transition-transform group-hover:rotate-6")} />
         <span>Verificar</span>
       </motion.button>
-    );
+    )
   }
 
   if (variant === 'gradient') {
@@ -79,7 +76,7 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
           }}
         />
       </motion.button>
-    );
+    )
   }
 
   if (variant === 'glow') {
@@ -105,7 +102,7 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
           <div className="absolute inset-[-1px] rounded-lg bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 opacity-75 blur-sm" />
         </div>
       </motion.button>
-    );
+    )
   }
 
   // Default variant
@@ -127,26 +124,23 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
       <Shield className={cn(iconSize[size], "transition-transform group-hover:rotate-12")} />
       <span>Verificar</span>
     </motion.button>
-  );
-};
-
+  )
+}
 export const VerificadoBadge: React.FC<{
-  verificadoPor?: string;
-  fecha?: Date;
-  size?: 'sm' | 'md' | 'lg';
+  verificadoPor?: string
+  fecha?: Date
+  size?: 'sm' | 'md' | 'lg'
 }> = ({ verificadoPor, fecha, size = 'md' }) => {
   const sizeClasses = {
     sm: 'px-3 py-1 text-xs',
     md: 'px-4 py-2 text-sm',
     lg: 'px-5 py-2.5 text-base'
-  };
-
+  }
   const iconSize = {
     sm: 'h-3 w-3',
     md: 'h-4 w-4',
     lg: 'h-5 w-5'
-  };
-
+  }
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -181,5 +175,5 @@ export const VerificadoBadge: React.FC<{
         )}
       </div>
     </motion.div>
-  );
-};
+  )
+}

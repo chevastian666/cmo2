@@ -1,115 +1,101 @@
-import React, { useState, useRef } from 'react';
-import { Camera, Upload, X} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useState, useRef } from 'react'
+import { Camera, Upload, X} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface PhotoUploaderProps {
-  onPhotosChange: (photos: File[]) => void;
-  existingPhotos?: string[];
-  maxPhotos?: number;
-  maxSizeMB?: number;
+  onPhotosChange: (photos: File[]) => void
+  existingPhotos?: string[]
+  maxPhotos?: number
+  maxSizeMB?: number
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   onPhotosChange, existingPhotos = [], maxPhotos = 5, maxSizeMB = 10
 }) => {
-  const [photos, setPhotos] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [photos, setPhotos] = useState<File[]>([])
+  const [previews, setPreviews] = useState<string[]>([])
+  const [dragActive, setDragActive] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const handleFiles = (files: FileList | null) => {
-    if (!files) return;
-
-    const validFiles: File[] = [];
-    const errors: string[] = [];
-
+    if (!files) return
+    const validFiles: File[] = []
+    const errors: string[] = []
     Array.from(files).forEach(file => {
       // Check file type
       if (!file.type.startsWith('image/')) {
-        errors.push(`${file.name} no es una imagen válida`);
-        return;
+        errors.push(`${file.name} no es una imagen válida`)
+        return
       }
 
       // Check file size
-      const sizeMB = file.size / (1024 * 1024);
+      const sizeMB = file.size / (1024 * 1024)
       if (sizeMB > maxSizeMB) {
-        errors.push(`${file.name} excede el tamaño máximo de ${maxSizeMB}MB`);
-        return;
+        errors.push(`${file.name} excede el tamaño máximo de ${maxSizeMB}MB`)
+        return
       }
 
       // Check max photos
       if (photos.length + validFiles.length >= maxPhotos) {
-        errors.push(`Máximo ${maxPhotos} fotos permitidas`);
-        return;
+        errors.push(`Máximo ${maxPhotos} fotos permitidas`)
+        return
       }
 
-      validFiles.push(file);
-
+      validFiles.push(file)
       // Create preview
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (e) => {
         if (e.target?.result) {
-          setPreviews(prev => [...prev, e.target!.result as string]);
+          setPreviews(prev => [...prev, e.target!.result as string])
         }
-      };
-      reader.readAsDataURL(file);
-    });
-
+      }
+      reader.readAsDataURL(file)
+    })
     if (errors.length > 0) {
-      alert(errors.join('\n'));
+      alert(errors.join('\n'))
     }
 
     if (validFiles.length > 0) {
-      const newPhotos = [...photos, ...validFiles].slice(0, maxPhotos);
-      setPhotos(newPhotos);
-      onPhotosChange(newPhotos);
+      const newPhotos = [...photos, ...validFiles].slice(0, maxPhotos)
+      setPhotos(newPhotos)
+      onPhotosChange(newPhotos)
     }
-  };
-
+  }
   const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
     if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
+      setDragActive(true)
     } else if (e.type === "dragleave") {
-      setDragActive(false);
+      setDragActive(false)
     }
-  };
-
+  }
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFiles(e.dataTransfer.files);
+      handleFiles(e.dataTransfer.files)
     }
-  };
-
+  }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     if (e.target.files && e.target.files[0]) {
-      handleFiles(e.target.files);
+      handleFiles(e.target.files)
     }
-  };
-
+  }
   const removePhoto = (index: number) => {
-    const newPhotos = photos.filter((_, i) => i !== index);
-    const newPreviews = previews.filter((_, i) => i !== index);
-    setPhotos(newPhotos);
-    setPreviews(newPreviews);
-    onPhotosChange(newPhotos);
-  };
-
+    const newPhotos = photos.filter((_, i) => i !== index)
+    const newPreviews = previews.filter((_, i) => i !== index)
+    setPhotos(newPhotos)
+    setPreviews(newPreviews)
+    onPhotosChange(newPhotos)
+  }
   const openCamera = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.setAttribute('capture', 'environment');
-      fileInputRef.current.click();
+      fileInputRef.current.setAttribute('capture', 'environment')
+      fileInputRef.current.click()
     }
-  };
-
-  const totalPhotos = existingPhotos.length + photos.length;
-
+  }
+  const totalPhotos = existingPhotos.length + photos.length
   return (<div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-white flex items-center gap-2">
@@ -235,5 +221,5 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

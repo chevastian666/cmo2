@@ -1,23 +1,22 @@
-import React, { useState, useRef } from 'react';
-import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import { notificationService} from '../../../services/shared/notification.service';
-import type { TipoNovedad} from '../types';
-import { PUNTOS_OPERACION, TIPOS_NOVEDAD} from '../types';
-
+import React, { useState, useRef } from 'react'
+import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import { notificationService} from '../../../services/shared/notification.service'
+import type { TipoNovedad} from '../types'
+import { PUNTOS_OPERACION, TIPOS_NOVEDAD} from '../types'
 interface FormularioNovedadProps {
-  onSubmit: (data: FormData) => Promise<void>;
-  puntoOperacionDefault?: string;
-  className?: string;
+  onSubmit: (data: FormData) => Promise<void>
+  puntoOperacionDefault?: string
+  className?: string
 }
 
 interface FormData {
-  fecha: string;
-  puntoOperacion: string;
-  tipoNovedad: TipoNovedad;
-  descripcion: string;
-  archivos?: File[];
+  fecha: string
+  puntoOperacion: string
+  tipoNovedad: TipoNovedad
+  descripcion: string
+  archivos?: File[]
 }
 
 export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
@@ -28,84 +27,73 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     puntoOperacion: puntoOperacionDefault,
     tipoNovedad: 'evento',
     descripcion: ''
-  });
-  const [archivos, setArchivos] = useState<File[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>(_);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  })
+  const [archivos, setArchivos] = useState<File[]>([])
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>(_)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || [])
     const validFiles = files.filter(file => {
-      const isImage = file.type.startsWith('image/');
-      const isPDF = file.type === 'application/pdf';
+      const isImage = file.type.startsWith('image/')
+      const isPDF = file.type === 'application/pdf'
       const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
       
       if (!isImage && !isPDF) {
-        notificationService.error('Archivo inválido', `${file.name} no es una imagen o PDF`);
-        return false;
+        notificationService.error('Archivo inválido', `${file.name} no es una imagen o PDF`)
+        return false
       }
       if (!isValidSize) {
-        notificationService.error('Archivo muy grande', `${file.name} supera los 5MB`);
-        return false;
+        notificationService.error('Archivo muy grande', `${file.name} supera los 5MB`)
+        return false
       }
-      return true;
-    });
-    
-    setArchivos(prev => [...prev, ...validFiles]);
-  };
-
+      return true
+    })
+    setArchivos(prev => [...prev, ...validFiles])
+  }
   const removeFile = (index: number) => {
-    setArchivos(prev => prev.filter((_, i) => i !== index));
-  };
-
+    setArchivos(prev => prev.filter((_, i) => i !== index))
+  }
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
+    const newErrors: Record<string, string> = {}
     if (!formData.puntoOperacion) {
-      newErrors.puntoOperacion = 'Debe seleccionar un punto de operación';
+      newErrors.puntoOperacion = 'Debe seleccionar un punto de operación'
     }
     if (!formData.descripcion.trim()) {
-      newErrors.descripcion = 'La descripción es requerida';
+      newErrors.descripcion = 'La descripción es requerida'
     }
     if (formData.descripcion.trim().length < 10) {
-      newErrors.descripcion = 'La descripción debe tener al menos 10 caracteres';
+      newErrors.descripcion = 'La descripción debe tener al menos 10 caracteres'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-
-    setLoading(true);
+    e.preventDefault()
+    if (!validateForm()) return
+    setLoading(true)
     try {
       await onSubmit({
         ...formData,
         archivos: archivos.length > 0 ? archivos : undefined
-      });
-      
+      })
       // Limpiar formulario
       setFormData({
         fecha: new Date().toISOString().split('T')[0],
         puntoOperacion: puntoOperacionDefault,
         tipoNovedad: 'evento',
         descripcion: ''
-      });
-      setArchivos([]);
-      setErrors(_);
-      
-      notificationService.success('Novedad registrada', 'La novedad se ha guardado correctamente');
+      })
+      setArchivos([])
+      setErrors(_)
+      notificationService.success('Novedad registrada', 'La novedad se ha guardado correctamente')
     } catch (error) {
-      notificationService.error('Error al guardar', 'No se pudo registrar la novedad');
+      notificationService.error('Error al guardar', 'No se pudo registrar la novedad')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   return (<Card variant="elevated" className={className}>
       <CardHeader>
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
@@ -277,5 +265,5 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
         </form>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

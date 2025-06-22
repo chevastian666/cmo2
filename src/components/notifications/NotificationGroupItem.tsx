@@ -4,44 +4,39 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { ChevronDown, ChevronRight, Users} from 'lucide-react';
-import type { NotificationGroup} from '../../types/notifications';
-import { NotificationItem} from './NotificationItem';
-
+import React, { useState } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { ChevronDown, ChevronRight, Users} from 'lucide-react'
+import type { NotificationGroup} from '../../types/notifications'
+import { NotificationItem} from './NotificationItem'
 interface NotificationGroupItemProps {
-  group: NotificationGroup;
-  selectedNotifications: Set<string>;
-  onSelect: (notificationId: string, selected: boolean) => void;
-  onAction: (notificationId: string, action: string, payload?: unknown) => void;
-  expanded?: boolean;
+  group: NotificationGroup
+  selectedNotifications: Set<string>
+  onSelect: (notificationId: string, selected: boolean) => void
+  onAction: (notificationId: string, action: string, payload?: unknown) => void
+  expanded?: boolean
 }
 
 export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
   group, selectedNotifications, onSelect, onAction, expanded = false
 }) => {
-  const [isExpanded, setIsExpanded] = useState(!group.collapsed);
-
+  const [isExpanded, setIsExpanded] = useState(!group.collapsed)
   const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-
+    setIsExpanded(!isExpanded)
+  }
   const selectAll = () => {
-    const allSelected = group.notifications.every(n => selectedNotifications.has(n.id));
+    const allSelected = group.notifications.every(n => selectedNotifications.has(n.id))
     group.notifications.forEach(n => {
-      onSelect(n.id, !allSelected);
-    });
-  };
-
-  const latestNotification = group.notifications[0];
+      onSelect(n.id, !allSelected)
+    })
+  }
+  const latestNotification = group.notifications[0]
   const priorityColor = {
     low: 'text-gray-400',
     normal: 'text-blue-400',
     high: 'text-yellow-400',
     critical: 'text-red-400'
-  }[group.priority];
-
+  }[group.priority]
   return (
     <motion.div
       layout
@@ -136,5 +131,5 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
         )}
       </AnimatePresence>
     </motion.div>
-  );
-};
+  )
+}

@@ -1,6 +1,5 @@
-import { create} from 'zustand';
-import type { Documento, EstadisticasDocumentacion, LogAuditoria} from '../features/documentacion/types';
-
+import { create} from 'zustand'
+import type { Documento, EstadisticasDocumentacion, LogAuditoria} from '../features/documentacion/types'
 // Mock data para desarrollo
 const mockDocumentos: Documento[] = [
   {
@@ -63,64 +62,59 @@ const mockDocumentos: Documento[] = [
     },
     estado: 'activo'
   }
-];
-
+]
 interface DocumentosState {
-  documentos: Documento[];
-  estadisticas: EstadisticasDocumentacion | null;
-  loading: boolean;
-  error: string | null;
-  logs: LogAuditoria[];
-  
+  documentos: Documento[]
+  estadisticas: EstadisticasDocumentacion | null
+  loading: boolean
+  error: string | null
+  logs: LogAuditoria[]
   // Actions
-  fetchDocumentos: () => Promise<void>;
-  uploadDocumento: (data: unknown) => Promise<void>;
-  deleteDocumento: (id: string) => Promise<void>;
-  updateDocumento: (id: string, updates: Partial<Documento>) => Promise<void>;
-  registrarLog: (log: Omit<LogAuditoria, 'id' | 'fecha'>) => void;
+  fetchDocumentos: () => Promise<void>
+  uploadDocumento: (data: unknown) => Promise<void>
+  deleteDocumento: (id: string) => Promise<void>
+  updateDocumento: (id: string, updates: Partial<Documento>) => Promise<void>
+  registrarLog: (log: Omit<LogAuditoria, 'id' | 'fecha'>) => void
 }
 
 export const useDocumentosStore = create<DocumentosState>((set, get) => ({
   documentos: [], estadisticas: null, loading: false, error: null, logs: [], fetchDocumentos: async () => {
-    set({ loading: true });
+    set({ loading: true })
     try {
       // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise(resolve => setTimeout(resolve, 500))
       // Calcular estadísticas
       const estadisticas: EstadisticasDocumentacion = {
         totalDocumentos: mockDocumentos.length,
         porTipo: mockDocumentos.reduce((acc, doc) => {
-          acc[doc.tipo] = (acc[doc.tipo] || 0) + 1;
-          return acc;
+          acc[doc.tipo] = (acc[doc.tipo] || 0) + 1
+          return acc
         }, {} as Record<string, number>),
         espacioUsado: mockDocumentos.reduce((acc, doc) => acc + doc.tamanioArchivo, 0),
         documentosMes: mockDocumentos.filter(doc => {
-          const mesActual = new Date().getMonth();
-          return doc.fechaSubida.getMonth() === mesActual;
+          const mesActual = new Date().getMonth()
+          return doc.fechaSubida.getMonth() === mesActual
         }).length,
         ultimaActualizacion: new Date()
-      };
-
+      }
       set({ 
         documentos: mockDocumentos, 
         estadisticas,
         loading: false,
         error: null
-      });
+      })
     } catch {
       set({ 
         error: 'Error al cargar documentos',
         loading: false
-      });
+      })
     }
   },
 
   uploadDocumento: async (data: unknown) => {
     try {
       // Simular subida
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise(resolve => setTimeout(resolve, 1000))
       const nuevoDoc: Documento = {
         id: Date.now().toString(),
         tipo: data.tipo,
@@ -141,11 +135,8 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
           email: 'usuario@blocktracker.com'
         },
         estado: 'activo'
-      };
-
-      
-      set({ documentos: [...documentos, nuevoDoc] });
-      
+      }
+      set({ documentos: [...documentos, nuevoDoc] })
       // Registrar log
       get().registrarLog({
         documentoId: nuevoDoc.id,
@@ -153,17 +144,16 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioId: '1',
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
-      });
+      })
     } catch {
-      throw new Error('Error al subir documento');
+      throw new Error('Error al subir documento')
     }
   },
 
   deleteDocumento: async (id) => {
     try {
-      
-      set({ documentos: documentos.filter(d => d.id !== id) });
-      
+
+      set({ documentos: documentos.filter(d => d.id !== id) })
       // Registrar log
       get().registrarLog({
         documentoId: id,
@@ -171,9 +161,9 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioId: '1',
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1'
-      });
+      })
     } catch {
-      throw new Error('Error al eliminar documento');
+      throw new Error('Error al eliminar documento')
     }
   },
 
@@ -194,8 +184,7 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
               }
             : d
         )
-      });
-      
+      })
       // Registrar log
       get().registrarLog({
         documentoId: id,
@@ -204,9 +193,9 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1',
         detalles: JSON.stringify(updates)
-      });
+      })
     } catch {
-      throw new Error('Error al actualizar documento');
+      throw new Error('Error al actualizar documento')
     }
   },
 
@@ -215,10 +204,9 @@ export const useDocumentosStore = create<DocumentosState>((set, get) => ({
       ...log,
       id: Date.now().toString(),
       fecha: new Date()
-    };
-    
+    }
     set(state => ({
       logs: [...state.logs, nuevoLog]
-    }));
+    }))
   }
-}));
+}))

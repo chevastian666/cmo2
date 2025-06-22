@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import {ChevronDown, ChevronUp, MapPin} from 'lucide-react';
-import type { RutaZonas} from '../data/zonasDescansoData';
-
+import React, { useState } from 'react'
+import {ChevronDown, ChevronUp, MapPin} from 'lucide-react'
+import type { RutaZonas} from '../data/zonasDescansoData'
 interface RutaAccordionProps {
-  rutaData: RutaZonas;
-  defaultOpen?: boolean;
+  rutaData: RutaZonas
+  defaultOpen?: boolean
 }
 
 export const RutaAccordion: React.FC<RutaAccordionProps> = ({ rutaData, defaultOpen = false }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -57,5 +55,5 @@ export const RutaAccordion: React.FC<RutaAccordionProps> = ({ rutaData, defaultO
         </div>
       )}
     </div>
-  );
-};
+  )
+}

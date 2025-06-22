@@ -4,30 +4,26 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import {Plus, Download, Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react';
-
-import { Input} from '@/components/ui/input';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card';
-
+import React, { useState, useEffect } from 'react'
+import {Plus, Download, Filter, RefreshCw, Shield, AlertCircle} from 'lucide-react'
+import { Input} from '@/components/ui/input'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import { cn} from '@/utils/utils';
-import { Precinto} from '@/types/precinto';
-import { exportToExcel} from '@/utils/export';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import { Precinto} from '@/types/precinto'
+import { exportToExcel} from '@/utils/export'
 // KPI Card Component
 const KPICard: React.FC<{
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-  color: string;
-  trend?: number;
-}> = ({ title, value, icon, color, trend }) => (
+  title: string
+  value: number
+  icon: React.ReactNode
+  color: string
+  trend?: number
+}> = (title, value, icon, color, trend ) => (
   <AnimatedCard className="relative overflow-hidden">
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
@@ -51,24 +47,26 @@ const KPICard: React.FC<{
       </div>
     </CardContent>
   </AnimatedCard>
-);
-
+)
 // Table Row Component with animations
 const PrecintoRow: React.FC<{
-  precinto: Precinto;
-  onView: (precinto: Precinto) => void;
-  index: number;
+  precinto: Precinto
+  onView: (precinto: Precinto) => void
+  index: number
 }> = ({ precinto, onView, index }) => {
   const getEstadoColor = (estado: string) => {
     switch (estado) {
-      case 'ACTIVO': return 'success';
-      case 'INACTIVO': return 'gray';
-      case 'EN_TRANSITO': return 'primary';
-      case 'ALARMA': return 'danger';
-      default: return 'gray';
+      case 'ACTIVO': {
+  return 'success'
+      case 'INACTIVO': {
+  return 'gray'
+      case 'EN_TRANSITO': {
+  return 'primary'
+      case 'ALARMA': {
+  return 'danger'
+      default: return 'gray'
     }
-  };
-
+  }
   return (
     <motion.tr
       initial={{ opacity: 0, x: -20 }}
@@ -134,74 +132,62 @@ const PrecintoRow: React.FC<{
         </AnimatedButton>
       </td>
     </motion.tr>
-  );
-};
-
+  )
+}
 const PrecintosPageV2: React.FC = () => {
-  
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [estadoFilter, setEstadoFilter] = useState('todos');
-  const [sortBy, setSortBy] = useState('fecha');
-   
-
-
+  const [searchTerm, setSearchTerm] = useState('')
+  const [estadoFilter, setEstadoFilter] = useState('todos')
+  const [sortBy, setSortBy] = useState('fecha')
     useEffect(() => {
-    fetchPrecintos();
-  }, [fetchPrecintos]);
-
+    fetchPrecintos()
+  }, [fetchPrecintos])
   // Filtrar y ordenar precintos
   const filteredPrecintos = React.useMemo(() => {
-    let filtered = [...precintos];
-
+    let filtered = [...precintos]
     // Filtro por búsqueda
     if (searchTerm) {
       filtered = filtered.filter(p => 
         p.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.ubicacion?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      )
     }
 
     // Filtro por estado
     if (estadoFilter !== 'todos') {
-      filtered = filtered.filter(p => p.estado === estadoFilter);
+      filtered = filtered.filter(p => p.estado === estadoFilter)
     }
 
     // Ordenamiento
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'codigo':
-          return a.codigo.localeCompare(b.codigo);
-        case 'estado':
-          return a.estado.localeCompare(b.estado);
-        case 'bateria':
-          return (b.bateria || 0) - (a.bateria || 0);
-        case 'fecha':
-        default:
-          return new Date(b.fechaActivacion).getTime() - new Date(a.fechaActivacion).getTime();
+        case 'codigo': {
+  return a.codigo.localeCompare(b.codigo)
+        case 'estado': {
+  return a.estado.localeCompare(b.estado)
+        case 'bateria': {
+  return (b.bateria || 0) - (a.bateria || 0)
+        case 'fecha': {
+  default:
+          return new Date(b.fechaActivacion).getTime() - new Date(a.fechaActivacion).getTime()
       }
-    });
-
-    return filtered;
-  }, [precintos, searchTerm, estadoFilter, sortBy]);
-
+    })
+    return filtered
+  }, [precintos])
   // KPIs
   const kpis = React.useMemo(() => ({
     total: precintos.length,
     activos: precintosActivos.length,
     conAlertas: getPrecintosConAlertas().length,
     bajaBateria: getPrecintosBajaBateria().length
-  }), [precintos, precintosActivos, getPrecintosConAlertas, getPrecintosBajaBateria]);
-
+  }), [precintos, precintosActivos, getPrecintosConAlertas, getPrecintosBajaBateria])
   const handleExport = () => {
-    exportToExcel(filteredPrecintos, 'precintos');
-  };
-
+    exportToExcel(filteredPrecintos, 'precintos')
+  }
   const handleViewPrecinto = (precinto: Precinto) => {
     // Implementar vista de detalle o modal
-    console.log('Ver precinto:', precinto);
-  };
-
+    console.log('Ver precinto:', precinto)
+  }
   return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
@@ -375,7 +361,6 @@ const PrecintosPageV2: React.FC = () => {
         </AnimatedSection>
       </div>
     </PageTransition>
-  );
-};
-
-export default PrecintosPageV2;
+  )
+}
+export default PrecintosPageV2

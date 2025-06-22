@@ -1,1 +1,1 @@
-export * from './useTransitos';
+export * from './useTransitos'

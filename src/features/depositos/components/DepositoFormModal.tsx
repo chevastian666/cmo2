@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {X, Save, Building2} from 'lucide-react';
-import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types';
-import type { Deposito} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import {X, Save, Building2} from 'lucide-react'
+import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types'
+import type { Deposito} from '../types'
 interface DepositoFormModalProps {
-  deposito: Deposito | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (data: Partial<Deposito>) => void;
+  deposito: Deposito | null
+  isOpen: boolean
+  onClose: () => void
+  onSave: (data: Partial<Deposito>) => void
 }
 
 export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
@@ -29,11 +28,8 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
     direccion: '',
     horaApertura: '',
     horaCierre: ''
-  });
-
-  const [errors, setErrors] = useState<Record<string, string>>(_);
-   
-
+  })
+  const [errors, setErrors] = useState<Record<string, string>>(_)
   useEffect(() => {
     if (deposito) {
       setFormData({
@@ -52,7 +48,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
         direccion: deposito.direccion || '',
         horaApertura: deposito.horaApertura || '',
         horaCierre: deposito.horaCierre || ''
-      });
+      })
     } else {
       setFormData({
         codigo: '',
@@ -70,40 +66,34 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
         direccion: '',
         horaApertura: '',
         horaCierre: ''
-      });
+      })
     }
-    setErrors(_);
-  }, [deposito]);
-
+    setErrors(_)
+  }, [deposito])
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.codigo) newErrors.codigo = 'El código es requerido';
-    if (!formData.nombre) newErrors.nombre = 'El nombre es requerido';
-    if (!formData.alias) newErrors.alias = 'El alias es requerido';
-    if (!formData.lat) newErrors.lat = 'La latitud es requerida';
-    if (!formData.lng) newErrors.lng = 'La longitud es requerida';
-    if (!formData.padre) newErrors.padre = 'El padre es requerido';
-    if (!formData.tipo) newErrors.tipo = 'El tipo es requerido';
-    if (!formData.zona) newErrors.zona = 'La zona es requerida';
-
+    const newErrors: Record<string, string> = {}
+    if (!formData.codigo) newErrors.codigo = 'El código es requerido'
+    if (!formData.nombre) newErrors.nombre = 'El nombre es requerido'
+    if (!formData.alias) newErrors.alias = 'El alias es requerido'
+    if (!formData.lat) newErrors.lat = 'La latitud es requerida'
+    if (!formData.lng) newErrors.lng = 'La longitud es requerida'
+    if (!formData.padre) newErrors.padre = 'El padre es requerido'
+    if (!formData.tipo) newErrors.tipo = 'El tipo es requerido'
+    if (!formData.zona) newErrors.zona = 'La zona es requerida'
     // Validate numeric fields
     if (formData.lat && isNaN(parseFloat(formData.lat))) {
-      newErrors.lat = 'La latitud debe ser un número válido';
+      newErrors.lat = 'La latitud debe ser un número válido'
     }
     if (formData.lng && isNaN(parseFloat(formData.lng))) {
-      newErrors.lng = 'La longitud debe ser un número válido';
+      newErrors.lng = 'La longitud debe ser un número válido'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validate()) return;
-
+    e.preventDefault()
+    if (!validate()) return
     const data: Partial<Deposito> = {
       codigo: parseInt(formData.codigo),
       nombre: formData.nombre,
@@ -120,13 +110,10 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
       direccion: formData.direccion || undefined,
       horaApertura: formData.horaApertura || undefined,
       horaCierre: formData.horaCierre || undefined
-    };
-
-    onSave(_data);
-  };
-
-  if (!isOpen) return null;
-
+    }
+    onSave(_data)
+  }
+  if (!isOpen) return null
   return (<>
       {/* Backdrop */}
       <div 
@@ -437,5 +424,5 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}

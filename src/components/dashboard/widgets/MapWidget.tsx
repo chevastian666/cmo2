@@ -3,12 +3,11 @@
  * By Cheva
  */
 
-import React from 'react';
-import {MapPin, Navigation, Activity} from 'lucide-react';
-
+import React from 'react'
+import {MapPin, Navigation, Activity} from 'lucide-react'
 interface MapWidgetProps {
-  showControls?: boolean;
-  showLegend?: boolean;
+  showControls?: boolean
+  showLegend?: boolean
 }
 
 // Placeholder del mapa mientras se resuelve el lazy loading
@@ -57,9 +56,8 @@ const MapPlaceholder: React.FC = () => {
         Zoom: 1:500k
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const MapWidget: React.FC<MapWidgetProps> = ({
   showControls = false, showLegend = false
 }) => {
@@ -109,5 +107,5 @@ export const MapWidget: React.FC<MapWidgetProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

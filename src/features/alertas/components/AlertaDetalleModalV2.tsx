@@ -1,125 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import { User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield, Battery, Radio, Package, Navigation, Pause, Zap, X} from 'lucide-react';
-import { cn} from '@/lib/utils';
-import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
-import type { AlertaExtendida, Usuario} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-import { usuariosService} from '../../../services/usuarios.service';
-
+import React, { useState, useEffect } from 'react'
+import { User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield, Battery, Radio, Package, Navigation, Pause, Zap, X} from 'lucide-react'
+import { cn} from '@/lib/utils'
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters'
+import type { AlertaExtendida, Usuario} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { usuariosService} from '../../../services/usuarios.service'
 // shadcn/ui components
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-import { Textarea} from '@/components/ui/textarea';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
-import { Badge} from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card';
-
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Textarea} from '@/components/ui/textarea'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import { Badge} from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
 interface AlertaDetalleModalProps {
-  alerta: AlertaExtendida;
-  isOpen: boolean;
-  onClose: () => void;
-  onAsignar: (usuarioId: string, notas?: string) => void;
-  onComentar: (mensaje: string) => void;
-  onResolver: (tipo: string, descripcion: string, acciones?: string[]) => void;
+  alerta: AlertaExtendida
+  isOpen: boolean
+  onClose: () => void
+  onAsignar: (usuarioId: string, notas?: string) => void
+  onComentar: (mensaje: string) => void
+  onResolver: (tipo: string, descripcion: string, acciones?: string[]) => void
 }
 
 export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null);
-  const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
-  const [mostrarResolucion, setMostrarResolucion] = useState(false);
-  const [nuevoComentario, setNuevoComentario] = useState('');
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('');
-  const [notasAsignacion, setNotasAsignacion] = useState('');
-  const [tipoResolucion, setTipoResolucion] = useState('resuelta');
-  const [descripcionResolucion, setDescripcionResolucion] = useState('');
-  const [accionesTomadas, setAccionesTomadas] = useState<string[]>(['']);
-   
-
+  const [usuarios, setUsuarios] = useState<Usuario[]>([])
+  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
+  const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
+  const [mostrarResolucion, setMostrarResolucion] = useState(false)
+  const [nuevoComentario, setNuevoComentario] = useState('')
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
+  const [notasAsignacion, setNotasAsignacion] = useState('')
+  const [tipoResolucion, setTipoResolucion] = useState('resuelta')
+  const [descripcionResolucion, setDescripcionResolucion] = useState('')
+  const [accionesTomadas, setAccionesTomadas] = useState<string[]>([''])
   useEffect(() => {
     if (isOpen) {
-      cargarUsuarios();
+      cargarUsuarios()
     }
-  }, [isOpen]);
-
+  }, [])
   const cargarUsuarios = async () => {
     const [users, currentUser] = await Promise.all([
       usuariosService.getActivos(),
       usuariosService.getCurrentUser()
-    ]);
-    setUsuarios(users);
-    setUsuarioActual(currentUser);
-  };
-
+    ])
+    setUsuarios(users)
+    setUsuarioActual(currentUser)
+  }
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'AAR': return <Clock className="h-6 w-6" />;
-      case 'BBJ': return <Battery className="h-6 w-6" />;
-      case 'DEM': return <Pause className="h-6 w-6" />;
-      case 'DNR': return <Navigation className="h-6 w-6" />;
-      case 'DTN': return <Shield className="h-6 w-6" />;
-      case 'NPG': return <Radio className="h-6 w-6" />;
-      case 'NPN': return <AlertTriangle className="h-6 w-6" />;
-      case 'PTN': return <Package className="h-6 w-6" />;
-      case 'SNA': return <Zap className="h-6 w-6" />;
-      default: return <AlertTriangle className="h-6 w-6" />;
+      case 'AAR': {
+  return <Clock className="h-6 w-6" />
+      case 'BBJ': {
+  return <Battery className="h-6 w-6" />
+      case 'DEM': {
+  return <Pause className="h-6 w-6" />
+      case 'DNR': {
+  return <Navigation className="h-6 w-6" />
+      case 'DTN': {
+  return <Shield className="h-6 w-6" />
+      case 'NPG': {
+  return <Radio className="h-6 w-6" />
+      case 'NPN': {
+  return <AlertTriangle className="h-6 w-6" />
+      case 'PTN': {
+  return <Package className="h-6 w-6" />
+      case 'SNA': {
+  return <Zap className="h-6 w-6" />
+      default: return <AlertTriangle className="h-6 w-6" />
     }
-  };
-
+  }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
     switch (severidad) {
-      case 'critica': return 'destructive';
-      case 'alta': return 'destructive';
-      case 'media': return 'secondary';
-      case 'baja': return 'outline';
-      default: return 'default';
+      case 'critica': {
+  return 'destructive'
+      case 'alta': {
+  return 'destructive'
+      case 'media': {
+  return 'secondary'
+      case 'baja': {
+  return 'outline'
+      default: return 'default'
     }
-  };
-
+  }
   const handleAsignar = () => {
     if (usuarioSeleccionado) {
-      onAsignar(usuarioSeleccionado, notasAsignacion);
-      setMostrarAsignacion(false);
-      setUsuarioSeleccionado('');
-      setNotasAsignacion('');
+      onAsignar(usuarioSeleccionado, notasAsignacion)
+      setMostrarAsignacion(false)
+      setUsuarioSeleccionado('')
+      setNotasAsignacion('')
     }
-  };
-
+  }
   const handleComentar = () => {
     if (nuevoComentario.trim()) {
-      onComentar(nuevoComentario);
-      setNuevoComentario('');
+      onComentar(nuevoComentario)
+      setNuevoComentario('')
     }
-  };
-
+  }
   const handleResolver = () => {
     if (descripcionResolucion.trim()) {
-      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()));
-      setMostrarResolucion(false);
-      setDescripcionResolucion('');
-      setAccionesTomadas(['']);
+      onResolver(tipoResolucion, descripcionResolucion, accionesTomadas.filter(a => a.trim()))
+      setMostrarResolucion(false)
+      setDescripcionResolucion('')
+      setAccionesTomadas([''])
     }
-  };
-
+  }
   const agregarAccion = () => {
-    setAccionesTomadas([...accionesTomadas, '']);
-  };
-
+    setAccionesTomadas([...accionesTomadas, ''])
+  }
   const actualizarAccion = (index: number, valor: string) => {
-    const nuevasAcciones = [...accionesTomadas];
-    nuevasAcciones[index] = valor;
-    setAccionesTomadas(nuevasAcciones);
-  };
-
+    const nuevasAcciones = [...accionesTomadas]
+    nuevasAcciones[index] = valor
+    setAccionesTomadas(nuevasAcciones)
+  }
   const eliminarAccion = (index: number) => {
-    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index));
-  };
-
+    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index))
+  }
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -489,9 +488,9 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setMostrarResolucion(false);
-                        setDescripcionResolucion('');
-                        setAccionesTomadas(['']);
+                        setMostrarResolucion(false)
+                        setDescripcionResolucion('')
+                        setAccionesTomadas([''])
                       }}
                     >
                       Cancelar
@@ -535,5 +534,5 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

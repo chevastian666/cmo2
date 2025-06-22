@@ -1,1 +1,1 @@
-export { ZonasDescansoPage } from './pages/ZonasDescansoPage';
+export { ZonasDescansoPage } from './pages/ZonasDescansoPage'

@@ -1,16 +1,13 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence, useAnimation} from 'framer-motion';
-import { cn} from '../../../../utils/utils';
-import type { RadialMenuProps, RadialMenuAction} from '../../types';
-
-import { useHotkeys} from '../../hooks/useHotkeys';
-
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { motion, AnimatePresence, useAnimation} from 'framer-motion'
+import { cn} from '../../../../utils/utils'
+import type { RadialMenuProps, RadialMenuAction} from '../../types'
+import { useHotkeys} from '../../hooks/useHotkeys'
 const RADIUS = {
   small: 80,
   medium: 120,
   large: 160
-};
-
+}
 const ANIMATION_PRESETS = {
   smooth: {
     type: 'spring',
@@ -27,150 +24,125 @@ const ANIMATION_PRESETS = {
     stiffness: 400,
     damping: 25
   }
-};
-
+}
 export const RadialMenu: React.FC<RadialMenuProps> = ({
   actions, position, isOpen, onClose, customizable = true, gestureEnabled = true, context, size = 'medium', animationPreset = 'smooth'
 }) => {
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [selectedAction, setSelectedAction] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const controls = useAnimation();
-  
-
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [selectedAction, setSelectedAction] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const controls = useAnimation()
   // Filter actions based on permissions
   const availableActions = actions.filter(action => 
     canUseAction(action.permissions || [])
-  );
-
+  )
   // Sort actions based on user preferences
   const sortedActions = customizable && settings.customOrder
     ? availableActions.sort((a, b) => {
-        const orderA = settings.customOrder!.indexOf(a.id);
-        const orderB = settings.customOrder!.indexOf(b.id);
-        if (orderA === -1) return 1;
-        if (orderB === -1) return -1;
-        return orderA - orderB;
+        const orderA = settings.customOrder!.indexOf(a.id)
+        const orderB = settings.customOrder!.indexOf(b.id)
+        if (orderA === -1) return 1
+        if (orderB === -1) return -1
+        return orderA - orderB
       })
-    : availableActions;
-
-  const radius = RADIUS[size];
-  const angleStep = (2 * Math.PI) / sortedActions.length;
-
+    : availableActions
+  const radius = RADIUS[size]
+  const angleStep = (2 * Math.PI) / sortedActions.length
   // Calculate action positions
   const getActionPosition = (index: number) => {
-    const angle = angleStep * index - Math.PI / 2;
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius;
-    return { x, y };
-  };
-
+    const angle = angleStep * index - Math.PI / 2
+    const x = Math.cos(angle) * radius
+    const y = Math.sin(angle) * radius
+    return { x, y }
+  }
   // Handle click outside
-   
-
 
     useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        onClose();
+        onClose()
       }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [isOpen, onClose]);
-
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
   // Keyboard navigation
-   
-
 
     useEffect(() => {
-    if (!isOpen) return;
-
+    if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onClose()
       } else if (e.key === 'Tab') {
-        e.preventDefault();
+        e.preventDefault()
         // Cycle through actions
         const currentIndex = selectedAction 
           ? sortedActions.findIndex(a => a.id === selectedAction)
-          : -1;
-        const nextIndex = (currentIndex + 1) % sortedActions.length;
-        setSelectedAction(sortedActions[nextIndex].id);
+          : -1
+        const nextIndex = (currentIndex + 1) % sortedActions.length
+        setSelectedAction(sortedActions[nextIndex].id)
       } else if (e.key === 'Enter' && selectedAction) {
-        const action = sortedActions.find(a => a.id === selectedAction);
+        const action = sortedActions.find(a => a.id === selectedAction)
         if (action && !action.disabled) {
-          handleActionClick(action);
+          handleActionClick(action)
         }
       }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedAction, sortedActions, onClose]);
-
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
   // Register hotkeys for actions
   sortedActions.forEach(action => {
     if (action.shortcut) {
       useHotkeys(action.shortcut, () => {
         if (isOpen && !action.disabled) {
-          handleActionClick(action);
+          handleActionClick(action)
         }
-      }, [isOpen]);
+      }, [])
     }
-  });
-
+  })
   const handleActionClick = useCallback((action: RadialMenuAction) => {
     // Haptic feedback on mobile
     if (settings.hapticFeedback && 'vibrate' in navigator) {
-      navigator.vibrate(50);
+      navigator.vibrate(50)
     }
 
     // Execute action with context
-    action.action(context);
-
+    action.action(context)
     // Track usage for customization
     if (customizable) {
-      const usageStats = JSON.parse(localStorage.getItem('radialMenuUsage') || '{}');
-      usageStats[action.id] = (usageStats[action.id] || 0) + 1;
-      localStorage.setItem('radialMenuUsage', JSON.stringify(usageStats));
+      const usageStats = JSON.parse(localStorage.getItem('radialMenuUsage') || '{}')
+      usageStats[action.id] = (usageStats[action.id] || 0) + 1
+      localStorage.setItem('radialMenuUsage', JSON.stringify(usageStats))
     }
 
-    onClose();
-  }, [context, onClose, settings.hapticFeedback, customizable]);
-
+    onClose()
+  }, [context, customizable])
   // Gesture support for touch devices
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!gestureEnabled) return;
-    setIsDragging(true);
-  }, [gestureEnabled]);
-
+    if (!gestureEnabled) return
+    setIsDragging(true)
+  }, [])
   const handleTouchMove = useCallback((e: React.TouchEvent, action: RadialMenuAction) => {
-    if (!isDragging || !gestureEnabled) return;
-
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    
+    if (!isDragging || !gestureEnabled) return
+    const touch = e.touches[0]
+    const element = document.elementFromPoint(touch.clientX, touch.clientY)
     if (element?.getAttribute('data-action-id') === action.id) {
-      setSelectedAction(action.id);
+      setSelectedAction(action.id)
     }
-  }, [isDragging, gestureEnabled]);
-
+  }, [])
   const handleTouchEnd = useCallback(() => {
-    if (!isDragging || !gestureEnabled) return;
-    
-    setIsDragging(false);
+    if (!isDragging || !gestureEnabled) return
+    setIsDragging(false)
     if (selectedAction) {
-      const action = sortedActions.find(a => a.id === selectedAction);
+      const action = sortedActions.find(a => a.id === selectedAction)
       if (action && !action.disabled) {
-        handleActionClick(action);
+        handleActionClick(action)
       }
     }
-  }, [isDragging, gestureEnabled, selectedAction, sortedActions, handleActionClick]);
-
+  }, [])
   return (
     <AnimatePresence>
       {isOpen && (
@@ -197,10 +169,9 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
 
           {/* Action buttons */}
           {sortedActions.map((action, index) => {
-            
-            const isSelected = selectedAction === action.id;
-            const isFavorite = settings.favoriteActions.includes(action.id);
 
+            const isSelected = selectedAction === action.id
+            const isFavorite = settings.favoriteActions.includes(action.id)
             return (
               <motion.div
                 key={action.id}
@@ -265,10 +236,10 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
                   </div>
                 </button>
               </motion.div>
-            );
+            )
           })}
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}

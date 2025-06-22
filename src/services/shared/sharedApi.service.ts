@@ -1,63 +1,60 @@
-import { SHARED_CONFIG, formatApiEndpoint} from '../../config/shared.config';
-import { jwtService} from '../jwt.service';
+import { SHARED_CONFIG, formatApiEndpoint} from '../../config/shared.config'
+import { jwtService} from '../jwt.service'
 import type { 
-  Precinto, TransitoPendiente, Alerta, EstadisticasMonitoreo, Usuario} from '../../types';
-import type { LoginResponse, RefreshTokenResponse} from '../../types/jwt';
-
+  Precinto, TransitoPendiente, Alerta, EstadisticasMonitoreo, Usuario} from '../../types'
+import type { LoginResponse, RefreshTokenResponse} from '../../types/jwt'
 interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
+  success: boolean
+  data?: T
+  error?: string
+  message?: string
 }
 
 interface CacheItem<T> {
-  data: T;
-  timestamp: number;
+  data: T
+  timestamp: number
 }
 
 class SharedApiService {
-  private cache = new Map<string, CacheItem<unknown>>();
-  private pendingRequests = new Map<string, Promise<unknown>>();
-
+  private cache = new Map<string, CacheItem<unknown>>()
+  private pendingRequests = new Map<string, Promise<unknown>>()
   // Cache management
   private getCacheKey(endpoint: string, params?: unknown): string {
-    const paramStr = params ? JSON.stringify(params) : '';
-    return `${SHARED_CONFIG.CACHE_PREFIX}${endpoint}_${paramStr}`;
+    const paramStr = params ? JSON.stringify(params) : ''
+    return `${SHARED_CONFIG.CACHE_PREFIX}${endpoint}_${paramStr}`
   }
 
   private getFromCache<T>(key: string): T | null {
-    const cached = this.cache.get(key);
-    if (!cached) return null;
-
-    const isExpired = Date.now() - cached.timestamp > SHARED_CONFIG.CACHE_DURATION;
+    const cached = this.cache.get(key)
+    if (!cached) return null
+    const isExpired = Date.now() - cached.timestamp > SHARED_CONFIG.CACHE_DURATION
     if (isExpired) {
-      this.cache.delete(key);
-      return null;
+      this.cache.delete(key)
+      return null
     }
 
-    return cached.data;
+    return cached.data
   }
 
   private setCache<T>(key: string, data: T): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now()
-    });
+    })
   }
 
   private clearCache(pattern?: string): void {
     if (!pattern) {
-      this.cache.clear();
-      return;
+      this.cache.clear()
+      return
     }
 
-    const keys = Array.from(this.cache.keys());
+    const keys = Array.from(this.cache.keys())
     keys.forEach(key => {
       if (key.includes(pattern)) {
-        this.cache.delete(key);
+        this.cache.delete(key)
       }
-    });
+    })
   }
 
   // Generic request handler with retry logic
@@ -69,9 +66,8 @@ class SharedApiService {
     useCache = true,
     retries = 3
   ): Promise<T> {
-    const url = formatApiEndpoint(endpoint);
-    const cacheKey = this.getCacheKey(endpoint, data);
-    
+    const url = formatApiEndpoint(endpoint)
+    const cacheKey = this.getCacheKey(endpoint, data)
     const requestOptions: RequestInit = {
       method,
       ...options,
@@ -85,43 +81,40 @@ class SharedApiService {
         ...options.headers
       },
       body: data && method !== 'GET' ? JSON.stringify(data) : undefined
-    };
-
+    }
     // Check cache first for GET requests
     if (method === 'GET' && useCache) {
-      const cached = this.getFromCache<T>(cacheKey);
-      if (cached) return cached;
-
+      const cached = this.getFromCache<T>(cacheKey)
+      if (cached) return cached
       // Check if request is already pending
-      const pending = this.pendingRequests.get(cacheKey);
-      if (pending) return pending;
+      const pending = this.pendingRequests.get(cacheKey)
+      if (pending) return pending
     }
 
     // Only use mock data if explicitly enabled AND not using real API
     if (SHARED_CONFIG.ENABLE_MOCK_DATA && !import.meta.env.VITE_USE_REAL_API) {
-      const mockData = await this.getMockData<T>(endpoint, requestOptions);
+      const mockData = await this.getMockData<T>(endpoint, requestOptions)
       if (mockData !== null) {
         // Cache mock data
         if (method === 'GET' && useCache) {
-          this.setCache(cacheKey, mockData);
+          this.setCache(cacheKey, mockData)
         }
-        return mockData;
+        return mockData
       }
     }
     
     // Retry logic wrapper
     const executeWithRetry = async (retriesLeft: number): Promise<T> => {
       try {
-        const response = await fetch(url, requestOptions);
-        
+        const response = await fetch(url, requestOptions)
         if (!response.ok) {
           // Handle 401 Unauthorized for token refresh
           if (response.status === 401 && endpoint !== '/auth/refresh') {
             // Try to refresh token
-            const refreshToken = jwtService.getRefreshToken();
+            const refreshToken = jwtService.getRefreshToken()
             if (refreshToken) {
               try {
-                await this.refreshToken();
+                await this.refreshToken()
                 // Retry the original request with new token
                 const retryOptions = {
                   ...requestOptions,
@@ -129,82 +122,76 @@ class SharedApiService {
                     ...requestOptions.headers,
                     ...jwtService.getAuthHeader()
                   }
-                };
-                const retryResponse = await fetch(url, retryOptions);
+                }
+                const retryResponse = await fetch(url, retryOptions)
                 if (retryResponse.ok) {
-                  const retryData: ApiResponse<T> = await retryResponse.json();
-                  return retryData.data || retryData as T;
+                  const retryData: ApiResponse<T> = await retryResponse.json()
+                  return retryData.data || retryData as T
                 }
               } catch {
                 // Refresh failed, continue with original error
-                console.error('Token refresh failed:', refreshError);
+                console.error('Token refresh failed:', refreshError)
               }
             }
           }
           
-          const error = await response.json().catch(() => ({ message: 'Request failed' }));
-          throw new Error(error.message || `HTTP ${response.status}`);
+          const error = await response.json().catch(() => ({ message: 'Request failed' }))
+          throw new Error(error.message || `HTTP ${response.status}`)
         }
         
-        const data: ApiResponse<T> = await response.json();
-        
+        const data: ApiResponse<T> = await response.json()
         if (!data.success && data.error) {
-          throw new Error(data.error);
+          throw new Error(data.error)
         }
         
-        const result = data.data || data as T;
-        
+        const result = data.data || data as T
         // Cache successful GET requests
         if (method === 'GET' && useCache) {
-          this.setCache(cacheKey, result);
+          this.setCache(cacheKey, result)
         }
         
-        return result;
+        return result
       } catch {
         // If we have retries left and it's a network error, retry
         if (retriesLeft > 0 && (_error instanceof TypeError || (_error as unknown).code === 'ECONNREFUSED')) {
-          console.warn(`Request failed, retrying... (${retriesLeft} retries left)`);
+          console.warn(`Request failed, retrying... (${retriesLeft} retries left)`)
           await new Promise(resolve => setTimeout(resolve, 1000 * (retries - retriesLeft + 1))); // Exponential backoff
-          return executeWithRetry(retriesLeft - 1);
+          return executeWithRetry(retriesLeft - 1)
         }
         
         // In development, try mock data on error
         if (SHARED_CONFIG.IS_DEVELOPMENT) {
-          const mockData = await this.getMockData<T>(endpoint, requestOptions);
+          const mockData = await this.getMockData<T>(endpoint, requestOptions)
           if (mockData !== null) {
             if (method === 'GET' && useCache) {
-              this.setCache(cacheKey, mockData);
+              this.setCache(cacheKey, mockData)
             }
-            return mockData;
+            return mockData
           }
         }
         
-        throw _error;
+        throw _error
       }
-    };
-
+    }
     // Create request promise
     const requestPromise = executeWithRetry(retries).finally(() => {
-      this.pendingRequests.delete(cacheKey);
-    });
-
+      this.pendingRequests.delete(cacheKey)
+    })
     // Store pending request for deduplication
     if (method === 'GET') {
-      this.pendingRequests.set(cacheKey, requestPromise);
+      this.pendingRequests.set(cacheKey, requestPromise)
     }
 
-    return requestPromise;
+    return requestPromise
   }
 
   // Authentication endpoints
   async login(email: string, password: string): Promise<LoginResponse> {
-    console.log('Login attempt - Mock enabled:', SHARED_CONFIG.ENABLE_MOCK_DATA, 'Real API:', import.meta.env.VITE_USE_REAL_API);
-    
+    console.log('Login attempt - Mock enabled:', SHARED_CONFIG.ENABLE_MOCK_DATA, 'Real API:', import.meta.env.VITE_USE_REAL_API)
     // Only use mock authentication if explicitly enabled AND not using real API
     if (SHARED_CONFIG.ENABLE_MOCK_DATA && import.meta.env.VITE_USE_REAL_API !== 'true') {
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise(resolve => setTimeout(resolve, 1000))
       // Mock users
       const mockUsers: Record<string, Usuario> = {
         'sebastian.saucedo@blocktracker.uy': {
@@ -231,10 +218,8 @@ class SharedApiService {
           avatar: 'https://ui-avatars.com/api/?name=Juan+Perez&background=10b981&color=fff',
           activo: true
         }
-      };
-      
-      const user = mockUsers[email];
-      
+      }
+      const user = mockUsers[email]
       if (user && password === 'password123') {
         // Generate mock JWT tokens
         const mockResponse: LoginResponse = {
@@ -255,129 +240,128 @@ class SharedApiService {
             }))}.mock-signature`,
             refreshToken: `refresh-${Date.now()}`
           }
-        };
-        
-        return mockResponse;
+        }
+        return mockResponse
       } else {
-        throw new Error('Credenciales inválidas');
+        throw new Error('Credenciales inválidas')
       }
     }
     
-    return this.request<LoginResponse>('POST', '/auth/login', { email, password }, {}, false);
+    return this.request<LoginResponse>('POST', '/auth/login', { email, password }, {}, false)
   }
 
   async logout(): Promise<void> {
     if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
       // Mock logout
-      jwtService.clearTokens();
-      localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY);
-      this.clearCache();
-      return;
+      jwtService.clearTokens()
+      localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY)
+      this.clearCache()
+      return
     }
     
     try {
-      await this.request('POST', '/auth/logout', null, {}, false);
+      await this.request('POST', '/auth/logout', null, {}, false)
     } finally {
-      jwtService.clearTokens();
-      localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY);
-      this.clearCache();
+      jwtService.clearTokens()
+      localStorage.removeItem(SHARED_CONFIG.AUTH_USER_KEY)
+      this.clearCache()
     }
   }
 
   async getCurrentUser(): Promise<Usuario | null> {
-    const stored = localStorage.getItem(SHARED_CONFIG.AUTH_USER_KEY);
+    const stored = localStorage.getItem(SHARED_CONFIG.AUTH_USER_KEY)
     if (stored) {
       try {
-        return JSON.parse(stored);
+        return JSON.parse(stored)
       } catch {
-        return null;
+        return null
       }
     }
 
     // In development, return null if no stored user
     if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
-      return null;
+      return null
     }
 
     try {
-      const user = await this.request<Usuario>('GET', '/auth/me');
-      localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(user));
-      return user;
+      const user = await this.request<Usuario>('GET', '/auth/me')
+      localStorage.setItem(SHARED_CONFIG.AUTH_USER_KEY, JSON.stringify(user))
+      return user
     } catch {
-      return null;
+      return null
     }
   }
 
   // Transit endpoints (shared between panels)
   async getTransitosPendientes(): Promise<TransitoPendiente[]> {
-    return this.request<TransitoPendiente[]>('GET', '/transitos/pendientes');
+    return this.request<TransitoPendiente[]>('GET', '/transitos/pendientes')
   }
 
   async getTransito(id: string): Promise<TransitoPendiente> {
-    return this.request<TransitoPendiente>('GET', `/transitos/${id}`);
+    return this.request<TransitoPendiente>('GET', `/transitos/${id}`)
   }
 
   async updateTransito(id: string, data: Partial<TransitoPendiente>): Promise<TransitoPendiente> {
-    const result = await this.request<TransitoPendiente>('PUT', `/transitos/${id}`, data);
-    this.clearCache('transitos');
-    return result;
+    const result = await this.request<TransitoPendiente>('PUT', `/transitos/${id}`, data)
+    this.clearCache('transitos')
+    return result
   }
 
   async precintarTransito(transitoId: string, precintoData: unknown): Promise<Precinto> {
-    const result = await this.request<Precinto>('POST', `/transitos/${transitoId}/precintar`, precintoData);
-    this.clearCache('transitos');
-    this.clearCache('precintos');
-    return result;
+    const result = await this.request<Precinto>('POST', `/transitos/${transitoId}/precintar`, precintoData)
+    this.clearCache('transitos')
+    this.clearCache('precintos')
+    return result
   }
 
   async addObservacion(transitoId: string, observacion: string): Promise<void> {
-    await this.request('POST', `/transitos/${transitoId}/observaciones`, { observacion });
-    this.clearCache(`transitos/${transitoId}`);
+    await this.request('POST', `/transitos/${transitoId}/observaciones`, { observacion })
+    this.clearCache(`transitos/${transitoId}`)
   }
 
   // Precinto endpoints
   async getPrecintosActivos(): Promise<Precinto[]> {
-    return this.request<Precinto[]>('GET', '/precintos/activos');
+    return this.request<Precinto[]>('GET', '/precintos/activos')
   }
 
   async getPrecinto(id: string): Promise<Precinto> {
-    return this.request<Precinto>('GET', `/precintos/${id}`);
+    return this.request<Precinto>('GET', `/precintos/${id}`)
   }
 
   async updatePrecinto(id: string, data: Partial<Precinto>): Promise<Precinto> {
-    const result = await this.request<Precinto>('PUT', `/precintos/${id}`, data);
-    this.clearCache('precintos');
-    return result;
+    const result = await this.request<Precinto>('PUT', `/precintos/${id}`, data)
+    this.clearCache('precintos')
+    return result
   }
 
   async finalizarPrecinto(id: string, motivo: string): Promise<void> {
-    await this.request('POST', `/precintos/${id}/finalizar`, { motivo });
-    this.clearCache('precintos');
+    await this.request('POST', `/precintos/${id}/finalizar`, { motivo })
+    this.clearCache('precintos')
   }
 
   // Alert endpoints
   async getAlertas(filtros?: unknown): Promise<Alerta[]> {
-    const params = new URLSearchParams(filtros).toString();
-    const endpoint = params ? `/alertas?${params}` : '/alertas';
-    return this.request<Alerta[]>('GET', endpoint);
+    const params = new URLSearchParams(filtros).toString()
+    const endpoint = params ? `/alertas?${params}` : '/alertas'
+    return this.request<Alerta[]>('GET', endpoint)
   }
 
   async getAlertasActivas(): Promise<Alerta[]> {
-    return this.request<Alerta[]>('GET', '/alertas/activas');
+    return this.request<Alerta[]>('GET', '/alertas/activas')
   }
 
   async atenderAlerta(id: string): Promise<void> {
-    await this.request('POST', `/alertas/${id}/atender`);
-    this.clearCache('alertas');
+    await this.request('POST', `/alertas/${id}/atender`)
+    this.clearCache('alertas')
   }
 
   async asignarAlerta(alertaId: string, usuarioId: string, notas?: string): Promise<void> {
-    await this.request('POST', `/alertas/${alertaId}/asignar`, { usuarioId, notas });
-    this.clearCache('alertas');
+    await this.request('POST', `/alertas/${alertaId}/asignar`, { usuarioId, notas })
+    this.clearCache('alertas')
   }
 
   async comentarAlerta(alertaId: string, mensaje: string): Promise<void> {
-    await this.request('POST', `/alertas/${alertaId}/comentarios`, { mensaje });
+    await this.request('POST', `/alertas/${alertaId}/comentarios`, { mensaje })
   }
 
   async resolverAlerta(
@@ -386,65 +370,65 @@ class SharedApiService {
     descripcion: string, 
     acciones?: string[]
   ): Promise<void> {
-    await this.request('POST', `/alertas/${alertaId}/resolver`, { tipo, descripcion, acciones });
-    this.clearCache('alertas');
+    await this.request('POST', `/alertas/${alertaId}/resolver`, { tipo, descripcion, acciones })
+    this.clearCache('alertas')
   }
 
   // Statistics endpoints
   async getEstadisticas(): Promise<EstadisticasMonitoreo> {
-    return this.request<EstadisticasMonitoreo>('GET', '/estadisticas');
+    return this.request<EstadisticasMonitoreo>('GET', '/estadisticas')
   }
 
   async getEstadisticasTransitos(periodo?: string): Promise<unknown> {
-    const params = periodo ? `?periodo=${periodo}` : '';
-    return this.request('GET', `/estadisticas/transitos${params}`);
+    const params = periodo ? `?periodo=${periodo}` : ''
+    return this.request('GET', `/estadisticas/transitos${params}`)
   }
 
   async getEstadisticasAlertas(periodo?: string): Promise<unknown> {
-    const params = periodo ? `?periodo=${periodo}` : '';
-    return this.request('GET', `/estadisticas/alertas${params}`);
+    const params = periodo ? `?periodo=${periodo}` : ''
+    return this.request('GET', `/estadisticas/alertas${params}`)
   }
 
   // Vehicle endpoints (for encargados)
   async getVehiculosEnRuta(): Promise<unknown[]> {
-    return this.request('GET', '/vehiculos/en-ruta');
+    return this.request('GET', '/vehiculos/en-ruta')
   }
 
   async buscarVehiculo(criterio: string): Promise<unknown[]> {
-    return this.request('GET', `/vehiculos/buscar?q=${encodeURIComponent(criterio)}`);
+    return this.request('GET', `/vehiculos/buscar?q=${encodeURIComponent(criterio)}`)
   }
 
   // Stock endpoints (for encargados)
   async getStock(): Promise<unknown> {
-    return this.request('GET', '/stock');
+    return this.request('GET', '/stock')
   }
 
   async updateStock(location: string, cantidad: number): Promise<void> {
-    await this.request('PUT', '/stock', { location, cantidad });
-    this.clearCache('stock');
+    await this.request('PUT', '/stock', { location, cantidad })
+    this.clearCache('stock')
   }
 
   // CMO messaging endpoints
   async getCMOMessages(unreadOnly = false): Promise<unknown[]> {
-    const params = unreadOnly ? '?unread=true' : '';
-    return this.request('GET', `/cmo/messages${params}`);
+    const params = unreadOnly ? '?unread=true' : ''
+    return this.request('GET', `/cmo/messages${params}`)
   }
 
   async markMessageAsRead(messageId: string): Promise<void> {
-    await this.request('POST', `/cmo/messages/${messageId}/read`);
+    await this.request('POST', `/cmo/messages/${messageId}/read`)
   }
 
   async respondToMessage(messageId: string, response: string): Promise<void> {
-    await this.request('POST', `/cmo/messages/${messageId}/respond`, { response });
+    await this.request('POST', `/cmo/messages/${messageId}/respond`, { response })
   }
 
   // System status endpoints
   async getSystemStatus(): Promise<unknown> {
-    return this.request('GET', '/system/status');
+    return this.request('GET', '/system/status')
   }
 
   async getSystemHealth(): Promise<unknown> {
-    return this.request('GET', '/system/health', null, {}, false);
+    return this.request('GET', '/system/health', null, {}, false)
   }
 
   // Export endpoints
@@ -453,7 +437,7 @@ class SharedApiService {
     format: 'csv' | 'xlsx' | 'pdf',
     filtros?: unknown
   ): Promise<Blob> {
-    const params = new URLSearchParams({ format, ...filtros }).toString();
+    const params = new URLSearchParams({ format, ...filtros }).toString()
     const response = await fetch(
       formatApiEndpoint(`/export/${type}?${params}`),
       {
@@ -461,46 +445,44 @@ class SharedApiService {
           ...jwtService.getAuthHeader()
         }
       }
-    );
-
+    )
     if (!response.ok) {
-      throw new Error('Export failed');
+      throw new Error('Export failed')
     }
 
-    return response.blob();
+    return response.blob()
   }
 
   // Real-time subscription management
   subscribeToUpdates(eventType: string, callback: (data: unknown) => void): () => void {
     // This will be handled by the WebSocket service
     // Return unsubscribe function
-    return () => {};
+    return () => {}
   }
 
   // Mock data generator
   private async getMockData<T>(endpoint: string, options: RequestInit): Promise<T | null> {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 200));
-
+    await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 200))
     // Generate mock data based on endpoint
     if (endpoint.includes('/transitos/pendientes')) {
-      
-      return generateMockTransitos() as T;
+
+      return generateMockTransitos() as T
     }
     
     if (endpoint.includes('/precintos/activos')) {
-      
-      return generateMockPrecintos() as T;
+
+      return generateMockPrecintos() as T
     }
     
     if (endpoint.includes('/alertas/activas')) {
-      
-      return generateMockAlertas().filter(a => !a.atendida) as T;
+
+      return generateMockAlertas().filter(a => !a.atendida) as T
     }
     
     if (endpoint.includes('/alertas')) {
-      
-      return generateMockAlertas() as T;
+
+      return generateMockAlertas() as T
     }
     
     if (endpoint.includes('/estadisticas')) {
@@ -512,8 +494,8 @@ class SharedApiService {
         lecturasPorHora: 850,
         alertasPorHora: 12,
         precintosConBateriaBaja: 8
-      };
-      return mockStats as T;
+      }
+      return mockStats as T
     }
     
     if (endpoint.includes('/system/status') || endpoint.includes('/system/health')) {
@@ -537,35 +519,34 @@ class SharedApiService {
           alertasPorHora: 12,
           precintosConBateriaBaja: 8
         }
-      } as T;
+      } as T
     }
 
     // For POST/PUT/DELETE, just return success
     if (options.method !== 'GET') {
-      return {} as T;
+      return {} as T
     }
 
-    return null;
+    return null
   }
 
   // Utility methods
   clearAllCache(): void {
-    this.clearCache();
+    this.clearCache()
   }
 
   async refreshToken(): Promise<RefreshTokenResponse> {
-    const refreshToken = jwtService.getRefreshToken();
+    const refreshToken = jwtService.getRefreshToken()
     if (!refreshToken) {
-      throw new Error('No refresh token available');
+      throw new Error('No refresh token available')
     }
 
     if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
       // Mock token refresh
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const userData = jwtService.getUserFromToken();
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const userData = jwtService.getUserFromToken()
       if (!userData) {
-        throw new Error('Invalid token');
+        throw new Error('Invalid token')
       }
       
       return {
@@ -574,12 +555,12 @@ class SharedApiService {
           iat: Math.floor(Date.now() / 1000),
           exp: Math.floor(Date.now() / 1000) + 3600 // 1 hour
         }))}.mock-signature-refreshed`
-      };
+      }
     }
     
-    return this.request<RefreshTokenResponse>('POST', '/auth/refresh', { refreshToken }, {}, false);
+    return this.request<RefreshTokenResponse>('POST', '/auth/refresh', { refreshToken }, {}, false)
   }
 }
 
 // Export singleton instance
-export const sharedApiService = new SharedApiService();
+export const sharedApiService = new SharedApiService()

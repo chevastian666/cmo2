@@ -1,18 +1,17 @@
-import React from 'react';
-import {MessageSquare, Database, Server, FileText} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import {MessageSquare, Database, Server, FileText} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface SystemStatusCardProps {
-  smsPendientes: number;
+  smsPendientes: number
   dbStats: {
-    memoriaUsada: number;
-    discoUsado: number;
-  };
+    memoriaUsada: number
+    discoUsado: number
+  }
   apiStats: {
-    memoriaUsada: number;
-    discoUsado: number;
-  };
-  reportesPendientes: number;
+    memoriaUsada: number
+    discoUsado: number
+  }
+  reportesPendientes: number
 }
 
 export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
@@ -78,5 +77,5 @@ export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

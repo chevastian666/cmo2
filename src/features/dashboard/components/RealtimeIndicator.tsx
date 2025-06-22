@@ -1,30 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Activity} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useEffect, useState } from 'react'
+import { Activity} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 export const RealtimeIndicator: React.FC = () => {
-  const [isActive, setIsActive] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-   
-
+  const [isActive, setIsActive] = useState(false)
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
   useEffect(() => {
     // Listen for any store updates
     const handleUpdate = () => {
-      setIsActive(true);
-      setLastUpdate(new Date());
-      
+      setIsActive(true)
+      setLastUpdate(new Date())
       // Reset indicator after animation
-      setTimeout(() => setIsActive(false), 1000);
-    };
-
+      setTimeout(() => setIsActive(false), 1000)
+    }
     // Custom event for any real-time update
-    window.addEventListener('realtime-update' as unknown, handleUpdate);
-    
+    window.addEventListener('realtime-update' as unknown, handleUpdate)
     return () => {
-      window.removeEventListener('realtime-update' as unknown, handleUpdate);
-    };
-  }, []);
-
+      window.removeEventListener('realtime-update' as unknown, handleUpdate)
+    }
+  }, [])
   return (
     <div className="flex items-center space-x-2 text-sm text-gray-400">
       <Activity 
@@ -38,5 +31,5 @@ export const RealtimeIndicator: React.FC = () => {
         <span className="text-green-400 animate-pulse">Actualizando...</span>
       )}
     </div>
-  );
-};
+  )
+}

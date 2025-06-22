@@ -1,21 +1,19 @@
-import React from 'react';
-import {X, MapPin, Phone, Battery, Wifi, Link2, Calendar, Clock, AlertTriangle} from 'lucide-react';
-import { PrecintoStatusBadge} from './PrecintoStatusBadge';
-import { BatteryIndicator} from './BatteryIndicator';
-import { SignalIndicator} from './SignalIndicator';
-import type { Precinto} from '../types';
-
+import React from 'react'
+import {X, MapPin, Phone, Battery, Wifi, Link2, Calendar, Clock, AlertTriangle} from 'lucide-react'
+import { PrecintoStatusBadge} from './PrecintoStatusBadge'
+import { BatteryIndicator} from './BatteryIndicator'
+import { SignalIndicator} from './SignalIndicator'
+import type { Precinto} from '../types'
 interface PrecintoDetailModalProps {
-  precinto: Precinto | null;
-  isOpen: boolean;
-  onClose: () => void;
+  precinto: Precinto | null
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const PrecintoDetailModal: React.FC<PrecintoDetailModalProps> = ({
   precinto, isOpen, onClose
 }) => {
-  if (!isOpen || !precinto) return null;
-
+  if (!isOpen || !precinto) return null
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
       <div className="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
@@ -191,5 +189,5 @@ export const PrecintoDetailModal: React.FC<PrecintoDetailModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

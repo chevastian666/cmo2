@@ -1,15 +1,13 @@
-import React from 'react';
-import { Shield, ChevronDown, ChevronUp} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { PermissionCheckbox} from './PermissionCheckbox';
-
-import type { Role, Section, Permission} from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS} from '../../../types/roles';
-
+import React from 'react'
+import { Shield, ChevronDown, ChevronUp} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { PermissionCheckbox} from './PermissionCheckbox'
+import type { Role, Section, Permission} from '../../../types/roles'
+import { SECTION_LABELS, ROLE_LABELS} from '../../../types/roles'
 interface RoleCardProps {
-  role: Role;
-  expanded?: boolean;
-  onToggleExpand?: () => void;
+  role: Role
+  expanded?: boolean
+  onToggleExpand?: () => void
 }
 
 const SECTIONS: Section[] = [
@@ -24,54 +22,47 @@ const SECTIONS: Section[] = [
   'zonas-descanso',
   'roles',
   'configuracion'
-];
-
-const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
-
+]
+const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete']
 export const RoleCard: React.FC<RoleCardProps> = ({ 
   role, expanded = false, onToggleExpand 
 }) => {
-  
-  
+
   const hasPermission = (section: Section, permission: Permission) => {
-    return permissions[role][section].includes(permission);
-  };
-  
+    return permissions[role][section].includes(permission)
+  }
   const isPermissionDisabled = (section: Section, permission: Permission) => {
-    if (permission === 'view') return false;
-    return !hasPermission(section, 'view');
-  };
-  
+    if (permission === 'view') return false
+    return !hasPermission(section, 'view')
+  }
   const getRoleColor = () => {
     switch (role) {
-      case 'God':
-        return 'border-purple-600 bg-purple-900/20';
-      case 'Gerente':
-        return 'border-blue-600 bg-blue-900/20';
-      case 'Supervisor':
-        return 'border-green-600 bg-green-900/20';
-      case 'CMO':
-        return 'border-yellow-600 bg-yellow-900/20';
+      case 'God': {
+  return 'border-purple-600 bg-purple-900/20'
+      case 'Gerente': {
+  return 'border-blue-600 bg-blue-900/20'
+      case 'Supervisor': {
+  return 'border-green-600 bg-green-900/20'
+      case 'CMO': {
+  return 'border-yellow-600 bg-yellow-900/20'
       default:
-        return 'border-gray-600 bg-gray-900/20';
+        return 'border-gray-600 bg-gray-900/20'
     }
-  };
-  
+  }
   const getRoleIcon = () => {
     switch (role) {
-      case 'God':
-        return 'text-purple-500';
-      case 'Gerente':
-        return 'text-blue-500';
-      case 'Supervisor':
-        return 'text-green-500';
-      case 'CMO':
-        return 'text-yellow-500';
+      case 'God': {
+  return 'text-purple-500'
+      case 'Gerente': {
+  return 'text-blue-500'
+      case 'Supervisor': {
+  return 'text-green-500'
+      case 'CMO': {
+  return 'text-yellow-500'
       default:
-        return 'text-gray-500';
+        return 'text-gray-500'
     }
-  };
-
+  }
   return (
     <div className={cn(
       'rounded-lg border-2 overflow-hidden transition-all duration-200',
@@ -119,5 +110,5 @@ export const RoleCard: React.FC<RoleCardProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

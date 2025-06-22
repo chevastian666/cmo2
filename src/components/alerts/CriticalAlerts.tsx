@@ -1,18 +1,17 @@
-import React, { useSyncExternalStore, memo } from 'react';
-import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react';
-import { cn} from '../../utils/utils';
-import { alertStore} from '../../stores/alertStore';
-import { PriorityBoundary} from '../priority/withPriority';
-
+import React, { useSyncExternalStore, memo } from 'react'
+import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react'
+import { cn} from '../../utils/utils'
+import { alertStore} from '../../stores/alertStore'
+import { PriorityBoundary} from '../priority/withPriority'
 interface Alert {
-  id: string;
-  type: 'violation' | 'tamper' | 'security' | 'system';
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  precintoId: string;
-  message: string;
-  timestamp: Date;
-  location?: { lat: number; lng: number; address: string };
-  acknowledged: boolean;
+  id: string
+  type: 'violation' | 'tamper' | 'security' | 'system'
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  precintoId: string
+  message: string
+  timestamp: Date
+  location?: { lat: number; lng: number; address: string }
+  acknowledged: boolean
 }
 
 const AlertIcon: React.FC<{ type: Alert['type'] }> = memo(({ type }) => {
@@ -21,10 +20,9 @@ const AlertIcon: React.FC<{ type: Alert['type'] }> = memo(({ type }) => {
     tamper: <Shield className="h-5 w-5" />,
     security: <AlertCircle className="h-5 w-5" />,
     system: <Bell className="h-5 w-5" />
-  };
-  return icons[type] || icons.system;
-});
-
+  }
+  return icons[type] || icons.system
+})
 const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }> = memo(({ 
   alert, onAcknowledge 
 }) => {
@@ -33,15 +31,13 @@ const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }>
     high: 'bg-orange-900/50 border-orange-600 text-orange-100',
     medium: 'bg-yellow-900/50 border-yellow-600 text-yellow-100',
     low: 'bg-blue-900/50 border-blue-600 text-blue-100'
-  };
-
+  }
   const iconColors = {
     critical: 'text-red-500',
     high: 'text-orange-500',
     medium: 'text-yellow-500',
     low: 'text-blue-500'
-  };
-
+  }
   return (
     <div
       className={cn(
@@ -81,30 +77,26 @@ const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }>
         )}
       </div>
     </div>
-  );
+  )
 }, (prevProps, nextProps) => {
   // Custom comparison for performance
   return prevProps.alert.id === nextProps.alert.id &&
-    prevProps.alert.acknowledged === nextProps.alert.acknowledged;
-});
-
+    prevProps.alert.acknowledged === nextProps.alert.acknowledged
+})
 export const CriticalAlerts: React.FC = () => {
   // Use sync external store for immediate updates
   const alerts = useSyncExternalStore(
     alertStore.subscribe,
     alertStore.getSnapshot,
     alertStore.getServerSnapshot
-  );
-
+  )
   // Filter only critical and high severity alerts
   const criticalAlerts = alerts.filter(
     alert => alert.severity === 'critical' || alert.severity === 'high'
-  );
-
+  )
   const handleAcknowledge = (alertId: string) => {
-    alertStore.acknowledgeAlert(alertId);
-  };
-
+    alertStore.acknowledgeAlert(alertId)
+  }
   return (
     <PriorityBoundary priority="immediate">
       <div className="space-y-4">
@@ -136,18 +128,17 @@ export const CriticalAlerts: React.FC = () => {
         )}
       </div>
     </PriorityBoundary>
-  );
-};
-
+  )
+}
 // Add subtle pulse animation
-const style = document.createElement('style');
+const style = document.createElement('style')
 style.textContent = `
   @keyframes pulse-subtle {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
   }
   .animate-pulse-subtle {
-    animation: pulse-subtle 2s ease-in-out infinite;
+    animation: pulse-subtle 2s ease-in-out infinite
   }
-`;
-document.head.appendChild(style);
+`
+document.head.appendChild(style)

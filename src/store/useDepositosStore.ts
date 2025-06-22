@@ -1,14 +1,13 @@
-import { create} from 'zustand';
-import type { Deposito} from '../features/depositos/types';
-
+import { create} from 'zustand'
+import type { Deposito} from '../features/depositos/types'
 interface DepositosState {
-  depositos: Deposito[];
-  loading: boolean;
-  error: string | null;
-  fetchDepositos: () => Promise<void>;
-  addDeposito: (deposito: Omit<Deposito, 'id'>) => void;
-  updateDeposito: (id: string, updates: Partial<Deposito>) => void;
-  deleteDeposito: (id: string) => void;
+  depositos: Deposito[]
+  loading: boolean
+  error: string | null
+  fetchDepositos: () => Promise<void>
+  addDeposito: (deposito: Omit<Deposito, 'id'>) => void
+  updateDeposito: (id: string, updates: Partial<Deposito>) => void
+  deleteDeposito: (id: string) => void
 }
 
 // Mock data based on the HTML file - ALL depositos from the original file
@@ -2753,15 +2752,14 @@ const mockDepositos: Deposito[] = [
     horaCierre: '22:00',
     precintosActivos: 45
   }
-];
-
+]
 export const useDepositosStore = create<DepositosState>((set) => ({
   depositos: [], loading: false, error: null, fetchDepositos: async () => {
-    set({ loading: true });
+    set({ loading: true })
     // Simulate API call
     setTimeout(() => {
-      set({ depositos: mockDepositos, loading: false });
-    }, 500);
+      set({ depositos: mockDepositos, loading: false })
+    }, 500)
   },
   
   addDeposito: (deposito) => {
@@ -2770,10 +2768,10 @@ export const useDepositosStore = create<DepositosState>((set) => ({
       id: Date.now().toString(),
       transitosActivos: 0,
       precintosActivos: 0
-    };
+    }
     set((state) => ({
       depositos: [...state.depositos, newDeposito]
-    }));
+    }))
   },
   
   updateDeposito: (id, updates) => {
@@ -2781,17 +2779,16 @@ export const useDepositosStore = create<DepositosState>((set) => ({
       depositos: state.depositos.map(d => 
         d.id === id ? { ...d, ...updates } : d
       )
-    }));
+    }))
   },
   
   deleteDeposito: (id) => {
     set((state) => ({
       depositos: state.depositos.filter(d => d.id !== id)
-    }));
+    }))
   }
-}));
-
+}))
 // Initialize store
 if (typeof window !== 'undefined') {
-  useDepositosStore.getState().fetchDepositos();
+  useDepositosStore.getState().fetchDepositos()
 }

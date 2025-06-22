@@ -1,11 +1,10 @@
-import React from 'react';
-import {Search, X} from 'lucide-react';
-
+import React from 'react'
+import {Search, X} from 'lucide-react'
 interface ZonasDescansoSearchProps {
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
-  totalZonas: number;
-  filteredZonas: number;
+  searchTerm: string
+  onSearchChange: (value: string) => void
+  totalZonas: number
+  filteredZonas: number
 }
 
 export const ZonasDescansoSearch: React.FC<ZonasDescansoSearchProps> = ({
@@ -35,5 +34,5 @@ export const ZonasDescansoSearch: React.FC<ZonasDescansoSearchProps> = ({
         </p>
       )}
     </div>
-  );
-};
+  )
+}

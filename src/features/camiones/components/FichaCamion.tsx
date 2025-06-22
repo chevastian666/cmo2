@@ -1,32 +1,26 @@
-import React, { useEffect } from 'react';
-import { ArrowLeft, Truck, Route, AlertCircle, Download, Camera, Activity} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { exportToCSV} from '../../../utils/export';
-import { notificationService} from '../../../services/shared/notification.service';
-
-import { ESTADOS_CAMION} from '../types';
-
+import React, { useEffect } from 'react'
+import { ArrowLeft, Truck, Route, AlertCircle, Download, Camera, Activity} from 'lucide-react'
+import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { exportToCSV} from '../../../utils/export'
+import { notificationService} from '../../../services/shared/notification.service'
+import { ESTADOS_CAMION} from '../types'
 interface FichaCamionProps {
-  matricula: string;
-  onClose: () => void;
+  matricula: string
+  onClose: () => void
 }
 
 export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) => {
-  const userInfo = useUserInfo();
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-   
-
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamion(matricula);
-    return () => clearSelection();
-  }, [matricula, selectCamion, clearSelection]);
-
+    selectCamion(matricula)
+    return () => clearSelection()
+  }, [matricula])
   const handleExportarHistorial = () => {
     if (!transitosCamion.length) {
-      notificationService.warning('Sin datos', 'No hay tránsitos para exportar');
-      return;
+      notificationService.warning('Sin datos', 'No hay tránsitos para exportar')
+      return
     }
 
     const datos = transitosCamion.map(t => ({
@@ -38,25 +32,21 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
       Precinto: t.precinto,
       Camionero: t.camionero?.nombre || 'No registrado',
       Documento: t.camionero?.documento || '-'
-    }));
-
-    exportToCSV(datos, `historial_${matricula}_${new Date().toISOString().split('T')[0]}`);
-    notificationService.success('Éxito', 'Historial exportado correctamente');
-  };
-
+    }))
+    exportToCSV(datos, `historial_${matricula}_${new Date().toISOString().split('T')[0]}`)
+    notificationService.success('Éxito', 'Historial exportado correctamente')
+  }
   const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file && camionSeleccionado) {
-      await uploadFotoCamion(camionSeleccionado.matricula, file);
+      await uploadFotoCamion(camionSeleccionado.matricula, file)
     }
-  };
-
+  }
   if (loading || !camionSeleccionado) {
-    return <LoadingState message="Cargando información del camión..." />;
+    return <LoadingState message="Cargando información del camión..." />
   }
 
-  const estadoConfig = ESTADOS_CAMION[camionSeleccionado.estado];
-
+  const estadoConfig = ESTADOS_CAMION[camionSeleccionado.estado]
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -307,5 +297,5 @@ export const FichaCamion: React.FC<FichaCamionProps> = ({ matricula, onClose }) 
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

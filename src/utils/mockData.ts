@@ -1,11 +1,9 @@
-import { UBICACIONES_URUGUAY, TIPO_CARGA, ESTADO_PRECINTO, SEVERIDAD_ALERTA} from '../constants';
-import { DESPACHANTES} from '../constants/locations';
-import type { Precinto, TransitoPendiente, Alerta} from '../types';
-
+import { UBICACIONES_URUGUAY, TIPO_CARGA, ESTADO_PRECINTO, SEVERIDAD_ALERTA} from '../constants'
+import { DESPACHANTES} from '../constants/locations'
+import type { Precinto, TransitoPendiente, Alerta} from '../types'
 export const generateMockPrecinto = (index: number): Precinto => {
-  const estados = Object.values(ESTADO_PRECINTO);
-  const estado = estados[Math.floor(Math.random() * estados.length)] as keyof typeof ESTADO_PRECINTO;
-  
+  const estados = Object.values(ESTADO_PRECINTO)
+  const estado = estados[Math.floor(Math.random() * estados.length)] as keyof typeof ESTADO_PRECINTO
   return {
     id: `pr-${index}`,
     codigo: `BT${String(2024000 + index).padStart(8, '0')}`,
@@ -41,9 +39,8 @@ export const generateMockPrecinto = (index: number): Precinto => {
         Math.random() > 0.9 ? 'abierta' : 'cerrada',
       ultimoCambio: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 3600)
     }
-  };
-};
-
+  }
+}
 export const generateMockTransito = (index: number): TransitoPendiente => {
   // Add observations to some transits (30% chance)
   const observaciones = Math.random() < 0.3 ? [
@@ -54,8 +51,7 @@ export const generateMockTransito = (index: number): TransitoPendiente => {
     'Prioridad alta - Cliente preferencial',
     'Revisar temperatura del contenedor refrigerado',
     'Precinto debe ser colocado por supervisor'
-  ][Math.floor(Math.random() * 7)] : undefined;
-
+  ][Math.floor(Math.random() * 7)] : undefined
   return {
     id: `tr-${index}`,
     numeroViaje: String(7581856 + Math.floor(Math.random() * 100000)),
@@ -69,23 +65,18 @@ export const generateMockTransito = (index: number): TransitoPendiente => {
     fechaIngreso: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 7200),
     estado: index < 5 ? 'pendiente' : index < 8 ? 'en_proceso' : 'precintado',
     observaciones
-  };
-};
-
+  }
+}
 export const generateMockTransitos = (count: number = 10): TransitoPendiente[] => {
-  return Array.from({ length: count }, (_, i) => generateMockTransito(i));
-};
-
+  return Array.from({ length: count }, (_, i) => generateMockTransito(i))
+}
 export const generateMockPrecintos = (count: number = 20): Precinto[] => {
-  return Array.from({ length: count }, (_, i) => generateMockPrecinto(i));
-};
-
+  return Array.from({ length: count }, (_, i) => generateMockPrecinto(i))
+}
 export const generateMockAlerta = (index: number): Alerta => {
-  const tipos: Array<Alerta['tipo']> = ['AAR', 'BBJ', 'DEM', 'DNR', 'DTN', 'NPG', 'NPN', 'PTN', 'SNA'];
-  const severidades = [SEVERIDAD_ALERTA.BAJA, SEVERIDAD_ALERTA.MEDIA, SEVERIDAD_ALERTA.ALTA, SEVERIDAD_ALERTA.CRITICA];
-  
-  const tipoSeleccionado = tipos[Math.floor(Math.random() * tipos.length)];
-  
+  const tipos: Array<Alerta['tipo']> = ['AAR', 'BBJ', 'DEM', 'DNR', 'DTN', 'NPG', 'NPN', 'PTN', 'SNA']
+  const severidades = [SEVERIDAD_ALERTA.BAJA, SEVERIDAD_ALERTA.MEDIA, SEVERIDAD_ALERTA.ALTA, SEVERIDAD_ALERTA.CRITICA]
+  const tipoSeleccionado = tipos[Math.floor(Math.random() * tipos.length)]
   // Generate appropriate message based on type
   const mensajes: Record<Alerta['tipo'], string> = {
     'AAR': 'Atraso en arribo de reporte por más de 30 minutos',
@@ -97,8 +88,7 @@ export const generateMockAlerta = (index: number): Alerta => {
     'NPN': 'Sin reporte del precinto por más de 4 horas',
     'PTN': 'Precinto abierto sin autorización en zona no permitida',
     'SNA': 'Salida no autorizada detectada del depósito'
-  };
-  
+  }
   return {
     id: `ALR-${index}`,
     tipo: tipoSeleccionado,
@@ -112,9 +102,8 @@ export const generateMockAlerta = (index: number): Alerta => {
     },
     severidad: severidades[Math.floor(Math.random() * severidades.length)],
     atendida: Math.random() > 0.8
-  };
-};
-
+  }
+}
 export const generateMockAlertas = (): Alerta[] => [
   {
     id: '1',
@@ -192,4 +181,4 @@ export const generateMockAlertas = (): Alerta[] => [
     severidad: SEVERIDAD_ALERTA.ALTA,
     atendida: false
   }
-];
+]

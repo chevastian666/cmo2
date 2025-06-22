@@ -1,46 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate} from 'react-router-dom';
-import { Package, CheckCircle, AlertCircle, Clock, MapPin, User, Phone, Calendar, ExternalLink, Copy, Download, Loader, XCircle, RefreshCw} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
-import { notificationService} from '../../../services/shared/notification.service';
-
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate} from 'react-router-dom'
+import { Package, CheckCircle, AlertCircle, Clock, MapPin, User, Phone, Calendar, ExternalLink, Copy, Download, Loader, XCircle, RefreshCw} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { notificationService} from '../../../services/shared/notification.service'
 interface TransitData {
-  pvid: string;
-  precintoid: string;
-  track: string;
-  empresaid: string;
-  fecha: number;
-  DUA: string;
-  VjeId: string;
-  MovId: string;
-  PrcId: string;
-  MatTra: string;
-  MatTraOrg: string;
-  MatZrr?: string;
-  MatRemo?: string;
-  ConNmb: string;
-  ConNDoc: string;
-  ConTel: string;
-  ConTelConf?: string;
-  plidEnd: string;
-  depEnd: string;
-  status: string;
+  pvid: string
+  precintoid: string
+  track: string
+  empresaid: string
+  fecha: number
+  DUA: string
+  VjeId: string
+  MovId: string
+  PrcId: string
+  MatTra: string
+  MatTraOrg: string
+  MatZrr?: string
+  MatRemo?: string
+  ConNmb: string
+  ConNDoc: string
+  ConTel: string
+  ConTelConf?: string
+  plidEnd: string
+  depEnd: string
+  status: string
   pstatus: Array<{
-    event: string;
-    status: string;
-    tsent: number;
-    tresponse: number;
-    Errnum?: string;
-    Errmsj?: string;
-    retry: number;
-  }>;
+    event: string
+    status: string
+    tsent: number
+    tresponse: number
+    Errnum?: string
+    Errmsj?: string
+    retry: number
+  }>
   aduana?: Array<{
-    praid: string;
-    OprId: 'SAL' | 'LLE' | 'LBR' | string;
-    Canal?: 'ROJO' | 'VERDE' | 'NARANJA';
-    trequest: number;
-  }>;
+    praid: string
+    OprId: 'SAL' | 'LLE' | 'LBR' | string
+    Canal?: 'ROJO' | 'VERDE' | 'NARANJA'
+    trequest: number
+  }>
 }
 
 const UBICACIONES: Record<string, string> = {
@@ -60,87 +58,77 @@ const UBICACIONES: Record<string, string> = {
   '14': 'Salto',
   '15': 'Paysandu',
   '16': 'Nueva Palmira'
-};
-
+}
 export const ArmadoWaitingPage: React.FC = () => {
-  const {transitId} = useParams<{ transitId: string }>();
-  const navigate = useNavigate();
-  const [transitData, setTransitData] = useState<TransitData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [exitConfirmed, setExitConfirmed] = useState(false);
-  const [pollingActive, setPollingActive] = useState(true);
-
+  const {transitId} = useParams<{ transitId: string }>()
+  const navigate = useNavigate()
+  const [transitData, setTransitData] = useState<TransitData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [exitConfirmed, setExitConfirmed] = useState(false)
+  const [pollingActive, setPollingActive] = useState(true)
   // Format date
   const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * 1000)
     return date.toLocaleDateString('es-UY', { 
       day: '2-digit', 
       month: '2-digit', 
       year: 'numeric' 
-    });
-  };
-
+    })
+  }
   const formatTime = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp * 1000)
     return date.toLocaleTimeString('es-UY', { 
       hour: '2-digit', 
       minute: '2-digit',
       hour12: false
-    });
-  };
-
+    })
+  }
   const formatDateTime = (timestamp: number) => {
-    return `${formatDate(timestamp)}, ${formatTime(timestamp)}`;
-  };
-
+    return `${formatDate(timestamp)}, ${formatTime(timestamp)}`
+  }
   // Calculate time ago
   const timeAgo = (timestamp: number) => {
-    const now = Date.now() / 1000;
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
+    const now = Date.now() / 1000
+    const diff = now - timestamp
+    const minutes = Math.floor(diff / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
     if (days > 0) {
-      return days === 1 ? 'ayer' : `hace ${days} días`;
+      return days === 1 ? 'ayer' : `hace ${days} días`
     } else if (hours > 0) {
-      return hours === 1 ? 'hace 1 hora' : `hace ${hours} horas`;
+      return hours === 1 ? 'hace 1 hora' : `hace ${hours} horas`
     } else if (minutes > 0) {
-      return minutes === 1 ? 'hace 1 minuto' : `hace ${minutes} minutos`;
+      return minutes === 1 ? 'hace 1 minuto' : `hace ${minutes} minutos`
     } else {
-      return 'hace un momento';
+      return 'hace un momento'
     }
-  };
-
+  }
   // Get status message for customs operation
   const getCustomsMessage = (oprId: string, canal?: string) => {
     switch (oprId) {
-      case 'SAL':
-        return 'Salida de aduana confirmada';
-      case 'LLE':
-        if (canal === 'ROJO') {
-          return 'Revisión aduanera pendiente';
+      case 'SAL': {
+  return 'Salida de aduana confirmada'
+      case 'LLE': {
+  if (canal === 'ROJO') {
+          return 'Revisión aduanera pendiente'
         }
-        return 'Llegada a aduana confirmada';
+        return 'Llegada a aduana confirmada'
       case 'LBR':
-        return 'Liberación confirmada';
+        return 'Liberación confirmada'
       default:
-        return 'Estado desconocido';
+        return 'Estado desconocido'
     }
-  };
-
+  }
   // Get status color
   const getStatusColor = (oprId: string, canal?: string) => {
-    if (oprId === 'SAL' || oprId === 'LBR') return 'success';
-    if (oprId === 'LLE' && canal === 'ROJO') return 'danger';
-    if (oprId === 'LLE') return 'success';
-    return 'warning';
-  };
-
+    if (oprId === 'SAL' || oprId === 'LBR') return 'success'
+    if (oprId === 'LLE' && canal === 'ROJO') return 'danger'
+    if (oprId === 'LLE') return 'success'
+    return 'warning'
+  }
   // Fetch transit data
   const fetchTransitData = async () => {
-    if (!transitId) return;
-
+    if (!transitId) return
     try {
       // In a real implementation, this would call the API
       // For now, we'll use mock data based on the HTML example
@@ -196,77 +184,65 @@ export const ArmadoWaitingPage: React.FC = () => {
             trequest: Date.now() / 1000 - 1620 // 27 minutes ago
           }
         ]
-      };
-
-      setTransitData(mockData);
-      setLoading(false);
-
+      }
+      setTransitData(mockData)
+      setLoading(false)
       // Check if exit is already confirmed
-      const hasExit = mockData.aduana?.some(a => a.OprId === 'SAL');
+      const hasExit = mockData.aduana?.some(a => a.OprId === 'SAL')
       if (hasExit) {
-        setExitConfirmed(true);
-        setPollingActive(false);
+        setExitConfirmed(true)
+        setPollingActive(false)
       }
     } catch {
-      console.error('Error fetching transit data:', _error);
-      notificationService.error('Error', 'No se pudo cargar la información del tránsito');
-      setLoading(false);
+      console.error('Error fetching transit data:', _error)
+      notificationService.error('Error', 'No se pudo cargar la información del tránsito')
+      setLoading(false)
     }
-  };
-
+  }
   // Copy to clipboard
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    notificationService.success('Copiado', 'Enlace copiado al portapapeles');
-  };
-
+    navigator.clipboard.writeText(text)
+    notificationService.success('Copiado', 'Enlace copiado al portapapeles')
+  }
   // Handle exit confirmation
   const handleConfirmExit = async () => {
-    if (!transitData) return;
-
+    if (!transitData) return
     try {
       // In a real implementation, this would call the API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setExitConfirmed(true);
-      setPollingActive(false);
-      notificationService.success('Confirmado', 'Salida confirmada exitosamente');
-      
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setExitConfirmed(true)
+      setPollingActive(false)
+      notificationService.success('Confirmado', 'Salida confirmada exitosamente')
       // Redirect after 2 seconds
       setTimeout(() => {
-        navigate('/transitos');
-      }, 2000);
+        navigate('/transitos')
+      }, 2000)
     } catch {
-      notificationService.error('Error', 'No se pudo confirmar la salida');
+      notificationService.error('Error', 'No se pudo confirmar la salida')
     }
-  };
-
+  }
   // Handle change precinto
   const handleChangePrecinto = () => {
-    notificationService.info('Función no disponible', 'Esta función estará disponible próximamente');
-  };
-
+    notificationService.info('Función no disponible', 'Esta función estará disponible próximamente')
+  }
   // Polling effect
-   
 
   useEffect(() => {
-    fetchTransitData();
-
+    fetchTransitData()
     if (pollingActive) {
       const interval = setInterval(() => {
-        fetchTransitData();
+        fetchTransitData()
       }, 10000); // Poll every 10 seconds
 
-      return () => clearInterval(interval);
+      return () => clearInterval(interval)
     }
-  }, [transitId, pollingActive]);
-
+  }, [])
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader className="h-8 w-8 animate-spin text-blue-500" />
       </div>
-    );
+    )
   }
 
   if (!transitData) {
@@ -280,12 +256,11 @@ export const ArmadoWaitingPage: React.FC = () => {
           Volver a Armado
         </button>
       </div>
-    );
+    )
   }
 
-  const hasCustomsExit = transitData.aduana?.some(a => a.OprId === 'SAL');
-  const lastCustomsStatus = transitData.aduana?.[transitData.aduana.length - 1];
-
+  const hasCustomsExit = transitData.aduana?.some(a => a.OprId === 'SAL')
+  const lastCustomsStatus = transitData.aduana?.[transitData.aduana.length - 1]
   return (
     <div className="space-y-6">
       <div>
@@ -459,9 +434,8 @@ export const ArmadoWaitingPage: React.FC = () => {
           
           {transitData.aduana && transitData.aduana.length > 0 ? (<div className="space-y-3">
               {transitData.aduana.map((status, index) => {
-                const isLast = index === transitData.aduana!.length - 1;
-                const statusColor = getStatusColor(status.OprId, status.Canal);
-                
+                const isLast = index === transitData.aduana!.length - 1
+                const statusColor = getStatusColor(status.OprId, status.Canal)
                 return (
                   <div
                     key={status.praid}
@@ -495,7 +469,7 @@ export const ArmadoWaitingPage: React.FC = () => {
                     </div>
                     <p className="text-sm text-gray-400">{timeAgo(status.trequest)}</p>
                   </div>
-                );
+                )
               })}
             </div>
           ) : (
@@ -549,5 +523,5 @@ export const ArmadoWaitingPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

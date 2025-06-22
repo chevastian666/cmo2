@@ -3,25 +3,24 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, Zap, RotateCw, Satellite, Trash2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Textarea} from '@/components/ui/textarea';
-import { Badge} from '@/components/ui/badge';
-import { Alert, AlertDescription} from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import { Label} from '@/components/ui/label';
-import { cn} from '@/utils/utils';
-import { formatTimeAgo} from '@/utils/formatters';
-import { notificationService} from '@/services/shared/notification.service';
-import type { Alerta} from '@/types';
-
+import React, { useState } from 'react'
+import { AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, Zap, RotateCw, Satellite, Trash2} from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Textarea} from '@/components/ui/textarea'
+import { Badge} from '@/components/ui/badge'
+import { Alert, AlertDescription} from '@/components/ui/alert'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Label} from '@/components/ui/label'
+import { cn} from '@/utils/utils'
+import { formatTimeAgo} from '@/utils/formatters'
+import { notificationService} from '@/services/shared/notification.service'
+import type { Alerta} from '@/types'
 interface VerificarAlertaModalProps {
-  alerta: Alerta;
-  isOpen: boolean;
-  onClose: () => void;
-  onSuccess?: () => void;
+  alerta: Alerta
+  isOpen: boolean
+  onClose: () => void
+  onSuccess?: () => void
 }
 
 // Definir las opciones de respuesta por tipo de alerta
@@ -134,128 +133,117 @@ const OPCIONES_RESPUESTA: Record<string, Array<{ id: number; descripcion: string
     { id: 3, descripcion: 'Falsa alarma' },
     { id: 4, descripcion: 'Otro' }
   ]
-};
-
+}
 // Comandos rápidos disponibles
 const COMANDOS_RAPIDOS = [
   { id: 'despertar', label: 'Despertar', icon: Zap, color: 'bg-blue-600 hover:bg-blue-700' },
   { id: 'reiniciar', label: 'Reiniciar', icon: RotateCw, color: 'bg-green-600 hover:bg-green-700' },
   { id: 'arreglar_gps', label: 'Arreglar GPS', icon: Satellite, color: 'bg-orange-600 hover:bg-orange-700' },
   { id: 'borrar_memoria', label: 'Borrar Memoria', icon: Trash2, color: 'bg-red-600 hover:bg-red-700' }
-];
-
+]
 export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
   alerta, isOpen, onClose, onSuccess
 }) => {
-  const [verificando, setVerificando] = useState(false);
-  const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('');
-  const [observaciones, setObservaciones] = useState('');
-  const [sendingCommand, setSendingCommand] = useState<string | null>(null);
-
+  const [verificando, setVerificando] = useState(false)
+  const [motivoSeleccionado, setMotivoSeleccionado] = useState<string>('')
+  const [observaciones, setObservaciones] = useState('')
+  const [sendingCommand, setSendingCommand] = useState<string | null>(null)
   const getIcon = (tipo: string) => {
-    const iconClass = "h-6 w-6";
+    const iconClass = "h-6 w-6"
     switch (tipo) {
       case 'violacion':
-        return <Shield className={iconClass} />;
+        return <Shield className={iconClass} />
       case 'bateria_baja':
-        return <Battery className={iconClass} />;
+        return <Battery className={iconClass} />
       case 'fuera_de_ruta':
-        return <MapPin className={iconClass} />;
+        return <MapPin className={iconClass} />
       case 'temperatura':
-        return <Thermometer className={iconClass} />;
+        return <Thermometer className={iconClass} />
       case 'sin_signal':
-        return <Radio className={iconClass} />;
+        return <Radio className={iconClass} />
       case 'intrusion':
-        return <Package className={iconClass} />;
+        return <Package className={iconClass} />
       default:
-        return <AlertTriangle className={iconClass} />;
+        return <AlertTriangle className={iconClass} />
     }
-  };
-
+  }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
     switch (severidad) {
-      case 'critica':
-        return 'destructive';
-      case 'alta':
-        return 'destructive';
-      case 'media':
-        return 'default';
-      case 'baja':
-        return 'secondary';
+      case 'critica': {
+  return 'destructive'
+      case 'alta': {
+  return 'destructive'
+      case 'media': {
+  return 'default'
+      case 'baja': {
+  return 'secondary'
       default:
-        return 'outline';
+        return 'outline'
     }
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20'
       default:
-        return 'text-gray-400 bg-gray-900/20';
+        return 'text-gray-400 bg-gray-900/20'
     }
-  };
-
+  }
   const handleVerificar = async () => {
     if (alerta.atendida) {
-      notificationService.info('Esta alerta ya fue verificada');
-      return;
+      notificationService.info('Esta alerta ya fue verificada')
+      return
     }
 
     if (!motivoSeleccionado) {
-      notificationService.error('Por favor seleccione un motivo de respuesta');
-      return;
+      notificationService.error('Por favor seleccione un motivo de respuesta')
+      return
     }
 
-    setVerificando(true);
+    setVerificando(true)
     try {
       // Aquí iría la llamada a la API real
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simular API call
       
-      notificationService.success(`Alerta ${alerta.precintoId} verificada correctamente`);
-      
+      notificationService.success(`Alerta ${alerta.precintoId} verificada correctamente`)
       // Log para desarrollo
       console.log('Alerta verificada:', {
         alertaId: alerta.id,
         motivo: motivoSeleccionado,
         observaciones,
         timestamp: new Date().toISOString()
-      });
-      
+      })
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
-      onClose();
+      onClose()
     } catch {
-      notificationService.error('Error al verificar la alerta');
-      console.error('Error verifying alert:', _error);
+      notificationService.error('Error al verificar la alerta')
+      console.error('Error verifying alert:', _error)
     } finally {
-      setVerificando(false);
+      setVerificando(false)
     }
-  };
-
+  }
   const handleSendCommand = async (commandId: string) => {
     try {
-      setSendingCommand(commandId);
+      setSendingCommand(commandId)
       // TODO: Implement command sending logic
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.precintoId}`);
+      notificationService.success(`Comando "${commandId}" enviado al precinto ${alerta.precintoId}`)
     } catch {
-      notificationService.error('Error al enviar el comando');
+      notificationService.error('Error al enviar el comando')
     } finally {
-      setSendingCommand(null);
+      setSendingCommand(null)
     }
-  };
-
+  }
   // Obtener las opciones según el tipo de alerta
-  const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || OPCIONES_RESPUESTA.violacion;
-
+  const opcionesRespuesta = OPCIONES_RESPUESTA[alerta.tipo] || OPCIONES_RESPUESTA.violacion
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-2xl bg-gray-800 border-gray-700">
@@ -381,7 +369,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
             <Label>Comandos Rápidos</Label>
             <div className="grid grid-cols-2 gap-2">
               {COMANDOS_RAPIDOS.map((comando) => {
-                const Icon = comando.icon;
+                const Icon = comando.icon
                 return (<Button
                     key={comando.id}
                     type="button"
@@ -401,7 +389,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
                     )}
                     {comando.label}
                   </Button>
-                );
+                )
               })}
             </div>
           </div>
@@ -451,5 +439,5 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,16 +1,15 @@
-import React, { memo } from 'react';
-import {ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { GroupingOptions} from '../types/virtualization';
-
+import React, { memo } from 'react'
+import {ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { GroupingOptions} from '../types/virtualization'
 interface AlertGroupHeaderProps {
-  groupKey: string;
-  groupValue: string;
-  count: number;
-  isExpanded: boolean;
-  onToggle: () => void;
-  groupBy: GroupingOptions['groupBy'];
-  style?: React.CSSProperties;
+  groupKey: string
+  groupValue: string
+  count: number
+  isExpanded: boolean
+  onToggle: () => void
+  groupBy: GroupingOptions['groupBy']
+  style?: React.CSSProperties
 }
 
 export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
@@ -18,32 +17,30 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
 }) => {
   const getIcon = () => {
     switch (groupBy) {
-      case 'timestamp':
-        return <Calendar className="h-4 w-4" />;
-      case 'severity':
-        return <AlertTriangle className="h-4 w-4" />;
-      case 'location':
-        return <MapPin className="h-4 w-4" />;
-      case 'status':
-        return <Shield className="h-4 w-4" />;
+      case 'timestamp': {
+  return <Calendar className="h-4 w-4" />
+      case 'severity': {
+  return <AlertTriangle className="h-4 w-4" />
+      case 'location': {
+  return <MapPin className="h-4 w-4" />
+      case 'status': {
+  return <Shield className="h-4 w-4" />
     }
-  };
-
+  }
   const getGroupLabel = () => {
     switch (groupBy) {
-      case 'timestamp':
-        return formatDateGroup(groupValue);
-      case 'severity':
-        return formatSeverityGroup(groupValue);
-      case 'location':
-        return groupValue;
-      case 'status':
-        return formatStatusGroup(groupValue);
+      case 'timestamp': {
+  return formatDateGroup(groupValue)
+      case 'severity': {
+  return formatSeverityGroup(groupValue)
+      case 'location': {
+  return groupValue
+      case 'status': {
+  return formatStatusGroup(groupValue)
       default:
-        return groupValue;
+        return groupValue
     }
-  };
-
+  }
   return (
     <div
       className="sticky top-0 z-10 bg-gray-800 border-b border-gray-700 px-4 py-2 cursor-pointer hover:bg-gray-750"
@@ -85,27 +82,23 @@ export const AlertGroupHeader = memo<AlertGroupHeaderProps>(({
         </div>
       </div>
     </div>
-  );
-});
-
-AlertGroupHeader.displayName = 'AlertGroupHeader';
-
+  )
+})
+AlertGroupHeader.displayName = 'AlertGroupHeader'
 // Helper functions
 function formatDateGroup(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-  
-  if (diffDays === 0) return 'Hoy';
-  if (diffDays === 1) return 'Ayer';
-  if (diffDays < 7) return `Hace ${diffDays} días`;
-  
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+  if (diffDays === 0) return 'Hoy'
+  if (diffDays === 1) return 'Ayer'
+  if (diffDays < 7) return `Hace ${diffDays} días`
   return date.toLocaleDateString('es-AR', { 
     weekday: 'long', 
     year: 'numeric', 
     month: 'long', 
     day: 'numeric' 
-  });
+  })
 }
 
 function formatSeverityGroup(severity: string): string {
@@ -114,8 +107,8 @@ function formatSeverityGroup(severity: string): string {
     high: 'Alta',
     medium: 'Media',
     low: 'Baja'
-  };
-  return labels[severity] || severity;
+  }
+  return labels[severity] || severity
 }
 
 function formatStatusGroup(status: string): string {
@@ -123,6 +116,6 @@ function formatStatusGroup(status: string): string {
     active: 'Activas',
     acknowledged: 'Reconocidas',
     resolved: 'Resueltas'
-  };
-  return labels[status] || status;
+  }
+  return labels[status] || status
 }

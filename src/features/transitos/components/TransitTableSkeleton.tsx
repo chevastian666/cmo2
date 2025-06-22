@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React from 'react'
 export const TransitTableSkeleton: React.FC = () => {
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700">
@@ -49,5 +48,5 @@ export const TransitTableSkeleton: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

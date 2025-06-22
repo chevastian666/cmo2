@@ -1,164 +1,147 @@
-import React, { useState, useMemo } from 'react';
-import {ChevronLeft, ChevronRight, Search, Download, Filter, X} from 'lucide-react';
-import { cn} from '../../utils/utils';
-
+import React, { useState, useMemo } from 'react'
+import {ChevronLeft, ChevronRight, Search, Download, Filter, X} from 'lucide-react'
+import { cn} from '../../utils/utils'
 export interface Column<T> {
-  key: keyof T | string;
-  header: string;
-  accessor?: (item: T) => React.ReactNode;
-  sortable?: boolean;
-  filterable?: boolean;
-  filterType?: 'text' | 'select' | 'date' | 'number';
-  filterOptions?: { value: string; label: string }[];
-  width?: string;
-  className?: string;
+  key: keyof T | string
+  header: string
+  accessor?: (item: T) => React.ReactNode
+  sortable?: boolean
+  filterable?: boolean
+  filterType?: 'text' | 'select' | 'date' | 'number'
+  filterOptions?: { value: string; label: string }[]
+  width?: string
+  className?: string
 }
 
 export interface DataTableProps<T> {
-  data: T[];
-  columns: Column<T>[];
-  searchKeys?: (keyof T)[];
-  searchPlaceholder?: string;
-  itemsPerPageOptions?: number[];
-  defaultItemsPerPage?: number;
-  onExport?: (data: T[], format: 'csv' | 'json') => void;
-  className?: string;
-  rowClassName?: (item: T, index: number) => string;
-  onRowClick?: (item: T) => void;
-  emptyMessage?: string;
-  title?: string;
+  data: T[]
+  columns: Column<T>[]
+  searchKeys?: (keyof T)[]
+  searchPlaceholder?: string
+  itemsPerPageOptions?: number[]
+  defaultItemsPerPage?: number
+  onExport?: (data: T[], format: 'csv' | 'json') => void
+  className?: string
+  rowClassName?: (item: T, index: number) => string
+  onRowClick?: (item: T) => void
+  emptyMessage?: string
+  title?: string
 }
 
 export function DataTable<T extends Record<string, unknown>>({
   data, columns, searchKeys = [], searchPlaceholder = "Buscar...", itemsPerPageOptions = [10, 25, 50, 100], defaultItemsPerPage = 25, onExport, className, rowClassName, onRowClick, emptyMessage = "No se encontraron datos", title
 }: DataTableProps<T>) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
-  const [sortColumn, setSortColumn] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = useState<Record<string, unknown>>({});
-  const [showFilters, setShowFilters] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage)
+  const [sortColumn, setSortColumn] = useState<string | null>(null)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  const [filters, setFilters] = useState<Record<string, unknown>>({})
+  const [showFilters, setShowFilters] = useState(false)
   // Filter data
   const filteredData = useMemo(() => {
-    let filtered = [...data];
-
+    let filtered = [...data]
     // Apply search
     if (searchTerm && searchKeys.length > 0) {
-      const lowerSearch = searchTerm.toLowerCase();
+      const lowerSearch = searchTerm.toLowerCase()
       filtered = filtered.filter(item => 
         searchKeys.some(key => {
-          const value = item[key];
-          if (value == null) return false;
-          return String(value).toLowerCase().includes(lowerSearch);
+          const value = item[key]
+          if (value == null) return false
+          return String(value).toLowerCase().includes(lowerSearch)
         })
-      );
+      )
     }
 
     // Apply column filters
     Object.entries(filters).forEach(([key, filterValue]) => {
       if (filterValue !== '' && filterValue != null) {
         filtered = filtered.filter(item => {
-          const column = columns.find(col => col.key === key);
-          if (!column) return true;
-
-          const itemValue = column.accessor ? column.accessor(item) : item[key];
-          
+          const column = columns.find(col => col.key === key)
+          if (!column) return true
+          const itemValue = column.accessor ? column.accessor(item) : item[key]
           if (column.filterType === 'select') {
-            return String(itemValue) === String(filterValue);
+            return String(itemValue) === String(filterValue)
           }
           
           if (column.filterType === 'number') {
-            const numValue = Number(itemValue);
-            const numFilter = Number(filterValue);
-            return !isNaN(numValue) && !isNaN(numFilter) && numValue >= numFilter;
+            const numValue = Number(itemValue)
+            const numFilter = Number(filterValue)
+            return !isNaN(numValue) && !isNaN(numFilter) && numValue >= numFilter
           }
 
-          return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase());
-        });
+          return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase())
+        })
       }
-    });
-
+    })
     // Apply sorting
     if (sortColumn) {
       filtered.sort((a, b) => {
-        const column = columns.find(col => col.key === sortColumn);
-        if (!column) return 0;
-
-        const aValue = column.accessor ? column.accessor(a) : a[sortColumn];
-        const bValue = column.accessor ? column.accessor(b) : b[sortColumn];
-
-        if (aValue == null) return 1;
-        if (bValue == null) return -1;
-
-        const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-        return sortDirection === 'asc' ? comparison : -comparison;
-      });
+        const column = columns.find(col => col.key === sortColumn)
+        if (!column) return 0
+        const aValue = column.accessor ? column.accessor(a) : a[sortColumn]
+        const bValue = column.accessor ? column.accessor(b) : b[sortColumn]
+        if (aValue == null) return 1
+        if (bValue == null) return -1
+        const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0
+        return sortDirection === 'asc' ? comparison : -comparison
+      })
     }
 
-    return filtered;
-  }, [data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns]);
-
+    return filtered
+  }, [data, filters, columns])
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage)
   const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(start, start + itemsPerPage);
-  }, [filteredData, currentPage, itemsPerPage]);
-
+    const start = (currentPage - 1) * itemsPerPage
+    return filteredData.slice(start, start + itemsPerPage)
+  }, [currentPage, filteredData, itemsPerPage])
   // Reset to first page when filters change
   React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filters, itemsPerPage]);
-
+    setCurrentPage(1)
+  }, [filters])
   const handleSort = (column: Column<T>) => {
-    if (!column.sortable) return;
-    
+    if (!column.sortable) return
     if (sortColumn === column.key) {
-      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortColumn(column.key as string);
-      setSortDirection('asc');
+      setSortColumn(column.key as string)
+      setSortDirection('asc')
     }
-  };
-
+  }
   const handleExport = (format: 'csv' | 'json') => {
     if (onExport) {
-      onExport(filteredData, format);
+      onExport(filteredData, format)
     } else {
       // Default export implementation
       if (format === 'csv') {
-        const headers = columns.map(col => col.header).join(',');
+        const headers = columns.map(col => col.header).join(',')
         const rows = filteredData.map(item => 
           columns.map(col => {
-            const value = col.accessor ? col.accessor(item) : item[col.key];
-            return `"${String(value).replace(/"/g, '""')}"`;
+            const value = col.accessor ? col.accessor(item) : item[col.key]
+            return `"${String(value).replace(/"/g, '""')}"`
           }).join(',')
-        );
-        const csv = [headers, ...rows].join('\n');
-        downloadFile(csv, `export-${Date.now()}.csv`, 'text/csv');
+        )
+        const csv = [headers, ...rows].join('\n')
+        downloadFile(csv, `export-${Date.now()}.csv`, 'text/csv')
       } else {
-        const json = JSON.stringify(filteredData, null, 2);
-        downloadFile(json, `export-${Date.now()}.json`, 'application/json');
+        const json = JSON.stringify(filteredData, null, 2)
+        downloadFile(json, `export-${Date.now()}.json`, 'application/json')
       }
     }
-  };
-
+  }
   const downloadFile = (content: string, filename: string, type: string) => {
-    const blob = new Blob([content], { type });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  const filterableColumns = columns.filter(col => col.filterable);
-
+    const blob = new Blob([content], { type })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+  const filterableColumns = columns.filter(col => col.filterable)
   return (
     <div className={cn("bg-gray-800 rounded-lg", className)}>
       {/* Header */}
@@ -370,5 +353,5 @@ export function DataTable<T extends Record<string, unknown>>({
         </div>
       </div>
     </div>
-  );
+  )
 }

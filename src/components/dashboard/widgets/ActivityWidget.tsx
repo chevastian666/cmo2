@@ -3,18 +3,17 @@
  * By Cheva
  */
 
-import React from 'react';
-import {Package, Truck, Shield, AlertCircle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-
+import React from 'react'
+import {Package, Truck, Shield, AlertCircle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
 interface Activity {
-  id: string;
-  type: 'precinto' | 'transito' | 'alerta' | 'sistema';
-  action: string;
-  description: string;
-  time: Date;
-  user?: string;
+  id: string
+  type: 'precinto' | 'transito' | 'alerta' | 'sistema'
+  action: string
+  description: string
+  time: Date
+  user?: string
 }
 
 export const ActivityWidget: React.FC = () => {
@@ -56,37 +55,30 @@ export const ActivityWidget: React.FC = () => {
       description: 'Precinto PRE-2024-005 llegó a destino',
       time: new Date(Date.now() - 90 * 60000)
     }
-  ];
-
+  ]
   const iconMap = {
     precinto: <Package className="h-4 w-4" />,
     transito: <Truck className="h-4 w-4" />,
     alerta: <AlertCircle className="h-4 w-4" />,
     sistema: <Shield className="h-4 w-4" />
-  };
-
+  }
   const colorMap = {
     precinto: 'text-blue-400 bg-blue-500/10',
     transito: 'text-green-400 bg-green-500/10',
     alerta: 'text-red-400 bg-red-500/10',
     sistema: 'text-purple-400 bg-purple-500/10'
-  };
-
+  }
   const getRelativeTime = (date: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / 60000);
-    
-    if (minutes < 1) return 'Ahora mismo';
-    if (minutes < 60) return `Hace ${minutes} min`;
-    
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `Hace ${hours} horas`;
-    
-    const days = Math.floor(hours / 24);
-    return `Hace ${days} días`;
-  };
-
+    const now = new Date()
+    const diff = now.getTime() - date.getTime()
+    const minutes = Math.floor(diff / 60000)
+    if (minutes < 1) return 'Ahora mismo'
+    if (minutes < 60) return `Hace ${minutes} min`
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return `Hace ${hours} horas`
+    const days = Math.floor(hours / 24)
+    return `Hace ${days} días`
+  }
   return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-1 overflow-auto">
         {activities.map((activity, index) => (
@@ -140,5 +132,5 @@ export const ActivityWidget: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}

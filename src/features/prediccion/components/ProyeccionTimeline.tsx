@@ -1,46 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import {BarChart, Clock, TrendingUp} from 'lucide-react';
-import { Card, CardHeader, CardContent} from '../../../components/ui';
-
-import { cn} from '../../../utils/utils';
-import type { TransitoTorreControl} from '../../torre-control/types';
-import type { ProyeccionPorHora} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import {BarChart, Clock, TrendingUp} from 'lucide-react'
+import { Card, CardHeader, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import type { TransitoTorreControl} from '../../torre-control/types'
+import type { ProyeccionPorHora} from '../types'
 interface ProyeccionTimelineProps {
-  transitos: TransitoTorreControl[];
-  className?: string;
-  destinosDestacados?: string[];
+  transitos: TransitoTorreControl[]
+  className?: string
+  destinosDestacados?: string[]
 }
 
 export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
   transitos, className, destinosDestacados = ['TCP', 'Montecon']
 }) => {
-  const [proyeccion, setProyeccion] = useState<ProyeccionPorHora[]>([]);
-  const [maxCamiones, setMaxCamiones] = useState(0);
-   
-
+  const [proyeccion, setProyeccion] = useState<ProyeccionPorHora[]>([])
+  const [maxCamiones, setMaxCamiones] = useState(0)
   useEffect(() => {
 
-    setProyeccion(_data);
-    
+    setProyeccion(_data)
     // Calcular máximo para escala
     const max = Math.max(...data.flatMap(p => 
       p.destinos.map(d => d.cantidad)
-    ), 0);
-    setMaxCamiones(max || 10);
-  }, [transitos]);
-
+    ), 0)
+    setMaxCamiones(max || 10)
+  }, [transitos])
   const getBarHeight = (cantidad: number) => {
-    return `${(cantidad / maxCamiones) * 100}%`;
-  };
-
+    return `${(cantidad / maxCamiones) * 100}%`
+  }
   const getBarColor = (cantidad: number) => {
-    if (cantidad >= 8) return 'bg-red-500';
-    if (cantidad >= 5) return 'bg-orange-500';
-    if (cantidad >= 3) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
+    if (cantidad >= 8) return 'bg-red-500'
+    if (cantidad >= 5) return 'bg-orange-500'
+    if (cantidad >= 3) return 'bg-yellow-500'
+    return 'bg-green-500'
+  }
   return (
     <Card variant="elevated" className={className}>
       <CardHeader>
@@ -95,9 +87,8 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
                 {/* Gráfico de barras por destino */}
                 <div className="grid grid-cols-1 gap-2">
                   {destinosDestacados.map(destinoNombre => {
-                    const destino = hora.destinos.find(d => d.nombre === destinoNombre);
-                    const cantidad = destino?.cantidad || 0;
-                    
+                    const destino = hora.destinos.find(d => d.nombre === destinoNombre)
+                    const cantidad = destino?.cantidad || 0
                     return (
                       <div key={destinoNombre} className="flex items-center gap-3">
                         <div className="w-24 text-sm text-gray-400 text-right">
@@ -118,7 +109,7 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
                           </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
                 </div>
               </div>
@@ -129,16 +120,15 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 {destinosDestacados.map(destino => {
                   const total = proyeccion.reduce((sum, hora) => {
-                    const destinoData = hora.destinos.find(d => d.nombre === destino);
-                    return sum + (destinoData?.cantidad || 0);
-                  }, 0);
-
+                    const destinoData = hora.destinos.find(d => d.nombre === destino)
+                    return sum + (destinoData?.cantidad || 0)
+                  }, 0)
                   return (
                     <div key={destino} className="text-center">
                       <p className="text-2xl font-bold text-white">{total}</p>
                       <p className="text-sm text-gray-400">Total {destino}</p>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -146,5 +136,5 @@ export const ProyeccionTimeline: React.FC<ProyeccionTimelineProps> = ({
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}

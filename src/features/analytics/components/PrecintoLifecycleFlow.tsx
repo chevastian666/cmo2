@@ -4,21 +4,18 @@
  * By Cheva
  */
 
-import React, { useMemo } from 'react';
-import { Card, CardContent} from '@/components/ui/card';
-import { Badge} from '@/components/ui/badge';
-import {Package, CheckCircle, XCircle, Zap, TrendingDown} from 'lucide-react';
-import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
-import { transformPrecintoLifecycle} from '@/components/charts/sankey/utils/dataTransformers';
-
-import type { PrecintoFlow} from '@/components/charts/types/sankey.types';
-
+import React, { useMemo } from 'react'
+import { Card, CardContent} from '@/components/ui/card'
+import { Badge} from '@/components/ui/badge'
+import {Package, CheckCircle, XCircle, Zap, TrendingDown} from 'lucide-react'
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
+import { transformPrecintoLifecycle} from '@/components/charts/sankey/utils/dataTransformers'
+import type { PrecintoFlow} from '@/components/charts/types/sankey.types'
 interface PrecintoLifecycleFlowProps {
-  dateRange?: { from: Date; to: Date };
+  dateRange?: { from: Date; to: Date }
 }
 
 export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ dateRange }) => {
-  
 
   // Calculate lifecycle stages from actual data
   const lifecycleData = useMemo(() => {
@@ -51,48 +48,41 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
         stage: 'deactivated',
         count: precintos.filter(p => p.estado === 'desactivado').length || 90
       }
-    ];
-
-    return stages;
-  }, [precintos]);
-
+    ]
+    return stages
+  }, [])
   const chartData = useMemo(() => {
-    return transformPrecintoLifecycle(lifecycleData);
-  }, [lifecycleData]);
-
+    return transformPrecintoLifecycle(lifecycleData)
+  }, [])
   // Calculate conversion rates
   const conversionRates = useMemo(() => {
-    const rates = [];
+    const rates = []
     for (let i = 0; i < lifecycleData.length - 1; i++) {
-      const current = lifecycleData[i];
-
+      const current = lifecycleData[i]
       if (current.count > 0) {
         rates.push({
           from: current.stage,
           to: next.stage,
           rate: ((next.count / current.count) * 100).toFixed(1)
-        });
+        })
       }
     }
-    return rates;
-  }, [lifecycleData]);
-
+    return rates
+  }, [])
   const stageIcons = {
     created: <Package className="h-5 w-5" />,
     activated: <Zap className="h-5 w-5" />,
     in_transit: <Package className="h-5 w-5" />,
     completed: <CheckCircle className="h-5 w-5" />,
     deactivated: <XCircle className="h-5 w-5" />
-  };
-
+  }
   const stageColors = {
     created: 'bg-gray-500',
     activated: 'bg-blue-500',
     in_transit: 'bg-purple-500',
     completed: 'bg-green-500',
     deactivated: 'bg-red-500'
-  };
-
+  }
   return (<div className="space-y-6">
       {/* Stage Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -171,5 +161,5 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

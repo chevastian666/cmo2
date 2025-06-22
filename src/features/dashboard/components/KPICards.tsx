@@ -1,26 +1,22 @@
-import React from 'react';
-import {Truck, Package, AlertTriangle, Clock, CheckCircle, TrendingUp, TrendingDown, Minus} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { TransitoPendiente, Alerta} from '../../../types';
-
+import React from 'react'
+import {Truck, Package, AlertTriangle, Clock, CheckCircle, TrendingUp, TrendingDown, Minus} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { TransitoPendiente, Alerta} from '../../../types'
 interface KPICardsProps {
-  transitos: TransitoPendiente[];
-  alertas: Alerta[];
+  transitos: TransitoPendiente[]
+  alertas: Alerta[]
 }
 
 export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
   // Calculate transit statistics
-  const transitosActivos = transitos.filter(t => t.estado === 'en_proceso').length;
-  const transitosEnViaje = transitos.filter(t => t.estado === 'en_proceso').length;
-  const transitosPendientesPrecintar = transitos.filter(t => t.estado === 'pendiente').length;
-  const transitosPendientesDesprecintar = transitos.filter(t => t.estado === 'precintado').length;
-  
+  const transitosActivos = transitos.filter(t => t.estado === 'en_proceso').length
+  const transitosEnViaje = transitos.filter(t => t.estado === 'en_proceso').length
+  const transitosPendientesPrecintar = transitos.filter(t => t.estado === 'pendiente').length
+  const transitosPendientesDesprecintar = transitos.filter(t => t.estado === 'precintado').length
   // Calculate alerts by priority
-  const alertasCriticas = alertas.filter(a => a.severidad === 'critica' || a.severidad === 'alta').length;
-  const alertasMedias = alertas.filter(a => a.severidad === 'media').length;
-  const alertasBajas = alertas.filter(a => a.severidad === 'baja').length;
-  
-
+  const alertasCriticas = alertas.filter(a => a.severidad === 'critica' || a.severidad === 'alta').length
+  const alertasMedias = alertas.filter(a => a.severidad === 'media').length
+  const alertasBajas = alertas.filter(a => a.severidad === 'baja').length
   const kpiData = [
     // Transit KPIs
     {
@@ -97,19 +93,17 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
       bgColor: 'bg-indigo-500/20',
       trend: alertas.length > 10 ? 'up' : 'neutral'
     }
-  ];
-
+  ]
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="h-4 w-4 text-red-400" />;
-      case 'down':
-        return <TrendingDown className="h-4 w-4 text-green-400" />;
+      case 'up': {
+  return <TrendingUp className="h-4 w-4 text-red-400" />
+      case 'down': {
+  return <TrendingDown className="h-4 w-4 text-green-400" />
       default:
-        return <Minus className="h-4 w-4 text-gray-400" />;
+        return <Minus className="h-4 w-4 text-gray-400" />
     }
-  };
-
+  }
   return (<div className="space-y-6">
       {/* Main KPI Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
@@ -138,5 +132,5 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
       </div>
 
     </div>
-  );
-};
+  )
+}

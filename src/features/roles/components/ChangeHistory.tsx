@@ -1,30 +1,25 @@
-import React, { useState, useMemo } from 'react';
-import {X, Clock, User, Shield, Filter, FileText} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { useRolesStore} from '../../../store/rolesStore';
-import type { PermissionChange, Role, Section} from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles';
-
+import React, { useState, useMemo } from 'react'
+import {X, Clock, User, Shield, Filter, FileText} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { useRolesStore} from '../../../store/rolesStore'
+import type { PermissionChange, Role, Section} from '../../../types/roles'
+import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles'
 interface ChangeHistoryProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose }) => {
-  const getPermissionHistory = useRolesStore(state => state.getPermissionHistory);
-  const [filterRole, setFilterRole] = useState<Role | ''>('');
-  const [filterSection, setFilterSection] = useState<Section | ''>('');
-  
+  const getPermissionHistory = useRolesStore(state => state.getPermissionHistory)
+  const [filterRole, setFilterRole] = useState<Role | ''>('')
+  const [filterSection, setFilterSection] = useState<Section | ''>('')
   const history = useMemo(() => {
-    const filters: unknown = {};
-    if (filterRole) filters.role = filterRole;
-    if (filterSection) filters.section = filterSection;
-    
-    return getPermissionHistory(filters);
-  }, [getPermissionHistory, filterRole, filterSection]);
-  
-  if (!isOpen) return null;
-  
+    const filters: unknown = {}
+    if (filterRole) filters.role = filterRole
+    if (filterSection) filters.section = filterSection
+    return getPermissionHistory(filters)
+  }, [])
+  if (!isOpen) return null
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleString('es-UY', {
       day: '2-digit',
@@ -32,24 +27,21 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
-  
+    })
+  }
   const getChangeDescription = (change: PermissionChange) => {
-    const added = change.newPermissions.filter(p => !change.oldPermissions.includes(p));
-    const removed = change.oldPermissions.filter(p => !change.newPermissions.includes(p));
-    
-    const parts = [];
+    const added = change.newPermissions.filter(p => !change.oldPermissions.includes(p))
+    const removed = change.oldPermissions.filter(p => !change.newPermissions.includes(p))
+    const parts = []
     if (added.length > 0) {
-      parts.push(`Agregó: ${added.map(p => PERMISSION_LABELS[p]).join(', ')}`);
+      parts.push(`Agregó: ${added.map(p => PERMISSION_LABELS[p]).join(', ')}`)
     }
     if (removed.length > 0) {
-      parts.push(`Quitó: ${removed.map(p => PERMISSION_LABELS[p]).join(', ')}`);
+      parts.push(`Quitó: ${removed.map(p => PERMISSION_LABELS[p]).join(', ')}`)
     }
     
-    return parts.join(' | ');
-  };
-
+    return parts.join(' | ')
+  }
   return (<>
       {/* Backdrop */}
       <div 
@@ -109,8 +101,8 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
                 
                 {(filterRole || filterSection) && (<button
                     onClick={() => {
-                      setFilterRole('');
-                      setFilterSection('');
+                      setFilterRole('')
+                      setFilterSection('')
                     }}
                     className="text-sm text-blue-400 hover:text-blue-300"
                   >
@@ -185,5 +177,5 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
         </div>
       </div>
     </>
-  );
-};
+  )
+}

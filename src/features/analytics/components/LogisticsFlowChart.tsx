@@ -4,32 +4,27 @@
  * By Cheva
  */
 
-import React, { useState, useMemo } from 'react';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-
-import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { Download, TrendingUp, MapPin, Package, Truck, AlertCircle, RefreshCw} from 'lucide-react';
-import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
+import React, { useState, useMemo } from 'react'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Download, TrendingUp, MapPin, Package, Truck, AlertCircle, RefreshCw} from 'lucide-react'
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
 import { 
-  transformLogisticsFlow, transformPrecintoLifecycle, transformAlertFlow, transformTimeBasedFlow} from '@/components/charts/sankey/utils/dataTransformers';
-
-import { motion} from 'framer-motion';
-import { toast} from '@/hooks/use-toast';
-
+  transformLogisticsFlow, transformPrecintoLifecycle, transformAlertFlow, transformTimeBasedFlow} from '@/components/charts/sankey/utils/dataTransformers'
+import { motion} from 'framer-motion'
+import { toast} from '@/hooks/use-toast'
 export const LogisticsFlowChart: React.FC = () => {
-  
-  const [timeRange, setTimeRange] = useState('week');
-  const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes');
-  const [loading, setLoading] = useState(false);
 
+  const [timeRange, setTimeRange] = useState('week')
+  const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes')
+  const [loading, setLoading] = useState(false)
   // Transform transit data into logistics flows
   const routeFlows = useMemo(() => {
-    const flowMap = new Map<string, any>();
-    
+    const flowMap = new Map<string, any>()
     transitos.forEach(transito => {
-      const key = `${transito.origen}-${transito.destino}`;
+      const key = `${transito.origen}-${transito.destino}`
       if (!flowMap.has(key)) {
         flowMap.set(key, {
           origin: transito.origen,
@@ -38,32 +33,29 @@ export const LogisticsFlowChart: React.FC = () => {
           totalVolume: 0,
           successCount: 0,
           totalTime: 0
-        });
+        })
       }
       
-      const flow = flowMap.get(key);
-      flow.transitCount++;
-      flow.totalVolume += transito.carga?.peso || 0;
+      const flow = flowMap.get(key)
+      flow.transitCount++
+      flow.totalVolume += transito.carga?.peso || 0
       if (transito.estado === 'completado') {
-        flow.successCount++;
+        flow.successCount++
       }
       if (transito.tiempoEstimado) {
-        flow.totalTime += transito.tiempoEstimado;
+        flow.totalTime += transito.tiempoEstimado
       }
-    });
-
+    })
     return Array.from(flowMap.values()).map(flow => ({
       ...flow,
       successRate: flow.transitCount > 0 ? (flow.successCount / flow.transitCount) * 100 : 0,
       avgTime: flow.transitCount > 0 ? flow.totalTime / flow.transitCount : 0
-    }));
-  }, [transitos]);
-
+    }))
+  }, [])
   // Precinto lifecycle data
   const lifecycleData = useMemo(() => {
-    const stages = ['created', 'activated', 'in_transit', 'completed', 'deactivated'];
-    const stageCount = new Map<string, number>();
-    
+    const stages = ['created', 'activated', 'in_transit', 'completed', 'deactivated']
+    // // const stageCount = new Map<string, number>()
     // Mock data - in production, calculate from real precinto data
     return [
       { stage: 'created' as const, count: 1000, nextStage: 'activated', dropoffCount: 50 },
@@ -71,9 +63,8 @@ export const LogisticsFlowChart: React.FC = () => {
       { stage: 'in_transit' as const, count: 920, nextStage: 'completed', dropoffCount: 20 },
       { stage: 'completed' as const, count: 900, nextStage: 'deactivated', dropoffCount: 0 },
       { stage: 'deactivated' as const, count: 900 }
-    ];
-  }, []);
-
+    ]
+  }, [])
   // Alert flow data
   const alertFlowData = useMemo(() => {
     // Mock data - in production, calculate from real alert data
@@ -83,67 +74,59 @@ export const LogisticsFlowChart: React.FC = () => {
       { source: 'Sensor Batería', alertType: 'bateria_baja', severity: 'low' as const, count: 67, resolution: 'Batería Reemplazada', resolutionTime: 120 },
       { source: 'Sensor Temperatura', alertType: 'temperatura_alta', severity: 'critical' as const, count: 12, resolution: 'Intervención Manual', resolutionTime: 45 },
       { source: 'Sistema', alertType: 'apertura_no_autorizada', severity: 'critical' as const, count: 8, resolution: 'Seguridad Notificada', resolutionTime: 5 }
-    ];
-  }, []);
-
+    ]
+  }, [])
   // Get appropriate data based on flow type
   const chartData = useMemo(() => {
     switch (flowType) {
-      case 'routes':
-        return transformLogisticsFlow(routeFlows);
-      case 'lifecycle':
-        return transformPrecintoLifecycle(lifecycleData);
-      case 'alerts':
-        return transformAlertFlow(alertFlowData);
-      case 'time':
-        // Mock time-based data
+      case 'routes': {
+  return transformLogisticsFlow(routeFlows)
+      case 'lifecycle': {
+  return transformPrecintoLifecycle(lifecycleData)
+      case 'alerts': {
+  return transformAlertFlow(alertFlowData)
+      case 'time': {
+  // Mock time-based data
         const timeData = transitos.map(t => ({
           timestamp: new Date(t.fechaCreacion),
           from: t.origen,
           to: t.destino,
           value: 1
-        }));
-        return transformTimeBasedFlow(timeData, timeRange as unknown);
+        }))
+        return transformTimeBasedFlow(timeData, timeRange as unknown)
       default:
-        return { nodes: [], links: [] };
+        return { nodes: [], links: [] }
     }
-  }, [flowType, routeFlows, lifecycleData, alertFlowData, transitos, timeRange]);
-
+  }, [transitos])
   // Calculate statistics
   const stats = useMemo(() => {
-    const totalFlow = chartData.links.reduce((sum, link) => sum + link.value, 0);
-    const avgFlow = chartData.links.length > 0 ? totalFlow / chartData.links.length : 0;
-    const maxFlow = Math.max(...chartData.links.map(l => l.value), 0);
-    const minFlow = Math.min(...chartData.links.map(l => l.value), Infinity);
-
-    return { totalFlow, avgFlow, maxFlow, minFlow };
-  }, [chartData]);
-
+    const totalFlow = chartData.links.reduce((sum, link) => sum + link.value, 0)
+    const avgFlow = chartData.links.length > 0 ? totalFlow / chartData.links.length : 0
+    const maxFlow = Math.max(...chartData.links.map(l => l.value), 0)
+    const minFlow = Math.min(...chartData.links.map(l => l.value), Infinity)
+    return { totalFlow, avgFlow, maxFlow, minFlow }
+  }, [])
   const handleExport = () => {
     // Export chart as SVG or PNG
     toast({
       title: 'Exportando gráfico',
       description: 'El gráfico se descargará en breve.'
-    });
-  };
-
+    })
+  }
   const handleNodeClick = (node: unknown) => {
     toast({
       title: node.name,
       description: `Flujo total: ${node.value?.toLocaleString() || 0}`
-    });
-  };
-
+    })
+  }
   const handleLinkClick = (link: unknown) => {
-    const source = typeof link.source === 'object' ? link.source.name : link.source;
-    const target = typeof link.target === 'object' ? link.target.name : link.target;
-    
+    const source = typeof link.source === 'object' ? link.source.name : link.source
+    const target = typeof link.target === 'object' ? link.target.name : link.target
     toast({
       title: `${source} → ${target}`,
       description: `Flujo: ${link.value?.toLocaleString() || 0}`
-    });
-  };
-
+    })
+  }
   return (<Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -333,5 +316,5 @@ export const LogisticsFlowChart: React.FC = () => {
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

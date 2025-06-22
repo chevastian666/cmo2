@@ -1,110 +1,103 @@
  
-import React, { useState, useMemo } from 'react';
-import { cn} from '../../utils/utils';
-import { Card} from './Card';
-import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map';
-import type { MapFilters} from './map/MapHeader';
-
+import React, { useState, useMemo } from 'react'
+import { cn} from '../../utils/utils'
+import { Card} from './Card'
+import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map'
+import type { MapFilters} from './map/MapHeader'
 export interface MapMarker {
-  id: string;
-  lat: number;
-  lng: number;
-  type: 'origin' | 'destination' | 'waypoint' | 'alert' | 'vehicle';
-  label?: string;
-  status?: 'active' | 'inactive' | 'alert' | 'critical' | 'warning';
-  metadata?: Record<string, unknown>;
-  direction?: number;
+  id: string
+  lat: number
+  lng: number
+  type: 'origin' | 'destination' | 'waypoint' | 'alert' | 'vehicle'
+  label?: string
+  status?: 'active' | 'inactive' | 'alert' | 'critical' | 'warning'
+  metadata?: Record<string, unknown>
+  direction?: number
 }
 
 export interface MapRoute {
-  id: string;
-  points: Array<{ lat: number; lng: number }>;
-  color?: string;
-  style?: 'solid' | 'dashed' | 'dotted' | 'animated';
-  animated?: boolean;
+  id: string
+  points: Array<{ lat: number; lng: number }>
+  color?: string
+  style?: 'solid' | 'dashed' | 'dotted' | 'animated'
+  animated?: boolean
 }
 
 interface MapModuleProps {
-  markers?: MapMarker[];
-  routes?: MapRoute[];
-  center?: { lat: number; lng: number };
-  zoom?: number;
-  className?: string;
-  height?: string;
-  showControls?: boolean;
-  showLegend?: boolean;
-  onMarkerClick?: (marker: MapMarker) => void;
-  variant?: 'default' | 'fullscreen' | 'compact';
-  useDetailedIcons?: boolean;
+  markers?: MapMarker[]
+  routes?: MapRoute[]
+  center?: { lat: number; lng: number }
+  zoom?: number
+  className?: string
+  height?: string
+  showControls?: boolean
+  showLegend?: boolean
+  onMarkerClick?: (marker: MapMarker) => void
+  variant?: 'default' | 'fullscreen' | 'compact'
+  useDetailedIcons?: boolean
 }
 
 export const MapModule: React.FC<MapModuleProps> = ({
   markers = [], routes = [], center = { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
   zoom = 10, className, height = '400px', showControls = true, showLegend = true, onMarkerClick, variant = 'default', useDetailedIcons = false
 }) => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [selectedMarker, setSelectedMarker] = useState<string | null>(null)
   const [filters, setFilters] = useState<MapFilters>({
     searchTerm: '',
     selectedDespachante: '',
     showRoutes: true,
     showAlerts: true,
     showInactive: false
-  });
-
+  })
   // Filter markers based on current filters
   const filteredMarkers = useMemo(() => {
     return markers.filter(marker => {
       // Filter by search term (license plate)
       if (filters.searchTerm && marker.label) {
         if (!marker.label.toLowerCase().includes(filters.searchTerm.toLowerCase())) {
-          return false;
+          return false
         }
       }
 
       // Filter by despachante
       if (filters.selectedDespachante && marker.metadata?.despachante) {
         if (marker.metadata.despachante !== filters.selectedDespachante) {
-          return false;
+          return false
         }
       }
 
       // Filter alerts
       if (!filters.showAlerts && (marker.type === 'alert' || marker.status === 'alert' || marker.status === 'critical')) {
-        return false;
+        return false
       }
 
       // Filter inactive
       if (!filters.showInactive && marker.status === 'inactive') {
-        return false;
+        return false
       }
 
-      return true;
-    });
-  }, [markers, filters]);
-
+      return true
+    })
+  }, [markers, filters])
   // Filter routes based on showRoutes filter
   const filteredRoutes = useMemo(() => {
-    return filters.showRoutes ? routes : [];
-  }, [routes, filters.showRoutes]);
-
+    return filters.showRoutes ? routes : []
+  }, [routes, filters.showRoutes])
   const handleMarkerClick = (marker: MapMarker) => {
-    setSelectedMarker(marker.id);
-    onMarkerClick?.(marker);
-  };
-
+    setSelectedMarker(marker.id)
+    onMarkerClick?.(marker)
+  }
   const handleFilterChange = (newFilters: MapFilters) => {
-    setFilters(newFilters);
-  };
-
+    setFilters(newFilters)
+  }
   const getMarkerStatus = (marker: MapMarker): 'normal' | 'warning' | 'critical' | 'inactive' => {
-    if (marker.status === 'inactive') return 'inactive';
-    if (marker.status === 'critical' || marker.status === 'alert') return 'critical';
-    if (marker.status === 'warning') return 'warning';
-    if (marker.type === 'alert') return 'critical';
-    return 'normal';
-  };
-
+    if (marker.status === 'inactive') return 'inactive'
+    if (marker.status === 'critical' || marker.status === 'alert') return 'critical'
+    if (marker.status === 'warning') return 'warning'
+    if (marker.type === 'alert') return 'critical'
+    return 'normal'
+  }
   const MapPlaceholder = () => (
     <div className="relative w-full h-full bg-gray-900 rounded-lg overflow-hidden">
       {/* Grid Background */}
@@ -123,7 +116,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         {/* Routes */}
         {filteredRoutes.map((route) => {
-          const RouteComponent = route.animated ? AnimatedRouteLine : RouteLine;
+          const RouteComponent = route.animated ? AnimatedRouteLine : RouteLine
           return (
             <RouteComponent
               key={route.id}
@@ -134,15 +127,14 @@ export const MapModule: React.FC<MapModuleProps> = ({
               showArrows={route.animated}
               opacity={0.7}
             />
-          );
+          )
         })}
       </svg>
       
       {/* Markers */}
       {filteredMarkers.map((marker) => {
-        const TruckComponent = useDetailedIcons ? TruckIconDetailed : TruckIcon;
-        const isVehicle = marker.type === 'vehicle';
-        
+        const TruckComponent = useDetailedIcons ? TruckIconDetailed : TruckIcon
+        const isVehicle = marker.type === 'vehicle'
         return (
           <div
             key={marker.id}
@@ -174,7 +166,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
               </span>
             )}
           </div>
-        );
+        )
       })}
       
       {/* Center Indicator */}
@@ -182,8 +174,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
         <div className="w-2 h-2 bg-white rounded-full opacity-50" />
       </div>
     </div>
-  );
-
+  )
   const mapContent = (<>
       <div style={{ height: variant === 'fullscreen' ? '100vh' : height }}>
         <MapPlaceholder />
@@ -240,14 +231,13 @@ export const MapModule: React.FC<MapModuleProps> = ({
         </div>
       )}
     </>
-  );
-
+  )
   if (variant === 'compact') {
     return (
       <div className={cn('relative rounded-lg overflow-hidden', className)}>
         {mapContent}
       </div>
-    );
+    )
   }
 
   return (
@@ -284,59 +274,58 @@ export const MapModule: React.FC<MapModuleProps> = ({
         </div>
       )}
     </Card>
-  );
-};
-
+  )
+}
 // Default marker icon component
 const DefaultMarkerIcon: React.FC<{ 
-  type: MapMarker['type']; 
+  type: MapMarker['type']
   status?: MapMarker['status'] 
 }> = ({ type, status }) => {
   const getColor = () => {
-    if (status === 'alert' || status === 'critical') return 'text-red-500';
-    if (status === 'warning') return 'text-yellow-500';
-    if (status === 'inactive') return 'text-gray-500';
-    
+    if (status === 'alert' || status === 'critical') return 'text-red-500'
+    if (status === 'warning') return 'text-yellow-500'
+    if (status === 'inactive') return 'text-gray-500'
     switch (type) {
-      case 'origin': return 'text-green-500';
-      case 'destination': return 'text-blue-500';
-      case 'alert': return 'text-red-500';
-      default: return 'text-gray-400';
+      case 'origin': {
+  return 'text-green-500'
+      case 'destination': {
+  return 'text-blue-500'
+      case 'alert': {
+  return 'text-red-500'
+      default: return 'text-gray-400'
     }
-  };
-
+  }
   const getIcon = () => {
     switch (type) {
-      case 'origin':
-        return (
+      case 'origin': {
+  return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
           </svg>
-        );
-      case 'destination':
-        return (
+        )
+      case 'destination': {
+  return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
           </svg>
-        );
-      case 'alert':
-        return (
+        )
+      case 'alert': {
+  return (
           <svg className="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2L1 21h22L12 2zm0 3.83L19.53 19H4.47L12 5.83zM11 16v2h2v-2h-2zm0-6v4h2v-4h-2z"/>
           </svg>
-        );
+        )
       default:
         return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="12" r="8"/>
           </svg>
-        );
+        )
     }
-  };
-
+  }
   return (
     <span className={cn('block', getColor())}>
       {getIcon()}
     </span>
-  );
-};
+  )
+}

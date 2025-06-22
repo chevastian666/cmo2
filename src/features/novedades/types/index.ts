@@ -1,61 +1,60 @@
-export type TipoNovedad = 'evento' | 'reclamo' | 'tarea' | 'pendiente' | 'aviso' | 'alerta' | 'incidente' | 'cambio_turno' | 'mantenimiento';
-export type EstadoNovedad = 'activa' | 'resuelta' | 'seguimiento';
-
+export type TipoNovedad = 'evento' | 'reclamo' | 'tarea' | 'pendiente' | 'aviso' | 'alerta' | 'incidente' | 'cambio_turno' | 'mantenimiento'
+export type EstadoNovedad = 'activa' | 'resuelta' | 'seguimiento'
 export interface Novedad {
-  id: string;
-  fecha: Date;
-  fechaCreacion: Date;
-  puntoOperacion: string;
-  tipoNovedad: TipoNovedad;
-  descripcion: string;
-  estado: EstadoNovedad;
-  destacado?: boolean;
+  id: string
+  fecha: Date
+  fechaCreacion: Date
+  puntoOperacion: string
+  tipoNovedad: TipoNovedad
+  descripcion: string
+  estado: EstadoNovedad
+  destacado?: boolean
   archivosAdjuntos?: {
-    id: string;
-    nombre: string;
-    tipo: 'imagen' | 'pdf';
-    url: string;
-    tamanio: number;
-  }[];
+    id: string
+    nombre: string
+    tipo: 'imagen' | 'pdf'
+    url: string
+    tamanio: number
+  }[]
   creadoPor: {
-    id: string;
-    nombre: string;
-    email: string;
-    rol: string;
-  };
+    id: string
+    nombre: string
+    email: string
+    rol: string
+  }
   editadoPor?: {
-    id: string;
-    nombre: string;
-    fecha: Date;
-  };
+    id: string
+    nombre: string
+    fecha: Date
+  }
   resolucion?: {
-    fecha: Date;
+    fecha: Date
     usuario: {
-      id: string;
-      nombre: string;
-    };
-    comentario?: string;
-  };
+      id: string
+      nombre: string
+    }
+    comentario?: string
+  }
   seguimientos?: {
-    id: string;
-    fecha: Date;
+    id: string
+    fecha: Date
     usuario: {
-      id: string;
-      nombre: string;
-    };
-    comentario: string;
-  }[];
+      id: string
+      nombre: string
+    }
+    comentario: string
+  }[]
 }
 
 export interface FiltrosNovedades {
-  fecha: Date | null;
-  fechaDesde: Date | null;
-  fechaHasta: Date | null;
-  puntoOperacion: string;
-  tipoNovedad: TipoNovedad | '';
-  estado: EstadoNovedad | '';
-  busqueda: string;
-  soloMias: boolean;
+  fecha: Date | null
+  fechaDesde: Date | null
+  fechaHasta: Date | null
+  puntoOperacion: string
+  tipoNovedad: TipoNovedad | ''
+  estado: EstadoNovedad | ''
+  busqueda: string
+  soloMias: boolean
 }
 
 export const PUNTOS_OPERACION = [
@@ -71,12 +70,11 @@ export const PUNTOS_OPERACION = [
   'Paysandú',
   'Salto',
   'CMO Central'
-] as const;
-
+] as const
 export const TIPOS_NOVEDAD: Record<TipoNovedad, {
-  label: string;
-  icon: string;
-  color: string;
+  label: string
+  icon: string
+  color: string
 }> = {
   evento: {
     label: 'Evento',
@@ -103,8 +101,7 @@ export const TIPOS_NOVEDAD: Record<TipoNovedad, {
     icon: '📢',
     color: 'purple'
   }
-};
-
+}
 export const FILTROS_DEFAULT: FiltrosNovedades = {
   fecha: new Date(),
   fechaDesde: null,
@@ -114,13 +111,12 @@ export const FILTROS_DEFAULT: FiltrosNovedades = {
   estado: '',
   busqueda: '',
   soloMias: false
-};
-
+}
 export interface EstadisticasNovedades {
-  totalDia: number;
-  porTipo: Record<TipoNovedad, number>;
-  porPunto: Record<string, number>;
-  pendientes: number;
-  resueltas: number;
-  enSeguimiento: number;
+  totalDia: number
+  porTipo: Record<TipoNovedad, number>
+  porPunto: Record<string, number>
+  pendientes: number
+  resueltas: number
+  enSeguimiento: number
 }

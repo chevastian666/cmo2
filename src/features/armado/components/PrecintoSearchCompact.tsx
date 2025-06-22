@@ -1,33 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Search, QrCode, Loader, AlertCircle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useState, useRef, useEffect } from 'react'
+import { Search, QrCode, Loader, AlertCircle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface PrecintoSearchProps {
-  onSearch: (nqr: string) => void;
-  loading?: boolean;
-  error?: string | null;
+  onSearch: (nqr: string) => void
+  loading?: boolean
+  error?: string | null
 }
 
 export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({ 
   onSearch, loading = false, error = null
 }) => {
-  const [nqr, setNqr] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
-   
-
+  const [nqr, setNqr] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
+    inputRef.current?.focus()
+  }, [])
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!nqr.trim()) {
-      inputRef.current?.focus();
-      return;
+      inputRef.current?.focus()
+      return
     }
-    onSearch(nqr.trim());
-  };
-
+    onSearch(nqr.trim())
+  }
   return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
       <form onSubmit={handleSubmit}>
         <div className="flex items-center space-x-3">
@@ -87,5 +82,5 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
         )}
       </form>
     </div>
-  );
-};
+  )
+}

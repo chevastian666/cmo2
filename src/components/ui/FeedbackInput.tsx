@@ -4,99 +4,89 @@
  * By Cheva
  */
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Input, InputProps} from '@/components/ui/input';
-import {Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { cn} from '@/lib/utils';
-
+import React, { useState, useRef, useEffect } from 'react'
+import { Input, InputProps} from '@/components/ui/input'
+import {Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/lib/utils'
 export interface FeedbackInputProps extends Omit<InputProps, 'type'> {
-  type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
-  validationFn?: (value: string) => boolean | Promise<boolean>;
-  validationMessage?: string;
-  debounceMs?: number;
-  showValidationIcon?: boolean;
-  showPasswordToggle?: boolean;
-  onValidationChange?: (isValid: boolean) => void;
-  showSearchIcon?: boolean;
-  clearable?: boolean;
-  onClear?: () => void;
+  type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url'
+  validationFn?: (value: string) => boolean | Promise<boolean>
+  validationMessage?: string
+  debounceMs?: number
+  showValidationIcon?: boolean
+  showPasswordToggle?: boolean
+  onValidationChange?: (isValid: boolean) => void
+  showSearchIcon?: boolean
+  clearable?: boolean
+  onClear?: () => void
 }
 
 export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   type = 'text', validationFn, validationMessage, debounceMs = 500, showValidationIcon = true, showPasswordToggle = true, onValidationChange, showSearchIcon = true, clearable = false, onClear, className, onChange, value, ...props
 }) => {
-  const [localValue, setLocalValue] = useState(value || '');
-  const [isValidating, setIsValidating] = useState(false);
-  const [isValid, setIsValid] = useState<boolean | null>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const debounceTimerRef = useRef<NodeJS.Timeout>();
-   
-
+  const [localValue, setLocalValue] = useState(value || '')
+  const [isValidating, setIsValidating] = useState(false)
+  const [isValid, setIsValid] = useState<boolean | null>(null)
+  const [isFocused, setIsFocused] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const debounceTimerRef = useRef<NodeJS.Timeout>()
   useEffect(() => {
     if (value !== undefined) {
-      setLocalValue(value);
+      setLocalValue(value)
     }
-  }, [value]);
-
+  }, [value])
   const handleValidation = async (val: string) => {
     if (!validationFn || !val) {
-      setIsValid(null);
-      return;
+      setIsValid(null)
+      return
     }
 
-    setIsValidating(true);
-
+    setIsValidating(true)
     try {
-      const result = await validationFn(val);
-      setIsValid(result);
-      onValidationChange?.(result);
+      const result = await validationFn(val)
+      setIsValid(result)
+      onValidationChange?.(result)
     } catch {
-      setIsValid(false);
-      onValidationChange?.(false);
+      setIsValid(false)
+      onValidationChange?.(false)
     } finally {
-      setIsValidating(false);
+      setIsValidating(false)
     }
-  };
-
+  }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setLocalValue(newValue);
-    onChange?.(e);
-
+    const newValue = e.target.value
+    setLocalValue(newValue)
+    onChange?.(e)
     // Debounced validation
     if (validationFn) {
       if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
+        clearTimeout(debounceTimerRef.current)
       }
 
       if (newValue) {
         debounceTimerRef.current = setTimeout(() => {
-          handleValidation(newValue);
-        }, debounceMs);
+          handleValidation(newValue)
+        }, debounceMs)
       } else {
-        setIsValid(null);
+        setIsValid(null)
       }
     }
-  };
-
+  }
   const handleClear = () => {
-    setLocalValue('');
-    setIsValid(null);
-    onClear?.();
-    
+    setLocalValue('')
+    setIsValid(null)
+    onClear?.()
     // Create synthetic event
-    const input = document.createElement('input');
-    input.value = '';
-    const event = new Event('change', { bubbles: true }) as unknown;
-    Object.defineProperty(event, 'target', { value: input });
-    onChange?.(event);
-  };
-
+    const input = document.createElement('input')
+    input.value = ''
+    const event = new Event('change', { bubbles: true }) as unknown
+    Object.defineProperty(event, 'target', { value: input })
+    onChange?.(event)
+  }
   const getIcon = () => {
     if (isValidating && showValidationIcon) {
-      return <Loader2 className="h-4 w-4 animate-spin text-gray-400" />;
+      return <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
     }
 
     if (isValid !== null && showValidationIcon && localValue) {
@@ -104,18 +94,16 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
         <Check className="h-4 w-4 text-green-500" />
       ) : (
         <X className="h-4 w-4 text-red-500" />
-      );
+      )
     }
 
     if (type === 'search' && showSearchIcon && !localValue) {
-      return <Search className="h-4 w-4 text-gray-400" />;
+      return <Search className="h-4 w-4 text-gray-400" />
     }
 
-    return null;
-  };
-
-  const inputType = type === 'password' && showPassword ? 'text' : type;
-
+    return null
+  }
+  const inputType = type === 'password' && showPassword ? 'text' : type
   return (<div className="relative">
       <div className="relative">
         <Input
@@ -218,25 +206,22 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
         />
       )}
     </div>
-  );
-};
-
+  )
+}
 // Preset validation functions
 export const emailValidation = (email: string): boolean => {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-};
-
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return regex.test(email)
+}
 export const urlValidation = (url: string): boolean => {
   try {
-    new URL(url);
-    return true;
+    new URL(url)
+    return true
   } catch {
-    return false;
+    return false
   }
-};
-
+}
 export const phoneValidation = (phone: string): boolean => {
-  const regex = /^[\d\s\-+()]+$/;
-  return regex.test(phone) && phone.replace(/\D/g, '').length >= 10;
-};
+  const regex = /^[\d\s\-+()]+$/
+  return regex.test(phone) && phone.replace(/\D/g, '').length >= 10
+}

@@ -3,23 +3,21 @@
  * By Cheva
  */
 
-import { persist} from 'zustand/middleware';
-import type { StateCreator, StateStorage} from './types';
-
+import { persist} from 'zustand/middleware'
+import type { StateCreator, StateStorage} from './types'
 export interface PersistOptions<T> {
-  name: string;
-  partialize?: (state: T) => Partial<T>;
-  version?: number;
-  migrate?: (persistedState: unknown, version: number) => T;
-  storage?: StateStorage;
-  skipHydration?: boolean;
+  name: string
+  partialize?: (state: T) => Partial<T>
+  version?: number
+  migrate?: (persistedState: unknown, version: number) => T
+  storage?: StateStorage
+  skipHydration?: boolean
 }
 
 /**
  * Crea una configuración de persist con valores por defecto
  */
 export function createPersistConfig<T>(options: PersistOptions<T>) {
-  
 
   return {
     name,
@@ -28,7 +26,7 @@ export function createPersistConfig<T>(options: PersistOptions<T>) {
     partialize,
     migrate,
     skipHydration
-  };
+  }
 }
 
 /**
@@ -39,7 +37,7 @@ export function createPersistedStore<T>(name: string, createState: StateCreator<
   return persist(createState, createPersistConfig({
     name,
     partialize
-  }));
+  }))
 }
 
 /**
@@ -48,21 +46,20 @@ export function createPersistedStore<T>(name: string, createState: StateCreator<
 export function enableCrossTabSync<T>(storeName: string, getState: () => T,
   setState: (state: Partial<T>) => void
 ) {
-  if (typeof window === 'undefined') return;
-
+  if (typeof window === 'undefined') return
   window.addEventListener('storage', (e) => {
     if (e.key === `cmo_${storeName}` && e.newValue) {
       try {
-        const newState = JSON.parse(e.newValue);
+        const newState = JSON.parse(e.newValue)
         // Verificar que el estado es válido antes de actualizar
         if (newState && typeof newState === 'object') {
-          setState(newState);
+          setState(newState)
         }
       } catch {
-        console.error(`Error sincronizando ${storeName} entre pestañas:`, error);
+        console.error(`Error sincronizando ${storeName} entre pestañas:`, error)
       }
     }
-  });
+  })
 }
 
 /**
@@ -70,7 +67,7 @@ export function enableCrossTabSync<T>(storeName: string, getState: () => T,
  */
 export function clearPersistedStore(storeName: string) {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem(`cmo_${storeName}`);
+    localStorage.removeItem(`cmo_${storeName}`)
   }
 }
 
@@ -78,39 +75,36 @@ export function clearPersistedStore(storeName: string) {
  * Helper para exportar todos los estados persistidos
  */
 export function exportAllPersistedStates(): Record<string, unknown> {
-  if (typeof window === 'undefined') return {};
-
-  const states: Record<string, unknown> = {};
-  
+  if (typeof window === 'undefined') return {}
+  const states: Record<string, unknown> = {}
   for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
+    const key = localStorage.key(i)
     if (key?.startsWith('cmo_')) {
-      const storeName = key.replace('cmo_', '');
+      const storeName = key.replace('cmo_', '')
       try {
-        const value = localStorage.getItem(key);
+        const value = localStorage.getItem(key)
         if (value) {
-          states[storeName] = JSON.parse(value);
+          states[storeName] = JSON.parse(value)
         }
       } catch {
-        console.error(`Error exportando ${key}:`, error);
+        console.error(`Error exportando ${key}:`, error)
       }
     }
   }
   
-  return states;
+  return states
 }
 
 /**
  * Helper para importar estados persistidos
  */
 export function importPersistedStates(states: Record<string, unknown>) {
-  if (typeof window === 'undefined') return;
-
+  if (typeof window === 'undefined') return
   Object.entries(states).forEach(([storeName, state]) => {
     try {
-      localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state));
+      localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state))
     } catch {
-      console.error(`Error importando ${storeName}:`, error);
+      console.error(`Error importando ${storeName}:`, error)
     }
-  });
+  })
 }

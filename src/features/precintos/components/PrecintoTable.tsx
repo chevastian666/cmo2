@@ -1,75 +1,65 @@
-import React, { useState, Fragment } from 'react';
-import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react';
-import { cn} from '@/lib/utils';
-import { Button} from '@/components/ui/button';
-import { PrecintoStatusBadge} from './PrecintoStatusBadge';
-import { BatteryIndicator} from './BatteryIndicator';
-import { SignalIndicator} from './SignalIndicator';
-import { PrecintoStatus} from '../types';
-import type { Precinto} from '../types';
-
+import React, { useState, Fragment } from 'react'
+import {ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react'
+import { cn} from '@/lib/utils'
+import { Button} from '@/components/ui/button'
+import { PrecintoStatusBadge} from './PrecintoStatusBadge'
+import { BatteryIndicator} from './BatteryIndicator'
+import { SignalIndicator} from './SignalIndicator'
+import { PrecintoStatus} from '../types'
+import type { Precinto} from '../types'
 interface PrecintoTableProps {
-  precintos: Precinto[];
-  loading: boolean;
-  onViewDetail: (precinto: Precinto) => void;
-  onViewMap: (precinto: Precinto) => void;
-  onAssign: (precinto: Precinto) => void;
-  onSendCommand: (precinto: Precinto) => void;
-  onViewHistory: (precinto: Precinto) => void;
-  onMarkAsBroken?: (precinto: Precinto) => void;
+  precintos: Precinto[]
+  loading: boolean
+  onViewDetail: (precinto: Precinto) => void
+  onViewMap: (precinto: Precinto) => void
+  onAssign: (precinto: Precinto) => void
+  onSendCommand: (precinto: Precinto) => void
+  onViewHistory: (precinto: Precinto) => void
+  onMarkAsBroken?: (precinto: Precinto) => void
 }
 
-type SortField = keyof Precinto;
-
+type SortField = keyof Precinto
 export const PrecintoTable: React.FC<PrecintoTableProps> = ({
   precintos, loading, onViewDetail, onViewMap, onAssign, onSendCommand, onViewHistory, onMarkAsBroken
 }) => {
-  const [sortField, setSortField] = useState<SortField>('id');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
+  const [sortField, setSortField] = useState<SortField>('id')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const handleSort = (field: SortField) => {
     if (field === sortField) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field);
-      setSortDirection('asc');
+      setSortField(field)
+      setSortDirection('asc')
     }
-  };
-
+  }
   const sortedPrecintos = [...precintos].sort((a, b) => {
-    let aValue = a[sortField];
-    let bValue = b[sortField];
-
-    if (aValue === undefined) aValue = '';
-    if (bValue === undefined) bValue = '';
-
+    let aValue = a[sortField]
+    let bValue = b[sortField]
+    if (aValue === undefined) aValue = ''
+    if (bValue === undefined) bValue = ''
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortDirection === 'asc' 
         ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+        : bValue.localeCompare(aValue)
     }
 
-    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-    return 0;
-  });
-
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
+    return 0
+  })
   const paginatedPrecintos = sortedPrecintos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  );
-
-  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage));
-
+  )
+  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
   const SortIcon = ({ field }: { field: SortField }) => {
-    if (sortField !== field) return <div className="w-4 h-4" />;
+    if (sortField !== field) return <div className="w-4 h-4" />
     return sortDirection === 'asc' ? 
       <ChevronUp className="h-4 w-4" /> : 
-      <ChevronDown className="h-4 w-4" />;
-  };
-
+      <ChevronDown className="h-4 w-4" />
+  }
   const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (<th 
       onClick={() => handleSort(field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
@@ -79,15 +69,14 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
         <SortIcon field={field} />
       </div>
     </th>
-  );
-
+  )
   if (loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-8 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
         <p className="text-gray-400 mt-4">Cargando precintos...</p>
       </div>
-    );
+    )
   }
 
   if (precintos.length === 0) {
@@ -96,7 +85,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
         <Unlink className="h-12 w-12 text-gray-600 mx-auto mb-4" />
         <p className="text-gray-400">No se encontraron precintos</p>
       </div>
-    );
+    )
   }
 
   return (<div className="bg-gray-800 rounded-lg border border-gray-700">
@@ -274,5 +263,5 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

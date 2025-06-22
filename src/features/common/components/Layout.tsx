@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
-import {Activity, Menu, X, User, LogOut, Settings, ChevronDown} from 'lucide-react';
-import { Link, useLocation} from 'react-router-dom';
-import { cn} from '../../../utils/utils';
-import { APP_CONFIG} from '../../../config';
-import { ConnectionStatus} from './ConnectionStatus';
-import { RealtimeNotifications} from './RealtimeNotifications';
-import { AlarmSummary} from './AlarmSummary';
-import { useAlertasActivas} from '../../../store/hooks';
-import {useUserInfo} from '../../../hooks/useAuth';
-import { useConnectionStatus} from '../../../hooks/useSharedState';
-import { PanelSwitcher} from '../../../components/PanelSwitcher';
-import { NotificationButton} from '../../../components/notifications/NotificationButton';
-
+import React, { useState } from 'react'
+import {Activity, Menu, X, User, LogOut, Settings, ChevronDown} from 'lucide-react'
+import { Link, useLocation} from 'react-router-dom'
+import { cn} from '../../../utils/utils'
+import { APP_CONFIG} from '../../../config'
+import { ConnectionStatus} from './ConnectionStatus'
+import { RealtimeNotifications} from './RealtimeNotifications'
+import { AlarmSummary} from './AlarmSummary'
+import { useAlertasActivas} from '../../../store/hooks'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { useConnectionStatus} from '../../../hooks/useSharedState'
+import { PanelSwitcher} from '../../../components/PanelSwitcher'
+import { NotificationButton} from '../../../components/notifications/NotificationButton'
 interface LayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
-  console.log('Layout: Rendering with children:', children);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const location = useLocation();
-  const connectionStatus = useConnectionStatus();
-  
-  
-  const userInfo = useUserInfo();
-
+  console.log('Layout: Rendering with children:', children)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const location = useLocation()
+  const connectionStatus = useConnectionStatus()
+  const userInfo = useUserInfo()
   return (<div className="min-h-screen bg-gray-900 text-gray-100">
       <header className="bg-gray-800 border-b border-gray-700">
         <div className="px-4 sm:px-6 lg:px-8">
@@ -300,5 +296,5 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Real-time notifications */}
       <RealtimeNotifications position="top-right" />
     </div>
-  );
-};
+  )
+}

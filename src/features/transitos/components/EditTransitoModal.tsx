@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import {X} from 'lucide-react';
-import { notificationService} from '../../../services/shared/notification.service';
-import { transitosService} from '../services/transitos.service';
-import type { Transito} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import {X} from 'lucide-react'
+import { notificationService} from '../../../services/shared/notification.service'
+import { transitosService} from '../services/transitos.service'
+import type { Transito} from '../types'
 interface EditTransitoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  transito: Transito | null;
-  onSuccess?: () => void;
+  isOpen: boolean
+  onClose: () => void
+  transito: Transito | null
+  onSuccess?: () => void
 }
 
 export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
@@ -17,71 +16,58 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
   const [formData, setFormData] = useState({
     dua: '',
     destino: ''
-  });
-  const [loading, setLoading] = useState(false);
-   
-
+  })
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (transito) {
       setFormData({
         dua: transito.dua || '',
         destino: transito.destino || ''
-      });
+      })
     }
-  }, [transito]);
-
+  }, [transito])
   // ESC key handler
-   
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
-        onClose();
+        onClose()
       }
-    };
-
+    }
     if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('keydown', handleEscKey)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
-  }, [isOpen, onClose]);
-
+      document.removeEventListener('keydown', handleEscKey)
+    }
+  }, [])
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!transito) return;
-
+    e.preventDefault()
+    if (!transito) return
     try {
-      setLoading(true);
-      
+      setLoading(true)
       // Call the update service
       await transitosService.updateTransito(transito.id, {
         dua: formData.dua,
         destino: formData.destino
-      });
-
+      })
       notificationService.success(
         'Tránsito Actualizado',
         `El tránsito ${formData.dua} ha sido actualizado exitosamente`
-      );
-
-      onSuccess?.();
-      onClose();
+      )
+      onSuccess?.()
+      onClose()
     } catch {
       notificationService.error(
         'Error',
         'No se pudo actualizar el tránsito. Por favor intente nuevamente.'
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  if (!transito || !isOpen) return null;
-
+  }
+  if (!transito || !isOpen) return null
   return (
     <>
       {/* Backdrop */}
@@ -207,5 +193,5 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}

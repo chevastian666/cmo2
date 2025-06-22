@@ -45,26 +45,24 @@ export const POLLING_CONFIG = {
     camiones: '/api/camiones',
     camioneros: '/api/camioneros'
   }
-};
-
+}
 /**
  * Hook para obtener la configuración de polling según el contexto
  */
 export function usePollingConfig(context: 'map' | 'transit' | 'alerts' | 'dashboard' | 'critical') {
-  const interval = POLLING_CONFIG.intervals[context];
-  const options = POLLING_CONFIG.options;
-
+  const interval = POLLING_CONFIG.intervals[context]
+  const options = POLLING_CONFIG.options
   return {
     interval,
     ...options,
     onError: (error: Error) => {
       if (options.logErrors) {
-        console.error(`[Polling ${context}] Error:`, error);
+        console.error(`[Polling ${context}] Error:`, error)
       }
       if (options.showNotifications) {
         // Aquí se podría integrar con el servicio de notificaciones
-        console.warn(`Error actualizando ${context}`);
+        console.warn(`Error actualizando ${context}`)
       }
     }
-  };
+  }
 }

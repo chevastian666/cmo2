@@ -1,12 +1,11 @@
-import React from 'react';
-import {AlertTriangle, TrendingUp, Truck, Clock} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { CongestionAnalysis} from '../types';
-
+import React from 'react'
+import {AlertTriangle, TrendingUp, Truck, Clock} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { CongestionAnalysis} from '../types'
 interface CongestionAlertProps {
-  congestion: CongestionAnalysis;
-  onClick?: () => void;
-  compact?: boolean;
+  congestion: CongestionAnalysis
+  onClick?: () => void
+  compact?: boolean
 }
 
 export const CongestionAlert: React.FC<CongestionAlertProps> = ({ 
@@ -14,14 +13,14 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
 }) => {
   const getSeverityStyles = () => {
     switch (congestion.severidad) {
-      case 'critica':
-        return {
+      case 'critica': {
+  return {
           bg: 'bg-red-900/20',
           border: 'border-red-600',
           icon: 'text-red-500',
           text: 'text-red-400',
           pulse: 'animate-pulse'
-        };
+        }
       case 'alta':
         return {
           bg: 'bg-orange-900/20',
@@ -29,7 +28,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
           icon: 'text-orange-500',
           text: 'text-orange-400',
           pulse: 'animate-pulse-slow'
-        };
+        }
       case 'media':
         return {
           bg: 'bg-yellow-900/20',
@@ -37,7 +36,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
           icon: 'text-yellow-500',
           text: 'text-yellow-400',
           pulse: ''
-        };
+        }
       default:
         return {
           bg: 'bg-blue-900/20',
@@ -45,19 +44,17 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
           icon: 'text-blue-500',
           text: 'text-blue-400',
           pulse: ''
-        };
+        }
     }
-  };
-
-  const styles = getSeverityStyles();
+  }
+  const styles = getSeverityStyles()
   const timeRange = `${congestion.ventanaInicio.toLocaleTimeString('es-UY', { 
     hour: '2-digit', 
     minute: '2-digit' 
   })} - ${congestion.ventanaFin.toLocaleTimeString('es-UY', { 
     hour: '2-digit', 
     minute: '2-digit' 
-  })}`;
-
+  })}`
   if (compact) {
     return (
       <button
@@ -80,7 +77,7 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
           </p>
         </div>
       </button>
-    );
+    )
   }
 
   return (
@@ -140,5 +137,5 @@ export const CongestionAlert: React.FC<CongestionAlertProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

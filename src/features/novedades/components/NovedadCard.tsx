@@ -1,46 +1,42 @@
-import React, { useState } from 'react';
-import {Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react';
-import { Badge, Card, CardContent} from '../../../components/ui';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo, formatDateTime} from '../../../utils/formatters';
-import type { Novedad} from '../types';
-import { TIPOS_NOVEDAD} from '../types';
-
+import React, { useState } from 'react'
+import {Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react'
+import { Badge, Card, CardContent} from '../../../components/ui'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
+import type { Novedad} from '../types'
+import { TIPOS_NOVEDAD} from '../types'
 interface NovedadCardProps {
-  novedad: Novedad;
-  onMarcarResuelta?: (novedad: Novedad) => void;
-  onAgregarSeguimiento?: (novedad: Novedad) => void;
-  onEditar?: (novedad: Novedad) => void;
-  onVerDetalles?: (novedad: Novedad) => void;
-  canEdit?: boolean;
-  isOwner?: boolean;
-  className?: string;
+  novedad: Novedad
+  onMarcarResuelta?: (novedad: Novedad) => void
+  onAgregarSeguimiento?: (novedad: Novedad) => void
+  onEditar?: (novedad: Novedad) => void
+  onVerDetalles?: (novedad: Novedad) => void
+  canEdit?: boolean
+  isOwner?: boolean
+  className?: string
 }
 
 export const NovedadCard: React.FC<NovedadCardProps> = ({
   novedad, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, isOwner = false, className
 }) => {
-  const [showMenu, setShowMenu] = useState(false);
-  const tipoConfig = TIPOS_NOVEDAD[novedad.tipoNovedad];
-  
+  const [showMenu, setShowMenu] = useState(false)
+  const tipoConfig = TIPOS_NOVEDAD[novedad.tipoNovedad]
   // Verificar si es editable (creada en las últimas 24h por el mismo usuario)
   const esEditable = () => {
-    if (!isOwner || !canEdit) return false;
-    const horasDesdeCreacion = (Date.now() - novedad.fechaCreacion.getTime()) / (1000 * 60 * 60);
-    return horasDesdeCreacion <= 24;
-  };
-
+    if (!isOwner || !canEdit) return false
+    const horasDesdeCreacion = (Date.now() - novedad.fechaCreacion.getTime()) / (1000 * 60 * 60)
+    return horasDesdeCreacion <= 24
+  }
   const getEstadoBadge = () => {
     switch (novedad.estado) {
-      case 'resuelta':
-        return <Badge variant="green" className="text-xs">Resuelta</Badge>;
-      case 'seguimiento':
-        return <Badge variant="yellow" className="text-xs">En seguimiento</Badge>;
+      case 'resuelta': {
+  return <Badge variant="green" className="text-xs">Resuelta</Badge>
+      case 'seguimiento': {
+  return <Badge variant="yellow" className="text-xs">En seguimiento</Badge>
       default:
-        return null;
+        return null
     }
-  };
-
+  }
   return (
     <Card 
       variant="elevated" 
@@ -108,8 +104,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                     <div className="py-1">
                       {onVerDetalles && (<button
                           onClick={() => {
-                            onVerDetalles(novedad);
-                            setShowMenu(false);
+                            onVerDetalles(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -120,8 +116,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && novedad.estado !== 'resuelta' && onMarcarResuelta && (<button
                           onClick={() => {
-                            onMarcarResuelta(novedad);
-                            setShowMenu(false);
+                            onMarcarResuelta(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -132,8 +128,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && onAgregarSeguimiento && (<button
                           onClick={() => {
-                            onAgregarSeguimiento(novedad);
-                            setShowMenu(false);
+                            onAgregarSeguimiento(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -146,8 +142,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                           <div className="border-t border-gray-700 my-1" />
                           <button
                             onClick={() => {
-                              onEditar(novedad);
-                              setShowMenu(false);
+                              onEditar(novedad)
+                              setShowMenu(false)
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                           >
@@ -227,5 +223,5 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}

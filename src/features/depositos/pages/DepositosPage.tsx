@@ -1,71 +1,60 @@
-import React, { useState, useMemo } from 'react';
-import {Plus, Search, Filter, Download, Building2} from 'lucide-react';
-import { DepositoTable} from '../components/DepositoTable';
-import {DepositoFilters} from '../components/DepositoFilters';
-import { DepositoDetailModal} from '../components/DepositoDetailModal';
-import { DepositoFormModal} from '../components/DepositoFormModal';
-
-import { exportToCSV} from '../../../utils/export';
-import type { Deposito} from '../types';
-
+import React, { useState, useMemo } from 'react'
+import {Plus, Search, Filter, Download, Building2} from 'lucide-react'
+import { DepositoTable} from '../components/DepositoTable'
+import {DepositoFilters} from '../components/DepositoFilters'
+import { DepositoDetailModal} from '../components/DepositoDetailModal'
+import { DepositoFormModal} from '../components/DepositoFormModal'
+import { exportToCSV} from '../../../utils/export'
+import type { Deposito} from '../types'
 export const DepositosPage: React.FC = () => {
-  
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null);
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null)
   const [filters, setFilters] = useState({
     tipo: '',
     zona: '',
     padre: ''
-  });
-
+  })
   const filteredDepositos = useMemo(() => {
     return depositos.filter(deposito => {
       const matchesSearch = searchTerm === '' || 
         deposito.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         deposito.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deposito.codigo.toString().includes(searchTerm);
-        
-      const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo;
-      const matchesZona = !filters.zona || deposito.zona === filters.zona;
-      const matchesPadre = !filters.padre || deposito.padre === filters.padre;
-      
-      return matchesSearch && matchesTipo && matchesZona && matchesPadre;
-    });
-  }, [depositos, searchTerm, filters]);
-
+        deposito.codigo.toString().includes(searchTerm)
+      const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo
+      const matchesZona = !filters.zona || deposito.zona === filters.zona
+      const matchesPadre = !filters.padre || deposito.padre === filters.padre
+      return matchesSearch && matchesTipo && matchesZona && matchesPadre
+    })
+  }, [depositos, filters])
   const handleExport = () => {
 
-    exportToCSV(_data, 'depositos');
-  };
-
+    exportToCSV(_data, 'depositos')
+  }
   const handleView = (deposito: Deposito) => {
-    setSelectedDeposito(deposito);
-    setShowDetail(true);
-  };
-
+    setSelectedDeposito(deposito)
+    setShowDetail(true)
+  }
   const handleEdit = (deposito: Deposito) => {
-    setEditingDeposito(deposito);
-    setShowForm(true);
-  };
-
+    setEditingDeposito(deposito)
+    setShowForm(true)
+  }
   const handleAdd = () => {
-    setEditingDeposito(null);
-    setShowForm(true);
-  };
-
+    setEditingDeposito(null)
+    setShowForm(true)
+  }
   const handleSave = (_data: Partial<Deposito>) => {
     if (editingDeposito) {
-      updateDeposito(editingDeposito.id, _data);
+      updateDeposito(editingDeposito.id, _data)
     } else {
-      addDeposito(data as Omit<Deposito, 'id'>);
+      addDeposito(data as Omit<Deposito, 'id'>)
     }
-    setShowForm(false);
-  };
-
+    setShowForm(false)
+  }
   return (<div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -162,8 +151,8 @@ export const DepositosPage: React.FC = () => {
           isOpen={showDetail}
           onClose={() => setShowDetail(false)}
           onEdit={() => {
-            setShowDetail(false);
-            handleEdit(selectedDeposito);
+            setShowDetail(false)
+            handleEdit(selectedDeposito)
           }}
         />
       )}
@@ -177,5 +166,5 @@ export const DepositosPage: React.FC = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}

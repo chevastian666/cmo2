@@ -1,13 +1,12 @@
-import React from 'react';
-import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { ConfiguracionTV} from '../types';
-import { PUNTOS_OPERACION_TV} from '../types';
-
+import React from 'react'
+import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { ConfiguracionTV} from '../types'
+import { PUNTOS_OPERACION_TV} from '../types'
 interface ConfiguracionModalProps {
-  configuracion: ConfiguracionTV;
-  onClose: () => void;
-  onChange: (config: Partial<ConfiguracionTV>) => void;
+  configuracion: ConfiguracionTV
+  onClose: () => void
+  onChange: (config: Partial<ConfiguracionTV>) => void
 }
 
 export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
@@ -158,5 +157,5 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

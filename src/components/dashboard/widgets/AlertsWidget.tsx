@@ -3,50 +3,41 @@
  * By Cheva
  */
 
-import React from 'react';
-import {AlertCircle, AlertTriangle, Info, CheckCircle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-import { useAlertasStore} from '../../../store/store';
-import { AnimatedBadge} from '../../animations/AnimatedComponents';
-
+import React from 'react'
+import {AlertCircle, AlertTriangle, Info, CheckCircle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
+import { useAlertasStore} from '../../../store/store'
+import { AnimatedBadge} from '../../animations/AnimatedComponents'
 // Alert interface removed - using data from store directly
 
 export const AlertsWidget: React.FC = () => {
-  const alertas = useAlertasStore(state => state.alertas);
-  
+  const alertas = useAlertasStore(state => state.alertas)
   // Tomar las últimas 5 alertas
-  const recentAlerts = alertas.slice(0, 5);
-
+  const recentAlerts = alertas.slice(0, 5)
   const iconMap = {
     critica: <AlertCircle className="h-4 w-4" />,
     advertencia: <AlertTriangle className="h-4 w-4" />,
     info: <Info className="h-4 w-4" />,
     exito: <CheckCircle className="h-4 w-4" />
-  };
-
+  }
   const colorMap = {
     critica: 'text-red-400 bg-red-500/10',
     advertencia: 'text-yellow-400 bg-yellow-500/10',
     info: 'text-blue-400 bg-blue-500/10',
     exito: 'text-green-400 bg-green-500/10'
-  };
-
+  }
   const getRelativeTime = (fecha: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - fecha.getTime();
-    const minutes = Math.floor(diff / 60000);
-    
-    if (minutes < 1) return 'Ahora';
-    if (minutes < 60) return `Hace ${minutes}m`;
-    
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `Hace ${hours}h`;
-    
-    const days = Math.floor(hours / 24);
-    return `Hace ${days}d`;
-  };
-
+    const now = new Date()
+    const diff = now.getTime() - fecha.getTime()
+    const minutes = Math.floor(diff / 60000)
+    if (minutes < 1) return 'Ahora'
+    if (minutes < 60) return `Hace ${minutes}m`
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return `Hace ${hours}h`
+    const days = Math.floor(hours / 24)
+    return `Hace ${days}d`
+  }
   if (recentAlerts.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -55,7 +46,7 @@ export const AlertsWidget: React.FC = () => {
           <p className="text-gray-500">Sin alertas activas</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (<div className="h-full flex flex-col">
@@ -108,5 +99,5 @@ export const AlertsWidget: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

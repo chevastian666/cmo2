@@ -4,55 +4,46 @@
  * By Cheva
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Responsive, WidthProvider} from 'react-grid-layout';
-import type { Layout, Layouts} from 'react-grid-layout';
-import {Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react';
-import { cn} from '../../utils/utils';
-import { motion, AnimatePresence} from 'framer-motion';
-
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import { Responsive, WidthProvider} from 'react-grid-layout'
+import type { Layout, Layouts} from 'react-grid-layout'
+import {Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react'
+import { cn} from '../../utils/utils'
+import { motion, AnimatePresence} from 'framer-motion'
 // CSS de react-grid-layout
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
-
+import 'react-grid-layout/css/styles.css'
+import 'react-resizable/css/styles.css'
+const ResponsiveGridLayout = WidthProvider(Responsive)
 export interface WidgetConfig {
-  id: string;
-  type: string;
-  title: string;
-  minW?: number;
-  minH?: number;
-  maxW?: number;
-  maxH?: number;
+  id: string
+  type: string
+  title: string
+  minW?: number
+  minH?: number
+  maxW?: number
+  maxH?: number
 }
 
 interface DashboardGridProps {
-  widgets: WidgetConfig[];
-  renderWidget: (widget: WidgetConfig) => React.ReactNode;
-  className?: string;
-  onLayoutChange?: (layouts: Layouts) => void;
+  widgets: WidgetConfig[]
+  renderWidget: (widget: WidgetConfig) => React.ReactNode
+  className?: string
+  onLayoutChange?: (layouts: Layouts) => void
 }
 
-const CURRENT_LAYOUT_VERSION = 2;
-
+const CURRENT_LAYOUT_VERSION = 2
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
   widgets, renderWidget, className = '', onLayoutChange
 }) => {
-  
 
-  const [isDragging, setIsDragging] = useState(false);
-  
+  const [isDragging, setIsDragging] = useState(false)
   // Reset layouts if version is outdated
-   
-
 
     useEffect(() => {
     if (layoutVersion < CURRENT_LAYOUT_VERSION) {
-      resetLayouts();
+      resetLayouts()
     }
-  }, []);
-
+  }, [])
   // Generar layouts por defecto si no existen
   const defaultLayouts = useMemo(() => {
     const generateLayout = (cols: number): Layout[] => {
@@ -60,62 +51,61 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       // Layout personalizado para widgets
       
       return widgets.map((widget) => {
-        let x = 0, y = 0, w = 4, h = 4;
-        
+        let x = 0, y = 0, w = 4, h = 4
         // Posicionamiento específico según el widget - Layout optimizado
         if (widget.id === 'kpi-precintos') {
           // Precintos activos - arriba a la izquierda
-          x = 0; y = 0; w = 3; h = 3;
+          x = 0; y = 0; w = 3; h = 3
         } else if (widget.id === 'kpi-cumplimiento') {
           // Tasa de cumplimiento - arriba centro
-          x = 3; y = 0; w = 3; h = 3;
+          x = 3; y = 0; w = 3; h = 3
         } else if (widget.id === 'kpi-transitos') {
           // KPI tránsitos - arriba centro-derecha
-          x = 6; y = 0; w = 3; h = 3;
+          x = 6; y = 0; w = 3; h = 3
         } else if (widget.id === 'kpi-alertas') {
           // KPI alertas - arriba derecha
-          x = 9; y = 0; w = 3; h = 3;
+          x = 9; y = 0; w = 3; h = 3
         } else if (widget.id === 'pending-precintos') {
           // Pendientes precintar/desprecintar - segunda fila izquierda, prominente
-          x = 0; y = 3; w = 6; h = 4;
+          x = 0; y = 3; w = 6; h = 4
         } else if (widget.id === 'precinto-status') {
           // Estado de precintos - segunda fila derecha
-          x = 6; y = 3; w = 6; h = 4;
+          x = 6; y = 3; w = 6; h = 4
         } else if (widget.id === 'map') {
           // Mapa - tercera fila izquierda, más grande
-          x = 0; y = 7; w = 7; h = 6;
+          x = 0; y = 7; w = 7; h = 6
         } else if (widget.id === 'chart-main') {
           // Gráfico principal - tercera fila derecha
-          x = 7; y = 7; w = 5; h = 6;
+          x = 7; y = 7; w = 5; h = 6
         } else if (widget.id === 'statistics') {
           // Estadísticas - cuarta fila izquierda
-          x = 0; y = 13; w = 4; h = 4;
+          x = 0; y = 13; w = 4; h = 4
         } else if (widget.id === 'activity') {
           // Actividad - cuarta fila centro
-          x = 4; y = 13; w = 4; h = 4;
+          x = 4; y = 13; w = 4; h = 4
         } else if (widget.id === 'transits') {
           // Widget tránsitos - cuarta fila derecha
-          x = 8; y = 13; w = 4; h = 4;
+          x = 8; y = 13; w = 4; h = 4
         } else if (widget.id === 'alerts') {
           // Widget alertas - quinta fila
-          x = 0; y = 17; w = 12; h = 4;
+          x = 0; y = 17; w = 12; h = 4
         }
         
         // Ajustar para diferentes tamaños de pantalla
         if (cols === 10) { // md
-          w = Math.min(w, 5);
-          x = Math.min(x, 5);
+          w = Math.min(w, 5)
+          x = Math.min(x, 5)
         } else if (cols === 6) { // sm
-          w = Math.min(w, 6);
-          x = x % 6;
+          w = Math.min(w, 6)
+          x = x % 6
         } else if (cols === 4) { // xs
-          w = 4;
-          x = 0;
-          y = widgets.indexOf(widget) * 4;
+          w = 4
+          x = 0
+          y = widgets.indexOf(widget) * 4
         } else if (cols === 2) { // xxs
-          w = 2;
-          x = 0;
-          y = widgets.indexOf(widget) * 3;
+          w = 2
+          x = 0
+          y = widgets.indexOf(widget) * 3
         }
         
         return {
@@ -129,40 +119,34 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
           maxW: widget.maxW,
           maxH: widget.maxH,
           static: !editMode
-        };
-      });
-    };
-
+        }
+      })
+    }
     return {
       lg: generateLayout(12),
       md: generateLayout(10),
       sm: generateLayout(6),
       xs: generateLayout(4),
       xxs: generateLayout(2)
-    };
-  }, [widgets, editMode]);
-
-  const currentLayouts = layouts || defaultLayouts;
-
+    }
+  }, [widgets])
+  const currentLayouts = layouts || defaultLayouts
   const handleLayoutChange = useCallback((layout: Layout[], layouts: Layouts) => {
-    setLayouts(layouts);
-    onLayoutChange?.(layouts);
-  }, [setLayouts, onLayoutChange]);
-
+    setLayouts(layouts)
+    onLayoutChange?.(layouts)
+  }, [onLayoutChange])
   const toggleEditMode = () => {
-    setEditMode(!editMode);
-  };
-
+    setEditMode(!editMode)
+  }
   const saveLayouts = () => {
     // Los layouts ya se guardan automáticamente en el store con persist
     // Esta función es para feedback visual
-    const notification = document.createElement('div');
-    notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50';
-    notification.textContent = 'Dashboard guardado';
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 2000);
-  };
-
+    const notification = document.createElement('div')
+    notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50'
+    notification.textContent = 'Dashboard guardado'
+    document.body.appendChild(notification)
+    setTimeout(() => notification.remove(), 2000)
+  }
   return (
     <div className={cn('relative', className)}>
       {/* Controles del Dashboard */}
@@ -278,43 +262,42 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       {/* Estilos personalizados */}
       <style>{`
         .react-grid-item {
-          transition: all 200ms ease;
+          transition: all 200ms ease
         }
         
         .react-grid-item.react-grid-placeholder {
-          background: rgba(59, 130, 246, 0.15);
-          border: 2px dashed rgba(59, 130, 246, 0.5);
-          border-radius: 0.5rem;
+          background: rgba(59, 130, 246, 0.15)
+          border: 2px dashed rgba(59, 130, 246, 0.5)
+          border-radius: 0.5rem
         }
         
         .react-grid-item.resizing {
-          opacity: 0.9;
-          z-index: 10;
+          opacity: 0.9
+          z-index: 10
         }
         
         .react-grid-item.react-draggable-dragging {
-          opacity: 0.8;
-          z-index: 20;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+          opacity: 0.8
+          z-index: 20
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5)
         }
         
         .react-resizable-handle {
-          opacity: 0;
-          transition: opacity 200ms ease;
+          opacity: 0
+          transition: opacity 200ms ease
         }
         
         .react-grid-item:hover .react-resizable-handle {
-          opacity: 1;
+          opacity: 1
         }
         
         .react-resizable-handle::after {
-          border-right-color: #3b82f6 !important;
-          border-bottom-color: #3b82f6 !important;
+          border-right-color: #3b82f6 !important
+          border-bottom-color: #3b82f6 !important
         }
       `}</style>
     </div>
-  );
-};
-
-export default DashboardGrid;
-export type { WidgetConfig };
+  )
+}
+export default DashboardGrid
+export type { WidgetConfig }

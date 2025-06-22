@@ -1,52 +1,49 @@
-import React from 'react';
-import {AlertOctagon, Truck, Clock, Phone} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { TransitoCritico} from '../types';
-
+import React from 'react'
+import {AlertOctagon, Truck, Clock, Phone} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { TransitoCritico} from '../types'
 interface TransitosCriticosProps {
-  criticos: TransitoCritico[];
+  criticos: TransitoCritico[]
 }
 
 export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }) => {
   const getColorNivel = (nivel: TransitoCritico['nivel']) => {
     switch (nivel) {
-      case 'critico':
-        return {
+      case 'critico': {
+  return {
           bg: 'bg-red-900/30',
           border: 'border-red-600',
           text: 'text-red-400',
           badge: 'bg-red-600 text-white'
-        };
+        }
       case 'alto':
         return {
           bg: 'bg-orange-900/30',
           border: 'border-orange-600',
           text: 'text-orange-400',
           badge: 'bg-orange-600 text-white'
-        };
+        }
       case 'medio':
         return {
           bg: 'bg-yellow-900/30',
           border: 'border-yellow-600',
           text: 'text-yellow-400',
           badge: 'bg-yellow-600 text-black'
-        };
+        }
       case 'bajo':
         return {
           bg: 'bg-gray-800',
           border: 'border-gray-700',
           text: 'text-gray-400',
           badge: 'bg-gray-600 text-white'
-        };
+        }
     }
-  };
-
+  }
   const formatearTiempo = (minutos: number): string => {
-    if (minutos < 60) return `${minutos} min`;
-    const horas = Math.floor(minutos / 60);
-    return `${horas}h ${minutos % 60}m`;
-  };
-
+    if (minutos < 60) return `${minutos} min`
+    const horas = Math.floor(minutos / 60)
+    return `${horas}h ${minutos % 60}m`
+  }
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -68,7 +65,7 @@ export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }
           </div>
         ) : (<div className="space-y-4">
             {criticos.map((critico, index) => {
-              const colores = getColorNivel(critico.nivel);
+              const colores = getColorNivel(critico.nivel)
               return (
                 <div
                   key={critico.id}
@@ -141,11 +138,11 @@ export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }
                     </div>
                   )}
                 </div>
-              );
+              )
             })}
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}

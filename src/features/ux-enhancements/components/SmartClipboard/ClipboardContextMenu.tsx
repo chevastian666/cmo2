@@ -1,27 +1,23 @@
-import React from 'react';
-import { motion} from 'framer-motion';
-
-import { DocumentDuplicateIcon, MagnifyingGlassIcon, DocumentTextIcon, ChatBubbleLeftIcon} from '@heroicons/react/24/outline';
-
+import React from 'react'
+import { motion} from 'framer-motion'
+import { DocumentDuplicateIcon, MagnifyingGlassIcon, DocumentTextIcon, ChatBubbleLeftIcon} from '@heroicons/react/24/outline'
 interface ClipboardContextMenuProps {
-  selection: string;
-  position: { x: number; y: number };
-  onClose: () => void;
+  selection: string
+  position: { x: number; y: number }
+  onClose: () => void
 }
 
 export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
   selection, position, onClose
 }) => {
-  
 
   const handleCopy = async (_context: string) => {
     await copyToClipboard(selection, {
       source: 'context-menu',
       context: { action: context }
-    });
-    onClose();
-  };
-
+    })
+    onClose()
+  }
   const menuItems = [
     {
       icon: DocumentDuplicateIcon,
@@ -43,8 +39,7 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
       label: 'Copiar para mensaje',
       action: () => handleCopy('message')
     }
-  ];
-
+  ]
   return (<motion.div
       className="fixed z-50 bg-gray-800 rounded-lg shadow-xl py-2 min-w-[200px]"
       style={{ left: position.x, top: position.y }}
@@ -63,5 +58,5 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
         </button>
       ))}
     </motion.div>
-  );
-};
+  )
+}

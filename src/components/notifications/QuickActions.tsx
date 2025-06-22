@@ -4,21 +4,20 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
+import React, { useState } from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
 import { 
-  CheckCircle, Clock, ArrowUp, X, Eye, MoreHorizontal, Archive} from 'lucide-react';
-import type { Notification} from '../../types/notifications';
-
+  CheckCircle, Clock, ArrowUp, X, Eye, MoreHorizontal, Archive} from 'lucide-react'
+import type { Notification} from '../../types/notifications'
 interface QuickActionsProps {
-  notification?: Notification;
-  onAction: (action: string, payload?: unknown) => void;
-  compact?: boolean;
-  disabled?: boolean;
+  notification?: Notification
+  onAction: (action: string, payload?: unknown) => void
+  compact?: boolean
+  disabled?: boolean
 }
 
 interface SnoozeOption {
-  label: string;
+  label: string
   duration: number; // minutes
 }
 
@@ -29,45 +28,36 @@ const snoozeOptions: SnoozeOption[] = [
   { label: '1 hora', duration: 60 },
   { label: '2 horas', duration: 120 },
   { label: '1 día', duration: 1440 }
-];
-
+]
 export const QuickActions: React.FC<QuickActionsProps> = ({
   notification, onAction, compact = false, disabled = false
 }) => {
-  const [showSnoozeOptions, setShowSnoozeOptions] = useState(false);
-  const [showMoreActions, setShowMoreActions] = useState(false);
-
+  const [showSnoozeOptions, setShowSnoozeOptions] = useState(false)
+  const [showMoreActions, setShowMoreActions] = useState(false)
   const handleAcknowledge = () => {
-    onAction('acknowledge');
-  };
-
+    onAction('acknowledge')
+  }
   const handleSnooze = (duration: number) => {
-    const snoozedUntil = new Date(Date.now() + duration * 60 * 1000);
-    onAction('snooze', { snoozedUntil, duration });
-    setShowSnoozeOptions(false);
-  };
-
+    const snoozedUntil = new Date(Date.now() + duration * 60 * 1000)
+    onAction('snooze', { snoozedUntil, duration })
+    setShowSnoozeOptions(false)
+  }
   const handleEscalate = () => {
-    onAction('escalate');
-  };
-
+    onAction('escalate')
+  }
   const handleDismiss = () => {
-    onAction('dismiss');
-  };
-
+    onAction('dismiss')
+  }
   const handleMarkRead = () => {
-    onAction('mark-read');
-  };
-
+    onAction('mark-read')
+  }
   const handleArchive = () => {
-    onAction('archive');
-  };
-
-  const canAcknowledge = !notification || notification.status === 'unread' || notification.status === 'read';
-  const canSnooze = !notification || (notification.status !== 'acknowledged' && notification.status !== 'dismissed');
-  const canEscalate = !notification || notification.priority !== 'low';
-  const isUnread = notification?.status === 'unread';
-
+    onAction('archive')
+  }
+  const canAcknowledge = !notification || notification.status === 'unread' || notification.status === 'read'
+  const canSnooze = !notification || (notification.status !== 'acknowledged' && notification.status !== 'dismissed')
+  const canEscalate = !notification || notification.priority !== 'low'
+  const isUnread = notification?.status === 'unread'
   if (compact) {
     return (
       <div className="flex items-center space-x-1">
@@ -174,7 +164,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           </AnimatePresence>
         </div>
       </div>
-    );
+    )
   }
 
   // Full action buttons for expanded view
@@ -272,5 +262,5 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         <span>Descartar</span>
       </button>
     </div>
-  );
-};
+  )
+}

@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { ColumnDef} from '@tanstack/react-table';
-import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, Wifi, MapPin, AlertTriangle, CheckCircle} from 'lucide-react';
-import { Button} from '@/components/ui/button';
-import { Badge} from '@/components/ui/badge';
-import { Checkbox} from '@/components/ui/checkbox';
+import React, { useState } from 'react'
+import { ColumnDef} from '@tanstack/react-table'
+import {MoreHorizontal, ArrowUpDown, Eye, Edit, Trash2, Link2, Battery, Wifi, MapPin, AlertTriangle, CheckCircle} from 'lucide-react'
+import { Button} from '@/components/ui/button'
+import { Badge} from '@/components/ui/badge'
+import { Checkbox} from '@/components/ui/checkbox'
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
 import {
-  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
-import { DataTableV2} from '@/components/ui/data-table/DataTableV2';
-import { cn} from '@/lib/utils';
-import type { Precinto} from '../../../types';
-
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover'
+import { DataTableV2} from '@/components/ui/data-table/DataTableV2'
+import { cn} from '@/lib/utils'
+import type { Precinto} from '../../../types'
 // Mock data for demonstration
 const mockPrecintos: Precinto[] = [
   {
@@ -71,28 +70,25 @@ const mockPrecintos: Precinto[] = [
       estado: 'DETENIDO'
     }
   }
-];
-
-import { PrecintosTableSkeleton} from './PrecintosTableSkeleton';
-
+]
+import { PrecintosTableSkeleton} from './PrecintosTableSkeleton'
 interface PrecintosTableProps {
-  loading?: boolean;
+  loading?: boolean
 }
 
 export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = false }) => {
-  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null);
-
+  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null)
   const columns: ColumnDef<Precinto>[] = [
     {
       id: 'select',
-      header: ({ table }) => (
+      header: (table ) => (
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
       ),
-      cell: ({ row }) => (
+      cell: (row ) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -112,35 +108,34 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
             Código
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        );
+        )
       },
       cell: ({ row }) => {
-        const precinto = row.original;
+        const precinto = row.original
         return (
           <div className="flex items-center gap-2">
             <Link2 className="h-4 w-4 text-blue-500" />
             <span className="font-medium">{precinto.codigo}</span>
           </div>
-        );
+        )
       },
     },
     {
       accessorKey: 'estado',
       header: 'Estado',
       cell: ({ row }) => {
-        const estado = row.getValue('estado') as string;
+        const estado = row.getValue('estado') as string
         const variant = 
           estado === 'ACTIVO' ? 'success' :
           estado === 'ALERTA' ? 'destructive' :
-          'secondary';
-        
+          'secondary'
         return (
           <Badge variant={variant as unknown}>
             {estado === 'ACTIVO' && <CheckCircle className="mr-1 h-3 w-3" />}
             {estado === 'ALERTA' && <AlertTriangle className="mr-1 h-3 w-3" />}
             {estado}
           </Badge>
-        );
+        )
       },
     },
     {
@@ -153,10 +148,10 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
             Batería
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        );
+        )
       },
       cell: ({ row }) => {
-        const bateria = row.getValue('bateria') as number;
+        const bateria = row.getValue('bateria') as number
         return (
           <Popover>
             <PopoverTrigger asChild>
@@ -210,31 +205,30 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
               </div>
             </PopoverContent>
           </Popover>
-        );
+        )
       },
     },
     {
       accessorKey: 'señal',
       header: 'Señal',
       cell: ({ row }) => {
-        const señal = row.getValue('señal') as string;
+        const señal = row.getValue('señal') as string
         const color = 
           señal === 'BUENA' ? 'text-green-500' :
-          señal === 'REGULAR' ? 'text-yellow-500' : 'text-red-500';
-        
+          señal === 'REGULAR' ? 'text-yellow-500' : 'text-red-500'
         return (
           <div className="flex items-center gap-2">
             <Wifi className={cn("h-4 w-4", color)} />
             <span className="text-sm">{señal}</span>
           </div>
-        );
+        )
       },
     },
     {
       accessorKey: 'ubicacion',
       header: 'Ubicación',
       cell: ({ row }) => {
-        const ubicacion = row.original.ubicacion;
+        const ubicacion = row.original.ubicacion
         return ubicacion ? (
           <Popover>
             <PopoverTrigger asChild>
@@ -274,14 +268,14 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
           </Popover>
         ) : (
           <span className="text-gray-500">Sin ubicación</span>
-        );
+        )
       },
     },
     {
       accessorKey: 'viaje',
       header: 'Viaje',
       cell: ({ row }) => {
-        const viaje = row.original.viaje;
+        const viaje = row.original.viaje
         return viaje ? (
           <div className="text-sm">
             <div className="font-medium">{viaje.numeroViaje}</div>
@@ -291,7 +285,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
           </div>
         ) : (
           <span className="text-gray-500 text-sm">Sin viaje</span>
-        );
+        )
       },
     },
     {
@@ -304,34 +298,32 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
             Última actualización
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        );
+        )
       },
       cell: ({ row }) => {
-        const fecha = row.getValue('ultimaActualizacion') as Date;
-        const ahora = new Date();
-        const diff = ahora.getTime() - fecha.getTime();
-        const minutos = Math.floor(diff / 1000 / 60);
-        
-        let tiempo = '';
+        const fecha = row.getValue('ultimaActualizacion') as Date
+        const ahora = new Date()
+        const diff = ahora.getTime() - fecha.getTime()
+        const minutos = Math.floor(diff / 1000 / 60)
+        let tiempo = ''
         if (minutos < 60) {
-          tiempo = `Hace ${minutos} min`;
+          tiempo = `Hace ${minutos} min`
         } else if (minutos < 1440) {
-          tiempo = `Hace ${Math.floor(minutos / 60)} horas`;
+          tiempo = `Hace ${Math.floor(minutos / 60)} horas`
         } else {
-          tiempo = `Hace ${Math.floor(minutos / 1440)} días`;
+          tiempo = `Hace ${Math.floor(minutos / 1440)} días`
         }
         
         return (
           <span className="text-sm text-gray-400">{tiempo}</span>
-        );
+        )
       },
     },
     {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const precinto = row.original;
-
+        const precinto = row.original
         return (<DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -356,13 +348,12 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        );
+        )
       },
     },
-  ];
-
+  ]
   if (loading) {
-    return <PrecintosTableSkeleton />;
+    return <PrecintosTableSkeleton />
   }
 
   return (
@@ -383,5 +374,5 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         pageSize={10}
       />
     </div>
-  );
-};
+  )
+}

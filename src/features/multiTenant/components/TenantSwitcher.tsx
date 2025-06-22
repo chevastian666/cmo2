@@ -4,22 +4,19 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import {Building2, Check, ChevronDown, Plus} from 'lucide-react';
+import React, { useState } from 'react'
+import {Building2, Check, ChevronDown, Plus} from 'lucide-react'
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu';
-import { Button} from '@/components/ui/button';
-import { Badge} from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-
-import { cn} from '@/utils/utils';
-
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
+import { Button} from '@/components/ui/button'
+import { Badge} from '@/components/ui/badge'
+import { Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
+import { cn} from '@/utils/utils'
 export const TenantSwitcher: React.FC = () => {
-  
-  const [open, setOpen] = useState(false);
 
+  const [open, setOpen] = useState(false)
   if (!currentTenant) {
-    return null;
+    return null
   }
 
   const getStatusBadge = (status: string) => {
@@ -28,23 +25,20 @@ export const TenantSwitcher: React.FC = () => {
       trial: 'secondary',
       suspended: 'destructive',
       inactive: 'outline'
-    };
-    
+    }
     return (
       <Badge variant={variants[status as keyof typeof variants] || 'default'} className="ml-2">
         {status}
       </Badge>
-    );
-  };
-
+    )
+  }
   const getPlanBadge = (planName: string) => {
     const colors = {
       starter: 'bg-gray-500',
       professional: 'bg-blue-500',
       enterprise: 'bg-purple-500',
       custom: 'bg-orange-500'
-    };
-
+    }
     return (
       <span className={cn(
         'px-2 py-0.5 text-xs rounded-full text-white',
@@ -52,9 +46,8 @@ export const TenantSwitcher: React.FC = () => {
       )}>
         {planName}
       </span>
-    );
-  };
-
+    )
+  }
   if (!canSwitchTenants) {
     return (
       <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-800/50 border border-gray-700">
@@ -69,7 +62,7 @@ export const TenantSwitcher: React.FC = () => {
           <p className="text-xs text-gray-400">{getPlanBadge(currentTenant.plan.name)}</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -147,5 +140,5 @@ export const TenantSwitcher: React.FC = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}

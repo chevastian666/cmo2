@@ -4,21 +4,16 @@
  * By Cheva
  */
 
-import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import { Badge} from '@/components/ui/badge';
-import { Activity, Layers, Zap, Target} from 'lucide-react';
-import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
-
-import type { TreemapData, TreemapNode} from '@/components/charts/treemap/types';
-
+import React, { useMemo, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import { Badge} from '@/components/ui/badge'
+import { Activity, Layers, Zap, Target} from 'lucide-react'
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
+import type { TreemapData, TreemapNode} from '@/components/charts/treemap/types'
 export const OperationalTreemap: React.FC = () => {
-  
-  
-  
-  const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview');
 
+  const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview')
   const operationalData = useMemo((): TreemapData => {
     if (viewMode === 'overview') {
       // General operational overview
@@ -41,8 +36,7 @@ export const OperationalTreemap: React.FC = () => {
             color: '#ef4444'
           }
         ]
-      };
-
+      }
       const transitosNode: TreemapNode = {
         name: 'Tránsitos',
         children: [
@@ -67,8 +61,7 @@ export const OperationalTreemap: React.FC = () => {
             color: '#ef4444'
           }
         ]
-      };
-
+      }
       const alertasNode: TreemapNode = {
         name: 'Alertas',
         children: [
@@ -93,30 +86,27 @@ export const OperationalTreemap: React.FC = () => {
             color: '#3b82f6'
           }
         ]
-      };
-
+      }
       return {
         name: 'Operaciones CMO',
         children: [precintosNode, transitosNode, alertasNode]
-      };
+      }
     } else if (viewMode === 'efficiency') {
       // Efficiency analysis
-      const routeEfficiency = new Map<string, { completed: number; total: number }>();
-      
+      const routeEfficiency = new Map<string, { completed: number; total: number }>()
       transitos.forEach(t => {
-        const route = `${t.origen} → ${t.destino}`;
+        const route = `${t.origen} → ${t.destino}`
         if (!routeEfficiency.has(route)) {
-          routeEfficiency.set(route, { completed: 0, total: 0 });
+          routeEfficiency.set(route, { completed: 0, total: 0 })
         }
-        const stats = routeEfficiency.get(route)!;
-        stats.total++;
+        const stats = routeEfficiency.get(route)!
+        stats.total++
         if (t.estado === 'completado') {
-          stats.completed++;
+          stats.completed++
         }
-      });
-
+      })
       const children: TreemapNode[] = Array.from(routeEfficiency.entries()).map(([route, stats]) => {
-        const efficiency = (stats.completed / stats.total) * 100;
+        const efficiency = (stats.completed / stats.total) * 100
         return {
           name: route,
           value: stats.total,
@@ -127,29 +117,26 @@ export const OperationalTreemap: React.FC = () => {
               color: efficiency > 80 ? '#10b981' : efficiency > 60 ? '#f59e0b' : '#ef4444'
             }
           ]
-        };
-      });
-
+        }
+      })
       return {
         name: 'Eficiencia por Ruta',
         children
-      };
+      }
     } else {
       // Risk analysis
-      const riskMap = new Map<string, number>();
-      
+      const riskMap = new Map<string, number>()
       // High risk: routes with many alerts
       alertas.forEach(alert => {
         if (alert.transitoId) {
-          const transito = transitos.find(t => t.id === alert.transitoId);
+          const transito = transitos.find(t => t.id === alert.transitoId)
           if (transito) {
-            const route = `${transito.origen} → ${transito.destino}`;
+            const route = `${transito.origen} → ${transito.destino}`
             riskMap.set(route, (riskMap.get(route) || 0) + 
-              (alert.tipo === 'critica' ? 10 : alert.tipo === 'alta' ? 5 : 1));
+              (alert.tipo === 'critica' ? 10 : alert.tipo === 'alta' ? 5 : 1))
           }
         }
-      });
-
+      })
       const children: TreemapNode[] = Array.from(riskMap.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 20)
@@ -157,27 +144,23 @@ export const OperationalTreemap: React.FC = () => {
           name: route,
           value: riskScore,
           color: riskScore > 20 ? '#dc2626' : riskScore > 10 ? '#ef4444' : '#f59e0b'
-        }));
-
+        }))
       return {
         name: 'Análisis de Riesgo',
         children: children.length > 0 ? children : [{ name: 'Sin riesgos detectados', value: 1, color: '#10b981' }]
-      };
+      }
     }
-  }, [precintos, transitos, alertas, viewMode]);
-
+  }, [precintos, transitos, alertas])
   const stats = useMemo(() => {
-    const totalOperations = precintos.length + transitos.length;
+    const totalOperations = precintos.length + transitos.length
     const activeOperations = precintos.filter(p => p.estado === 'en_transito').length + 
-                           transitos.filter(t => t.estado === 'en_curso').length;
-    const criticalAlerts = alertas.filter(a => a.tipo === 'critica' && a.estado === 'activa').length;
+                           transitos.filter(t => t.estado === 'en_curso').length
+    const criticalAlerts = alertas.filter(a => a.tipo === 'critica' && a.estado === 'activa').length
     const efficiency = transitos.length > 0 
       ? (transitos.filter(t => t.estado === 'completado').length / transitos.length) * 100 
-      : 0;
-
-    return { totalOperations, activeOperations, criticalAlerts, efficiency };
-  }, [precintos, transitos, alertas]);
-
+      : 0
+    return { totalOperations, activeOperations, criticalAlerts, efficiency }
+  }, [precintos, transitos, alertas])
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -317,5 +300,5 @@ export const OperationalTreemap: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

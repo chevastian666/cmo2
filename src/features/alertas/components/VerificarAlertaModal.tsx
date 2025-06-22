@@ -3,100 +3,91 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { X, AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, MessageSquare} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo} from '../../../utils/formatters';
-import { notificationService} from '../../../services/shared/notification.service';
-import type { Alerta} from '../../../types';
-
+import React, { useState, useEffect } from 'react'
+import { X, AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Thermometer, Package, MessageSquare} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo} from '../../../utils/formatters'
+import { notificationService} from '../../../services/shared/notification.service'
+import type { Alerta} from '../../../types'
 interface VerificarAlertaModalProps {
-  alerta: Alerta;
-  isOpen: boolean;
-  onClose: () => void;
-  onVerificar: (alertaId: string, comentario?: string) => Promise<void>;
+  alerta: Alerta
+  isOpen: boolean
+  onClose: () => void
+  onVerificar: (alertaId: string, comentario?: string) => Promise<void>
 }
 
 export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
   alerta, isOpen, onClose, onVerificar
 }) => {
-  const [verificando, setVerificando] = useState(false);
-  const [comentario, setComentario] = useState('');
-  const [showComentario, setShowComentario] = useState(false);
-
+  const [verificando, setVerificando] = useState(false)
+  const [comentario, setComentario] = useState('')
+  const [showComentario, setShowComentario] = useState(false)
   // Handle ESC key to close modal
-   
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
-        onClose();
+        onClose()
       }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      return () => {
-        document.removeEventListener('keydown', handleEsc);
-      };
     }
-  }, [isOpen, onClose]);
-
+    if (isOpen) {
+      document.addEventListener('keydown', handleEsc)
+      return () => {
+        document.removeEventListener('keydown', handleEsc)
+      }
+    }
+  }, [])
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'violacion':
-        return <Shield className="h-6 w-6" />;
-      case 'bateria_baja':
-        return <Battery className="h-6 w-6" />;
-      case 'fuera_de_ruta':
-        return <MapPin className="h-6 w-6" />;
-      case 'temperatura':
-        return <Thermometer className="h-6 w-6" />;
-      case 'sin_signal':
-        return <Radio className="h-6 w-6" />;
-      case 'intrusion':
-        return <Package className="h-6 w-6" />;
+      case 'violacion': {
+  return <Shield className="h-6 w-6" />
+      case 'bateria_baja': {
+  return <Battery className="h-6 w-6" />
+      case 'fuera_de_ruta': {
+  return <MapPin className="h-6 w-6" />
+      case 'temperatura': {
+  return <Thermometer className="h-6 w-6" />
+      case 'sin_signal': {
+  return <Radio className="h-6 w-6" />
+      case 'intrusion': {
+  return <Package className="h-6 w-6" />
       default:
-        return <AlertTriangle className="h-6 w-6" />;
+        return <AlertTriangle className="h-6 w-6" />
     }
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20'
       default:
-        return 'text-gray-400 bg-gray-900/20';
+        return 'text-gray-400 bg-gray-900/20'
     }
-  };
-
+  }
   const handleVerificar = async () => {
     if (alerta.atendida) {
-      notificationService.info('Esta alerta ya fue verificada');
-      return;
+      notificationService.info('Esta alerta ya fue verificada')
+      return
     }
 
-    setVerificando(true);
+    setVerificando(true)
     try {
-      await onVerificar(alerta.id, comentario || undefined);
-      notificationService.success(`Alerta ${alerta.codigoPrecinto} verificada correctamente`);
-      onClose();
+      await onVerificar(alerta.id, comentario || undefined)
+      notificationService.success(`Alerta ${alerta.codigoPrecinto} verificada correctamente`)
+      onClose()
     } catch {
-      notificationService.error('Error al verificar la alerta');
-      console.error('Error verifying alert:', _error);
+      notificationService.error('Error al verificar la alerta')
+      console.error('Error verifying alert:', _error)
     } finally {
-      setVerificando(false);
+      setVerificando(false)
     }
-  };
-
-  if (!isOpen) return null;
-
+  }
+  if (!isOpen) return null
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -261,5 +252,5 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,12 +1,11 @@
  
-import React from 'react';
-import { cn} from '@/utils/utils';
-
+import React from 'react'
+import { cn} from '@/utils/utils'
 interface AvatarProps {
-  className?: string;
-  children?: React.ReactNode;
-  src?: string;
-  alt?: string;
+  className?: string
+  children?: React.ReactNode
+  src?: string
+  alt?: string
 }
 
 export const Avatar: React.FC<AvatarProps> = ({ className, children, src, alt }) => {
@@ -18,12 +17,11 @@ export const Avatar: React.FC<AvatarProps> = ({ className, children, src, alt })
         children
       )}
     </div>
-  );
-};
-
+  )
+}
 interface AvatarFallbackProps {
-  className?: string;
-  children?: React.ReactNode;
+  className?: string
+  children?: React.ReactNode
 }
 
 export const AvatarFallback: React.FC<AvatarFallbackProps> = ({ className, children }) => {
@@ -31,15 +29,14 @@ export const AvatarFallback: React.FC<AvatarFallbackProps> = ({ className, child
     <div className={cn("flex h-full w-full items-center justify-center bg-gray-700", className)}>
       {children}
     </div>
-  );
-};
-
+  )
+}
 interface AvatarImageProps {
-  src?: string;
-  alt?: string;
-  className?: string;
+  src?: string
+  alt?: string
+  className?: string
 }
 
 export const AvatarImage: React.FC<AvatarImageProps> = ({ src, alt, className }) => {
-  return <img src={src} alt={alt} className={cn("h-full w-full object-cover", className)} />;
-};
+  return <img src={src} alt={alt} className={cn("h-full w-full object-cover", className)} />
+}

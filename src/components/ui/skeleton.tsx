@@ -1,41 +1,35 @@
  
-import React from 'react';
-import { cn} from '@/utils/utils';
-
+import React from 'react'
+import { cn} from '@/utils/utils'
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'text' | 'circular' | 'rectangular' | 'rounded';
-  animation?: 'pulse' | 'wave' | 'none';
-  width?: string | number;
-  height?: string | number;
+  variant?: 'text' | 'circular' | 'rectangular' | 'rounded'
+  animation?: 'pulse' | 'wave' | 'none'
+  width?: string | number
+  height?: string | number
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   className, variant = 'text', animation = 'pulse', width, height, style, ...props
 }) => {
-  const baseClasses = 'bg-gray-800 relative overflow-hidden';
-  
+  const baseClasses = 'bg-gray-800 relative overflow-hidden'
   const variantClasses = {
     text: 'rounded',
     circular: 'rounded-full',
     rectangular: 'rounded-none',
     rounded: 'rounded-lg'
-  };
-
+  }
   const animationClasses = {
     pulse: 'animate-pulse',
     wave: 'skeleton-wave',
     none: ''
-  };
-
+  }
   const defaultSizes = {
     text: { height: '1em', width: '100%' },
     circular: { height: '40px', width: '40px' },
     rectangular: { height: '100px', width: '100%' },
     rounded: { height: '100px', width: '100%' }
-  };
-
-  const size = defaultSizes[variant];
-
+  }
+  const size = defaultSizes[variant]
   return (
     <div
       className={cn(
@@ -55,9 +49,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         <div className="skeleton-wave-shimmer absolute inset-0" />
       )}
     </div>
-  );
-};
-
+  )
+}
 // Componentes específicos de skeleton
 export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
   lines = 1, className 
@@ -72,9 +65,8 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
         />
       ))}
     </div>
-  );
-};
-
+  )
+}
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={cn("bg-gray-900 border border-gray-800 rounded-lg p-4 space-y-3", className)}>
@@ -88,9 +80,8 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
         <Skeleton variant="rounded" width="80px" height="24px" />
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const SkeletonTable: React.FC<{ rows?: number; columns?: number; className?: string }> = ({ 
   rows = 5, columns = 4, className 
 }) => {
@@ -119,9 +110,8 @@ export const SkeletonTable: React.FC<{ rows?: number; columns?: number; classNam
         </div>
       ))}
     </div>
-  );
-};
-
+  )
+}
 export const SkeletonList: React.FC<{ items?: number; className?: string }> = ({ 
   items = 3, className 
 }) => {
@@ -138,9 +128,8 @@ export const SkeletonList: React.FC<{ items?: number; className?: string }> = ({
         </div>
       ))}
     </div>
-  );
-};
-
+  )
+}
 export const SkeletonDashboard: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={cn("space-y-6", className)}>
@@ -171,5 +160,5 @@ export const SkeletonDashboard: React.FC<{ className?: string }> = ({ className 
         <SkeletonTable rows={5} columns={5} />
       </div>
     </div>
-  );
-};
+  )
+}

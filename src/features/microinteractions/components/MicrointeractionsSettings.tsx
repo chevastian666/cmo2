@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import {Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { asmrSoundService, useASMRSound} from '../services/soundService';
-
+import React, { useState, useEffect } from 'react'
+import {Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { asmrSoundService, useASMRSound} from '../services/soundService'
 interface MicrointeractionsConfig {
-  animationsEnabled: boolean;
-  animationIntensity: 'low' | 'medium' | 'high';
-  particlesEnabled: boolean;
-  soundsEnabled: boolean;
-  soundVolume: number;
-  reducedMotion: boolean;
+  animationsEnabled: boolean
+  animationIntensity: 'low' | 'medium' | 'high'
+  particlesEnabled: boolean
+  soundsEnabled: boolean
+  soundVolume: number
+  reducedMotion: boolean
 }
 
 export const MicrointeractionsSettings: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { config: soundConfig } = useASMRSound();
-  
+  const [isOpen, setIsOpen] = useState(false)
+  const { config: soundConfig } = useASMRSound()
   const [_config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
     animationIntensity: 'medium',
@@ -23,55 +21,47 @@ export const MicrointeractionsSettings: React.FC = () => {
     soundsEnabled: soundConfig.enabled,
     soundVolume: soundConfig.volume,
     reducedMotion: false
-  });
-
+  })
   // Load config from localStorage
-   
 
   useEffect(() => {
-    const saved = localStorage.getItem('microinteractions-config');
+    const saved = localStorage.getItem('microinteractions-config')
     if (saved) {
-      const parsed = JSON.parse(saved);
-      setConfig(prev => ({ ...prev, ...parsed }));
+      const parsed = JSON.parse(saved)
+      setConfig(prev => ({ ...prev, ...parsed }))
     }
 
     // Check system preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setConfig(prev => ({ ...prev, reducedMotion: mediaQuery.matches }));
-
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setConfig(prev => ({ ...prev, reducedMotion: mediaQuery.matches }))
     const handleChange = (e: MediaQueryListEvent) => {
-      setConfig(prev => ({ ...prev, reducedMotion: e.matches }));
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
+      setConfig(prev => ({ ...prev, reducedMotion: e.matches }))
+    }
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
   // Save config changes
   const updateConfig = (updates: Partial<MicrointeractionsConfig>) => {
-    const newConfig = { ..._config, ...updates };
-    setConfig(newConfig);
-    localStorage.setItem('microinteractions-config', JSON.stringify(newConfig));
-
+    const newConfig = { ..._config, ...updates }
+    setConfig(newConfig)
+    localStorage.setItem('microinteractions-config', JSON.stringify(newConfig))
     // Update sound service
     if ('soundsEnabled' in updates) {
-      asmrSoundService.setEnabled(updates.soundsEnabled!);
+      asmrSoundService.setEnabled(updates.soundsEnabled!)
     }
     if ('soundVolume' in updates) {
-      asmrSoundService.setVolume(updates.soundVolume!);
+      asmrSoundService.setVolume(updates.soundVolume!)
     }
-  };
-
+  }
   const handleToggle = () => {
     if (isOpen) {
-      playClose();
-      setIsOpen(false);
+      playClose()
+      setIsOpen(false)
     } else {
-      playOpen();
-      setIsOpen(true);
+      playOpen()
+      setIsOpen(true)
     }
-  };
-
+  }
   return (<>
       {/* Settings Button */}
       <button
@@ -205,59 +195,59 @@ export const MicrointeractionsSettings: React.FC = () => {
 
       <style>{`
         .toggle-checkbox {
-          width: 40px;
-          height: 20px;
-          appearance: none;
-          background-color: #374151;
-          border-radius: 10px;
-          position: relative;
-          cursor: pointer;
-          transition: background-color 0.3s;
+          width: 40px
+          height: 20px
+          appearance: none
+          background-color: #374151
+          border-radius: 10px
+          position: relative
+          cursor: pointer
+          transition: background-color 0.3s
         }
 
         .toggle-checkbox:checked {
-          background-color: #8b5cf6;
+          background-color: #8b5cf6
         }
 
         .toggle-checkbox:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
+          opacity: 0.5
+          cursor: not-allowed
         }
 
         .toggle-checkbox::after {
-          content: '';
-          position: absolute;
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background-color: white;
-          top: 2px;
-          left: 2px;
-          transition: transform 0.3s;
+          content: ''
+          position: absolute
+          width: 16px
+          height: 16px
+          border-radius: 50%
+          background-color: white
+          top: 2px
+          left: 2px
+          transition: transform 0.3s
         }
 
         .toggle-checkbox:checked::after {
-          transform: translateX(20px);
+          transform: translateX(20px)
         }
 
         .slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 12px;
-          height: 12px;
-          background: #8b5cf6;
-          border-radius: 50%;
-          cursor: pointer;
+          appearance: none
+          width: 12px
+          height: 12px
+          background: #8b5cf6
+          border-radius: 50%
+          cursor: pointer
         }
 
         .slider::-moz-range-thumb {
-          width: 12px;
-          height: 12px;
-          background: #8b5cf6;
-          border-radius: 50%;
-          cursor: pointer;
-          border: none;
+          width: 12px
+          height: 12px
+          background: #8b5cf6
+          border-radius: 50%
+          cursor: pointer
+          border: none
         }
       `}</style>
     </>
-  );
-};
+  )
+}

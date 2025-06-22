@@ -1,11 +1,11 @@
 export interface ZonaDescanso {
-  ubicacion: string;
-  maps: string;
+  ubicacion: string
+  maps: string
 }
 
 export interface RutaZonas {
-  ruta: string;
-  zonas: ZonaDescanso[];
+  ruta: string
+  zonas: ZonaDescanso[]
 }
 
 export const zonasDescansoData: RutaZonas[] = [
@@ -163,4 +163,4 @@ export const zonasDescansoData: RutaZonas[] = [
       }
     ]
   }
-];
+]

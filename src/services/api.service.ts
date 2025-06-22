@@ -1,71 +1,68 @@
-import axios from 'axios';
-import type { Precinto, EventoPrecinto, EstadisticasMonitoreo, Alerta, PuntoControl, TransitoPendiente} from '../types/monitoring';
-import { API_CONFIG} from '../config';
-
-const API_BASE_URL = API_CONFIG.BASE_URL;
-
+import axios from 'axios'
+import type { Precinto, EventoPrecinto, EstadisticasMonitoreo, Alerta, PuntoControl, TransitoPendiente} from '../types/monitoring'
+import { API_CONFIG} from '../config'
+const API_BASE_URL = API_CONFIG.BASE_URL
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
-});
-
+})
 export const monitoringApi = {
   // Precintos
   getPrecintos: async (filtros?: { estado?: string; tipo?: string }): Promise<Precinto[]> => {
     
-    return data;
+    return data
   },
 
   getPrecinto: async (id: string): Promise<Precinto> => {
-    
-    return data;
+
+    return data
   },
 
   // Eventos
   getEventos: async (precintoId?: string, limit = 50): Promise<EventoPrecinto[]> => {
-    
-    return data;
+
+    return data
   },
 
   // Estadísticas
   getEstadisticas: async (): Promise<EstadisticasMonitoreo> => {
-    
-    return data;
+
+    return data
   },
 
   // Alertas
   getAlertas: async (activas = true): Promise<Alerta[]> => {
-    
-    return data;
+
+    return data
   },
 
   atenderAlerta: async (id: string): Promise<void> => {
-    await api.patch(`/alertas/${id}/atender`);
+    await api.patch(`/alertas/${id}/atender`)
   },
 
   // Puntos de Control
   getPuntosControl: async (): Promise<PuntoControl[]> => {
-    
-    return data;
+
+    return data
   },
 
   // Históricos
   getHistoricoLecturas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number }>> => {
     
-    return data;
+    return data
   },
 
   getHistoricoAlertas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
     
-    return data;
+    return data
   },
 
   // Tránsitos
   getTransitosPendientes: async (): Promise<TransitoPendiente[]> => {
-    
-    return data;
+
+    return data
   },
-};
+}

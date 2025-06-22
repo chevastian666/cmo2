@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Plus, User, Phone, Calendar, Flag} from 'lucide-react';
-import { Card, CardContent, EmptyState, LoadingState} from '../../../components/ui';
-
-import { FichaCamionero} from './FichaCamionero';
-import { FormularioCamionero} from './FormularioCamionero';
-
-import type { FiltrosCamionero, Nacionalidad} from '../types';
-import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import { Search, Plus, User, Phone, Calendar, Flag} from 'lucide-react'
+import { Card, CardContent, EmptyState, LoadingState} from '../../../components/ui'
+import { FichaCamionero} from './FichaCamionero'
+import { FormularioCamionero} from './FormularioCamionero'
+import type { FiltrosCamionero, Nacionalidad} from '../types'
+import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT} from '../types'
 export const ListaCamioneros: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamionero>(FILTROS_CAMIONERO_DEFAULT);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(null);
-   
-
+  const [filtros, setFiltros] = useState<FiltrosCamionero>(FILTROS_CAMIONERO_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(null)
   useEffect(() => {
-    fetchCamioneros(filtros);
-  }, [fetchCamioneros, filtros]);
-
+    fetchCamioneros(filtros)
+  }, [filtros])
   const handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamionero>) => {
-    setFiltros(prev => ({ ...prev, ...nuevosFiltros }));
-  };
-
+    setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
+  }
   if (camioneroSeleccionado) {
     return (<FichaCamionero 
         documento={camioneroSeleccionado} 
         onClose={() => setCamioneroSeleccionado(null)} 
       />
-    );
+    )
   }
 
   return (<div className="space-y-6">
@@ -186,5 +179,5 @@ export const ListaCamioneros: React.FC = () => {
       {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(false)} />
       )}
     </div>
-  );
-};
+  )
+}

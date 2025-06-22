@@ -3,153 +3,148 @@
  * By Cheva
  */
 
-import { sharedApiService} from '../shared/sharedApi.service';
-import { TROKOR_CONFIG, buildTrokorUrl, getTrokorHeaders} from '../../config/trokor.config';
+import { sharedApiService} from '../shared/sharedApi.service'
+import { TROKOR_CONFIG, buildTrokorUrl, getTrokorHeaders} from '../../config/trokor.config'
 // TrokorAdapter import removed - not currently used
 import type { 
-  Precinto, PrecintoViaje, AlarmSystem, Empresa, AppUser, PrecintoLocation, PrecintoAduanaAlarma, PrecintoAduanaReport} from '../../types/api/maindb.types';
-import type { Transito} from '../../features/transitos/types';
-import type { Alerta} from '../../types';
-
+  Precinto, PrecintoViaje, AlarmSystem, Empresa, AppUser, PrecintoLocation, PrecintoAduanaAlarma, PrecintoAduanaReport} from '../../types/api/maindb.types'
+import type { Transito} from '../../features/transitos/types'
+import type { Alerta} from '../../types'
 class MainDBService {
-  private readonly API_BASE = import.meta.env.VITE_USE_REAL_API ? TROKOR_CONFIG.MAINDB_BASE : '/api/maindb';
-  private readonly useRealAPI = import.meta.env.VITE_USE_REAL_API === 'true';
-
+  private readonly API_BASE = import.meta.env.VITE_USE_REAL_API ? TROKOR_CONFIG.MAINDB_BASE : '/api/maindb'
+  private readonly useRealAPI = import.meta.env.VITE_USE_REAL_API === 'true'
   // ==================== PRECINTOS ====================
   
   async getPrecintos(params?: {
-    status?: number;
-    empresaid?: number;
-    page?: number;
-    limit?: number;
+    status?: number
+    empresaid?: number
+    page?: number
+    limit?: number
   }): Promise<{ data: Precinto[]; total: number }> {
     if (this.useRealAPI) {
       try {
-        const url = buildTrokorUrl(TROKOR_CONFIG.ENDPOINTS.PRECINTOS, this.API_BASE);
-        const queryParams = new URLSearchParams();
-        if (params?.status !== undefined) queryParams.append('status', params.status.toString());
-        if (params?.empresaid) queryParams.append('empresaid', params.empresaid.toString());
-        if (params?.page) queryParams.append('page', params.page.toString());
-        if (params?.limit) queryParams.append('limit', params.limit.toString());
-        
+        const url = buildTrokorUrl(TROKOR_CONFIG.ENDPOINTS.PRECINTOS, this.API_BASE)
+        const queryParams = new URLSearchParams()
+        if (params?.status !== undefined) queryParams.append('status', params.status.toString())
+        if (params?.empresaid) queryParams.append('empresaid', params.empresaid.toString())
+        if (params?.page) queryParams.append('page', params.page.toString())
+        if (params?.limit) queryParams.append('limit', params.limit.toString())
         const response = await fetch(`${url}?${queryParams}`, {
           headers: getTrokorHeaders()
-        });
-        
-        if (!response.ok) throw new Error('Failed to fetch precintos');
-        
-        const data = await response.json();
-        return data;
+        })
+        if (!response.ok) throw new Error('Failed to fetch precintos')
+        const data = await response.json()
+        return data
       } catch (error) {
-        console.error('Error fetching from Trokor API:', error);
+        console.error('Error fetching from Trokor API:', error)
         // Fallback to mock data
-        return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params);
+        return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params)
       }
     }
     
-    return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params)
   }
 
   async getPrecintoByNQR(nqr: string): Promise<Precinto | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/precintos/nqr/${nqr}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/precintos/nqr/${nqr}`)
   }
 
   async updatePrecintoStatus(precintoid: number, status: number): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/precintos/${precintoid}/status`, { status });
+    return sharedApiService.request('PUT', `${this.API_BASE}/precintos/${precintoid}/status`, { status })
   }
 
   // ==================== VIAJES ====================
 
   async getViajes(params?: {
-    status?: number;
-    empresaid?: number;
-    fechaDesde?: number;
-    fechaHasta?: number;
-    page?: number;
-    limit?: number;
+    status?: number
+    empresaid?: number
+    fechaDesde?: number
+    fechaHasta?: number
+    page?: number
+    limit?: number
   }): Promise<{ data: PrecintoViaje[]; total: number }> {
-    return sharedApiService.request('GET', `${this.API_BASE}/viajes`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/viajes`, null, params)
   }
 
   async getViajeByPvid(pvid: number): Promise<PrecintoViaje | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/viajes/${pvid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/viajes/${pvid}`)
   }
 
   async createViaje(viaje: Partial<PrecintoViaje>): Promise<PrecintoViaje> {
-    return sharedApiService.request('POST', `${this.API_BASE}/viajes`, viaje);
+    return sharedApiService.request('POST', `${this.API_BASE}/viajes`, viaje)
   }
 
   async updateViaje(pvid: number, updates: Partial<PrecintoViaje>): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/viajes/${pvid}`, updates);
+    return sharedApiService.request('PUT', `${this.API_BASE}/viajes/${pvid}`, updates)
   }
 
   // ==================== ALARMAS ====================
 
   async getAlarmas(params?: {
-    precintoid?: number;
-    status?: number;
-    fechaDesde?: number;
-    fechaHasta?: number;
-    page?: number;
-    limit?: number;
+    precintoid?: number
+    status?: number
+    fechaDesde?: number
+    fechaHasta?: number
+    page?: number
+    limit?: number
   }): Promise<{ data: AlarmSystem[]; total: number }> {
-    return sharedApiService.request('GET', `${this.API_BASE}/alarmas`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/alarmas`, null, params)
   }
 
   async getAlarmasByPrecinto(precintoid: number): Promise<AlarmSystem[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/alarmas/precinto/${precintoid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/alarmas/precinto/${precintoid}`)
   }
 
   async updateAlarmaStatus(asid: number, status: number): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/alarmas/${asid}/status`, { status });
+    return sharedApiService.request('PUT', `${this.API_BASE}/alarmas/${asid}/status`, { status })
   }
 
   // ==================== EMPRESAS ====================
 
   async getEmpresas(params?: {
-    tipo?: number;
-    page?: number;
-    limit?: number;
+    tipo?: number
+    page?: number
+    limit?: number
   }): Promise<{ data: Empresa[]; total: number }> {
-    return sharedApiService.request('GET', `${this.API_BASE}/empresas`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/empresas`, null, params)
   }
 
   async getEmpresaById(empresaid: number): Promise<Empresa | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/empresas/${empresaid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/empresas/${empresaid}`)
   }
 
   // ==================== USUARIOS ====================
 
   async getUsuarios(params?: {
-    empresaid?: number;
-    type?: number;
-    page?: number;
-    limit?: number;
+    empresaid?: number
+    type?: number
+    page?: number
+    limit?: number
   }): Promise<{ data: AppUser[]; total: number }> {
-    return sharedApiService.request('GET', `${this.API_BASE}/usuarios`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/usuarios`, null, params)
   }
 
   // ==================== LOCATIONS ====================
 
   async getLocations(params?: {
-    type?: number;
-    status?: number;
+    type?: number
+    status?: number
   }): Promise<PrecintoLocation[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/locations`, null, params);
+    return sharedApiService.request('GET', `${this.API_BASE}/locations`, null, params)
   }
 
   async getLocationById(plid: number): Promise<PrecintoLocation | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/locations/${plid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/locations/${plid}`)
   }
 
   // ==================== REPORTES ADUANA ====================
 
   async getReportesAduana(pvid: number): Promise<PrecintoAduanaReport[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/reportes-aduana/${pvid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/reportes-aduana/${pvid}`)
   }
 
   async getAlarmasAduana(pvid: number): Promise<PrecintoAduanaAlarma[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/alarmas-aduana/${pvid}`);
+    return sharedApiService.request('GET', `${this.API_BASE}/alarmas-aduana/${pvid}`)
   }
 
   // ==================== MAPPERS ====================
@@ -187,7 +182,7 @@ class MainDBService {
       progreso: this.calculateProgress(viaje.fecha, viaje.fechafin),
       alertas: undefined,
       observaciones: viaje.HmTxt || undefined
-    };
+    }
   }
 
   /**
@@ -204,26 +199,26 @@ class MainDBService {
       ubicacion: this.extractLocationFromExtraData(alarma.extradata),
       severidad: this.getAlarmSeverity(alarma.alarmtype),
       atendida: alarma.status === 1
-    };
+    }
   }
 
   // ==================== HELPERS ====================
 
   private mapStatusToEstado(viajeStatus: number, precintoStatus?: number): 'en_viaje' | 'desprecintado' | 'con_alerta' {
-    if (viajeStatus === 0 || precintoStatus === 4) return 'desprecintado';
-    if (precintoStatus === 3) return 'con_alerta';
-    return 'en_viaje';
+    if (viajeStatus === 0 || precintoStatus === 4) return 'desprecintado'
+    if (precintoStatus === 3) return 'con_alerta'
+    return 'en_viaje'
   }
 
   private mapAlarmType(alarmtype?: string): Alerta['tipo'] {
     switch (alarmtype?.toLowerCase()) {
-      case 'door': return 'violacion';
-      case 'battery': return 'bateria_baja';
-      case 'route': return 'fuera_de_ruta';
-      case 'temperature': return 'temperatura';
-      case 'signal': return 'sin_signal';
-      case 'intrusion': return 'intrusion';
-      default: return 'violacion';
+      case 'door': return 'violacion'
+      case 'battery': return 'bateria_baja'
+      case 'route': return 'fuera_de_ruta'
+      case 'temperature': return 'temperatura'
+      case 'signal': return 'sin_signal'
+      case 'intrusion': return 'intrusion'
+      default: return 'violacion'
     }
   }
 
@@ -235,51 +230,46 @@ class MainDBService {
       'temperature': 'Temperatura fuera de rango',
       'signal': 'Pérdida de señal GPS',
       'intrusion': 'Intrusión detectada'
-    };
-    
-    const baseMessage = baseMessages[alarmtype?.toLowerCase() || ''] || 'Alerta de seguridad';
-    return extradata ? `${baseMessage}: ${extradata}` : baseMessage;
+    }
+    const baseMessage = baseMessages[alarmtype?.toLowerCase() || ''] || 'Alerta de seguridad'
+    return extradata ? `${baseMessage}: ${extradata}` : baseMessage
   }
 
   private getAlarmSeverity(alarmtype?: string): Alerta['severidad'] {
     switch (alarmtype?.toLowerCase()) {
       case 'door':
-      case 'intrusion': return 'critica';
+      case 'intrusion': return 'critica'
       case 'route':
-      case 'temperature': return 'alta';
-      case 'battery': return 'media';
-      case 'signal': return 'baja';
-      default: return 'media';
+      case 'temperature': return 'alta'
+      case 'battery': return 'media'
+      case 'signal': return 'baja'
+      default: return 'media'
     }
   }
 
   private extractLocationFromExtraData(extradata?: string): { lat: number; lng: number } | undefined {
-    if (!extradata) return undefined;
-    
+    if (!extradata) return undefined
     // Intentar parsear coordenadas del extradata
-    const match = extradata.match(/lat:(-?\d+\.?\d*),lng:(-?\d+\.?\d*)/);
+    const match = extradata.match(/lat:(-?\d+\.?\d*),lng:(-?\d+\.?\d*)/)
     if (match) {
       return {
         lat: parseFloat(match[1]),
         lng: parseFloat(match[2])
-      };
+      }
     }
     
-    return undefined;
+    return undefined
   }
 
   private calculateProgress(fechaInicio: number, fechaFin?: number): number {
-    if (!fechaFin) return 50;
-    
-    const now = Date.now() / 1000;
-    const total = fechaFin - fechaInicio;
-    const elapsed = now - fechaInicio;
-    
-    if (elapsed >= total) return 100;
-    if (elapsed <= 0) return 0;
-    
-    return Math.round((elapsed / total) * 100);
+    if (!fechaFin) return 50
+    const now = Date.now() / 1000
+    const total = fechaFin - fechaInicio
+    const elapsed = now - fechaInicio
+    if (elapsed >= total) return 100
+    if (elapsed <= 0) return 0
+    return Math.round((elapsed / total) * 100)
   }
 }
 
-export const mainDBService = new MainDBService();
+export const mainDBService = new MainDBService()

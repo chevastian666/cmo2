@@ -5,73 +5,72 @@
  */
 
 export interface APIEndpoint {
-  id: string;
-  path: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  description: string;
-  parameters?: APIParameter[];
-  responses: APIResponse[];
-  authentication: 'none' | 'api_key' | 'bearer' | 'basic';
+  id: string
+  path: string
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+  description: string
+  parameters?: APIParameter[]
+  responses: APIResponse[]
+  authentication: 'none' | 'api_key' | 'bearer' | 'basic'
   rateLimit?: {
-    requests: number;
+    requests: number
     window: number; // seconds
-  };
-  tags: string[];
-  enabled: boolean;
+  }
+  tags: string[]
+  enabled: boolean
 }
 
 export interface APIParameter {
-  name: string;
-  in: 'query' | 'path' | 'header' | 'body';
-  type: 'string' | 'number' | 'boolean' | 'array' | 'object';
-  required: boolean;
-  description: string;
-  example?: unknown;
-  enum?: string[];
+  name: string
+  in: 'query' | 'path' | 'header' | 'body'
+  type: 'string' | 'number' | 'boolean' | 'array' | 'object'
+  required: boolean
+  description: string
+  example?: unknown
+  enum?: string[]
 }
 
 export interface APIResponse {
-  status: number;
-  description: string;
-  example?: unknown;
-  schema?: unknown;
+  status: number
+  description: string
+  example?: unknown
+  schema?: unknown
 }
 
 export interface APIConfig {
-  baseUrl: string;
-  version: string;
-  title: string;
-  description: string;
-  port: number;
+  baseUrl: string
+  version: string
+  title: string
+  description: string
+  port: number
   cors: {
-    enabled: boolean;
-    origins: string[];
-  };
+    enabled: boolean
+    origins: string[]
+  }
   authentication: {
     apiKey: {
-      enabled: boolean;
-      key: string;
-      header: string;
-    };
+      enabled: boolean
+      key: string
+      header: string
+    }
     bearer: {
-      enabled: boolean;
-      secret: string;
-    };
-  };
+      enabled: boolean
+      secret: string
+    }
+  }
   rateLimit: {
-    enabled: boolean;
-    requests: number;
-    window: number;
-  };
-  logging: boolean;
+    enabled: boolean
+    requests: number
+    window: number
+  }
+  logging: boolean
 }
 
 class RestAPIService {
-  private _config: APIConfig;
-  private endpoints = new Map<string, APIEndpoint>();
-  private server: unknown = null;
-  private requestStats = new Map<string, { count: number; lastReset: number }>();
-
+  private _config: APIConfig
+  private endpoints = new Map<string, APIEndpoint>()
+  private server: unknown = null
+  private requestStats = new Map<string, { count: number; lastReset: number }>()
   constructor() {
     this.config = {
       baseUrl: 'http://localhost:3001',
@@ -100,19 +99,18 @@ class RestAPIService {
         window: 3600 // 1 hour
       },
       logging: true
-    };
-
-    this.initializeDefaultEndpoints();
+    }
+    this.initializeDefaultEndpoints()
   }
 
   // Configuration
   updateConfig(updates: Partial<APIConfig>): void {
-    this.config = { ...this.config, ...updates };
-    this.saveConfig();
+    this.config = { ...this.config, ...updates }
+    this.saveConfig()
   }
 
   getConfig(): APIConfig {
-    return this.config;
+    return this.config
   }
 
   // Endpoints management
@@ -120,41 +118,39 @@ class RestAPIService {
     const newEndpoint: APIEndpoint = {
       ...endpoint,
       id: this.generateId()
-    };
-
-    this.endpoints.set(newEndpoint.id, newEndpoint);
-    this.saveEndpoints();
-    return newEndpoint;
+    }
+    this.endpoints.set(newEndpoint.id, newEndpoint)
+    this.saveEndpoints()
+    return newEndpoint
   }
 
   updateEndpoint(id: string, updates: Partial<APIEndpoint>): APIEndpoint | null {
-    const endpoint = this.endpoints.get(id);
-    if (!endpoint) return null;
-
-    const updatedEndpoint = { ...endpoint, ...updates };
-    this.endpoints.set(id, updatedEndpoint);
-    this.saveEndpoints();
-    return updatedEndpoint;
+    const endpoint = this.endpoints.get(id)
+    if (!endpoint) return null
+    const updatedEndpoint = { ...endpoint, ...updates }
+    this.endpoints.set(id, updatedEndpoint)
+    this.saveEndpoints()
+    return updatedEndpoint
   }
 
   deleteEndpoint(id: string): boolean {
-    const deleted = this.endpoints.delete(id);
+    const deleted = this.endpoints.delete(id)
     if (deleted) {
-      this.saveEndpoints();
+      this.saveEndpoints()
     }
-    return deleted;
+    return deleted
   }
 
   getEndpoint(id: string): APIEndpoint | null {
-    return this.endpoints.get(id) || null;
+    return this.endpoints.get(id) || null
   }
 
   getAllEndpoints(): APIEndpoint[] {
-    return Array.from(this.endpoints.values());
+    return Array.from(this.endpoints.values())
   }
 
   getEnabledEndpoints(): APIEndpoint[] {
-    return this.getAllEndpoints().filter(endpoint => endpoint.enabled);
+    return this.getAllEndpoints().filter(endpoint => endpoint.enabled)
   }
 
   // OpenAPI/Swagger specification generation
@@ -196,13 +192,12 @@ class RestAPIService {
       },
       paths: {},
       tags: this.generateTags()
-    };
-
+    }
     // Generate paths from endpoints
     this.getEnabledEndpoints().forEach(endpoint => {
-      const path = endpoint.path;
+      const path = endpoint.path
       if (!spec.paths[path]) {
-        spec.paths[path] = {};
+        spec.paths[path] = {}
       }
 
       spec.paths[path][endpoint.method.toLowerCase()] = {
@@ -214,142 +209,135 @@ class RestAPIService {
         ...(endpoint.authentication !== 'none' && {
           security: this.formatSecurity(endpoint.authentication)
         })
-      };
-    });
-
-    return spec;
+      }
+    })
+    return spec
   }
 
   // Mock server functionality
   async startMockServer(): Promise<void> {
     if (this.server) {
-      console.warn('Mock server is already running');
-      return;
+      console.warn('Mock server is already running')
+      return
     }
 
     // Create simple mock server
     this.server = {
       listen: (port: number, callback: () => void) => {
-        console.log(`Mock API server would start on port ${port}`);
-        callback();
+        console.log(`Mock API server would start on port ${port}`)
+        callback()
       },
       close: (callback: () => void) => {
-        console.log('Mock API server stopped');
-        callback();
+        console.log('Mock API server stopped')
+        callback()
       }
-    };
-
+    }
     return new Promise((resolve) => {
       this.server.listen(this.config.port, () => {
-        console.log(`CMO REST API server started on port ${this.config.port}`);
-        console.log(`API Documentation: ${this.config.baseUrl}/docs`);
-        resolve();
-      });
-    });
+        console.log(`CMO REST API server started on port ${this.config.port}`)
+        console.log(`API Documentation: ${this.config.baseUrl}/docs`)
+        resolve()
+      })
+    })
   }
 
   async stopMockServer(): Promise<void> {
     if (!this.server) {
-      console.warn('Mock server is not running');
-      return;
+      console.warn('Mock server is not running')
+      return
     }
 
     return new Promise((resolve) => {
       this.server.close(() => {
-        this.server = null;
-        resolve();
-      });
-    });
+        this.server = null
+        resolve()
+      })
+    })
   }
 
   // Request handling (mock)
   async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> {
-    const endpoint = this.findEndpoint(path, method);
-    
+    const endpoint = this.findEndpoint(path, method)
     if (!endpoint) {
       return {
         status: 404,
         data: { error: 'Endpoint not found' }
-      };
+      }
     }
 
     if (!endpoint.enabled) {
       return {
         status: 503,
         data: { error: 'Endpoint is disabled' }
-      };
+      }
     }
 
     // Check authentication
     if (endpoint.authentication !== 'none') {
-      const authResult = this.checkAuthentication(endpoint.authentication, headers);
+      const authResult = this.checkAuthentication(endpoint.authentication, headers)
       if (!authResult.valid) {
         return {
           status: 401,
           data: { error: authResult.error }
-        };
+        }
       }
     }
 
     // Check rate limiting
     if (endpoint.rateLimit || this.config.rateLimit.enabled) {
-      const rateLimitResult = this.checkRateLimit(endpoint.id, endpoint.rateLimit);
+      const rateLimitResult = this.checkRateLimit(endpoint.id, endpoint.rateLimit)
       if (!rateLimitResult.allowed) {
         return {
           status: 429,
           data: { error: 'Rate limit exceeded' }
-        };
+        }
       }
     }
 
     // Generate mock response based on endpoint configuration
-    return this.generateMockResponse(endpoint, params);
+    return this.generateMockResponse(endpoint, params)
   }
 
   // Data export functionality
   async exportData(format: 'json' | 'csv' | 'xml' = 'json', filters: unknown = {}): Promise<string> {
-    const data = await this.getExportData(filters);
-    
+    const data = await this.getExportData(filters)
     switch (format) {
-      case 'csv':
-        return this.convertToCSV(data);
-      case 'xml':
-        return this.convertToXML(data);
+      case 'csv': {
+  return this.convertToCSV(data)
+      case 'xml': {
+  return this.convertToXML(data)
       default:
-        return JSON.stringify(data, null, 2);
+        return JSON.stringify(data, null, 2)
     }
   }
 
   // Statistics and monitoring
   getAPIStats(): {
-    totalEndpoints: number;
-    enabledEndpoints: number;
-    totalRequests: number;
-    requestsByEndpoint: Record<string, number>;
-    uptime: number;
+    totalEndpoints: number
+    enabledEndpoints: number
+    totalRequests: number
+    requestsByEndpoint: Record<string, number>
+    uptime: number
   } {
     const totalRequests = Array.from(this.requestStats.values())
-      .reduce((sum, stat) => sum + stat.count, 0);
-
-    const requestsByEndpoint: Record<string, number> = {};
+      .reduce((sum, stat) => sum + stat.count, 0)
+    const requestsByEndpoint: Record<string, number> = {}
     this.requestStats.forEach((stat, endpointId) => {
-      const endpoint = this.endpoints.get(endpointId);
+      const endpoint = this.endpoints.get(endpointId)
       if (endpoint) {
-        requestsByEndpoint[endpoint.path] = stat.count;
+        requestsByEndpoint[endpoint.path] = stat.count
       }
-    });
-
+    })
     return {
       totalEndpoints: this.endpoints.size,
       enabledEndpoints: this.getEnabledEndpoints().length,
       totalRequests,
       requestsByEndpoint,
       uptime: Date.now() - (this.startTime || Date.now())
-    };
+    }
   }
 
-  private startTime = Date.now();
-
+  private startTime = Date.now()
   // Private helper methods
   private initializeDefaultEndpoints(): void {
     const defaultEndpoints: Omit<APIEndpoint, 'id'>[] = [
@@ -410,11 +398,10 @@ class RestAPIService {
         tags: ['Estadísticas'],
         enabled: true
       }
-    ];
-
+    ]
     defaultEndpoints.forEach(endpoint => {
-      this.addEndpoint(endpoint);
-    });
+      this.addEndpoint(endpoint)
+    })
   }
 
   private generateSchemas(): unknown {
@@ -452,19 +439,18 @@ class RestAPIService {
           timestamp: { type: 'string', format: 'date-time' }
         }
       }
-    };
+    }
   }
 
   private generateTags(): unknown[] {
-    const tags = new Set<string>();
+    const tags = new Set<string>()
     this.getEnabledEndpoints().forEach(endpoint => {
-      endpoint.tags.forEach(tag => tags.add(tag));
-    });
-
+      endpoint.tags.forEach(tag => tags.add(tag))
+    })
     return Array.from(tags).map(tag => ({
       name: tag,
       description: `Operaciones relacionadas con ${tag}`
-    }));
+    }))
   }
 
   private formatParameters(parameters: APIParameter[]): unknown[] {
@@ -478,11 +464,11 @@ class RestAPIService {
         ...(param.enum && { enum: param.enum }),
         ...(param.example && { example: param.example })
       }
-    }));
+    }))
   }
 
   private formatResponses(responses: APIResponse[]): unknown {
-    const formatted: unknown = {};
+    const formatted: unknown = {}
     responses.forEach(response => {
       formatted[response.status] = {
         description: response.description,
@@ -493,80 +479,80 @@ class RestAPIService {
             }
           }
         })
-      };
-    });
-    return formatted;
+      }
+    })
+    return formatted
   }
 
   private formatSecurity(authType: string): unknown[] {
     switch (authType) {
       case 'api_key':
-        return [{ ApiKeyAuth: [] }];
+        return [{ ApiKeyAuth: [] }]
       case 'bearer':
-        return [{ BearerAuth: [] }];
+        return [{ BearerAuth: [] }]
       default:
-        return [];
+        return []
     }
   }
 
   private findEndpoint(path: string, method: string): APIEndpoint | null {
     return this.getEnabledEndpoints().find(
       endpoint => endpoint.path === path && endpoint.method === method.toUpperCase()
-    ) || null;
+    ) || null
   }
 
   private checkAuthentication(authType: string, headers: unknown): { valid: boolean; error?: string } {
     switch (authType) {
       case 'api_key': {
-        
-        const apiKey = headers[this.config.authentication.apiKey.header.toLowerCase()];
+
+        const apiKey = headers[this.config.authentication.apiKey.header.toLowerCase()]
         if (!apiKey || apiKey !== this.config.authentication.apiKey.key) {
-          return { valid: false, error: 'Invalid API key' };
+          return { valid: false, error: 'Invalid API key' }
         }
       }
-        break;
-      case 'bearer': {
-        
-        const authorization = headers.authorization;
-        if (!authorization || !authorization.startsWith('Bearer ')) {
-          return { valid: false, error: 'Invalid bearer token' };
-        }
-        break;
+        break
     }
-    return { valid: true };
+    case 'bearer': {
+
+        const authorization = headers.authorization
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+          return { valid: false, error: 'Invalid bearer token' }
+        }
+        break
+    }
+    return { valid: true }
   }
 
   private checkRateLimit(endpointId: string, endpointLimit?: { requests: number; window: number }): { allowed: boolean } {
-    const limit = endpointLimit || this.config.rateLimit;
-    const now = Date.now();
-    const windowStart = now - (limit.window * 1000);
-    
-    let stats = this.requestStats.get(endpointId);
+    const limit = endpointLimit || this.config.rateLimit
+    const now = Date.now()
+    const windowStart = now - (limit.window * 1000)
+    let stats = this.requestStats.get(endpointId)
     if (!stats || stats.lastReset < windowStart) {
-      stats = { count: 0, lastReset: now };
-      this.requestStats.set(endpointId, stats);
+      stats = { count: 0, lastReset: now }
+      this.requestStats.set(endpointId, stats)
     }
 
     if (stats.count >= limit.requests) {
-      return { allowed: false };
+      return { allowed: false }
     }
 
-    stats.count++;
-    return { allowed: true };
+    stats.count++
+    return { allowed: true }
   }
 
   private generateMockResponse(endpoint: APIEndpoint, params: unknown): unknown {
     // Generate mock data based on endpoint path
     switch (endpoint.path) {
-      case '/api/v1/alerts':
-        return {
+      case '/api/v1/alerts': {
+  return {
           status: 200,
           data: {
             alerts: this.generateMockAlerts(params.limit || 10),
             total: 150,
             page: Math.floor((params.offset || 0) / (params.limit || 10)) + 1
           }
-        };
+        }
       case '/api/v1/transits':
         return {
           status: 200,
@@ -574,7 +560,7 @@ class RestAPIService {
             transits: this.generateMockTransits(params.limit || 10),
             total: 75
           }
-        };
+        }
       case '/api/v1/precintos':
         return {
           status: 200,
@@ -582,7 +568,7 @@ class RestAPIService {
             precintos: this.generateMockPrecintos(params.limit || 10),
             total: 200
           }
-        };
+        }
       case '/api/v1/statistics':
         return {
           status: 200,
@@ -591,20 +577,19 @@ class RestAPIService {
             transits: { total: 75, inProgress: 15, completed: 60 },
             precintos: { total: 200, active: 180, violated: 5, inactive: 15 }
           }
-        };
+        }
       default:
         return {
           status: 200,
           data: { message: 'Mock response', timestamp: new Date().toISOString() }
-        };
+        }
     }
   }
 
   private generateMockAlerts(count: number): unknown[] {
-    const alerts = [];
-    const priorities = ['low', 'medium', 'high', 'critical'];
-    const statuses = ['active', 'resolved', 'acknowledged'];
-    
+    const alerts = []
+    const priorities = ['low', 'medium', 'high', 'critical']
+    const statuses = ['active', 'resolved', 'acknowledged']
     for (let i = 0; i < count; i++) {
       alerts.push({
         id: `alert_${i + 1}`,
@@ -614,21 +599,19 @@ class RestAPIService {
         status: statuses[Math.floor(Math.random() * statuses.length)],
         timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(),
         source: 'CMO'
-      });
+      })
     }
     
-    return alerts;
+    return alerts
   }
 
   private generateMockTransits(count: number): unknown[] {
-    const transits = [];
-    const origins = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago'];
-    const destinations = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago'];
-    
+    const transits = []
+    const origins = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago']
+    const destinations = ['Montevideo', 'Buenos Aires', 'São Paulo', 'Santiago']
     for (let i = 0; i < count; i++) {
-      const departure = new Date(Date.now() - Math.random() * 86400000);
-      const arrival = new Date(departure.getTime() + Math.random() * 86400000);
-      
+      const departure = new Date(Date.now() - Math.random() * 86400000)
+      const arrival = new Date(departure.getTime() + Math.random() * 86400000)
       transits.push({
         id: `transit_${i + 1}`,
         origin: origins[Math.floor(Math.random() * origins.length)],
@@ -636,16 +619,15 @@ class RestAPIService {
         status: Math.random() > 0.5 ? 'in_progress' : 'completed',
         departure: departure.toISOString(),
         arrival: arrival.toISOString()
-      });
+      })
     }
     
-    return transits;
+    return transits
   }
 
   private generateMockPrecintos(count: number): unknown[] {
-    const precintos = [];
-    const statuses = ['active', 'inactive', 'violated'];
-    
+    const precintos = []
+    const statuses = ['active', 'inactive', 'violated']
     for (let i = 0; i < count; i++) {
       precintos.push({
         id: `precinto_${i + 1}`,
@@ -653,10 +635,10 @@ class RestAPIService {
         status: statuses[Math.floor(Math.random() * statuses.length)],
         location: `Ubicación ${i + 1}`,
         timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString()
-      });
+      })
     }
     
-    return precintos;
+    return precintos
   }
 
   private async getExportData(filters: unknown): Promise<any[]> {
@@ -665,93 +647,87 @@ class RestAPIService {
       { id: 1, type: 'alert', data: 'Sample alert data' },
       { id: 2, type: 'transit', data: 'Sample transit data' },
       { id: 3, type: 'precinto', data: 'Sample precinto data' }
-    ];
+    ]
   }
 
   private convertToCSV(data: unknown[]): string {
-    if (data.length === 0) return '';
-    
-    const headers = Object.keys(data[0]);
-    const csvRows = [headers.join(',')];
-    
+    if (data.length === 0) return ''
+    const headers = Object.keys(data[0])
+    const csvRows = [headers.join(',')]
     data.forEach(row => {
       const values = headers.map(header => {
-        const value = row[header];
-        return typeof value === 'string' ? `"${value}"` : value;
-      });
-      csvRows.push(values.join(','));
-    });
-    
-    return csvRows.join('\n');
+        const value = row[header]
+        return typeof value === 'string' ? `"${value}"` : value
+      })
+      csvRows.push(values.join(','))
+    })
+    return csvRows.join('\n')
   }
 
   private convertToXML(data: unknown[]): string {
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<data>\n';
-    
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<data>\n'
     data.forEach(item => {
-      xml += '  <item>\n';
+      xml += '  <item>\n'
       Object.entries(item).forEach(([key, value]) => {
-        xml += `    <${key}>${value}</${key}>\n`;
-      });
-      xml += '  </item>\n';
-    });
-    
-    xml += '</data>';
-    return xml;
+        xml += `    <${key}>${value}</${key}>\n`
+      })
+      xml += '  </item>\n'
+    })
+    xml += '</data>'
+    return xml
   }
 
   private generateId(): string {
-    return `api_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `api_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
 
   // Persistence
   private saveConfig(): void {
     try {
-      localStorage.setItem('cmo_api_config', JSON.stringify(this.config));
+      localStorage.setItem('cmo_api_config', JSON.stringify(this.config))
     } catch (error) {
-      console.error('Failed to save API config:', error);
+      console.error('Failed to save API config:', error)
     }
   }
 
   private saveEndpoints(): void {
     try {
-      const endpointsArray = Array.from(this.endpoints.values());
-      localStorage.setItem('cmo_api_endpoints', JSON.stringify(endpointsArray));
+      const endpointsArray = Array.from(this.endpoints.values())
+      localStorage.setItem('cmo_api_endpoints', JSON.stringify(endpointsArray))
     } catch (error) {
-      console.error('Failed to save API endpoints:', error);
+      console.error('Failed to save API endpoints:', error)
     }
   }
 
   loadConfig(): void {
     try {
-      const stored = localStorage.getItem('cmo_api_config');
+      const stored = localStorage.getItem('cmo_api_config')
       if (stored) {
-        this.config = { ...this.config, ...JSON.parse(stored) };
+        this.config = { ...this.config, ...JSON.parse(stored) }
       }
     } catch (error) {
-      console.error('Failed to load API config:', error);
+      console.error('Failed to load API config:', error)
     }
   }
 
   loadEndpoints(): void {
     try {
-      const stored = localStorage.getItem('cmo_api_endpoints');
+      const stored = localStorage.getItem('cmo_api_endpoints')
       if (stored) {
-        const endpointsArray: APIEndpoint[] = JSON.parse(stored);
-        this.endpoints.clear();
+        const endpointsArray: APIEndpoint[] = JSON.parse(stored)
+        this.endpoints.clear()
         endpointsArray.forEach(endpoint => {
-          this.endpoints.set(endpoint.id, endpoint);
-        });
+          this.endpoints.set(endpoint.id, endpoint)
+        })
       }
     } catch (error) {
-      console.error('Failed to load API endpoints:', error);
+      console.error('Failed to load API endpoints:', error)
     }
   }
 }
 
 // Singleton instance
-export const restAPIService = new RestAPIService();
-
+export const restAPIService = new RestAPIService()
 // Initialize on import
-restAPIService.loadConfig();
-restAPIService.loadEndpoints();
+restAPIService.loadConfig()
+restAPIService.loadEndpoints()

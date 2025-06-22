@@ -4,11 +4,10 @@
  * By Cheva
  */
 
-import React from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import { useLocation} from 'react-router-dom';
-import { transitions} from './AnimationPresets';
-
+import React from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import { useLocation} from 'react-router-dom'
+import { transitions} from './AnimationPresets'
 // ==========================================
 // VARIANTES DE TRANSICIÓN DE PÁGINA
 // ==========================================
@@ -31,8 +30,7 @@ const pageVariants = {
     x: 20,
     transition: transitions.fast
   }
-};
-
+}
 const fadePageVariants = {
   initial: {
     opacity: 0
@@ -51,8 +49,7 @@ const fadePageVariants = {
       ease: "easeIn"
     }
   }
-};
-
+}
 const slideUpPageVariants = {
   initial: {
     opacity: 0,
@@ -68,29 +65,26 @@ const slideUpPageVariants = {
     y: -30,
     transition: transitions.fast
   }
-};
-
+}
 // ==========================================
 // COMPONENTE DE TRANSICIÓN DE PÁGINA
 // ==========================================
 
 interface PageTransitionProps {
-  children: React.ReactNode;
-  variant?: 'slide' | 'fade' | 'slideUp';
-  className?: string;
+  children: React.ReactNode
+  variant?: 'slide' | 'fade' | 'slideUp'
+  className?: string
 }
 
 export const PageTransition: React.FC<PageTransitionProps> = ({ 
   children, variant = 'slide', className = ""
 }) => {
-  const location = useLocation();
-  
+  const location = useLocation()
   const variants = {
     slide: pageVariants,
     fade: fadePageVariants,
     slideUp: slideUpPageVariants
-  };
-  
+  }
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -104,17 +98,16 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
         {children}
       </motion.div>
     </AnimatePresence>
-  );
-};
-
+  )
+}
 // ==========================================
 // COMPONENTE DE SECCIÓN ANIMADA
 // ==========================================
 
 interface AnimatedSectionProps {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
+  children: React.ReactNode
+  delay?: number
+  className?: string
 }
 
 export const AnimatedSection: React.FC<AnimatedSectionProps> = ({ 
@@ -135,17 +128,16 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     >
       {children}
     </motion.section>
-  );
-};
-
+  )
+}
 // ==========================================
 // COMPONENTE DE HEADER ANIMADO
 // ==========================================
 
 interface AnimatedHeaderProps {
-  title: string;
-  subtitle?: string;
-  className?: string;
+  title: string
+  subtitle?: string
+  className?: string
 }
 
 export const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({ 
@@ -172,16 +164,15 @@ export const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
         </motion.p>
       )}
     </motion.div>
-  );
-};
-
+  )
+}
 // ==========================================
 // LAYOUT CON TRANSICIONES
 // ==========================================
 
 interface AnimatedLayoutProps {
-  children: React.ReactNode;
-  sidebar?: React.ReactNode;
+  children: React.ReactNode
+  sidebar?: React.ReactNode
 }
 
 export const AnimatedLayout: React.FC<AnimatedLayoutProps> = ({ 
@@ -209,17 +200,16 @@ export const AnimatedLayout: React.FC<AnimatedLayoutProps> = ({
         {children}
       </motion.main>
     </div>
-  );
-};
-
+  )
+}
 // ==========================================
 // COMPONENTE DE TAB ANIMADO
 // ==========================================
 
 interface AnimatedTabPanelProps {
-  children: React.ReactNode;
-  isActive: boolean;
-  className?: string;
+  children: React.ReactNode
+  isActive: boolean
+  className?: string
 }
 
 export const AnimatedTabPanel: React.FC<AnimatedTabPanelProps> = ({ 
@@ -239,17 +229,16 @@ export const AnimatedTabPanel: React.FC<AnimatedTabPanelProps> = ({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
-
+  )
+}
 // ==========================================
 // COMPONENTE DE GRID ANIMADO
 // ==========================================
 
 interface AnimatedGridProps {
-  children: React.ReactNode;
-  className?: string;
-  staggerDelay?: number;
+  children: React.ReactNode
+  className?: string
+  staggerDelay?: number
 }
 
 export const AnimatedGrid: React.FC<AnimatedGridProps> = ({ 
@@ -283,9 +272,8 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
         </motion.div>
       ))}
     </motion.div>
-  );
-};
-
+  )
+}
 export default {
   PageTransition,
   AnimatedSection,
@@ -293,4 +281,4 @@ export default {
   AnimatedLayout,
   AnimatedTabPanel,
   AnimatedGrid
-};
+}

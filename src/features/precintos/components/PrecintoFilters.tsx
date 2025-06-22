@@ -1,32 +1,27 @@
-import React, { useState } from 'react';
-import {Search, Filter, Battery, MapPin, Calendar, X} from 'lucide-react';
-import { PrecintoStatusText} from '../types';
-import type { PrecintoFilters as PrecintoFiltersType} from '../types';
-
+import React, { useState } from 'react'
+import {Search, Filter, Battery, MapPin, Calendar, X} from 'lucide-react'
+import { PrecintoStatusText} from '../types'
+import type { PrecintoFilters as PrecintoFiltersType} from '../types'
 interface PrecintoFiltersProps {
-  filters: PrecintoFiltersType;
-  onFiltersChange: (filters: PrecintoFiltersType) => void;
-  empresas: string[];
-  ubicaciones: string[];
+  filters: PrecintoFiltersType
+  onFiltersChange: (filters: PrecintoFiltersType) => void
+  empresas: string[]
+  ubicaciones: string[]
 }
 
 export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
   filters, onFiltersChange, empresas, ubicaciones
 }) => {
-  console.log('PrecintoFilters: Rendering with', { filters, empresasCount: empresas.length, ubicacionesCount: ubicaciones.length });
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-
+  console.log('PrecintoFilters: Rendering with', { filters, empresasCount: empresas.length, ubicacionesCount: ubicaciones.length })
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const handleChange = (key: keyof PrecintoFiltersType, value: unknown) => {
-    onFiltersChange({ ...filters, [key]: value });
-  };
-
+    onFiltersChange({ ...filters, [key]: value })
+  }
   const clearFilters = () => {
-    onFiltersChange(_);
-    setShowAdvancedFilters(false);
-  };
-
-  const activeFiltersCount = Object.values(filters).filter(v => v !== undefined && v !== '').length;
-
+    onFiltersChange(_)
+    setShowAdvancedFilters(false)
+  }
+  const activeFiltersCount = Object.values(filters).filter(v => v !== undefined && v !== '').length
   return (<div className="bg-gray-800 rounded-lg p-4 border border-gray-700 space-y-4">
       {/* Main search and toggle */}
       <div className="flex gap-4">
@@ -166,5 +161,5 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

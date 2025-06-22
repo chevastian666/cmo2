@@ -1,15 +1,13 @@
-import React from 'react';
-import { Card, CardHeader, CardContent, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index';
-import { Truck, AlertTriangle, Activity, MapPin} from 'lucide-react';
-
+import React from 'react'
+import { Card, CardHeader, CardContent, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index'
+import { Truck, AlertTriangle, Activity, MapPin} from 'lucide-react'
 /**
  * This example demonstrates how to compose the modular UI components
  * to create complex, reusable interfaces
  */
 export const CompositionExample: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState('overview');
-  const [isLoading, setIsLoading] = React.useState(false);
-
+  const [activeTab, setActiveTab] = React.useState('overview')
+  const [isLoading, setIsLoading] = React.useState(false)
   // Example data
   const mockAlerts = [
     {
@@ -27,8 +25,7 @@ export const CompositionExample: React.FC = () => {
       severity: 'alta' as const,
       timestamp: Date.now() / 1000 - 1800
     }
-  ];
-
+  ]
   const mockTransit = {
     id: 'TR-001',
     vehicleId: 'UY-1234',
@@ -47,15 +44,13 @@ export const CompositionExample: React.FC = () => {
       id: '1.234.567-8',
       phone: '+598 99 123 456'
     }
-  };
-
+  }
   const tabs = [
     { id: 'overview', label: 'General', icon: <Activity className="h-4 w-4" /> },
     { id: 'transits', label: 'Tránsitos', icon: <Truck className="h-4 w-4" /> },
     { id: 'alerts', label: 'Alertas', icon: <AlertTriangle className="h-4 w-4" /> },
     { id: 'map', label: 'Mapa', icon: <MapPin className="h-4 w-4" /> }
-  ];
-
+  ]
   return (<div className="space-y-6 p-6 bg-gray-900 min-h-screen">
       <h1 className="text-2xl font-bold text-white">Ejemplos de Composición de Componentes</h1>
       
@@ -271,5 +266,5 @@ export const CompositionExample: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

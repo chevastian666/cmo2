@@ -1,34 +1,31 @@
-import React from 'react';
-import { MapPin, Phone, Clock, Building2, Package, Activity, ExternalLink} from 'lucide-react';
-import type { Deposito} from '../types';
-import { cn} from '@/lib/utils';
-import { Button} from '@/components/ui/button';
+import React from 'react'
+import { MapPin, Phone, Clock, Building2, Package, Activity, ExternalLink} from 'lucide-react'
+import type { Deposito} from '../types'
+import { cn} from '@/lib/utils'
+import { Button} from '@/components/ui/button'
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
-import { Badge} from '@/components/ui/badge';
-
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
+import { Badge} from '@/components/ui/badge'
 interface DepositoDetailModalProps {
-  deposito: Deposito;
-  isOpen: boolean;
-  onClose: () => void;
-  onEdit: () => void;
+  deposito: Deposito
+  isOpen: boolean
+  onClose: () => void
+  onEdit: () => void
 }
 
 export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
   deposito, isOpen, onClose, onEdit
 }) => {
   const getCapacidadColor = (capacidad: number) => {
-    if (capacidad >= 80) return 'text-red-400';
-    if (capacidad >= 60) return 'text-yellow-400';
-    return 'text-green-400';
-  };
-
+    if (capacidad >= 80) return 'text-red-400'
+    if (capacidad >= 60) return 'text-yellow-400'
+    return 'text-green-400'
+  }
   const getCapacidadBgColor = (capacidad: number) => {
-    if (capacidad >= 80) return 'bg-red-500';
-    if (capacidad >= 60) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
+    if (capacidad >= 80) return 'bg-red-500'
+    if (capacidad >= 60) return 'bg-yellow-500'
+    return 'bg-green-500'
+  }
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -186,5 +183,5 @@ export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,15 +1,14 @@
-import React from 'react';
-import { Link, useLocation} from 'react-router-dom';
-import { ChevronRight, Home} from 'lucide-react';
+import React from 'react'
+import { Link, useLocation} from 'react-router-dom'
+import { ChevronRight, Home} from 'lucide-react'
 import {
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from '@/components/ui/breadcrumb';
-
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from '@/components/ui/breadcrumb'
 interface BreadcrumbConfig {
   [key: string]: {
-    label: string;
-    parent?: string;
-    icon?: React.ReactNode;
-  };
+    label: string
+    parent?: string
+    icon?: React.ReactNode
+  }
 }
 
 const breadcrumbConfig: BreadcrumbConfig = {
@@ -81,49 +80,41 @@ const breadcrumbConfig: BreadcrumbConfig = {
     label: 'Componentes Demo',
     parent: '/'
   }
-};
-
+}
 export const BreadcrumbNav: React.FC = () => {
-  const location = useLocation();
-  const currentPath = location.pathname;
-
+  const location = useLocation()
+  const currentPath = location.pathname
   // Build breadcrumb trail
   const getBreadcrumbTrail = (path: string): string[] => {
-    const trail: string[] = [];
-    let currentConfig = breadcrumbConfig[path];
-    
+    const trail: string[] = []
+    let currentConfig = breadcrumbConfig[path]
     if (!currentConfig) {
       // Try to match dynamic routes
-      const pathParts = path.split('/');
+      const pathParts = path.split('/')
       if (pathParts.length > 2) {
-        const basePath = `/${pathParts[1]}/${pathParts[2]}`;
-        currentConfig = breadcrumbConfig[basePath];
+        const basePath = `/${pathParts[1]}/${pathParts[2]}`
+        currentConfig = breadcrumbConfig[basePath]
       }
     }
 
     if (currentConfig) {
-      trail.unshift(path);
-      
-      let parentPath = currentConfig.parent;
+      trail.unshift(path)
+      let parentPath = currentConfig.parent
       while (parentPath && breadcrumbConfig[parentPath]) {
-        trail.unshift(parentPath);
-        parentPath = breadcrumbConfig[parentPath].parent;
+        trail.unshift(parentPath)
+        parentPath = breadcrumbConfig[parentPath].parent
       }
     }
 
-    return trail;
-  };
-
-  const trail = getBreadcrumbTrail(currentPath);
-
-  if (trail.length === 0) return null;
-
+    return trail
+  }
+  const trail = getBreadcrumbTrail(currentPath)
+  if (trail.length === 0) return null
   return (<Breadcrumb className="mb-4">
       <BreadcrumbList>
         {trail.map((path, index) => {
-          const config = breadcrumbConfig[path];
-          const isLast = index === trail.length - 1;
-
+          const config = breadcrumbConfig[path]
+          const isLast = index === trail.length - 1
           return (
             <React.Fragment key={path}>
               <BreadcrumbItem>
@@ -150,9 +141,9 @@ export const BreadcrumbNav: React.FC = () => {
                 </BreadcrumbSeparator>
               )}
             </React.Fragment>
-          );
+          )
         })}
       </BreadcrumbList>
     </Breadcrumb>
-  );
-};
+  )
+}

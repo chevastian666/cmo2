@@ -4,9 +4,8 @@
  * By Cheva
  */
 
-import React from 'react';
-import { TreemapProps} from './types';
-
+import React from 'react'
+import { TreemapProps} from './types'
 export const SimpleTreemap: React.FC<TreemapProps> = ({
   data, width = 800, height = 600, className = ''
 }) => {
@@ -30,5 +29,5 @@ export const SimpleTreemap: React.FC<TreemapProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

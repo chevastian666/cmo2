@@ -4,32 +4,29 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion} from 'framer-motion';
-import { Info, Download, Maximize2, Grid3X3, Package, Truck, AlertTriangle, Building} from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { Button} from '@/components/ui/button';
+import React, { useState } from 'react'
+import { motion} from 'framer-motion'
+import { Info, Download, Maximize2, Grid3X3, Package, Truck, AlertTriangle, Building} from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Button} from '@/components/ui/button'
 import { 
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
 import {
-  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
-import { PrecintosTreemap} from './treemap/PrecintosTreemap';
-import { TransitosTreemap} from './treemap/TransitosTreemap';
-import { AlertasTreemap} from './treemap/AlertasTreemap';
-import { OperationalTreemap} from './treemap/OperationalTreemap';
-import { toast} from '@/hooks/use-toast';
-
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover'
+import { PrecintosTreemap} from './treemap/PrecintosTreemap'
+import { TransitosTreemap} from './treemap/TransitosTreemap'
+import { AlertasTreemap} from './treemap/AlertasTreemap'
+import { OperationalTreemap} from './treemap/OperationalTreemap'
+import { toast} from '@/hooks/use-toast'
 export const TreemapDashboard: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('precintos');
-  const [fullscreenView, setFullscreenView] = useState<string | null>(null);
-
+  const [selectedTab, setSelectedTab] = useState('precintos')
+  const [fullscreenView, setFullscreenView] = useState<string | null>(null)
   const handleExport = () => {
     toast({
       title: 'Exportando visualización',
       description: 'Se generará un archivo SVG de alta resolución.'
-    });
-  };
-
+    })
+  }
   const tabInfo = {
     precintos: {
       title: 'Distribución de Precintos',
@@ -51,8 +48,7 @@ export const TreemapDashboard: React.FC = () => {
       description: 'Análisis integral de operaciones con múltiples dimensiones.',
       icon: Building
     }
-  };
-
+  }
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -184,5 +180,5 @@ export const TreemapDashboard: React.FC = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}

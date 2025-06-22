@@ -1,12 +1,10 @@
-import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion} from '../types';
-import { transitosService} from '../../transitos/services/transitos.service';
-
+import type { Camion, TransitoCamion, EstadisticasCamion, FiltrosCamion, EstadoCamion} from '../types'
+import { transitosService} from '../../transitos/services/transitos.service'
 class CamionesService {
-  private camiones: Map<string, Camion> = new Map();
-
+  private camiones: Map<string, Camion> = new Map()
   constructor() {
     // Inicializar con algunos datos de ejemplo
-    this.initMockData();
+    this.initMockData()
   }
 
   private initMockData() {
@@ -49,50 +47,47 @@ class CamionesService {
         fechaActualizacion: new Date('2024-12-15'),
         creadoPor: { id: '2', nombre: 'Supervisor' }
       }
-    ];
-
+    ]
     mockCamiones.forEach(camion => {
-      this.camiones.set(camion.matricula, camion);
-    });
+      this.camiones.set(camion.matricula, camion)
+    })
   }
 
   async getCamiones(filtros?: FiltrosCamion): Promise<Camion[]> {
-    let camiones = Array.from(this.camiones.values());
-
+    let camiones = Array.from(this.camiones.values())
     if (filtros) {
       // Filtrar por búsqueda (matrícula)
       if (filtros.busqueda) {
-        const busqueda = filtros.busqueda.toLowerCase();
+        const busqueda = filtros.busqueda.toLowerCase()
         camiones = camiones.filter(c => 
           c.matricula.toLowerCase().includes(busqueda)
-        );
+        )
       }
 
       // Filtrar por estado
       if (filtros.estado) {
-        camiones = camiones.filter(c => c.estado === filtros.estado);
+        camiones = camiones.filter(c => c.estado === filtros.estado)
       }
 
       // Filtrar por tránsitos recientes
       if (filtros.conTransitosRecientes) {
         // Por ahora solo retornamos los que tienen estado frecuente
-        camiones = camiones.filter(c => c.estado === 'frecuente');
+        camiones = camiones.filter(c => c.estado === 'frecuente')
       }
     }
 
     return camiones.sort((a, b) => 
       b.fechaActualizacion.getTime() - a.fechaActualizacion.getTime()
-    );
+    )
   }
 
   async getCamionByMatricula(matricula: string): Promise<Camion | null> {
-    return this.camiones.get(matricula) || null;
+    return this.camiones.get(matricula) || null
   }
 
   async getTransitosCamion(matricula: string, limit: number = 5): Promise<TransitoCamion[]> {
     // Obtener todos los tránsitos del sistema
-    const todosTransitos = await transitosService.getTransitos();
-    
+    const todosTransitos = await transitosService.getTransitos()
     // Filtrar por matrícula del camión
     const transitosCamion = todosTransitos
       .filter(t => t.vehiculo?.matricula === matricula)
@@ -109,66 +104,58 @@ class CamionesService {
           nombre: t.vehiculo.conductor.nombre,
           documento: t.vehiculo.conductor.documento || ''
         } : undefined
-      }));
-
-    return transitosCamion;
+      }))
+    return transitosCamion
   }
 
   async getEstadisticasCamion(matricula: string): Promise<EstadisticasCamion> {
-    const todosTransitos = await transitosService.getTransitos();
-    const transitosCamion = todosTransitos.filter(t => t.vehiculo?.matricula === matricula);
-    
-    const hace30Dias = new Date();
-    hace30Dias.setDate(hace30Dias.getDate() - 30);
-    
-    const transitosRecientes = transitosCamion.filter(t => t.fechaInicio > hace30Dias);
-
+    const todosTransitos = await transitosService.getTransitos()
+    const transitosCamion = todosTransitos.filter(t => t.vehiculo?.matricula === matricula)
+    const hace30Dias = new Date()
+    hace30Dias.setDate(hace30Dias.getDate() - 30)
+    const transitosRecientes = transitosCamion.filter(t => t.fechaInicio > hace30Dias)
     // Contar camioneros frecuentes
-    const camioneroCount = new Map<string, { nombre: string; cantidad: number }>();
+    const camioneroCount = new Map<string, { nombre: string; cantidad: number }>()
     transitosCamion.forEach(t => {
       if (t.vehiculo?.conductor) {
-        const key = t.vehiculo.conductor.documento || t.vehiculo.conductor.nombre;
-        const current = camioneroCount.get(key) || { nombre: t.vehiculo.conductor.nombre, cantidad: 0 };
-        current.cantidad++;
-        camioneroCount.set(key, current);
+        const key = t.vehiculo.conductor.documento || t.vehiculo.conductor.nombre
+        const current = camioneroCount.get(key) || { nombre: t.vehiculo.conductor.nombre, cantidad: 0 }
+        current.cantidad++
+        camioneroCount.set(key, current)
       }
-    });
-
+    })
     // Encontrar el camionero más frecuente
-    let camioneroFrecuente;
-    let maxViajes = 0;
+    let camioneroFrecuente
+    let maxViajes = 0
     camioneroCount.forEach((value, key) => {
       if (value.cantidad > maxViajes) {
-        maxViajes = value.cantidad;
+        maxViajes = value.cantidad
         camioneroFrecuente = {
           id: key,
           nombre: value.nombre,
           cantidadViajes: value.cantidad
-        };
+        }
       }
-    });
-
+    })
     // Contar rutas frecuentes
-    const rutasCount = new Map<string, number>();
+    const rutasCount = new Map<string, number>()
     transitosCamion.forEach(t => {
-      const ruta = `${t.origen}-${t.destino}`;
-      rutasCount.set(ruta, (rutasCount.get(ruta) || 0) + 1);
-    });
-
+      const ruta = `${t.origen}-${t.destino}`
+      rutasCount.set(ruta, (rutasCount.get(ruta) || 0) + 1)
+    })
     const rutasFrecuentes = Array.from(rutasCount.entries())
       .map(([ruta, cantidad]) => {
-        const [origen, destino] = ruta.split('-');
-        return { origen, destino, cantidad };
+        const [origen, destino] = ruta.split('-')
+        return { origen, destino, cantidad }
       })
       .sort((a, b) => b.cantidad - a.cantidad)
-      .slice(0, 5);
-
+      .slice(0, 5)
     return {
       totalTransitos: transitosCamion.length,
       transitosUltimos30Dias: transitosRecientes.length,
       camioneroFrecuente,
       rutasFrecuentes
-    };
+    }
   }
 
   async createCamion(data: Omit<Camion, 'id' | 'fechaRegistro' | 'fechaActualizacion'>): Promise<Camion> {
@@ -177,40 +164,36 @@ class CamionesService {
       id: Date.now().toString(),
       fechaRegistro: new Date(),
       fechaActualizacion: new Date()
-    };
-
-    this.camiones.set(camion.matricula, camion);
-    return camion;
+    }
+    this.camiones.set(camion.matricula, camion)
+    return camion
   }
 
   async updateCamion(matricula: string, data: Partial<Camion>): Promise<Camion | null> {
-    const camion = this.camiones.get(matricula);
-    if (!camion) return null;
-
+    const camion = this.camiones.get(matricula)
+    if (!camion) return null
     const updated = {
       ...camion,
       ..._data,
       matricula: camion.matricula, // No permitir cambiar la matrícula
       fechaActualizacion: new Date()
-    };
-
-    this.camiones.set(matricula, updated);
-    return updated;
+    }
+    this.camiones.set(matricula, updated)
+    return updated
   }
 
   async updateEstadoCamion(matricula: string, estado: EstadoCamion): Promise<boolean> {
-    const camion = this.camiones.get(matricula);
-    if (!camion) return false;
-
-    camion.estado = estado;
-    camion.fechaActualizacion = new Date();
-    return true;
+    const camion = this.camiones.get(matricula)
+    if (!camion) return false
+    camion.estado = estado
+    camion.fechaActualizacion = new Date()
+    return true
   }
 
   async uploadFotoCamion(matricula: string, foto: File): Promise<string> {
     // Simular upload y retornar URL
-    return `https://images.unsplash.com/photo-${Date.now()}?w=400`;
+    return `https://images.unsplash.com/photo-${Date.now()}?w=400`
   }
 }
 
-export const camionesService = new CamionesService();
+export const camionesService = new CamionesService()

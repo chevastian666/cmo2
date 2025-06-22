@@ -4,37 +4,33 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react';
-
-import { Input} from '@/components/ui/input';
-
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Progress} from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import React, { useState, useEffect } from 'react'
+import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react'
+import { Input} from '@/components/ui/input'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Progress} from '@/components/ui/progress'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { 
-  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions';
-import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton, AnimatedDiv} from '@/components/animations/AnimatedComponents';
-import { motion, AnimatePresence} from 'framer-motion';
-
-import { cn} from '@/utils/utils';
-import type { Alerta} from '@/types';
-import { fadeInUp} from '@/components/animations/AnimationPresets';
-import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal';
-import { VerificarAlertaModalV2} from '../components/VerificarAlertaModalV2';
-import { VerificarButton, VerificadoBadge} from '../components/VerificarButton';
-
+  PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
+import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton, AnimatedDiv} from '@/components/animations/AnimatedComponents'
+import { motion, AnimatePresence} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import type { Alerta} from '@/types'
+import { fadeInUp} from '@/components/animations/AnimationPresets'
+import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal'
+import { VerificarAlertaModalV2} from '../components/VerificarAlertaModalV2'
+import { VerificarButton, VerificadoBadge} from '../components/VerificarButton'
 // KPI Card mejorado con animaciones
 const KPICard: React.FC<{
-  title: string;
-  value: number | string;
-  icon: React.ReactNode;
-  color: string;
-  trend?: number;
-  subtitle?: string;
-  onClick?: () => void;
-}> = ({ title, value, icon, color, trend, subtitle, onClick }) => (
+  title: string
+  value: number | string
+  icon: React.ReactNode
+  color: string
+  trend?: number
+  subtitle?: string
+  onClick?: () => void
+}> = (title, value, icon, color, trend, subtitle, onClick ) => (
   <AnimatedCard 
     className={cn("relative overflow-hidden cursor-pointer", onClick && "hover:shadow-lg")}
     whileHover={{ scale: 1.02, y: -2 }}
@@ -103,29 +99,27 @@ const KPICard: React.FC<{
       }}
     />
   </AnimatedCard>
-);
-
+)
 // Alert Row Component con animaciones mejoradas
 const AlertRow: React.FC<{
-  alerta: Alerta;
-  onVerificar: (alerta: Alerta) => void;
-  index: number;
+  alerta: Alerta
+  onVerificar: (alerta: Alerta) => void
+  index: number
 }> = ({ alerta, onVerificar, index }) => {
   const getSeveridadInfo = (severidad: string) => {
     switch (severidad) {
       case 'critica':
-        return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true };
+        return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true }
       case 'alta':
-        return { color: 'warning', icon: <AlertTriangle className="h-4 w-4" /> };
+        return { color: 'warning', icon: <AlertTriangle className="h-4 w-4" /> }
       case 'media':
-        return { color: 'primary', icon: <AlertCircle className="h-4 w-4" /> };
+        return { color: 'primary', icon: <AlertCircle className="h-4 w-4" /> }
       case 'baja':
-        return { color: 'gray', icon: <Bell className="h-4 w-4" /> };
+        return { color: 'gray', icon: <Bell className="h-4 w-4" /> }
       default:
-        return { color: 'gray', icon: <Bell className="h-4 w-4" /> };
+        return { color: 'gray', icon: <Bell className="h-4 w-4" /> }
     }
-  };
-
+  }
   const getTipoLabel = (tipo: string) => {
     const labels: Record<string, string> = {
       violacion: 'Violación de Precinto',
@@ -134,11 +128,10 @@ const AlertRow: React.FC<{
       temperatura: 'Temperatura Anormal',
       sin_signal: 'Sin Señal',
       intrusion: 'Intrusión Detectada'
-    };
-    return labels[tipo] || tipo;
-  };
-
-  const severidadInfo = getSeveridadInfo(alerta.severidad);
+    }
+    return labels[tipo] || tipo
+  }
+  const severidadInfo = getSeveridadInfo(alerta.severidad)
   const isNew = new Date().getTime() - new Date(alerta.fecha).getTime() < 300000; // 5 min
 
   return (
@@ -249,19 +242,17 @@ const AlertRow: React.FC<{
         </div>
       </td>
     </motion.tr>
-  );
-};
-
+  )
+}
 // Statistics Card Component
 const StatCard: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-  total: number;
-  color: string;
+  icon: React.ReactNode
+  label: string
+  value: number
+  total: number
+  color: string
 }> = ({ icon, label, value, total, color }) => {
-  const percentage = total > 0 ? (value / total) * 100 : 0;
-  
+  const percentage = total > 0 ? (value / total) * 100 : 0
   return (
     <AnimatedDiv className="bg-gray-800/50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
@@ -276,42 +267,30 @@ const StatCard: React.FC<{
       <Progress value={percentage} className="h-2" />
       <p className="text-xs text-gray-500 mt-1">{percentage.toFixed(1)}% del total</p>
     </AnimatedDiv>
-  );
-};
-
+  )
+}
 const AlertasPageV2: React.FC = () => {
-  
 
-  
-  
-
-  const [showHistorialModal, setShowHistorialModal] = useState(false);
-  const [showVerificarModal, setShowVerificarModal] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('todas');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
-   
-
-
+  const [showHistorialModal, setShowHistorialModal] = useState(false)
+  const [showVerificarModal, setShowVerificarModal] = useState(false)
+  const [selectedTab, setSelectedTab] = useState('todas')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
     useEffect(() => {
-    fetchAlertas();
-    fetchAlertasActivas();
-    
+    fetchAlertas()
+    fetchAlertasActivas()
     // Auto-refresh cada 30 segundos
     const interval = setInterval(() => {
-      fetchAlertasActivas();
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, [fetchAlertas, fetchAlertasActivas]);
-
+      fetchAlertasActivas()
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
   // Estadísticas calculadas
   const stats = React.useMemo(() => {
-    const criticas = alertasActivas.filter(a => a.severidad === 'critica').length;
-    const altas = alertasActivas.filter(a => a.severidad === 'alta').length;
-    const medias = alertasActivas.filter(a => a.severidad === 'media').length;
-    const bajas = alertasActivas.filter(a => a.severidad === 'baja').length;
-    
+    const criticas = alertasActivas.filter(a => a.severidad === 'critica').length
+    const altas = alertasActivas.filter(a => a.severidad === 'alta').length
+    const medias = alertasActivas.filter(a => a.severidad === 'media').length
+    const bajas = alertasActivas.filter(a => a.severidad === 'baja').length
     return {
       total: alertas.length,
       activas: alertasActivas.length,
@@ -331,27 +310,28 @@ const AlertasPageV2: React.FC = () => {
         sin_signal: alertasActivas.filter(a => a.tipo === 'sin_signal').length,
         intrusion: alertasActivas.filter(a => a.tipo === 'intrusion').length,
       }
-    };
-  }, [alertas, alertasActivas]);
-
+    }
+  }, [alertas])
   // Filtrar alertas según tab y búsqueda
   const filteredAlertas = React.useMemo(() => {
-    let filtered = [...alertas];
-    
+    let filtered = [...alertas]
     // Filtro por tab
     switch (selectedTab) {
-      case 'activas':
-        filtered = filtered.filter(a => !a.atendida);
-        break;
-      case 'criticas':
-        filtered = filtered.filter(a => a.severidad === 'critica' && !a.atendida);
-        break;
-      case 'asignadas':
-        filtered = filtered.filter(a => a.asignadoA && !a.atendida);
-        break;
-      case 'resueltas':
-        filtered = filtered.filter(a => a.atendida);
-        break;
+      case 'activas': {
+  filtered = filtered.filter(a => !a.atendida)
+        break
+    }
+    case 'criticas':
+        filtered = filtered.filter(a => a.severidad === 'critica' && !a.atendida)
+        break
+    }
+    case 'asignadas':
+        filtered = filtered.filter(a => a.asignadoA && !a.atendida)
+        break
+    }
+    case 'resueltas':
+        filtered = filtered.filter(a => a.atendida)
+        break
     }
     
     // Filtro por búsqueda
@@ -360,37 +340,33 @@ const AlertasPageV2: React.FC = () => {
         a.precintoId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         a.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
         a.tipo.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      )
     }
     
     // Filtros adicionales del store
     if (filter.tipo) {
-      filtered = filtered.filter(a => a.tipo === filter.tipo);
+      filtered = filtered.filter(a => a.tipo === filter.tipo)
     }
     if (filter.severidad) {
-      filtered = filtered.filter(a => a.severidad === filter.severidad);
+      filtered = filtered.filter(a => a.severidad === filter.severidad)
     }
     
     // Ordenar por fecha descendente
-    filtered.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-    
-    return filtered;
-  }, [alertas, selectedTab, searchTerm, filter]);
-
+    filtered.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    return filtered
+  }, [alertas, filter])
   const handleVerificarAlerta = (alerta: Alerta) => {
-    setSelectedAlerta(alerta);
-    setShowVerificarModal(true);
-  };
-
+    setSelectedAlerta(alerta)
+    setShowVerificarModal(true)
+  }
   const handleVerificarSuccess = async () => {
     if (selectedAlerta) {
-      await atenderAlerta(selectedAlerta.id);
-      setShowVerificarModal(false);
-      setSelectedAlerta(null);
-      fetchAlertasActivas();
+      await atenderAlerta(selectedAlerta.id)
+      setShowVerificarModal(false)
+      setSelectedAlerta(null)
+      fetchAlertasActivas()
     }
-  };
-
+  }
   return (<PageTransition>
       <div className="space-y-6">
         <AnimatedHeader
@@ -527,8 +503,8 @@ const AlertasPageV2: React.FC = () => {
                   <AnimatedButton
                     variant="outline"
                     onClick={() => {
-                      fetchAlertas();
-                      fetchAlertasActivas();
+                      fetchAlertas()
+                      fetchAlertasActivas()
                     }}
                     disabled={loading}
                   >
@@ -636,15 +612,14 @@ const AlertasPageV2: React.FC = () => {
       {selectedAlerta && (<VerificarAlertaModalV2
           isOpen={showVerificarModal}
           onClose={() => {
-            setShowVerificarModal(false);
-            setSelectedAlerta(null);
+            setShowVerificarModal(false)
+            setSelectedAlerta(null)
           }}
           alerta={selectedAlerta}
           onSuccess={handleVerificarSuccess}
         />
       )}
     </PageTransition>
-  );
-};
-
-export default AlertasPageV2;
+  )
+}
+export default AlertasPageV2

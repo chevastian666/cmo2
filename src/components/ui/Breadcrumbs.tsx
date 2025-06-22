@@ -4,26 +4,25 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Link, useLocation} from 'react-router-dom';
-import { ChevronRight, Home} from 'lucide-react';
-import { motion} from 'framer-motion';
-import { cn} from '@/lib/utils';
-
+import React from 'react'
+import { Link, useLocation} from 'react-router-dom'
+import { ChevronRight, Home} from 'lucide-react'
+import { motion} from 'framer-motion'
+import { cn} from '@/lib/utils'
 export interface BreadcrumbItem {
-  label: string;
-  href?: string;
-  icon?: React.ReactNode;
+  label: string
+  href?: string
+  icon?: React.ReactNode
 }
 
 interface BreadcrumbProps {
-  items?: BreadcrumbItem[];
-  separator?: React.ReactNode;
-  className?: string;
-  showHome?: boolean;
-  homeLabel?: string;
-  homeHref?: string;
-  maxItems?: number;
+  items?: BreadcrumbItem[]
+  separator?: React.ReactNode
+  className?: string
+  showHome?: boolean
+  homeLabel?: string
+  homeHref?: string
+  maxItems?: number
 }
 
 // Route configuration for automatic breadcrumb generation
@@ -49,47 +48,41 @@ const routeConfig: Record<string, { label: string; parent?: string }> = {
   '/roles': { label: 'Roles y Permisos' },
   '/demo': { label: 'Demo Componentes' },
   '/dashboard-interactive': { label: 'Dashboard Interactivo' }
-};
-
+}
 const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
-  const items: BreadcrumbItem[] = [];
-  const segments = pathname.split('/').filter(Boolean);
-  
+  const items: BreadcrumbItem[] = []
+  const segments = pathname.split('/').filter(Boolean)
   // Build breadcrumbs from route config
-  let currentPath = '';
-  
+  let currentPath = ''
   segments.forEach((segment, index) => {
-    currentPath += `/${segment}`;
-    
+    currentPath += `/${segment}`
     // Check if we have a config for this exact path
 
     if (_config) {
       items.push({
         label: config.label,
         href: index === segments.length - 1 ? undefined : currentPath
-      });
+      })
     } else {
       // Check for dynamic routes (with :param)
       const dynamicKey = Object.keys(routeConfig).find(key => {
-        const regex = new RegExp('^' + key.replace(/:[^/]+/g, '[^/]+') + '$');
-        return regex.test(currentPath);
-      });
-      
+        const regex = new RegExp('^' + key.replace(/:[^/]+/g, '[^/]+') + '$')
+        return regex.test(currentPath)
+      })
       if (dynamicKey) {
 
         items.push({
           label: config.label,
           href: index === segments.length - 1 ? undefined : currentPath
-        });
-        
+        })
         // Add parent if exists
         if (config.parent) {
-          const parentConfig = routeConfig[config.parent];
+          const parentConfig = routeConfig[config.parent]
           if (parentConfig && !items.some(item => item.href === config.parent)) {
             items.unshift({
               label: parentConfig.label,
               href: config.parent
-            });
+            })
           }
         }
       } else {
@@ -97,27 +90,22 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
         items.push({
           label: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
           href: index === segments.length - 1 ? undefined : currentPath
-        });
+        })
       }
     }
-  });
-  
-  return items;
-};
-
+  })
+  return items
+}
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items, separator = <ChevronRight className="h-4 w-4" />, className, showHome = true, homeLabel = 'Inicio', homeHref = '/', maxItems = 4
 }) => {
-  const location = useLocation();
-  
+  const location = useLocation()
   // Use provided items or generate from current path
-  const breadcrumbItems = items || generateBreadcrumbsFromPath(location.pathname);
-  
+  const breadcrumbItems = items || generateBreadcrumbsFromPath(location.pathname)
   // Add home if requested and not already present
   const allItems = showHome && !breadcrumbItems.some(item => item.href === homeHref)
     ? [{ label: homeLabel, href: homeHref, icon: <Home className="h-4 w-4" /> }, ...breadcrumbItems]
-    : breadcrumbItems;
-  
+    : breadcrumbItems
   // Handle max items with ellipsis
   const displayItems = allItems.length > maxItems
     ? [
@@ -125,16 +113,13 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
         { label: '...', href: undefined },
         ...allItems.slice(-(maxItems - 2))
       ]
-    : allItems;
-
-  if (displayItems.length === 0) return null;
-
+    : allItems
+  if (displayItems.length === 0) return null
   return (
     <nav aria-label="Breadcrumb" className={cn('flex items-center space-x-2 text-sm', className)}>
       {displayItems.map((item, index) => {
-        const isLast = index === displayItems.length - 1;
-        const isEllipsis = item.label === '...';
-
+        const isLast = index === displayItems.length - 1
+        const isEllipsis = item.label === '...'
         return (
           <React.Fragment key={index}>
             <motion.div
@@ -179,18 +164,16 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
               </motion.span>
             )}
           </React.Fragment>
-        );
+        )
       })}
     </nav>
-  );
-};
-
+  )
+}
 // Hook to get current breadcrumbs
 export const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const location = useLocation();
-  return generateBreadcrumbsFromPath(location.pathname);
-};
-
+  const location = useLocation()
+  return generateBreadcrumbsFromPath(location.pathname)
+}
 // Animated breadcrumb variant
 export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (props) => {
   return (
@@ -201,5 +184,5 @@ export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (props) => {
     >
       <Breadcrumb {...props} />
     </motion.div>
-  );
-};
+  )
+}

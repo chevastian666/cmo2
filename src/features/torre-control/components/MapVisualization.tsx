@@ -4,62 +4,54 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import {MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react';
-import { Card} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-import { Progress} from '@/components/ui/progress';
-import { ScrollArea} from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { motion, AnimatePresence} from 'framer-motion';
-import type { TransitoTorreControl} from '../types';
-import { cn} from '@/utils/utils';
-
+import React, { useState, useEffect } from 'react'
+import {MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react'
+import { Card} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Progress} from '@/components/ui/progress'
+import { ScrollArea} from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { motion, AnimatePresence} from 'framer-motion'
+import type { TransitoTorreControl} from '../types'
+import { cn} from '@/utils/utils'
 interface MapVisualizationProps {
-  data: TransitoTorreControl[];
+  data: TransitoTorreControl[]
 }
 
 export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
-  const [selectedTab, setSelectedTab] = useState('rutas');
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-   
-
+  const [selectedTab, setSelectedTab] = useState('rutas')
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     // Simulate loading delay to ensure proper mounting
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
+      setIsLoading(false)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
   // Ensure data is an array
-  const safeData = Array.isArray(data) ? data : [];
-
+  const safeData = Array.isArray(data) ? data : []
   // Group transitos by route
   const routeGroups = safeData.reduce((acc, transito) => {
-    const route = `${transito.origen} → ${transito.destino}`;
+    const route = `${transito.origen} → ${transito.destino}`
     if (!acc[route]) {
-      acc[route] = [];
+      acc[route] = []
     }
-    acc[route].push(transito);
-    return acc;
-  }, {} as Record<string, TransitoTorreControl[]>);
-
+    acc[route].push(transito)
+    return acc
+  }, {} as Record<string, TransitoTorreControl[]>)
   // Group by status
   const statusGroups = {
     verde: safeData.filter(t => t.semaforo === 'verde'),
     amarillo: safeData.filter(t => t.semaforo === 'amarillo'),
     rojo: safeData.filter(t => t.semaforo === 'rojo')
-  };
-
+  }
   // Sort routes by activity
   const sortedRoutes = Object.entries(routeGroups).sort((a, b) => {
-    const aActivity = a[1].filter(t => t.semaforo !== 'verde').length;
-    const bActivity = b[1].filter(t => t.semaforo !== 'verde').length;
-    return bActivity - aActivity;
-  });
-
+    const aActivity = a[1].filter(t => t.semaforo !== 'verde').length
+    const bActivity = b[1].filter(t => t.semaforo !== 'verde').length
+    return bActivity - aActivity
+  })
   if (isLoading) {
     return (
       <div className="h-full flex flex-col">
@@ -74,7 +66,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   if (!safeData || safeData.length === 0) {
@@ -94,7 +86,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (<div className="h-full flex flex-col" style={{ minHeight: '400px' }}>
@@ -114,10 +106,9 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
           <ScrollArea className="h-full">
             <div className="space-y-4">
               {sortedRoutes.map(([route, transitos]) => {
-                const hasIssues = transitos.some(t => t.semaforo !== 'verde');
-                const criticalCount = transitos.filter(t => t.semaforo === 'rojo').length;
-                const warningCount = transitos.filter(t => t.semaforo === 'amarillo').length;
-
+                const hasIssues = transitos.some(t => t.semaforo !== 'verde')
+                const criticalCount = transitos.filter(t => t.semaforo === 'rojo').length
+                const warningCount = transitos.filter(t => t.semaforo === 'amarillo').length
                 return (
                   <motion.div
                     key={route}
@@ -190,7 +181,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                       ))}
                     </div>
                   </motion.div>
-                );
+                )
               })}
             </div>
           </ScrollArea>
@@ -341,5 +332,5 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}

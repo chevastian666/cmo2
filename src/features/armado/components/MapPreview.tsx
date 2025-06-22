@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
-import {MapPin, Maximize2, X} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useState } from 'react'
+import {MapPin, Maximize2, X} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface MapPreviewProps {
-  lat: number;
-  lng: number;
-  title?: string;
-  height?: string;
+  lat: number
+  lng: number
+  title?: string
+  height?: string
 }
 
 export const MapPreview: React.FC<MapPreviewProps> = ({ 
   lat, lng, title = 'Ubicación', height = '300px' 
 }) => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
-
+    setIsFullscreen(!isFullscreen)
+  }
   return (
     <>
       <div className={cn(
@@ -81,5 +78,5 @@ export const MapPreview: React.FC<MapPreviewProps> = ({
         />
       )}
     </>
-  );
-};
+  )
+}

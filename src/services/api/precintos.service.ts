@@ -1,13 +1,12 @@
-import type { Precinto, EventoPrecinto} from '../types/monitoring';
-import { unifiedAPIService} from './api/unified.service';
-import { generateMockPrecinto} from '../utils/mockData';
-
+import type { Precinto, EventoPrecinto} from '../types/monitoring'
+import { unifiedAPIService} from './api/unified.service'
+import { generateMockPrecinto} from '../utils/mockData'
 export interface PrecintoFilters {
-  estado?: string;
-  tipo?: string;
-  bateriaBaja?: boolean;
-  page?: number;
-  limit?: number;
+  estado?: string
+  tipo?: string
+  bateriaBaja?: boolean
+  page?: number
+  limit?: number
 }
 
 export const precintosService = {
@@ -15,47 +14,47 @@ export const precintosService = {
     try {
       // In development, return mock data
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i));
+        return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
       }
       
       // Use unified API service
-      const response = await unifiedAPIService.getPrecintosActivos(filters?.limit || 100);
-      return response;
+      const response = await unifiedAPIService.getPrecintosActivos(filters?.limit || 100)
+      return response
     } catch {
-      console.error('Error fetching precintos:', _error);
+      console.error('Error fetching precintos:', _error)
       // Fallback to mock data
-      return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i));
+      return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
     }
   },
 
   getById: async (id: string): Promise<Precinto> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockPrecinto(parseInt(id) || 1);
+        return generateMockPrecinto(parseInt(id) || 1)
       }
       
       // For now, get all and find by id
-      const all = await precintosService.getAll();
-      const precinto = all.find(p => p.id === id);
-      if (!precinto) throw new Error('Precinto not found');
-      return precinto;
+      const all = await precintosService.getAll()
+      const precinto = all.find(p => p.id === id)
+      if (!precinto) throw new Error('Precinto not found')
+      return precinto
     } catch {
-      console.error('Error fetching precinto:', _error);
-      return generateMockPrecinto(parseInt(id) || 1);
+      console.error('Error fetching precinto:', _error)
+      return generateMockPrecinto(parseInt(id) || 1)
     }
   },
 
   getActivos: async (): Promise<Precinto[]> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
+        return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
       }
       
-      const response = await unifiedAPIService.getPrecintosActivos(10);
-      return response;
+      const response = await unifiedAPIService.getPrecintosActivos(10)
+      return response
     } catch {
-      console.error('Error fetching precintos activos:', _error);
-      return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i));
+      console.error('Error fetching precintos activos:', _error)
+      return Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
     }
   },
 
@@ -72,56 +71,56 @@ export const precintosService = {
             lat: -34.9011 + (Math.random() - 0.5) * 0.1,
             lng: -56.1645 + (Math.random() - 0.5) * 0.1
           }
-        }));
+        }))
       }
       
       // TODO: Implement real API call when endpoint is available
-      return [];
+      return []
     } catch {
-      console.error('Error fetching eventos:', _error);
-      return [];
+      console.error('Error fetching eventos:', _error)
+      return []
     }
   },
 
   activar: async (precintoData: Partial<Precinto>): Promise<Precinto> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return { ...generateMockPrecinto(1), ...precintoData } as Precinto;
+        return { ...generateMockPrecinto(1), ...precintoData } as Precinto
       }
       
       // TODO: Implement real API call
-      throw new Error('Not implemented');
+      throw new Error('Not implemented')
     } catch {
-      console.error('Error activating precinto:', _error);
-      return { ...generateMockPrecinto(1), ...precintoData } as Precinto;
+      console.error('Error activating precinto:', _error)
+      return { ...generateMockPrecinto(1), ...precintoData } as Precinto
     }
   },
 
   desactivar: async (id: string, motivo?: string): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        console.log('Mock: Desactivating precinto', id, motivo);
-        return;
+        console.log('Mock: Desactivating precinto', id, motivo)
+        return
       }
       
       // TODO: Implement real API call
-      throw new Error('Not implemented');
+      throw new Error('Not implemented')
     } catch {
-      console.error('Error deactivating precinto:', _error);
+      console.error('Error deactivating precinto:', _error)
     }
   },
 
   actualizarUbicacion: async (id: string, lat: number, lng: number): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        console.log('Mock: Updating location', id, lat, lng);
-        return;
+        console.log('Mock: Updating location', id, lat, lng)
+        return
       }
       
       // TODO: Implement real API call
-      throw new Error('Not implemented');
+      throw new Error('Not implemented')
     } catch {
-      console.error('Error updating location:', _error);
+      console.error('Error updating location:', _error)
     }
   },
-};
+}

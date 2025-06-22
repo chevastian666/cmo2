@@ -4,8 +4,7 @@
  * By Cheva
  */
 
-import React from 'react';
-
+import React from 'react'
 const TreemapDirect = () => {
   return (
     <div style={{ padding: '24px' }}>
@@ -33,7 +32,6 @@ const TreemapDirect = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default TreemapDirect;
+  )
+}
+export default TreemapDirect

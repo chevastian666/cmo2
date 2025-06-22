@@ -1,33 +1,30 @@
-import React from 'react';
-import {Search, Calendar, Building, MapPin, Filter} from 'lucide-react';
-import { ORIGENES_DESTINOS} from '../../../constants/locations';
-import type { Transito} from '../types';
-
+import React from 'react'
+import {Search, Calendar, Building, MapPin, Filter} from 'lucide-react'
+import { ORIGENES_DESTINOS} from '../../../constants/locations'
+import type { Transito} from '../types'
 interface FiltersState {
-  estado: string;
-  fechaDesde: string;
-  fechaHasta: string;
-  precinto: string;
-  empresa: string;
-  origen: string;
-  destino: string;
-  searchText: string;
+  estado: string
+  fechaDesde: string
+  fechaHasta: string
+  precinto: string
+  empresa: string
+  origen: string
+  destino: string
+  searchText: string
 }
 
 interface TransitFiltersProps {
-  filters: FiltersState;
-  onChange: (filters: FiltersState) => void;
-  transitos: Transito[];
+  filters: FiltersState
+  onChange: (filters: FiltersState) => void
+  transitos: Transito[]
 }
 
 export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChange, transitos }) => {
   // Get unique empresas from transitos
-  const empresas = Array.from(new Set(transitos.map(t => t.empresa))).sort();
-
+  const empresas = Array.from(new Set(transitos.map(t => t.empresa))).sort()
   const handleChange = (field: keyof FiltersState, value: string) => {
-    onChange({ ...filters, [field]: value });
-  };
-
+    onChange({ ...filters, [field]: value })
+  }
   const handleReset = () => {
     onChange({
       estado: '',
@@ -38,9 +35,8 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
       origen: '',
       destino: '',
       searchText: ''
-    });
-  };
-
+    })
+  }
   return (
     <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
       <div className="flex items-center justify-between mb-4">
@@ -198,5 +194,5 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

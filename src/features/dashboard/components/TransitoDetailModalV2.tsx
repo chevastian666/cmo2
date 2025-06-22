@@ -1,61 +1,57 @@
  
-import React, { useEffect, useRef, useState } from 'react';
-import { User, MapPin, Clock, Package, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Link2} from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog';
-import { Button} from '@/components/ui/button';
-import { Card, CardContent, CardHeader} from '@/components/ui/card';
-import { Badge} from '@/components/ui/badge';
-import { Slider} from '@/components/ui/slider';
-import { cn} from '@/lib/utils';
-
-
+import React, { useEffect, useRef, useState } from 'react'
+import { User, MapPin, Clock, Package, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Link2} from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog'
+import { Button} from '@/components/ui/button'
+import { Card, CardContent, CardHeader} from '@/components/ui/card'
+import { Badge} from '@/components/ui/badge'
+import { Slider} from '@/components/ui/slider'
+import { cn} from '@/lib/utils'
 export interface TransitoDashboard {
-  id: string;
-  numeroViaje: string;
-  numeroMovimiento: string;
-  dua: string;
-  matricula: string;
-  chofer: string;
-  choferCI: string;
-  origen: string;
-  destino: string;
-  fechaSalida: Date;
-  eta: Date;
-  estado: 'en_ruta' | 'detenido' | 'completado';
-  precintoId: string;
-  precintoNumero: string;
-  eslinga_larga: boolean;
-  eslinga_corta: boolean;
-  observaciones?: string;
-  alertas?: string[];
+  id: string
+  numeroViaje: string
+  numeroMovimiento: string
+  dua: string
+  matricula: string
+  chofer: string
+  choferCI: string
+  origen: string
+  destino: string
+  fechaSalida: Date
+  eta: Date
+  estado: 'en_ruta' | 'detenido' | 'completado'
+  precintoId: string
+  precintoNumero: string
+  eslinga_larga: boolean
+  eslinga_corta: boolean
+  observaciones?: string
+  alertas?: string[]
   ubicacionActual?: {
-    lat: number;
-    lng: number;
-  };
-  progreso: number;
-  fotoPrecintado?: string;
-  bateria?: number;
-  temperatura?: number;
+    lat: number
+    lng: number
+  }
+  progreso: number
+  fotoPrecintado?: string
+  bateria?: number
+  temperatura?: number
 }
 
 interface TransitoDetailModalProps {
-  transitoId: string;
-  isOpen: boolean;
-  onClose: () => void;
+  transitoId: string
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
   transitoId, isOpen, onClose
 }) => {
-  const [showFullImage, setShowFullImage] = useState(false);
+  const [showFullImage, setShowFullImage] = useState(false)
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
-  const [selectedTime, setSelectedTime] = useState<Date>(new Date());
-  const [isPlayingTimeline, setIsPlayingTimeline] = useState(false);
-  const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [transito, setTransito] = useState<TransitoDashboard | null>(null);
-
+  const [selectedTime, setSelectedTime] = useState<Date>(new Date())
+  const [isPlayingTimeline, setIsPlayingTimeline] = useState(false)
+  const playIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [transito, setTransito] = useState<TransitoDashboard | null>(null)
   // Fetch transit data based on transitoId
-   
 
   useEffect(() => {
     if (isOpen && transitoId) {
@@ -85,60 +81,50 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
         fotoPrecintado: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
         bateria: 85,
         temperatura: -18
-      };
-      setTransito(mockTransito);
-      setTimelinePosition(mockTransito.progreso);
+      }
+      setTransito(mockTransito)
+      setTimelinePosition(mockTransito.progreso)
     }
-  }, [isOpen, transitoId]);
-
-
+  }, [])
   const handleTimelineChange = (value: number[]) => {
-    const newPosition = value[0];
-    setTimelinePosition(newPosition);
-    
-    if (!transito) return;
-    
+    const newPosition = value[0]
+    setTimelinePosition(newPosition)
+    if (!transito) return
     // Calculate the time based on position
-    const totalDuration = transito.eta.getTime() - transito.fechaSalida.getTime();
-    const currentDuration = (totalDuration * newPosition) / 100;
-    const currentTime = new Date(transito.fechaSalida.getTime() + currentDuration);
-    setSelectedTime(currentTime);
-  };
-
+    const totalDuration = transito.eta.getTime() - transito.fechaSalida.getTime()
+    const currentDuration = (totalDuration * newPosition) / 100
+    const currentTime = new Date(transito.fechaSalida.getTime() + currentDuration)
+    setSelectedTime(currentTime)
+  }
   const togglePlayTimeline = () => {
     if (isPlayingTimeline) {
       // Stop playing
       if (playIntervalRef.current) {
-        clearInterval(playIntervalRef.current);
-        playIntervalRef.current = null;
+        clearInterval(playIntervalRef.current)
+        playIntervalRef.current = null
       }
-      setIsPlayingTimeline(false);
+      setIsPlayingTimeline(false)
     } else {
       // Start playing
-      setIsPlayingTimeline(true);
-      let currentPos = timelinePosition;
-      
+      setIsPlayingTimeline(true)
+      let currentPos = timelinePosition
       playIntervalRef.current = setInterval(() => {
         currentPos += 2; // Move 2% each interval
         if (currentPos >= 100) {
           currentPos = 0; // Loop back to start
         }
-        handleTimelineChange([currentPos]);
+        handleTimelineChange([currentPos])
       }, 100); // Update every 100ms
     }
-  };
-   
-
+  }
   useEffect(() => {
     return () => {
       if (playIntervalRef.current) {
-        clearInterval(playIntervalRef.current);
+        clearInterval(playIntervalRef.current)
       }
-    };
-  }, []);
-
-  if (!transito) return null;
-
+    }
+  }, [])
+  if (!transito) return null
   const formatDateTime = (date: Date) => {
     return date.toLocaleString('es-UY', {
       day: '2-digit',
@@ -146,16 +132,14 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
-
+    })
+  }
   const calculateDuration = () => {
-    const duration = transito.eta.getTime() - transito.fechaSalida.getTime();
-    const hours = Math.floor(duration / (1000 * 60 * 60));
-    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}h ${minutes}m`;
-  };
-
+    const duration = transito.eta.getTime() - transito.fechaSalida.getTime()
+    const hours = Math.floor(duration / (1000 * 60 * 60))
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
+    return `${hours}h ${minutes}m`
+  }
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -396,12 +380,12 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={(e) => {
-                              e.stopPropagation();
+                              e.stopPropagation()
                               // Download functionality
-                              const link = document.createElement('a');
-                              link.href = transito.fotoPrecintado!;
-                              link.download = `precinto-${transito.precintoId}.jpg`;
-                              link.click();
+                              const link = document.createElement('a')
+                              link.href = transito.fotoPrecintado!
+                              link.download = `precinto-${transito.precintoId}.jpg`
+                              link.click()
                             }}
                             className="text-xs text-blue-400 hover:text-blue-300"
                           >
@@ -591,11 +575,11 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
                 </div>
                 <Button
                   onClick={(e) => {
-                    e.stopPropagation();
-                    const link = document.createElement('a');
-                    link.href = transito.fotoPrecintado!;
-                    link.download = `precinto-${transito.precintoId}-full.jpg`;
-                    link.click();
+                    e.stopPropagation()
+                    const link = document.createElement('a')
+                    link.href = transito.fotoPrecintado!
+                    link.download = `precinto-${transito.precintoId}-full.jpg`
+                    link.click()
                   }}
                   className="bg-blue-600 hover:bg-blue-700"
                 >
@@ -608,5 +592,5 @@ export const TransitoDetailModalV2: React.FC<TransitoDetailModalProps> = ({
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}

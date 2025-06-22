@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import {Clock, RefreshCw, Filter, Monitor} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-
+import React, { useState, useEffect } from 'react'
+import {Clock, RefreshCw, Filter, Monitor} from 'lucide-react'
+import { cn} from '../../../utils/utils'
 interface TorreControlHeaderProps {
-  lastUpdate: Date;
-  transitosCount: number;
-  onRefresh: () => void;
-  onToggleFilters: () => void;
-  showFilters: boolean;
+  lastUpdate: Date
+  transitosCount: number
+  onRefresh: () => void
+  onToggleFilters: () => void
+  showFilters: boolean
 }
 
 export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
   lastUpdate, transitosCount, onRefresh, onToggleFilters, showFilters
 }) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-   
-
+  const [currentTime, setCurrentTime] = useState(new Date())
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
   return (
     <div className="bg-gray-900 border-b border-gray-800">
       <div className="max-w-full mx-auto px-4 py-3 sm:py-4">
@@ -80,5 +76,5 @@ export const TorreControlHeader: React.FC<TorreControlHeaderProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

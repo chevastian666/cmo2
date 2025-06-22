@@ -3,79 +3,70 @@
  * By Cheva
  */
 
-import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { AlertTriangle, Shield, TrendingUp, Users, CheckCircle, History, Bell, BellOff, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap, Activity, Search} from 'lucide-react';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Badge} from '@/components/ui/badge';
-
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-
-import { useAlertasStore} from '@/store/store';
-import { cn} from '@/utils/utils';
-import type { Alerta} from '@/types';
-import { VerificarButton, VerificadoBadge} from '../components/VerificarButton';
-
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react'
+import { AlertTriangle, Shield, TrendingUp, Users, CheckCircle, History, Bell, BellOff, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap, Activity, Search} from 'lucide-react'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Badge} from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { useAlertasStore} from '@/store/store'
+import { cn} from '@/utils/utils'
+import type { Alerta} from '@/types'
+import { VerificarButton, VerificadoBadge} from '../components/VerificarButton'
 // Lazy load modals pesados
 const HistorialAlertasCriticasModal = lazy(() => 
   import('../components/HistorialAlertasCriticasModal').then(m => ({ 
     default: m.HistorialAlertasCriticasModal 
   }))
-);
-
+)
 const VerificarAlertaModalV2 = lazy(() => 
   import('../components/VerificarAlertaModalV2').then(m => ({ 
     default: m.VerificarAlertaModalV2 
   }))
-);
-
+)
 // Static helper functions outside component to avoid recreating
 const getSeveridadInfo = (severidad: string) => {
   switch (severidad) {
     case 'critica':
-      return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true };
+      return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true }
     case 'alta':
-      return { color: 'warning', icon: <AlertTriangle className="h-4 w-4" />, pulse: false };
+      return { color: 'warning', icon: <AlertTriangle className="h-4 w-4" />, pulse: false }
     case 'media':
-      return { color: 'secondary', icon: <AlertCircle className="h-4 w-4" />, pulse: false };
+      return { color: 'secondary', icon: <AlertCircle className="h-4 w-4" />, pulse: false }
     case 'baja':
-      return { color: 'default', icon: <Bell className="h-4 w-4" />, pulse: false };
+      return { color: 'default', icon: <Bell className="h-4 w-4" />, pulse: false }
     default:
-      return { color: 'default', icon: <Bell className="h-4 w-4" />, pulse: false };
+      return { color: 'default', icon: <Bell className="h-4 w-4" />, pulse: false }
   }
-};
-
+}
 const getTipoInfo = (tipo: string) => {
   switch (tipo) {
     case 'violacion':
-      return { color: 'destructive', icon: <Shield className="h-5 w-5" /> };
+      return { color: 'destructive', icon: <Shield className="h-5 w-5" /> }
     case 'bateria_baja':
-      return { color: 'warning', icon: <Zap className="h-5 w-5" /> };
+      return { color: 'warning', icon: <Zap className="h-5 w-5" /> }
     case 'fuera_de_ruta':
-      return { color: 'secondary', icon: <TrendingUp className="h-5 w-5" /> };
+      return { color: 'secondary', icon: <TrendingUp className="h-5 w-5" /> }
     case 'temperatura':
-      return { color: 'warning', icon: <AlertTriangle className="h-5 w-5" /> };
+      return { color: 'warning', icon: <AlertTriangle className="h-5 w-5" /> }
     case 'sin_signal':
-      return { color: 'default', icon: <BellOff className="h-5 w-5" /> };
+      return { color: 'default', icon: <BellOff className="h-5 w-5" /> }
     case 'intrusion':
-      return { color: 'destructive', icon: <Users className="h-5 w-5" /> };
+      return { color: 'destructive', icon: <Users className="h-5 w-5" /> }
     default:
-      return { color: 'default', icon: <AlertTriangle className="h-5 w-5" /> };
+      return { color: 'default', icon: <AlertTriangle className="h-5 w-5" /> }
   }
-};
-
+}
 // Helper for search matching
 const matchesSearch = (alerta: Alerta, searchTerm: string): boolean => {
-  const search = searchTerm.toLowerCase();
+  const search = searchTerm.toLowerCase()
   return (
     alerta.precintoId.toLowerCase().includes(search) ||
     alerta.descripcion.toLowerCase().includes(search) ||
     alerta.tipo.toLowerCase().includes(search)
-  );
-};
-
+  )
+}
 // Loading skeleton mejorado
 const AlertSkeleton = () => (
   <tr className="animate-pulse">
@@ -107,18 +98,17 @@ const AlertSkeleton = () => (
       <div className="h-8 w-24 bg-gray-700 rounded"></div>
     </td>
   </tr>
-);
-
+)
 // KPI Card optimizada con React.memo
 const KPICard = React.memo<{
-  title: string;
-  value: number | string;
-  icon: React.ReactNode;
-  color: string;
-  trend?: number;
-  subtitle?: string;
-  onClick?: () => void;
-}>(({ title, value, icon, color, trend, subtitle, onClick }) => (
+  title: string
+  value: number | string
+  icon: React.ReactNode
+  color: string
+  trend?: number
+  subtitle?: string
+  onClick?: () => void
+}>((title, value, icon, color, trend, subtitle, onClick ) => (
   <Card 
     className={cn("relative overflow-hidden cursor-pointer transition-all hover:shadow-lg", onClick && "hover:scale-[1.02]")}
     onClick={onClick}
@@ -147,21 +137,19 @@ const KPICard = React.memo<{
       </div>
     </CardContent>
   </Card>
-));
-
+))
 // Alert Row optimizada con memoización mejorada
 const AlertRow = React.memo<{
-  alerta: Alerta;
-  onVerificar: (alerta: Alerta) => void;
-  index: number;
+  alerta: Alerta
+  onVerificar: (alerta: Alerta) => void
+  index: number
 }>(({ alerta, onVerificar, index }) => {
-  const severidadInfo = React.useMemo(() => getSeveridadInfo(alerta.severidad), [alerta.severidad]);
-  const tipoInfo = React.useMemo(() => getTipoInfo(alerta.tipo), [alerta.tipo]);
+  const severidadInfo = React.useMemo(() => getSeveridadInfo(alerta.severidad), [alerta.severidad])
+  const tipoInfo = React.useMemo(() => getTipoInfo(alerta.tipo), [alerta.tipo])
   const timeAgo = React.useMemo(() => {
-    const minutes = Math.floor((new Date().getTime() - new Date(alerta.fecha).getTime()) / 60000);
-    return minutes;
-  }, [alerta.fecha]);
-
+    const minutes = Math.floor((new Date().getTime() - new Date(alerta.fecha).getTime()) / 60000)
+    return minutes
+  }, [alerta.fecha])
   return (
     <tr className="border-b border-gray-700 hover:bg-gray-800/50 transition-all duration-200 group">
       <td className="px-6 py-4 whitespace-nowrap">
@@ -243,7 +231,7 @@ const AlertRow = React.memo<{
         </div>
       </td>
     </tr>
-  );
+  )
 }, (prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
@@ -251,47 +239,41 @@ const AlertRow = React.memo<{
     prevProps.alerta.atendida === nextProps.alerta.atendida &&
     prevProps.alerta.asignadoA === nextProps.alerta.asignadoA &&
     prevProps.index === nextProps.index
-  );
-});
-
+  )
+})
 const AlertasPageV2: React.FC = () => {
   // Optimized store subscriptions
-  const alertas = useAlertasStore(state => state.alertas);
-  const alertasActivas = useAlertasStore(state => state.alertasActivas);
-  const loading = useAlertasStore(state => state.loading);
-  const fetchAlertas = useAlertasStore(state => state.fetchAlertas);
-  const fetchAlertasActivas = useAlertasStore(state => state.fetchAlertasActivas);
-  const atenderAlerta = useAlertasStore(state => state.atenderAlerta);
-  
-  const [showHistorialModal, setShowHistorialModal] = useState(false);
-  const [showVerificarModal, setShowVerificarModal] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('todas');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  
+  const alertas = useAlertasStore(state => state.alertas)
+  const alertasActivas = useAlertasStore(state => state.alertasActivas)
+  const loading = useAlertasStore(state => state.loading)
+  const fetchAlertas = useAlertasStore(state => state.fetchAlertas)
+  const fetchAlertasActivas = useAlertasStore(state => state.fetchAlertasActivas)
+  const atenderAlerta = useAlertasStore(state => state.atenderAlerta)
+  const [showHistorialModal, setShowHistorialModal] = useState(false)
+  const [showVerificarModal, setShowVerificarModal] = useState(false)
+  const [selectedTab, setSelectedTab] = useState('todas')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
   // Estado local para paginación
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20
   // Cargar datos solo una vez con loading state
   
     useEffect(() => {
     const loadData = async () => {
-      if (!isInitialLoad) return;
-      
+      if (!isInitialLoad) return
       try {
         await Promise.all([
           fetchAlertas(),
           fetchAlertasActivas()
-        ]);
+        ])
       } finally {
-        setIsInitialLoad(false);
+        setIsInitialLoad(false)
       }
-    };
-    loadData();
-  }, [isInitialLoad, fetchAlertas, fetchAlertasActivas]);
-
+    }
+    loadData()
+  }, [])
   // Estadísticas calculadas con memoización optimizada
   const stats = React.useMemo(() => {
     if (!alertas.length && !alertasActivas.length) {
@@ -312,25 +294,22 @@ const AlertasPageV2: React.FC = () => {
           sin_signal: 0,
           intrusion: 0,
         }
-      };
+      }
     }
 
     // Single pass for all calculations
-    let atendidas = 0;
-    const severidadCounts: Record<string, number> = {};
-    const tipoCounts: Record<string, number> = {};
-    
+    let atendidas = 0
+    const severidadCounts: Record<string, number> = {}
+    const tipoCounts: Record<string, number> = {}
     // Process alertas for atendidas count
     alertas.forEach(a => {
-      if (a.atendida) atendidas++;
-    });
-    
+      if (a.atendida) atendidas++
+    })
     // Process alertasActivas for counts
     alertasActivas.forEach(a => {
-      severidadCounts[a.severidad] = (severidadCounts[a.severidad] || 0) + 1;
-      tipoCounts[a.tipo] = (tipoCounts[a.tipo] || 0) + 1;
-    });
-    
+      severidadCounts[a.severidad] = (severidadCounts[a.severidad] || 0) + 1
+      tipoCounts[a.tipo] = (tipoCounts[a.tipo] || 0) + 1
+    })
     return {
       total: alertas.length,
       activas: alertasActivas.length,
@@ -348,77 +327,70 @@ const AlertasPageV2: React.FC = () => {
         sin_signal: tipoCounts.sin_signal || 0,
         intrusion: tipoCounts.intrusion || 0,
       }
-    };
-  }, [alertas, alertasActivas]);
-
+    }
+  }, [alertas])
   // Filtrado optimizado con paginación y single pass
-  
-          break;
-        case 'criticas':
-          if (a.severidad !== 'critica' || a.atendida) return false;
-          break;
-        case 'resueltas':
-          if (!a.atendida) return false;
-          break;
+
+          break
+    }
+    case 'criticas':
+          if (a.severidad !== 'critica' || a.atendida) return false
+          break
+    }
+    case 'resueltas':
+          if (!a.atendida) return false
+          break
       }
       
       // Search filter
       if (searchTerm && !matchesSearch(a, searchTerm)) {
-        return false;
+        return false
       }
       
-      return true;
-    });
-    
+      return true
+    })
     // Sort only the page we need
-    const total = Math.ceil(filtered.length / itemsPerPage);
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    
+    const total = Math.ceil(filtered.length / itemsPerPage)
+    const start = (currentPage - 1) * itemsPerPage
+    const end = start + itemsPerPage
     // Sort only the visible portion for better performance
     const sortedPage = filtered
       .sort((a, b) => {
         // Cache date values to avoid repeated parsing
-        const dateA = new Date(a.fecha).getTime();
-        const dateB = new Date(b.fecha).getTime();
-        return dateB - dateA;
+        const dateA = new Date(a.fecha).getTime()
+        const dateB = new Date(b.fecha).getTime()
+        return dateB - dateA
       })
-      .slice(start, end);
-    
+      .slice(start, end)
     return { 
       filteredAlertas: sortedPage, 
       totalPages: total,
       totalItems: filtered.length 
-    };
-  }, [alertas, selectedTab, searchTerm, currentPage, itemsPerPage]);
-
+    }
+  }, [alertas])
   const handleVerificarAlerta = useCallback((alerta: Alerta) => {
-    setSelectedAlerta(alerta);
-    setShowVerificarModal(true);
-  }, []);
-
+    setSelectedAlerta(alerta)
+    setShowVerificarModal(true)
+  }, [])
   const handleVerificarSuccess = useCallback(async () => {
     if (selectedAlerta) {
-      await atenderAlerta(selectedAlerta.id);
-      setShowVerificarModal(false);
-      setSelectedAlerta(null);
-      fetchAlertasActivas();
+      await atenderAlerta(selectedAlerta.id)
+      setShowVerificarModal(false)
+      setSelectedAlerta(null)
+      fetchAlertasActivas()
     }
-  }, [selectedAlerta, atenderAlerta, fetchAlertasActivas]);
-
+  }, [])
   const handleRefresh = useCallback(async () => {
     await Promise.all([
       fetchAlertas(),
       fetchAlertasActivas()
-    ]);
-  }, [fetchAlertas, fetchAlertasActivas]);
-
+    ])
+  }, [])
   // Reset page when changing filters
   
     useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedTab, searchTerm]);
-
+    setCurrentPage(1)
+  }, [])
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -624,8 +596,8 @@ const AlertasPageV2: React.FC = () => {
         {selectedAlerta && (<VerificarAlertaModalV2
             isOpen={showVerificarModal}
             onClose={() => {
-              setShowVerificarModal(false);
-              setSelectedAlerta(null);
+              setShowVerificarModal(false)
+              setSelectedAlerta(null)
             }}
             alerta={selectedAlerta}
             onSuccess={handleVerificarSuccess}
@@ -633,7 +605,6 @@ const AlertasPageV2: React.FC = () => {
         )}
       </Suspense>
     </div>
-  );
-};
-
-export default AlertasPageV2;
+  )
+}
+export default AlertasPageV2

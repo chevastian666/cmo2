@@ -4,68 +4,68 @@
  */
 
 export interface TimeSeriesData {
-  date: Date;
-  value: number;
-  category?: string;
-  metadata?: Record<string, string | number | boolean>;
+  date: Date
+  value: number
+  category?: string
+  metadata?: Record<string, string | number | boolean>
 }
 
 export interface HeatmapData {
-  hour: number;
-  day: number;
-  value: number;
-  label?: string;
+  hour: number
+  day: number
+  value: number
+  label?: string
 }
 
 export interface NetworkNode {
-  id: string;
-  label: string;
-  value: number;
-  group: string;
-  metadata?: Record<string, string | number | boolean>;
+  id: string
+  label: string
+  value: number
+  group: string
+  metadata?: Record<string, string | number | boolean>
 }
 
 export interface NetworkLink {
-  source: string;
-  target: string;
-  value: number;
-  label?: string;
+  source: string
+  target: string
+  value: number
+  label?: string
 }
 
 export interface NetworkData {
-  nodes: NetworkNode[];
-  links: NetworkLink[];
+  nodes: NetworkNode[]
+  links: NetworkLink[]
 }
 
 export interface TreemapNode {
-  name: string;
-  value: number;
-  children?: TreemapNode[];
-  category?: string;
-  metadata?: Record<string, string | number | boolean>;
+  name: string
+  value: number
+  children?: TreemapNode[]
+  category?: string
+  metadata?: Record<string, string | number | boolean>
 }
 
 export interface TooltipProps {
-  data: TimeSeriesData | HeatmapData | NetworkNode | NetworkLink | TreemapNode;
-  x: number;
-  y: number;
-  visible: boolean;
+  data: TimeSeriesData | HeatmapData | NetworkNode | NetworkLink | TreemapNode
+  x: number
+  y: number
+  visible: boolean
 }
 
 export interface ChartConfig {
-  width: number;
-  height: number;
+  width: number
+  height: number
   margin: {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-  };
-  colors: string[];
+    top: number
+    right: number
+    bottom: number
+    left: number
+  }
+  colors: string[]
   animations: {
-    duration: number;
-    easing: string;
-  };
+    duration: number
+    easing: string
+  }
 }
 
 export const DEFAULT_CHART_CONFIG: ChartConfig = {
@@ -85,4 +85,4 @@ export const DEFAULT_CHART_CONFIG: ChartConfig = {
     duration: 750,
     easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
   }
-};
+}

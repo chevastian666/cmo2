@@ -1,5 +1,4 @@
-import type { Precinto, TransitoPendiente, Alerta} from '../../types';
-
+import type { Precinto, TransitoPendiente, Alerta} from '../../types'
 export type WebSocketMessageType = 
   | 'precinto_update'
   | 'transito_update'
@@ -7,60 +6,59 @@ export type WebSocketMessageType =
   | 'alerta_update'
   | 'sistema_update'
   | 'connection'
-  | 'heartbeat';
-
+  | 'heartbeat'
 export interface WebSocketMessage<T = unknown> {
-  type: WebSocketMessageType;
-  timestamp: number;
-  data: T;
+  type: WebSocketMessageType
+  timestamp: number
+  data: T
 }
 
 export interface PrecintoUpdateData {
-  precinto: Partial<Precinto> & { id: string };
-  action: 'update' | 'create' | 'delete';
+  precinto: Partial<Precinto> & { id: string }
+  action: 'update' | 'create' | 'delete'
 }
 
 export interface TransitoUpdateData {
-  transito: Partial<TransitoPendiente> & { id: string };
-  action: 'update' | 'create' | 'delete' | 'precintado';
+  transito: Partial<TransitoPendiente> & { id: string }
+  action: 'update' | 'create' | 'delete' | 'precintado'
 }
 
 export interface AlertaUpdateData {
-  alerta: Alerta;
-  action: 'create' | 'update' | 'atender' | 'asignar' | 'comentar' | 'resolver';
+  alerta: Alerta
+  action: 'create' | 'update' | 'atender' | 'asignar' | 'comentar' | 'resolver'
   detalles?: {
-    asignacion?: unknown;
-    comentario?: unknown;
-    resolucion?: unknown;
-  };
+    asignacion?: unknown
+    comentario?: unknown
+    resolucion?: unknown
+  }
 }
 
 export interface SistemaUpdateData {
-  smsPendientes?: number;
+  smsPendientes?: number
   dbStats?: {
-    memoriaUsada: number;
-    discoUsado: number;
-  };
+    memoriaUsada: number
+    discoUsado: number
+  }
   apiStats?: {
-    memoriaUsada: number;
-    discoUsado: number;
-  };
-  reportesPendientes?: number;
-  precintosActivos?: number;
-  alertasActivas?: number;
+    memoriaUsada: number
+    discoUsado: number
+  }
+  reportesPendientes?: number
+  precintosActivos?: number
+  alertasActivas?: number
 }
 
 export interface ConnectionData {
-  status: 'connected' | 'disconnected' | 'reconnecting';
-  message?: string;
+  status: 'connected' | 'disconnected' | 'reconnecting'
+  message?: string
 }
 
 export type WebSocketEventHandlers = {
-  onPrecintoUpdate?: (data: PrecintoUpdateData) => void;
-  onTransitoUpdate?: (data: TransitoUpdateData) => void;
-  onAlertaNueva?: (data: AlertaUpdateData) => void;
-  onAlertaUpdate?: (data: AlertaUpdateData) => void;
-  onSistemaUpdate?: (data: SistemaUpdateData) => void;
-  onConnectionChange?: (data: ConnectionData) => void;
-  onError?: (error: Error) => void;
-};
+  onPrecintoUpdate?: (data: PrecintoUpdateData) => void
+  onTransitoUpdate?: (data: TransitoUpdateData) => void
+  onAlertaNueva?: (data: AlertaUpdateData) => void
+  onAlertaUpdate?: (data: AlertaUpdateData) => void
+  onSistemaUpdate?: (data: SistemaUpdateData) => void
+  onConnectionChange?: (data: ConnectionData) => void
+  onError?: (error: Error) => void
+}

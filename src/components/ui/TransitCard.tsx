@@ -1,62 +1,57 @@
  
-import React, { useState, useEffect } from 'react';
-import { cn} from '../../utils/utils';
-import { Card} from './Card';
-import { StatusBadge} from './StatusBadge';
-import { InfoRow} from './InfoRow';
-import {Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react';
-
+import React, { useState, useEffect } from 'react'
+import { cn} from '../../utils/utils'
+import { Card} from './Card'
+import { StatusBadge} from './StatusBadge'
+import { InfoRow} from './InfoRow'
+import {Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
 export interface TransitInfo {
-  id: string;
-  origin: string;
-  destination: string;
-  status: 'in-transit' | 'arrived' | 'delayed' | 'stopped' | 'completed';
-  progress?: number;
-  startTime: Date | string;
-  estimatedArrival?: Date | string;
-  actualArrival?: Date | string;
+  id: string
+  origin: string
+  destination: string
+  status: 'in-transit' | 'arrived' | 'delayed' | 'stopped' | 'completed'
+  progress?: number
+  startTime: Date | string
+  estimatedArrival?: Date | string
+  actualArrival?: Date | string
   vehicle?: {
-    type: string;
-    plate: string;
-    driver?: string;
+    type: string
+    plate: string
+    driver?: string
     frequentDriver?: string; // Chofer más frecuente
-  };
+  }
   cargo?: {
-    description: string;
-    weight?: number;
-    units?: number;
+    description: string
+    weight?: number
+    units?: number
     precinto?: string; // Número de precinto
     eslingas?: number; // Cantidad de eslingas
-  };
-  metadata?: Record<string, unknown>;
+  }
+  metadata?: Record<string, unknown>
 }
 
 interface TransitCardProps {
-  transit: TransitInfo;
-  className?: string;
-  onClick?: (transit: TransitInfo) => void;
-  onViewHistory?: (vehiclePlate: string) => void;
-  variant?: 'default' | 'compact' | 'detailed';
-  showProgress?: boolean;
+  transit: TransitInfo
+  className?: string
+  onClick?: (transit: TransitInfo) => void
+  onViewHistory?: (vehiclePlate: string) => void
+  variant?: 'default' | 'compact' | 'detailed'
+  showProgress?: boolean
 }
 
 export const TransitCard: React.FC<TransitCardProps> = ({
   transit, className, onClick, onViewHistory, variant = 'default', showProgress = true
 }) => {
-  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
-   
-
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null)
   useEffect(() => {
     const updateTimeRemaining = () => {
-      setTimeRemaining(calculateTimeRemaining());
-    };
-
-    updateTimeRemaining();
+      setTimeRemaining(calculateTimeRemaining())
+    }
+    updateTimeRemaining()
     const interval = setInterval(updateTimeRemaining, 60000); // Update every minute
 
-    return () => clearInterval(interval);
-  }, [transit.estimatedArrival, transit.status]);
-
+    return () => clearInterval(interval)
+  }, [transit.status])
   const getStatusVariant = (status: TransitInfo['status']): 'success' | 'warning' | 'danger' | 'info' | 'default' => {
     const variants = {
       'in-transit': 'info' as const,
@@ -64,10 +59,9 @@ export const TransitCard: React.FC<TransitCardProps> = ({
       'delayed': 'warning' as const,
       'stopped': 'danger' as const,
       'completed': 'default' as const
-    };
-    return variants[status];
-  };
-
+    }
+    return variants[status]
+  }
   const getStatusText = (status: TransitInfo['status']) => {
     const texts = {
       'in-transit': 'En Tránsito',
@@ -75,48 +69,41 @@ export const TransitCard: React.FC<TransitCardProps> = ({
       'delayed': 'Demorado',
       'stopped': 'Detenido',
       'completed': 'Completado'
-    };
-    return texts[status];
-  };
-
+    }
+    return texts[status]
+  }
   const formatDate = (date: Date | string) => {
-    const d = date instanceof Date ? date : new Date(date);
+    const d = date instanceof Date ? date : new Date(date)
     return d.toLocaleString('es-AR', {
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
-
+    })
+  }
   const calculateTimeRemaining = () => {
     if (!transit.estimatedArrival || transit.status === 'arrived' || transit.status === 'completed') {
-      return null;
+      return null
     }
     
-    const now = new Date();
+    const now = new Date()
     const arrival = transit.estimatedArrival instanceof Date 
       ? transit.estimatedArrival 
-      : new Date(transit.estimatedArrival);
-    
-    const diff = arrival.getTime() - now.getTime();
-    if (diff < 0) return 'Demorado';
-    
-    const days = Math.floor(diff / 86400000);
-    const hours = Math.floor((diff % 86400000) / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    
-    if (days > 0) return `${days}d ${hours}h`;
-    if (hours > 0) return `${hours}h ${minutes}min`;
-    return `${minutes}min`;
-  };
-
+      : new Date(transit.estimatedArrival)
+    const diff = arrival.getTime() - now.getTime()
+    if (diff < 0) return 'Demorado'
+    const days = Math.floor(diff / 86400000)
+    const hours = Math.floor((diff % 86400000) / 3600000)
+    const minutes = Math.floor((diff % 3600000) / 60000)
+    if (days > 0) return `${days}d ${hours}h`
+    if (hours > 0) return `${hours}h ${minutes}min`
+    return `${minutes}min`
+  }
   const getTrafficLightStatus = () => {
-    if (transit.status === 'stopped' || transit.status === 'delayed') return 'danger';
-    if (transit.status === 'arrived' || transit.status === 'completed') return 'success';
-    return 'warning';
-  };
-
+    if (transit.status === 'stopped' || transit.status === 'delayed') return 'danger'
+    if (transit.status === 'arrived' || transit.status === 'completed') return 'success'
+    return 'warning'
+  }
   return (
     <Card
       className={cn(
@@ -284,8 +271,8 @@ export const TransitCard: React.FC<TransitCardProps> = ({
             <button 
               className="text-sm text-gray-400 hover:text-gray-300 flex items-center gap-1"
               onClick={(e) => {
-                e.stopPropagation();
-                onViewHistory?.(transit.vehicle!.plate);
+                e.stopPropagation()
+                onViewHistory?.(transit.vehicle!.plate)
               }}
             >
               <History className="h-4 w-4" />
@@ -295,5 +282,5 @@ export const TransitCard: React.FC<TransitCardProps> = ({
         </div>
       )}
     </Card>
-  );
-};
+  )
+}

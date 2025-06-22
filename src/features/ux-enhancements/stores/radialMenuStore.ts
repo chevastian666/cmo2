@@ -1,15 +1,14 @@
-import { create} from 'zustand';
-import { persist} from 'zustand/middleware';
-import type { RadialMenuSettings} from '../types';
-
+import { create} from 'zustand'
+import { persist} from 'zustand/middleware'
+import type { RadialMenuSettings} from '../types'
 interface RadialMenuStore {
-  settings: RadialMenuSettings;
-  userPermissions: string[];
-  updateSettings: (settings: Partial<RadialMenuSettings>) => void;
-  setUserPermissions: (permissions: string[]) => void;
-  canUseAction: (requiredPermissions: string[]) => boolean;
-  toggleFavorite: (actionId: string) => void;
-  reorderActions: (actionIds: string[]) => void;
+  settings: RadialMenuSettings
+  userPermissions: string[]
+  updateSettings: (settings: Partial<RadialMenuSettings>) => void
+  setUserPermissions: (permissions: string[]) => void
+  canUseAction: (requiredPermissions: string[]) => boolean
+  toggleFavorite: (actionId: string) => void
+  reorderActions: (actionIds: string[]) => void
 }
 
 export const useRadialMenuStore = create<RadialMenuStore>()(persist(
@@ -19,40 +18,38 @@ export const useRadialMenuStore = create<RadialMenuStore>()(persist(
       }, userPermissions: [], updateSettings: (newSettings) => {
         set((state) => ({
           settings: { ...state.settings, ...newSettings }
-        }));
+        }))
       },
 
       setUserPermissions: (permissions) => {
-        set({ userPermissions: permissions });
+        set({ userPermissions: permissions })
       },
 
       canUseAction: (requiredPermissions) => {
-        if (requiredPermissions.length === 0) return true;
-        
-        return requiredPermissions.some(perm => userPermissions.includes(perm));
+        if (requiredPermissions.length === 0) return true
+        return requiredPermissions.some(perm => userPermissions.includes(perm))
       },
 
       toggleFavorite: (actionId) => {
         set((state) => {
-          const favorites = [...state.settings.favoriteActions];
-          const index = favorites.indexOf(actionId);
-          
+          const favorites = [...state.settings.favoriteActions]
+          const index = favorites.indexOf(actionId)
           if (index > -1) {
-            favorites.splice(index, 1);
+            favorites.splice(index, 1)
           } else {
-            favorites.push(actionId);
+            favorites.push(actionId)
           }
 
           return {
             settings: { ...state.settings, favoriteActions: favorites }
-          };
-        });
+          }
+        })
       },
 
       reorderActions: (actionIds) => {
         set((state) => ({
           settings: { ...state.settings, customOrder: actionIds }
-        }));
+        }))
       }
     }),
     {
@@ -60,4 +57,4 @@ export const useRadialMenuStore = create<RadialMenuStore>()(persist(
       partialize: (state) => ({ settings: state.settings })
     }
   )
-);
+)

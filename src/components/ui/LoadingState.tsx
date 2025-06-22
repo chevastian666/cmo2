@@ -1,14 +1,12 @@
  
-import React from 'react';
-import { cn} from '../../utils/utils';
-
-type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton' | 'progress';
-
+import React from 'react'
+import { cn} from '../../utils/utils'
+type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton' | 'progress'
 interface LoadingStateProps {
-  variant?: LoadingVariant;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  text?: string;
-  className?: string;
+  variant?: LoadingVariant
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  text?: string
+  className?: string
   progress?: number; // For progress variant
   rows?: number; // For skeleton variant
 }
@@ -41,10 +39,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       dot: 'w-5 h-5',
       text: 'text-xl'
     }
-  };
-
-  const styles = sizeStyles[size];
-
+  }
+  const styles = sizeStyles[size]
   const renderSpinner = () => (
     <svg 
       className={cn(styles.spinner, 'animate-spin text-blue-500')}
@@ -65,8 +61,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
       />
     </svg>
-  );
-
+  )
   const renderDots = () => (<div className="flex items-center gap-1">
       {[0, 1, 2].map((i) => (
         <div
@@ -81,15 +76,13 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         />
       ))}
     </div>
-  );
-
+  )
   const renderPulse = () => (
     <div className="relative">
       <div className={cn(styles.spinner, 'bg-blue-500 rounded-full animate-ping absolute')} />
       <div className={cn(styles.spinner, 'bg-blue-500 rounded-full')} />
     </div>
-  );
-
+  )
   const renderSkeleton = () => (
     <div className="w-full max-w-md space-y-3">
       {Array.from({ length: rows }).map((_, i) => (
@@ -101,8 +94,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         </div>
       ))}
     </div>
-  );
-
+  )
   const renderProgress = () => (
     <div className="w-full max-w-xs">
       <div className="flex justify-between text-sm text-gray-400 mb-2">
@@ -116,23 +108,21 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         />
       </div>
     </div>
-  );
-
+  )
   const renderLoader = () => {
     switch (variant) {
-      case 'dots':
-        return renderDots();
-      case 'pulse':
-        return renderPulse();
-      case 'skeleton':
-        return renderSkeleton();
-      case 'progress':
-        return renderProgress();
+      case 'dots': {
+  return renderDots()
+      case 'pulse': {
+  return renderPulse()
+      case 'skeleton': {
+  return renderSkeleton()
+      case 'progress': {
+  return renderProgress()
       default:
-        return renderSpinner();
+        return renderSpinner()
     }
-  };
-
+  }
   return (
     <div className={cn(
       'flex flex-col items-center justify-center',
@@ -147,22 +137,20 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         </p>
       )}
     </div>
-  );
-};
-
+  )
+}
 interface LoadingOverlayProps {
-  visible: boolean;
-  text?: string;
-  variant?: LoadingVariant;
-  fullScreen?: boolean;
-  className?: string;
+  visible: boolean
+  text?: string
+  variant?: LoadingVariant
+  fullScreen?: boolean
+  className?: string
 }
 
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   visible, text, variant = 'spinner', fullScreen = false, className
 }) => {
-  if (!visible) return null;
-
+  if (!visible) return null
   return (
     <div className={cn(
       'absolute inset-0 bg-gray-900/80 backdrop-blur-sm',
@@ -172,15 +160,14 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
     )}>
       <LoadingState variant={variant} text={text} size="lg" />
     </div>
-  );
-};
-
+  )
+}
 interface SkeletonProps {
-  className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
-  width?: string | number;
-  height?: string | number;
-  animation?: 'pulse' | 'wave' | 'none';
+  className?: string
+  variant?: 'text' | 'circular' | 'rectangular'
+  width?: string | number
+  height?: string | number
+  animation?: 'pulse' | 'wave' | 'none'
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
@@ -190,14 +177,12 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     text: 'rounded',
     circular: 'rounded-full',
     rectangular: 'rounded-lg'
-  };
-
+  }
   const animationStyles = {
     pulse: 'animate-pulse',
     wave: 'animate-shimmer',
     none: ''
-  };
-
+  }
   return (
     <div
       className={cn(
@@ -211,5 +196,5 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         height: height || (variant === 'text' ? '20px' : variant === 'circular' ? '40px' : '100px')
       }}
     />
-  );
-};
+  )
+}

@@ -1,1 +1,1 @@
-export * from './usePrecintos';
+export * from './usePrecintos'

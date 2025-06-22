@@ -1,6 +1,5 @@
-import { create} from 'zustand';
-import type { Novedad, EstadisticasNovedades, FiltrosNovedades, TipoNovedad} from '../features/novedades/types';
-
+import { create} from 'zustand'
+import type { Novedad, EstadisticasNovedades, FiltrosNovedades, TipoNovedad} from '../features/novedades/types'
 // Mock data para desarrollo
 const mockNovedades: Novedad[] = [
   {
@@ -106,53 +105,49 @@ const mockNovedades: Novedad[] = [
       rol: 'admin'
     }
   }
-];
-
+]
 interface NovedadesState {
-  novedades: Novedad[];
-  estadisticas: EstadisticasNovedades | null;
-  loading: boolean;
-  error: string | null;
-  
+  novedades: Novedad[]
+  estadisticas: EstadisticasNovedades | null
+  loading: boolean
+  error: string | null
   // Actions
-  fetchNovedades: (filtros?: FiltrosNovedades) => Promise<void>;
-  crearNovedad: (data: Partial<Novedad>) => Promise<void>;
-  editarNovedad: (id: string, data: Partial<Novedad>) => Promise<void>;
-  marcarResuelta: (id: string, comentario?: string) => Promise<void>;
-  agregarSeguimiento: (id: string, comentario: string) => Promise<void>;
-  calcularEstadisticas: () => void;
+  fetchNovedades: (filtros?: FiltrosNovedades) => Promise<void>
+  crearNovedad: (data: Partial<Novedad>) => Promise<void>
+  editarNovedad: (id: string, data: Partial<Novedad>) => Promise<void>
+  marcarResuelta: (id: string, comentario?: string) => Promise<void>
+  agregarSeguimiento: (id: string, comentario: string) => Promise<void>
+  calcularEstadisticas: () => void
 }
 
 export const useNovedadesStore = create<NovedadesState>((set, get) => ({
   novedades: [], estadisticas: {
     totalDia: 0, porTipo: {} as Record<TipoNovedad, number>, porPunto: {} as Record<string, number>, pendientes: 0, resueltas: 0, enSeguimiento: 0
   }, loading: false, error: null, fetchNovedades: async (filtros) => {
-    set({ loading: true });
+    set({ loading: true })
     try {
       // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      let novedadesFiltradas = [...mockNovedades];
-      
+      await new Promise(resolve => setTimeout(resolve, 500))
+      let novedadesFiltradas = [...mockNovedades]
       // Aplicar filtros si existen
       if (filtros) {
         if (filtros.fecha) {
           novedadesFiltradas = novedadesFiltradas.filter(n => 
             n.fecha.toDateString() === filtros.fecha!.toDateString()
-          );
+          )
         }
         if (filtros.puntoOperacion) {
           novedadesFiltradas = novedadesFiltradas.filter(n => 
             n.puntoOperacion === filtros.puntoOperacion
-          );
+          )
         }
         // ... más filtros
       }
-      
-      set({ novedades: novedadesFiltradas, loading: false });
-      get().calcularEstadisticas();
+
+      set({ novedades: novedadesFiltradas, loading: false })
+      get().calcularEstadisticas()
     } catch {
-      set({ error: 'Error al cargar novedades', loading: false });
+      set({ error: 'Error al cargar novedades', loading: false })
     }
   },
 
@@ -172,13 +167,11 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
           email: 'usuario@blocktracker.com',
           rol: 'encargado'
         }
-      };
-
-      
-      set({ novedades: [nuevaNovedad, ...novedades] });
-      get().calcularEstadisticas();
+      }
+      set({ novedades: [nuevaNovedad, ...novedades] })
+      get().calcularEstadisticas()
     } catch {
-      throw new Error('Error al crear novedad');
+      throw new Error('Error al crear novedad')
     }
   },
 
@@ -199,9 +192,9 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
               }
             : n
         )
-      });
+      })
     } catch {
-      throw new Error('Error al editar novedad');
+      throw new Error('Error al editar novedad')
     }
   },
 
@@ -225,10 +218,10 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
               }
             : n
         )
-      });
-      get().calcularEstadisticas();
+      })
+      get().calcularEstadisticas()
     } catch {
-      throw new Error('Error al marcar como resuelta');
+      throw new Error('Error al marcar como resuelta')
     }
   },
 
@@ -243,8 +236,7 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
           nombre: 'Usuario Actual'
         },
         comentario
-      };
-
+      }
       set({
         novedades: novedades.map(n => 
           n.id === id 
@@ -255,34 +247,32 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
               }
             : n
         )
-      });
+      })
     } catch {
-      throw new Error('Error al agregar seguimiento');
+      throw new Error('Error al agregar seguimiento')
     }
   },
 
   calcularEstadisticas: () => {
-    
-    const hoy = new Date();
+
+    const hoy = new Date()
     const novedadesHoy = novedades.filter(n => 
       n.fecha.toDateString() === hoy.toDateString()
-    );
-
+    )
     const estadisticas: EstadisticasNovedades = {
       totalDia: novedadesHoy.length,
       porTipo: novedadesHoy.reduce((acc, n) => {
-        acc[n.tipoNovedad] = (acc[n.tipoNovedad] || 0) + 1;
-        return acc;
+        acc[n.tipoNovedad] = (acc[n.tipoNovedad] || 0) + 1
+        return acc
       }, {} as Record<string, number>),
       porPunto: novedadesHoy.reduce((acc, n) => {
-        acc[n.puntoOperacion] = (acc[n.puntoOperacion] || 0) + 1;
-        return acc;
+        acc[n.puntoOperacion] = (acc[n.puntoOperacion] || 0) + 1
+        return acc
       }, {} as Record<string, number>),
       pendientes: novedades.filter(n => n.estado === 'activa').length,
       resueltas: novedades.filter(n => n.estado === 'resuelta').length,
       enSeguimiento: novedades.filter(n => n.estado === 'seguimiento').length
-    };
-
-    set({ estadisticas });
+    }
+    set({ estadisticas })
   }
-}));
+}))

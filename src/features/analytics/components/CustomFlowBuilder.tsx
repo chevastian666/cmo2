@@ -4,18 +4,15 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-
-import { Plus, Trash2, Play} from 'lucide-react';
-import { SankeyChart} from '@/components/charts/sankey/SankeyChart';
-import type { SankeyData, FlowData} from '@/components/charts/types/sankey.types';
-
-import { toast} from '@/hooks/use-toast';
-
+import React, { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Plus, Trash2, Play} from 'lucide-react'
+import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
+import type { SankeyData, FlowData} from '@/components/charts/types/sankey.types'
+import { toast} from '@/hooks/use-toast'
 export const CustomFlowBuilder: React.FC = () => {
   const [flows, setFlows] = useState<FlowData[]>([
     { from: 'Origen A', to: 'Destino 1', value: 100 },
@@ -23,49 +20,42 @@ export const CustomFlowBuilder: React.FC = () => {
     { from: 'Origen B', to: 'Destino 1', value: 75 },
     { from: 'Destino 1', to: 'Final', value: 150 },
     { from: 'Destino 2', to: 'Final', value: 50 }
-  ]);
-  
+  ])
   const [newFlow, setNewFlow] = useState<FlowData>({
     from: '',
     to: '',
     value: 0
-  });
-
-  const [chartData, setChartData] = useState<SankeyData | null>(null);
-
+  })
+  const [chartData, setChartData] = useState<SankeyData | null>(null)
   const handleAddFlow = () => {
     if (newFlow.from && newFlow.to && newFlow.value > 0) {
-      setFlows([...flows, { ...newFlow }]);
-      setNewFlow({ from: '', to: '', value: 0 });
+      setFlows([...flows, { ...newFlow }])
+      setNewFlow({ from: '', to: '', value: 0 })
       toast({
         title: 'Flujo agregado',
         description: `${newFlow.from} → ${newFlow.to}: ${newFlow.value}`
-      });
+      })
     }
-  };
-
+  }
   const handleRemoveFlow = (index: number) => {
-    setFlows(flows.filter((_, i) => i !== index));
-  };
-
+    setFlows(flows.filter((_, i) => i !== index))
+  }
   const handleGenerateChart = () => {
     if (flows.length === 0) {
       toast({
         title: 'Error',
         description: 'Agrega al menos un flujo para generar el gráfico',
         variant: 'destructive'
-      });
-      return;
+      })
+      return
     }
 
-    setChartData(_data);
-  };
-
+    setChartData(_data)
+  }
   // Get unique nodes for suggestions
   const allNodes = Array.from(new Set(
     flows.flatMap(f => [f.from, f.to])
-  )).filter(Boolean);
-
+  )).filter(Boolean)
   return (
     <div className="space-y-6">
       {/* Flow Builder */}
@@ -197,8 +187,8 @@ export const CustomFlowBuilder: React.FC = () => {
                   { from: 'Almacén', to: 'Devoluciones', value: 20 },
                   { from: 'Distribución', to: 'Cliente Final', value: 75 },
                   { from: 'Distribución', to: 'Pérdidas', value: 5 }
-                ]);
-                toast({ title: 'Plantilla cargada', description: 'Cadena de suministro' });
+                ])
+                toast({ title: 'Plantilla cargada', description: 'Cadena de suministro' })
               }}
             >
               Cadena de Suministro
@@ -213,8 +203,8 @@ export const CustomFlowBuilder: React.FC = () => {
                   { from: 'En Proceso', to: 'Cancelado', value: 10 },
                   { from: 'Revisión', to: 'Completado', value: 85 },
                   { from: 'Revisión', to: 'En Proceso', value: 5 }
-                ]);
-                toast({ title: 'Plantilla cargada', description: 'Flujo de trabajo' });
+                ])
+                toast({ title: 'Plantilla cargada', description: 'Flujo de trabajo' })
               }}
             >
               Flujo de Trabajo
@@ -229,8 +219,8 @@ export const CustomFlowBuilder: React.FC = () => {
                   { from: 'Cliente', to: 'Cliente Premium', value: 100 },
                   { from: 'Usuario', to: 'Inactivo', value: 200 },
                   { from: 'Cliente', to: 'Inactivo', value: 50 }
-                ]);
-                toast({ title: 'Plantilla cargada', description: 'Conversión de usuarios' });
+                ])
+                toast({ title: 'Plantilla cargada', description: 'Conversión de usuarios' })
               }}
             >
               Conversión de Usuarios
@@ -239,5 +229,5 @@ export const CustomFlowBuilder: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

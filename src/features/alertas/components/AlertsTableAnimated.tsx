@@ -1,21 +1,19 @@
-import React from 'react';
-import { motion, AnimatePresence} from 'framer-motion';
-import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react';
-import { format} from 'date-fns';
-import { Button} from '@/components/ui/button';
-
-import { cn} from '@/lib/utils';
-import type { Alerta} from '../types';
-import { AnimatedBadge} from '@/components/animations/AnimatedComponents';
-import { alertCriticalVariants, transitions, staggerContainer, staggerItem} from '@/components/animations/AnimationPresets';
-
+import React from 'react'
+import { motion, AnimatePresence} from 'framer-motion'
+import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react'
+import { format} from 'date-fns'
+import { Button} from '@/components/ui/button'
+import { cn} from '@/lib/utils'
+import type { Alerta} from '../types'
+import { AnimatedBadge} from '@/components/animations/AnimatedComponents'
+import { alertCriticalVariants, transitions, staggerContainer, staggerItem} from '@/components/animations/AnimationPresets'
 interface AlertsTableAnimatedProps {
-  alertas: Alerta[];
-  loading: boolean;
-  onViewDetail: (alerta: Alerta) => void;
-  onRespond?: (alerta: Alerta) => void;
-  onVerify?: (alerta: Alerta) => void;
-  onViewLocation?: (alerta: Alerta) => void;
+  alertas: Alerta[]
+  loading: boolean
+  onViewDetail: (alerta: Alerta) => void
+  onRespond?: (alerta: Alerta) => void
+  onVerify?: (alerta: Alerta) => void
+  onViewLocation?: (alerta: Alerta) => void
 }
 
 export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
@@ -23,40 +21,37 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
 }) => {
   const getSeverityIcon = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return <XCircle className="h-5 w-5 text-red-400" />;
-      case 'alta':
-        return <AlertCircle className="h-5 w-5 text-orange-400" />;
-      case 'media':
-        return <Clock className="h-5 w-5 text-yellow-400" />;
+      case 'critica': {
+  return <XCircle className="h-5 w-5 text-red-400" />
+      case 'alta': {
+  return <AlertCircle className="h-5 w-5 text-orange-400" />
+      case 'media': {
+  return <Clock className="h-5 w-5 text-yellow-400" />
       default:
-        return <AlertCircle className="h-5 w-5 text-blue-400" />;
+        return <AlertCircle className="h-5 w-5 text-blue-400" />
     }
-  };
-
+  }
   const getSeverityColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-400/10 border-red-400/20';
-      case 'alta':
-        return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      case 'critica': {
+  return 'text-red-400 bg-red-400/10 border-red-400/20'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-400/10 border-orange-400/20'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20'
       default:
-        return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
+        return 'text-blue-400 bg-blue-400/10 border-blue-400/20'
     }
-  };
-
+  }
   const getStatusBadge = (alerta: Alerta) => {
     if (alerta.verificada) {
-      return <AnimatedBadge variant="success">Verificada</AnimatedBadge>;
+      return <AnimatedBadge variant="success">Verificada</AnimatedBadge>
     }
     if (alerta.atendida) {
-      return <AnimatedBadge variant="primary">Atendida</AnimatedBadge>;
+      return <AnimatedBadge variant="primary">Atendida</AnimatedBadge>
     }
-    return <AnimatedBadge variant="warning" pulse>Pendiente</AnimatedBadge>;
-  };
-
+    return <AnimatedBadge variant="warning" pulse>Pendiente</AnimatedBadge>
+  }
   if (loading) {
     return (
       <motion.div 
@@ -71,7 +66,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
         />
         <p className="text-gray-400 mt-4">Cargando alertas...</p>
       </motion.div>
-    );
+    )
   }
 
   if (alertas.length === 0) {
@@ -85,13 +80,12 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
         <CheckCircle className="h-12 w-12 text-green-400 mx-auto mb-4" />
         <p className="text-gray-400">No hay alertas activas</p>
       </motion.div>
-    );
+    )
   }
 
   // Separar alertas críticas para animarlas de forma especial
-  const criticalAlerts = alertas.filter(a => a.severidad === 'critica' && !a.atendida);
-  const otherAlerts = alertas.filter(a => a.severidad !== 'critica' || a.atendida);
-
+  const criticalAlerts = alertas.filter(a => a.severidad === 'critica' && !a.atendida)
+  const otherAlerts = alertas.filter(a => a.severidad !== 'critica' || a.atendida)
   return (<motion.div 
       className="space-y-4"
       variants={staggerContainer}
@@ -353,5 +347,5 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
         ))}
       </AnimatePresence>
     </motion.div>
-  );
-};
+  )
+}

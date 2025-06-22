@@ -2,11 +2,9 @@
  * MSW Request Handlers
  * By Cheva
  */
-import { http, HttpResponse} from 'msw';
-import { faker} from '@faker-js/faker';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-
+import { http, HttpResponse} from 'msw'
+import { faker} from '@faker-js/faker'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 // Generar datos mock
 const generateMockPrecinto = () => ({
   id: faker.string.uuid(),
@@ -21,8 +19,7 @@ const generateMockPrecinto = () => ({
   },
   bateria: faker.number.int({ min: 0, max: 100 }),
   temperatura: faker.number.float({ min: -10, max: 40, fractionDigits: 1 }),
-});
-
+})
 const generateMockTransito = () => ({
   id: faker.string.uuid(),
   codigo: `TRN-${faker.number.int({ min: 1000, max: 9999 })}`,
@@ -41,8 +38,7 @@ const generateMockTransito = () => ({
     nombre: faker.person.fullName(),
     documento: faker.string.numeric(8),
   },
-});
-
+})
 const generateMockAlerta = () => ({
   id: faker.string.uuid(),
   tipo: faker.helpers.arrayElement(['temperatura', 'bateria', 'desviacion_ruta', 'apertura_no_autorizada']),
@@ -51,14 +47,12 @@ const generateMockAlerta = () => ({
   fecha: faker.date.recent().toISOString(),
   precinto_id: faker.string.uuid(),
   estado: faker.helpers.arrayElement(['activa', 'reconocida', 'resuelta']),
-});
-
+})
 export const handlers = [
   // Auth endpoints
   http.post(`${API_URL}/auth/login`, async () => {
-    const body = await request.json();
-    const { email } = body as { email: string; password: string };
-    
+    const body = await request.json()
+    const { email } = body as { email: string; password: string }
     if (email === 'test@cmo.com' && password === 'test123') {
       return HttpResponse.json({
         success: true,
@@ -70,23 +64,21 @@ export const handlers = [
           rol: 'admin',
           permisos: ['cmo:access', 'cmo:admin'],
         },
-      });
+      })
     }
     
     return HttpResponse.json(
       { success: false, error: 'Credenciales inválidas' },
       { status: 401 }
-    );
+    )
   }),
 
   // Precintos endpoints
   http.get(`${API_URL}/precintos`, ({ request }) => {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '10');
-    
-    const precintos = Array.from({ length: limit }, generateMockPrecinto);
-    
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '10')
+    const precintos = Array.from({ length: limit }, generateMockPrecinto)
     return HttpResponse.json({
       data: precintos,
       pagination: {
@@ -95,7 +87,7 @@ export const handlers = [
         total: 100,
         totalPages: 10,
       },
-    });
+    })
   }),
 
   http.get(`${API_URL}/precintos/:id`, ({ params }) => {
@@ -104,7 +96,7 @@ export const handlers = [
         ...generateMockPrecinto(),
         id: params.id,
       },
-    });
+    })
   }),
 
   http.post(`${API_URL}/precintos`, async () => {
@@ -114,17 +106,15 @@ export const handlers = [
         ...generateMockPrecinto(),
         ...data,
       },
-    });
+    })
   }),
 
   // Transitos endpoints
   http.get(`${API_URL}/transitos`, ({ request }) => {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '10');
-    
-    const transitos = Array.from({ length: limit }, generateMockTransito);
-    
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '10')
+    const transitos = Array.from({ length: limit }, generateMockTransito)
     return HttpResponse.json({
       data: transitos,
       pagination: {
@@ -133,7 +123,7 @@ export const handlers = [
         total: 50,
         totalPages: 5,
       },
-    });
+    })
   }),
 
   http.get(`${API_URL}/transitos/:id`, ({ params }) => {
@@ -142,17 +132,15 @@ export const handlers = [
         ...generateMockTransito(),
         id: params.id,
       },
-    });
+    })
   }),
 
   // Alertas endpoints
   http.get(`${API_URL}/alertas`, ({ request }) => {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '10');
-    
-    const alertas = Array.from({ length: limit }, generateMockAlerta);
-    
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '10')
+    const alertas = Array.from({ length: limit }, generateMockAlerta)
     return HttpResponse.json({
       data: alertas,
       pagination: {
@@ -161,7 +149,7 @@ export const handlers = [
         total: 30,
         totalPages: 3,
       },
-    });
+    })
   }),
 
   http.patch(`${API_URL}/alertas/:id/reconocer`, ({ params }) => {
@@ -171,7 +159,7 @@ export const handlers = [
         id: params.id,
         estado: 'reconocida',
       },
-    });
+    })
   }),
 
   // Statistics endpoints
@@ -187,7 +175,7 @@ export const handlers = [
         tasaCompletitud: 87.5,
         tiempoPromedioTransito: '4h 32m',
       },
-    });
+    })
   }),
 
   // WebSocket mock (simulación)
@@ -198,7 +186,7 @@ export const handlers = [
         'Upgrade': 'websocket',
         'Connection': 'Upgrade',
       },
-    });
+    })
   }),
 
   // Google Maps mock
@@ -207,11 +195,11 @@ export const handlers = [
       headers: {
         'Content-Type': 'application/javascript',
       },
-    });
+    })
   }),
 
   // Catch all handler
   http.get('*', () => {
-    return HttpResponse.json({ error: 'Not found' }, { status: 404 });
+    return HttpResponse.json({ error: 'Not found' }, { status: 404 })
   }),
-];
+]

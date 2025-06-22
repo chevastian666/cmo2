@@ -1,52 +1,45 @@
-import React, { useState } from 'react';
-import {X, Save, RotateCcw, Plus, Trash2} from 'lucide-react';
+import React, { useState } from 'react'
+import {X, Save, RotateCcw, Plus, Trash2} from 'lucide-react'
 import { 
-  Card, CardHeader, CardContent, InfoSection} from '../../../components/ui';
-import { congestionAnalyzer} from '../utils/congestionAnalyzer';
-import { CONFIGURACION_DEFAULT} from '../types';
-import type { ConfiguracionPrediccion} from '../types';
-
+  Card, CardHeader, CardContent, InfoSection} from '../../../components/ui'
+import { congestionAnalyzer} from '../utils/congestionAnalyzer'
+import { CONFIGURACION_DEFAULT} from '../types'
+import type { ConfiguracionPrediccion} from '../types'
 interface ConfiguracionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave?: (config: ConfiguracionPrediccion) => void;
+  isOpen: boolean
+  onClose: () => void
+  onSave?: (config: ConfiguracionPrediccion) => void
 }
 
 export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
   isOpen, onClose, onSave
 }) => {
-  const [_config, setConfig] = useState<ConfiguracionPrediccion>(CONFIGURACION_DEFAULT);
-  const [nuevoDestino, setNuevoDestino] = useState('');
-
-  if (!isOpen) return null;
-
+  const [_config, setConfig] = useState<ConfiguracionPrediccion>(CONFIGURACION_DEFAULT)
+  const [nuevoDestino, setNuevoDestino] = useState('')
+  if (!isOpen) return null
   const handleSave = () => {
-    congestionAnalyzer.actualizarConfiguracion(_config);
-    onSave?.(_config);
-    onClose();
-  };
-
+    congestionAnalyzer.actualizarConfiguracion(_config)
+    onSave?.(_config)
+    onClose()
+  }
   const handleReset = () => {
-    setConfig(CONFIGURACION_DEFAULT);
-  };
-
+    setConfig(CONFIGURACION_DEFAULT)
+  }
   const agregarDestino = () => {
     if (nuevoDestino && !config.destinosMonitoreados.includes(nuevoDestino)) {
       setConfig({
         ...config,
         destinosMonitoreados: [...config.destinosMonitoreados, nuevoDestino]
-      });
-      setNuevoDestino('');
+      })
+      setNuevoDestino('')
     }
-  };
-
+  }
   const eliminarDestino = (destino: string) => {
     setConfig({
       ...config,
       destinosMonitoreados: config.destinosMonitoreados.filter(d => d !== destino)
-    });
-  };
-
+    })
+  }
   return (
     <>
       {/* Backdrop */}
@@ -238,5 +231,5 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

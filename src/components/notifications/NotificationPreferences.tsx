@@ -4,19 +4,18 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion} from 'framer-motion';
+import React, { useState, useEffect } from 'react'
+import { motion} from 'framer-motion'
 import {
-  Bell, BellOff, Mail, Smartphone, Monitor, Volume2, VolumeX, Clock, Settings, Save, RefreshCw, TestTube2} from 'lucide-react';
+  Bell, BellOff, Mail, Smartphone, Monitor, Volume2, VolumeX, Clock, Settings, Save, RefreshCw, TestTube2} from 'lucide-react'
 import type {
-  NotificationPreferences, NotificationType, NotificationPriority, NotificationChannel, } from '../../types/notifications';
-import { DEFAULT_SOUNDS} from '../../types/notifications';
-
+  NotificationPreferences, NotificationType, NotificationPriority, NotificationChannel, } from '../../types/notifications'
+import { DEFAULT_SOUNDS} from '../../types/notifications'
 interface NotificationPreferencesProps {
-  preferences: NotificationPreferences;
-  onSave: (preferences: NotificationPreferences) => void;
-  onTest: (channel: NotificationChannel, type: NotificationType) => void;
-  className?: string;
+  preferences: NotificationPreferences
+  onSave: (preferences: NotificationPreferences) => void
+  onTest: (channel: NotificationChannel, type: NotificationType) => void
+  className?: string
 }
 
 const notificationTypes: { key: NotificationType; label: string; icon: string; description: string }[] = [
@@ -56,8 +55,7 @@ const notificationTypes: { key: NotificationType; label: string; icon: string; d
     icon: '🔧',
     description: 'Programación y avisos de mantenimiento'
   }
-];
-
+]
 const channels: { key: NotificationChannel; label: string; icon: React.ComponentType; description: string }[] = [
   {
     key: 'in-app',
@@ -77,41 +75,31 @@ const channels: { key: NotificationChannel; label: string; icon: React.Component
     icon: Mail,
     description: 'Notificaciones por email'
   }
-];
-
+]
 const priorities: { key: NotificationPriority; label: string; color: string }[] = [
   { key: 'low', label: 'Baja', color: 'text-gray-400' },
   { key: 'normal', label: 'Normal', color: 'text-blue-400' },
   { key: 'high', label: 'Alta', color: 'text-yellow-400' },
   { key: 'critical', label: 'Crítica', color: 'text-red-400' }
-];
-
+]
 export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
   preferences, onSave, onTest, className = ''
 }) => {
-  const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [activeTab, setActiveTab] = useState<'channels' | 'types' | 'sounds' | 'schedule'>('channels');
-  const [testingChannel, setTestingChannel] = useState<{ channel: NotificationChannel; type: NotificationType } | null>(null);
-   
-
-
+  const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences)
+  const [hasChanges, setHasChanges] = useState(false)
+  const [activeTab, setActiveTab] = useState<'channels' | 'types' | 'sounds' | 'schedule'>('channels')
+  const [testingChannel, setTestingChannel] = useState<{ channel: NotificationChannel; type: NotificationType } | null>(null)
     useEffect(() => {
-    setLocalPreferences(preferences);
-    setHasChanges(false);
-  }, [preferences]);
-   
-
-
+    setLocalPreferences(preferences)
+    setHasChanges(false)
+  }, [preferences])
     useEffect(() => {
-    const isDifferent = JSON.stringify(localPreferences) !== JSON.stringify(preferences);
-    setHasChanges(isDifferent);
-  }, [localPreferences, preferences]);
-
+    const isDifferent = JSON.stringify(localPreferences) !== JSON.stringify(preferences)
+    setHasChanges(isDifferent)
+  }, [preferences])
   const updatePreferences = (updates: Partial<NotificationPreferences>) => {
-    setLocalPreferences(prev => ({ ...prev, ...updates }));
-  };
-
+    setLocalPreferences(prev => ({ ...prev, ...updates }))
+  }
   const updateChannelPreferences = (channel: NotificationChannel, updates: Partial<typeof localPreferences.channels[NotificationChannel]>) => {
     setLocalPreferences(prev => ({
       ...prev,
@@ -122,9 +110,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           ...updates
         }
       }
-    }));
-  };
-
+    }))
+  }
   const updateTypePreferences = (channel: NotificationChannel, type: NotificationType, updates: Partial<typeof localPreferences.channels[NotificationChannel]['types'][NotificationType]>) => {
     setLocalPreferences(prev => ({
       ...prev,
@@ -141,23 +128,20 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           }
         }
       }
-    }));
-  };
-
+    }))
+  }
   const handleSave = () => {
-    onSave(localPreferences);
-    setHasChanges(false);
-  };
-
+    onSave(localPreferences)
+    setHasChanges(false)
+  }
   const handleTest = async (channel: NotificationChannel, type: NotificationType) => {
-    setTestingChannel({ channel, type });
+    setTestingChannel({ channel, type })
     try {
-      await onTest(channel, type);
+      await onTest(channel, type)
     } finally {
-      setTimeout(() => setTestingChannel(null), 2000);
+      setTimeout(() => setTestingChannel(null), 2000)
     }
-  };
-
+  }
   const resetToDefaults = () => {
     // Reset to default preferences
     const defaultPrefs: NotificationPreferences = {
@@ -214,11 +198,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         volume: 0.7,
         customSounds: []
       }
-    } as NotificationPreferences;
-
-    setLocalPreferences(defaultPrefs);
-  };
-
+    } as NotificationPreferences
+    setLocalPreferences(defaultPrefs)
+  }
   return (
     <div className={`bg-gray-900 rounded-lg border border-gray-700 ${className}`}>
       {/* Header */}
@@ -299,7 +281,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             { key: 'types', label: 'Tipos', icon: Bell },
             { key: 'sounds', label: 'Sonidos', icon: Volume2 },
             { key: 'schedule', label: 'Horario', icon: Clock }
-          ].map(({ key, label, icon: Icon }) => (<button
+          ].map((key, label, icon: Icon ) => (<button
               key={key}
               onClick={() => setActiveTab(key as 'channels' | 'types' | 'sounds' | 'schedule')}
               className={`flex items-center space-x-2 py-4 border-b-2 transition-colors ${
@@ -320,8 +302,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         {/* Channels Tab */}
         {activeTab === 'channels' && (<div className="space-y-6">
             {channels.map(({ key: channel, label, icon: Icon, description }) => {
-              const channelPrefs = localPreferences.channels[channel];
-              
+              const channelPrefs = localPreferences.channels[channel]
               return (<motion.div
                   key={channel}
                   initial={{ opacity: 0, y: 20 }}
@@ -365,8 +346,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
 
                   {channelPrefs.enabled && (<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {notificationTypes.map((type) => {
-                        const typePrefs = channelPrefs.types[type.key];
-                        
+                        const typePrefs = channelPrefs.types[type.key]
                         return (<div key={type.key} className="bg-gray-700 rounded p-3">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center space-x-2">
@@ -404,10 +384,10 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                                         onChange={(e) => {
                                           const newPriorities = e.target.checked
                                             ? [...typePrefs.priority, priority.key]
-                                            : typePrefs.priority.filter(p => p !== priority.key);
+                                            : typePrefs.priority.filter(p => p !== priority.key)
                                           updateTypePreferences(channel, type.key, {
                                             priority: newPriorities
-                                          });
+                                          })
                                         }}
                                         className="rounded bg-gray-600 border-gray-500 text-blue-600 focus:ring-blue-500"
                                       />
@@ -420,12 +400,12 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                               </div>
                             )}
                           </div>
-                        );
+                        )
                       })}
                     </div>
                   )}
                 </motion.div>
-              );
+              )
             })}
           </div>
         )}
@@ -448,9 +428,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {channels.map(({ key: channel, label, icon: Icon }) => {
-                    const typePrefs = localPreferences.channels[channel].types[type.key];
-                    const channelEnabled = localPreferences.channels[channel].enabled;
-                    
+                    const typePrefs = localPreferences.channels[channel].types[type.key]
+                    const channelEnabled = localPreferences.channels[channel].enabled
                     return (<div
                         key={channel}
                         className={`p-3 rounded border-2 transition-colors ${
@@ -484,7 +463,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                           </div>
                         )}
                       </div>
-                    );
+                    )
                   })}
                 </div>
               </motion.div>
@@ -568,11 +547,11 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                         <button
                           onClick={async () => {
                             try {
-                              const audio = new Audio(sound.url);
-                              audio.volume = localPreferences.sounds.volume;
-                              await audio.play();
+                              const audio = new Audio(sound.url)
+                              audio.volume = localPreferences.sounds.volume
+                              await audio.play()
                             } catch (error) {
-                              console.error('Failed to play sound:', error);
+                              console.error('Failed to play sound:', error)
                             }
                           }}
                           className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
@@ -672,13 +651,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                             onChange={(e) => {
                               const days = e.target.checked
                                 ? [...localPreferences.doNotDisturbSchedule!.days, index]
-                                : localPreferences.doNotDisturbSchedule!.days.filter(d => d !== index);
+                                : localPreferences.doNotDisturbSchedule!.days.filter(d => d !== index)
                               updatePreferences({
                                 doNotDisturbSchedule: {
                                   ...localPreferences.doNotDisturbSchedule!,
                                   days
                                 }
-                              });
+                              })
                             }}
                             className="rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500 mb-1"
                           />
@@ -760,5 +739,5 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         )}
       </div>
     </div>
-  );
-};
+  )
+}

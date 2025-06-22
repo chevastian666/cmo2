@@ -1,69 +1,59 @@
-import React, { useState } from 'react';
-import {AlertTriangle} from 'lucide-react';
-import { BloomingAlert} from '../components/BloomingAlert';
-
-import { cn} from '../../../utils/utils';
-
+import React, { useState } from 'react'
+import {AlertTriangle} from 'lucide-react'
+import { BloomingAlert} from '../components/BloomingAlert'
+import { cn} from '../../../utils/utils'
 interface AlertData {
-  id: string;
-  tipo: 'normal' | 'alerta' | 'critico';
-  mensaje: string;
-  timestamp: Date;
+  id: string
+  tipo: 'normal' | 'alerta' | 'critico'
+  mensaje: string
+  timestamp: Date
 }
 
 export const AlertaCardExample: React.FC<{ alerta: AlertData; isNew?: boolean }> = ({ 
   alerta, isNew = false 
 }) => {
-  const [showBloom, setShowBloom] = useState(isNew);
-  
-
+  const [showBloom, setShowBloom] = useState(isNew)
   const handleClick = () => {
-    playOpen();
+    playOpen()
     // Handle alert click
-  };
-
+  }
   const alertColors = {
     normal: 'border-green-500 bg-green-900/20',
     alerta: 'border-yellow-500 bg-yellow-900/20', 
     critico: 'border-red-500 bg-red-900/20'
-  };
-
+  }
   const alertIcons = {
     normal: 'text-green-400',
     alerta: 'text-yellow-400',
     critico: 'text-red-400'
-  };
-
+  }
   if (showBloom) {
     return (<BloomingAlert
         status={alerta.tipo === 'normal' ? 'normal' : alerta.tipo === 'alerta' ? 'alert' : 'critical'}
         onBloomComplete={() => {
-          setShowBloom(false);
-          playNotification();
+          setShowBloom(false)
+          playNotification()
         }}
         className="w-full"
       >
         <AlertCard alerta={alerta} onClick={handleClick} />
       </BloomingAlert>
-    );
+    )
   }
 
-  return <AlertCard alerta={alerta} onClick={handleClick} />;
-};
-
+  return <AlertCard alerta={alerta} onClick={handleClick} />
+}
 const AlertCard: React.FC<{ alerta: AlertData; onClick: () => void }> = ({ alerta, onClick }) => {
   const alertColors = {
     normal: 'border-green-500 bg-green-900/20',
     alerta: 'border-yellow-500 bg-yellow-900/20',
     critico: 'border-red-500 bg-red-900/20'
-  };
-
+  }
   const alertIcons = {
     normal: 'text-green-400',
     alerta: 'text-yellow-400',
     critico: 'text-red-400'
-  };
-
+  }
   return (
     <div
       className={cn(
@@ -83,5 +73,5 @@ const AlertCard: React.FC<{ alerta: AlertData; onClick: () => void }> = ({ alert
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

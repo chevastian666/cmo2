@@ -1,74 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import {Shield, Save, History, Eye, Users, AlertTriangle} from 'lucide-react';
-import { useMediaQuery} from '../../../hooks/useMediaQuery';
-import { RolesTable} from '../components/RolesTable';
-import { RoleCard} from '../components/RoleCard';
-import { ChangeHistory} from '../components/ChangeHistory';
-import { RolesTableSkeleton, RoleCardSkeleton} from '../components/RolesTableSkeleton';
-import { useRolesStore} from '../../../store/rolesStore';
-
-import type { Role} from '../../../types/roles';
-import { ROLE_LABELS} from '../../../types/roles';
-import { cn} from '../../../utils/utils';
-
-const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
-
+import React, { useState, useEffect } from 'react'
+import {Shield, Save, History, Eye, Users, AlertTriangle} from 'lucide-react'
+import { useMediaQuery} from '../../../hooks/useMediaQuery'
+import { RolesTable} from '../components/RolesTable'
+import { RoleCard} from '../components/RoleCard'
+import { ChangeHistory} from '../components/ChangeHistory'
+import { RolesTableSkeleton, RoleCardSkeleton} from '../components/RolesTableSkeleton'
+import { useRolesStore} from '../../../store/rolesStore'
+import type { Role} from '../../../types/roles'
+import { ROLE_LABELS} from '../../../types/roles'
+import { cn} from '../../../utils/utils'
+const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO']
 export const RolesPage: React.FC = () => {
-  
-  
-  const [showHistory, setShowHistory] = useState(false);
-  const [expandedRole, setExpandedRole] = useState<Role | null>(null);
-  const [previewMode, setPreviewMode] = useState(false);
-  const [previewRole, setPreviewRole] = useState<Role>('CMO');
-  const [hasChanges, setHasChanges] = useState(false);
-  
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const isTablet = useMediaQuery('(max-width: 1024px)');
-  
+
+  const [showHistory, setShowHistory] = useState(false)
+  const [expandedRole, setExpandedRole] = useState<Role | null>(null)
+  const [previewMode, setPreviewMode] = useState(false)
+  const [previewRole, setPreviewRole] = useState<Role>('CMO')
+  const [hasChanges, setHasChanges] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
   // Load permissions on mount
-   
 
   useEffect(() => {
-    loadPermissions();
-  }, [loadPermissions]);
-  
+    loadPermissions()
+  }, [])
   // Track changes
-   
 
   useEffect(() => {
     const unsubscribe = useRolesStore.subscribe((state) => state.permissions,
       () => setHasChanges(true)
-    );
-    
-    return unsubscribe;
-  }, []);
-  
+    )
+    return unsubscribe
+  }, [])
   const handleSave = async () => {
     try {
-      await savePermissions();
-      setHasChanges(false);
+      await savePermissions()
+      setHasChanges(false)
     } catch {
       // Error is handled in the store
     }
-  };
-  
+  }
   const handlePreviewToggle = () => {
     if (!previewMode) {
-      setPreviewMode(true);
-      setCurrentUserRole(previewRole);
+      setPreviewMode(true)
+      setCurrentUserRole(previewRole)
     } else {
-      setPreviewMode(false);
+      setPreviewMode(false)
       setCurrentUserRole('God'); // Reset to admin
     }
-  };
-  
+  }
   const handlePreviewRoleChange = (role: Role) => {
-    setPreviewRole(role);
+    setPreviewRole(role)
     if (previewMode) {
-      setCurrentUserRole(role);
+      setCurrentUserRole(role)
     }
-  };
-
+  }
   // Check if current user has access
   if (currentUserRole !== 'God' && !previewMode) {
     return (
@@ -81,7 +67,7 @@ export const RolesPage: React.FC = () => {
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (<div className="space-y-6">
@@ -246,5 +232,5 @@ export const RolesPage: React.FC = () => {
         onClose={() => setShowHistory(false)}
       />
     </div>
-  );
-};
+  )
+}

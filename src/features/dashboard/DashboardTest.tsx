@@ -3,8 +3,7 @@
  * By Cheva
  */
 
-import React from 'react';
-
+import React from 'react'
 const DashboardTest: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-6">
@@ -24,7 +23,6 @@ const DashboardTest: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default DashboardTest;
+  )
+}
+export default DashboardTest

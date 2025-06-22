@@ -1,51 +1,43 @@
-import React, { useCallback, useRef, useState, useEffect, memo } from 'react';
-import { cn} from '../../utils/utils';
-
+import React, { useCallback, useRef, useState, useEffect, memo } from 'react'
+import { cn} from '../../utils/utils'
 export interface VirtualizedListProps<T> {
-  items: T[];
-  itemHeight: number;
-  containerHeight: number;
-  renderItem: (item: T, index: number) => React.ReactNode;
-  overscan?: number;
-  className?: string;
-  onScroll?: (scrollTop: number) => void;
+  items: T[]
+  itemHeight: number
+  containerHeight: number
+  renderItem: (item: T, index: number) => React.ReactNode
+  overscan?: number
+  className?: string
+  onScroll?: (scrollTop: number) => void
 }
 
 export const VirtualizedList = <T,>({
   items, itemHeight, containerHeight, renderItem, overscan = 3, className, onScroll
 }: VirtualizedListProps<T>) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  const totalHeight = items.length * itemHeight;
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [scrollTop, setScrollTop] = useState(0)
+  const totalHeight = items.length * itemHeight
   // visibleCount removed - unused
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan)
   const endIndex = Math.min(
     items.length - 1,
     Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
-  );
-
-  const visibleItems = items.slice(startIndex, endIndex + 1);
-  const offsetY = startIndex * itemHeight;
-
+  )
+  const visibleItems = items.slice(startIndex, endIndex + 1)
+  const offsetY = startIndex * itemHeight
   const handleScroll = useCallback(() => {
     if (scrollContainerRef.current) {
-      const newScrollTop = scrollContainerRef.current.scrollTop;
-      setScrollTop(newScrollTop);
-      onScroll?.(newScrollTop);
+      const newScrollTop = scrollContainerRef.current.scrollTop
+      setScrollTop(newScrollTop)
+      onScroll?.(newScrollTop)
     }
-  }, [onScroll]);
-   
-
-
+  }, [])
     useEffect(() => {
-    const container = scrollContainerRef.current;
+    const container = scrollContainerRef.current
     if (container) {
-      container.addEventListener('scroll', handleScroll, { passive: true });
-      return () => container.removeEventListener('scroll', handleScroll);
+      container.addEventListener('scroll', handleScroll, { passive: true })
+      return () => container.removeEventListener('scroll', handleScroll)
     }
-  }, [handleScroll]);
-
+  }, [])
   return (
     <div
       ref={scrollContainerRef}
@@ -74,27 +66,25 @@ export const VirtualizedList = <T,>({
         </div>
       </div>
     </div>
-  );
-};
-
+  )
+}
 // Properly type the memoized component
-export const MemoizedVirtualizedList = memo(VirtualizedList) as typeof VirtualizedList;
-
+export const MemoizedVirtualizedList = memo(VirtualizedList) as typeof VirtualizedList
 // Virtualized Table Component
 export interface VirtualizedTableProps<T> {
-  items: T[];
+  items: T[]
   columns: Array<{
-    key: string;
-    header: string;
-    width?: string;
-    render?: (item: T) => React.ReactNode;
-  }>;
-  rowHeight?: number;
-  containerHeight?: number;
-  onRowClick?: (item: T, index: number) => void;
-  className?: string;
-  headerClassName?: string;
-  rowClassName?: string | ((item: T, index: number) => string);
+    key: string
+    header: string
+    width?: string
+    render?: (item: T) => React.ReactNode
+  }>
+  rowHeight?: number
+  containerHeight?: number
+  onRowClick?: (item: T, index: number) => void
+  className?: string
+  headerClassName?: string
+  rowClassName?: string | ((item: T, index: number) => string)
 }
 
 export const VirtualizedTable = <T extends Record<string, unknown>,>({
@@ -103,8 +93,7 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
   const renderRow = useCallback((item: T, index: number) => {
     const rowClass = typeof rowClassName === 'function' 
       ? rowClassName(item, index) 
-      : rowClassName;
-
+      : rowClassName
     return (
       <div
         className={cn(
@@ -124,9 +113,8 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
           </div>
         ))}
       </div>
-    );
-  }, [columns, onRowClick, rowClassName, rowHeight]);
-
+    )
+  }, [columns])
   return (
     <div className={cn('bg-gray-800 rounded-lg overflow-hidden', className)}>
       {/* Header */}
@@ -154,8 +142,7 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
         className="virtualized-table-body"
       />
     </div>
-  );
-};
-
+  )
+}
 // Properly type the memoized component
-export const MemoizedVirtualizedTable = memo(VirtualizedTable) as typeof VirtualizedTable;
+export const MemoizedVirtualizedTable = memo(VirtualizedTable) as typeof VirtualizedTable

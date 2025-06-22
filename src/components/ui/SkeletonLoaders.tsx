@@ -4,10 +4,9 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Skeleton} from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader} from '@/components/ui/Card';
-
+import React from 'react'
+import { Skeleton} from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader} from '@/components/ui/Card'
 // Table Skeleton Loader
 export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({ 
   rows = 5, columns = 4 
@@ -34,9 +33,8 @@ export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({
         </div>
       ))}
     </div>
-  );
-};
-
+  )
+}
 // Card Skeleton Loader
 export const CardSkeleton: React.FC<{ showHeader?: boolean }> = ({ showHeader = true }) => {
   return (
@@ -55,9 +53,8 @@ export const CardSkeleton: React.FC<{ showHeader?: boolean }> = ({ showHeader = 
         </div>
       </CardContent>
     </Card>
-  );
-};
-
+  )
+}
 // Form Skeleton Loader
 export const FormSkeleton: React.FC<{ fields?: number }> = ({ fields = 4 }) => {
   return (
@@ -73,9 +70,8 @@ export const FormSkeleton: React.FC<{ fields?: number }> = ({ fields = 4 }) => {
         <Skeleton className="h-10 w-24" /> {/* Cancel button */}
       </div>
     </div>
-  );
-};
-
+  )
+}
 // List Skeleton Loader
 export const ListSkeleton: React.FC<{ items?: number }> = ({ items = 5 }) => {
   return (
@@ -91,9 +87,8 @@ export const ListSkeleton: React.FC<{ items?: number }> = ({ items = 5 }) => {
         </div>
       ))}
     </div>
-  );
-};
-
+  )
+}
 // Stats Grid Skeleton
 export const StatsGridSkeleton: React.FC<{ items?: number }> = ({ items = 4 }) => {
   return (
@@ -113,9 +108,8 @@ export const StatsGridSkeleton: React.FC<{ items?: number }> = ({ items = 4 }) =
         </Card>
       ))}
     </div>
-  );
-};
-
+  )
+}
 // Detail Page Skeleton
 export const DetailPageSkeleton: React.FC = () => {
   return (
@@ -149,9 +143,8 @@ export const DetailPageSkeleton: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
+  )
+}
 // Chart Skeleton
 export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "300px" }) => {
   return (
@@ -190,9 +183,8 @@ export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "300px" 
         </div>
       </CardContent>
     </Card>
-  );
-};
-
+  )
+}
 // Modal Skeleton
 export const ModalSkeleton: React.FC = () => {
   return (
@@ -205,9 +197,8 @@ export const ModalSkeleton: React.FC = () => {
       </div>
       <FormSkeleton fields={3} />
     </div>
-  );
-};
-
+  )
+}
 // Search Result Skeleton
 export const SearchResultSkeleton: React.FC<{ items?: number }> = ({ items = 3 }) => {
   return (
@@ -229,17 +220,15 @@ export const SearchResultSkeleton: React.FC<{ items?: number }> = ({ items = 3 }
         </div>
       ))}
     </div>
-  );
-};
-
+  )
+}
 // Widget Skeleton (for dashboard)
 export const WidgetSkeleton: React.FC<{ type?: 'kpi' | 'chart' | 'list' | 'map' }> = ({ 
   type = 'kpi' 
 }) => {
   switch (type) {
     case 'chart':
-      return <ChartSkeleton height="200px" />;
-    
+      return <ChartSkeleton height="200px" />
     case 'list':
       return (
         <Card>
@@ -250,8 +239,7 @@ export const WidgetSkeleton: React.FC<{ type?: 'kpi' | 'chart' | 'list' | 'map' 
             <ListSkeleton items={3} />
           </CardContent>
         </Card>
-      );
-    
+      )
     case 'map':
       return (
         <Card>
@@ -262,8 +250,7 @@ export const WidgetSkeleton: React.FC<{ type?: 'kpi' | 'chart' | 'list' | 'map' 
             <Skeleton className="h-64 w-full rounded" />
           </CardContent>
         </Card>
-      );
-    
+      )
     case 'kpi':
     default:
       return (
@@ -279,6 +266,6 @@ export const WidgetSkeleton: React.FC<{ type?: 'kpi' | 'chart' | 'list' | 'map' 
             </div>
           </CardContent>
         </Card>
-      );
+      )
   }
-};
+}

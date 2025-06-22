@@ -1,26 +1,24 @@
-import React from 'react';
-import { Navigate} from 'react-router-dom';
-import {AlertTriangle} from 'lucide-react';
-import { useRolesStore} from '../store/rolesStore';
-import type { Section, Permission} from '../types/roles';
-
+import React from 'react'
+import { Navigate} from 'react-router-dom'
+import {AlertTriangle} from 'lucide-react'
+import { useRolesStore} from '../store/rolesStore'
+import type { Section, Permission} from '../types/roles'
 interface ProtectedRouteProps {
-  section: Section;
-  permission?: Permission;
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-  redirectTo?: string;
+  section: Section
+  permission?: Permission
+  children: React.ReactNode
+  fallback?: React.ReactNode
+  redirectTo?: string
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   section, permission = 'view', children, fallback, redirectTo = '/'
 }) => {
-  const canAccess = useRolesStore(state => state.canAccess);
-  const hasAccess = canAccess(section, permission);
-  
+  const canAccess = useRolesStore(state => state.canAccess)
+  const hasAccess = canAccess(section, permission)
   if (!hasAccess) {
     if (fallback) {
-      return <>{fallback}</>;
+      return <>{fallback}</>
     }
     
     if (redirectTo === 'none') {
@@ -40,12 +38,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
             </button>
           </div>
         </div>
-      );
+      )
     }
     
-    return <Navigate to={redirectTo} replace />;
+    return <Navigate to={redirectTo} replace />
   }
   
-  return <>{children}</>;
-};
-
+  return <>{children}</>
+}

@@ -3,120 +3,110 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { X, AlertTriangle, Clock, User, MessageSquare, CheckCircle, Search} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatDateTime, formatTimeAgo} from '../../../utils/formatters';
-import type { Alerta} from '../../../types';
-
+import React, { useState, useEffect } from 'react'
+import { X, AlertTriangle, Clock, User, MessageSquare, CheckCircle, Search} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatDateTime, formatTimeAgo} from '../../../utils/formatters'
+import type { Alerta} from '../../../types'
 interface HistorialAlertasCriticasModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 interface AlertaCriticaHistorial extends Alerta {
   respuesta?: {
-    tipo: string;
-    descripcion: string;
-    usuario: string;
-    timestamp: number;
-    acciones?: string[];
-  };
+    tipo: string
+    descripcion: string
+    usuario: string
+    timestamp: number
+    acciones?: string[]
+  }
   asignacion?: {
-    usuario: string;
-    timestamp: number;
-    notas?: string;
-  };
+    usuario: string
+    timestamp: number
+    notas?: string
+  }
   comentarios?: Array<{
-    id: string;
-    usuario: string;
-    mensaje: string;
-    timestamp: number;
-  }>;
+    id: string
+    usuario: string
+    mensaje: string
+    timestamp: number
+  }>
 }
 
 export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasModalProps> = ({
   isOpen, onClose
 }) => {
-  const [alertasCriticas, setAlertasCriticas] = useState<AlertaCriticaHistorial[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
-  const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(null);
-   
-
+  const [alertasCriticas, setAlertasCriticas] = useState<AlertaCriticaHistorial[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all')
+  const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(null)
   useEffect(() => {
     if (isOpen) {
-      fetchAlertasCriticas();
+      fetchAlertasCriticas()
     }
-  }, [isOpen]);
-
+  }, [])
   // ESC key handler
-   
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
-        onClose();
+        onClose()
       }
-    };
-
+    }
     if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('keydown', handleEscKey)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
-  }, [isOpen, onClose]);
-
+      document.removeEventListener('keydown', handleEscKey)
+    }
+  }, [])
   const fetchAlertasCriticas = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       // TODO: Replace with actual API call
       // For now, generate mock data
-      const mockData: AlertaCriticaHistorial[] = generateMockAlertasCriticas();
-      setAlertasCriticas(mockData);
+      const mockData: AlertaCriticaHistorial[] = generateMockAlertasCriticas()
+      setAlertasCriticas(mockData)
     } catch {
-      console.error('Error fetching critical alerts history:', _error);
+      console.error('Error fetching critical alerts history:', _error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
   const filterAlerts = (alerts: AlertaCriticaHistorial[]) => {
-    let filtered = alerts;
-
+    let filtered = alerts
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(alert =>
         alert.codigoPrecinto.toLowerCase().includes(searchTerm.toLowerCase()) ||
         alert.mensaje.toLowerCase().includes(searchTerm.toLowerCase()) ||
         alert.respuesta?.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      )
     }
 
     // Date filter
-    const now = Date.now() / 1000;
+    const now = Date.now() / 1000
     switch (dateFilter) {
-      case 'today':
-        filtered = filtered.filter(alert => now - alert.timestamp < 86400);
-        break;
-      case 'week':
-        filtered = filtered.filter(alert => now - alert.timestamp < 604800);
-        break;
-      case 'month':
-        filtered = filtered.filter(alert => now - alert.timestamp < 2592000);
-        break;
+      case 'today': {
+  filtered = filtered.filter(alert => now - alert.timestamp < 86400)
+        break
+    }
+    case 'week':
+        filtered = filtered.filter(alert => now - alert.timestamp < 604800)
+        break
+    }
+    case 'month':
+        filtered = filtered.filter(alert => now - alert.timestamp < 2592000)
+        break
     }
 
-    return filtered;
-  };
-
-  const filteredAlerts = filterAlerts(alertasCriticas);
-
-  if (!isOpen) return null;
-
+    return filtered
+  }
+  const filteredAlerts = filterAlerts(alertasCriticas)
+  if (!isOpen) return null
   return (<div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={onClose} />
@@ -326,31 +316,26 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
         />
       )}
     </div>
-  );
-};
-
+  )
+}
 // Detail modal for selected alert
 const AlertaDetailModal: React.FC<{
-  alerta: AlertaCriticaHistorial;
-  onClose: () => void;
+  alerta: AlertaCriticaHistorial
+  onClose: () => void
 }> = ({ alerta, onClose }) => {
   // ESC key handler
-   
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
-
-    document.addEventListener('keydown', handleEscKey);
-
+    }
+    document.addEventListener('keydown', handleEscKey)
     return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
-  }, [onClose]);
-
+      document.removeEventListener('keydown', handleEscKey)
+    }
+  }, [])
   return (
     <div className="fixed inset-0 z-60 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
@@ -477,17 +462,15 @@ const AlertaDetailModal: React.FC<{
         </div>
       </div>
     </div>
-  );
-};
-
+  )
+}
 // Mock data generator
 function generateMockAlertasCriticas(): AlertaCriticaHistorial[] {
-  const usuarios = ['Sebastian Saucedo', 'Juan Pérez', 'María García', 'Carlos López'];
-  const tiposRespuesta = ['Falsa alarma', 'Intervención exitosa', 'Problema resuelto', 'Acción preventiva'];
-  
+  const usuarios = ['Sebastian Saucedo', 'Juan Pérez', 'María García', 'Carlos López']
+  const tiposRespuesta = ['Falsa alarma', 'Intervención exitosa', 'Problema resuelto', 'Acción preventiva']
   return Array.from({ length: 20 }, (_, i) => {
-    const isResolved = Math.random() > 0.3;
-    const hasComments = Math.random() > 0.5;
+    const isResolved = Math.random() > 0.3
+    const hasComments = Math.random() > 0.5
     const timestamp = Date.now() / 1000 - Math.floor(Math.random() * 2592000); // Last 30 days
     
     return {
@@ -541,6 +524,6 @@ function generateMockAlertasCriticas(): AlertaCriticaHistorial[] {
         ][Math.floor(Math.random() * 4)],
         timestamp: timestamp + Math.floor(Math.random() * 7200)
       })) : undefined
-    };
-  });
+    }
+  })
 }

@@ -3,24 +3,22 @@
  * By Cheva
  */
 
-import { notificationService} from '../../services/notificationService';
-
+import { notificationService} from '../../services/notificationService'
 export type LoadingState = 
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'error'; error: string }
-  | { status: 'success' };
-
+  | { status: 'success' }
 export interface ErrorHandlingState {
-  loadingState: LoadingState;
-  setLoadingState: (state: LoadingState) => void;
+  loadingState: LoadingState
+  setLoadingState: (state: LoadingState) => void
 }
 
 export interface AsyncActionOptions {
-  showErrorNotification?: boolean;
-  errorMessage?: string;
-  successMessage?: string;
-  showSuccessNotification?: boolean;
+  showErrorNotification?: boolean
+  errorMessage?: string
+  successMessage?: string
+  showSuccessNotification?: boolean
 }
 
 /**
@@ -30,31 +28,25 @@ export async function executeAsyncAction<T>(action: () => Promise<T>,
   setLoadingState: (state: LoadingState) => void,
   options: AsyncActionOptions = {}
 ): Promise<T | null> {
-  
 
-  setLoadingState({ status: 'loading' });
-
+  setLoadingState({ status: 'loading' })
   try {
-    const result = await action();
-    
-    setLoadingState({ status: 'success' });
-    
+    const result = await action()
+    setLoadingState({ status: 'success' })
     if (showSuccessNotification && successMessage) {
-      notificationService.success(successMessage);
+      notificationService.success(successMessage)
     }
     
-    return result;
+    return result
   } catch {
-    const errorMsg = error instanceof Error ? error.message : errorMessage;
-    
-    setLoadingState({ status: 'error', error: errorMsg });
-    
+    const errorMsg = error instanceof Error ? error.message : errorMessage
+    setLoadingState({ status: 'error', error: errorMsg })
     if (showErrorNotification) {
-      notificationService.error(errorMsg);
+      notificationService.error(errorMsg)
     }
     
-    console.error('Error en acción asíncrona:', _error);
-    return null;
+    console.error('Error en acción asíncrona:', _error)
+    return null
   }
 }
 
@@ -65,7 +57,7 @@ export function createErrorHandlingSlice(): ErrorHandlingState {
   return {
     loadingState: { status: 'idle' },
     setLoadingState: (state) => ({ loadingState: state })
-  };
+  }
 }
 
 /**
@@ -78,5 +70,5 @@ export function useLoadingState(loadingState: LoadingState) {
     isError: loadingState.status === 'error',
     isSuccess: loadingState.status === 'success',
     error: loadingState.status === 'error' ? loadingState.error : null
-  };
+  }
 }

@@ -4,14 +4,12 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 const TreemapStatic: React.FC = () => {
   // Mock data for testing
 
-  const total = _data.reduce((sum, item) => sum + item.value, 0);
-
+  const total = _data.reduce((sum, item) => sum + item.value, 0)
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -27,7 +25,7 @@ const TreemapStatic: React.FC = () => {
           <div className="bg-gray-900 rounded-lg p-4">
             <div className="grid grid-cols-2 gap-2" style={{ height: '400px' }}>
               {data.map((item, index) => {
-                const percentage = (item.value / total) * 100;
+                const percentage = (item.value / total) * 100
                 return (
                   <div
                     key={index}
@@ -43,7 +41,7 @@ const TreemapStatic: React.FC = () => {
                     </div>
                     <p className="text-xs opacity-75">{percentage.toFixed(1)}%</p>
                   </div>
-                );
+                )
               })}
             </div>
           </div>
@@ -64,7 +62,6 @@ const TreemapStatic: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
-
-export default TreemapStatic;
+  )
+}
+export default TreemapStatic

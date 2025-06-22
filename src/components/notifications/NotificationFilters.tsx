@@ -4,16 +4,15 @@
  * By Cheva
  */
 
-import React from 'react';
-import { motion} from 'framer-motion';
-import { Filter, X} from 'lucide-react';
+import React from 'react'
+import { motion} from 'framer-motion'
+import { Filter, X} from 'lucide-react'
 import type { 
-  NotificationFilter, NotificationStats, NotificationType, NotificationPriority, NotificationStatus} from '../../types/notifications';
-
+  NotificationFilter, NotificationStats, NotificationType, NotificationPriority, NotificationStatus} from '../../types/notifications'
 interface NotificationFiltersProps {
-  filter: NotificationFilter;
-  onFilterChange: (filter: Partial<NotificationFilter>) => void;
-  stats?: NotificationStats;
+  filter: NotificationFilter
+  onFilterChange: (filter: Partial<NotificationFilter>) => void
+  stats?: NotificationStats
 }
 
 const typeOptions: { key: NotificationType; label: string; icon: string }[] = [
@@ -23,15 +22,13 @@ const typeOptions: { key: NotificationType; label: string; icon: string }[] = [
   { key: 'system', label: 'Sistema', icon: '⚙️' },
   { key: 'user', label: 'Usuario', icon: '👤' },
   { key: 'maintenance', label: 'Mantenimiento', icon: '🔧' }
-];
-
+]
 const priorityOptions: { key: NotificationPriority; label: string; color: string }[] = [
   { key: 'critical', label: 'Crítica', color: 'bg-red-600' },
   { key: 'high', label: 'Alta', color: 'bg-yellow-600' },
   { key: 'normal', label: 'Normal', color: 'bg-blue-600' },
   { key: 'low', label: 'Baja', color: 'bg-gray-600' }
-];
-
+]
 const statusOptions: { key: NotificationStatus; label: string; color: string }[] = [
   { key: 'unread', label: 'Sin leer', color: 'bg-blue-600' },
   { key: 'read', label: 'Leído', color: 'bg-gray-600' },
@@ -39,8 +36,7 @@ const statusOptions: { key: NotificationStatus; label: string; color: string }[]
   { key: 'snoozed', label: 'Pospuesto', color: 'bg-yellow-600' },
   { key: 'escalated', label: 'Escalado', color: 'bg-red-600' },
   { key: 'dismissed', label: 'Descartado', color: 'bg-gray-500' }
-];
-
+]
 export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
   filter, onFilterChange, stats
 }) => {
@@ -53,9 +49,8 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
       dateTo: undefined,
       search: undefined,
       unreadOnly: false
-    });
-  };
-
+    })
+  }
   const hasActiveFilters = Boolean(
     filter.types?.length ||
     filter.priorities?.length ||
@@ -64,19 +59,16 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
     filter.dateTo ||
     filter.search ||
     filter.unreadOnly
-  );
-
+  )
   const toggleArrayFilter = <T extends string>(filterKey: 'types' | 'priorities' | 'statuses', value: T) => {
-    const currentArray = (filter[filterKey] as T[]) || [];
+    const currentArray = (filter[filterKey] as T[]) || []
     const newArray = currentArray.includes(value)
       ? currentArray.filter(item => item !== value)
-      : [...currentArray, value];
-    
+      : [...currentArray, value]
     onFilterChange({
       [filterKey]: newArray.length > 0 ? newArray : undefined
-    });
-  };
-
+    })
+  }
   return (
     <motion.div
       initial={{ height: 0 }}
@@ -143,9 +135,8 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
         <label className="block text-xs text-gray-400 mb-2">Tipos:</label>
         <div className="flex flex-wrap gap-1">
           {typeOptions.map(({ key, label, icon }) => {
-            const isSelected = filter.types?.includes(key);
-            const count = stats?.byType[key] || 0;
-            
+            const isSelected = filter.types?.includes(key)
+            const count = stats?.byType[key] || 0
             return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('types', key)}
@@ -163,7 +154,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
                   </span>
                 )}
               </button>
-            );
+            )
           })}
         </div>
       </div>
@@ -173,9 +164,8 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
         <label className="block text-xs text-gray-400 mb-2">Prioridades:</label>
         <div className="flex flex-wrap gap-1">
           {priorityOptions.map(({ key, label, color }) => {
-            const isSelected = filter.priorities?.includes(key);
-            const count = stats?.byPriority[key] || 0;
-            
+            const isSelected = filter.priorities?.includes(key)
+            const count = stats?.byPriority[key] || 0
             return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('priorities', key)}
@@ -192,7 +182,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
                   </span>
                 )}
               </button>
-            );
+            )
           })}
         </div>
       </div>
@@ -202,9 +192,8 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
         <label className="block text-xs text-gray-400 mb-2">Estados:</label>
         <div className="flex flex-wrap gap-1">
           {statusOptions.map(({ key, label, color }) => {
-            const isSelected = filter.statuses?.includes(key);
-            const count = stats?.byStatus[key] || 0;
-            
+            const isSelected = filter.statuses?.includes(key)
+            const count = stats?.byStatus[key] || 0
             return (<button
                 key={key}
                 onClick={() => toggleArrayFilter('statuses', key)}
@@ -221,7 +210,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
                   </span>
                 )}
               </button>
-            );
+            )
           })}
         </div>
       </div>
@@ -286,5 +275,5 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
         </div>
       )}
     </motion.div>
-  );
-};
+  )
+}

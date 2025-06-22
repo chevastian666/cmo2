@@ -1,2 +1,2 @@
-export * from './monitoring';
-export * from './locations';
+export * from './monitoring'
+export * from './locations'

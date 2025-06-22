@@ -4,46 +4,43 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card';
-import { Button} from '@/components/ui/button';
-import { Badge} from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { Settings, Webhook, MessageSquare, Ticket, BarChart3, Server, Database, Plus, Play, Pause, Trash2, Activity} from 'lucide-react';
-
-import { webhooksService, WebhookConfig} from '../../../services/integrations/webhooks.service';
-import { chatService, ChatConfig} from '../../../services/integrations/chat.service';
-import { ticketingService, TicketingConfig} from '../../../services/integrations/ticketing.service';
-import { restAPIService, APIEndpoint} from '../../../services/integrations/rest-api.service';
-
-import { biExportService, BIConnection} from '../../../services/integrations/bi-export.service';
-
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Button} from '@/components/ui/button'
+import { Badge} from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Settings, Webhook, MessageSquare, Ticket, BarChart3, Server, Database, Plus, Play, Pause, Trash2, Activity} from 'lucide-react'
+import { webhooksService, WebhookConfig} from '../../../services/integrations/webhooks.service'
+import { chatService, ChatConfig} from '../../../services/integrations/chat.service'
+import { ticketingService, TicketingConfig} from '../../../services/integrations/ticketing.service'
+import { restAPIService, APIEndpoint} from '../../../services/integrations/rest-api.service'
+import { biExportService, BIConnection} from '../../../services/integrations/bi-export.service'
 interface IntegrationStats {
   webhooks: {
-    total: number;
-    active: number;
-    successRate: number;
-  };
+    total: number
+    active: number
+    successRate: number
+  }
   chat: {
-    total: number;
-    active: number;
-    lastMessage?: Date;
-  };
+    total: number
+    active: number
+    lastMessage?: Date
+  }
   ticketing: {
-    total: number;
-    active: number;
-    ticketsCreated: number;
-  };
+    total: number
+    active: number
+    ticketsCreated: number
+  }
   api: {
-    totalEndpoints: number;
-    enabledEndpoints: number;
-    totalRequests: number;
-  };
+    totalEndpoints: number
+    enabledEndpoints: number
+    totalRequests: number
+  }
   bi: {
-    total_connections: number;
-    active_connections: number;
-    total_records_exported: number;
-  };
+    total_connections: number
+    active_connections: number
+    total_records_exported: number
+  }
 }
 
 const IntegrationsManagementPage: React.FC = () => {
@@ -53,32 +50,26 @@ const IntegrationsManagementPage: React.FC = () => {
     ticketing: { total: 0, active: 0, ticketsCreated: 0 },
     api: { totalEndpoints: 0, enabledEndpoints: 0, totalRequests: 0 },
     bi: { total_connections: 0, active_connections: 0, total_records_exported: 0 }
-  });
-
-  const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
-  const [chatConfigs, setChatConfigs] = useState<ChatConfig[]>([]);
-  const [ticketingConfigs, setTicketingConfigs] = useState<TicketingConfig[]>([]);
-  const [apiEndpoints, setApiEndpoints] = useState<APIEndpoint[]>([]);
-  const [biConnections, setBiConnections] = useState<BIConnection[]>([]);
-   
-
+  })
+  const [webhooks, setWebhooks] = useState<WebhookConfig[]>([])
+  const [chatConfigs, setChatConfigs] = useState<ChatConfig[]>([])
+  const [ticketingConfigs, setTicketingConfigs] = useState<TicketingConfig[]>([])
+  const [apiEndpoints, setApiEndpoints] = useState<APIEndpoint[]>([])
+  const [biConnections, setBiConnections] = useState<BIConnection[]>([])
   useEffect(() => {
-    loadData();
-  }, []);
-
+    loadData()
+  }, [])
   const loadData = () => {
     // Load configurations
-    setWebhooks(webhooksService.getAllWebhooks());
-    setChatConfigs(chatService.getAllChatConfigs());
-    setTicketingConfigs(ticketingService.getAllTicketingConfigs());
-    setApiEndpoints(restAPIService.getAllEndpoints());
-    setBiConnections(biExportService.getAllConnections());
-
+    setWebhooks(webhooksService.getAllWebhooks())
+    setChatConfigs(chatService.getAllChatConfigs())
+    setTicketingConfigs(ticketingService.getAllTicketingConfigs())
+    setApiEndpoints(restAPIService.getAllEndpoints())
+    setBiConnections(biExportService.getAllConnections())
     // Load statistics
-    const webhookStats = webhooksService.getDeliveryStats();
-    const apiStats = restAPIService.getAPIStats();
-    const biStats = biExportService.getExportStats();
-
+    const webhookStats = webhooksService.getDeliveryStats()
+    const apiStats = restAPIService.getAPIStats()
+    const biStats = biExportService.getExportStats()
     setStats({
       webhooks: {
         total: webhooksService.getAllWebhooks().length,
@@ -104,102 +95,90 @@ const IntegrationsManagementPage: React.FC = () => {
         active_connections: biStats.active_connections,
         total_records_exported: biStats.total_records_exported
       }
-    });
-  };
-
+    })
+  }
   const toggleWebhook = (id: string) => {
-    const webhook = webhooksService.getWebhook(id);
+    const webhook = webhooksService.getWebhook(id)
     if (webhook) {
-      webhooksService.updateWebhook(id, { active: !webhook.active });
-      loadData();
+      webhooksService.updateWebhook(id, { active: !webhook.active })
+      loadData()
     }
-  };
-
+  }
   const toggleChatConfig = (id: string) => {
-    const config = chatService.getChatConfig(id);
+    const config = chatService.getChatConfig(id)
     if (config) {
-      chatService.updateChatConfig(id, { active: !config.active });
-      loadData();
+      chatService.updateChatConfig(id, { active: !config.active })
+      loadData()
     }
-  };
-
+  }
   const toggleTicketingConfig = (id: string) => {
-    const config = ticketingService.getTicketingConfig(id);
+    const config = ticketingService.getTicketingConfig(id)
     if (config) {
-      ticketingService.updateTicketingConfig(id, { active: !config.active });
-      loadData();
+      ticketingService.updateTicketingConfig(id, { active: !config.active })
+      loadData()
     }
-  };
-
+  }
   const toggleApiEndpoint = (id: string) => {
-    const endpoint = restAPIService.getEndpoint(id);
+    const endpoint = restAPIService.getEndpoint(id)
     if (endpoint) {
-      restAPIService.updateEndpoint(id, { enabled: !endpoint.enabled });
-      loadData();
+      restAPIService.updateEndpoint(id, { enabled: !endpoint.enabled })
+      loadData()
     }
-  };
-
+  }
   const toggleBiConnection = (id: string) => {
-    const connection = biExportService.getConnection(id);
+    const connection = biExportService.getConnection(id)
     if (connection) {
-      biExportService.updateConnection(id, { active: !connection.active });
-      loadData();
+      biExportService.updateConnection(id, { active: !connection.active })
+      loadData()
     }
-  };
-
+  }
   const testWebhook = async (id: string) => {
     try {
-      await webhooksService.testWebhook(id);
-      alert('Webhook test sent successfully!');
+      await webhooksService.testWebhook(id)
+      alert('Webhook test sent successfully!')
     } catch (error) {
-      alert(`Webhook test failed: ${error}`);
+      alert(`Webhook test failed: ${error}`)
     }
-  };
-
+  }
   const testChatConfig = async (id: string) => {
     try {
-      const config = chatService.getChatConfig(id);
+      const config = chatService.getChatConfig(id)
       if (config) {
-        await chatService.testConnection(config);
-        alert('Chat integration test sent successfully!');
+        await chatService.testConnection(config)
+        alert('Chat integration test sent successfully!')
       }
     } catch (error) {
-      alert(`Chat test failed: ${error}`);
+      alert(`Chat test failed: ${error}`)
     }
-  };
-
+  }
   const testTicketingConfig = async (id: string) => {
     try {
-      const config = ticketingService.getTicketingConfig(id);
+      const config = ticketingService.getTicketingConfig(id)
       if (config) {
-        const result = await ticketingService.testConnection(config);
-        alert(result ? 'Ticketing connection successful!' : 'Ticketing connection failed!');
+        const result = await ticketingService.testConnection(config)
+        alert(result ? 'Ticketing connection successful!' : 'Ticketing connection failed!')
       }
     } catch (error) {
-      alert(`Ticketing test failed: ${error}`);
+      alert(`Ticketing test failed: ${error}`)
     }
-  };
-
+  }
   const testBiConnection = async (id: string) => {
     try {
-      const connection = biExportService.getConnection(id);
+      const connection = biExportService.getConnection(id)
       if (connection) {
-        const result = await biExportService.testConnection(connection);
-        alert(result.success ? 'BI connection successful!' : `BI connection failed: ${result.error}`);
+        const result = await biExportService.testConnection(connection)
+        alert(result.success ? 'BI connection successful!' : `BI connection failed: ${result.error}`)
       }
     } catch (error) {
-      alert(`BI test failed: ${error}`);
+      alert(`BI test failed: ${error}`)
     }
-  };
-
+  }
   const getStatusColor = (active: boolean): string => {
-    return active ? 'bg-green-500' : 'bg-gray-500';
-  };
-
+    return active ? 'bg-green-500' : 'bg-gray-500'
+  }
   const formatDate = (date: Date): string => {
-    return new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
-  };
-
+    return new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString()
+  }
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -697,7 +676,6 @@ const IntegrationsManagementPage: React.FC = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
-
-export default IntegrationsManagementPage;
+  )
+}
+export default IntegrationsManagementPage

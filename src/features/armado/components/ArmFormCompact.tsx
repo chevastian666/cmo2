@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { Truck} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { ORIGENES_DESTINOS} from '../../../constants/locations';
-
+import React, { useEffect } from 'react'
+import { Truck} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { ORIGENES_DESTINOS} from '../../../constants/locations'
 // Empresas con RUT
 const EMPRESAS = [
   { nombre: 'Transportes del Sur S.A.', rut: '211234567890' },
@@ -15,77 +14,68 @@ const EMPRESAS = [
   { nombre: 'Transportadora Central', rut: '218901234567' },
   { nombre: 'Logística Integral Uruguay', rut: '219012345678' },
   { nombre: 'Express Cargo S.R.L.', rut: '210123456789' }
-];
-
+]
 interface TransitoFormData {
-  matricula: string;
-  nombreConductor: string;
-  telefonoConductor: string;
-  empresa: string;
-  rutEmpresa: string;
-  origen: string;
-  destino: string;
+  matricula: string
+  nombreConductor: string
+  telefonoConductor: string
+  empresa: string
+  rutEmpresa: string
+  origen: string
+  destino: string
   tipoEslinga: {
-    larga: boolean;
-    corta: boolean;
-  };
-  precintoId: string;
-  observaciones: string;
+    larga: boolean
+    corta: boolean
+  }
+  precintoId: string
+  observaciones: string
 }
 
 interface ArmFormProps {
-  data: Partial<TransitoFormData>;
-  onChange: (field: string, value: unknown) => void;
-  disabled?: boolean;
-  precintoId?: string;
+  data: Partial<TransitoFormData>
+  onChange: (field: string, value: unknown) => void
+  disabled?: boolean
+  precintoId?: string
 }
 
 export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = false, precintoId }) => {
   // Auto-complete precinto ID when provided
-   
 
   useEffect(() => {
     if (precintoId && data.precintoId !== precintoId) {
-      onChange('precintoId', precintoId);
+      onChange('precintoId', precintoId)
     }
-  }, [precintoId]);
-
+  }, [])
   // Auto-complete RUT when empresa is selected
-   
 
   useEffect(() => {
     if (data.empresa) {
-      const empresa = EMPRESAS.find(e => e.nombre === data.empresa);
+      const empresa = EMPRESAS.find(e => e.nombre === data.empresa)
       if (empresa && data.rutEmpresa !== empresa.rut) {
-        onChange('rutEmpresa', empresa.rut);
+        onChange('rutEmpresa', empresa.rut)
       }
     }
-  }, [data.empresa]);
-
+  }, [data.empresa])
   // Auto-complete empresa when RUT is entered
-   
 
   useEffect(() => {
     if (data.rutEmpresa && data.rutEmpresa.length === 12) {
-      const empresa = EMPRESAS.find(e => e.rut === data.rutEmpresa);
+      const empresa = EMPRESAS.find(e => e.rut === data.rutEmpresa)
       if (empresa && data.empresa !== empresa.nombre) {
-        onChange('empresa', empresa.nombre);
+        onChange('empresa', empresa.nombre)
       }
     }
-  }, [data.rutEmpresa]);
-
+  }, [data.rutEmpresa])
   const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    onChange(field, value);
-  };
-
+    const value = e.target.value
+    onChange(field, value)
+  }
   const handleCheckboxChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange('tipoEslinga', {
       ...data.tipoEslinga,
       [field]: e.target.checked
-    });
-  };
-
+    })
+  }
   return (
     <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
       <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -337,5 +327,5 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
         * Campos obligatorios
       </div>
     </div>
-  );
-};
+  )
+}

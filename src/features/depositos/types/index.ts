@@ -1,28 +1,28 @@
 export interface Deposito {
-  id: string;
-  codigo: number;
-  nombre: string;
-  alias: string;
-  lat: number;
-  lng: number;
-  padre: string;
-  tipo: string;
-  zona: string;
-  empresa?: string;
-  capacidad: number;
-  transitosActivos: number;
-  estado: 'activo' | 'inactivo';
-  telefono?: string;
-  direccion?: string;
-  horaApertura?: string;
-  horaCierre?: string;
-  precintosActivos?: number;
+  id: string
+  codigo: number
+  nombre: string
+  alias: string
+  lat: number
+  lng: number
+  padre: string
+  tipo: string
+  zona: string
+  empresa?: string
+  capacidad: number
+  transitosActivos: number
+  estado: 'activo' | 'inactivo'
+  telefono?: string
+  direccion?: string
+  horaApertura?: string
+  horaCierre?: string
+  precintosActivos?: number
 }
 
 export interface DepositoFilters {
-  tipo: string;
-  zona: string;
-  padre: string;
+  tipo: string
+  zona: string
+  padre: string
 }
 
 export const DEPOSITO_TIPOS = [
@@ -32,8 +32,7 @@ export const DEPOSITO_TIPOS = [
   'Control Integrado',
   'Puerto',
   'Aeropuerto'
-] as const;
-
+] as const
 export const DEPOSITO_ZONAS = [
   'Puerto',
   'ZF Florida',
@@ -61,4 +60,4 @@ export const DEPOSITO_ZONAS = [
   'En Viaje',
   'Tacuarembo',
   'Encomienda'
-] as const;
+] as const

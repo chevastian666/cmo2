@@ -4,50 +4,46 @@
  * By Cheva
  */
 
-import React, { useState } from 'react';
-import { motion} from 'framer-motion';
-import { Download, Maximize2, Info, TrendingUp, RefreshCw} from 'lucide-react';
-import { Card, CardContent} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
+import React, { useState } from 'react'
+import { motion} from 'framer-motion'
+import { Download, Maximize2, Info, TrendingUp, RefreshCw} from 'lucide-react'
+import { Card, CardContent} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
 import { 
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
 import {
-  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover';
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import { LogisticsFlowChart} from './LogisticsFlowChart';
-import { PrecintoLifecycleFlow} from './PrecintoLifecycleFlow';
-import { AlertFlowAnalysis} from './AlertFlowAnalysis';
-import { CustomFlowBuilder} from './CustomFlowBuilder';
-import { DatePickerWithRange} from '@/components/ui/date-picker-range';
-import { toast} from '@/hooks/use-toast';
-
+  Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { LogisticsFlowChart} from './LogisticsFlowChart'
+import { PrecintoLifecycleFlow} from './PrecintoLifecycleFlow'
+import { AlertFlowAnalysis} from './AlertFlowAnalysis'
+import { CustomFlowBuilder} from './CustomFlowBuilder'
+import { DatePickerWithRange} from '@/components/ui/date-picker-range'
+import { toast} from '@/hooks/use-toast'
 const InteractiveSankeyDashboard: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('logistics');
+  const [selectedTab, setSelectedTab] = useState('logistics')
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     to: new Date()
-  });
-  const [fullscreenChart, setFullscreenChart] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
+  })
+  const [fullscreenChart, setFullscreenChart] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const handleRefresh = async () => {
-    setIsRefreshing(true);
+    setIsRefreshing(true)
     // Simulate data refresh
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsRefreshing(false);
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    setIsRefreshing(false)
     toast({
       title: 'Datos actualizados',
       description: 'Los gráficos han sido actualizados con los datos más recientes.'
-    });
-  };
-
+    })
+  }
   const handleExportAll = () => {
     toast({
       title: 'Exportando dashboard',
       description: 'Se generará un PDF con todos los gráficos.'
-    });
-  };
-
+    })
+  }
   const chartInfo = {
     logistics: {
       title: 'Flujos Logísticos',
@@ -65,8 +61,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
       title: 'Constructor de Flujos',
       description: 'Crea visualizaciones personalizadas de flujos de datos seleccionando métricas y dimensiones específicas.'
     }
-  };
-
+  }
   return (<div className="space-y-6">
       {/* Header */}
       <motion.div
@@ -325,7 +320,6 @@ const InteractiveSankeyDashboard: React.FC = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
-
-export default InteractiveSankeyDashboard;
+  )
+}
+export default InteractiveSankeyDashboard

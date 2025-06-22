@@ -1,56 +1,50 @@
-import React from 'react';
-import {AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react';
-
-import { formatDateTime} from '../../../utils/formatters';
-import { cn} from '../../../utils/utils';
-import type { Alerta} from '../../../types';
-
+import React from 'react'
+import {AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react'
+import { formatDateTime} from '../../../utils/formatters'
+import { cn} from '../../../utils/utils'
+import type { Alerta} from '../../../types'
 export const AlertasView: React.FC = () => {
-  
-  
+
   const getIcon = (tipo: Alerta['tipo']) => {
     switch (tipo) {
-      case 'violacion':
-        return <Shield className="h-5 w-5" />;
-      case 'bateria_baja':
-        return <Battery className="h-5 w-5" />;
-      case 'fuera_de_ruta':
-        return <MapPin className="h-5 w-5" />;
-      case 'temperatura':
-        return <Thermometer className="h-5 w-5" />;
-      case 'sin_signal':
-        return <Radio className="h-5 w-5" />;
-      case 'intrusion':
-        return <Package className="h-5 w-5" />;
+      case 'violacion': {
+  return <Shield className="h-5 w-5" />
+      case 'bateria_baja': {
+  return <Battery className="h-5 w-5" />
+      case 'fuera_de_ruta': {
+  return <MapPin className="h-5 w-5" />
+      case 'temperatura': {
+  return <Thermometer className="h-5 w-5" />
+      case 'sin_signal': {
+  return <Radio className="h-5 w-5" />
+      case 'intrusion': {
+  return <Package className="h-5 w-5" />
       default:
-        return <AlertCircle className="h-5 w-5" />;
+        return <AlertCircle className="h-5 w-5" />
     }
-  };
-
+  }
   const getStyles = (severidad: Alerta['severidad']) => {
     switch (severidad) {
-      case 'critica':
-        return 'bg-red-900/20 border-red-800 text-red-400';
-      case 'alta':
-        return 'bg-orange-900/20 border-orange-800 text-orange-400';
-      case 'media':
-        return 'bg-yellow-900/20 border-yellow-800 text-yellow-400';
-      case 'baja':
-        return 'bg-blue-900/20 border-blue-800 text-blue-400';
+      case 'critica': {
+  return 'bg-red-900/20 border-red-800 text-red-400'
+      case 'alta': {
+  return 'bg-orange-900/20 border-orange-800 text-orange-400'
+      case 'media': {
+  return 'bg-yellow-900/20 border-yellow-800 text-yellow-400'
+      case 'baja': {
+  return 'bg-blue-900/20 border-blue-800 text-blue-400'
     }
-  };
-
+  }
   const handleFilterChange = (key: keyof typeof filter, value: unknown) => {
-    actions.setFilter({ ...filter, [key]: value });
-    actions.refresh();
-  };
-
+    actions.setFilter({ ...filter, [key]: value })
+    actions.refresh()
+  }
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-gray-400">Cargando alertas...</div>
       </div>
-    );
+    )
   }
 
   return (<div className="space-y-6">
@@ -245,5 +239,5 @@ export const AlertasView: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

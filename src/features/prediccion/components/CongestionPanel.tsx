@@ -1,56 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import {AlertTriangle, Settings, X, TrendingUp} from 'lucide-react';
-import { Card, CardHeader, CardContent, EmptyState, Badge} from '../../../components/ui';
-import { CongestionAlert} from './CongestionAlert';
-import { CongestionDetailModal} from './CongestionDetailModal';
-import { ConfiguracionModal} from './ConfiguracionModal';
-import { congestionAnalyzer} from '../utils/congestionAnalyzer';
-import { cn} from '../../../utils/utils';
-import type { TransitoTorreControl} from '../../torre-control/types';
-import type { CongestionAnalysis} from '../types';
-
+import React, { useState, useEffect } from 'react'
+import {AlertTriangle, Settings, X, TrendingUp} from 'lucide-react'
+import { Card, CardHeader, CardContent, EmptyState, Badge} from '../../../components/ui'
+import { CongestionAlert} from './CongestionAlert'
+import { CongestionDetailModal} from './CongestionDetailModal'
+import { ConfiguracionModal} from './ConfiguracionModal'
+import { congestionAnalyzer} from '../utils/congestionAnalyzer'
+import { cn} from '../../../utils/utils'
+import type { TransitoTorreControl} from '../../torre-control/types'
+import type { CongestionAnalysis} from '../types'
 interface CongestionPanelProps {
-  transitos: TransitoTorreControl[];
-  variant?: 'full' | 'compact' | 'sidebar';
-  onCongestionDetected?: (congestions: CongestionAnalysis[]) => void;
-  className?: string;
+  transitos: TransitoTorreControl[]
+  variant?: 'full' | 'compact' | 'sidebar'
+  onCongestionDetected?: (congestions: CongestionAnalysis[]) => void
+  className?: string
 }
 
 export const CongestionPanel: React.FC<CongestionPanelProps> = ({
   transitos, variant = 'full', onCongestionDetected, className
 }) => {
-  const [congestions, setCongestions] = useState<CongestionAnalysis[]>([]);
-  const [selectedCongestion, setSelectedCongestion] = useState<CongestionAnalysis | null>(null);
-  const [showConfig, setShowConfig] = useState(false);
+  const [congestions, setCongestions] = useState<CongestionAnalysis[]>([])
+  const [selectedCongestion, setSelectedCongestion] = useState<CongestionAnalysis | null>(null)
+  const [showConfig, setShowConfig] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false); // Always start expanded
 
   // Analizar congestiones
-   
 
   useEffect(() => {
-    const analyzed = congestionAnalyzer.analizarCongestion(transitos);
-    setCongestions(analyzed);
-  }, [transitos]);
-
+    const analyzed = congestionAnalyzer.analizarCongestion(transitos)
+    setCongestions(analyzed)
+  }, [transitos])
   // Notificar congestiones detectadas
-   
 
   useEffect(() => {
     if (onCongestionDetected && congestions.length > 0) {
-      onCongestionDetected(congestions);
+      onCongestionDetected(congestions)
     }
   }, [congestions.length]); // Only depend on length to avoid infinite loops
 
   // Contar por severidad
   const countBySeverity = () => {
     return congestions.reduce((acc, c) => {
-      acc[c.severidad] = (acc[c.severidad] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-  };
-
-  const severityCounts = countBySeverity();
-
+      acc[c.severidad] = (acc[c.severidad] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+  }
+  const severityCounts = countBySeverity()
   if (variant === 'sidebar') {
     return (
       <div className={cn("w-80 bg-gray-900 border-l border-gray-800", className)}>
@@ -123,7 +117,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
           />
         )}
       </div>
-    );
+    )
   }
 
   if (variant === 'compact') {
@@ -161,7 +155,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
           </>
         )}
       </div>
-    );
+    )
   }
 
   // Variant full
@@ -244,5 +238,5 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
         />
       )}
     </Card>
-  );
-};
+  )
+}

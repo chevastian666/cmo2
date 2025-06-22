@@ -1,10 +1,9 @@
-import React from 'react';
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import { cn} from '../../../utils/utils'
 interface LoadingIndicatorProps {
-  size?: 'small' | 'medium' | 'large';
-  message?: string;
-  className?: string;
+  size?: 'small' | 'medium' | 'large'
+  message?: string
+  className?: string
 }
 
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
@@ -14,8 +13,7 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
     small: 'h-4 w-4',
     medium: 'h-8 w-8',
     large: 'h-12 w-12'
-  };
-
+  }
   return (
     <div className={cn('flex flex-col items-center gap-3', className)}>
       <div className="relative">
@@ -38,5 +36,5 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
         </p>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,52 +1,46 @@
-import React, { useState } from 'react';
-import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo} from '../../../utils/formatters';
-
+import React, { useState } from 'react'
+import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo} from '../../../utils/formatters'
 interface PrecintoListItem {
-  nqr: string;
-  battery: number;
-  lastReport: number;
-  location?: string;
-  status?: string;
+  nqr: string
+  battery: number
+  lastReport: number
+  location?: string
+  status?: string
 }
 
 interface PrecintosListPanelProps {
-  precintos: PrecintoListItem[];
-  onSelect: (precinto: PrecintoListItem) => void;
-  onRefresh: () => void;
+  precintos: PrecintoListItem[]
+  onSelect: (precinto: PrecintoListItem) => void
+  onRefresh: () => void
 }
 
 export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
   precintos, onSelect, onRefresh
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const filteredPrecintos = precintos.filter(p => 
     p.nqr.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.location?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  )
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await onRefresh();
-    setTimeout(() => setIsRefreshing(false), 500);
-  };
-
+    setIsRefreshing(true)
+    await onRefresh()
+    setTimeout(() => setIsRefreshing(false), 500)
+  }
   const getBatteryColor = (level: number) => {
-    if (level < 20) return 'text-red-400';
-    if (level < 50) return 'text-yellow-400';
-    return 'text-green-400';
-  };
-
+    if (level < 20) return 'text-red-400'
+    if (level < 50) return 'text-yellow-400'
+    return 'text-green-400'
+  }
   const getTimeColor = (timestamp: number) => {
-    const hoursSince = (Date.now() / 1000 - timestamp) / 3600;
-    if (hoursSince > 2) return 'text-red-400';
-    if (hoursSince > 1) return 'text-yellow-400';
-    return 'text-gray-400';
-  };
-
+    const hoursSince = (Date.now() / 1000 - timestamp) / 3600
+    if (hoursSince > 2) return 'text-red-400'
+    if (hoursSince > 1) return 'text-yellow-400'
+    return 'text-gray-400'
+  }
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700 h-full flex flex-col">
       {/* Header */}
@@ -92,9 +86,8 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
           </div>
         ) : (<div className="divide-y divide-gray-700">
             {filteredPrecintos.map((precinto) => {
-              const hoursSinceReport = (Date.now() / 1000 - precinto.lastReport) / 3600;
-              const hasWarnings = precinto.battery < 20 || hoursSinceReport > 1;
-
+              const hoursSinceReport = (Date.now() / 1000 - precinto.lastReport) / 3600
+              const hasWarnings = precinto.battery < 20 || hoursSinceReport > 1
               return (<button
                   key={precinto.nqr}
                   onClick={() => onSelect(precinto)}
@@ -150,7 +143,7 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
                     )}
                   </div>
                 </button>
-              );
+              )
             })}
           </div>
         )}
@@ -163,5 +156,5 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { Phone, Mail, MapPin, FileText, Calendar, Plus} from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog';
-import { Input} from '@/components/ui/input';
-import { Label} from '@/components/ui/label';
-import { Button} from '@/components/ui/button';
-import { Switch} from '@/components/ui/switch';
-import { notificationService} from '@/services/shared/notification.service';
-
+import React, { useState } from 'react'
+import { Phone, Mail, MapPin, FileText, Calendar, Plus} from 'lucide-react'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog'
+import { Input} from '@/components/ui/input'
+import { Label} from '@/components/ui/label'
+import { Button} from '@/components/ui/button'
+import { Switch} from '@/components/ui/switch'
+import { notificationService} from '@/services/shared/notification.service'
 export const DespachantesPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     nombre: '',
     razonSocial: '',
@@ -17,7 +16,7 @@ export const DespachantesPage: React.FC = () => {
     email: '',
     direccion: '',
     activo: true
-  });
+  })
   // Mock data de despachantes
   const despachantes = [
     {
@@ -86,8 +85,7 @@ export const DespachantesPage: React.FC = () => {
       transitosActivos: 4,
       fechaRegistro: '2018-09-12'
     }
-  ];
-
+  ]
   return (<div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-start">
@@ -233,10 +231,10 @@ export const DespachantesPage: React.FC = () => {
           </DialogHeader>
           
           <form onSubmit={(e) => {
-            e.preventDefault();
+            e.preventDefault()
             // Aquí iría la lógica para guardar el despachante
-            notificationService.success('Despachante registrado', `${formData.nombre} ha sido agregado exitosamente`);
-            setShowModal(false);
+            notificationService.success('Despachante registrado', `${formData.nombre} ha sido agregado exitosamente`)
+            setShowModal(false)
             // Reset form
             setFormData({
               nombre: '',
@@ -246,7 +244,7 @@ export const DespachantesPage: React.FC = () => {
               email: '',
               direccion: '',
               activo: true
-            });
+            })
           }}>
             <div className="space-y-4 py-4">
               <div>
@@ -351,5 +349,5 @@ export const DespachantesPage: React.FC = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}

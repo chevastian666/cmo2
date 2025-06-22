@@ -1,7 +1,6 @@
  
-import React from 'react';
-import {AlertTriangle} from 'lucide-react';
-
+import React from 'react'
+import {AlertTriangle} from 'lucide-react'
 export const CriticalAlertsSkeleton: React.FC = () => {
   return (<div className="space-y-4 animate-pulse">
       <div className="flex items-center justify-between">
@@ -33,9 +32,8 @@ export const CriticalAlertsSkeleton: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
-
+  )
+}
 export const AlertItemSkeleton: React.FC = () => {
   return (
     <div className="p-4 rounded-lg border-2 border-gray-800 bg-gray-900/50 animate-pulse">
@@ -52,5 +50,5 @@ export const AlertItemSkeleton: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

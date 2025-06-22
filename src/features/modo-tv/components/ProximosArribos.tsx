@@ -1,39 +1,35 @@
-import React from 'react';
-import {Truck, Clock, MapPin, User} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { ProximoArribo} from '../types';
-
+import React from 'react'
+import {Truck, Clock, MapPin, User} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { ProximoArribo} from '../types'
 interface ProximosArribosProps {
-  arribos: ProximoArribo[];
+  arribos: ProximoArribo[]
 }
 
 export const ProximosArribos: React.FC<ProximosArribosProps> = ({ arribos }) => {
   const formatearTiempo = (minutos: number): string => {
     if (minutos < 60) {
-      return `${minutos} min`;
+      return `${minutos} min`
     }
-    const horas = Math.floor(minutos / 60);
-    const mins = minutos % 60;
-    return `${horas}h ${mins}m`;
-  };
-
+    const horas = Math.floor(minutos / 60)
+    const mins = minutos % 60
+    return `${horas}h ${mins}m`
+  }
   const getColorSemaforo = (estado: ProximoArribo['estado']) => {
     switch (estado) {
-      case 'verde':
-        return 'bg-green-500';
-      case 'amarillo':
-        return 'bg-yellow-500';
-      case 'rojo':
-        return 'bg-red-500';
+      case 'verde': {
+  return 'bg-green-500'
+      case 'amarillo': {
+  return 'bg-yellow-500'
+      case 'rojo': {
+  return 'bg-red-500'
     }
-  };
-
+  }
   const getColorFondo = (estado: ProximoArribo['estado'], index: number) => {
-    if (estado === 'rojo') return 'bg-red-900/20 border-red-800';
-    if (estado === 'amarillo' && index < 3) return 'bg-yellow-900/20 border-yellow-800';
-    return 'bg-gray-800 border-gray-700';
-  };
-
+    if (estado === 'rojo') return 'bg-red-900/20 border-red-800'
+    if (estado === 'amarillo' && index < 3) return 'bg-yellow-900/20 border-yellow-800'
+    return 'bg-gray-800 border-gray-700'
+  }
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -129,5 +125,5 @@ export const ProximosArribos: React.FC<ProximosArribosProps> = ({ arribos }) => 
         )}
       </div>
     </div>
-  );
-};
+  )
+}

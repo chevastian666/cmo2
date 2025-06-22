@@ -1,8 +1,7 @@
-import React from 'react';
-import { X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User, Building, Globe, Home} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import type { Precinto} from '../../../types';
-
+import React from 'react'
+import { X, Package, AlertTriangle, CheckCircle, MapPin, Truck, User, Building, Globe, Home} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import type { Precinto} from '../../../types'
 // Import the location names
 const UBICACIONES: Record<string, string> = {
   '1': 'Puerto',
@@ -31,63 +30,55 @@ const UBICACIONES: Record<string, string> = {
   '24': 'En Viaje',
   '25': 'Tacuarembo',
   '26': 'Encomienda'
-};
-
+}
 interface TransitoFormData {
   // Datos del viaje
-  precintoId: string;
-  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | '';
-  dua: string;
-  
+  precintoId: string
+  tipoViaje: 'Tránsito' | 'GEX' | 'Monitoreo externo' | ''
+  dua: string
   // Datos del vehículo
-  matricula: string;
-  matriculaRemolque: string;
-  contenedorId: string;
-  
+  matricula: string
+  matriculaRemolque: string
+  contenedorId: string
   // Datos del conductor
-  nombreConductor: string;
-  tipoDocumentoConductor: string;
-  numeroDocumentoConductor: string;
-  origenDocumentoConductor: string;
-  telefonoConductor: string;
-  
+  nombreConductor: string
+  tipoDocumentoConductor: string
+  numeroDocumentoConductor: string
+  origenDocumentoConductor: string
+  telefonoConductor: string
   // Datos de la empresa
-  empresa: string;
-  rutEmpresa: string;
-  empresaSecundaria?: string;
-  rutEmpresaSecundaria?: string;
-  
+  empresa: string
+  rutEmpresa: string
+  empresaSecundaria?: string
+  rutEmpresaSecundaria?: string
   // Ruta y ubicaciones
-  origen: string;
-  destino: string;
-  depositoInicio: string;
-  depositoFin: string;
-  
+  origen: string
+  destino: string
+  depositoInicio: string
+  depositoFin: string
   // Eslinga y observaciones
   tipoEslinga: {
-    larga: boolean;
-    corta: boolean;
-  };
-  observaciones: string;
+    larga: boolean
+    corta: boolean
+  }
+  observaciones: string
 }
 
 interface ArmConfirmationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  precinto: Precinto | null;
-  transito: Partial<TransitoFormData>;
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  precinto: Precinto | null
+  transito: Partial<TransitoFormData>
 }
 
 export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> = ({
   isOpen, onClose, onConfirm, precinto, transito
 }) => {
-  if (!isOpen || !precinto) return null;
-
+  if (!isOpen || !precinto) return null
   const hasWarnings = precinto.bateria < 20 || 
                       (Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 ||
-                      precinto.eslinga.estado === 'violada';
-
+                      precinto.eslinga.estado === 'violada'
   return (
     <>
       {/* Backdrop */}
@@ -437,5 +428,5 @@ export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> =
         </div>
       </div>
     </>
-  );
-};
+  )
+}

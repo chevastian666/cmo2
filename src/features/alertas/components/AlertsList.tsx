@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Shield, MapPin, Clock, CheckCircle, Unlock, Navigation, BatteryLow, WifiOff, Satellite, Pause, Zap} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo} from '../../../utils/formatters';
-import type { Alerta} from '../../../types';
-import { TIPOS_ALERTA} from '../../../types/monitoring';
-
-import { ResponderAlertaModal} from './ResponderAlertaModal';
-import { notificationService} from '../../../services/shared/notification.service';
-
+import React, { useState } from 'react'
+import { AlertTriangle, Shield, MapPin, Clock, CheckCircle, Unlock, Navigation, BatteryLow, WifiOff, Satellite, Pause, Zap} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo} from '../../../utils/formatters'
+import type { Alerta} from '../../../types'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { ResponderAlertaModal} from './ResponderAlertaModal'
+import { notificationService} from '../../../services/shared/notification.service'
 // Alarm codes mapping
 interface AlarmCode {
-  code: string;
-  tipo: string;
-  descripcion: string;
-  prioridad: 'alta' | 'media';
-  icon: React.ReactNode;
+  code: string
+  tipo: string
+  descripcion: string
+  prioridad: 'alta' | 'media'
+  icon: React.ReactNode
 }
 
 const ALARM_CODES: Record<string, AlarmCode> = {
@@ -81,28 +79,23 @@ const ALARM_CODES: Record<string, AlarmCode> = {
     prioridad: 'alta',
     icon: <Zap className="h-5 w-5" />
   }
-};
-
+}
 export const AlertsList: React.FC = () => {
-  
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
-    setSelectedAlerta(alerta);
-    setIsModalOpen(true);
-  };
-
+    setSelectedAlerta(alerta)
+    setIsModalOpen(true)
+  }
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedAlerta(null);
-  };
-
+    setIsModalOpen(false)
+    setSelectedAlerta(null)
+  }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId);
-      notificationService.success('Alerta respondida correctamente');
-      
+      await actions.atenderAlerta(alertaId)
+      notificationService.success('Alerta respondida correctamente')
       // Log the response details (in a real app, this would be sent to the backend)
       console.log('Alert response:', {
         alertaId,
@@ -110,41 +103,36 @@ export const AlertsList: React.FC = () => {
         motivoDescripcion,
         observaciones,
         timestamp: new Date().toISOString()
-      });
+      })
     } catch {
-      notificationService.error('Error al responder la alerta');
-      console.error('Error responding to alert:', _error);
-      throw _error;
+      notificationService.error('Error al responder la alerta')
+      console.error('Error responding to alert:', _error)
+      throw _error
     }
-  };
-
+  }
   const getIcon = (tipo: string) => {
-    const alarm = ALARM_CODES[tipo];
-    if (alarm) return alarm.icon;
-    
+    const alarm = ALARM_CODES[tipo]
+    if (alarm) return alarm.icon
     // Default icon for unknown types
-    return <AlertTriangle className="h-5 w-5" />;
-  };
-
+    return <AlertTriangle className="h-5 w-5" />
+  }
   const getAlarmCode = (tipo: string) => {
     return tipo; // The tipo is already the code (AAR, BBJ, etc.)
-  };
-
+  }
   const getSeveridadColor = (severidad: string) => {
     switch (severidad) {
-      case 'critica':
-        return 'text-red-400 bg-red-900/20 border-red-800';
-      case 'alta':
-        return 'text-orange-400 bg-orange-900/20 border-orange-800';
-      case 'media':
-        return 'text-yellow-400 bg-yellow-900/20 border-yellow-800';
-      case 'baja':
-        return 'text-blue-400 bg-blue-900/20 border-blue-800';
+      case 'critica': {
+  return 'text-red-400 bg-red-900/20 border-red-800'
+      case 'alta': {
+  return 'text-orange-400 bg-orange-900/20 border-orange-800'
+      case 'media': {
+  return 'text-yellow-400 bg-yellow-900/20 border-yellow-800'
+      case 'baja': {
+  return 'text-blue-400 bg-blue-900/20 border-blue-800'
       default:
-        return 'text-gray-400 bg-gray-900/20 border-gray-800';
+        return 'text-gray-400 bg-gray-900/20 border-gray-800'
     }
-  };
-
+  }
   if (loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-4">
@@ -154,7 +142,7 @@ export const AlertsList: React.FC = () => {
           ))}
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -162,7 +150,7 @@ export const AlertsList: React.FC = () => {
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
         <p className="text-red-400">Error cargando alertas: {error}</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -255,5 +243,5 @@ export const AlertsList: React.FC = () => {
         onRespond={handleResponderAlerta}
       />
     </>
-  );
-};
+  )
+}

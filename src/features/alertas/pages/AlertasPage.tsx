@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Shield, TrendingUp, CheckCircle, History} from 'lucide-react';
-import { AlertsTable} from '../components/AlertsTable';
-import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal';
-import { useAlertasStore} from '../../../store';
-
+import React, { useState } from 'react'
+import { AlertTriangle, Shield, TrendingUp, CheckCircle, History} from 'lucide-react'
+import { AlertsTable} from '../components/AlertsTable'
+import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal'
+import { useAlertasStore} from '../../../store'
 export const AlertasPage: React.FC = () => {
-  const alertas = useAlertasStore(state => state.alertas);
-  const alertasActivas = useAlertasStore(state => state.alertasActivas);
-  const [showHistorialModal, setShowHistorialModal] = useState(false);
-
+  const alertas = useAlertasStore(state => state.alertas)
+  const alertasActivas = useAlertasStore(state => state.alertasActivas)
+  const [showHistorialModal, setShowHistorialModal] = useState(false)
   // Calculate statistics
   const stats = {
     total: alertas.length,
@@ -26,8 +24,7 @@ export const AlertasPage: React.FC = () => {
       sin_signal: alertasActivas.filter(a => a.tipo === 'sin_signal').length,
       intrusion: alertasActivas.filter(a => a.tipo === 'intrusion').length,
     }
-  };
-
+  }
   return (<div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -107,7 +104,6 @@ export const AlertasPage: React.FC = () => {
         </div>
       </div>
 
-
       {/* Alerts Table */}
       <AlertsTable />
 
@@ -117,5 +113,5 @@ export const AlertasPage: React.FC = () => {
         onClose={() => setShowHistorialModal(false)}
       />
     </div>
-  );
-};
+  )
+}

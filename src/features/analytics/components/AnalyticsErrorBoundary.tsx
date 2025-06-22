@@ -4,40 +4,38 @@
  * By Cheva
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { Button} from '@/components/ui/button';
-import {AlertTriangle, RefreshCw} from 'lucide-react';
-
+import React, { Component, ErrorInfo, ReactNode } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { Button} from '@/components/ui/button'
+import {AlertTriangle, RefreshCw} from 'lucide-react'
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
 interface State {
-  hasError: boolean;
-  _error: Error | null;
-  errorInfo: ErrorInfo | null;
+  hasError: boolean
+  _error: Error | null
+  errorInfo: ErrorInfo | null
 }
 
 class AnalyticsErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false, _error: null, errorInfo: null };
+    super(props)
+    this.state = { hasError: false, _error: null, errorInfo: null }
   }
 
   static getDerivedStateFromError(_error: Error): State {
-    return { hasError: true, _error, errorInfo: null };
+    return { hasError: true, _error, errorInfo: null }
   }
 
   componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
-    console._error('Analytics Error:', _error, errorInfo);
-    this.setState({ _error, errorInfo });
+    console._error('Analytics Error:', _error, errorInfo)
+    this.setState({ _error, errorInfo })
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, _error: null, errorInfo: null });
-  };
-
+    this.setState({ hasError: false, _error: null, errorInfo: null })
+  }
   render() {
     if (this.state.hasError) {
       return (
@@ -74,11 +72,11 @@ class AnalyticsErrorBoundary extends Component<Props, State> {
             </CardContent>
           </Card>
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
-export default AnalyticsErrorBoundary;
+export default AnalyticsErrorBoundary

@@ -1,1 +1,1 @@
-export * from './useEstadisticas';
+export * from './useEstadisticas'

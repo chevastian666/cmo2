@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, CardContent, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton} from './index';
-
+import React, { useState } from 'react'
+import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, CardContent, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton} from './index'
 export const UIComponentsDemo: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('tabs');
-
+  const [selectedTab, setSelectedTab] = useState('tabs')
   // Sample data
   const sampleAlerts: Alert[] = [
     {
@@ -32,8 +30,7 @@ export const UIComponentsDemo: React.FC = () => {
       source: 'Sistema',
       status: 'resolved'
     }
-  ];
-
+  ]
   const sampleTransit: TransitInfo = {
     id: 'TRN-001',
     origin: 'Buenos Aires',
@@ -52,15 +49,13 @@ export const UIComponentsDemo: React.FC = () => {
       weight: 2500,
       units: 1
     }
-  };
-
+  }
   const sampleMarkers: MapMarker[] = [
     { id: '1', lat: -34.6037, lng: -58.3816, type: 'origin', label: 'Buenos Aires' },
     { id: '2', lat: -32.8908, lng: -68.8272, type: 'destination', label: 'Mendoza' },
     { id: '3', lat: -33.4489, lng: -60.6693, type: 'vehicle', label: 'Posición Actual', status: 'active' },
     { id: '4', lat: -33.0, lng: -61.0, type: 'alert', label: 'Alerta', status: 'alert' }
-  ];
-
+  ]
   return (<div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-100 mb-8">UI Components Demo</h1>
@@ -378,5 +373,5 @@ export const UIComponentsDemo: React.FC = () => {
         </Tabs>
       </div>
     </div>
-  );
-};
+  )
+}

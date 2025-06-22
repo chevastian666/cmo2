@@ -1,46 +1,41 @@
-import React from 'react';
-import { Truck, CheckCircle, AlertTriangle, XCircle, Clock, User, MapPin, ChevronRight, AlertCircle} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { CountdownTimer} from './CountdownTimer';
-import type { TransitoTorreControl, EstadoSemaforo} from '../types';
-
+import React from 'react'
+import { Truck, CheckCircle, AlertTriangle, XCircle, Clock, User, MapPin, ChevronRight, AlertCircle} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { CountdownTimer} from './CountdownTimer'
+import type { TransitoTorreControl, EstadoSemaforo} from '../types'
 interface TransitoRowProps {
-  transito: TransitoTorreControl;
-  index: number;
-  onClick: () => void;
+  transito: TransitoTorreControl
+  index: number
+  onClick: () => void
 }
 
 export const TransitoRow: React.FC<TransitoRowProps> = ({ transito, index, onClick }) => {
   const getSemaforoIcon = (semaforo: EstadoSemaforo) => {
     switch (semaforo) {
-      case 'verde':
-        return <CheckCircle className="h-6 w-6 text-green-500" />;
-      case 'amarillo':
-        return <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />;
-      case 'rojo':
-        return <XCircle className="h-6 w-6 text-red-500 animate-pulse" />;
+      case 'verde': {
+  return <CheckCircle className="h-6 w-6 text-green-500" />
+      case 'amarillo': {
+  return <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />
+      case 'rojo': {
+  return <XCircle className="h-6 w-6 text-red-500 animate-pulse" />
     }
-  };
-
+  }
   const getRowAnimation = () => {
     if (transito.semaforo === 'rojo') {
-      return 'animate-pulse-slow';
+      return 'animate-pulse-slow'
     }
     if (transito.alertas && transito.alertas.length > 0) {
-      return 'animate-attention';
+      return 'animate-attention'
     }
-    return '';
-  };
-
+    return ''
+  }
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('es-UY', { 
       hour: '2-digit', 
       minute: '2-digit' 
-    });
-  };
-
-  const isPastDeparture = transito.fechaSalida.getTime() > Date.now();
-
+    })
+  }
+  const isPastDeparture = transito.fechaSalida.getTime() > Date.now()
   return (
     <tr
       onClick={onClick}
@@ -144,5 +139,5 @@ export const TransitoRow: React.FC<TransitoRowProps> = ({ transito, index, onCli
         <ChevronRight className="h-5 w-5 text-gray-400 mx-auto" />
       </td>
     </tr>
-  );
-};
+  )
+}

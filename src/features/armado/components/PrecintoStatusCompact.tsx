@@ -1,48 +1,44 @@
-import React from 'react';
-import {Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle, Zap} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { formatTimeAgo} from '../../../utils/formatters';
-import type { Precinto} from '../../../types';
-
+import React from 'react'
+import {Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle, Zap} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { formatTimeAgo} from '../../../utils/formatters'
+import type { Precinto} from '../../../types'
 interface PrecintoStatusProps {
-  precinto: Precinto;
+  precinto: Precinto
 }
 
 export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   const getBatteryColor = (level: number) => {
-    if (level < 20) return 'text-red-400';
-    if (level < 50) return 'text-yellow-400';
-    return 'text-green-400';
-  };
-
+    if (level < 20) return 'text-red-400'
+    if (level < 50) return 'text-yellow-400'
+    return 'text-green-400'
+  }
   const getEslingaStatus = () => {
     switch (precinto.eslinga.estado) {
-      case 'cerrada':
-        return {
+      case 'cerrada': {
+  return {
           icon: <Lock className="h-4 w-4" />,
           text: 'Cerrada',
           color: 'text-green-400'
-        };
+        }
       case 'abierta':
         return {
           icon: <LockOpen className="h-4 w-4" />,
           text: 'Abierta',
           color: 'text-yellow-400'
-        };
+        }
       case 'violada':
         return {
           icon: <ShieldAlert className="h-4 w-4" />,
           text: 'Violada',
           color: 'text-red-400'
-        };
+        }
     }
-  };
-
-  const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura;
+  }
+  const timeSinceLastReport = Date.now() / 1000 - precinto.fechaUltimaLectura
   const isOldReport = timeSinceLastReport > 3600; // More than 1 hour
-  const eslingaStatus = getEslingaStatus();
-  const hasWarnings = precinto.bateria < 20 || isOldReport || precinto.eslinga.estado === 'violada';
-
+  const eslingaStatus = getEslingaStatus()
+  const hasWarnings = precinto.bateria < 20 || isOldReport || precinto.eslinga.estado === 'violada'
   return (
     <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
       <div className="flex items-center justify-between mb-3">
@@ -148,5 +144,5 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

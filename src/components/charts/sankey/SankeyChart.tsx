@@ -4,47 +4,46 @@
  * By Cheva
  */
 
-import React, { useRef, useEffect, useState, useMemo } from 'react';
-import * as d3 from 'd3';
-import { sankey, sankeyLinkHorizontal, sankeyLeft, sankeyRight, sankeyCenter, sankeyJustify} from 'd3-sankey';
-import { motion} from 'framer-motion';
-import { cn} from '@/utils/utils';
-import type { SankeyChartProps, SankeyNode, SankeyLink} from '../types/sankey.types';
-
+import React, { useRef, useEffect, useState, useMemo } from 'react'
+import * as d3 from 'd3'
+import { sankey, sankeyLinkHorizontal, sankeyLeft, sankeyRight, sankeyCenter, sankeyJustify} from 'd3-sankey'
+import { motion} from 'framer-motion'
+import { cn} from '@/utils/utils'
+import type { SankeyChartProps, SankeyNode, SankeyLink} from '../types/sankey.types'
 // Define D3 Sankey types locally since they're not exported
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 interface D3SankeyNode<N = any, L = any> {
-  sourceLinks?: L[];
-  targetLinks?: L[];
-  value?: number;
-  index?: number;
-  x0?: number;
-  x1?: number;
-  y0?: number;
-  y1?: number;
+  sourceLinks?: L[]
+  targetLinks?: L[]
+  value?: number
+  index?: number
+  x0?: number
+  x1?: number
+  y0?: number
+  y1?: number
 }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 interface D3SankeyLink<N = any, L = any> {
-  source: N | number;
-  target: N | number;
-  value: number;
-  width?: number;
-  y0?: number;
-  y1?: number;
+  source: N | number
+  target: N | number
+  value: number
+  width?: number
+  y0?: number
+  y1?: number
 }
 
 // Extend D3 types with our custom properties
 interface ExtendedNode extends D3SankeyNode<SankeyNode, SankeyLink> {
-  x0?: number;
-  x1?: number;
-  y0?: number;
-  y1?: number;
+  x0?: number
+  x1?: number
+  y0?: number
+  y1?: number
 }
 
 interface ExtendedLink extends D3SankeyLink<SankeyNode, SankeyLink> {
-  width?: number;
-  y0?: number;
-  y1?: number;
+  width?: number
+  y0?: number
+  y1?: number
 }
 
 export const SankeyChart: React.FC<SankeyChartProps> = ({
@@ -55,35 +54,27 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
   onLinkHover,
   className
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [, setHoveredLink] = useState<string | null>(null);
-
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null)
+  const [, setHoveredLink] = useState<string | null>(null)
   // Calculate inner dimensions
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
-
+  const innerWidth = width - margin.left - margin.right
+  const innerHeight = height - margin.top - margin.bottom
   // Create color scale
   const colorScale = useMemo(() => {
-    const uniqueNodes = Array.from(new Set(data.nodes.map(n => n.id)));
+    const uniqueNodes = Array.from(new Set(data.nodes.map(n => n.id)))
     return d3.scaleOrdinal<string>()
       .domain(uniqueNodes)
-      .range(colors);
-  }, [data.nodes, colors]);
-   
-
-
+      .range(colors)
+  }, [data.nodes, colors])
     useEffect(() => {
-    if (!svgRef.current || !data.nodes.length || !data.links.length) return;
-
+    if (!svgRef.current || !data.nodes.length || !data.links.length) return
     // Clear previous content
-    d3.select(svgRef.current).selectAll('*').remove();
-
+    d3.select(svgRef.current).selectAll('*').remove()
     // Create SVG groups
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select(svgRef.current)
     const g = svg.append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
+      .attr('transform', `translate(${margin.left},${margin.top})`)
     // Create sankey generator
     const sankeyGenerator = sankey<SankeyNode, SankeyLink>()
       .nodeId(d => d.id)
@@ -93,17 +84,14 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       .nodeSort(nodeSort)
       .linkSort(linkSort)
       .extent([[0, 0], [innerWidth, innerHeight]])
-      .iterations(iterations);
-
+      .iterations(iterations)
     // Generate sankey layout
     const sankeyData = sankeyGenerator({
       nodes: data.nodes.map(d => ({ ...d })),
       links: data.links.map(d => ({ ...d }))
-    });
-
+    })
     // Create gradients for links
-    const defs = svg.append('defs');
-    
+    const defs = svg.append('defs')
     sankeyData.links.forEach((link: ExtendedLink, i) => {
       const gradient = defs.append('linearGradient')
         .attr('id', `gradient-${i}`)
@@ -111,22 +99,18 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
         .attr('x1', (link.source as ExtendedNode).x1)
         .attr('y1', ((link.source as ExtendedNode).y0! + (link.source as ExtendedNode).y1!) / 2)
         .attr('x2', (link.target as ExtendedNode).x0)
-        .attr('y2', ((link.target as ExtendedNode).y0! + (link.target as ExtendedNode).y1!) / 2);
-
+        .attr('y2', ((link.target as ExtendedNode).y0! + (link.target as ExtendedNode).y1!) / 2)
       gradient.append('stop')
         .attr('offset', '0%')
-        .attr('stop-color', link.color || colorScale((link.source as SankeyNode).id));
-
+        .attr('stop-color', link.color || colorScale((link.source as SankeyNode).id))
       gradient.append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', link.color || colorScale((link.target as SankeyNode).id));
-    });
-
+        .attr('stop-color', link.color || colorScale((link.target as SankeyNode).id))
+    })
     // Draw links
     const linksGroup = g.append('g')
       .attr('class', 'links')
-      .attr('fill', 'none');
-
+      .attr('fill', 'none')
     const links = linksGroup.selectAll('path')
       .data(sankeyData.links)
       .enter()
@@ -136,19 +120,17 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       .attr('stroke-width', (d: ExtendedLink) => Math.max(1, d.width || 0))
       .attr('opacity', animated ? 0 : 0.5)
       .attr('class', 'transition-all duration-300')
-      .style('cursor', interactive ? 'pointer' : 'default');
-
+      .style('cursor', interactive ? 'pointer' : 'default')
     if (animated) {
       links.transition()
         .duration(1000)
         .delay((d, i) => i * 20)
-        .attr('opacity', 0.5);
+        .attr('opacity', 0.5)
     }
 
     // Draw nodes
     const nodesGroup = g.append('g')
-      .attr('class', 'nodes');
-
+      .attr('class', 'nodes')
     const nodes = nodesGroup.selectAll('rect')
       .data(sankeyData.nodes)
       .enter()
@@ -160,59 +142,56 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       .attr('fill', (d: SankeyNode) => d.color || colorScale(d.id))
       .attr('opacity', animated ? 0 : 0.9)
       .attr('class', 'transition-all duration-300')
-      .style('cursor', interactive ? 'pointer' : 'default');
-
+      .style('cursor', interactive ? 'pointer' : 'default')
     if (animated) {
       nodes.transition()
         .duration(1000)
         .delay((d, i) => i * 30)
         .attr('height', (d: ExtendedNode) => (d.y1 || 0) - (d.y0 || 0))
-        .attr('opacity', 0.9);
+        .attr('opacity', 0.9)
     }
 
     // Add labels
     if (showLabels) {
       const labelsGroup = g.append('g')
-        .attr('class', 'labels');
-
+        .attr('class', 'labels')
       const labels = labelsGroup.selectAll('text')
         .data(sankeyData.nodes)
         .enter()
         .append('text')
         .attr('x', (d: ExtendedNode) => {
           if (labelPosition === 'inside') {
-            return (d.x0! + d.x1!) / 2;
+            return (d.x0! + d.x1!) / 2
           }
-          return d.x0! < innerWidth / 2 ? d.x0! - 6 : d.x1! + 6;
+          return d.x0! < innerWidth / 2 ? d.x0! - 6 : d.x1! + 6
         })
         .attr('y', (d: ExtendedNode) => (d.y0! + d.y1!) / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', (d: ExtendedNode) => {
-          if (labelPosition === 'inside') return 'middle';
-          return d.x0! < innerWidth / 2 ? 'end' : 'start';
+          if (labelPosition === 'inside') return 'middle'
+          return d.x0! < innerWidth / 2 ? 'end' : 'start'
         })
         .attr('opacity', animated ? 0 : 1)
         .attr('class', 'text-sm fill-gray-300')
-        .text((d: SankeyNode) => d.name);
-
+        .text((d: SankeyNode) => d.name)
       if (showValues) {
         labels.append('tspan')
           .attr('x', (d: ExtendedNode) => {
             if (labelPosition === 'inside') {
-              return (d.x0! + d.x1!) / 2;
+              return (d.x0! + d.x1!) / 2
             }
-            return d.x0! < innerWidth / 2 ? d.x0! - 6 : d.x1! + 6;
+            return d.x0! < innerWidth / 2 ? d.x0! - 6 : d.x1! + 6
           })
           .attr('dy', '1.2em')
           .attr('class', 'text-xs fill-gray-500')
-          .text((d: SankeyNode) => valueFormat(d.value || 0));
+          .text((d: SankeyNode) => valueFormat(d.value || 0))
       }
 
       if (animated) {
         labels.transition()
           .duration(1000)
           .delay((d, i) => i * 30 + 500)
-          .attr('opacity', 1);
+          .attr('opacity', 1)
       }
     }
 
@@ -221,87 +200,73 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       // Node interactions
       nodes
         .on('mouseenter', function(event, d) {
-          setHoveredNode((d as SankeyNode).id);
-          d3.select(this).transition().duration(200).attr('opacity', 1);
-          
+          setHoveredNode((d as SankeyNode).id)
+          d3.select(this).transition().duration(200).attr('opacity', 1)
           // Highlight connected links
           links
             .transition()
             .duration(200)
             .attr('opacity', (l: unknown) => {
               return (l.source as SankeyNode).id === (d as SankeyNode).id || 
-                     (l.target as SankeyNode).id === (d as SankeyNode).id ? 0.8 : 0.2;
-            });
-
+                     (l.target as SankeyNode).id === (d as SankeyNode).id ? 0.8 : 0.2
+            })
           if (onNodeHover) {
-            onNodeHover(d, event);
+            onNodeHover(d, event)
           }
         })
         .on('mouseleave', function(event) {
-          setHoveredNode(null);
-          d3.select(this).transition().duration(200).attr('opacity', 0.9);
-          
+          setHoveredNode(null)
+          d3.select(this).transition().duration(200).attr('opacity', 0.9)
           // Reset links
-          links.transition().duration(200).attr('opacity', 0.5);
-
+          links.transition().duration(200).attr('opacity', 0.5)
           if (onNodeHover) {
-            onNodeHover(null, event);
+            onNodeHover(null, event)
           }
         })
         .on('click', function(event, d) {
           if (onNodeClick) {
-            onNodeClick(d, event);
+            onNodeClick(d, event)
           }
-        });
-
+        })
       // Link interactions
       links
         .on('mouseenter', function(event, d) {
-          const linkId = `${(d.source as SankeyNode).id}-${(d.target as SankeyNode).id}`;
-          setHoveredLink(linkId);
-          d3.select(this).transition().duration(200).attr('opacity', 0.8);
-
+          const linkId = `${(d.source as SankeyNode).id}-${(d.target as SankeyNode).id}`
+          setHoveredLink(linkId)
+          d3.select(this).transition().duration(200).attr('opacity', 0.8)
           if (onLinkHover) {
-            onLinkHover(d, event);
+            onLinkHover(d, event)
           }
         })
         .on('mouseleave', function(event) {
-          setHoveredLink(null);
-          d3.select(this).transition().duration(200).attr('opacity', 0.5);
-
+          setHoveredLink(null)
+          d3.select(this).transition().duration(200).attr('opacity', 0.5)
           if (onLinkHover) {
-            onLinkHover(null, event);
+            onLinkHover(null, event)
           }
         })
         .on('click', function(event, d) {
           if (onLinkClick) {
-            onLinkClick(d, event);
+            onLinkClick(d, event)
           }
-        });
+        })
     }
 
     // Add hover info box
     const tooltip = g.append('g')
       .attr('class', 'tooltip')
-      .style('display', 'none');
-
+      .style('display', 'none')
     tooltip.append('rect')
       .attr('rx', 4)
       .attr('ry', 4)
       .attr('fill', 'rgba(0, 0, 0, 0.9)')
-      .attr('stroke', 'rgba(255, 255, 255, 0.1)');
-
+      .attr('stroke', 'rgba(255, 255, 255, 0.1)')
     tooltip.append('text')
       .attr('fill', 'white')
       .attr('font-size', '12px')
       .attr('x', 8)
-      .attr('y', 20);
-
-  }, [data, width, height, margin, nodeWidth, nodePadding, nodeAlign, iterations, 
-      colors, animated, interactive, showLabels, showValues, labelPosition, 
-      valueFormat, colorScale, innerWidth, innerHeight, linkSort, nodeSort, 
-      onLinkClick, onLinkHover, onNodeClick, onNodeHover]);
-
+      .attr('y', 20)
+  }, [data, width, height, margin, iterations, colors, animated, interactive])
   return (
     <div className={cn('relative', className)}>
       <svg
@@ -330,16 +295,13 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
         </motion.div>
       )}
     </div>
-  );
-};
-
+  )
+}
 // Helper function to convert alignment string to D3 function
 function sankeyNodeAlign(align: string) {
   switch (align) {
-    case 'left': return sankeyLeft;
-    case 'right': return sankeyRight;
-    case 'center': return sankeyCenter;
-    case 'justify': 
-    default: return sankeyJustify;
-  }
+    case 'left': {
+  
+  break;
+}
 }

@@ -1,30 +1,27 @@
  
-import React from 'react';
-import { cn} from '../../utils/utils';
-
+import React from 'react'
+import { cn} from '../../utils/utils'
 interface InfoRowProps {
-  label: string;
-  value: React.ReactNode;
-  className?: string;
-  variant?: 'default' | 'compact' | 'highlight' | 'muted';
-  icon?: React.ReactNode;
-  extra?: React.ReactNode;
-  copyable?: boolean;
+  label: string
+  value: React.ReactNode
+  className?: string
+  variant?: 'default' | 'compact' | 'highlight' | 'muted'
+  icon?: React.ReactNode
+  extra?: React.ReactNode
+  copyable?: boolean
 }
 
 export const InfoRow: React.FC<InfoRowProps> = ({
   label, value, className, variant = 'default', icon, extra, copyable = false
 }) => {
-  const [copied, setCopied] = React.useState(false);
-
+  const [copied, setCopied] = React.useState(false)
   const handleCopy = async () => {
     if (typeof value === 'string') {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(value)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
-  };
-
+  }
   const variantStyles = {
     default: {
       container: 'py-2',
@@ -46,10 +43,8 @@ export const InfoRow: React.FC<InfoRowProps> = ({
       label: 'text-gray-500',
       value: 'text-gray-400'
     }
-  };
-
-  const styles = variantStyles[variant];
-
+  }
+  const styles = variantStyles[variant]
   return (
     <div className={cn('flex items-center justify-between', styles.container, className)}>
       <div className="flex items-center gap-2 min-w-0">
@@ -93,13 +88,12 @@ export const InfoRow: React.FC<InfoRowProps> = ({
         )}
       </div>
     </div>
-  );
-};
-
+  )
+}
 interface InfoGridProps {
-  children: React.ReactNode;
-  className?: string;
-  columns?: 1 | 2 | 3 | 4;
+  children: React.ReactNode
+  className?: string
+  columns?: 1 | 2 | 3 | 4
 }
 
 export const InfoGrid: React.FC<InfoGridProps> = ({
@@ -110,28 +104,25 @@ export const InfoGrid: React.FC<InfoGridProps> = ({
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
     4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-  };
-
+  }
   return (
     <div className={cn('grid gap-4', gridCols[columns], className)}>
       {children}
     </div>
-  );
-};
-
+  )
+}
 interface InfoSectionProps {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-  collapsible?: boolean;
-  defaultOpen?: boolean;
+  title: string
+  children: React.ReactNode
+  className?: string
+  collapsible?: boolean
+  defaultOpen?: boolean
 }
 
 export const InfoSection: React.FC<InfoSectionProps> = ({
   title, children, className, collapsible = false, defaultOpen = true
 }) => {
-  const [isOpen, setIsOpen] = React.useState(defaultOpen);
-
+  const [isOpen, setIsOpen] = React.useState(defaultOpen)
   return (
     <div className={cn('space-y-3', className)}>
       <div 
@@ -160,5 +151,5 @@ export const InfoSection: React.FC<InfoSectionProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

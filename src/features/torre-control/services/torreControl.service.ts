@@ -3,15 +3,14 @@
  * By Cheva
  */
 
-import { unifiedAPIService} from '../../../services/api/unified.service';
-import type { TransitoTorreControl} from '../types';
-
+import { unifiedAPIService} from '../../../services/api/unified.service'
+import type { TransitoTorreControl} from '../types'
 class TorreControlService {
   async getTransitosEnRuta(): Promise<TransitoTorreControl[]> {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Return mock data for development
-        return this.getMockTransitos();
+        return this.getMockTransitos()
       }
       
       // Get transitos en viaje from unified API
@@ -19,28 +18,26 @@ class TorreControlService {
         estado: 'en_viaje',
         page: 1,
         limit: 100
-      });
-      
+      })
       // Map to TorreControl format
-      return response.data.map(transito => this.mapTransitoToTorreControl(transito));
+      return response.data.map(transito => this.mapTransitoToTorreControl(transito))
     } catch {
-      console.error('Error fetching transitos en ruta:', error);
+      console.error('Error fetching transitos en ruta:', error)
       // Fallback to mock data
-      return this.getMockTransitos();
+      return this.getMockTransitos()
     }
   }
 
   private mapTransitoToTorreControl(transito: unknown): TransitoTorreControl {
-    const now = Date.now();
-    const salidaTime = new Date(transito.fechaSalida).getTime();
-    const etaTime = transito.eta ? new Date(transito.eta).getTime() : now + 3600000;
-    
+    const now = Date.now()
+    const salidaTime = new Date(transito.fechaSalida).getTime()
+    const etaTime = transito.eta ? new Date(transito.eta).getTime() : now + 3600000
     // Calculate semaforo based on time and alerts
-    let semaforo: 'verde' | 'amarillo' | 'rojo' = 'verde';
+    let semaforo: 'verde' | 'amarillo' | 'rojo' = 'verde'
     if (transito.alertas && transito.alertas.length > 0) {
-      semaforo = 'rojo';
+      semaforo = 'rojo'
     } else if (etaTime - now < 3600000) { // Less than 1 hour to ETA
-      semaforo = 'amarillo';
+      semaforo = 'amarillo'
     }
     
     return {
@@ -66,20 +63,19 @@ class TorreControlService {
       numeroViaje: transito.numeroViaje,
       numeroMovimiento: transito.numeroMovimiento,
       fotoPrecintado: transito.fotoPrecintado
-    };
+    }
   }
 
   private generateMockLocation(): { lat: number; lng: number } {
     // Uruguay bounds
-    const minLat = -35.0;
-    const maxLat = -30.0;
-    const minLng = -58.5;
-    const maxLng = -53.0;
-    
+    const minLat = -35.0
+    const maxLat = -30.0
+    const minLng = -58.5
+    const maxLng = -53.0
     return {
       lat: minLat + Math.random() * (maxLat - minLat),
       lng: minLng + Math.random() * (maxLng - minLng)
-    };
+    }
   }
 
   private getMockTransitos(): TransitoTorreControl[] {
@@ -201,10 +197,9 @@ class TorreControlService {
         numeroMovimiento: '1238',
         fotoPrecintado: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80'
       }
-    ];
-
-    return mockData;
+    ]
+    return mockData
   }
 }
 
-export const torreControlService = new TorreControlService();
+export const torreControlService = new TorreControlService()

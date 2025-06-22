@@ -1,26 +1,25 @@
-import {useState, useCallback, useRef, useEffect} from 'react';
-import type { Alert} from '../types/alerts';
-
+import {useState, useCallback, useRef, useEffect} from 'react'
+import type { Alert} from '../types/alerts'
 interface UseInfiniteLoadingProps {
   loadMore: (page: number) => Promise<{
-    alerts: Alert[];
-    hasMore: boolean;
-    total?: number;
-  }>;
+    alerts: Alert[]
+    hasMore: boolean
+    total?: number
+  }>
   threshold?: number; // Distance from bottom to trigger load
   retryDelay?: number; // Delay between retries
-  maxRetries?: number;
+  maxRetries?: number
 }
 
 interface InfiniteLoadingState {
-  items: Alert[];
-  isLoading: boolean;
-  isLoadingMore: boolean;
-  hasMore: boolean;
-  error: Error | null;
-  page: number;
-  total?: number;
-  retryCount: number;
+  items: Alert[]
+  isLoading: boolean
+  isLoadingMore: boolean
+  hasMore: boolean
+  error: Error | null
+  page: number
+  total?: number
+  retryCount: number
 }
 
 export function useInfiniteLoading({
@@ -35,40 +34,30 @@ export function useInfiniteLoading({
     page: 0,
     total: undefined,
     retryCount: 0
-  });
-
-  const loadingRef = useRef(false);
-  const retryTimeoutRef = useRef<NodeJS.Timeout>();
-  const mountedRef = useRef(true);
-
+  })
+  const loadingRef = useRef(false)
+  const retryTimeoutRef = useRef<NodeJS.Timeout>()
+  const mountedRef = useRef(true)
   // Load initial data
-   
-
 
     useEffect(() => {
-    mountedRef.current = true;
-    loadInitialData();
-    
+    mountedRef.current = true
+    loadInitialData()
     return () => {
-      mountedRef.current = false;
+      mountedRef.current = false
       if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
+        clearTimeout(retryTimeoutRef.current)
       }
-    };
-  }, []);
-
+    }
+  }, [])
   // Load initial data
   const loadInitialData = useCallback(async () => {
-    if (loadingRef.current) return;
-    
-    loadingRef.current = true;
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
-
+    if (loadingRef.current) return
+    loadingRef.current = true
+    setState(prev => ({ ...prev, isLoading: true, error: null }))
     try {
-      const result = await loadMore(0);
-      
-      if (!mountedRef.current) return;
-      
+      const result = await loadMore(0)
+      if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
         items: result.alerts,
@@ -78,41 +67,34 @@ export function useInfiniteLoading({
         isLoading: false,
         error: null,
         retryCount: 0
-      }));
+      }))
     } catch {
-      if (!mountedRef.current) return;
-      
+      if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
         isLoading: false,
         error: error as Error
-      }));
-      
+      }))
       // Auto-retry with exponential backoff
       if (state.retryCount < maxRetries) {
-        const delay = retryDelay * Math.pow(2, state.retryCount);
+        const delay = retryDelay * Math.pow(2, state.retryCount)
         retryTimeoutRef.current = setTimeout(() => {
-          setState(prev => ({ ...prev, retryCount: prev.retryCount + 1 }));
-          loadInitialData();
-        }, delay);
+          setState(prev => ({ ...prev, retryCount: prev.retryCount + 1 }))
+          loadInitialData()
+        }, delay)
       }
     } finally {
-      loadingRef.current = false;
+      loadingRef.current = false
     }
-  }, [loadMore, retryDelay, maxRetries, state.retryCount]);
-
+  }, [state.retryCount])
   // Load more data
   const loadMoreData = useCallback(async () => {
-    if (loadingRef.current || !state.hasMore || state.isLoadingMore) return;
-    
-    loadingRef.current = true;
-    setState(prev => ({ ...prev, isLoadingMore: true, error: null }));
-
+    if (loadingRef.current || !state.hasMore || state.isLoadingMore) return
+    loadingRef.current = true
+    setState(prev => ({ ...prev, isLoadingMore: true, error: null }))
     try {
-      const result = await loadMore(state.page);
-      
-      if (!mountedRef.current) return;
-      
+      const result = await loadMore(state.page)
+      if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
         items: [...prev.items, ...result.alerts],
@@ -122,48 +104,42 @@ export function useInfiniteLoading({
         isLoadingMore: false,
         error: null,
         retryCount: 0
-      }));
+      }))
     } catch {
-      if (!mountedRef.current) return;
-      
+      if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
         isLoadingMore: false,
         error: error as Error
-      }));
-      
+      }))
       // Auto-retry for load more
       if (state.retryCount < maxRetries) {
-        const delay = retryDelay * Math.pow(2, state.retryCount);
+        const delay = retryDelay * Math.pow(2, state.retryCount)
         retryTimeoutRef.current = setTimeout(() => {
-          setState(prev => ({ ...prev, retryCount: prev.retryCount + 1 }));
-          loadMoreData();
-        }, delay);
+          setState(prev => ({ ...prev, retryCount: prev.retryCount + 1 }))
+          loadMoreData()
+        }, delay)
       }
     } finally {
-      loadingRef.current = false;
+      loadingRef.current = false
     }
-  }, [loadMore, state.hasMore, state.isLoadingMore, state.page, state.retryCount, retryDelay, maxRetries]);
-
+  }, [state.hasMore, state.isLoadingMore, state.page, state.retryCount])
   // Check if should load more based on scroll position
   const checkLoadMore = useCallback((scrollTop: number, scrollHeight: number, clientHeight: number) => {
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight
     if (distanceFromBottom < threshold && state.hasMore && !state.isLoadingMore && !state._error) {
-      loadMoreData();
+      loadMoreData()
     }
-  }, [threshold, state.hasMore, state.isLoadingMore, state._error, loadMoreData]);
-
+  }, [threshold, state.hasMore, state.isLoadingMore, state._error])
   // Retry failed load
   const retry = useCallback(() => {
-    setState(prev => ({ ...prev, retryCount: 0, error: null }));
+    setState(prev => ({ ...prev, retryCount: 0, error: null }))
     if (state.items.length === 0) {
-      loadInitialData();
+      loadInitialData()
     } else {
-      loadMoreData();
+      loadMoreData()
     }
-  }, [state.items.length, loadInitialData, loadMoreData]);
-
+  }, [state.items.length])
   // Reset and reload
   const reset = useCallback(() => {
     setState({
@@ -175,19 +151,17 @@ export function useInfiniteLoading({
       page: 0,
       total: undefined,
       retryCount: 0
-    });
-    loadInitialData();
-  }, [loadInitialData]);
-
+    })
+    loadInitialData()
+  }, [])
   // Insert new items at the beginning (for real-time updates)
   const prependItems = useCallback((newItems: Alert[]) => {
     setState(prev => ({
       ...prev,
       items: [...newItems, ...prev.items],
       total: prev.total ? prev.total + newItems.length : undefined
-    }));
-  }, []);
-
+    }))
+  }, [])
   // Update existing item
   const updateItem = useCallback((id: string, updates: Partial<Alert>) => {
     setState(prev => ({
@@ -195,18 +169,16 @@ export function useInfiniteLoading({
       items: prev.items.map(item => 
         item.id === id ? { ...item, ...updates } : item
       )
-    }));
-  }, []);
-
+    }))
+  }, [])
   // Remove item
   const removeItem = useCallback((id: string) => {
     setState(prev => ({
       ...prev,
       items: prev.items.filter(item => item.id !== id),
       total: prev.total ? prev.total - 1 : undefined
-    }));
-  }, []);
-
+    }))
+  }, [])
   return {
     items: state.items,
     isLoading: state.isLoading,
@@ -221,7 +193,7 @@ export function useInfiniteLoading({
     prependItems,
     updateItem,
     removeItem
-  };
+  }
 }
 
 /**
@@ -231,8 +203,6 @@ export function useAlertSubscription(onNewAlert: (alert: Alert) => void,
   onUpdateAlert: (id: string, updates: Partial<Alert>) => void,
   onRemoveAlert: (id: string) => void
 ) {
-   
-
 
     useEffect(() => {
     // Subscribe to WebSocket or SSE for real-time updates
@@ -240,17 +210,16 @@ export function useAlertSubscription(onNewAlert: (alert: Alert) => void,
       onNew: onNewAlert,
       onUpdate: onUpdateAlert,
       onRemove: onRemoveAlert
-    });
-
-    return unsubscribe;
-  }, [onNewAlert, onUpdateAlert, onRemoveAlert]);
+    })
+    return unsubscribe
+  }, [])
 }
 
 // Mock subscription function - replace with actual implementation
 function subscribeToAlertUpdates(handlers: {
-  onNew: (alert: Alert) => void;
-  onUpdate: (id: string, updates: Partial<Alert>) => void;
-  onRemove: (id: string) => void;
+  onNew: (alert: Alert) => void
+  onUpdate: (id: string, updates: Partial<Alert>) => void
+  onRemove: (id: string) => void
 }): () => void {
   // Mock implementation
   const interval = setInterval(() => {
@@ -270,10 +239,9 @@ function subscribeToAlertUpdates(handlers: {
         message: 'Nueva alerta de prueba',
         status: 'active',
         assignedTo: undefined
-      };
-      handlers.onNew(mockAlert);
+      }
+      handlers.onNew(mockAlert)
     }
-  }, 5000);
-
-  return () => clearInterval(interval);
+  }, 5000)
+  return () => clearInterval(interval)
 }

@@ -4,50 +4,41 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion} from 'framer-motion';
-import { Bell, Settings, TestTube2, Smartphone, Mail, TrendingUp, AlertTriangle, CheckCircle, Play} from 'lucide-react';
-import { NotificationButton, NotificationPreferences} from '../../../components/notifications';
-import { notificationService} from '../../../services/notifications/notificationService';
-import { pushNotificationService} from '../../../services/notifications/pushNotificationService';
+import React, { useState, useEffect } from 'react'
+import { motion} from 'framer-motion'
+import { Bell, Settings, TestTube2, Smartphone, Mail, TrendingUp, AlertTriangle, CheckCircle, Play} from 'lucide-react'
+import { NotificationButton, NotificationPreferences} from '../../../components/notifications'
+import { notificationService} from '../../../services/notifications/notificationService'
+import { pushNotificationService} from '../../../services/notifications/pushNotificationService'
 import type { 
-  NotificationPreferences as NotificationPrefsType, NotificationType, NotificationPriority, NotificationStats} from '../../../types/notifications';
-import { DEFAULT_SOUNDS} from '../../../types/notifications';
-
+  NotificationPreferences as NotificationPrefsType, NotificationType, NotificationPriority, NotificationStats} from '../../../types/notifications'
+import { DEFAULT_SOUNDS} from '../../../types/notifications'
 export const NotificationSystemDemo: React.FC = () => {
-  const [preferences, setPreferences] = useState<NotificationPrefsType | null>(null);
-  const [stats, setStats] = useState<NotificationStats | null>(null);
-  const [pushSupported, setPushSupported] = useState(false);
-  const [pushSubscribed, setPushSubscribed] = useState(false);
-  const [activeTab, setActiveTab] = useState<'demo' | 'preferences' | 'stats'>('demo');
-   
-
+  const [preferences, setPreferences] = useState<NotificationPrefsType | null>(null)
+  const [stats, setStats] = useState<NotificationStats | null>(null)
+  const [pushSupported, setPushSupported] = useState(false)
+  const [pushSubscribed, setPushSubscribed] = useState(false)
+  const [activeTab, setActiveTab] = useState<'demo' | 'preferences' | 'stats'>('demo')
   useEffect(() => {
-    initializeDemo();
-  }, []);
-
+    initializeDemo()
+  }, [])
   const initializeDemo = async () => {
     // Initialize notification service
-    await notificationService.initialize();
-    
+    await notificationService.initialize()
     // Load preferences
-    const prefs = await notificationService.loadPreferences();
-    setPreferences(prefs);
-    
+    const prefs = await notificationService.loadPreferences()
+    setPreferences(prefs)
     // Load stats
-    const currentStats = notificationService.getStats();
-    setStats(currentStats);
-    
+    const currentStats = notificationService.getStats()
+    setStats(currentStats)
     // Check push notification support
-    const supported = pushNotificationService.isSupported();
-    setPushSupported(supported);
-    
+    const supported = pushNotificationService.isSupported()
+    setPushSupported(supported)
     if (supported) {
-      const subscribed = await pushNotificationService.isSubscribed();
-      setPushSubscribed(subscribed);
+      const subscribed = await pushNotificationService.isSubscribed()
+      setPushSubscribed(subscribed)
     }
-  };
-
+  }
   const createTestNotification = async (type: NotificationType, priority: NotificationPriority, title: string, message: string) => {
     await notificationService.createNotification(type, title, message, {
       priority,
@@ -55,33 +46,28 @@ export const NotificationSystemDemo: React.FC = () => {
         source: 'demo',
         sourceId: `demo-${Date.now()}`
       }
-    });
-    
+    })
     // Update stats
-    const currentStats = notificationService.getStats();
-    setStats(currentStats);
-  };
-
+    const currentStats = notificationService.getStats()
+    setStats(currentStats)
+  }
   const testPushPermission = async () => {
     try {
-      const permission = await pushNotificationService.requestPermission();
+      const permission = await pushNotificationService.requestPermission()
       if (permission === 'granted') {
-        const subscription = await pushNotificationService.subscribe();
-        setPushSubscribed(!!subscription);
+        const subscription = await pushNotificationService.subscribe()
+        setPushSubscribed(!!subscription)
       }
     } catch (error) {
-      console.error('Failed to test push permission:', error);
+      console.error('Failed to test push permission:', error)
     }
-  };
-
+  }
   const testNotificationChannels = async () => {
-    await notificationService.testNotification('in-app', 'system');
-    
+    await notificationService.testNotification('in-app', 'system')
     if (pushSubscribed) {
-      await notificationService.testNotification('push', 'system');
+      await notificationService.testNotification('push', 'system')
     }
-  };
-
+  }
   const generateSampleNotifications = async () => {
     const sampleNotifications = [
       {
@@ -114,39 +100,33 @@ export const NotificationSystemDemo: React.FC = () => {
         title: 'Nuevo Mensaje',
         message: 'Tienes un nuevo mensaje del supervisor de turno'
       }
-    ];
-
+    ]
     for (const notif of sampleNotifications) {
-      await createTestNotification(notif.type, notif.priority, notif.title, notif.message);
+      await createTestNotification(notif.type, notif.priority, notif.title, notif.message)
       // Add delay between notifications
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500))
     }
-  };
-
+  }
   const handlePreferencesUpdate = async (newPreferences: NotificationPrefsType) => {
-    await notificationService.updatePreferences(newPreferences);
-    setPreferences(newPreferences);
-  };
-
+    await notificationService.updatePreferences(newPreferences)
+    setPreferences(newPreferences)
+  }
   const handleTestSound = async (soundUrl: string, volume: number) => {
     try {
-      const audio = new Audio(soundUrl);
-      audio.volume = volume;
-      await audio.play();
+      const audio = new Audio(soundUrl)
+      audio.volume = volume
+      await audio.play()
     } catch (error) {
-      console.error('Failed to play sound:', error);
+      console.error('Failed to play sound:', error)
     }
-  };
-
+  }
   const clearAllNotifications = async () => {
-    const allNotifications = notificationService.getNotifications();
-    const notificationIds = allNotifications.map(n => n.id);
-    await notificationService.handleBulkAction(notificationIds, 'dismiss');
-    
-    const currentStats = notificationService.getStats();
-    setStats(currentStats);
-  };
-
+    const allNotifications = notificationService.getNotifications()
+    const notificationIds = allNotifications.map(n => n.id)
+    await notificationService.handleBulkAction(notificationIds, 'dismiss')
+    const currentStats = notificationService.getStats()
+    setStats(currentStats)
+  }
   return (<div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -183,7 +163,7 @@ export const NotificationSystemDemo: React.FC = () => {
           <div className="flex space-x-1 bg-gray-800 rounded-lg p-1">
             {[
               { key: 'demo', label: 'Demostración', icon: TestTube2 }, { key: 'preferences', label: 'Preferencias', icon: Settings }, { key: 'stats', label: 'Estadísticas', icon: TrendingUp }
-            ].map(({ key, label, icon: Icon }) => (<button
+            ].map((key, label, icon: Icon ) => (<button
                 key={key}
                 onClick={() => setActiveTab(key as unknown)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
@@ -482,5 +462,5 @@ export const NotificationSystemDemo: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

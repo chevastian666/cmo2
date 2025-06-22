@@ -3,16 +3,15 @@
  * By Cheva
  */
 
-import React from 'react';
+import React from 'react'
 // No lucide-react icons currently used
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
 interface Stat {
-  label: string;
-  value: number;
-  total: number;
-  color: string;
+  label: string
+  value: number
+  total: number
+  color: string
 }
 
 export const StatisticsWidget: React.FC = () => {
@@ -41,8 +40,7 @@ export const StatisticsWidget: React.FC = () => {
       total: 100,
       color: 'bg-purple-500'
     }
-  ];
-
+  ]
   return (<div className="h-full flex flex-col">
       <div className="grid grid-cols-2 gap-3 flex-1">
         {stats.map((stat, index) => (
@@ -84,5 +82,5 @@ export const StatisticsWidget: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

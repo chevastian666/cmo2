@@ -1,51 +1,46 @@
  
-import React from 'react';
-import { cn} from '../../../utils/utils';
-
+import React from 'react'
+import { cn} from '../../../utils/utils'
 interface RoutePoint {
-  lat: number;
-  lng: number;
+  lat: number
+  lng: number
 }
 
 interface RouteLineProps {
-  points: RoutePoint[];
-  color?: string;
-  width?: number;
-  style?: 'solid' | 'dashed' | 'dotted' | 'animated';
-  animated?: boolean;
-  opacity?: number;
-  className?: string;
-  showArrows?: boolean;
-  showProgress?: boolean;
+  points: RoutePoint[]
+  color?: string
+  width?: number
+  style?: 'solid' | 'dashed' | 'dotted' | 'animated'
+  animated?: boolean
+  opacity?: number
+  className?: string
+  showArrows?: boolean
+  showProgress?: boolean
   progress?: number; // 0-100
 }
 
 export const RouteLine: React.FC<RouteLineProps> = ({
   points, color = '#3b82f6', width = 3, style = 'solid', animated = false, opacity = 0.8, className, showArrows = false, showProgress = false, progress = 0
 }) => {
-  if (points.length < 2) return null;
-
+  if (points.length < 2) return null
   // Convert lat/lng to SVG path
   const pathData = points.reduce((path, point, index) => {
-    const command = index === 0 ? 'M' : 'L';
-    return `${path} ${command} ${point.lng},${point.lat}`;
-  }, '');
-
+    const command = index === 0 ? 'M' : 'L'
+    return `${path} ${command} ${point.lng},${point.lat}`
+  }, '')
   const getStrokeDasharray = () => {
     switch (style) {
-      case 'dashed':
-        return '10,5';
-      case 'dotted':
-        return '3,3';
-      case 'animated':
-        return '10,5';
+      case 'dashed': {
+  return '10,5'
+      case 'dotted': {
+  return '3,3'
+      case 'animated': {
+  return '10,5'
       default:
-        return undefined;
+        return undefined
     }
-  };
-
-  const isAnimated = animated || style === 'animated';
-
+  }
+  const isAnimated = animated || style === 'animated'
   return (
     <g className={cn('route-line-group', className)}>
       {/* Background line for contrast */}
@@ -92,14 +87,13 @@ export const RouteLine: React.FC<RouteLineProps> = ({
       {showArrows && points.length > 1 && (
         <g className="route-arrows">
           {points.slice(0, -1).map((point, index) => {
-            const nextPoint = points[index + 1];
-            const midX = (point.lng + nextPoint.lng) / 2;
-            const midY = (point.lat + nextPoint.lat) / 2;
+            const nextPoint = points[index + 1]
+            const midX = (point.lng + nextPoint.lng) / 2
+            const midY = (point.lat + nextPoint.lat) / 2
             const angle = Math.atan2(
               nextPoint.lat - point.lat,
               nextPoint.lng - point.lng
-            ) * (180 / Math.PI);
-
+            ) * (180 / Math.PI)
             return (
               <g
                 key={index}
@@ -116,7 +110,7 @@ export const RouteLine: React.FC<RouteLineProps> = ({
                   )}
                 />
               </g>
-            );
+            )
           })}
         </g>
       )}
@@ -155,26 +149,22 @@ export const RouteLine: React.FC<RouteLineProps> = ({
         </g>
       </g>
     </g>
-  );
-};
-
+  )
+}
 // Animated route component with multiple effects
 export const AnimatedRouteLine: React.FC<RouteLineProps & {
-  glowEffect?: boolean;
-  pulseEffect?: boolean;
-  flowSpeed?: number;
+  glowEffect?: boolean
+  pulseEffect?: boolean
+  flowSpeed?: number
 }> = ({
   points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ...props
 }) => {
-  if (points.length < 2) return null;
-
+  if (points.length < 2) return null
   const pathData = points.reduce((path, point, index) => {
-    const command = index === 0 ? 'M' : 'L';
-    return `${path} ${command} ${point.lng},${point.lat}`;
-  }, '');
-
-  const pathId = `route-path-${Math.random().toString(36).substr(2, 9)}`;
-
+    const command = index === 0 ? 'M' : 'L'
+    return `${path} ${command} ${point.lng},${point.lat}`
+  }, '')
+  const pathId = `route-path-${Math.random().toString(36).substr(2, 9)}`
   return (
     <g className={cn('animated-route-group', className)}>
       <defs>
@@ -289,5 +279,5 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
         style={{ display: 'none' }}
       />
     </g>
-  );
-};
+  )
+}

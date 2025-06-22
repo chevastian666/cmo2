@@ -1,11 +1,8 @@
-import React, { useMemo, useCallback } from 'react';
-import { Shield, Info} from 'lucide-react';
-
-import { PermissionCheckbox, BulkPermissionCheckbox} from './PermissionCheckbox';
-
-import type { Role, Section, Permission} from '../../../types/roles';
-import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles';
-
+import React, { useMemo, useCallback } from 'react'
+import { Shield, Info} from 'lucide-react'
+import { PermissionCheckbox, BulkPermissionCheckbox} from './PermissionCheckbox'
+import type { Role, Section, Permission} from '../../../types/roles'
+import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles'
 const SECTIONS: Section[] = [
   'dashboard',
   'transitos',
@@ -18,99 +15,77 @@ const SECTIONS: Section[] = [
   'zonas-descanso',
   'roles',
   'configuracion'
-];
-
-const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO'];
-const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete'];
-
+]
+const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO']
+const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete']
 export const RolesTable: React.FC = () => {
-  
-  
+
   // Calculate bulk checkbox states for sections
   const sectionBulkStates = useMemo(() => {
-    const states: Record<Section, { checked: boolean; indeterminate: boolean }> = {} as unknown;
-    
+    const states: Record<Section, { checked: boolean; indeterminate: boolean }> = {} as unknown
     SECTIONS.forEach(section => {
-      let totalPermissions = 0;
-      let checkedPermissions = 0;
-      
+      let totalPermissions = 0
+      let checkedPermissions = 0
       ROLES.forEach(role => {
         PERMISSIONS.forEach(permission => {
-          totalPermissions++;
+          totalPermissions++
           if (permissions[role][section].includes(permission)) {
-            checkedPermissions++;
+            checkedPermissions++
           }
-        });
-      });
-      
+        })
+      })
       states[section] = {
         checked: checkedPermissions === totalPermissions,
         indeterminate: checkedPermissions > 0 && checkedPermissions < totalPermissions
-      };
-    });
-    
-    return states;
-  }, [permissions]);
-  
+      }
+    })
+    return states
+  }, [permissions])
   // Calculate bulk checkbox states for roles
   const roleBulkStates = useMemo(() => {
-    const states: Record<Role, { checked: boolean; indeterminate: boolean }> = {} as unknown;
-    
+    const states: Record<Role, { checked: boolean; indeterminate: boolean }> = {} as unknown
     ROLES.forEach(role => {
-      let totalPermissions = 0;
-      let checkedPermissions = 0;
-      
+      let totalPermissions = 0
+      let checkedPermissions = 0
       SECTIONS.forEach(section => {
         PERMISSIONS.forEach(permission => {
-          totalPermissions++;
+          totalPermissions++
           if (permissions[role][section].includes(permission)) {
-            checkedPermissions++;
+            checkedPermissions++
           }
-        });
-      });
-      
+        })
+      })
       states[role] = {
         checked: checkedPermissions === totalPermissions,
         indeterminate: checkedPermissions > 0 && checkedPermissions < totalPermissions
-      };
-    });
-    
-    return states;
-  }, [permissions]);
-  
+      }
+    })
+    return states
+  }, [permissions])
   const handleSectionBulkToggle = useCallback((section: Section, checked: boolean) => {
-    const newPermissions: Record<Role, Permission[]> = {} as unknown;
-    
+    const newPermissions: Record<Role, Permission[]> = {} as unknown
     ROLES.forEach(role => {
-      newPermissions[role] = checked ? [...PERMISSIONS] : [];
-    });
-    
-    setSectionPermissions(section, newPermissions);
-  }, [setSectionPermissions]);
-  
+      newPermissions[role] = checked ? [...PERMISSIONS] : []
+    })
+    setSectionPermissions(section, newPermissions)
+  }, [])
   const handleRoleBulkToggle = useCallback((role: Role, checked: boolean) => {
-    const newPermissions: Record<Section, Permission[]> = {} as unknown;
-    
+    const newPermissions: Record<Section, Permission[]> = {} as unknown
     SECTIONS.forEach(section => {
-      newPermissions[section] = checked ? [...PERMISSIONS] : [];
-    });
-    
-    setRolePermissions(role, newPermissions);
-  }, [setRolePermissions]);
-  
+      newPermissions[section] = checked ? [...PERMISSIONS] : []
+    })
+    setRolePermissions(role, newPermissions)
+  }, [])
   const hasPermission = (role: Role, section: Section, permission: Permission) => {
-    return permissions[role][section].includes(permission);
-  };
-  
+    return permissions[role][section].includes(permission)
+  }
   // Check if permission should be disabled based on cascading rules
   const isPermissionDisabled = (role: Role, section: Section, permission: Permission) => {
     // If it's 'view', it's never disabled
-    if (permission === 'view') return false;
-    
+    if (permission === 'view') return false
     // Other permissions are disabled if 'view' is not granted
-    return !hasPermission(role, section, 'view');
-  };
-
+    return !hasPermission(role, section, 'view')
+  }
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -212,5 +187,5 @@ export const RolesTable: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

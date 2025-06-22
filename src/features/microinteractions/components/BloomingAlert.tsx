@@ -1,35 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { cn} from '../../../utils/utils';
-import '../animations/bloom.css';
-
+import React, { useState, useEffect } from 'react'
+import { cn} from '../../../utils/utils'
+import '../animations/bloom.css'
 interface BloomingAlertProps {
-  children: React.ReactNode;
-  status: 'normal' | 'alert' | 'critical';
-  onBloomComplete?: () => void;
-  className?: string;
-  show?: boolean;
+  children: React.ReactNode
+  status: 'normal' | 'alert' | 'critical'
+  onBloomComplete?: () => void
+  className?: string
+  show?: boolean
 }
 
 export const BloomingAlert: React.FC<BloomingAlertProps> = ({
   children, status, onBloomComplete, className, show = true
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-   
-
+  const [isVisible, setIsVisible] = useState(false)
   useEffect(() => {
     if (show) {
-      setIsVisible(true);
+      setIsVisible(true)
       const timer = setTimeout(() => {
-        onBloomComplete?.();
-      }, 600);
-      return () => clearTimeout(timer);
+        onBloomComplete?.()
+      }, 600)
+      return () => clearTimeout(timer)
     } else {
-      setIsVisible(false);
+      setIsVisible(false)
     }
-  }, [show, onBloomComplete]);
-
-  if (!isVisible) return null;
-
+  }, [show])
+  if (!isVisible) return null
   return (
     <div className={cn('bloom-container', className)}>
       <div className="flower-petals">
@@ -45,5 +40,5 @@ export const BloomingAlert: React.FC<BloomingAlertProps> = ({
         {children}
       </div>
     </div>
-  );
-};
+  )
+}

@@ -3,28 +3,23 @@
  * By Cheva
  */
 
-import React from 'react';
-import { Lock, Unlock, Clock, ArrowRight} from 'lucide-react';
-import { cn} from '../../../utils/utils';
-import { motion} from 'framer-motion';
-import { usePrecintosStore} from '../../../store/store';
-import { AnimatedBadge} from '../../animations/AnimatedComponents';
-
+import React from 'react'
+import { Lock, Unlock, Clock, ArrowRight} from 'lucide-react'
+import { cn} from '../../../utils/utils'
+import { motion} from 'framer-motion'
+import { usePrecintosStore} from '../../../store/store'
+import { AnimatedBadge} from '../../animations/AnimatedComponents'
 export const PendingPrecintosWidget: React.FC = () => {
-  const precintos = usePrecintosStore(state => state.precintos);
-  
+  const precintos = usePrecintosStore(state => state.precintos)
   // Calcular pendientes basado en el estado
   // Estado 0 = Disponible, Estado 1 = En Tránsito, Estado 4 = Finalizado
   const pendientesPrecintar = precintos.filter(p => 
     p.estado === 0 // Disponibles para precintar
-  ).length;
-  
+  ).length
   const pendientesDesprecintar = precintos.filter(p => 
     p.estado === 4 // Finalizados pendientes de desprecintar
-  ).length;
-
-  const totalPendientes = pendientesPrecintar + pendientesDesprecintar;
-
+  ).length
+  const totalPendientes = pendientesPrecintar + pendientesDesprecintar
   return (
     <div className="h-full flex flex-col">
       {/* Header con total */}
@@ -159,5 +154,5 @@ export const PendingPrecintosWidget: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

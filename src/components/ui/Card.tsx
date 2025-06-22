@@ -1,17 +1,15 @@
  
-import React from 'react';
-import { cn} from '../../utils/utils';
-
-export type CardVariant = 'default' | 'elevated' | 'bordered' | 'ghost';
-
+import React from 'react'
+import { cn} from '../../utils/utils'
+export type CardVariant = 'default' | 'elevated' | 'bordered' | 'ghost'
 interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-  variant?: CardVariant;
-  noPadding?: boolean;
-  onClick?: () => void;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
+  children: React.ReactNode
+  className?: string
+  variant?: CardVariant
+  noPadding?: boolean
+  onClick?: () => void
+  header?: React.ReactNode
+  footer?: React.ReactNode
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -22,8 +20,7 @@ export const Card: React.FC<CardProps> = ({
     elevated: 'bg-gray-800 border-gray-700 shadow-lg',
     bordered: 'bg-transparent border-gray-600 border-2',
     ghost: 'bg-gray-800/50 border-transparent'
-  };
-
+  }
   return (
     <div
       className={cn(
@@ -56,13 +53,12 @@ export const Card: React.FC<CardProps> = ({
         </div>
       )}
     </div>
-  );
-};
-
+  )
+}
 interface CardHeaderProps {
-  children: React.ReactNode;
-  className?: string;
-  actions?: React.ReactNode;
+  children: React.ReactNode
+  className?: string
+  actions?: React.ReactNode
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({
@@ -79,12 +75,11 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
         </div>
       )}
     </div>
-  );
-};
-
+  )
+}
 interface CardTitleProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export const CardTitle: React.FC<CardTitleProps> = ({
@@ -94,12 +89,11 @@ export const CardTitle: React.FC<CardTitleProps> = ({
     <h3 className={cn('text-lg font-semibold text-gray-100', className)}>
       {children}
     </h3>
-  );
-};
-
+  )
+}
 interface CardDescriptionProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export const CardDescription: React.FC<CardDescriptionProps> = ({
@@ -109,12 +103,11 @@ export const CardDescription: React.FC<CardDescriptionProps> = ({
     <p className={cn('text-sm text-gray-400 mt-1', className)}>
       {children}
     </p>
-  );
-};
-
+  )
+}
 interface CardContentProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export const CardContent: React.FC<CardContentProps> = ({
@@ -124,12 +117,11 @@ export const CardContent: React.FC<CardContentProps> = ({
     <div className={cn('text-gray-300', className)}>
       {children}
     </div>
-  );
-};
-
+  )
+}
 interface CardFooterProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export const CardFooter: React.FC<CardFooterProps> = ({
@@ -139,5 +131,5 @@ export const CardFooter: React.FC<CardFooterProps> = ({
     <div className={cn('flex items-center justify-end gap-2', className)}>
       {children}
     </div>
-  );
-};
+  )
+}

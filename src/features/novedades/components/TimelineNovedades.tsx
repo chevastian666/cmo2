@@ -1,27 +1,26 @@
-import React from 'react';
-import { MapPin} from 'lucide-react';
-import { EmptyState, LoadingState} from '../../../components/ui';
-import { NovedadCard} from './NovedadCard';
-import { cn} from '../../../utils/utils';
-import type { Novedad} from '../types';
-
+import React from 'react'
+import { MapPin} from 'lucide-react'
+import { EmptyState, LoadingState} from '../../../components/ui'
+import { NovedadCard} from './NovedadCard'
+import { cn} from '../../../utils/utils'
+import type { Novedad} from '../types'
 interface TimelineNovedadesProps {
-  novedades: Novedad[];
-  loading?: boolean;
-  onMarcarResuelta?: (novedad: Novedad) => void;
-  onAgregarSeguimiento?: (novedad: Novedad) => void;
-  onEditar?: (novedad: Novedad) => void;
-  onVerDetalles?: (novedad: Novedad) => void;
-  canEdit?: boolean;
-  userId?: string;
-  className?: string;
+  novedades: Novedad[]
+  loading?: boolean
+  onMarcarResuelta?: (novedad: Novedad) => void
+  onAgregarSeguimiento?: (novedad: Novedad) => void
+  onEditar?: (novedad: Novedad) => void
+  onVerDetalles?: (novedad: Novedad) => void
+  canEdit?: boolean
+  userId?: string
+  className?: string
 }
 
 export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
   novedades, loading = false, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, userId, className
 }) => {
   if (loading) {
-    return <LoadingState variant="skeleton" rows={4} />;
+    return <LoadingState variant="skeleton" rows={4} />
   }
 
   if (novedades.length === 0) {
@@ -32,22 +31,20 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
         description="No hay novedades registradas para los filtros seleccionados"
         size="sm"
       />
-    );
+    )
   }
 
   // Agrupar novedades por punto de operación
   const novedadesPorPunto = novedades.reduce((acc, novedad) => {
     if (!acc[novedad.puntoOperacion]) {
-      acc[novedad.puntoOperacion] = [];
+      acc[novedad.puntoOperacion] = []
     }
-    acc[novedad.puntoOperacion].push(novedad);
-    return acc;
-  }, {} as Record<string, Novedad[]>);
-
+    acc[novedad.puntoOperacion].push(novedad)
+    return acc
+  }, {} as Record<string, Novedad[]>)
   // Ordenar puntos por cantidad de novedades
   const puntosOrdenados = Object.entries(novedadesPorPunto)
-    .sort(([, a], [, b]) => b.length - a.length);
-
+    .sort(([, a], [, b]) => b.length - a.length)
   return (
     <div className={cn("space-y-6", className)}>
       {puntosOrdenados.map(([punto, novedadesPunto]) => (<div key={punto} className="space-y-4">
@@ -116,5 +113,5 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
         </div>
       ))}
     </div>
-  );
-};
+  )
+}

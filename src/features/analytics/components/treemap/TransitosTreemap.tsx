@@ -4,17 +4,15 @@
  * By Cheva
  */
 
-import React, { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import { ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group';
-import {MapPin, Truck, Clock} from 'lucide-react';
-import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap';
-import { transformTransitsByRoute, createHierarchy, transformByTimePeriod} from '@/components/charts/treemap/utils/dataTransformers';
-
+import React, { useMemo, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
+import { ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group'
+import {MapPin, Truck, Clock} from 'lucide-react'
+import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
+import { transformTransitsByRoute, createHierarchy, transformByTimePeriod} from '@/components/charts/treemap/utils/dataTransformers'
 export const TransitosTreemap: React.FC = () => {
-  
-  const [viewMode, setViewMode] = useState<'routes' | 'timeline' | 'delays'>('routes');
 
+  const [viewMode, setViewMode] = useState<'routes' | 'timeline' | 'delays'>('routes')
   const treemapData = useMemo(() => {
     if (!transitos.length) {
       return {
@@ -26,35 +24,36 @@ export const TransitosTreemap: React.FC = () => {
             color: '#6b7280'
           }
         ]
-      };
+      }
     }
 
     switch (viewMode) {
-      case 'routes':
-        return transformTransitsByRoute(transitos);
-      
-      case 'timeline':
-        return transformByTimePeriod(transitos, 'fechaInicio', 'week');
-      
+      case 'routes': {
+  return transformTransitsByRoute(transitos)
+      case 'timeline': {
+  return transformByTimePeriod(transitos, 'fechaInicio', 'week')
       case 'delays': {
-        
-        const delayedTransits = transitos.filter(t => t.estado === 'retrasado');
-        return createHierarchy(delayedTransits, ['origen', 'destino']);
-      
+  {
+
+        const delayedTransits = transitos.filter(t => t.estado === 'retrasado')
+        return createHierarchy(delayedTransits, ['origen', 'destino'])
       default:
-        return transformTransitsByRoute(transitos);
+        return transformTransitsByRoute(transitos)
     }
-  }, [transitos, viewMode]);
-
+  }, [transitos])
   const stats = useMemo(() => {
-    const total = transitos.length;
-    const active = transitos.filter(t => t.estado === 'en_curso').length;
-    const delayed = transitos.filter(t => t.estado === 'retrasado').length;
-    const routes = new Set(transitos.map(t => `${t.origen}-${t.destino}`)).size;
-    
-    return { total, active, delayed, routes };
-  }, [transitos]);
-
+    const total = transitos.length
+    const active = transitos.filter(t => t.estado === 'en_curso').length
+    const delayed = transitos.filter(t => t.estado === 'retrasado').length
+    const routes = new Set(transitos.map(t => `${t.origen}-${t.destino}`)).size
+    return { total, active, delayed, routes }
+  }, [transitos])
+  return (
+    <div className="h-full">
+      <TreemapChart data={data} onNodeClick={onNodeClick} />
+    </div>
+  )
+}
   return (<div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -141,5 +140,5 @@ export const TransitosTreemap: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

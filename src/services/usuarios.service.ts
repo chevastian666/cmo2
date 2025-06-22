@@ -1,5 +1,4 @@
-import type { Usuario} from '../types';
-
+import type { Usuario} from '../types'
 // Mock users for development
 const mockUsuarios: Usuario[] = [
   {
@@ -42,27 +41,26 @@ const mockUsuarios: Usuario[] = [
     avatar: 'https://ui-avatars.com/api/?name=Roberto+Gomez&background=ef4444&color=fff',
     activo: false
   }
-];
-
+]
 export const usuariosService = {
   getAll: async (): Promise<Usuario[]> => {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return mockUsuarios;
+    await new Promise(resolve => setTimeout(resolve, 500))
+    return mockUsuarios
   },
 
   getActivos: async (): Promise<Usuario[]> => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return mockUsuarios.filter(u => u.activo);
+    await new Promise(resolve => setTimeout(resolve, 500))
+    return mockUsuarios.filter(u => u.activo)
   },
 
   getById: async (id: string): Promise<Usuario | null> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return mockUsuarios.find(u => u.id === id) || null;
+    await new Promise(resolve => setTimeout(resolve, 300))
+    return mockUsuarios.find(u => u.id === id) || null
   },
 
   getCurrentUser: async (): Promise<Usuario> => {
     // Return the first admin user as current user
-    return mockUsuarios[0];
+    return mockUsuarios[0]
   }
-};
+}

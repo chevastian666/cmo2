@@ -3,121 +3,104 @@
  * By Cheva
  */
 
-import React, { memo, useEffect, useState, useCallback } from 'react';
-import { SystemStatusCard} from './SystemStatusCard';
-import { PrecintosActivosTable} from './PrecintosActivosTable';
-import { TransitosPendientesWrapper} from '../../transitos';
-import { AlertsList} from '../../alertas';
-import { RealtimeIndicator} from './RealtimeIndicator';
-import { KPICards} from './KPICards';
-import {NotificationSettings} from '../../../components/ui/NotificationSettings';
-import { RefreshCw} from 'lucide-react';
-import './dashboard.css';
-import { DataTransition} from '../../../components/animations/DataTransition';
-import { useSmootherRefresh} from '../../../hooks/useSmootherRefresh';
-import { SkeletonDashboard} from '@/components/ui/skeleton';
+import React, { memo, useEffect, useState, useCallback } from 'react'
+import { SystemStatusCard} from './SystemStatusCard'
+import { PrecintosActivosTable} from './PrecintosActivosTable'
+import { TransitosPendientesWrapper} from '../../transitos'
+import { AlertsList} from '../../alertas'
+import { RealtimeIndicator} from './RealtimeIndicator'
+import { KPICards} from './KPICards'
+import {NotificationSettings} from '../../../components/ui/NotificationSettings'
+import { RefreshCw} from 'lucide-react'
+import './dashboard.css'
+import { DataTransition} from '../../../components/animations/DataTransition'
+import { useSmootherRefresh} from '../../../hooks/useSmootherRefresh'
+import { SkeletonDashboard} from '@/components/ui/skeleton'
 import { 
-  usePrecintosActivos, useTransitosPendientes, useAlertasActivas, useSystemStatus} from '../../../store/hooks';
-
+  usePrecintosActivos, useTransitosPendientes, useAlertasActivas, useSystemStatus} from '../../../store/hooks'
 export const Dashboard: React.FC = memo(() => {
-  const { loading: loadingPrecintos, actions: precintosActions } = usePrecintosActivos();
-  const { loading: loadingStatus, actions: statusActions } = useSystemStatus();
-  const { loading: loadingAlertas, actions: alertasActions } = useAlertasActivas();
-  const { loading: loadingTransitos, actions: transitosActions } = useTransitosPendientes();
-  
-  const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(60);
-  
+  const { loading: loadingPrecintos, actions: precintosActions } = usePrecintosActivos()
+  const { loading: loadingStatus, actions: statusActions } = useSystemStatus()
+  const { loading: loadingAlertas, actions: alertasActions } = useAlertasActivas()
+  const { loading: loadingTransitos, actions: transitosActions } = useTransitosPendientes()
+  const [lastUpdate, setLastUpdate] = useState(new Date())
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(60)
   // Función para mostrar notificaciones suaves
   const showNotification = useCallback((type: 'success' | 'error') => {
-    const notification = document.createElement('div');
-    notification.className = `fixed bottom-4 right-4 ${type === 'success' ? 'bg-green-600/90' : 'bg-red-600/90'} backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center gap-2 transition-all duration-300 transform translate-y-0`;
+    const notification = document.createElement('div')
+    notification.className = `fixed bottom-4 right-4 ${type === 'success' ? 'bg-green-600/90' : 'bg-red-600/90'} backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center gap-2 transition-all duration-300 transform translate-y-0`
     notification.innerHTML = `
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M5 13l4 4L19 7' : 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'}"></path>
       </svg>
       <span class="text-sm font-medium">${type === 'success' ? 'Datos actualizados' : 'Error al actualizar'}</span>
-    `;
-    
+    `
     // Iniciar con opacidad 0 y desplazado hacia abajo
-    notification.style.opacity = '0';
-    notification.style.transform = 'translateY(1rem)';
-    document.body.appendChild(notification);
-    
+    notification.style.opacity = '0'
+    notification.style.transform = 'translateY(1rem)'
+    document.body.appendChild(notification)
     // Animar entrada
     requestAnimationFrame(() => {
-      notification.style.opacity = '1';
-      notification.style.transform = 'translateY(0)';
-    });
-    
+      notification.style.opacity = '1'
+      notification.style.transform = 'translateY(0)'
+    })
     // Animar salida
     setTimeout(() => {
-      notification.style.opacity = '0';
-      notification.style.transform = 'translateY(1rem)';
-      setTimeout(() => notification.remove(), 300);
-    }, 2500);
-  }, []);
-
+      notification.style.opacity = '0'
+      notification.style.transform = 'translateY(1rem)'
+      setTimeout(() => notification.remove(), 300)
+    }, 2500)
+  }, [])
   // Usar el hook de actualización suave
   const refreshFunctions = [
     precintosActions?.refresh,
     statusActions?.refresh,
     alertasActions?.refresh,
     transitosActions?.refresh
-  ];
-
+  ]
   const { refresh: smoothRefresh } = useSmootherRefresh(refreshFunctions, {
     onSuccess: () => {
-      setLastUpdate(new Date());
-      setSecondsUntilRefresh(60);
-      showNotification('success');
-      setIsRefreshing(false);
+      setLastUpdate(new Date())
+      setSecondsUntilRefresh(60)
+      showNotification('success')
+      setIsRefreshing(false)
     },
     onError: () => {
-      showNotification('error');
-      setIsRefreshing(false);
+      showNotification('error')
+      setIsRefreshing(false)
     },
     minimumDelay: 400
-  });
-
+  })
   // Función de recarga que usa el smoothRefresh
   const refreshData = useCallback(async () => {
-    if (isRefreshing) return;
-    setIsRefreshing(true);
-    await smoothRefresh();
-  }, [smoothRefresh, isRefreshing]);
-  
+    if (isRefreshing) return
+    setIsRefreshing(true)
+    await smoothRefresh()
+  }, [])
   // Auto-refresh cada 60 segundos
-   
-
 
     useEffect(() => {
     // Recargar inmediatamente al montar
-    refreshData();
-    
+    refreshData()
     // Configurar intervalo de 60 segundos
-    const refreshInterval = setInterval(refreshData, 60000);
-    
+    const refreshInterval = setInterval(refreshData, 60000)
     // Contador de segundos
     const countdownInterval = setInterval(() => {
       setSecondsUntilRefresh(prev => {
         if (prev <= 1) {
-          return 60;
+          return 60
         }
-        return prev - 1;
-      });
-    }, 1000);
-    
+        return prev - 1
+      })
+    }, 1000)
     return () => {
-      clearInterval(refreshInterval);
-      clearInterval(countdownInterval);
-    };
-  }, [refreshData]);
-
+      clearInterval(refreshInterval)
+      clearInterval(countdownInterval)
+    }
+  }, [])
   // Solo mostrar skeleton en la carga inicial
-  const isInitialLoading = !estadisticas && !precintos && !transitos && (loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas);
-
+  const isInitialLoading = !estadisticas && !precintos && !transitos && (loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas)
   // Show skeleton only on initial load
   if (isInitialLoading) {
     return (
@@ -164,7 +147,7 @@ export const Dashboard: React.FC = memo(() => {
         </div>
         <SkeletonDashboard />
       </div>
-    );
+    )
   }
 
   return (
@@ -229,7 +212,6 @@ export const Dashboard: React.FC = memo(() => {
         </DataTransition>
       </div>
     </div>
-  );
-});
-
-Dashboard.displayName = 'Dashboard';
+  )
+})
+Dashboard.displayName = 'Dashboard'

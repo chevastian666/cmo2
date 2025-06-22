@@ -1,22 +1,20 @@
-import React, { useState, useCallback } from 'react';
-import { VirtualizedAlertList} from '../VirtualizedAlertList';
-import {Search, Filter, AlertTriangle} from 'lucide-react';
-import type { Alert, AlertFilters} from '../types/alerts';
-
+import React, { useState, useCallback } from 'react'
+import { VirtualizedAlertList} from '../VirtualizedAlertList'
+import {Search, Filter, AlertTriangle} from 'lucide-react'
+import type { Alert, AlertFilters} from '../types/alerts'
 // Mock data generator
 function generateMockAlerts(count: number, startId: number = 0): Alert[] {
-  const severities: Alert['severity'][] = ['low', 'medium', 'high', 'critical'];
-  const statuses: Alert['status'][] = ['active', 'acknowledged', 'resolved'];
+  const severities: Alert['severity'][] = ['low', 'medium', 'high', 'critical']
+  const statuses: Alert['status'][] = ['active', 'acknowledged', 'resolved']
   const locations = [
     'Buenos Aires, Argentina',
     'Rosario, Argentina',
     'Córdoba, Argentina',
     'Mendoza, Argentina',
     'La Plata, Argentina'
-  ];
-  
+  ]
   return Array.from({ length: count }, (_, i) => {
-    const id = startId + i;
+    const id = startId + i
     return {
       id: `alert-${id}`,
       timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
@@ -31,8 +29,8 @@ function generateMockAlerts(count: number, startId: number = 0): Alert[] {
       message: `Alerta de prueba #${id}: ${generateRandomMessage()}`,
       status: statuses[Math.floor(Math.random() * statuses.length)],
       assignedTo: Math.random() > 0.5 ? `Operador ${Math.floor(Math.random() * 10)}` : undefined
-    };
-  });
+    }
+  })
 }
 
 function generateRandomMessage(): string {
@@ -47,34 +45,29 @@ function generateRandomMessage(): string {
     'Intento de manipulación',
     'Sensor de impacto activado',
     'Conexión perdida con servidor'
-  ];
-  return messages[Math.floor(Math.random() * messages.length)];
+  ]
+  return messages[Math.floor(Math.random() * messages.length)]
 }
 
 export const VirtualizedListExample: React.FC = () => {
-  const [filters, setFilters] = useState<AlertFilters>(_);
-  const [showFilters, setShowFilters] = useState(false);
-
+  const [filters, setFilters] = useState<AlertFilters>(_)
+  const [showFilters, setShowFilters] = useState(false)
   // Mock API call
   const loadMoreAlerts = useCallback(async (page: number) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const pageSize = 50;
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const pageSize = 50
     const totalAlerts = 100000; // Simulate 100k alerts
-    const hasMore = (page + 1) * pageSize < totalAlerts;
-    
+    const hasMore = (page + 1) * pageSize < totalAlerts
     return {
       alerts: generateMockAlerts(pageSize, page * pageSize),
       hasMore,
       total: totalAlerts
-    };
-  }, []);
-
+    }
+  }, [])
   const handleAlertClick = useCallback((alert: Alert, index: number) => {
-    console.log('Alert clicked:', alert, 'at index:', index);
-  }, []);
-
+    console.log('Alert clicked:', alert, 'at index:', index)
+  }, [])
   return (<div className="h-screen bg-gray-900 flex flex-col">
       {/* Header */}
       <div className="bg-gray-800 border-b border-gray-700 p-4">
@@ -121,17 +114,17 @@ export const VirtualizedListExample: React.FC = () => {
                         type="checkbox"
                         className="rounded border-gray-600 text-blue-600 focus:ring-blue-500"
                         onChange={(e) => {
-                          const current = filters.severity || [];
+                          const current = filters.severity || []
                           if (e.target.checked) {
                             setFilters(prev => ({ 
                               ...prev, 
                               severity: [...current, severity as Alert['severity']] 
-                            }));
+                            }))
                           } else {
                             setFilters(prev => ({ 
                               ...prev, 
                               severity: current.filter(s => s !== severity) 
-                            }));
+                            }))
                           }
                         }}
                       />
@@ -153,17 +146,17 @@ export const VirtualizedListExample: React.FC = () => {
                         type="checkbox"
                         className="rounded border-gray-600 text-blue-600 focus:ring-blue-500"
                         onChange={(e) => {
-                          const current = filters.status || [];
+                          const current = filters.status || []
                           if (e.target.checked) {
                             setFilters(prev => ({ 
                               ...prev, 
                               status: [...current, status as Alert['status']] 
-                            }));
+                            }))
                           } else {
                             setFilters(prev => ({ 
                               ...prev, 
                               status: current.filter(s => s !== status) 
-                            }));
+                            }))
                           }
                         }}
                       />
@@ -201,5 +194,5 @@ export const VirtualizedListExample: React.FC = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,12 +1,11 @@
-import React from 'react';
-import { MapPin, Flag, CircleDot} from 'lucide-react';
-import type { TorreControlFilters, EstadoSemaforo} from '../types';
-
+import React from 'react'
+import { MapPin, Flag, CircleDot} from 'lucide-react'
+import type { TorreControlFilters, EstadoSemaforo} from '../types'
 interface TorreControlFiltersProps {
-  filters: TorreControlFilters;
-  onFiltersChange: (filters: TorreControlFilters) => void;
-  origenOptions: string[];
-  destinoOptions: string[];
+  filters: TorreControlFilters
+  onFiltersChange: (filters: TorreControlFilters) => void
+  origenOptions: string[]
+  destinoOptions: string[]
 }
 
 export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
@@ -16,9 +15,8 @@ export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
     onFiltersChange({
       ...filters,
       [key]: value
-    });
-  };
-
+    })
+  }
   return (<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Origen Filter */}
       <div className="relative">
@@ -71,5 +69,5 @@ export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
         </select>
       </div>
     </div>
-  );
-};
+  )
+}

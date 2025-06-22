@@ -1,95 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import { Download, TrendingUp} from 'lucide-react';
-import { Card, CardHeader, CardContent, Badge} from '../../../components/ui';
-import { FormularioNovedad} from './FormularioNovedad';
-import { TimelineNovedades} from './TimelineNovedades';
-import { FiltrosNovedadesComponent} from './FiltrosNovedades';
-import { ModalSeguimiento} from './ModalSeguimiento';
-import { ModalResolucion} from './ModalResolucion';
-
-import {useUserInfo} from '../../../hooks/useAuth';
-import { notificationService} from '../../../services/shared/notification.service';
-import { exportToCSV} from '../../../utils/export';
-import type { Novedad, FiltrosNovedades} from '../types';
-import { FILTROS_DEFAULT, TIPOS_NOVEDAD} from '../types';
-
-const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros';
-
+import React, { useState, useEffect } from 'react'
+import { Download, TrendingUp} from 'lucide-react'
+import { Card, CardHeader, CardContent, Badge} from '../../../components/ui'
+import { FormularioNovedad} from './FormularioNovedad'
+import { TimelineNovedades} from './TimelineNovedades'
+import { FiltrosNovedadesComponent} from './FiltrosNovedades'
+import { ModalSeguimiento} from './ModalSeguimiento'
+import { ModalResolucion} from './ModalResolucion'
+import {useUserInfo} from '../../../hooks/useAuth'
+import { notificationService} from '../../../services/shared/notification.service'
+import { exportToCSV} from '../../../utils/export'
+import type { Novedad, FiltrosNovedades} from '../types'
+import { FILTROS_DEFAULT, TIPOS_NOVEDAD} from '../types'
+const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros'
 export const LibroNovedades: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
+    const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
     if (saved) {
-      const parsed = JSON.parse(saved);
+      const parsed = JSON.parse(saved)
       // Convertir strings de fecha a objetos Date
       return {
         ...parsed,
         fecha: parsed.fecha ? new Date(parsed.fecha) : null,
         fechaDesde: parsed.fechaDesde ? new Date(parsed.fechaDesde) : null,
         fechaHasta: parsed.fechaHasta ? new Date(parsed.fechaHasta) : null
-      };
+      }
     }
-    return FILTROS_DEFAULT;
-  });
-  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null);
-  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null);
-  
-  
-  const userInfo = useUserInfo();
-  
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado';
-
+    return FILTROS_DEFAULT
+  })
+  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null)
+  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null)
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   // Cargar novedades al montar y cuando cambien los filtros
-   
 
   useEffect(() => {
-    fetchNovedades(filtros);
-  }, [fetchNovedades, filtros]);
-
+    fetchNovedades(filtros)
+  }, [filtros])
   // Guardar filtros en localStorage
-   
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros));
-  }, [filtros]);
-
+    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
+  }, [filtros])
   // Auto-refresh cada minuto
-   
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchNovedades(filtros);
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [fetchNovedades, filtros]);
-
+      fetchNovedades(filtros)
+    }, 60000)
+    return () => clearInterval(interval)
+  }, [filtros])
   const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(_data);
+    await crearNovedad(_data)
     // Si hay archivos, aquí se subirían
     if ((_data as unknown).archivos) {
-      console.log('Archivos a subir:', (_data as unknown).archivos);
+      console.log('Archivos a subir:', (_data as unknown).archivos)
     }
-  };
-
+  }
   const handleMarcarResuelta = async (novedadId: string, comentario?: string) => {
     try {
-      await marcarResuelta(novedadId, comentario);
-      notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta');
-      setNovedadResolucion(null);
+      await marcarResuelta(novedadId, comentario)
+      notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta')
+      setNovedadResolucion(null)
     } catch (error) {
-      notificationService.error('Error', 'No se pudo marcar la novedad como resuelta');
+      notificationService.error('Error', 'No se pudo marcar la novedad como resuelta')
     }
-  };
-
+  }
   const handleAgregarSeguimiento = async (novedadId: string, comentario: string) => {
     try {
-      await agregarSeguimiento(novedadId, comentario);
-      notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente');
-      setNovedadSeguimiento(null);
+      await agregarSeguimiento(novedadId, comentario)
+      notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente')
+      setNovedadSeguimiento(null)
     } catch (error) {
-      notificationService.error('Error', 'No se pudo agregar el seguimiento');
+      notificationService.error('Error', 'No se pudo agregar el seguimiento')
     }
-  };
-
+  }
   const handleExportar = () => {
     const datosExportar = novedades.map(nov => ({
       Fecha: nov.fecha.toLocaleDateString('es-UY'),
@@ -102,17 +86,14 @@ export const LibroNovedades: React.FC = () => {
       'Resuelto por': nov.resolucion?.usuario.nombre || '-',
       'Comentario resolución': nov.resolucion?.comentario || '-',
       Seguimientos: nov.seguimientos?.length || 0
-    }));
-
-    exportToCSV(datosExportar, `novedades_${new Date().toISOString().split('T')[0]}`);
-    notificationService.success('Exportación completada', 'Las novedades se han exportado correctamente');
-  };
-
+    }))
+    exportToCSV(datosExportar, `novedades_${new Date().toISOString().split('T')[0]}`)
+    notificationService.success('Exportación completada', 'Las novedades se han exportado correctamente')
+  }
   // Filtrar novedades según usuario si está marcado "solo mías"
   const novedadesFiltradas = filtros.soloMias 
     ? novedades.filter(n => n.creadoPor.id === userInfo.id)
-    : novedades;
-
+    : novedades
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Columna izquierda - Formulario y estadísticas */}
@@ -158,7 +139,7 @@ export const LibroNovedades: React.FC = () => {
               <div className="space-y-2">
                 <p className="text-sm text-gray-400">Por tipo:</p>
                 {Object.entries(estadisticas.porTipo).map(([tipo, cantidad]) => {
-                  const config = TIPOS_NOVEDAD[tipo as keyof typeof TIPOS_NOVEDAD];
+                  const config = TIPOS_NOVEDAD[tipo as keyof typeof TIPOS_NOVEDAD]
                   return (
                     <div key={tipo} className="flex items-center justify-between">
                       <span className="text-sm text-gray-300 flex items-center gap-2">
@@ -169,7 +150,7 @@ export const LibroNovedades: React.FC = () => {
                         {cantidad}
                       </Badge>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </CardContent>
@@ -236,5 +217,5 @@ export const LibroNovedades: React.FC = () => {
         onSubmit={handleMarcarResuelta}
       />
     </div>
-  );
-};
+  )
+}
