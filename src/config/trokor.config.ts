@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-export const TROKOR_CONFIG = {
+export const _TROKOR_CONFIG = {
   // Base URLs
   API_BASE: import.meta.env.VITE_TROKOR_API_BASE || 'https://api.trokor.com/api',
   MAINDB_BASE: import.meta.env.VITE_TROKOR_MAINDB_BASE || 'https://maindb.trokor.com',
@@ -125,7 +125,7 @@ export const TROKOR_CONFIG = {
   }
 }
 // Helper para obtener headers con autenticación
-export const getTrokorHeaders = (): HeadersInit => {
+export const _getTrokorHeaders = (): HeadersInit => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   }
@@ -137,14 +137,14 @@ export const getTrokorHeaders = (): HeadersInit => {
     headers['X-API-Secret'] = TROKOR_CONFIG.API_SECRET
   }
   
-  const token = localStorage.getItem('trokor_token')
-  if (token) {
+  const _token = localStorage.getItem('trokor_token')
+  if (_token) {
     headers['Authorization'] = `Bearer ${token}`
   }
   
   return headers
 }
 // Helper para construir URLs completas
-export const buildTrokorUrl = (endpoint: string, base: string = TROKOR_CONFIG.API_BASE): string => {
+export const _buildTrokorUrl = (endpoint: string, base: string = TROKOR_CONFIG.API_BASE): string => {
   return `${base}${endpoint}`
 }

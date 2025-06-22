@@ -9,7 +9,7 @@ function fixFiles(dir) {
   
   for (const file of files) {
     const fullPath = path.join(dir, file);
-    if (fs.statSync(fullPath).isDirectory() && \!file.startsWith(".")) {
+    if (fs.statSync(fullPath).isDirectory() && !file.startsWith(".")) {
       count += fixFiles(fullPath);
     } else if (file.endsWith(".ts") || file.endsWith(".tsx")) {
       try {
@@ -22,7 +22,7 @@ function fixFiles(dir) {
         content = content.replace(/: any;/g, ": unknown;");
         content = content.replace(/Record<string, any>/g, "Record<string, unknown>");
         
-        if (content \!== original) {
+        if (content !== original) {
           fs.writeFileSync(fullPath, content);
           count++;
         }

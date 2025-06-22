@@ -15,9 +15,9 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
   precinto, isOpen, onClose
 }) => {
   const [activeTab, setActiveTab] = React.useState('info')
-  const statusInfo = getStatusInfo(precinto.estado as unknown)
+  const _statusInfo = getStatusInfo(precinto.estado as unknown)
   if (!isOpen) return null
-  const tabs = [
+  const _tabs = [
     { id: 'info', label: 'Información', icon: <Package className="h-4 w-4" /> },
     { id: 'location', label: 'Ubicación', icon: <MapPin className="h-4 w-4" /> },
     { id: 'sensors', label: 'Sensores', icon: <Activity className="h-4 w-4" /> },

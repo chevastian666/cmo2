@@ -132,10 +132,10 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
     if (providedData) return providedData
     switch (selectedType) {
       case 'line': {
-  
-  break;
-}
-  }, [])
+          break;
+        }
+      }
+    }, [])
   const renderVisualization = () => {
     switch (selectedType) {
       case 'line': {

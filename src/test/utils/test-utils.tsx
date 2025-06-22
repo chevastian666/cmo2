@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi } from 'vitest'
 // Create a custom render that includes providers
-const createTestQueryClient = () =>
+const _createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: {
@@ -26,7 +26,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   queryClient?: QueryClient
 }
 
-export const customRender = (
+export const _customRender = (
   ui: ReactElement,
   {
     route = '/',
@@ -35,7 +35,7 @@ export const customRender = (
   }: CustomRenderOptions = {}
 ) => {
   window.history.pushState(_, 'Test page', route)
-  const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
+  const _AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     return (
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -51,21 +51,21 @@ export const customRender = (
 export * from '@testing-library/react'
 export { customRender as render }
 // Test helpers
-export const waitForLoadingToFinish = () =>
+export const _waitForLoadingToFinish = () =>
   screen.findByText((content, element) => {
     return !element?.className?.includes('loading')
   })
 // Mock navigation
-export const mockNavigate = vi.fn()
+export const _mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
+  const _actual = await vi.importActual('react-router-dom')
   return {
     ...actual,
     useNavigate: () => mockNavigate,
   }
 })
 // Mock Zustand stores
-export const createMockStore = (initialState: unknown) => {
+export const _createMockStore = (initialState: unknown) => {
   return {
     getState: () => initialState,
     setState: vi.fn(),
@@ -74,9 +74,9 @@ export const createMockStore = (initialState: unknown) => {
   }
 }
 // Date helpers for consistent testing
-export const TEST_DATE = new Date('2024-01-01T00:00:00.000Z')
+export const _TEST_DATE = new Date('2024-01-01T00:00:00.000Z')
 // Mock auth context
-export const mockAuthContext = {
+export const _mockAuthContext = {
   user: {
     id: '1',
     email: 'test@cmo.com',
@@ -126,7 +126,7 @@ export class MockWebSocket {
 
 global.WebSocket = MockWebSocket as unknown
 // Helper to create mock data
-export const createMockPrecinto = (overrides: Record<string, unknown> = {}) => ({
+export const _createMockPrecinto = (overrides: Record<string, unknown> = {}) => ({
   id: '1',
   codigo: 'PRE-001',
   estado: 'activo',
@@ -138,7 +138,7 @@ export const createMockPrecinto = (overrides: Record<string, unknown> = {}) => (
   temperatura: 25.5,
   ...overrides,
 })
-export const createMockTransito = (overrides = {}) => ({
+export const _createMockTransito = (overrides = {}) => ({
   id: '1',
   codigo: 'TRN-001',
   estado: 'en_curso',
@@ -158,7 +158,7 @@ export const createMockTransito = (overrides = {}) => ({
   },
   ...overrides,
 })
-export const createMockAlerta = (overrides = {}) => ({
+export const _createMockAlerta = (overrides = {}) => ({
   id: '1',
   tipo: 'temperatura',
   severidad: 'alta',

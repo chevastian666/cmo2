@@ -66,7 +66,7 @@ export const NACIONALIDADES: Record<Nacionalidad, string> = {
   'Otro': '🌍 Otro'
 }
 // Tipos de documento
-export const TIPOS_DOCUMENTO = {
+export const _TIPOS_DOCUMENTO = {
   'CI': 'Cédula de Identidad',
   'Pasaporte': 'Pasaporte',
   'Otro': 'Otro documento'

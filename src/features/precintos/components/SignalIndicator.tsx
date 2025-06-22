@@ -19,13 +19,13 @@ export const SignalIndicator: React.FC<SignalIndicatorProps> = ({
     )} />
   }
 
-  const getColor = () => {
+  const _getColor = () => {
     if (strength >= 75) return 'text-green-500'
     if (strength >= 50) return 'text-yellow-500'
     if (strength >= 25) return 'text-orange-500'
     return 'text-red-500'
   }
-  const sizeClasses = {
+  const _sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-5 w-5',
     lg: 'h-6 w-6'

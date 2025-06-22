@@ -9,8 +9,8 @@ interface PrecintosTableProps {
 }
 
 export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => {
-  const getEstadoColor = (estado: Precinto['estado']) => {
-    switch (estado) {
+  const _getEstadoColor = (estado: Precinto['estado']) => {
+    switch (_estado) {
       case 'SAL': {
   return 'text-blue-400 bg-blue-900/20'
       case 'LLE': {
@@ -30,7 +30,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       sortable: true,
       filterable: true,
       filterType: 'number',
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center space-x-3">
           <span className="font-medium text-white">{item.numeroPrecinto}</span>
           <div className="flex items-center">
@@ -49,7 +49,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       header: 'Viaje / MOV',
       sortable: true,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div>
           <span className="font-medium text-white">{item.numeroViaje}</span>
           <span className="text-cyan-400 ml-2">/ {item.mov}</span>
@@ -69,7 +69,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
         { value: 'CFM', label: 'CFM - Confirmado' },
         { value: 'CNP', label: 'CNP - Cancelado No Precintado' }
       ],
-      accessor: (item) => (
+      accessor: (_item) => (
         <span className={cn(
           "inline-flex px-2 py-1 text-xs font-medium rounded-full",
           getEstadoColor(item.estado)
@@ -83,7 +83,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       header: 'Ubicación',
       sortable: false,
       filterable: true,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center text-sm">
           <MapPin className="h-4 w-4 mr-1" />
           {item.ubicacionActual.direccion || 
@@ -95,7 +95,7 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       key: 'sensores',
       header: 'Sensores',
       sortable: false,
-      accessor: (item) => (
+      accessor: (_item) => (
         <div className="flex items-center space-x-3 text-sm">
           <div className="flex items-center">
             <Radio className={cn(
@@ -135,15 +135,15 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
       key: 'fechaUltimaLectura',
       header: 'Última Lectura',
       sortable: true,
-      accessor: (item) => formatTime24h(item.fechaUltimaLectura)
+      accessor: (_item) => formatTime24h(item.fechaUltimaLectura)
     }
   ]
-  const handleExport = (_data: Precinto[], format: 'csv' | 'json') => {
-    const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `precintos-activos-${timestamp}`
+  const _handleExport = (_data: Precinto[], format: 'csv' | 'json') => {
+    const _timestamp = new Date().toISOString().split('T')[0]
+    const _filename = `precintos-activos-${timestamp}`
     if (format === 'csv') {
-      const headers = ['Precinto', 'Viaje', 'MOV', 'Estado', 'Ubicación', 'GPS', 'Eslinga', 'Batería', 'Última Lectura']
-      const rows = data.map(p => [
+      const _headers = ['Precinto', 'Viaje', 'MOV', 'Estado', 'Ubicación', 'GPS', 'Eslinga', 'Batería', 'Última Lectura']
+      const _rows = data.map(p => [
         p.numeroPrecinto,
         p.numeroViaje,
         p.mov,
@@ -154,18 +154,18 @@ export const PrecintosTable: React.FC<PrecintosTableProps> = ({ precintos }) => 
         `${p.bateria}%`,
         new Date(p.fechaUltimaLectura * 1000).toLocaleString('es-UY')
       ])
-      const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
+      const _csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
         map(row => row.join(',')).join('\n')
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
+      const _blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const _link = document.createElement('a')
+      link.href = URL.createObjectURL(_blob)
       link.download = `${filename}.csv`
       link.click()
     } else {
-      const jsonData = JSON.stringify(_data, null, 2)
-      const blob = new Blob([jsonData], { type: 'application/json' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
+      const _jsonData = JSON.stringify(_data, null, 2)
+      const _blob = new Blob([jsonData], { type: 'application/json' })
+      const _link = document.createElement('a')
+      link.href = URL.createObjectURL(_blob)
       link.download = `${filename}.json`
       link.click()
     }

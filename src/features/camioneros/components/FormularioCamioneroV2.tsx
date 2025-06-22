@@ -14,7 +14,7 @@ import {useUserInfo} from '../../../hooks/useAuth'
 import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
 import type { Nacionalidad} from '../types'
 // Define the form schema with Zod
-const formSchema = z.object({
+const _formSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio').trim(),
   apellido: z.string().min(1, 'El apellido es obligatorio').trim(),
   tipoDocumento: z.enum(['CI', 'PASAPORTE', 'DNI'] as const),
@@ -24,13 +24,13 @@ const formSchema = z.object({
   telefonoUruguayo: z.string().optional(),
   telefonoPais: z.string().optional(),
   comentario: z.string().optional(),
-}).refine((_data) => {
+}).refine((__data) => {
   // At least one phone is required
   return data.telefonoUruguayo || data.telefonoPais
 }, {
   message: 'Debe proporcionar al menos un teléfono de contacto',
   path: ['telefonoUruguayo'],
-}).refine((_data) => {
+}).refine((__data) => {
   // If nacionalidad is 'Otro', paisOrigen is required
   if (data.nacionalidad === 'Otro') {
     return data.paisOrigen && data.paisOrigen.trim().length > 0
@@ -47,11 +47,11 @@ interface FormularioCamioneroProps {
 }
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
-  const userInfo = useUserInfo()
-  const [loading, setLoading] = useState(false)
-  const [generalError, setGeneralError] = useState<string | null>(null)
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const _userInfo = useUserInfo()
+  const [loading, setLoading] = useState(_false)
+  const [generalError, setGeneralError] = useState<string | null>(_null)
+  const _form = useForm<FormData>({
+    resolver: zodResolver(_formSchema),
     defaultValues: {
       nombre: '',
       apellido: '',
@@ -64,9 +64,9 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
       comentario: '',
     },
   })
-  const handleSubmit = async (_data: FormData) => {
-    setLoading(true)
-    setGeneralError(null)
+  const _handleSubmit = async (_data: FormData) => {
+    setLoading(_true)
+    setGeneralError(_null)
     try {
       await createCamionero({
         nombre: data.nombre.trim(),
@@ -88,10 +88,10 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
     } catch {
       setGeneralError('Error al registrar el camionero')
     } finally {
-      setLoading(false)
+      setLoading(_false)
     }
   }
-  const nacionalidadValue = form.watch('nacionalidad')
+  const _nacionalidadValue = form.watch('nacionalidad')
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
@@ -103,7 +103,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(_handleSubmit)} className="space-y-4">
             {generalError && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -171,7 +171,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.entries(TIPOS_DOCUMENTO).map(([key, label]) => (
+                        {Object.entries(_TIPOS_DOCUMENTO).map(([key, label]) => (
                           <SelectItem key={key} value={key}>
                             {label}
                           </SelectItem>
@@ -222,7 +222,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.entries(NACIONALIDADES).map(([key, label]) => (
+                        {Object.entries(_NACIONALIDADES).map(([key, label]) => (
                           <SelectItem key={key} value={key}>
                             {label}
                           </SelectItem>
@@ -317,7 +317,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               name="comentario"
               render={(field ) => (
                 <FormItem>
-                  <FormLabel>Comentarios / Observaciones (opcional)</FormLabel>
+                  <FormLabel>Comentarios / Observaciones (_opcional)</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Ej: Chofer de confianza, siempre puntual..."

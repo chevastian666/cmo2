@@ -1,7 +1,7 @@
 /**
  * Configuración global de polling para la aplicación
  */
-export const POLLING_CONFIG = {
+export const _POLLING_CONFIG = {
   // Intervalos de actualización (en milisegundos)
   intervals: {
     map: 45000,          // 45 segundos - Mapa general
@@ -50,8 +50,8 @@ export const POLLING_CONFIG = {
  * Hook para obtener la configuración de polling según el contexto
  */
 export function usePollingConfig(context: 'map' | 'transit' | 'alerts' | 'dashboard' | 'critical') {
-  const interval = POLLING_CONFIG.intervals[context]
-  const options = POLLING_CONFIG.options
+  const _interval = POLLING_CONFIG.intervals[context]
+  const _options = POLLING_CONFIG.options
   return {
     interval,
     ...options,

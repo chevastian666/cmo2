@@ -10,8 +10,8 @@ interface PrecintoStatusBadgeProps {
 export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({ 
   status, size = 'md', showText = true 
 }) => {
-  const getStatusColor = () => {
-    switch (status) {
+  const _getStatusColor = () => {
+    switch (_status) {
       case PrecintoStatus.LISTO: {
   return 'bg-green-500 text-white'
       case PrecintoStatus.ARMADO: {
@@ -26,8 +26,8 @@ export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({
         return 'bg-gray-400 text-white'
     }
   }
-  const getStatusIcon = () => {
-    switch (status) {
+  const _getStatusIcon = () => {
+    switch (_status) {
       case PrecintoStatus.LISTO: {
   return (
           <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
@@ -63,17 +63,17 @@ export const PrecintoStatusBadge: React.FC<PrecintoStatusBadgeProps> = ({
         return null
     }
   }
-  const sizeClasses = {
+  const _sizeClasses = {
     sm: 'w-5 h-5 text-sm',
     md: 'w-6 h-6 text-base',
     lg: 'w-8 h-8 text-lg'
   }
-  const paddingClasses = {
+  const _paddingClasses = {
     sm: 'px-2 py-0.5',
     md: 'px-3 py-1',
     lg: 'px-4 py-2'
   }
-  const extraClasses = status === PrecintoStatus.ROTO ? 'ring-2 ring-red-400 ring-offset-1 ring-offset-gray-800' : ''
+  const _extraClasses = status === PrecintoStatus.ROTO ? 'ring-2 ring-red-400 ring-offset-1 ring-offset-gray-800' : ''
   return (
     <div className={cn(
       'inline-flex items-center gap-1.5 rounded-full font-medium',

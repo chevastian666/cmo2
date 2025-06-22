@@ -23,7 +23,7 @@ export interface Precinto {
   muestreoServidor?: number
 }
 
-export const PrecintoStatus = {
+export const _PrecintoStatus = {
   LISTO: 1,
   ARMADO: 2,
   ALARMA: 3,

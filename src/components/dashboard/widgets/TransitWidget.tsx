@@ -17,11 +17,14 @@ export const TransitWidget: React.FC = () => {
   const getEstadoColor = (estado: string) => {
     switch (estado) {
       case 'EN_TRANSITO': {
-  return 'text-green-400 bg-green-500/10'
+        return 'text-green-400 bg-green-500/10'
+      }
       case 'DETENIDO': {
-  return 'text-yellow-400 bg-yellow-500/10'
+        return 'text-yellow-400 bg-yellow-500/10'
+      }
       case 'COMPLETADO': {
-  return 'text-blue-400 bg-blue-500/10'
+        return 'text-blue-400 bg-blue-500/10'
+      }
       default: return 'text-gray-400 bg-gray-500/10'
     }
   }

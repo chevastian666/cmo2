@@ -126,7 +126,7 @@ export class GroupingService {
   /**
    * Extract alert pattern for grouping similar alerts
    */
-  private extractAlertPattern(notification: Notification): string | null {
+  private extractAlertPattern(_notification: Notification): string | null {
 
     // Common alert patterns
     const patterns = [

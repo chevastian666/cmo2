@@ -77,21 +77,21 @@ interface PrecintosTableProps {
 }
 
 export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = false }) => {
-  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null)
+  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(_null)
   const columns: ColumnDef<Precinto>[] = [
     {
       id: 'select',
       header: (table ) => (
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          onCheckedChange={(_value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
       ),
       cell: (row ) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          onCheckedChange={(_value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
       ),
@@ -111,7 +111,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         )
       },
       cell: ({ row }) => {
-        const precinto = row.original
+        const _precinto = row.original
         return (
           <div className="flex items-center gap-2">
             <Link2 className="h-4 w-4 text-blue-500" />
@@ -124,8 +124,8 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       accessorKey: 'estado',
       header: 'Estado',
       cell: ({ row }) => {
-        const estado = row.getValue('estado') as string
-        const variant = 
+        const _estado = row.getValue('estado') as string
+        const _variant = 
           estado === 'ACTIVO' ? 'success' :
           estado === 'ALERTA' ? 'destructive' :
           'secondary'
@@ -151,7 +151,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         )
       },
       cell: ({ row }) => {
-        const bateria = row.getValue('bateria') as number
+        const _bateria = row.getValue('bateria') as number
         return (
           <Popover>
             <PopoverTrigger asChild>
@@ -213,7 +213,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       header: 'Señal',
       cell: ({ row }) => {
         const señal = row.getValue('señal') as string
-        const color = 
+        const _color = 
           señal === 'BUENA' ? 'text-green-500' :
           señal === 'REGULAR' ? 'text-yellow-500' : 'text-red-500'
         return (
@@ -228,7 +228,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       accessorKey: 'ubicacion',
       header: 'Ubicación',
       cell: ({ row }) => {
-        const ubicacion = row.original.ubicacion
+        const _ubicacion = row.original.ubicacion
         return ubicacion ? (
           <Popover>
             <PopoverTrigger asChild>
@@ -275,7 +275,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       accessorKey: 'viaje',
       header: 'Viaje',
       cell: ({ row }) => {
-        const viaje = row.original.viaje
+        const _viaje = row.original.viaje
         return viaje ? (
           <div className="text-sm">
             <div className="font-medium">{viaje.numeroViaje}</div>
@@ -301,10 +301,10 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
         )
       },
       cell: ({ row }) => {
-        const fecha = row.getValue('ultimaActualizacion') as Date
-        const ahora = new Date()
-        const diff = ahora.getTime() - fecha.getTime()
-        const minutos = Math.floor(diff / 1000 / 60)
+        const _fecha = row.getValue('ultimaActualizacion') as Date
+        const _ahora = new Date()
+        const _diff = ahora.getTime() - fecha.getTime()
+        const _minutos = Math.floor(diff / 1000 / 60)
         let tiempo = ''
         if (minutos < 60) {
           tiempo = `Hace ${minutos} min`
@@ -323,7 +323,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const precinto = row.original
+        const _precinto = row.original
         return (<DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -333,7 +333,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setSelectedPrecinto(precinto)}>
+              <DropdownMenuItem onClick={() => setSelectedPrecinto(_precinto)}>
                 <Eye className="mr-2 h-4 w-4" />
                 Ver detalles
               </DropdownMenuItem>
@@ -352,7 +352,7 @@ export const PrecintosTableV2: React.FC<PrecintosTableProps> = ({ loading = fals
       },
     },
   ]
-  if (loading) {
+  if (_loading) {
     return <PrecintosTableSkeleton />
   }
 

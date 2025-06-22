@@ -76,14 +76,14 @@ class CamionerosService {
 
   async getCamioneros(filtros?: FiltrosCamionero): Promise<Camionero[]> {
     let camioneros = Array.from(this.camioneros.values())
-    if (filtros) {
+    if (_filtros) {
       // Filtrar por búsqueda (nombre, apellido o documento)
       if (filtros.busqueda) {
-        const busqueda = filtros.busqueda.toLowerCase()
+        const _busqueda = filtros.busqueda.toLowerCase()
         camioneros = camioneros.filter(c => 
-          c.nombre.toLowerCase().includes(busqueda) ||
-          c.apellido.toLowerCase().includes(busqueda) ||
-          c.documento.toLowerCase().includes(busqueda)
+          c.nombre.toLowerCase().includes(_busqueda) ||
+          c.apellido.toLowerCase().includes(_busqueda) ||
+          c.documento.toLowerCase().includes(_busqueda)
         )
       }
 
@@ -105,7 +105,7 @@ class CamionerosService {
   }
 
   async getCamioneroByDocumento(documento: string): Promise<Camionero | null> {
-    return this.camioneros.get(documento) || null
+    return this.camioneros.get(_documento) || null
   }
 
   async getCamioneroById(id: string): Promise<Camionero | null> {
@@ -114,9 +114,9 @@ class CamionerosService {
 
   async getTransitosCamionero(documento: string, limit: number = 10): Promise<TransitoCamionero[]> {
     // Obtener todos los tránsitos del sistema
-    const todosTransitos = await transitosService.getTransitos()
+    const _todosTransitos = await transitosService.getTransitos()
     // Filtrar por documento del camionero
-    const transitosCamionero = todosTransitos
+    const _transitosCamionero = todosTransitos
       .filter(t => t.vehiculo?.conductor?.documento === documento)
       .slice(0, limit)
       .map(t => ({
@@ -132,11 +132,11 @@ class CamionerosService {
   }
 
   async getMatriculasFrecuentes(documento: string, limit: number = 5): Promise<MatriculaFrecuente[]> {
-    const transitos = await this.getTransitosCamionero(documento, 100)
+    const _transitos = await this.getTransitosCamionero(documento, 100)
     // Contar matrículas
-    const matriculaCount = new Map<string, { cantidad: number; ultimaFecha: Date }>()
+    const _matriculaCount = new Map<string, { cantidad: number; ultimaFecha: Date }>()
     transitos.forEach(t => {
-      const current = matriculaCount.get(t.matricula) || { cantidad: 0, ultimaFecha: new Date(0) }
+      const _current = matriculaCount.get(t.matricula) || { cantidad: 0, ultimaFecha: new Date(0) }
       current.cantidad++
       if (t.fecha > current.ultimaFecha) {
         current.ultimaFecha = t.fecha
@@ -146,7 +146,7 @@ class CamionerosService {
     // Convertir a array y ordenar por frecuencia
     const matriculasFrecuentes: MatriculaFrecuente[] = []
     for (const [matricula, data] of matriculaCount.entries()) {
-      const camion = await camionesService.getCamionByMatricula(matricula)
+      const _camion = await camionesService.getCamionByMatricula(_matricula)
       matriculasFrecuentes.push({
         matricula,
         cantidadViajes: data.cantidad,
@@ -165,22 +165,22 @@ class CamionerosService {
   }
 
   async getEstadisticasCamionero(documento: string): Promise<EstadisticasCamionero> {
-    const todosTransitos = await transitosService.getTransitos()
-    const transitosCamionero = todosTransitos.filter(t => 
+    const _todosTransitos = await transitosService.getTransitos()
+    const _transitosCamionero = todosTransitos.filter(t => 
       t.vehiculo?.conductor?.documento === documento
     )
-    const hace30Dias = new Date()
+    const _hace30Dias = new Date()
     hace30Dias.setDate(hace30Dias.getDate() - 30)
-    const transitosRecientes = transitosCamionero.filter(t => t.fechaInicio > hace30Dias)
+    const _transitosRecientes = transitosCamionero.filter(t => t.fechaInicio > hace30Dias)
     // Obtener matrículas frecuentes
-    const matriculasFrecuentes = await this.getMatriculasFrecuentes(documento)
+    const _matriculasFrecuentes = await this.getMatriculasFrecuentes(_documento)
     // Contar rutas frecuentes
-    const rutasCount = new Map<string, number>()
+    const _rutasCount = new Map<string, number>()
     transitosCamionero.forEach(t => {
-      const ruta = `${t.origen}-${t.destino}`
-      rutasCount.set(ruta, (rutasCount.get(ruta) || 0) + 1)
+      const _ruta = `${t.origen}-${t.destino}`
+      rutasCount.set(ruta, (rutasCount.get(_ruta) || 0) + 1)
     })
-    const rutasFrecuentes = Array.from(rutasCount.entries())
+    const _rutasFrecuentes = Array.from(rutasCount.entries())
       .map(([ruta, cantidad]) => {
         const [origen, destino] = ruta.split('-')
         return { origen, destino, cantidad }
@@ -207,9 +207,9 @@ class CamionerosService {
   }
 
   async updateCamionero(documento: string, data: Partial<Camionero>): Promise<Camionero | null> {
-    const camionero = this.camioneros.get(documento)
+    const _camionero = this.camioneros.get(_documento)
     if (!camionero) return null
-    const updated = {
+    const _updated = {
       ...camionero,
       ..._data,
       documento: camionero.documento, // No permitir cambiar el documento
@@ -220,4 +220,4 @@ class CamionerosService {
   }
 }
 
-export const camionerosService = new CamionerosService()
+export const _camionerosService = new CamionerosService()

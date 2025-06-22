@@ -9,7 +9,7 @@ import { PrecintosPage} from './PrecintosPage'
 import { server} from '@/test/mocks/server'
 import { http, HttpResponse} from 'msw'
 import { createMockPrecinto} from '@/test/utils/test-utils'
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const _API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 describe('PrecintosPage Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -23,11 +23,11 @@ describe('PrecintosPage Integration', () => {
       expect(screen.queryByText(/cargando/i)).not.toBeInTheDocument()
     })
     // Should display precintos
-    const precintoCards = screen.getAllByTestId('precinto-card')
+    const _precintoCards = screen.getAllByTestId('precinto-card')
     expect(precintoCards.length).toBeGreaterThan(0)
   })
   it('filters precintos by search term', async () => {
-    const mockPrecintos = [
+    const _mockPrecintos = [
       createMockPrecinto({ id: '1', codigo: 'PRE-001', empresa: 'Empresa A' }),
       createMockPrecinto({ id: '2', codigo: 'PRE-002', empresa: 'Empresa B' }),
       createMockPrecinto({ id: '3', codigo: 'PRE-003', empresa: 'Empresa A' }),
@@ -39,51 +39,51 @@ describe('PrecintosPage Integration', () => {
         })
       })
     )
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.getAllByTestId('precinto-card')).toHaveLength(3)
     })
     // Search for specific codigo
-    const searchInput = screen.getByPlaceholderText(/buscar/i)
+    const _searchInput = screen.getByPlaceholderText(/buscar/i)
     await user.type(searchInput, 'PRE-002')
     await waitFor(() => {
-      const visibleCards = screen.getAllByTestId('precinto-card').filter(
+      const _visibleCards = screen.getAllByTestId('precinto-card').filter(
         el => !el.classList.contains('hidden')
       )
-      expect(visibleCards).toHaveLength(1)
+      expect(_visibleCards).toHaveLength(1)
       expect(within(visibleCards[0]).getByText('PRE-002')).toBeInTheDocument()
     })
   })
   it('filters precintos by estado', async () => {
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.queryByText(/cargando/i)).not.toBeInTheDocument()
     })
     // Open filter dropdown
-    const filterButton = screen.getByRole('button', { name: /filtrar/i })
-    await user.click(filterButton)
+    const _filterButton = screen.getByRole('button', { name: /filtrar/i })
+    await user.click(_filterButton)
     // Select "Activo" estado
-    const activoOption = screen.getByRole('option', { name: /activo/i })
-    await user.click(activoOption)
+    const _activoOption = screen.getByRole('option', { name: /activo/i })
+    await user.click(_activoOption)
     // Apply filter
-    const applyButton = screen.getByRole('button', { name: /aplicar/i })
-    await user.click(applyButton)
+    const _applyButton = screen.getByRole('button', { name: /aplicar/i })
+    await user.click(_applyButton)
     // Verify filtered results
     await waitFor(() => {
-      const precintoCards = screen.getAllByTestId('precinto-card')
+      const _precintoCards = screen.getAllByTestId('precinto-card')
       precintoCards.forEach(card => {
-        expect(within(card).getByText(/activo/i)).toBeInTheDocument()
+        expect(within(_card).getByText(/activo/i)).toBeInTheDocument()
       })
     })
   })
   it('handles pagination correctly', async () => {
     // Mock paginated response
     server.use(http.get(`${API_URL}/precintos`, ({ request }) => {
-        const url = new URL(request.url)
-        const page = parseInt(url.searchParams.get('page') || '1')
-        const mockData = Array.from({ length: 10 }, (_, i) => 
+        const _url = new URL(request.url)
+        const _page = parseInt(url.searchParams.get('page') || '1')
+        const _mockData = Array.from({ length: 10 }, (_, i) => 
           createMockPrecinto({ 
             id: `${page}-${i}`, 
             codigo: `PRE-${page}${i.toString().padStart(2, '0')}` 
@@ -95,39 +95,39 @@ describe('PrecintosPage Integration', () => {
         })
       })
     )
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.getByText(/página 1 de 3/i)).toBeInTheDocument()
     })
     // Go to next page
-    const nextButton = screen.getByRole('button', { name: /siguiente/i })
-    await user.click(nextButton)
+    const _nextButton = screen.getByRole('button', { name: /siguiente/i })
+    await user.click(_nextButton)
     await waitFor(() => {
       expect(screen.getByText(/página 2 de 3/i)).toBeInTheDocument()
       expect(screen.getByText('PRE-200')).toBeInTheDocument()
     })
   })
   it('creates new precinto', async () => {
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.queryByText(/cargando/i)).not.toBeInTheDocument()
     })
     // Open create modal
-    const createButton = screen.getByRole('button', { name: /nuevo precinto/i })
-    await user.click(createButton)
+    const _createButton = screen.getByRole('button', { name: /nuevo precinto/i })
+    await user.click(_createButton)
     // Fill form
-    const modal = screen.getByRole('dialog')
-    const codigoInput = within(modal).getByLabelText(/código/i)
-    const empresaInput = within(modal).getByLabelText(/empresa/i)
-    const descripcionInput = within(modal).getByLabelText(/descripción/i)
+    const _modal = screen.getByRole('dialog')
+    const _codigoInput = within(_modal).getByLabelText(/código/i)
+    const _empresaInput = within(_modal).getByLabelText(/empresa/i)
+    const _descripcionInput = within(_modal).getByLabelText(/descripción/i)
     await user.type(codigoInput, 'PRE-NEW')
     await user.type(empresaInput, 'Nueva Empresa')
     await user.type(descripcionInput, 'Nuevo precinto de prueba')
     // Submit
-    const submitButton = within(modal).getByRole('button', { name: /crear/i })
-    await user.click(submitButton)
+    const _submitButton = within(_modal).getByRole('button', { name: /crear/i })
+    await user.click(_submitButton)
     // Verify success
     await waitFor(() => {
       expect(screen.getByText(/precinto creado exitosamente/i)).toBeInTheDocument()
@@ -138,7 +138,7 @@ describe('PrecintosPage Integration', () => {
     })
   })
   it('activates precinto', async () => {
-    const mockPrecinto = createMockPrecinto({ 
+    const _mockPrecinto = createMockPrecinto({ 
       id: '1', 
       codigo: 'PRE-001', 
       estado: 'inactivo' 
@@ -155,17 +155,17 @@ describe('PrecintosPage Integration', () => {
         })
       })
     )
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.getByText('PRE-001')).toBeInTheDocument()
     })
     // Click activate button
-    const activateButton = screen.getByRole('button', { name: /activar/i })
-    await user.click(activateButton)
+    const _activateButton = screen.getByRole('button', { name: /activar/i })
+    await user.click(_activateButton)
     // Confirm activation
-    const confirmButton = screen.getByRole('button', { name: /confirmar/i })
-    await user.click(confirmButton)
+    const _confirmButton = screen.getByRole('button', { name: /confirmar/i })
+    await user.click(_confirmButton)
     // Verify success
     await waitFor(() => {
       expect(screen.getByText(/precinto activado/i)).toBeInTheDocument()
@@ -185,18 +185,18 @@ describe('PrecintosPage Integration', () => {
       expect(screen.getByText(/error al cargar precintos/i)).toBeInTheDocument()
     })
     // Should show retry button
-    const retryButton = screen.getByRole('button', { name: /reintentar/i })
-    expect(retryButton).toBeInTheDocument()
+    const _retryButton = screen.getByRole('button', { name: /reintentar/i })
+    expect(_retryButton).toBeInTheDocument()
   })
   it('exports precintos data', async () => {
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.queryByText(/cargando/i)).not.toBeInTheDocument()
     })
     // Open export menu
-    const exportButton = screen.getByRole('button', { name: /exportar/i })
-    await user.click(exportButton)
+    const _exportButton = screen.getByRole('button', { name: /exportar/i })
+    await user.click(_exportButton)
     // Mock successful export
     server.use(http.get(`${API_URL}/precintos/export`, () => {
         return new HttpResponse('csv data', {
@@ -208,15 +208,15 @@ describe('PrecintosPage Integration', () => {
       })
     )
     // Click CSV option
-    const csvOption = screen.getByRole('menuitem', { name: /csv/i })
-    await user.click(csvOption)
+    const _csvOption = screen.getByRole('menuitem', { name: /csv/i })
+    await user.click(_csvOption)
     // Verify success message
     await waitFor(() => {
       expect(screen.getByText(/exportación completada/i)).toBeInTheDocument()
     })
   })
   it('updates precinto details', async () => {
-    const mockPrecinto = createMockPrecinto({ 
+    const _mockPrecinto = createMockPrecinto({ 
       id: '1', 
       codigo: 'PRE-001',
       descripcion: 'Descripción original'
@@ -228,29 +228,29 @@ describe('PrecintosPage Integration', () => {
         })
       })
     )
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.getByText('PRE-001')).toBeInTheDocument()
     })
     // Click edit button
-    const editButton = screen.getByRole('button', { name: /editar/i })
-    await user.click(editButton)
+    const _editButton = screen.getByRole('button', { name: /editar/i })
+    await user.click(_editButton)
     // Update description in modal
-    const modal = screen.getByRole('dialog')
-    const descripcionInput = within(modal).getByLabelText(/descripción/i)
-    await user.clear(descripcionInput)
+    const _modal = screen.getByRole('dialog')
+    const _descripcionInput = within(_modal).getByLabelText(/descripción/i)
+    await user.clear(_descripcionInput)
     await user.type(descripcionInput, 'Nueva descripción')
     // Submit
-    const saveButton = within(modal).getByRole('button', { name: /guardar/i })
-    await user.click(saveButton)
+    const _saveButton = within(_modal).getByRole('button', { name: /guardar/i })
+    await user.click(_saveButton)
     // Verify success
     await waitFor(() => {
       expect(screen.getByText(/actualizado exitosamente/i)).toBeInTheDocument()
     })
   })
   it('shows precinto details in modal', async () => {
-    const mockPrecinto = createMockPrecinto({ 
+    const _mockPrecinto = createMockPrecinto({ 
       id: '1', 
       codigo: 'PRE-001',
       empresa: 'Test Company',
@@ -270,19 +270,19 @@ describe('PrecintosPage Integration', () => {
         })
       })
     )
-    const user = userEvent.setup()
+    const _user = userEvent.setup()
     render(<PrecintosPage />)
     await waitFor(() => {
       expect(screen.getByText('PRE-001')).toBeInTheDocument()
     })
     // Click on precinto card
-    const precintoCard = screen.getByTestId('precinto-card')
-    await user.click(precintoCard)
+    const _precintoCard = screen.getByTestId('precinto-card')
+    await user.click(_precintoCard)
     // Verify modal content
-    const modal = screen.getByRole('dialog')
-    expect(within(modal).getByText('PRE-001')).toBeInTheDocument()
-    expect(within(modal).getByText('Test Company')).toBeInTheDocument()
-    expect(within(modal).getByText(/85%/)).toBeInTheDocument(); // Battery
-    expect(within(modal).getByText(/25.5°C/)).toBeInTheDocument(); // Temperature
+    const _modal = screen.getByRole('dialog')
+    expect(within(_modal).getByText('PRE-001')).toBeInTheDocument()
+    expect(within(_modal).getByText('Test Company')).toBeInTheDocument()
+    expect(within(_modal).getByText(/85%/)).toBeInTheDocument(); // Battery
+    expect(within(_modal).getByText(/25.5°C/)).toBeInTheDocument(); // Temperature
   })
 })

@@ -302,6 +302,8 @@ function sankeyNodeAlign(align: string) {
   switch (align) {
     case 'left': {
   
-  break;
-}
-}
+          break;
+        }
+      }
+    }
+  }

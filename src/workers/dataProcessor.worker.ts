@@ -266,15 +266,15 @@ export class DataProcessor {
   date.setSeconds(0, 0)
         break
     }
-    case 'hour':
+      case 'hour': {
         date.setMinutes(0, 0, 0)
         break
-    }
-    case 'day':
+      }
+      case 'day': {
         date.setHours(0, 0, 0, 0)
         break
-    }
-    case 'week': {
+      }
+      case 'week': {
         const dayOfWeek = date.getDay()
         date.setDate(date.getDate() - dayOfWeek)
         date.setHours(0, 0, 0, 0)

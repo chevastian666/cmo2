@@ -103,7 +103,7 @@ export interface Alerta {
   atendida: boolean
 }
 
-export const TIPOS_ALERTA = {
+export const _TIPOS_ALERTA = {
   AAR: 'Atraso en arribo de reporte',
   BBJ: 'Batería baja',
   DEM: 'Demorado',

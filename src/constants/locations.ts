@@ -1,4 +1,4 @@
-export const ORIGENES_DESTINOS = [
+export const _ORIGENES_DESTINOS = [
   'Montevideo',
   'Nueva Palmira',
   'Colonia',
@@ -65,7 +65,7 @@ export const ORIGENES_DESTINOS = [
   'Puerto Sauce',
   'Puerto Fray Bentos'
 ]
-export const DESPACHANTES = [
+export const _DESPACHANTES = [
   'SKUNCA SPINELLI CAROLINA',
   'SCHRAMM CANABAL AGUSTINA',
   'ZUGASTI BARRIO FERNANDO LUIS',

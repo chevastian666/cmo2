@@ -12,19 +12,19 @@ interface FichaCamioneroProps {
 }
 
 export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose }) => {
-  const userInfo = useUserInfo()
-  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
+  const _userInfo = useUserInfo()
+  const _canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamionero(documento)
+    selectCamionero(_documento)
     return () => clearSelection()
   }, [documento])
-  const handleExportarHistorial = () => {
+  const _handleExportarHistorial = () => {
     if (!transitosCamionero.length) {
       notificationService.warning('Sin datos', 'No hay tránsitos para exportar')
       return
     }
 
-    const datos = transitosCamionero.map(t => ({
+    const _datos = transitosCamionero.map(t => ({
       Fecha: new Date(t.fecha).toLocaleDateString('es-UY'),
       Hora: new Date(t.fecha).toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' }),
       Matrícula: t.matricula,
@@ -33,7 +33,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
       Estado: t.estado,
       Precinto: t.precinto
     }))
-    const nombreArchivo = camioneroSeleccionado 
+    const _nombreArchivo = camioneroSeleccionado 
       ? `historial_${camioneroSeleccionado.nombre}_${camioneroSeleccionado.apellido}_${new Date().toISOString().split('T')[0]}`
       : 'historial_camionero'
     exportToCSV(datos, nombreArchivo)
@@ -153,7 +153,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   </label>
                   <textarea
                     value={camioneroSeleccionado.comentario || ''}
-                    onChange={(e) => updateCamionero(documento, { comentario: e.target.value })}
+                    onChange={(_e) => updateCamionero(documento, { comentario: e.target.value })}
                     placeholder="Agregar comentarios..."
                     className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={4}
@@ -225,8 +225,8 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {matriculasFrecuentes.map((matricula) => {
-                    const estadoConfig = matricula.camion?.estado 
+                  {matriculasFrecuentes.map((_matricula) => {
+                    const _estadoConfig = matricula.camion?.estado 
                       ? ESTADOS_CAMION[matricula.camion.estado as keyof typeof ESTADOS_CAMION]
                       : null
                     return (
@@ -295,7 +295,7 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                       </tr>
                     </thead>
                     <tbody>
-                      {transitosCamionero.map((transito) => (
+                      {transitosCamionero.map((_transito) => (
                         <tr key={transito.id} className="border-b border-gray-800 hover:bg-gray-800/50">
                           <td className="py-3 px-4">
                             <div className="text-sm text-white">

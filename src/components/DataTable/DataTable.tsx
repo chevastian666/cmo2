@@ -39,6 +39,7 @@ export function DataTable<T extends Record<string, unknown>>({
   const [filters, setFilters] = useState<Record<string, unknown>>({})
   const [showFilters, setShowFilters] = useState(false)
   // Filter data
+   
   const filteredData = useMemo(() => {
     let filtered = [...data]
     // Apply search
@@ -92,6 +93,7 @@ export function DataTable<T extends Record<string, unknown>>({
   }, [data, filters, columns])
   // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage)
+   
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage
     return filteredData.slice(start, start + itemsPerPage)

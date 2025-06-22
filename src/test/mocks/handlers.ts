@@ -4,9 +4,9 @@
  */
 import { http, HttpResponse} from 'msw'
 import { faker} from '@faker-js/faker'
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const _API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 // Generar datos mock
-const generateMockPrecinto = () => ({
+const _generateMockPrecinto = () => ({
   id: faker.string.uuid(),
   codigo: `PRE-${faker.number.int({ min: 1000, max: 9999 })}`,
   estado: faker.helpers.arrayElement(['activo', 'en_transito', 'completado', 'inactivo']),
@@ -20,7 +20,7 @@ const generateMockPrecinto = () => ({
   bateria: faker.number.int({ min: 0, max: 100 }),
   temperatura: faker.number.float({ min: -10, max: 40, fractionDigits: 1 }),
 })
-const generateMockTransito = () => ({
+const _generateMockTransito = () => ({
   id: faker.string.uuid(),
   codigo: `TRN-${faker.number.int({ min: 1000, max: 9999 })}`,
   estado: faker.helpers.arrayElement(['en_curso', 'completado', 'retrasado', 'pendiente']),
@@ -39,7 +39,7 @@ const generateMockTransito = () => ({
     documento: faker.string.numeric(8),
   },
 })
-const generateMockAlerta = () => ({
+const _generateMockAlerta = () => ({
   id: faker.string.uuid(),
   tipo: faker.helpers.arrayElement(['temperatura', 'bateria', 'desviacion_ruta', 'apertura_no_autorizada']),
   severidad: faker.helpers.arrayElement(['critica', 'alta', 'media', 'baja']),
@@ -48,10 +48,10 @@ const generateMockAlerta = () => ({
   precinto_id: faker.string.uuid(),
   estado: faker.helpers.arrayElement(['activa', 'reconocida', 'resuelta']),
 })
-export const handlers = [
+export const _handlers = [
   // Auth endpoints
   http.post(`${API_URL}/auth/login`, async () => {
-    const body = await request.json()
+    const _body = await request.json()
     const { email } = body as { email: string; password: string }
     if (email === 'test@cmo.com' && password === 'test123') {
       return HttpResponse.json({
@@ -75,10 +75,10 @@ export const handlers = [
 
   // Precintos endpoints
   http.get(`${API_URL}/precintos`, ({ request }) => {
-    const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page') || '1')
-    const limit = parseInt(url.searchParams.get('limit') || '10')
-    const precintos = Array.from({ length: limit }, generateMockPrecinto)
+    const _url = new URL(request.url)
+    const _page = parseInt(url.searchParams.get('page') || '1')
+    const _limit = parseInt(url.searchParams.get('limit') || '10')
+    const _precintos = Array.from({ length: limit }, generateMockPrecinto)
     return HttpResponse.json({
       data: precintos,
       pagination: {
@@ -111,10 +111,10 @@ export const handlers = [
 
   // Transitos endpoints
   http.get(`${API_URL}/transitos`, ({ request }) => {
-    const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page') || '1')
-    const limit = parseInt(url.searchParams.get('limit') || '10')
-    const transitos = Array.from({ length: limit }, generateMockTransito)
+    const _url = new URL(request.url)
+    const _page = parseInt(url.searchParams.get('page') || '1')
+    const _limit = parseInt(url.searchParams.get('limit') || '10')
+    const _transitos = Array.from({ length: limit }, generateMockTransito)
     return HttpResponse.json({
       data: transitos,
       pagination: {
@@ -137,10 +137,10 @@ export const handlers = [
 
   // Alertas endpoints
   http.get(`${API_URL}/alertas`, ({ request }) => {
-    const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page') || '1')
-    const limit = parseInt(url.searchParams.get('limit') || '10')
-    const alertas = Array.from({ length: limit }, generateMockAlerta)
+    const _url = new URL(request.url)
+    const _page = parseInt(url.searchParams.get('page') || '1')
+    const _limit = parseInt(url.searchParams.get('limit') || '10')
+    const _alertas = Array.from({ length: limit }, generateMockAlerta)
     return HttpResponse.json({
       data: alertas,
       pagination: {

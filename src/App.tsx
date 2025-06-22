@@ -14,46 +14,46 @@ import { LoadingOverlay} from './components/ui/LoadingState'
 import { ProtectedRoute} from './components/ProtectedRoute'
 import './utils/clearDashboardLayout'
 // Lazy load heavy components
-// const ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })))
-const ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'))
-const ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })))
-const PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })))
-const TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'))
-const PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })))
-const ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })))
-const AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'))
-const DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })))
-const DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })))
-const ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })))
-// const TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })))
-const TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
-const CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
-// const LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'))
-const BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
-const CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
-const DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })))
-const AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })))
-const CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })))
-const ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })))
-const RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })))
-const SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })))
-const ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'))
-const InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'))
-const DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'))
-const InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'))
-const AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'))
-const SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'))
-// const SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'))
-const AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'))
-// const TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'))
-const TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'))
-const TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'))
-const TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'))
-const TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'))
-const D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })))
-const NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })))
-const PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })))
-const IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })))
+// const _ArmadoPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoPage })))
+const _ArmadoPageV2 = lazy(() => import('./features/armado/pages/ArmadoPageV2'))
+const _ArmadoWaitingPage = lazy(() => import('./features/armado').then(m => ({ default: m.ArmadoWaitingPage })))
+const _PrearmadoPage = lazy(() => import('./features/prearmado').then(m => ({ default: m.PrearmadoPage })))
+const _TransitosPageV2 = lazy(() => import('./features/transitos/pages/TransitosPageV2'))
+const _PrecintosPage = lazy(() => import('./features/precintos').then(m => ({ default: m.PrecintosPage })))
+const _ErrorBoundary = lazy(() => import('./features/precintos').then(m => ({ default: m.ErrorBoundary })))
+const _AlertasPageV2 = lazy(() => import('./features/alertas/pages/AlertasPageV2'))
+const _DespachantesPage = lazy(() => import('./features/despachantes').then(m => ({ default: m.DespachantesPage })))
+const _DepositosPage = lazy(() => import('./features/depositos').then(m => ({ default: m.DepositosPage })))
+const _ZonasDescansoPage = lazy(() => import('./features/zonas-descanso').then(m => ({ default: m.ZonasDescansoPage })))
+// const _TorreControl = lazy(() => import('./features/torre-control/components/TorreControl').then(m => ({ default: m.TorreControl })))
+const _TorreControlV2 = lazy(() => import('./features/torre-control/components/TorreControlV2'))
+const _CentroDocumentacion = lazy(() => import('./features/documentacion').then(m => ({ default: m.CentroDocumentacion })))
+// const _LibroNovedadesPageV2 = lazy(() => import('./features/novedades/pages/LibroNovedadesPageV2'))
+const _BitacoraOperacional = lazy(() => import('./features/novedades').then(m => ({ default: m.BitacoraOperacional })))
+const _CamionesPage = lazy(() => import('./features/camiones/pages/CamionesPage').then(m => ({ default: m.CamionesPage })))
+const _DesignTokensDemo = lazy(() => import('./components/ui/DesignTokensDemo').then(m => ({ default: m.DesignTokensDemo })))
+const _AnimationsDemo = lazy(() => import('./components/animations/AnimationsDemo').then(m => ({ default: m.AnimationsDemo })))
+const _CamionerosPage = lazy(() => import('./features/camioneros/pages/CamionerosPage').then(m => ({ default: m.CamionerosPage })))
+const _ModoTVPage = lazy(() => import('./features/modo-tv/pages/ModoTVPage').then(m => ({ default: m.ModoTVPage })))
+const _RolesPage = lazy(() => import('./features/roles').then(m => ({ default: m.RolesPage })))
+const _SubPanelesPage = lazy(() => import('./features/sub-paneles').then(m => ({ default: m.SubPanelesPage })))
+const _ShadcnDemo = lazy(() => import('./components/ui/ShadcnDemo'))
+const _InteractiveDashboard = lazy(() => import('./features/dashboard/InteractiveDashboard'))
+const _DashboardTest = lazy(() => import('./features/dashboard/DashboardTest'))
+const _InteractiveSankeyDashboard = lazy(() => import('./features/analytics/components/InteractiveSankeyDashboard'))
+const _AnalyticsTest = lazy(() => import('./features/analytics/components/AnalyticsTest'))
+const _SankeyMinimal = lazy(() => import('./features/analytics/components/SankeyMinimal'))
+// const _SimpleAnalytics = lazy(() => import('./features/analytics/components/SimpleAnalytics'))
+const _AnalyticsErrorBoundary = lazy(() => import('./features/analytics/components/AnalyticsErrorBoundary'))
+// const _TreemapDashboard = lazy(() => import('./features/analytics/components/TreemapDashboard'))
+const _TreemapDashboardSimple = lazy(() => import('./features/analytics/components/TreemapDashboardSimple'))
+const _TreemapStatic = lazy(() => import('./features/analytics/components/TreemapStatic'))
+const _TreemapTest = lazy(() => import('./features/analytics/components/TreemapTest'))
+const _TreemapFixed = lazy(() => import('./features/analytics/components/TreemapFixed'))
+const _D3VisualizationsDemo = lazy(() => import('./features/dashboard/pages/D3VisualizationsDemo').then(m => ({ default: m.D3VisualizationsDemo })))
+const _NotificationSystemDemo = lazy(() => import('./features/notifications/pages/NotificationSystemDemo').then(m => ({ default: m.NotificationSystemDemo })))
+const _PerformanceDemo = lazy(() => import('./features/performance/pages/PerformanceDemo').then(m => ({ default: m.PerformanceDemo })))
+const _IntegrationsManagementPage = lazy(() => import('./features/integrations/pages/IntegrationsManagementPage').then(m => ({ default: m.default })))
 import { initializeStores, setupAutoRefresh} from './store'
 import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedIntegration'
 import { useWebSocket} from './hooks/useWebSocket'
@@ -64,7 +64,7 @@ import { Toaster} from '@/components/ui/toaster'
 import GlobalErrorBoundary from './components/GlobalErrorBoundary'
 // import TreemapDirect from './features/analytics/components/TreemapDirect'
 import './App.css'
-const queryClient = new QueryClient({
+const _queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5000,
@@ -95,26 +95,26 @@ function App() {
     // Set up notification handlers for real-time events
     const unsubscribers: (() => void)[] = []
     // New alert notifications
-    unsubscribers.push(sharedWebSocketService.onAlertNew((_data) => {
+    unsubscribers.push(sharedWebSocketService.onAlertNew((__data) => {
         notificationService.newAlert(_data.alert || _data)
       })
     )
     // Transit delay notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (_data) => {
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (__data) => {
         if (_data.status === 'delayed') {
           notificationService.transitDelayed(_data.transit)
         }
       })
     )
     // CMO message notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (_data) => {
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (__data) => {
         notificationService.cmoMessage(_data.message || _data)
       })
     )
     // Initialize stores and fetch initial data
     initializeStores()
     // Set up auto-refresh intervals (as fallback)
-    const cleanup = setupAutoRefresh()
+    const _cleanup = setupAutoRefresh()
     return () => {
       unsubscribers.forEach(unsub => unsub())
       cleanup?.()

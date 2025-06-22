@@ -16,6 +16,7 @@ export const DataTransition: React.FC<DataTransitionProps> = ({
   children, dataKey, className = '' 
 }) => {
   const [isVisible, setIsVisible] = useState(true)
+   
   useEffect(() => {
     // Trigger re-animation when dataKey changes
     if (dataKey !== undefined) {

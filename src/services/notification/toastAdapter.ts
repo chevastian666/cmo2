@@ -68,13 +68,14 @@ export class ToastNotificationAdapter {
   this.success(message, undefined, options)
         break
     }
-    case 'error':
+      case 'error': {
         this.error(message, undefined, options)
         break
-    }
-    case 'warning':
+      }
+      case 'warning': {
         this.warning(message, undefined, options)
         break
+      }
       default:
         this.info(message, undefined, options)
     }

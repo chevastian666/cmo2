@@ -25,43 +25,43 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
   const [sortField, setSortField] = useState<SortField>('id')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
-  const handleSort = (field: SortField) => {
+  const _itemsPerPage = 10
+  const _handleSort = (field: SortField) => {
     if (field === sortField) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(field)
+      setSortField(_field)
       setSortDirection('asc')
     }
   }
-  const sortedPrecintos = [...precintos].sort((a, b) => {
+  const _sortedPrecintos = [...precintos].sort((a, b) => {
     let aValue = a[sortField]
     let bValue = b[sortField]
     if (aValue === undefined) aValue = ''
     if (bValue === undefined) bValue = ''
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortDirection === 'asc' 
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue)
+        ? aValue.localeCompare(_bValue)
+        : bValue.localeCompare(_aValue)
     }
 
     if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
     if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
     return 0
   })
-  const paginatedPrecintos = sortedPrecintos.slice(
+  const _paginatedPrecintos = sortedPrecintos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
-  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
-  const SortIcon = ({ field }: { field: SortField }) => {
+  const _totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
+  const _SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) return <div className="w-4 h-4" />
     return sortDirection === 'asc' ? 
       <ChevronUp className="h-4 w-4" /> : 
       <ChevronDown className="h-4 w-4" />
   }
-  const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (<th 
-      onClick={() => handleSort(field)}
+  const _SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (<th 
+      onClick={() => handleSort(_field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
     >
       <div className="flex items-center gap-1">
@@ -70,7 +70,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
       </div>
     </th>
   )
-  if (loading) {
+  if (_loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-8 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
@@ -112,7 +112,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {paginatedPrecintos.map((precinto) => (
+            {paginatedPrecintos.map((_precinto) => (
               <tr key={precinto.id} className={cn(
                 "hover:bg-gray-700/50 transition-colors",
                 precinto.status === PrecintoStatus.ROTO && "bg-red-900/20 hover:bg-red-900/30"
@@ -165,7 +165,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewDetail(precinto)}
+                      onClick={() => onViewDetail(_precinto)}
                       title="Ver detalle"
                       aria-label={`Ver detalle del precinto ${precinto.codigo}`}
                     >
@@ -174,7 +174,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     {precinto.gps && (<Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onViewMap(precinto)}
+                        onClick={() => onViewMap(_precinto)}
                         title="Ver en mapa"
                         aria-label={`Ver ubicación del precinto ${precinto.codigo} en el mapa`}
                       >
@@ -184,7 +184,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onSendCommand(precinto)}
+                      onClick={() => onSendCommand(_precinto)}
                       title="Enviar comando"
                       aria-label={`Enviar comando al precinto ${precinto.codigo}`}
                     >
@@ -193,7 +193,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewHistory(precinto)}
+                      onClick={() => onViewHistory(_precinto)}
                       title="Ver historial"
                       aria-label={`Ver historial del precinto ${precinto.codigo}`}
                     >
@@ -202,7 +202,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                     {onMarkAsBroken && precinto.status !== PrecintoStatus.ROTO && (<Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onMarkAsBroken(precinto)}
+                        onClick={() => onMarkAsBroken(_precinto)}
                         title="Marcar como roto"
                       >
                         <XCircle className="h-4 w-4 text-orange-400" />
@@ -245,7 +245,7 @@ export const PrecintoTable: React.FC<PrecintoTableProps> = ({
                   <Button
                     size="sm"
                     variant={page === currentPage ? "default" : "secondary"}
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => setCurrentPage(_page)}
                   >
                     {page}
                   </Button>

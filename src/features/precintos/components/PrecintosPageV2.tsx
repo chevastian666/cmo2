@@ -54,8 +54,8 @@ const PrecintoRow: React.FC<{
   onView: (precinto: Precinto) => void
   index: number
 }> = ({ precinto, onView, index }) => {
-  const getEstadoColor = (estado: string) => {
-    switch (estado) {
+  const _getEstadoColor = (estado: string) => {
+    switch (_estado) {
       case 'ACTIVO': {
   return 'success'
       case 'INACTIVO': {
@@ -126,7 +126,7 @@ const PrecintoRow: React.FC<{
         <AnimatedButton
           variant="ghost"
           size="sm"
-          onClick={() => onView(precinto)}
+          onClick={() => onView(_precinto)}
         >
           Ver detalles
         </AnimatedButton>
@@ -143,10 +143,10 @@ const PrecintosPageV2: React.FC = () => {
     fetchPrecintos()
   }, [fetchPrecintos])
   // Filtrar y ordenar precintos
-  const filteredPrecintos = React.useMemo(() => {
+  const _filteredPrecintos = React.useMemo(() => {
     let filtered = [...precintos]
     // Filtro por búsqueda
-    if (searchTerm) {
+    if (_searchTerm) {
       filtered = filtered.filter(p => 
         p.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.ubicacion?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -160,7 +160,7 @@ const PrecintosPageV2: React.FC = () => {
 
     // Ordenamiento
     filtered.sort((a, b) => {
-      switch (sortBy) {
+      switch (_sortBy) {
         case 'codigo': {
   return a.codigo.localeCompare(b.codigo)
         case 'estado': {
@@ -175,16 +175,16 @@ const PrecintosPageV2: React.FC = () => {
     return filtered
   }, [precintos])
   // KPIs
-  const kpis = React.useMemo(() => ({
+  const _kpis = React.useMemo(() => ({
     total: precintos.length,
     activos: precintosActivos.length,
     conAlertas: getPrecintosConAlertas().length,
     bajaBateria: getPrecintosBajaBateria().length
   }), [precintos, precintosActivos, getPrecintosConAlertas, getPrecintosBajaBateria])
-  const handleExport = () => {
+  const _handleExport = () => {
     exportToExcel(filteredPrecintos, 'precintos')
   }
-  const handleViewPrecinto = (precinto: Precinto) => {
+  const _handleViewPrecinto = (precinto: Precinto) => {
     // Implementar vista de detalle o modal
     console.log('Ver precinto:', precinto)
   }
@@ -236,7 +236,7 @@ const PrecintosPageV2: React.FC = () => {
                   <Input
                     placeholder="Buscar por código o ubicación..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="bg-gray-800 border-gray-700"
                     icon={<Filter className="h-4 w-4 text-gray-400" />}
                   />
