@@ -3,12 +3,12 @@
  * Jira, ServiceNow, and other ticketing platforms
  * By Cheva
  */
-export interface TicketingConfig { /* TODO: Complete implementation */ }
+export interface TicketingConfig {
   id: string
   name: string
   type: 'jira' | 'servicenow' | 'freshdesk' | 'zendesk' | 'generic'
   base_url: string
-  authentication: { /* TODO: Complete implementation */ }
+  authentication: {
     type: 'basic' | 'bearer' | 'api_key' | 'oauth2'
     username?: string
     password?: string
@@ -25,7 +25,7 @@ export interface TicketingConfig { /* TODO: Complete implementation */ }
   active: boolean
   created: Date
 }
-export interface TicketData { /* TODO: Complete implementation */ }
+export interface TicketData {
   title: string
   description: string
   priority: 'Low' | 'Medium' | 'High' | 'Critical'
@@ -34,151 +34,151 @@ export interface TicketData { /* TODO: Complete implementation */ }
   assignee?: string
   labels?: string[]
   custom_fields?: Record<string, unknown>
-  attachments?: Array<{ /* TODO: Complete implementation */ }
+  attachments?: Array<{
     name: string
     content: string
     mime_type: string
   }>
 }
-export interface CreatedTicket { /* TODO: Complete implementation */ }
+export interface CreatedTicket {
   id: string
   key: string
   url: string
   status: string
   created_at: Date
 }
-class TicketingService { /* TODO: Complete implementation */ }
+class TicketingService {
   private configs = new Map<string, TicketingConfig>()
   private ticketCache = new Map<string, CreatedTicket>()
   // Configuration management
-  async createTicketingConfig(config: Omit<TicketingConfig, 'id' | 'created'>): Promise<TicketingConfig> { /* TODO: Complete implementation */ }
-    const ticketingConfig: TicketingConfig = { /* TODO: Complete implementation */ }
+  async createTicketingConfig(config: Omit<TicketingConfig, 'id' | 'created'>): Promise<TicketingConfig> {
+    const ticketingConfig: TicketingConfig = {
       ...config,
       id: this.generateId(),
       created: new Date()
     }
     // Test the connection
-    await this.testConnection(_ticketingConfig)
+    await this.testConnection(ticketingConfig)
     this.configs.set(ticketingConfig.id, ticketingConfig)
     this.saveTicketingConfigs()
     return ticketingConfig
   }
-  updateTicketingConfig(id: string, updates: Partial<TicketingConfig>): TicketingConfig | null { /* TODO: Complete implementation */ }
-    const config = this.configs.get(_id)
+  updateTicketingConfig(id: string, updates: Partial<TicketingConfig>): TicketingConfig | null {
+    const config = this.configs.get(id)
     if (!config) return null
     const updatedConfig = { ...config, ...updates }
-    this.configs.set(_id, updatedConfig)
+    this.configs.set(id, updatedConfig)
     this.saveTicketingConfigs()
     return updatedConfig
   }
-  deleteTicketingConfig(id: string): boolean { /* TODO: Complete implementation */ }
-    const deleted = this.configs.delete(_id)
-    if (_deleted) { /* TODO: Complete implementation */ }
+  deleteTicketingConfig(id: string): boolean {
+    const deleted = this.configs.delete(id)
+    if (deleted) {
       this.saveTicketingConfigs()
     }
     return deleted
   }
-  getTicketingConfig(id: string): TicketingConfig | null { /* TODO: Complete implementation */ }
-    return this.configs.get(_id) || null
+  getTicketingConfig(id: string): TicketingConfig | null {
+    return this.configs.get(id) || null
   }
-  getAllTicketingConfigs(): TicketingConfig[] { /* TODO: Complete implementation */ }
+  getAllTicketingConfigs(): TicketingConfig[] {
     return Array.from(this.configs.values())
   }
-  getActiveTicketingConfigs(): TicketingConfig[] { /* TODO: Complete implementation */ }
+  getActiveTicketingConfigs(): TicketingConfig[] {
     return this.getAllTicketingConfigs().filter(config => config.active)
   }
   // Ticket creation
-  async createTicketForAlert(alertType: string, alert: unknown): Promise<CreatedTicket[]> { /* TODO: Complete implementation */ }
+  async createTicketForAlert(alertType: string, alert: any): Promise<CreatedTicket[]> {
     const activeConfigs = this.getActiveTicketingConfigs()
       .filter(config =>
         config.auto_create_tickets &&
-        config.alert_types.includes(_alertType)
+        config.alert_types.includes(alertType)
       )
     if (activeConfigs.length === 0) return []
-    const promises = activeConfigs.map(async config => { /* TODO: Complete implementation */ }
-      const ticketData = this.formatAlertAsTicket(_alert, alertType, config)
-      return this.createTicket(_config, ticketData)
+    const promises = activeConfigs.map(async config => {
+      const ticketData = this.formatAlertAsTicket(alert, alertType, config)
+      return this.createTicket(config, ticketData)
     })
-    const results = await Promise.allSettled(_promises)
+    const results = await Promise.allSettled(promises)
     return results
       .filter(result => result.status === 'fulfilled')
       .map(result => (result as PromiseFulfilledResult<CreatedTicket>).value)
   }
-  async createTicket(config: TicketingConfig, ticketData: TicketData): Promise<CreatedTicket> { /* TODO: Complete implementation */ }
-    const payload = this.formatTicketForPlatform(_config, ticketData)
-    const headers = this.getAuthHeaders(_config)
-    try { /* TODO: Complete implementation */ }
-      const response = await fetch(this.getCreateTicketUrl(_config), { /* TODO: Complete implementation */ }
+  async createTicket(config: TicketingConfig, ticketData: TicketData): Promise<CreatedTicket> {
+    const payload = this.formatTicketForPlatform(config, ticketData)
+    const headers = this.getAuthHeaders(config)
+    try {
+      const response = await fetch(this.getCreateTicketUrl(config), {
         method: 'POST',
-        headers: { /* TODO: Complete implementation */ }
+        headers: {
           'Content-Type': 'application/json',
           ...headers
         },
-        body: JSON.stringify(_payload)
+        body: JSON.stringify(payload)
       })
-      if (!response.ok) { /* TODO: Complete implementation */ }
+      if (!response.ok) {
         const errorText = await response.text()
-        throw new Error(`HTTP ${response.status}: ${_errorText}`)
+        throw new Error(`HTTP ${response.status}: ${errorText}`)
       }
       const responseData = await response.json()
-      const ticket = this.parseTicketResponse(_config, responseData)
+      const ticket = this.parseTicketResponse(config, responseData)
       // Cache the ticket
       this.ticketCache.set(ticket.id, ticket)
       return ticket
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error) {
       console.error(`Failed to create ticket in ${config.type}:`, error)
       throw error
     }
   }
   // Ticket updates
-  async updateTicket(configId: string, __ticketId: string, updates: Partial<TicketData>): Promise<void> { /* TODO: Complete implementation */ }
-    const config = this.configs.get(_configId)
-    if (!config) { /* TODO: Complete implementation */ }
+  async updateTicket(configId: string, ticketId: string, updates: Partial<TicketData>): Promise<void> {
+    const config = this.configs.get(configId)
+    if (!config) {
       throw new Error('Ticketing configuration not found')
     }
-    const payload = this.formatTicketForPlatform(_config, updates)
-    const headers = this.getAuthHeaders(_config)
-    try { /* TODO: Complete implementation */ }
-      const response = await fetch(this.getUpdateTicketUrl(_config, ticketId), { /* TODO: Complete implementation */ }
+    const payload = this.formatTicketForPlatform(config, updates)
+    const headers = this.getAuthHeaders(config)
+    try {
+      const response = await fetch(this.getUpdateTicketUrl(config, ticketId), {
         method: 'PUT',
-        headers: { /* TODO: Complete implementation */ }
+        headers: {
           'Content-Type': 'application/json',
           ...headers
         },
-        body: JSON.stringify(_payload)
+        body: JSON.stringify(payload)
       })
-      if (!response.ok) { /* TODO: Complete implementation */ }
+      if (!response.ok) {
         const errorText = await response.text()
-        throw new Error(`HTTP ${response.status}: ${_errorText}`)
+        throw new Error(`HTTP ${response.status}: ${errorText}`)
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
-      console.error(`Failed to update ticket ${_ticketId}:`, error)
+    } catch (error) {
+      console.error(`Failed to update ticket ${ticketId}:`, error)
       throw error
     }
   }
   // Platform-specific implementations
-  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): unknown { /* TODO: Complete implementation */ }
-    switch (config.type) { /* TODO: Complete implementation */ }
-      case 'jira': { /* TODO: Complete implementation */ }
-  return this.formatJiraTicket(_config, ticketData)
-      case 'servicenow': { /* TODO: Complete implementation */ }
-  return this.formatServiceNowTicket(_config, ticketData)
-      case 'freshdesk': { /* TODO: Complete implementation */ }
-  return this.formatFreshdeskTicket(_config, ticketData)
-      case 'zendesk': { /* TODO: Complete implementation */ }
-  return this.formatZendeskTicket(_config, ticketData)
+  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+    switch (config.type) {
+      case 'jira':
+        return this.formatJiraTicket(config, ticketData)
+      case 'servicenow':
+        return this.formatServiceNowTicket(config, ticketData)
+      case 'freshdesk':
+        return this.formatFreshdeskTicket(config, ticketData)
+      case 'zendesk':
+        return this.formatZendeskTicket(config, ticketData)
       default:
         return ticketData
     }
   }
-  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown { /* TODO: Complete implementation */ }
-    const priorityMap: Record<string, string> = { /* TODO: Complete implementation */ }
+  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+    const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
       'Medium': '3',
       'Low': '4'
     }
-    const issueTypeMap: Record<string, string> = { /* TODO: Complete implementation */ }
+    const issueTypeMap: Record<string, string> = {
       'Bug': 'Bug',
       'Task': 'Task',
       'Story': 'Story',
@@ -186,8 +186,8 @@ class TicketingService { /* TODO: Complete implementation */ }
       'Problem': 'Bug',
       'Change': 'Task'
     }
-    return { /* TODO: Complete implementation */ }
-      fields: { /* TODO: Complete implementation */ }
+    return {
+      fields: {
         project: { key: ticketData.project || config.default_project },
         summary: ticketData.title,
         description: ticketData.description,
@@ -201,14 +201,14 @@ class TicketingService { /* TODO: Complete implementation */ }
       }
     }
   }
-  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown { /* TODO: Complete implementation */ }
-    const priorityMap: Record<string, string> = { /* TODO: Complete implementation */ }
+  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+    const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
       'Medium': '3',
       'Low': '4'
     }
-    return { /* TODO: Complete implementation */ }
+    return {
       short_description: ticketData.title,
       description: ticketData.description,
       priority: ticketData.priority ? priorityMap[ticketData.priority] : '3',
@@ -219,14 +219,14 @@ class TicketingService { /* TODO: Complete implementation */ }
       ...ticketData.custom_fields
     }
   }
-  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown { /* TODO: Complete implementation */ }
-    const priorityMap: Record<string, number> = { /* TODO: Complete implementation */ }
+  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+    const priorityMap: Record<string, number> = {
       'Critical': 4,
       'High': 3,
       'Medium': 2,
       'Low': 1
     }
-    return { /* TODO: Complete implementation */ }
+    return {
       subject: ticketData.title,
       description: ticketData.description,
       priority: ticketData.priority ? priorityMap[ticketData.priority] : 2,
@@ -237,15 +237,15 @@ class TicketingService { /* TODO: Complete implementation */ }
       ...ticketData.custom_fields
     }
   }
-  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): unknown { /* TODO: Complete implementation */ }
-    const priorityMap: Record<string, string> = { /* TODO: Complete implementation */ }
+  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+    const priorityMap: Record<string, string> = {
       'Critical': 'urgent',
       'High': 'high',
       'Medium': 'normal',
       'Low': 'low'
     }
-    return { /* TODO: Complete implementation */ }
-      ticket: { /* TODO: Complete implementation */ }
+    return {
+      ticket: {
         subject: ticketData.title,
         comment: { body: ticketData.description },
         priority: ticketData.priority ? priorityMap[ticketData.priority] : 'normal',
@@ -256,8 +256,8 @@ class TicketingService { /* TODO: Complete implementation */ }
     }
   }
   // URL generation
-  private getCreateTicketUrl(config: TicketingConfig): string { /* TODO: Complete implementation */ }
-    switch (config.type) { /* TODO: Complete implementation */ }
+  private getCreateTicketUrl(config: TicketingConfig): string {
+    switch (config.type) {
       case 'jira':
         return `${config.base_url}/rest/api/2/issue`
       case 'servicenow':
@@ -270,33 +270,34 @@ class TicketingService { /* TODO: Complete implementation */ }
         return `${config.base_url}/tickets`
     }
   }
-  private getUpdateTicketUrl(config: TicketingConfig, ticketId: string): string { /* TODO: Complete implementation */ }
-    switch (config.type) { /* TODO: Complete implementation */ }
+  private getUpdateTicketUrl(config: TicketingConfig, ticketId: string): string {
+    switch (config.type) {
       case 'jira':
-        return `${config.base_url}/rest/api/2/issue/${_ticketId}`
+        return `${config.base_url}/rest/api/2/issue/${ticketId}`
       case 'servicenow':
-        return `${config.base_url}/api/now/table/incident/${_ticketId}`
+        return `${config.base_url}/api/now/table/incident/${ticketId}`
       case 'freshdesk':
-        return `${config.base_url}/api/v2/tickets/${_ticketId}`
+        return `${config.base_url}/api/v2/tickets/${ticketId}`
       case 'zendesk':
-        return `${config.base_url}/api/v2/tickets/${_ticketId}.json`
+        return `${config.base_url}/api/v2/tickets/${ticketId}.json`
       default:
-        return `${config.base_url}/tickets/${_ticketId}`
+        return `${config.base_url}/tickets/${ticketId}`
     }
   }
   // Authentication
-  private getAuthHeaders(config: TicketingConfig): Record<string, string> { /* TODO: Complete implementation */ }
+  private getAuthHeaders(config: TicketingConfig): Record<string, string> {
     const auth = config.authentication
-    switch (auth.type) { /* TODO: Complete implementation */ }
-      case 'basic': { /* TODO: Complete implementation */ }
+    switch (auth.type) {
+      case 'basic': {
         const credentials = btoa(`${auth.username}:${auth.password}`)
-        return { 'Authorization': `Basic ${_credentials}` }
+        return { 'Authorization': `Basic ${credentials}` }
+      }
       case 'bearer':
         return { 'Authorization': `Bearer ${auth.token}` }
       case 'api_key':
-        if (config.type === 'freshdesk') { /* TODO: Complete implementation */ }
+        if (config.type === 'freshdesk') {
           const credentials = btoa(`${auth.api_key}:X`)
-          return { 'Authorization': `Basic ${_credentials}` }
+          return { 'Authorization': `Basic ${credentials}` }
         }
         return { 'X-API-Key': auth.api_key! }
       default:
@@ -304,10 +305,10 @@ class TicketingService { /* TODO: Complete implementation */ }
     }
   }
   // Response parsing
-  private parseTicketResponse(config: TicketingConfig, response: unknown): CreatedTicket { /* TODO: Complete implementation */ }
-    switch (config.type) { /* TODO: Complete implementation */ }
+  private parseTicketResponse(config: TicketingConfig, response: any): CreatedTicket {
+    switch (config.type) {
       case 'jira':
-        return { /* TODO: Complete implementation */ }
+        return {
           id: response.id,
           key: response.key,
           url: `${config.base_url}/browse/${response.key}`,
@@ -315,7 +316,7 @@ class TicketingService { /* TODO: Complete implementation */ }
           created_at: new Date()
         }
       case 'servicenow':
-        return { /* TODO: Complete implementation */ }
+        return {
           id: response.result.sys_id,
           key: response.result.number,
           url: `${config.base_url}/incident.do?sys_id=${response.result.sys_id}`,
@@ -323,7 +324,7 @@ class TicketingService { /* TODO: Complete implementation */ }
           created_at: new Date()
         }
       case 'freshdesk':
-        return { /* TODO: Complete implementation */ }
+        return {
           id: response.id.toString(),
           key: `#${response.id}`,
           url: `${config.base_url}/a/tickets/${response.id}`,
@@ -331,7 +332,7 @@ class TicketingService { /* TODO: Complete implementation */ }
           created_at: new Date(response.created_at)
         }
       case 'zendesk':
-        return { /* TODO: Complete implementation */ }
+        return {
           id: response.ticket.id.toString(),
           key: `#${response.ticket.id}`,
           url: `${config.base_url}/agent/tickets/${response.ticket.id}`,
@@ -339,7 +340,7 @@ class TicketingService { /* TODO: Complete implementation */ }
           created_at: new Date(response.ticket.created_at)
         }
       default:
-        return { /* TODO: Complete implementation */ }
+        return {
           id: response.id || response.ticket_id,
           key: response.key || response.number,
           url: response.url || `${config.base_url}/tickets/${response.id}`,
@@ -348,8 +349,8 @@ class TicketingService { /* TODO: Complete implementation */ }
         }
     }
   }
-  private getFreshdeskStatus(statusCode: number): string { /* TODO: Complete implementation */ }
-    const statusMap: Record<number, string> = { /* TODO: Complete implementation */ }
+  private getFreshdeskStatus(statusCode: number): string {
+    const statusMap: Record<number, string> = {
       2: 'Open',
       3: 'Pending',
       4: 'Resolved',
@@ -358,18 +359,18 @@ class TicketingService { /* TODO: Complete implementation */ }
     return statusMap[statusCode] || 'Unknown'
   }
   // Alert formatting
-  private formatAlertAsTicket(alert: unknown, alertType: string, config: TicketingConfig): TicketData { /* TODO: Complete implementation */ }
+  private formatAlertAsTicket(alert: any, alertType: string, config: TicketingConfig): TicketData {
     const priority = this.mapAlertPriority(alert.priority || alert.severity)
-    const type = this.mapAlertType(_alertType)
-    return { /* TODO: Complete implementation */ }
+    const type = this.mapAlertType(alertType)
+    return {
       title: `[CMO] ${alertType.toUpperCase()}: ${alert.title}`,
-      description: this.buildAlertDescription(_alert, alertType),
+      description: this.buildAlertDescription(alert, alertType),
       priority,
       type,
       project: config.default_project,
       assignee: config.default_assignee,
       labels: ['cmo', 'automated', alertType.replace('.', '-')],
-      custom_fields: { /* TODO: Complete implementation */ }
+      custom_fields: {
         alert_id: alert.id,
         alert_type: alertType,
         source_system: 'CMO',
@@ -377,9 +378,9 @@ class TicketingService { /* TODO: Complete implementation */ }
       }
     }
   }
-  private buildAlertDescription(alert: unknown, alertType: string): string { /* TODO: Complete implementation */ }
+  private buildAlertDescription(alert: any, alertType: string): string {
     const sections = [
-      `**Tipo de Alerta:** ${_alertType}`,
+      `**Tipo de Alerta:** ${alertType}`,
       `**Descripción:** ${alert.message || alert.description}`,
       `**Fecha/Hora:** ${new Date(alert.timestamp || Date.now()).toLocaleString()}`,
       `**Ubicación:** ${alert.location || 'N/A'}`,
@@ -388,16 +389,16 @@ class TicketingService { /* TODO: Complete implementation */ }
       '**Detalles Adicionales:**'
     ]
     // Add custom fields
-    Object.entries(_alert).forEach(([key, value]) => { /* TODO: Complete implementation */ }
-      if (!['id', 'title', 'message', 'description', 'timestamp', 'location'].includes(_key)) { /* TODO: Complete implementation */ }
-        sections.push(`- ${_key}: ${_value}`)
+    Object.entries(alert).forEach(([key, value]) => {
+      if (!['id', 'title', 'message', 'description', 'timestamp', 'location'].includes(key)) {
+        sections.push(`- ${key}: ${value}`)
       }
     })
     sections.push('', '---', '*Ticket creado automáticamente por CMO*')
     return sections.join('\n')
   }
-  private mapAlertPriority(alertPriority: string): 'Low' | 'Medium' | 'High' | 'Critical' { /* TODO: Complete implementation */ }
-    const priorityMap: Record<string, 'Low' | 'Medium' | 'High' | 'Critical'> = { /* TODO: Complete implementation */ }
+  private mapAlertPriority(alertPriority: string): 'Low' | 'Medium' | 'High' | 'Critical' {
+    const priorityMap: Record<string, 'Low' | 'Medium' | 'High' | 'Critical'> = {
       'low': 'Low',
       'medium': 'Medium',
       'high': 'High',
@@ -405,8 +406,8 @@ class TicketingService { /* TODO: Complete implementation */ }
     }
     return priorityMap[alertPriority] || 'Medium'
   }
-  private mapAlertType(alertType: string): 'Bug' | 'Task' | 'Story' | 'Incident' | 'Problem' | 'Change' { /* TODO: Complete implementation */ }
-    const typeMap: Record<string, 'Bug' | 'Task' | 'Story' | 'Incident' | 'Problem' | 'Change'> = { /* TODO: Complete implementation */ }
+  private mapAlertType(alertType: string): 'Bug' | 'Task' | 'Story' | 'Incident' | 'Problem' | 'Change' {
+    const typeMap: Record<string, 'Bug' | 'Task' | 'Story' | 'Incident' | 'Problem' | 'Change'> = {
       'alert.created': 'Incident',
       'system.error': 'Bug',
       'precinto.violated': 'Incident',
@@ -416,23 +417,23 @@ class TicketingService { /* TODO: Complete implementation */ }
     return typeMap[alertType] || 'Task'
   }
   // Connection testing
-  async testConnection(config: TicketingConfig): Promise<boolean> { /* TODO: Complete implementation */ }
-    const headers = this.getAuthHeaders(_config)
-    try { /* TODO: Complete implementation */ }
+  async testConnection(config: TicketingConfig): Promise<boolean> {
+    const headers = this.getAuthHeaders(config)
+    try {
       // Test with a simple GET request to projects or users endpoint
-      const testUrl = this.getTestUrl(_config)
-      const response = await fetch(_testUrl, { /* TODO: Complete implementation */ }
+      const testUrl = this.getTestUrl(config)
+      const response = await fetch(testUrl, {
         method: 'GET',
         headers
       })
       return response.ok
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error) {
       console.error(`Test connection failed for ${config.type}:`, error)
       return false
     }
   }
-  private getTestUrl(config: TicketingConfig): string { /* TODO: Complete implementation */ }
-    switch (config.type) { /* TODO: Complete implementation */ }
+  private getTestUrl(config: TicketingConfig): string {
+    switch (config.type) {
       case 'jira':
         return `${config.base_url}/rest/api/2/myself`
       case 'servicenow':
@@ -446,13 +447,13 @@ class TicketingService { /* TODO: Complete implementation */ }
     }
   }
   // Persistence
-  private saveTicketingConfigs(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  private saveTicketingConfigs(): void {
+    try {
       const configsArray = Array.from(this.configs.values())
       // Remove sensitive data before saving
-      const sanitizedConfigs = configsArray.map(config => ({ /* TODO: Complete implementation */ }
+      const sanitizedConfigs = configsArray.map(config => ({
         ...config,
-        authentication: { /* TODO: Complete implementation */ }
+        authentication: {
           ...config.authentication,
           password: config.authentication.password ? '***' : undefined,
           token: config.authentication.token ? '***' : undefined,
@@ -460,31 +461,31 @@ class TicketingService { /* TODO: Complete implementation */ }
           client_secret: config.authentication.client_secret ? '***' : undefined
         }
       }))
-      localStorage.setItem('cmo_ticketing_configs', JSON.stringify(s_anitizedConfigs))
-    } catch (_error) { /* TODO: Complete implementation */ }
+      localStorage.setItem('cmo_ticketing_configs', JSON.stringify(sanitizedConfigs))
+    } catch (error) {
       console.error('Failed to save ticketing configs:', error)
     }
   }
-  loadTicketingConfigs(): void { /* TODO: Complete implementation */ }
-    try { /* TODO: Complete implementation */ }
+  loadTicketingConfigs(): void {
+    try {
       const stored = localStorage.getItem('cmo_ticketing_configs')
-      if (s_tored) { /* TODO: Complete implementation */ }
-        const configsArray: TicketingConfig[] = JSON.parse(s_tored)
+      if (stored) {
+        const configsArray: TicketingConfig[] = JSON.parse(stored)
         this.configs.clear()
-        configsArray.forEach(config => { /* TODO: Complete implementation */ }
+        configsArray.forEach(config => {
           config.created = new Date(config.created)
           this.configs.set(config.id, config)
         })
       }
-    } catch (_error) { /* TODO: Complete implementation */ }
+    } catch (error) {
       console.error('Failed to load ticketing configs:', error)
     }
   }
-  private generateId(): string { /* TODO: Complete implementation */ }
+  private generateId(): string {
     return `ticket_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
   // Get created tickets
-  getCreatedTickets(): CreatedTicket[] { /* TODO: Complete implementation */ }
+  getCreatedTickets(): CreatedTicket[] {
     return Array.from(this.ticketCache.values())
   }
 }
@@ -492,4 +493,3 @@ class TicketingService { /* TODO: Complete implementation */ }
 export const ticketingService = new TicketingService()
 // Initialize on import
 ticketingService.loadTicketingConfigs()
-}

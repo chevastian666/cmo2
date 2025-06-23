@@ -5,7 +5,8 @@ import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
 import type { Alerta} from '../../../types'
 import { TIPOS_ALERTA} from '../../../types/monitoring'
 import { DataTable} from '../../../components/DataTable'
-import { useAlertaExtendida} from '../../../store/hooks/useAlertas'
+import { useAlertaExtendida, useAlertasStore} from '../../../store/hooks/useAlertas'
+import type { Column } from '../../../components/DataTable'
 import { AlertaDetalleModalV2} from './AlertaDetalleModalV2'
 import { ResponderAlertaModal} from './ResponderAlertaModal'
 import { notificationService} from '../../../services/shared/notification.service'
@@ -13,11 +14,11 @@ import { notificationService} from '../../../services/shared/notification.servic
 import { Button} from '@/components/ui/button'
 import { Badge} from '@/components/ui/badge'
 export const AlertsTableV2: React.FC = () => {
-
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(_null)
-  const [isModalOpen, setIsModalOpen] = useState(_false)
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(_null)
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(_false)
+  const { alertas, loading, error, actions } = useAlertasStore()
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
     setSelectedAlertaId(alerta.id)
     setIsModalOpen(_true)
@@ -51,54 +52,55 @@ export const AlertsTableV2: React.FC = () => {
   }
   const closeModal = () => {
     setIsModalOpen(_false)
-    setSelectedAlertaId(_null)
+    setSelectedAlertaId(null)
   }
   const getIcon = (tipo: string) => {
-    switch (_tipo) {
-      case 'AAR': {
-  return <Clock className="h-4 w-4" />
-      case 'BBJ': {
-  return <Battery className="h-4 w-4" />
-      case 'DEM': {
-  return <Pause className="h-4 w-4" />
-      case 'DNR': {
-  return <Navigation className="h-4 w-4" />
-      case 'DTN': {
-  return <Shield className="h-4 w-4" />
-      case 'NPG': {
-  return <Satellite className="h-4 w-4" />
-      case 'NPN': {
-  return <WifiOff className="h-4 w-4" />
-      case 'PTN': {
-  return <Package className="h-4 w-4" />
-      case 'SNA': {
-  return <Zap className="h-4 w-4" />
-      default: return <AlertTriangle className="h-4 w-4" />
+    switch (tipo) {
+      case 'AAR':
+        return <Clock className="h-4 w-4" />
+      case 'BBJ':
+        return <Battery className="h-4 w-4" />
+      case 'DEM':
+        return <Pause className="h-4 w-4" />
+      case 'DNR':
+        return <Navigation className="h-4 w-4" />
+      case 'DTN':
+        return <Shield className="h-4 w-4" />
+      case 'NPG':
+        return <Satellite className="h-4 w-4" />
+      case 'NPN':
+        return <WifiOff className="h-4 w-4" />
+      case 'PTN':
+        return <Package className="h-4 w-4" />
+      case 'SNA':
+        return <Zap className="h-4 w-4" />
+      default:
+        return <AlertTriangle className="h-4 w-4" />
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'text-red-400 bg-red-900/20'
-      case 'alta': {
-  return 'text-orange-400 bg-orange-900/20'
-      case 'media': {
-  return 'text-yellow-400 bg-yellow-900/20'
-      case 'baja': {
-  return 'text-blue-400 bg-blue-900/20'
+    switch (severidad) {
+      case 'critica':
+        return 'text-red-400 bg-red-900/20'
+      case 'alta':
+        return 'text-orange-400 bg-orange-900/20'
+      case 'media':
+        return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja':
+        return 'text-blue-400 bg-blue-900/20'
       default:
         return 'text-gray-400 bg-gray-900/20'
     }
   }
   const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
-    switch (s_everidad) {
-      case 'critica': {
-  case 'alta':
+    switch (severidad) {
+      case 'critica':
+      case 'alta':
         return 'destructive'
-      case 'media': {
-  return 'secondary'
-      case 'baja': {
-  return 'outline'
+      case 'media':
+        return 'secondary'
+      case 'baja':
+        return 'outline'
       default:
         return 'default'
     }
@@ -169,7 +171,7 @@ export const AlertsTableV2: React.FC = () => {
           <Button
             size="sm"
             variant="default"
-            onClick={(_e) => {
+            onClick={(e) => {
               e.stopPropagation()
               notificationService.info('Función de mapa próximamente')
             }}
@@ -258,25 +260,25 @@ export const AlertsTableV2: React.FC = () => {
     } else {
       const jsonContent = JSON.stringify(__data, null, 2)
       const blob = new Blob([jsonContent], { type: 'application/json' })
-      const url = URL.createObjectURL(_blob)
+      const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `${_filename}.json`
+      link.download = `${filename}.json`
       link.click()
-      URL.revokeObjectURL(_url)
+      URL.revokeObjectURL(url)
     }
   }
-  const {data: selectedAlerta} =  useAlertaExtendida(s_electedAlertaId)
+  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId)
   return (<>
       <DataTable
-        data={_alertas}
-        columns={_columns}
-        loading={_loading}
-        error={_error}
+        data={alertas}
+        columns={columns}
+        loading={loading}
+        error={error}
         pageSize={20}
         searchPlaceholder="Buscar alertas..."
-        onRowClick={_handleAlertClick}
-        onExport={_handleExport}
+        onRowClick={handleAlertClick}
+        onExport={handleExport}
         emptyStateProps={{
           icon: AlertTriangle, title: "No hay alertas activas", description: "No se han detectado alertas en el sistema"
         }}
@@ -285,9 +287,9 @@ export const AlertsTableV2: React.FC = () => {
 
       {selectedAlerta && (
         <AlertaDetalleModalV2
-          alerta={s_electedAlerta}
-          isOpen={_isModalOpen}
-          onClose={_closeModal}
+          alerta={selectedAlerta}
+          isOpen={isModalOpen}
+          onClose={closeModal}
           onAsignar={(_usuarioId, notas) => {
             console.log('Asignar:', { usuarioId, notas })
             notificationService.success('Alerta asignada correctamente')
@@ -305,13 +307,13 @@ export const AlertsTableV2: React.FC = () => {
       )}
 
       {selectedAlertaForResponse && (<ResponderAlertaModal
-          alerta={s_electedAlertaForResponse}
-          isOpen={_isResponseModalOpen}
+          alerta={selectedAlertaForResponse}
+          isOpen={isResponseModalOpen}
           onClose={() => {
-            setIsResponseModalOpen(_false)
-            setSelectedAlertaForResponse(_null)
+            setIsResponseModalOpen(false)
+            setSelectedAlertaForResponse(null)
           }}
-          onResponder={_handleResponderAlerta}
+          onResponder={handleResponderAlerta}
         />
       )}
     </>

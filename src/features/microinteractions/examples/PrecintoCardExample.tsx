@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Package} from 'lucide-react'
+import { Package } from 'lucide-react'
 import { BreathingPrecinto} from '../components/BreathingPrecinto'
 import { cn} from '../../../utils/utils'
 interface PrecintoData {
@@ -12,13 +12,13 @@ interface PrecintoData {
 export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ precinto }) => {
 
   const getStatus = (estado: string): 'normal' | 'alert' | 'critical' => {
-    switch (_estado) {
-      case 'activo': {
-  return 'normal'
-      case 'alerta': {
-  return 'alert'
-      case 'critico': {
-  return 'critical'
+    switch (estado) {
+      case 'activo':
+        return 'normal'
+      case 'alerta':
+        return 'alert'
+      case 'critico':
+        return 'critical'
       default: return 'normal'
     }
   }
@@ -38,8 +38,8 @@ export const PrecintoCardExample: React.FC<{ precinto: PrecintoData }> = ({ prec
           statusColors[precinto.estado],
           'hover:shadow-lg hover:scale-[1.02]'
         )}
-        onMouseEnter={() => playHover()}
-        onClick={() => playSuccess()}
+        // onMouseEnter={() => playHover()}
+        // onClick={() => playSuccess()}
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">

@@ -6,13 +6,15 @@
 
 import React, { useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
-import {_RadioGroup, RadioGroupItem} from '@/components/ui/radio-group'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label} from '@/components/ui/label'
-import {_AlertTriangle, AlertCircle, CheckCircle, XCircle} from 'lucide-react'
+import { AlertTriangle, AlertCircle, CheckCircle, XCircle } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformAlertsBySeverity, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
 export const AlertasTreemap: React.FC = () => {
-
+  // Mock data - in production, replace with real data from store or API
+  const alertas: any[] = []
+  
   const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity')
   const treemapData = useMemo(() => {
     if (!alertas.length) {
@@ -28,11 +30,11 @@ export const AlertasTreemap: React.FC = () => {
       }
     }
 
-    switch (_groupBy) {
+    switch (groupBy) {
       case 'severity':
-        return transformAlertsBySeverity(_alertas)
+        return transformAlertsBySeverity(alertas)
       case 'source':
-        return createHierarchy(_alertas, ['origen', 'tipo', 'estado'])
+        return createHierarchy(alertas, ['origen', 'tipo', 'estado'])
       case 'time': {
 
         const now = new Date()
@@ -45,29 +47,29 @@ export const AlertasTreemap: React.FC = () => {
           else if (hoursDiff < 48) timeCategory = 'Últimas 48h'
           return { ...alert, timeCategory }
         })
-        return createHierarchy(_categorizedAlerts, ['timeCategory', 'tipo'])
+        return createHierarchy(categorizedAlerts, ['timeCategory', 'tipo'])
+      }
       default:
-        return transformAlertsBySeverity(_alertas)
+        return transformAlertsBySeverity(alertas)
     }
-  )
-}, [alertas])
+  }, [alertas, groupBy])
   const stats = useMemo(() => {
     const total = alertas.length
     const critical = alertas.filter(a => a.tipo === 'critica').length
     const active = alertas.filter(a => a.estado === 'activa').length
     const resolved = alertas.filter(a => a.estado === 'resuelta').length
     return { total, critical, active, resolved }
-  );
-}, [alertas])
+  }, [alertas])
   const getAlertIcon = (type: string) => {
-    switch (_type) {
-      case 'critica': {
-  return <AlertTriangle className="h-6 w-6 text-red-500" />
-      case 'activa': {
-  return <AlertCircle className="h-6 w-6 text-yellow-500" />
-      case 'resuelta': {
-  return <CheckCircle className="h-6 w-6 text-green-500" />
-      default: return <XCircle className="h-6 w-6 text-gray-500" />
+    switch (type) {
+      case 'critica':
+        return <AlertTriangle className="h-6 w-6 text-red-500" />
+      case 'activa':
+        return <AlertCircle className="h-6 w-6 text-yellow-500" />
+      case 'resuelta':
+        return <CheckCircle className="h-6 w-6 text-green-500" />
+      default:
+        return <XCircle className="h-6 w-6 text-gray-500" />
     }
   }
   return (
@@ -128,7 +130,7 @@ export const AlertasTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Mapa de Alertas</CardTitle>
-            <RadioGroup value={_groupBy} onValueChange={(value: unknown) => setGroupBy(_value)}>
+            <RadioGroup value={groupBy} onValueChange={(value) => setGroupBy(value as 'severity' | 'source' | 'time')}>
               <div className="flex gap-4">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="severity" id="severity" />
@@ -148,7 +150,7 @@ export const AlertasTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={_treemapData}
+            data={treemapData}
             width={900}
             height={600}
             title={
@@ -157,9 +159,9 @@ export const AlertasTreemap: React.FC = () => {
               'Alertas por Tiempo'
             }
             subtitle="El tamaño representa la cantidad de alertas"
-            showBreadcrumb={_true}
-            showTooltip={_true}
-            animated={_true}
+            showBreadcrumb={true}
+            showTooltip={true}
+            animated={true}
             colorScheme={
               groupBy === 'severity' 
                 ? ['#dc2626', '#ef4444', '#f59e0b', '#3b82f6', '#10b981', '#6b7280']
@@ -170,5 +172,4 @@ export const AlertasTreemap: React.FC = () => {
       </Card>
     </div>
   )
-}
 }

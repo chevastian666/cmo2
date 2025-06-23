@@ -4,19 +4,19 @@ import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
 import type { Alerta} from '../../../types'
 import { TIPOS_ALERTA} from '../../../types/monitoring'
-import { DataTable} from '../../../components/DataTable'
+import { DataTable, Column} from '../../../components/DataTable'
 import { AlertaDetalleModal} from './AlertaDetalleModal'
 import { ResponderAlertaModal} from './ResponderAlertaModal'
 import { notificationService} from '../../../services/shared/notification.service'
 export const AlertsTable: React.FC = () => {
 
-  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(_null)
-  const [isModalOpen, setIsModalOpen] = useState(_false)
-  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(_null)
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(_false)
+  const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
     setSelectedAlertaId(alerta.id)
-    setIsModalOpen(_true)
+    setIsModalOpen(true)
   }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
     event.stopPropagation()
@@ -25,12 +25,13 @@ export const AlertsTable: React.FC = () => {
       return
     }
     
-    setSelectedAlertaForResponse(_alerta)
-    setIsResponseModalOpen(_true)
+    setSelectedAlertaForResponse(alerta)
+    setIsResponseModalOpen(true)
   }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(_alertaId)
+      // TODO: Implement atenderAlerta action
+      // await actions.atenderAlerta(alertaId)
       notificationService.success('Alerta respondida correctamente')
       // Log the response details (in a real app, this would be sent to the backend)
       console.log('Alert response:', {
@@ -40,59 +41,59 @@ export const AlertsTable: React.FC = () => {
         observaciones,
         timestamp: new Date().toISOString()
       })
-    } catch {
+    } catch (error) {
       notificationService.error('Error al responder la alerta')
-      console.error('Error responding to alert:', _error)
-      throw _error
+      console.error('Error responding to alert:', error)
+      throw error
     }
   }
   const closeModal = () => {
-    setIsModalOpen(_false)
-    setSelectedAlertaId(_null)
+    setIsModalOpen(false)
+    setSelectedAlertaId(null)
   }
   const getIcon = (tipo: string) => {
-    switch (_tipo) {
-      case 'AAR': {
-  // Atraso en arribo de reporte
+    switch (tipo) {
+      case 'AAR':
+        // Atraso en arribo de reporte
         return <Clock className="h-4 w-4" />
-      case 'BBJ': {
-  // Batería baja
+      case 'BBJ':
+        // Batería baja
         return <Battery className="h-4 w-4" />
-      case 'DEM': {
-  // Demorado
+      case 'DEM':
+        // Demorado
         return <Pause className="h-4 w-4" />
-      case 'DNR': {
-  // Desvío de ruta
+      case 'DNR':
+        // Desvío de ruta
         return <Navigation className="h-4 w-4" />
-      case 'DTN': {
-  // Detenido
+      case 'DTN':
+        // Detenido
         return <Shield className="h-4 w-4" />
-      case 'NPG': {
-  // Sin señal GPS
+      case 'NPG':
+        // Sin señal GPS
         return <Satellite className="h-4 w-4" />
-      case 'NPN': {
-  // Sin reporte del precinto
+      case 'NPN':
+        // Sin reporte del precinto
         return <WifiOff className="h-4 w-4" />
-      case 'PTN': {
-  // Precinto abierto no autorizado
+      case 'PTN':
+        // Precinto abierto no autorizado
         return <Package className="h-4 w-4" />
-      case 'SNA': {
-  // Salida no autorizada
+      case 'SNA':
+        // Salida no autorizada
         return <Zap className="h-4 w-4" />
       default:
         return <AlertTriangle className="h-4 w-4" />
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'text-red-400 bg-red-900/20'
-      case 'alta': {
-  return 'text-orange-400 bg-orange-900/20'
-      case 'media': {
-  return 'text-yellow-400 bg-yellow-900/20'
-      case 'baja': {
-  return 'text-blue-400 bg-blue-900/20'
+    switch (severidad) {
+      case 'critica':
+        return 'text-red-400 bg-red-900/20'
+      case 'alta':
+        return 'text-orange-400 bg-orange-900/20'
+      case 'media':
+        return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja':
+        return 'text-blue-400 bg-blue-900/20'
       default:
         return 'text-gray-400 bg-gray-900/20'
     }
@@ -104,12 +105,12 @@ export const AlertsTable: React.FC = () => {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: Object.entries(_TIPOS_ALERTA).map(([key, value]) => ({
+      filterOptions: Object.entries(TIPOS_ALERTA).map(([key, value]) => ({
         value: key,
         label: value
       })),
       width: '120px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="flex items-center space-x-2">
           <div className={cn('p-1.5 rounded', getSeveridadColor(item.severidad))}>
             {getIcon(item.tipo)}
@@ -123,7 +124,7 @@ export const AlertsTable: React.FC = () => {
       header: 'Precinto',
       sortable: true,
       filterable: true,
-      accessor: (_item) => <span className="font-medium text-white">{item.codigoPrecinto}</span>
+      accessor: (item) => <span className="font-medium text-white">{item.codigoPrecinto}</span>
     },
     {
       key: 'severidad',
@@ -138,7 +139,7 @@ export const AlertsTable: React.FC = () => {
         { value: 'baja', label: 'Baja' }
       ],
       width: '120px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <span className={cn(
           'inline-flex px-2 py-1 text-xs font-medium rounded-full',
           getSeveridadColor(item.severidad)
@@ -152,7 +153,7 @@ export const AlertsTable: React.FC = () => {
       header: 'Mensaje',
       sortable: false,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="max-w-md">
           <p className="text-sm text-gray-300 truncate">{item.mensaje}</p>
         </div>
@@ -162,9 +163,9 @@ export const AlertsTable: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (_item) => (item.ubicacion ? (
+      accessor: (item) => (item.ubicacion ? (
           <button
-            onClick={(_e) => {
+            onClick={(e) => {
               e.stopPropagation()
               // TODO: Implement map view functionality
               notificationService.info('Función de mapa próximamente')
@@ -183,7 +184,7 @@ export const AlertsTable: React.FC = () => {
       key: 'timestamp',
       header: 'Tiempo',
       sortable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="text-sm">
           <div className="text-gray-300">{formatTimeAgo(item.timestamp)}</div>
           <div className="text-xs text-gray-500">{formatDateTime(item.timestamp)}</div>
@@ -201,7 +202,7 @@ export const AlertsTable: React.FC = () => {
         { value: 'true', label: 'Atendida' }
       ],
       width: '100px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <span className={cn(
           'inline-flex px-2 py-1 text-xs font-medium rounded-full',
           item.atendida ? 'bg-green-900/20 text-green-400' : 'bg-red-900/20 text-red-400'
@@ -215,9 +216,9 @@ export const AlertsTable: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (_item) => (<div className="flex items-center justify-center">
+      accessor: (item) => (<div className="flex items-center justify-center">
           <button
-            onClick={(_e) => handleVerificar(_item, e)}
+            onClick={(e) => handleVerificar(item, e)}
             disabled={item.atendida}
             className={cn(
               'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
@@ -234,9 +235,9 @@ export const AlertsTable: React.FC = () => {
       )
     }
   ]
-  const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
+  const handleExport = (data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `alertas-${_timestamp}`
+    const filename = `alertas-${timestamp}`
     if (format === 'csv') {
       const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
@@ -248,55 +249,60 @@ export const AlertsTable: React.FC = () => {
         new Date(a.timestamp * 1000).toLocaleString('es-UY'),
         a.atendida ? 'Atendida' : 'Activa'
       ])
-      const csv = [headers, ...rows.map(row => row.map(cell => `"${_cell}"`))].
+      const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
         map(row => row.join(',')).join('\n')
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(_blob)
-      link.download = `${_filename}.csv`
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.csv`
       link.click()
     } else {
-      const jsonData = JSON.stringify(__data, null, 2)
+      const jsonData = JSON.stringify(data, null, 2)
       const blob = new Blob([jsonData], { type: 'application/json' })
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(_blob)
-      link.download = `${_filename}.json`
+      link.href = URL.createObjectURL(blob)
+      link.download = `${filename}.json`
       link.click()
     }
   }
-  if (_loading) {
+  // TODO: Add loading state from store or props
+  const loading = false
+  const error = null
+  const alertas: Alerta[] = []
+  
+  if (loading) {
     return (
       <div className="bg-gray-800 rounded-lg p-4">
         <div className="animate-pulse space-y-3">
           {[...Array(5)].map((__, i) => (
-            <div key={_i} className="bg-gray-700 h-16 rounded"></div>
+            <div key={i} className="bg-gray-700 h-16 rounded"></div>
           ))}
         </div>
       </div>
     )
   }
 
-  if (_error) {
+  if (error) {
     return (
       <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
-        <p className="text-red-400">Error cargando alertas: {_error}</p>
+        <p className="text-red-400">Error cargando alertas: {error}</p>
       </div>
     )
   }
 
   return (<>
       <DataTable
-        data={_alertas}
-        columns={_columns}
+        data={alertas}
+        columns={columns}
         searchKeys={['codigoPrecinto', 'mensaje']}
         searchPlaceholder="Buscar por precinto o mensaje..."
         title="Gestión de Alarmas"
-        onExport={_handleExport}
-        onRowClick={_handleAlertClick}
+        onExport={handleExport}
+        onRowClick={handleAlertClick}
         emptyMessage="No hay alarmas registradas"
         defaultItemsPerPage={25}
         itemsPerPageOptions={[10, 25, 50, 100]}
-        rowClassName={(_item) => cn(
+        rowClassName={(item) => cn(
           'cursor-pointer',
           !item.atendida && 'border-l-4',
           !item.atendida && getSeveridadColor(item.severidad).replace('text-', 'border-')
@@ -306,21 +312,21 @@ export const AlertsTable: React.FC = () => {
       {/* Alert Detail Modal */}
       {selectedAlertaId && (
         <AlertDetailModalWrapper
-          alertaId={s_electedAlertaId}
-          isOpen={_isModalOpen}
-          onClose={_closeModal}
+          alertaId={selectedAlertaId}
+          isOpen={isModalOpen}
+          onClose={closeModal}
         />
       )}
 
       {/* Response Modal */}
       <ResponderAlertaModal
-        alerta={s_electedAlertaForResponse}
-        isOpen={_isResponseModalOpen}
+        alerta={selectedAlertaForResponse}
+        isOpen={isResponseModalOpen}
         onClose={() => {
-          setIsResponseModalOpen(_false)
-          setSelectedAlertaForResponse(_null)
+          setIsResponseModalOpen(false)
+          setSelectedAlertaForResponse(null)
         }}
-        onRespond={_handleResponderAlerta}
+        onRespond={handleResponderAlerta}
       />
     </>
   )
@@ -331,19 +337,22 @@ const AlertDetailModalWrapper: React.FC<{
   isOpen: boolean
   onClose: () => void
 }> = ({ alertaId, isOpen, onClose }) => {
-
+  // TODO: Fetch alerta data
+  const alerta = null
+  const loading = false
+  
   if (!alerta || loading) {
     return null
   }
 
   return (
     <AlertaDetalleModal
-      alerta={_alerta}
-      isOpen={_isOpen}
-      onClose={_onClose}
-      onAsignar={actions.asignar}
-      onComentar={actions.comentar}
-      onResolver={actions.resolver}
+      alerta={alerta}
+      isOpen={isOpen}
+      onClose={onClose}
+      onAsignar={() => {}} // TODO: Implement action
+      onComentar={() => {}} // TODO: Implement action
+      onResolver={() => {}} // TODO: Implement action
     />
   )
 }

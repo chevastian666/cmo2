@@ -6,12 +6,14 @@
 
 import React, { useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
-import {_Building, Package, TrendingUp} from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Building, Package, TrendingUp } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
 export const PrecintosTreemap: React.FC = () => {
-
+  // Mock data - in production, replace with real data from store or API
+  const precintos: any[] = []
+  
   const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company')
   const treemapData = useMemo(() => {
     if (!precintos.length) {
@@ -27,17 +29,17 @@ export const PrecintosTreemap: React.FC = () => {
       }
     }
 
-    switch (_groupBy) {
-      case 'company': {
-  return transformPrecintosByCompany(_precintos)
-      case 'type': {
-  return createHierarchy(_precintos, ['tipo', 'estado'])
-      case 'status': {
-  return createHierarchy(_precintos, ['estado', 'tipo'])
+    switch (groupBy) {
+      case 'company':
+        return transformPrecintosByCompany(precintos)
+      case 'type':
+        return createHierarchy(precintos, ['tipo', 'estado'])
+      case 'status':
+        return createHierarchy(precintos, ['estado', 'tipo'])
       default:
-        return transformPrecintosByCompany(_precintos)
+        return transformPrecintosByCompany(precintos)
     }
-  }, [])
+  }, [precintos, groupBy])
   const stats = useMemo(() => {
     const total = precintos.length
     const active = precintos.filter(p => p.estado === 'en_transito').length
@@ -89,7 +91,7 @@ export const PrecintosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Distribución de Precintos</CardTitle>
-            <Select value={_groupBy} onValueChange={(value: unknown) => setGroupBy(_value)}>
+            <Select value={groupBy} onValueChange={(value) => setGroupBy(value as 'company' | 'type' | 'status')}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
@@ -103,15 +105,15 @@ export const PrecintosTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={_treemapData}
+            data={treemapData}
             width={900}
             height={600}
             title={`Agrupado por ${groupBy === 'company' ? 'Empresa' : groupBy === 'type' ? 'Tipo' : 'Estado'}`}
             subtitle="Click para hacer zoom • Click derecho para detalles"
-            showBreadcrumb={_true}
-            showTooltip={_true}
-            animated={_true}
-            onNodeClick={(_node, event) => {
+            showBreadcrumb={true}
+            showTooltip={true}
+            animated={true}
+            onNodeClick={(node, event) => {
               console.log('Node clicked:', node)
             }}
           />

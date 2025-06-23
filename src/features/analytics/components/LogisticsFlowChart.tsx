@@ -5,9 +5,9 @@
  */
 
 import React, { useState, useMemo } from 'react'
-import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button} from '@/components/ui/button'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { Download, TrendingUp, MapPin, Package, Truck, AlertCircle, RefreshCw} from 'lucide-react'
 import { SankeyChart} from '@/components/charts/sankey/SankeyChart'
@@ -16,17 +16,19 @@ import {
 import { motion} from 'framer-motion'
 import { toast} from '@/hooks/use-toast'
 export const LogisticsFlowChart: React.FC = () => {
-
+  // Mock data - in production, replace with real data from store or API
+  const transitos: any[] = []
+  
   const [timeRange, setTimeRange] = useState('week')
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes')
-  const [loading, setLoading] = useState(_false)
+  const [loading, setLoading] = useState(false)
   // Transform transit data into logistics flows
   const routeFlows = useMemo(() => {
     const flowMap = new Map<string, any>()
     transitos.forEach(transito => {
       const key = `${transito.origen}-${transito.destino}`
-      if (!flowMap.has(_key)) {
-        flowMap.set(_key, {
+      if (!flowMap.has(key)) {
+        flowMap.set(key, {
           origin: transito.origen,
           destination: transito.destino,
           transitCount: 0,
@@ -36,7 +38,7 @@ export const LogisticsFlowChart: React.FC = () => {
         })
       }
       
-      const flow = flowMap.get(_key)
+      const flow = flowMap.get(key)
       flow.transitCount++
       flow.totalVolume += transito.carga?.peso || 0
       if (transito.estado === 'completado') {
@@ -51,11 +53,11 @@ export const LogisticsFlowChart: React.FC = () => {
       successRate: flow.transitCount > 0 ? (flow.successCount / flow.transitCount) * 100 : 0,
       avgTime: flow.transitCount > 0 ? flow.totalTime / flow.transitCount : 0
     }))
-  }, [])
+  }, [transitos])
   // Precinto lifecycle data
   const lifecycleData = useMemo(() => {
     const stages = ['created', 'activated', 'in_transit', 'completed', 'deactivated']
-    // // const stageCount = new Map<string, number>()
+    // const stageCount = new Map<string, number>()
     // Mock data - in production, calculate from real precinto data
     return [
       { stage: 'created' as const, count: 1000, nextStage: 'activated', dropoffCount: 50 },
@@ -78,34 +80,35 @@ export const LogisticsFlowChart: React.FC = () => {
   }, [])
   // Get appropriate data based on flow type
   const chartData = useMemo(() => {
-    switch (_flowType) {
-      case 'routes': {
-  return transformLogisticsFlow(_routeFlows)
-      case 'lifecycle': {
-  return transformPrecintoLifecycle(_lifecycleData)
-      case 'alerts': {
-  return transformAlertFlow(_alertFlowData)
+    switch (flowType) {
+      case 'routes':
+        return transformLogisticsFlow(routeFlows)
+      case 'lifecycle':
+        return transformPrecintoLifecycle(lifecycleData)
+      case 'alerts':
+        return transformAlertFlow(alertFlowData)
       case 'time': {
-  // Mock time-based data
+        // Mock time-based data
         const timeData = transitos.map(t => ({
           timestamp: new Date(t.fechaCreacion),
           from: t.origen,
           to: t.destino,
           value: 1
         }))
-        return transformTimeBasedFlow(_timeData, timeRange as unknown)
+        return transformTimeBasedFlow(timeData, timeRange as 'hour' | 'day' | 'week' | 'month')
+      }
       default:
         return { nodes: [], links: [] }
     }
-  }, [])
+  }, [flowType, routeFlows, lifecycleData, alertFlowData, timeRange, transitos])
   // Calculate statistics
   const stats = useMemo(() => {
-    const totalFlow = chartData.links.reduce((s_um, link) => sum + link.value, 0)
+    const totalFlow = chartData.links.reduce((sum, link) => sum + link.value, 0)
     const avgFlow = chartData.links.length > 0 ? totalFlow / chartData.links.length : 0
     const maxFlow = Math.max(...chartData.links.map(l => l.value), 0)
     const minFlow = Math.min(...chartData.links.map(l => l.value), Infinity)
     return { totalFlow, avgFlow, maxFlow, minFlow }
-  }, [])
+  }, [chartData])
   const handleExport = () => {
     // Export chart as SVG or PNG
     toast({
@@ -113,17 +116,17 @@ export const LogisticsFlowChart: React.FC = () => {
       description: 'El gráfico se descargará en breve.'
     })
   }
-  const handleNodeClick = (node: unknown) => {
+  const handleNodeClick = (node: any) => {
     toast({
       title: node.name,
       description: `Flujo total: ${node.value?.toLocaleString() || 0}`
     })
   }
-  const handleLinkClick = (link: unknown) => {
+  const handleLinkClick = (link: any) => {
     const source = typeof link.source === 'object' ? link.source.name : link.source
     const target = typeof link.target === 'object' ? link.target.name : link.target
     toast({
-      title: `${s_ource} → ${_target}`,
+      title: `${source} → ${target}`,
       description: `Flujo: ${link.value?.toLocaleString() || 0}`
     })
   }
@@ -148,7 +151,7 @@ export const LogisticsFlowChart: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={_handleExport}
+              onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-2" />
               Exportar
@@ -160,7 +163,7 @@ export const LogisticsFlowChart: React.FC = () => {
         <div className="space-y-6">
           {/* Controls */}
           <div className="flex flex-col md:flex-row gap-4">
-            <Tabs value={_flowType} onValueChange={(v: unknown) => setFlowType(_v)} className="flex-1">
+            <Tabs value={flowType} onValueChange={(v) => setFlowType(v as 'routes' | 'lifecycle' | 'alerts' | 'time')} className="flex-1">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="routes" className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
@@ -182,7 +185,7 @@ export const LogisticsFlowChart: React.FC = () => {
             </Tabs>
 
             {flowType === 'time' && (
-              <Select value={_timeRange} onValueChange={s_etTimeRange}>
+              <Select value={timeRange} onValueChange={setTimeRange}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -254,19 +257,19 @@ export const LogisticsFlowChart: React.FC = () => {
           <div className="bg-gray-900 rounded-lg p-6 min-h-[600px] flex items-center justify-center">
             {chartData.nodes.length > 0 && chartData.links.length > 0 ? (
               <SankeyChart
-                data={_chartData}
+                data={chartData}
                 width={1000}
                 height={600}
                 margin={{ top: 20, right: 150, bottom: 20, left: 150 }}
                 nodeWidth={20}
                 nodePadding={20}
-                animated={_true}
-                interactive={_true}
-                showLabels={_true}
-                showValues={_true}
+                animated={true}
+                interactive={true}
+                showLabels={true}
+                showValues={true}
                 labelPosition="outside"
-                onNodeClick={_handleNodeClick}
-                onLinkClick={_handleLinkClick}
+                onNodeClick={handleNodeClick}
+                onLinkClick={handleLinkClick}
                 colors={['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444']}
               />
             ) : (

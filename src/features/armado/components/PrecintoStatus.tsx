@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle} from 'lucide-react'
+import { Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
 import type { Precinto} from '../../../types'
@@ -16,7 +16,7 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   const getBatteryIcon = (level: number) => {
     return (
       <div className="relative">
-        <Battery className={cn('h-6 w-6', getBatteryColor(_level))} />
+        <Battery className={cn('h-6 w-6', getBatteryColor(level))} />
         {level < 20 && (
           <AlertTriangle className="h-3 w-3 text-red-400 absolute -top-1 -right-1" />
         )}
@@ -25,8 +25,8 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   }
   const getEslingaStatus = () => {
     switch (precinto.eslinga.estado) {
-      case 'cerrada': {
-  return {
+      case 'cerrada':
+        return {
           icon: <Lock className="h-5 w-5" />,
           text: 'Cerrada',
           color: 'text-green-400',
@@ -45,6 +45,13 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
           text: 'Violada',
           color: 'text-red-400',
           bg: 'bg-red-900/20'
+        }
+      default:
+        return {
+          icon: <Lock className="h-5 w-5" />,
+          text: 'Desconocido',
+          color: 'text-gray-400',
+          bg: 'bg-gray-900/20'
         }
     }
   }

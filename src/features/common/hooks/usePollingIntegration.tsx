@@ -1,8 +1,9 @@
-import {_useState, useCallback} from 'react'
-import { usePolling, useAutoReconnect} from '../../../hooks/usePolling'
-import type { MapMarker, MapRoute} from '../../../components/ui/MapModule'
-import type { TransitInfo} from '../../../components/ui/TransitCard'
-import type { Alert} from '../../../components/ui/AlertsPanel'
+import { useState, useCallback, useEffect } from 'react'
+import { usePolling, useAutoReconnect } from '../../../hooks/usePolling'
+import type { MapMarker, MapRoute } from '../../../components/ui/MapModule'
+import type { TransitInfo } from '../../../components/ui/TransitCard'
+import type { Alert } from '../../../components/ui/AlertsPanel'
+
 // Mock service imports - reemplazar con servicios reales
 const transitosService = {
   getTransitos: async () => {
@@ -10,27 +11,31 @@ const transitosService = {
     return []
   }
 }
+
 const alertasService = {
   getActivas: async () => {
     // Simular llamada API
     return []
   }
 }
+
 /**
  * Hook para integrar polling con el MapModule
  */
 export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: MapRoute[] = []) {
-  const [markers, setMarkers] = useState<MapMarker[]>(_initialMarkers)
-  const [routes] = useState<MapRoute[]>(_initialRoutes)
-  const [isLoading, setIsLoading] = useState(_false)
-  const [error, setError] = useState<Error | null>(_null)
+  const [markers, setMarkers] = useState<MapMarker[]>(initialMarkers)
+  const [routes] = useState<MapRoute[]>(initialRoutes)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+  
   const fetchMapData = useCallback(async () => {
     try {
-      setIsLoading(_true)
+      setIsLoading(true)
       // Obtener tránsitos activos
       const transitos = await transitosService.getTransitos()
+      
       // Convertir tránsitos a markers
-      const newMarkers: MapMarker[] = transitos.map((transito: unknown) => ({
+      const newMarkers: MapMarker[] = transitos.map((transito: any) => ({
         id: transito.id,
         lat: transito.currentLocation?.lat || -34.6037,
         lng: transito.currentLocation?.lng || -58.3816,
@@ -45,26 +50,33 @@ export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: M
         },
         direction: transito.direction || 0
       }))
+      
       // Actualizar solo si hay cambios
-      if (JSON.stringify(_newMarkers) !== JSON.stringify(_markers)) {
-        setMarkers(_newMarkers)
+      if (JSON.stringify(newMarkers) !== JSON.stringify(markers)) {
+        setMarkers(newMarkers)
       }
 
-      setError(_null)
-    } catch {
-      setError(_err as Error)
-      console.error('Error fetching map data:', _err)
+      setError(null)
+    } catch (err) {
+      setError(err as Error)
+      console.error('Error fetching map data:', err)
     } finally {
-      setIsLoading(_false)
+      setIsLoading(false)
     }
   }, [markers])
+  
   // Configurar polling
+  const { executeNow, startPolling, stopPolling } = usePolling(fetchMapData, {
+    interval: 60000,
+    enabled: true
+  })
 
   // Auto-reconexión
   useAutoReconnect(() => {
     console.log('Reconectando polling del mapa...')
     executeNow()
   })
+  
   return {
     markers,
     routes,
@@ -80,15 +92,17 @@ export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: M
  * Hook para integrar polling con TransitCard
  */
 export function useTransitPolling(transitId: string) {
-  const [transit, setTransit] = useState<TransitInfo | null>(_null)
-  const [isLoading, setIsLoading] = useState(_false)
-  const [error, setError] = useState<Error | null>(_null)
+  const [transit, setTransit] = useState<TransitInfo | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+  
   const fetchTransitData = useCallback(async () => {
     try {
-      setIsLoading(_true)
+      setIsLoading(true)
       const transitos = await transitosService.getTransitos()
-      const foundTransit = transitos.find((t: unknown) => t.id === transitId)
-      if (_foundTransit) {
+      const foundTransit = transitos.find((t: any) => t.id === transitId)
+      
+      if (foundTransit) {
         // Mapear a TransitInfo
         const transitInfo: TransitInfo = {
           id: foundTransit.id,
@@ -112,22 +126,26 @@ export function useTransitPolling(transitId: string) {
             eslingas: foundTransit.eslingas
           }
         }
-        setTransit(_transitInfo)
+        setTransit(transitInfo)
       }
       
-      setError(_null)
-    } catch {
-      setError(_err as Error)
-      console.error('Error fetching transit data:', _err)
+      setError(null)
+    } catch (err) {
+      setError(err as Error)
+      console.error('Error fetching transit data:', err)
     } finally {
-      setIsLoading(_false)
+      setIsLoading(false)
     }
-  }, [])
+  }, [transitId])
+  
   // Polling con intervalo más corto para datos específicos
-  usePolling(_fetchTransitData, {
+  usePolling(fetchTransitData, {
     interval: 30000, // 30 segundos para actualizaciones más frecuentes
-    enabled: true, immediateFirstCall: true, onError: (__err) => setError(__err)
+    enabled: true,
+    immediateFirstCall: true,
+    onError: (err) => setError(err)
   })
+  
   return {
     transit,
     isLoading,
@@ -140,13 +158,14 @@ export function useTransitPolling(transitId: string) {
  */
 export function useAlertsPolling() {
   const [alerts, setAlerts] = useState<Alert[]>([])
-  const [isLoading, setIsLoading] = useState(_false)
-  const [error, setError] = useState<Error | null>(_null)
-  const [hasNewCriticalAlert, setHasNewCriticalAlert] = useState(_false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+  const [hasNewCriticalAlert, setHasNewCriticalAlert] = useState(false)
+  
   const fetchAlerts = useCallback(async () => {
     try {
       const data = await alertasService.getActivas()
-      return data.map((alert: unknown) => ({
+      return data.map((alert: any) => ({
         id: alert.id,
         title: alert.titulo,
         description: alert.descripcion,
@@ -156,10 +175,11 @@ export function useAlertsPolling() {
         status: alert.estado || 'active',
         metadata: alert.metadata
       }))
-    } catch {
-      throw _err
+    } catch (err) {
+      throw err
     }
   }, [])
+  
   const handleAlertsChange = useCallback((newAlerts: Alert[]) => {
     // Detectar si hay nuevas alertas críticas
     const oldCriticalIds = new Set(
@@ -167,43 +187,58 @@ export function useAlertsPolling() {
         .filter(a => a.severity === 'critical' || a.severity === 'high')
         .map(a => a.id)
     )
+    
     const hasCritical = newAlerts.some(
       alert => 
         (alert.severity === 'critical' || alert.severity === 'high') &&
         !oldCriticalIds.has(alert.id)
     )
-    if (_hasCritical) {
-      setHasNewCriticalAlert(_true)
-      setTimeout(() => setHasNewCriticalAlert(_false), 5000)
+    
+    if (hasCritical) {
+      setHasNewCriticalAlert(true)
+      setTimeout(() => setHasNewCriticalAlert(false), 5000)
     }
 
-    setAlerts(_newAlerts)
+    setAlerts(newAlerts)
   }, [alerts])
+  
   // Polling con detección de cambios
-
-        console.error('Error fetching alerts:', _err)
+  const { executeNow, startPolling, stopPolling } = usePolling(
+    fetchAlerts,
+    {
+      interval: 45000,
+      enabled: true,
+      immediateFirstCall: true,
+      onSuccess: handleAlertsChange,
+      onError: (err) => {
+        setError(err)
+        console.error('Error fetching alerts:', err)
       }
     }
   )
+  
   // Auto-reconexión
   useAutoReconnect(() => {
     console.log('Reconectando polling de alertas...')
     executeNow()
   })
+  
   const acknowledgeAlert = useCallback(async (alertId: string) => {
     try {
       // Llamar API para marcar como atendida
-      // await alertasService.acknowledge(_alertId)
+      // await alertasService.acknowledge(alertId)
+      
       // Actualizar estado local inmediatamente
       setAlerts(prev => prev.map(alert => 
         alert.id === alertId 
           ? { ...alert, status: 'acknowledged' as const }
           : alert
       ))
-    } catch {
-      console.error('Error acknowledging alert:', _err)
+    } catch (err) {
+      console.error('Error acknowledging alert:', err)
     }
   }, [])
+  
   return {
     alerts,
     isLoading,
@@ -220,24 +255,26 @@ export function useAlertsPolling() {
  * Hook global para manejar todo el polling de la aplicación
  */
 export function useGlobalPolling() {
-  const [isPollingActive, setIsPollingActive] = useState(_true)
-  // Pausar polling cuando la pestaña no está visible
+  const [isPollingActive, setIsPollingActive] = useState(true)
   
-    useCallback(() => {
+  // Pausar polling cuando la pestaña no está visible
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         console.log('Tab hidden, pausing polling...')
-        setIsPollingActive(_false)
+        setIsPollingActive(false)
       } else {
         console.log('Tab visible, resuming polling...')
-        setIsPollingActive(_true)
+        setIsPollingActive(true)
       }
     }
+    
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
+  
   return {
     isPollingActive
   }

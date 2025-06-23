@@ -38,33 +38,33 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
     }
   }, [])
   const getIcon = (tipo: string) => {
-    switch (_tipo) {
-      case 'violacion': {
-  return <Shield className="h-6 w-6" />
-      case 'bateria_baja': {
-  return <Battery className="h-6 w-6" />
-      case 'fuera_de_ruta': {
-  return <MapPin className="h-6 w-6" />
-      case 'temperatura': {
-  return <Thermometer className="h-6 w-6" />
-      case 'sin_signal': {
-  return <Radio className="h-6 w-6" />
-      case 'intrusion': {
-  return <Package className="h-6 w-6" />
+    switch (tipo) {
+      case 'violacion':
+        return <Shield className="h-6 w-6" />
+      case 'bateria_baja':
+        return <Battery className="h-6 w-6" />
+      case 'fuera_de_ruta':
+        return <MapPin className="h-6 w-6" />
+      case 'temperatura':
+        return <Thermometer className="h-6 w-6" />
+      case 'sin_signal':
+        return <Radio className="h-6 w-6" />
+      case 'intrusion':
+        return <Package className="h-6 w-6" />
       default:
         return <AlertTriangle className="h-6 w-6" />
     }
   }
   const getSeveridadColor = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'text-red-400 bg-red-900/20'
-      case 'alta': {
-  return 'text-orange-400 bg-orange-900/20'
-      case 'media': {
-  return 'text-yellow-400 bg-yellow-900/20'
-      case 'baja': {
-  return 'text-blue-400 bg-blue-900/20'
+    switch (severidad) {
+      case 'critica':
+        return 'text-red-400 bg-red-900/20'
+      case 'alta':
+        return 'text-orange-400 bg-orange-900/20'
+      case 'media':
+        return 'text-yellow-400 bg-yellow-900/20'
+      case 'baja':
+        return 'text-blue-400 bg-blue-900/20'
       default:
         return 'text-gray-400 bg-gray-900/20'
     }
@@ -114,7 +114,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
                 </div>
               </div>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -242,7 +242,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
               </button>
               
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
               >
                 Cancelar

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown} from 'lucide-react'
+import { FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown } from 'lucide-react'
 import { Badge} from '@/components/ui/badge'
 import { EmptyState} from '@/components/ui/EmptyState'
 import { LoadingState} from '@/components/ui/LoadingState'
@@ -26,17 +26,17 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
 }) => {
   const [ordenColumna, setOrdenColumna] = useState<OrdenColumna>('fecha')
   const [direccionOrden, setDireccionOrden] = useState<DireccionOrden>('desc')
-  const [menuAbierto, setMenuAbierto] = useState<string | null>(_null)
+  const [menuAbierto, setMenuAbierto] = useState<string | null>(null)
   const getIconoTipo = (tipo: TipoDocumento) => {
-    switch (_tipo) {
-      case 'DUA': {
-  return <FileText className="h-5 w-5" />
-      case 'Autorizacion': {
-  return <CheckSquare className="h-5 w-5" />
-      case 'Comunicacion': {
-  return <Mail className="h-5 w-5" />
-      case 'Resolucion': {
-  return <Gavel className="h-5 w-5" />
+    switch (tipo) {
+      case 'DUA':
+        return <FileText className="h-5 w-5" />
+      case 'Autorizacion':
+        return <CheckSquare className="h-5 w-5" />
+      case 'Comunicacion':
+        return <Mail className="h-5 w-5" />
+      case 'Resolucion':
+        return <Gavel className="h-5 w-5" />
       default:
         return <File className="h-5 w-5" />
     }
@@ -48,35 +48,31 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
     if (columna === ordenColumna) {
       setDireccionOrden(direccionOrden === 'asc' ? 'desc' : 'asc')
     } else {
-      setOrdenColumna(_columna)
+      setOrdenColumna(columna)
       setDireccionOrden('asc')
     }
   }
-  const documentosOrdenados = [...documentos].sort((_a, b) => {
+  const documentosOrdenados = [...documentos].sort((a, b) => {
     let valorA: unknown
     let valorB: unknown
-    switch (_ordenColumna) {
-      case 'fecha': {
-  valorA = a.fechaDocumento.getTime()
+    switch (ordenColumna) {
+      case 'fecha':
+        valorA = a.fechaDocumento.getTime()
         valorB = b.fechaDocumento.getTime()
         break
-    }
-    case 'tipo':
+      case 'tipo':
         valorA = a.tipo
         valorB = b.tipo
         break
-    }
-    case 'descripcion':
+      case 'descripcion':
         valorA = a.descripcion.toLowerCase()
         valorB = b.descripcion.toLowerCase()
         break
-    }
-    case 'empresa':
+      case 'empresa':
         valorA = a.empresa?.toLowerCase() || ''
         valorB = b.empresa?.toLowerCase() || ''
         break
-    }
-    case 'subidoPor':
+      case 'subidoPor':
         valorA = a.subidoPor.nombre.toLowerCase()
         valorB = b.subidoPor.nombre.toLowerCase()
         break
@@ -87,16 +83,16 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
     return 0
   })
   const ColumnaOrden = ({ columna, children }: { columna: OrdenColumna; children: React.ReactNode }) => (<button
-      onClick={() => handleOrden(_columna)}
+      onClick={() => handleOrden(columna)}
       className="flex items-center gap-1 hover:text-white transition-colors"
     >
-      {_children}
+      {children}
       {ordenColumna === columna && (
         direccionOrden === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />
       )}
     </button>
   )
-  if (_loading) {
+  if (loading) {
     return <LoadingState variant="skeleton" rows={5} />
   }
 
@@ -162,7 +158,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-700">
-          {documentosOrdenados.map((_doc) => (
+          {documentosOrdenados.map((doc) => (
             <tr
               key={doc.id}
               className={cn(
@@ -184,7 +180,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <Badge variant={getColorTipo(doc.tipo) as unknown} className="text-xs w-fit">
+                    <Badge variant={getColorTipo(doc.tipo) as any} className="text-xs w-fit">
                       {TIPOS_DOCUMENTO[doc.tipo].label}
                     </Badge>
                     {doc.estado === 'archivado' && (
@@ -210,9 +206,9 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                   )}
                   {doc.palabrasClave.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {doc.palabrasClave.slice(0, 3).map((_palabra, idx) => (
-                        <span key={_idx} className="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">
-                          {_palabra}
+                      {doc.palabrasClave.slice(0, 3).map((palabra, idx) => (
+                        <span key={idx} className="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">
+                          {palabra}
                         </span>
                       ))}
                       {doc.palabrasClave.length > 3 && (
@@ -261,7 +257,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
               <td className="px-4 py-4">
                 <div className="flex items-center justify-center gap-1">
                   <button
-                    onClick={() => onVisualizar(_doc)}
+                    onClick={() => onVisualizar(doc)}
                     className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                     title="Ver documento"
                   >
@@ -269,7 +265,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                   </button>
                   
                   <button
-                    onClick={() => onDescargar(_doc)}
+                    onClick={() => onDescargar(doc)}
                     className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                     title="Descargar"
                   >
@@ -287,15 +283,15 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                       {menuAbierto === doc.id && (<>
                           <div
                             className="fixed inset-0 z-10"
-                            onClick={() => setMenuAbierto(_null)}
+                            onClick={() => setMenuAbierto(null)}
                           />
                           <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-20">
                             <div className="py-1">
                               {canEdit && (<>
                                   <button
                                     onClick={() => {
-                                      onToggleDestacado(_doc)
-                                      setMenuAbierto(_null)
+                                      onToggleDestacado(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                                   >
@@ -308,8 +304,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                                   
                                   <button
                                     onClick={() => {
-                                      onArchivar(_doc)
-                                      setMenuAbierto(_null)
+                                      onArchivar(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                                   >
@@ -323,8 +319,8 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                                   <div className="border-t border-gray-700 my-1" />
                                   <button
                                     onClick={() => {
-                                      onEliminar(_doc)
-                                      setMenuAbierto(_null)
+                                      onEliminar(doc)
+                                      setMenuAbierto(null)
                                     }}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-gray-700 text-left"
                                   >

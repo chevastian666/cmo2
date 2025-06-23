@@ -44,14 +44,50 @@ export const LibroNovedadesPageV2: React.FC = () => {
     }
     return FILTROS_DEFAULT
   })
-  const [showFilters, setShowFilters] = useState(_false)
-  const [showFormulario, setShowFormulario] = useState(_false)
-  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(_null)
-  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(_null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [showFormulario, setShowFormulario] = useState(false)
+  const [novedadSeguimiento, setNovedadSeguimiento] = useState<Novedad | null>(null)
+  const [novedadResolucion, setNovedadResolucion] = useState<Novedad | null>(null)
   const [selectedTab, setSelectedTab] = useState<'todas' | 'activas' | 'resueltas'>('todas')
   const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set())
+  const [loading, setLoading] = useState(false)
+  const [novedades, setNovedades] = useState<Novedad[]>([])
+  const [estadisticas, setEstadisticas] = useState<any>(null)
+  
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
+  
+  // Mock functions - replace with actual API calls
+  const fetchNovedades = async (filtros: FiltrosNovedades) => {
+    setLoading(true)
+    // TODO: Implement actual API call
+    setTimeout(() => {
+      setNovedades([])
+      setEstadisticas({
+        totalDia: 0,
+        pendientes: 0,
+        enSeguimiento: 0,
+        resueltas: 0,
+        porTipo: { reclamo: 0 }
+      })
+      setLoading(false)
+    }, 500)
+  }
+  
+  const crearNovedad = async (data: unknown) => {
+    // TODO: Implement actual API call
+    console.log('Creating novedad:', data)
+  }
+  
+  const marcarResuelta = async (novedadId: string, comentario?: string) => {
+    // TODO: Implement actual API call
+    console.log('Marking as resolved:', novedadId, comentario)
+  }
+  
+  const agregarSeguimiento = async (novedadId: string, comentario: string) => {
+    // TODO: Implement actual API call
+    console.log('Adding follow-up:', novedadId, comentario)
+  }
   // Cargar novedades al montar y cuando cambien los filtros
 
     useEffect(() => {
@@ -72,11 +108,11 @@ export const LibroNovedadesPageV2: React.FC = () => {
   }, [filtros])
   // Filtrar novedades por tab
   const filteredNovedades = useMemo(() => {
-    switch (s_electedTab) {
-      case 'activas': {
-  return novedades.filter(n => n.estado === 'activa' || n.estado === 'seguimiento')
-      case 'resueltas': {
-  return novedades.filter(n => n.estado === 'resuelta')
+    switch (selectedTab) {
+      case 'activas':
+        return novedades.filter(n => n.estado === 'activa' || n.estado === 'seguimiento')
+      case 'resueltas':
+        return novedades.filter(n => n.estado === 'resuelta')
       default:
         return novedades
     }
@@ -615,7 +651,7 @@ const NovedadItem: React.FC<{
                 )}
 
                 {/* Acciones */}
-                {canEdit && novedad.estado !== 'resuelta' && (<div className="flex items-center gap-2 pt-2" onClick={(_e) => e.stopPropagation()}>
+                {canEdit && novedad.estado !== 'resuelta' && (<div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
                     <AnimatedButton
                       variant="outline"
                       size="sm"

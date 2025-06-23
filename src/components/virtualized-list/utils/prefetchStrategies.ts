@@ -87,12 +87,12 @@ export class ScrollPredictor {
       }
     } else if (pattern === 'jump-navigation') {
       // User is jumping between sections - prefetch common jump targets
-      const jumpTargets = this.predictJumpTargets(_currentIndex)
+      const jumpTargets = this.predictJumpTargets(currentIndex)
       predictedItems.push(...jumpTargets)
     }
 
     // Add velocity-based predictions
-    if (Math.abs(_velocity) > this.velocityThreshold) {
+    if (Math.abs(velocity) > this.velocityThreshold) {
       const timeToReach = 2000; // Predict 2 seconds ahead
       const predictedDistance = velocity * timeToReach / 1000
       const predictedIndex = currentIndex + Math.round(predictedDistance / 50); // Assuming ~50px per item
@@ -102,7 +102,7 @@ export class ScrollPredictor {
       }
     }
 
-    return [...new Set(_predictedItems)].filter(i => i >= 0)
+    return [...new Set(predictedItems)].filter(i => i >= 0)
   }
 
   /**
@@ -111,20 +111,19 @@ export class ScrollPredictor {
   getPrefetchRange(visibleStart: number, visibleEnd: number): [number, number] {
     const pattern = this.detectPattern()
     const visibleCount = visibleEnd - visibleStart
-    switch (_pattern) {
-      case 'fast-scroll-down': {
-  return [visibleStart, visibleEnd + visibleCount * 3]
-      case 'fast-scroll-up': {
-  return [Math.max(0, visibleStart - visibleCount * 3), visibleEnd]
+    switch (pattern) {
+      case 'fast-scroll-down':
+        return [visibleStart, visibleEnd + visibleCount * 3]
+      case 'fast-scroll-up':
+        return [Math.max(0, visibleStart - visibleCount * 3), visibleEnd]
       case 'steady-browse': {
-  {
-      const direction = this.getScrollDirection()
+        const direction = this.getScrollDirection()
         if (direction === 'down') {
           return [visibleStart, visibleEnd + visibleCount]
         } else {
           return [Math.max(0, visibleStart - visibleCount), visibleEnd]
         }
-      
+      }
       case 'jump-navigation':
         // Wider range for jump navigation
         return [
@@ -147,25 +146,25 @@ export class ScrollPredictor {
     if (this.scrollHistory.length < 5) return 'unknown'
     const recentHistory = this.scrollHistory.slice(-10)
     const velocities = recentHistory.map(e => e.velocity)
-    const avgVelocity = velocities.reduce((_a, b) => a + b, 0) / velocities.length
+    const avgVelocity = velocities.reduce((a, b) => a + b, 0) / velocities.length
     const directions = recentHistory.map(e => e.direction).filter(d => d !== null)
     // Check for consistent direction
     const downCount = directions.filter(d => d === 'down').length
     const upCount = directions.filter(d => d === 'up').length
-    const directionConsistency = Math.max(_downCount, upCount) / directions.length
+    const directionConsistency = Math.max(downCount, upCount) / directions.length
     // Detect patterns
-    if (Math.abs(_avgVelocity) > 500 && directionConsistency > 0.8) {
+    if (Math.abs(avgVelocity) > 500 && directionConsistency > 0.8) {
       return avgVelocity > 0 ? 'fast-scroll-down' : 'fast-scroll-up'
     }
 
-    if (Math.abs(_avgVelocity) > 50 && Math.abs(_avgVelocity) < 200 && directionConsistency > 0.6) {
+    if (Math.abs(avgVelocity) > 50 && Math.abs(avgVelocity) < 200 && directionConsistency > 0.6) {
       return 'steady-browse'
     }
 
     // Check for jump pattern (large position changes)
     const positions = recentHistory.map(e => e.scrollTop)
-    const jumps = positions.slice(1).map((_pos, i) => Math.abs(pos - positions[i]))
-    const avgJump = jumps.reduce((_a, b) => a + b, 0) / jumps.length
+    const jumps = positions.slice(1).map((pos, i) => Math.abs(pos - positions[i]))
+    const avgJump = jumps.reduce((a, b) => a + b, 0) / jumps.length
     if (avgJump > 1000) {
       return 'jump-navigation'
     }
@@ -178,12 +177,12 @@ export class ScrollPredictor {
    */
   private updatePatterns(): void {
     const pattern = this.detectPattern()
-    const count = this.patterns.get(_pattern) || 0
-    this.patterns.set(_pattern, count + 1)
+    const count = this.patterns.get(pattern) || 0
+    this.patterns.set(pattern, count + 1)
     // Decay old patterns
-    this.patterns.forEach((_count, key) => {
+    this.patterns.forEach((count, key) => {
       if (key !== pattern) {
-        this.patterns.set(_key, count * 0.95)
+        this.patterns.set(key, count * 0.95)
       }
     })
   }
@@ -245,9 +244,8 @@ export class ScrollPredictor {
   getConfidence(): number {
     if (this.scrollHistory.length < 10) return 0
     const pattern = this.detectPattern()
-    const patternCount = this.patterns.get(_pattern) || 0
-    const totalCount = Array.from(this.patterns.values()).reduce((_a, b) => a + b, 0)
+    const patternCount = this.patterns.get(pattern) || 0
+    const totalCount = Array.from(this.patterns.values()).reduce((a, b) => a + b, 0)
     return totalCount > 0 ? patternCount / totalCount : 0
   }
-}
 }

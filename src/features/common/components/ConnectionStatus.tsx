@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Wifi, WifiOff, RefreshCw} from 'lucide-react'
+import { Wifi, WifiOff, RefreshCw } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { sharedWebSocketService} from '../../../services/shared/sharedWebSocket.service'
 interface ConnectionStatusProps {
@@ -8,37 +8,37 @@ interface ConnectionStatusProps {
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status }) => {
   const getStatusColor = () => {
-    switch (s_tatus) {
-      case 'connected': {
-  return 'text-green-400'
-      case 'disconnected': {
-  return 'text-red-400'
-      case 'reconnecting': {
-  return 'text-yellow-400'
+    switch (status) {
+      case 'connected':
+        return 'text-green-400'
+      case 'disconnected':
+        return 'text-red-400'
+      case 'reconnecting':
+        return 'text-yellow-400'
       default:
         return 'text-gray-400'
     }
   }
   const getStatusIcon = () => {
-    switch (s_tatus) {
-      case 'connected': {
-  return <Wifi className="h-4 w-4" />
-      case 'disconnected': {
-  return <WifiOff className="h-4 w-4" />
-      case 'reconnecting': {
-  return <RefreshCw className="h-4 w-4 animate-spin" />
+    switch (status) {
+      case 'connected':
+        return <Wifi className="h-4 w-4" />
+      case 'disconnected':
+        return <WifiOff className="h-4 w-4" />
+      case 'reconnecting':
+        return <RefreshCw className="h-4 w-4 animate-spin" />
       default:
         return <WifiOff className="h-4 w-4" />
     }
   }
   const getStatusText = () => {
-    switch (s_tatus) {
-      case 'connected': {
-  return 'Conectado'
-      case 'disconnected': {
-  return 'Desconectado'
-      case 'reconnecting': {
-  return 'Reconectando...'
+    switch (status) {
+      case 'connected':
+        return 'Conectado'
+      case 'disconnected':
+        return 'Desconectado'
+      case 'reconnecting':
+        return 'Reconectando...'
       default:
         return 'Desconocido'
     }

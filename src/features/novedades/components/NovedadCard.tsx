@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar} from 'lucide-react'
+import { Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar } from 'lucide-react'
 import { Badge, Card, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
@@ -19,7 +19,7 @@ interface NovedadCardProps {
 export const NovedadCard: React.FC<NovedadCardProps> = ({
   novedad, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, isOwner = false, className
 }) => {
-  const [showMenu, setShowMenu] = useState(_false)
+  const [showMenu, setShowMenu] = useState(false)
   const tipoConfig = TIPOS_NOVEDAD[novedad.tipoNovedad]
   // Verificar si es editable (creada en las últimas 24h por el mismo usuario)
   const esEditable = () => {
@@ -29,10 +29,10 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
   }
   const getEstadoBadge = () => {
     switch (novedad.estado) {
-      case 'resuelta': {
-  return <Badge variant="green" className="text-xs">Resuelta</Badge>
-      case 'seguimiento': {
-  return <Badge variant="yellow" className="text-xs">En seguimiento</Badge>
+      case 'resuelta':
+        return <Badge variant="green" className="text-xs">Resuelta</Badge>
+      case 'seguimiento':
+        return <Badge variant="yellow" className="text-xs">En seguimiento</Badge>
       default:
         return null
     }
@@ -98,14 +98,14 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
               {showMenu && (<>
                   <div
                     className="fixed inset-0 z-10"
-                    onClick={() => setShowMenu(_false)}
+                    onClick={() => setShowMenu(false)}
                   />
                   <div className="absolute right-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-20">
                     <div className="py-1">
                       {onVerDetalles && (<button
                           onClick={() => {
-                            onVerDetalles(_novedad)
-                            setShowMenu(_false)
+                            onVerDetalles(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -116,8 +116,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && novedad.estado !== 'resuelta' && onMarcarResuelta && (<button
                           onClick={() => {
-                            onMarcarResuelta(_novedad)
-                            setShowMenu(_false)
+                            onMarcarResuelta(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -128,8 +128,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                       
                       {canEdit && onAgregarSeguimiento && (<button
                           onClick={() => {
-                            onAgregarSeguimiento(_novedad)
-                            setShowMenu(_false)
+                            onAgregarSeguimiento(novedad)
+                            setShowMenu(false)
                           }}
                           className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                         >
@@ -142,8 +142,8 @@ export const NovedadCard: React.FC<NovedadCardProps> = ({
                           <div className="border-t border-gray-700 my-1" />
                           <button
                             onClick={() => {
-                              onEditar(_novedad)
-                              setShowMenu(_false)
+                              onEditar(novedad)
+                              setShowMenu(false)
                             }}
                             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 text-left"
                           >

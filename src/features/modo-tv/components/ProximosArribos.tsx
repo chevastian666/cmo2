@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Truck, Clock, MapPin, User} from 'lucide-react'
+import { Truck, Clock, MapPin, User } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { ProximoArribo} from '../types'
 interface ProximosArribosProps {
@@ -9,20 +9,22 @@ interface ProximosArribosProps {
 export const ProximosArribos: React.FC<ProximosArribosProps> = ({ arribos }) => {
   const formatearTiempo = (minutos: number): string => {
     if (minutos < 60) {
-      return `${_minutos} min`
+      return `${minutos} min`
     }
     const horas = Math.floor(minutos / 60)
     const mins = minutos % 60
-    return `${_horas}h ${_mins}m`
+    return `${horas}h ${mins}m`
   }
   const getColorSemaforo = (estado: ProximoArribo['estado']) => {
-    switch (_estado) {
-      case 'verde': {
-  return 'bg-green-500'
-      case 'amarillo': {
-  return 'bg-yellow-500'
-      case 'rojo': {
-  return 'bg-red-500'
+    switch (estado) {
+      case 'verde':
+        return 'bg-green-500'
+      case 'amarillo':
+        return 'bg-yellow-500'
+      case 'rojo':
+        return 'bg-red-500'
+      default:
+        return 'bg-gray-500'
     }
   }
   const getColorFondo = (estado: ProximoArribo['estado'], index: number) => {
@@ -50,7 +52,7 @@ export const ProximosArribos: React.FC<ProximosArribosProps> = ({ arribos }) => 
             </div>
           </div>
         ) : (<div className="divide-y divide-gray-800">
-            {arribos.map((_arribo, index) => (
+            {arribos.map((arribo, index) => (
               <div
                 key={arribo.id}
                 className={cn(

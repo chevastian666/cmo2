@@ -1,5 +1,5 @@
 import React from 'react'
-import {_AlertTriangle, Clock} from 'lucide-react'
+import { AlertTriangle, Clock } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { AlertaTV} from '../types'
 import { TIPOS_ALERTA_TV} from '../types'
@@ -9,24 +9,26 @@ interface AlertasActivasProps {
 
 export const AlertasActivas: React.FC<AlertasActivasProps> = ({ alertas }) => {
   const getColorNivel = (nivel: AlertaTV['nivel']) => {
-    switch (_nivel) {
-      case 'critico': {
-  return 'bg-red-900/50 border-red-700 text-red-300'
-      case 'alto': {
-  return 'bg-orange-900/50 border-orange-700 text-orange-300'
-      case 'medio': {
-  return 'bg-yellow-900/50 border-yellow-700 text-yellow-300'
-      case 'bajo': {
-  return 'bg-gray-800 border-gray-700 text-gray-300'
+    switch (nivel) {
+      case 'critico':
+        return 'bg-red-900/50 border-red-700 text-red-300'
+      case 'alto':
+        return 'bg-orange-900/50 border-orange-700 text-orange-300'
+      case 'medio':
+        return 'bg-yellow-900/50 border-yellow-700 text-yellow-300'
+      case 'bajo':
+        return 'bg-gray-800 border-gray-700 text-gray-300'
+      default:
+        return 'bg-gray-800 border-gray-700 text-gray-300'
     }
   }
   const formatearTiempoTranscurrido = (fecha: Date): string => {
     const ahora = new Date()
     const minutos = Math.floor((ahora.getTime() - fecha.getTime()) / 60000)
     if (minutos < 1) return 'Hace un momento'
-    if (minutos < 60) return `Hace ${_minutos} min`
+    if (minutos < 60) return `Hace ${minutos} min`
     const horas = Math.floor(minutos / 60)
-    if (horas < 24) return `Hace ${_horas}h`
+    if (horas < 24) return `Hace ${horas}h`
     return `Hace ${Math.floor(horas / 24)}d`
   }
   return (
@@ -54,7 +56,7 @@ export const AlertasActivas: React.FC<AlertasActivasProps> = ({ alertas }) => {
             </div>
           </div>
         ) : (<div className="p-4 space-y-3">
-            {alertas.map((_alerta, index) => {
+            {alertas.map((alerta, index) => {
               const tipoInfo = TIPOS_ALERTA_TV[alerta.tipo]
               return (
                 <div

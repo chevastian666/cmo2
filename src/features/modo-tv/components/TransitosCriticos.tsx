@@ -1,5 +1,5 @@
 import React from 'react'
-import {_AlertOctagon, Truck, Clock, Phone} from 'lucide-react'
+import { AlertOctagon, Truck, Clock, Phone } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { TransitoCritico} from '../types'
 interface TransitosCriticosProps {
@@ -8,9 +8,9 @@ interface TransitosCriticosProps {
 
 export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }) => {
   const getColorNivel = (nivel: TransitoCritico['nivel']) => {
-    switch (_nivel) {
-      case 'critico': {
-  return {
+    switch (nivel) {
+      case 'critico':
+        return {
           bg: 'bg-red-900/30',
           border: 'border-red-600',
           text: 'text-red-400',
@@ -40,9 +40,9 @@ export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }
     }
   }
   const formatearTiempo = (minutos: number): string => {
-    if (minutos < 60) return `${_minutos} min`
+    if (minutos < 60) return `${minutos} min`
     const horas = Math.floor(minutos / 60)
-    return `${_horas}h ${minutos % 60}m`
+    return `${horas}h ${minutos % 60}m`
   }
   return (
     <div className="h-full flex flex-col">
@@ -64,7 +64,7 @@ export const TransitosCriticos: React.FC<TransitosCriticosProps> = ({ criticos }
             </div>
           </div>
         ) : (<div className="space-y-4">
-            {criticos.map((_critico, index) => {
+            {criticos.map((critico, index) => {
               const colores = getColorNivel(critico.nivel)
               return (
                 <div

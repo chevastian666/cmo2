@@ -192,6 +192,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
       default:
         return <XCircle className="h-6 w-6 text-gray-500" />
     }
+  }
   // Manejar detección de congestiones
   const handleCongestionDetected = useCallback((congestions: CongestionAnalysis[]) => {
     setLastCongestionNotification(prev => {

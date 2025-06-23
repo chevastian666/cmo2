@@ -43,10 +43,10 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all')
   const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(_null)
   useEffect(() => {
-    if (_isOpen) {
+    if (isOpen) {
       fetchAlertasCriticas()
     }
-  }, [])
+  }, [isOpen])
   // ESC key handler
 
   useEffect(() => {
@@ -55,14 +55,14 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
         onClose()
       }
     }
-    if (_isOpen) {
+    if (isOpen) {
       document.addEventListener('keydown', handleEscKey)
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscKey)
     }
-  }, [])
+  }, [isOpen, onClose])
   const fetchAlertasCriticas = async () => {
     setLoading(_true)
     try {
@@ -89,16 +89,14 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
 
     // Date filter
     const now = Date.now() / 1000
-    switch (_dateFilter) {
-      case 'today': {
-  filtered = filtered.filter(alert => now - alert.timestamp < 86400)
+    switch (dateFilter) {
+      case 'today':
+        filtered = filtered.filter(alert => now - alert.timestamp < 86400)
         break
-    }
-    case 'week':
+      case 'week':
         filtered = filtered.filter(alert => now - alert.timestamp < 604800)
         break
-    }
-    case 'month':
+      case 'month':
         filtered = filtered.filter(alert => now - alert.timestamp < 2592000)
         break
     }
@@ -311,8 +309,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
 
       {/* Detail Modal */}
       {selectedAlerta && (<AlertaDetailModal
-          alerta={s_electedAlerta}
-          onClose={() => setSelectedAlerta(_null)}
+          alerta={selectedAlerta}
+          onClose={() => setSelectedAlerta(null)}
         />
       )}
     </div>
@@ -335,7 +333,7 @@ const AlertaDetailModal: React.FC<{
     return () => {
       document.removeEventListener('keydown', handleEscKey)
     }
-  }, [])
+  }, [onClose])
   return (
     <div className="fixed inset-0 z-60 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">

@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {_AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react'
+import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} from 'lucide-react'
 import { format} from 'date-fns'
 import { Button} from '@/components/ui/button'
 import { cn} from '@/lib/utils'
@@ -20,25 +20,25 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
   alertas, loading, onViewDetail, onRespond, onVerify, onViewLocation
 }) => {
   const getSeverityIcon = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return <XCircle className="h-5 w-5 text-red-400" />
-      case 'alta': {
-  return <AlertCircle className="h-5 w-5 text-orange-400" />
-      case 'media': {
-  return <Clock className="h-5 w-5 text-yellow-400" />
+    switch (severidad) {
+      case 'critica':
+        return <XCircle className="h-5 w-5 text-red-400" />
+      case 'alta':
+        return <AlertCircle className="h-5 w-5 text-orange-400" />
+      case 'media':
+        return <Clock className="h-5 w-5 text-yellow-400" />
       default:
         return <AlertCircle className="h-5 w-5 text-blue-400" />
     }
   }
   const getSeverityColor = (severidad: string) => {
-    switch (s_everidad) {
-      case 'critica': {
-  return 'text-red-400 bg-red-400/10 border-red-400/20'
-      case 'alta': {
-  return 'text-orange-400 bg-orange-400/10 border-orange-400/20'
-      case 'media': {
-  return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20'
+    switch (severidad) {
+      case 'critica':
+        return 'text-red-400 bg-red-400/10 border-red-400/20'
+      case 'alta':
+        return 'text-orange-400 bg-orange-400/10 border-orange-400/20'
+      case 'media':
+        return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20'
       default:
         return 'text-blue-400 bg-blue-400/10 border-blue-400/20'
     }

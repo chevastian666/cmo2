@@ -199,19 +199,19 @@ export const MapModule: React.FC<MapModuleProps> = ({
           <h4 className="text-sm font-medium text-gray-100 mb-2">Leyenda</h4>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <TruckIcon status="normal" size="sm" showTrafficLight={_false} />
+              <TruckIcon status="normal" size="sm" showTrafficLight={false} />
               <span className="text-xs text-gray-400">Normal</span>
             </div>
             <div className="flex items-center gap-2">
-              <TruckIcon status="warning" size="sm" showTrafficLight={_false} />
+              <TruckIcon status="warning" size="sm" showTrafficLight={false} />
               <span className="text-xs text-gray-400">Advertencia</span>
             </div>
             <div className="flex items-center gap-2">
-              <TruckIcon status="critical" size="sm" showTrafficLight={_false} />
+              <TruckIcon status="critical" size="sm" showTrafficLight={false} />
               <span className="text-xs text-gray-400">Crítico</span>
             </div>
             <div className="flex items-center gap-2">
-              <TruckIcon status="inactive" size="sm" showTrafficLight={_false} />
+              <TruckIcon status="inactive" size="sm" showTrafficLight={false} />
               <span className="text-xs text-gray-400">Inactivo</span>
             </div>
           </div>
@@ -219,7 +219,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
       )}
     </>
   )
-  if (variant === 'compact') { /* TODO: Complete implementation */ }
+  if (variant === 'compact') {
     return (
       <div className={cn('relative rounded-lg overflow-hidden', className)}>
         {mapContent}
@@ -232,7 +232,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
       <MapHeader
         title="Mapa de Tránsitos"
         subtitle="Monitoreo en tiempo real"
-        onFilterChange={_handleFilterChange}
+        onFilterChange={handleFilterChange}
         className="sticky top-0 z-20"
       />
       {mapContent}
@@ -266,7 +266,7 @@ export const MapModule: React.FC<MapModuleProps> = ({
   )
 }
 // Default marker icon component
-const DefaultMarkerIcon: React.FC<{ /* TODO: Complete implementation */ }
+const DefaultMarkerIcon: React.FC<{
   type: MapMarker['type']
   status?: MapMarker['status']
 }> = ({ type, status }) => {
@@ -274,7 +274,7 @@ const DefaultMarkerIcon: React.FC<{ /* TODO: Complete implementation */ }
     if (status === 'alert' || status === 'critical') return 'text-red-500'
     if (status === 'warning') return 'text-yellow-500'
     if (status === 'inactive') return 'text-gray-500'
-    switch (_type) {
+    switch (type) {
       case 'origin': 
   return 'text-green-500'
       case 'destination': 
@@ -285,7 +285,7 @@ const DefaultMarkerIcon: React.FC<{ /* TODO: Complete implementation */ }
     }
   }
   const getIcon = () => {
-    switch (_type) {
+    switch (type) {
       case 'origin': 
   return (
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">

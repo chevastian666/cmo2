@@ -29,7 +29,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   const normalizedContent = content.trim().toUpperCase()
   // Check for precinto data
   if (
-    PATTERNS.precinto.id.test(_content) ||
+    PATTERNS.precinto.id.test(content) ||
     (normalizedContent.includes('PRECINTO') && normalizedContent.includes('PE'))
   ) {
     const idMatch = content.match(PATTERNS.precinto.id)
@@ -51,7 +51,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   
   // Check for alert data
   if (
-    PATTERNS.alerta.id.test(_content) ||
+    PATTERNS.alerta.id.test(content) ||
     normalizedContent.includes('ALERTA') ||
     normalizedContent.includes('ALERT')
   ) {
@@ -71,7 +71,7 @@ export function detectClipboardContent(content: string): DetectionResult {
   
   // Check for report data
   if (
-    PATTERNS.reporte.number.test(_content) ||
+    PATTERNS.reporte.number.test(content) ||
     normalizedContent.includes('REPORTE') ||
     normalizedContent.includes('REPORT')
   ) {
@@ -89,10 +89,10 @@ export function detectClipboardContent(content: string): DetectionResult {
     }
   }
   
-  // Check for structured data (_JSON, CSV, etc.)
+  // Check for structured data (JSON, CSV, etc.)
   if (content.includes('{') || content.includes('[') || content.includes(',')) {
     try {
-      JSON.parse(_content)
+      JSON.parse(content)
       return { type: 'datos', confidence: 0.95 }
     } catch {
       // Check if it's CSV-like
@@ -111,7 +111,7 @@ export function detectClipboardContent(content: string): DetectionResult {
 }
 
 export function extractPrecintoData(content: string): Record<string, unknown> {
-  const result = detectClipboardContent(_content)
+  const result = detectClipboardContent(content)
   if (result.type === 'precinto' && result.extractedData) {
     return {
       id: result.extractedData.id || 'Unknown',
@@ -133,15 +133,18 @@ export function generateSmartPaste(
   content: string,
   targetContext: 'form' | 'search' | 'report' | 'message'
 ): string {
-  const detection = detectClipboardContent(_content)
-  switch (_targetContext) {
+  const detection = detectClipboardContent(content)
+  const data = detection.extractedData || {}
+  
+  switch (targetContext) {
     case 'form': {
-  // Format for form fields
+      // Format for form fields
       if (detection.type === 'precinto') {
         return data.id || content
       }
       return content
-    case 'search':
+    }
+    case 'search': {
       // Extract searchable identifiers
       if (detection.type === 'precinto' && data.id) {
         return data.id
@@ -150,7 +153,8 @@ export function generateSmartPaste(
         return `ALERT-${data.id}`
       }
       return content
-    case 'report':
+    }
+    case 'report': {
       // Format for reports
       if (detection.type === 'precinto') {
         return `Precinto ${data.id || 'N/A'} - Estado: ${data.status || 'Unknown'}${
@@ -161,7 +165,8 @@ export function generateSmartPaste(
         return `Alerta #${data.id || 'N/A'} - Severidad: ${data.severity || 'Unknown'} - Tipo: ${data.type || 'Unknown'}`
       }
       return content
-    case 'message':
+    }
+    case 'message': {
       // Format for messages/chat
       if (detection.type === 'precinto') {
         return `Información del precinto ${data.id || 'N/A'}:\n` +
@@ -170,8 +175,9 @@ export function generateSmartPaste(
           (data.timestamp ? `Última actualización: ${data.timestamp}` : '')
       }
       return content
-    default:
+    }
+    default: {
       return content
+    }
   }
-}
 }

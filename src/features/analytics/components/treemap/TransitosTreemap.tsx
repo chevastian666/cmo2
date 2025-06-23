@@ -7,11 +7,13 @@
 import React, { useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group'
-import {_MapPin, Truck, Clock} from 'lucide-react'
+import { MapPin, Truck, Clock } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformTransitsByRoute, createHierarchy, transformByTimePeriod} from '@/components/charts/treemap/utils/dataTransformers'
 export const TransitosTreemap: React.FC = () => {
-
+  // Mock data - in production, replace with real data from store or API
+  const transitos: any[] = []
+  
   const [viewMode, setViewMode] = useState<'routes' | 'timeline' | 'delays'>('routes')
   const treemapData = useMemo(() => {
     if (!transitos.length) {
@@ -27,20 +29,19 @@ export const TransitosTreemap: React.FC = () => {
       }
     }
 
-    switch (_viewMode) {
-      case 'routes': {
-  return transformTransitsByRoute(_transitos)
-      case 'timeline': {
-  return transformByTimePeriod(_transitos, 'fechaInicio', 'week')
+    switch (viewMode) {
+      case 'routes':
+        return transformTransitsByRoute(transitos)
+      case 'timeline':
+        return transformByTimePeriod(transitos, 'fechaInicio', 'week')
       case 'delays': {
-  {
-
         const delayedTransits = transitos.filter(t => t.estado === 'retrasado')
-        return createHierarchy(_delayedTransits, ['origen', 'destino'])
+        return createHierarchy(delayedTransits, ['origen', 'destino'])
+      }
       default:
-        return transformTransitsByRoute(_transitos)
+        return transformTransitsByRoute(transitos)
     }
-  }, [transitos])
+  }, [transitos, viewMode])
   const stats = useMemo(() => {
     const total = transitos.length
     const active = transitos.filter(t => t.estado === 'en_curso').length
@@ -48,12 +49,6 @@ export const TransitosTreemap: React.FC = () => {
     const routes = new Set(transitos.map(t => `${t.origen}-${t.destino}`)).size
     return { total, active, delayed, routes }
   }, [transitos])
-  return (
-    <div className="h-full">
-      <TreemapChart data={_data} onNodeClick={_onNodeClick} />
-    </div>
-  )
-}
   return (<div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -111,7 +106,7 @@ export const TransitosTreemap: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Análisis de Tránsitos</CardTitle>
-            <ToggleGroup value={_viewMode} onValueChange={(_value) => value && setViewMode(value as unknown)}>
+            <ToggleGroup value={viewMode} onValueChange={(value) => value && setViewMode(value as 'routes' | 'timeline' | 'delays')}>
               <ToggleGroupItem value="routes">Rutas</ToggleGroupItem>
               <ToggleGroupItem value="timeline">Línea de Tiempo</ToggleGroupItem>
               <ToggleGroupItem value="delays">Retrasos</ToggleGroupItem>
@@ -120,7 +115,7 @@ export const TransitosTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={_treemapData}
+            data={treemapData}
             width={900}
             height={600}
             title={
@@ -128,9 +123,9 @@ export const TransitosTreemap: React.FC = () => {
               viewMode === 'timeline' ? 'Tránsitos por Semana' :
               'Tránsitos Retrasados'
             }
-            showBreadcrumb={_true}
-            showTooltip={_true}
-            animated={_true}
+            showBreadcrumb={true}
+            showTooltip={true}
+            animated={true}
             colorScheme={
               viewMode === 'delays' 
                 ? ['#ef4444', '#f87171', '#fca5a5', '#fecaca']

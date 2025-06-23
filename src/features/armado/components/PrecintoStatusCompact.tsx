@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle, Zap} from 'lucide-react'
+import { Battery, Radio, MapPin, Lock, LockOpen, ShieldAlert, Clock, AlertTriangle, Zap } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo} from '../../../utils/formatters'
 import type { Precinto} from '../../../types'
@@ -15,8 +15,8 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
   }
   const getEslingaStatus = () => {
     switch (precinto.eslinga.estado) {
-      case 'cerrada': {
-  return {
+      case 'cerrada':
+        return {
           icon: <Lock className="h-4 w-4" />,
           text: 'Cerrada',
           color: 'text-green-400'
@@ -32,6 +32,12 @@ export const PrecintoStatus: React.FC<PrecintoStatusProps> = ({ precinto }) => {
           icon: <ShieldAlert className="h-4 w-4" />,
           text: 'Violada',
           color: 'text-red-400'
+        }
+      default:
+        return {
+          icon: <Lock className="h-4 w-4" />,
+          text: 'Desconocido',
+          color: 'text-gray-400'
         }
     }
   }

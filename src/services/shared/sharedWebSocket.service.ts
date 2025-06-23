@@ -1,15 +1,18 @@
-import { SHARED_CONFIG} from '../../config/shared.config'
-import { jwtService} from '../jwt.service'
+import { SHARED_CONFIG } from '../../config/shared.config'
+import { jwtService } from '../jwt.service'
+
 type EventCallback = (data: unknown) => void
 type ConnectionCallback = (status: 'connected' | 'disconnected' | 'reconnecting') => void
-interface QueuedMessage { /* TODO: Complete implementation */ }
+
+interface QueuedMessage {
   id: string
   type: string
   data: unknown
   timestamp: number
   retries: number
 }
-export class SharedWebSocketService { /* TODO: Complete implementation */ }
+
+export class SharedWebSocketService {
   private ws: WebSocket | null = null
   private url: string
   private reconnectAttempts = 0
@@ -27,52 +30,52 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
   // State tracking
   private connectionState: 'connected' | 'disconnected' | 'reconnecting' = 'disconnected'
   private lastEventTimestamps = new Map<string, number>()
-  constructor(url?: string) { /* TODO: Complete implementation */ }
+  constructor(url?: string) {
     this.url = url || SHARED_CONFIG.WS_BASE_URL
     // Enable simulation mode in development or when explicitly set
-    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA || this.url.includes('localhost')) { /* TODO: Complete implementation */ }
+    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA || this.url.includes('localhost')) {
       console.log('WebSocket running in simulation mode')
     }
   }
   // Connection management
-  connect(): void { /* TODO: Complete implementation */ }
-    if (this.ws?.readyState === WebSocket.OPEN) { /* TODO: Complete implementation */ }
+  connect(): void {
+    if (this.ws?.readyState === WebSocket.OPEN) {
       console.log('WebSocket already connected')
       return
     }
     // Use simulation mode in development
-    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) { /* TODO: Complete implementation */ }
+    if (SHARED_CONFIG.IS_DEVELOPMENT || SHARED_CONFIG.ENABLE_MOCK_DATA) {
       this.startSimulation()
       return
     }
-    try { /* TODO: Complete implementation */ }
+    try {
       this.ws = new WebSocket(this.url)
       this.setupEventListeners()
       this.updateConnectionState('reconnecting')
-    } catch { /* TODO: Complete implementation */ }
+    } catch (error) {
       console.error('WebSocket connection error:', error)
       // Fall back to simulation mode
-      if (SHARED_CONFIG.IS_DEVELOPMENT) { /* TODO: Complete implementation */ }
+      if (SHARED_CONFIG.IS_DEVELOPMENT) {
         console.log('Falling back to simulation mode')
         this.startSimulation()
-      } else { /* TODO: Complete implementation */ }
+      } else {
         this.scheduleReconnect()
       }
     }
   }
-  disconnect(): void { /* TODO: Complete implementation */ }
+  disconnect(): void {
     this.clearTimers()
     this.stopSimulation()
-    if (this.ws) { /* TODO: Complete implementation */ }
+    if (this.ws) {
       this.ws.close()
       this.ws = null
     }
     this.isAuthenticated = false
     this.updateConnectionState('disconnected')
   }
-  private setupEventListeners(): void { /* TODO: Complete implementation */ }
+  private setupEventListeners(): void {
     if (!this.ws) return
-    this.ws.onopen = () => { /* TODO: Complete implementation */ }
+    this.ws.onopen = () => {
       console.log('WebSocket connected')
       this.reconnectAttempts = 0
       this.reconnectDelay = 1000
@@ -81,18 +84,18 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
       this.startHeartbeat()
       this.processMessageQueue()
     }
-    this.ws.onmessage = (_event) => { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
+    this.ws.onmessage = (event) => {
+      try {
         const message = JSON.parse(event.data)
-        this.handleMessage(_message)
-      } catch { /* TODO: Complete implementation */ }
+        this.handleMessage(message)
+      } catch (error) {
         console.error('Failed to parse WebSocket message:', error)
       }
     }
-    this.ws.onerror = (_error) => { /* TODO: Complete implementation */ }
+    this.ws.onerror = (error) => {
       console.error('WebSocket error:', error)
     }
-    this.ws.onclose = () => { /* TODO: Complete implementation */ }
+    this.ws.onclose = () => {
       console.log('WebSocket disconnected')
       this.isAuthenticated = false
       this.updateConnectionState('disconnected')
@@ -100,11 +103,12 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
       this.scheduleReconnect()
     }
   }
-  private handleMessage(): void { /* TODO: Complete implementation */ }
+  private handleMessage(message: any): void {
+    const { type, data, timestamp } = message
     // Handle system messages
-    switch (_type) { /* TODO: Complete implementation */ }
-      case 'auth_success': { /* TODO: Complete implementation */ }
-  this.isAuthenticated = true
+    switch (type) {
+      case 'auth_success':
+        this.isAuthenticated = true
         console.log('WebSocket authenticated')
         break
       case 'auth_error':
@@ -119,189 +123,190 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
         break
       default:
         // Handle business events
-        this.emitEvent(_type, data)
-        this.lastEventTimestamps.set(_type, timestamp || Date.now())
+        this.emitEvent(type, data)
+        this.lastEventTimestamps.set(type, timestamp || Date.now())
     }
   }
-  private authenticate(): void { /* TODO: Complete implementation */ }
+  private authenticate(): void {
     const token = jwtService.getAccessToken()
-    if (_token) { /* TODO: Complete implementation */ }
+    if (token) {
       this.send('auth', { token })
     }
   }
-  private startHeartbeat(): void { /* TODO: Complete implementation */ }
-    this.heartbeatInterval = setInterval(() => { /* TODO: Complete implementation */ }
-      if (this.isConnected()) { /* TODO: Complete implementation */ }
+  private startHeartbeat(): void {
+    this.heartbeatInterval = setInterval(() => {
+      if (this.isConnected()) {
         this.send('heartbeat', { timestamp: Date.now() })
       }
     }, 30000); // Every 30 seconds
   }
-  private clearTimers(): void { /* TODO: Complete implementation */ }
-    if (this.heartbeatInterval) { /* TODO: Complete implementation */ }
+  private clearTimers(): void {
+    if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval)
       this.heartbeatInterval = null
     }
-    if (this.reconnectTimeout) { /* TODO: Complete implementation */ }
+    if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout)
       this.reconnectTimeout = null
     }
   }
-  private scheduleReconnect(): void { /* TODO: Complete implementation */ }
-    if (this.reconnectAttempts >= this.maxReconnectAttempts) { /* TODO: Complete implementation */ }
+  private scheduleReconnect(): void {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.error('Max reconnection attempts reached')
       this.updateConnectionState('disconnected')
       return
     }
     this.reconnectAttempts++
     this.updateConnectionState('reconnecting')
-    this.reconnectTimeout = setTimeout(() => { /* TODO: Complete implementation */ }
+    this.reconnectTimeout = setTimeout(() => {
       console.log(`Reconnection attempt ${this.reconnectAttempts}`)
       this.connect()
     }, this.reconnectDelay)
     // Exponential backoff
     this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000)
   }
-  private updateConnectionState(state: 'connected' | 'disconnected' | 'reconnecting'): void { /* TODO: Complete implementation */ }
+  private updateConnectionState(state: 'connected' | 'disconnected' | 'reconnecting'): void {
     this.connectionState = state
-    this.connectionListeners.forEach(listener => listener(s_tate))
+    this.connectionListeners.forEach(listener => listener(state))
   }
   // Message handling
-  send(type: string, data: unknown = {}): void { /* TODO: Complete implementation */ }
-    const message = { /* TODO: Complete implementation */ }
+  send(type: string, data: unknown = {}): void {
+    const message: QueuedMessage = {
       id: this.generateMessageId(),
       type,
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      retries: 0
     }
-    if (this.isConnected() && this.isAuthenticated) { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
-        this.ws!.send(JSON.stringify(_message))
-      } catch { /* TODO: Complete implementation */ }
+    if (this.isConnected() && this.isAuthenticated) {
+      try {
+        this.ws!.send(JSON.stringify(message))
+      } catch (error) {
         console.error('Failed to send message:', error)
-        this.queueMessage(_message)
+        this.queueMessage(message)
       }
-    } else { /* TODO: Complete implementation */ }
-      this.queueMessage(_message)
+    } else {
+      this.queueMessage(message)
     }
   }
-  private queueMessage(message: QueuedMessage): void { /* TODO: Complete implementation */ }
+  private queueMessage(message: QueuedMessage): void {
     this.messageQueue.push({ ...message, retries: 0 })
     // Limit queue size
-    if (this.messageQueue.length > 100) { /* TODO: Complete implementation */ }
+    if (this.messageQueue.length > 100) {
       this.messageQueue.shift()
     }
   }
-  private async processMessageQueue(): Promise<void> { /* TODO: Complete implementation */ }
+  private async processMessageQueue(): Promise<void> {
     if (!this.isConnected() || !this.isAuthenticated) return
     const messages = [...this.messageQueue]
     this.messageQueue = []
-    for (const message of messages) { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
-        this.ws!.send(JSON.stringify(_message))
-      } catch { /* TODO: Complete implementation */ }
-        if (message.retries < 3) { /* TODO: Complete implementation */ }
+    for (const message of messages) {
+      try {
+        this.ws!.send(JSON.stringify(message))
+      } catch (error) {
+        if (message.retries < 3) {
           message.retries++
-          this.messageQueue.push(_message)
+          this.messageQueue.push(message)
         }
       }
     }
   }
   // Event subscription
-  on(event: string, callback: EventCallback): () => void { /* TODO: Complete implementation */ }
-    if (!this.eventListeners.has(_event)) { /* TODO: Complete implementation */ }
-      this.eventListeners.set(_event, new Set())
+  on(event: string, callback: EventCallback): () => void {
+    if (!this.eventListeners.has(event)) {
+      this.eventListeners.set(event, new Set())
     }
-    this.eventListeners.get(_event)!.add(_callback)
+    this.eventListeners.get(event)!.add(callback)
     // Return unsubscribe function
-    return () => { /* TODO: Complete implementation */ }
-      const listeners = this.eventListeners.get(_event)
-      if (_listeners) { /* TODO: Complete implementation */ }
-        listeners.delete(_callback)
-        if (listeners.size === 0) { /* TODO: Complete implementation */ }
-          this.eventListeners.delete(_event)
+    return () => {
+      const listeners = this.eventListeners.get(event)
+      if (listeners) {
+        listeners.delete(callback)
+        if (listeners.size === 0) {
+          this.eventListeners.delete(event)
         }
       }
     }
   }
-  onAny(callback: EventCallback): () => void { /* TODO: Complete implementation */ }
-    this.globalListeners.add(_callback)
-    return () => this.globalListeners.delete(_callback)
+  onAny(callback: EventCallback): () => void {
+    this.globalListeners.add(callback)
+    return () => this.globalListeners.delete(callback)
   }
-  onConnection(callback: ConnectionCallback): () => void { /* TODO: Complete implementation */ }
-    this.connectionListeners.add(_callback)
+  onConnection(callback: ConnectionCallback): () => void {
+    this.connectionListeners.add(callback)
     // Immediately call with current state
     callback(this.connectionState)
-    return () => this.connectionListeners.delete(_callback)
+    return () => this.connectionListeners.delete(callback)
   }
-  off(event: string, callback?: EventCallback): void { /* TODO: Complete implementation */ }
-    if (!callback) { /* TODO: Complete implementation */ }
-      this.eventListeners.delete(_event)
-    } else { /* TODO: Complete implementation */ }
-      const listeners = this.eventListeners.get(_event)
-      if (_listeners) { /* TODO: Complete implementation */ }
-        listeners.delete(_callback)
+  off(event: string, callback?: EventCallback): void {
+    if (!callback) {
+      this.eventListeners.delete(event)
+    } else {
+      const listeners = this.eventListeners.get(event)
+      if (listeners) {
+        listeners.delete(callback)
       }
     }
   }
-  private emitEvent(event: string, data: unknown): void { /* TODO: Complete implementation */ }
+  private emitEvent(event: string, data: unknown): void {
     // Emit to specific event listeners
-    const listeners = this.eventListeners.get(_event)
-    if (_listeners) { /* TODO: Complete implementation */ }
-      listeners.forEach(callback => { /* TODO: Complete implementation */ }
-        try { /* TODO: Complete implementation */ }
-          callback(_data)
-        } catch (_error) { /* TODO: Complete implementation */ }
-          console.error(`Error in event listener for ${_event}:`, error)
+    const listeners = this.eventListeners.get(event)
+    if (listeners) {
+      listeners.forEach(callback => {
+        try {
+          callback(data)
+        } catch (error) {
+          console.error(`Error in event listener for ${event}:`, error)
         }
       })
     }
     // Emit to global listeners
-    this.globalListeners.forEach(callback => { /* TODO: Complete implementation */ }
-      try { /* TODO: Complete implementation */ }
+    this.globalListeners.forEach(callback => {
+      try {
         callback({ type: event, data })
-      } catch { /* TODO: Complete implementation */ }
+      } catch (error) {
         console.error('Error in global event listener:', error)
       }
     })
   }
   // Simulation mode
   private simulationInterval: NodeJS.Timeout | null = null
-  private startSimulation(): void { /* TODO: Complete implementation */ }
+  private startSimulation(): void {
     console.log('Starting WebSocket simulation mode')
     this.updateConnectionState('connected')
     this.isAuthenticated = true
     // Simulate periodic updates
-    this.simulationInterval = setInterval(() => { /* TODO: Complete implementation */ }
+    this.simulationInterval = setInterval(() => {
       const random = Math.random()
       // 20% chance of new alert
-      if (random < 0.2) { /* TODO: Complete implementation */ }
+      if (random < 0.2) {
         this.simulateAlert()
       }
       // 30% chance of transit update
-      else if (random < 0.5) { /* TODO: Complete implementation */ }
+      else if (random < 0.5) {
         this.simulateTransitUpdate()
       }
       // 20% chance of precinto update
-      else if (random < 0.7) { /* TODO: Complete implementation */ }
+      else if (random < 0.7) {
         this.simulatePrecintoUpdate()
       }
       // 30% chance of system update
-      else { /* TODO: Complete implementation */ }
+      else {
         this.simulateSystemUpdate()
       }
     }, 5000); // Every 5 seconds
   }
-  private stopSimulation(): void { /* TODO: Complete implementation */ }
-    if (this.simulationInterval) { /* TODO: Complete implementation */ }
+  private stopSimulation(): void {
+    if (this.simulationInterval) {
       clearInterval(this.simulationInterval)
       this.simulationInterval = null
     }
   }
-  private simulateAlert(): void { /* TODO: Complete implementation */ }
+  private simulateAlert(): void {
     const alertTypes = ['violacion', 'bateria_baja', 'fuera_de_ruta', 'sin_signal', 'temperatura']
     const severidades = ['critica', 'alta', 'media', 'baja']
-    this.emitEvent(SHARED_CONFIG.WS_EVENTS.ALERT_NEW, { /* TODO: Complete implementation */ }
-      alert: { /* TODO: Complete implementation */ }
+    this.emitEvent(SHARED_CONFIG.WS_EVENTS.ALERT_NEW, {
+      alert: {
         id: `alert-${Date.now()}`,
         tipo: alertTypes[Math.floor(Math.random() * alertTypes.length)],
         precintoId: `pr-${Math.floor(Math.random() * 10)}`,
@@ -310,31 +315,31 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
         timestamp: Math.floor(Date.now() / 1000),
         severidad: severidades[Math.floor(Math.random() * severidades.length)],
         atendida: false,
-        ubicacion: { /* TODO: Complete implementation */ }
+        ubicacion: {
           lat: -34.9011 + (Math.random() - 0.5) * 0.1,
           lng: -56.1645 + (Math.random() - 0.5) * 0.1
         }
       }
     })
   }
-  private simulateTransitUpdate(): void { /* TODO: Complete implementation */ }
-    this.emitEvent(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, { /* TODO: Complete implementation */ }
+  private simulateTransitUpdate(): void {
+    this.emitEvent(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, {
       transitId: `tr-${Math.floor(Math.random() * 10)}`,
       action: 'update',
-      transit: { /* TODO: Complete implementation */ }
+      transit: {
         estado: Math.random() > 0.5 ? 'en_proceso' : 'pendiente'
       }
     })
   }
-  private simulatePrecintoUpdate(): void { /* TODO: Complete implementation */ }
+  private simulatePrecintoUpdate(): void {
     const estados = ['SAL', 'LLE', 'FMF', 'CFM', 'CNP']
-    this.emitEvent(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, { /* TODO: Complete implementation */ }
+    this.emitEvent(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, {
       precintoId: `pr-${Math.floor(Math.random() * 10)}`,
       action: 'update',
-      precinto: { /* TODO: Complete implementation */ }
+      precinto: {
         estado: estados[Math.floor(Math.random() * estados.length)],
         bateria: Math.floor(Math.random() * 100),
-        ubicacionActual: { /* TODO: Complete implementation */ }
+        ubicacionActual: {
           lat: -34.9011 + (Math.random() - 0.5) * 0.1,
           lng: -56.1645 + (Math.random() - 0.5) * 0.1,
           direccion: 'Ubicación actualizada'
@@ -342,16 +347,16 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
       }
     })
   }
-  private simulateSystemUpdate(): void { /* TODO: Complete implementation */ }
-    this.emitEvent(SHARED_CONFIG.WS_EVENTS.SYSTEM_UPDATE, { /* TODO: Complete implementation */ }
+  private simulateSystemUpdate(): void {
+    this.emitEvent(SHARED_CONFIG.WS_EVENTS.SYSTEM_UPDATE, {
       smsPendientes: Math.floor(Math.random() * 200),
       precintosActivos: 127 + Math.floor(Math.random() * 20),
       alertasActivas: Math.floor(Math.random() * 10),
-      dbStats: { /* TODO: Complete implementation */ }
+      dbStats: {
         memoriaUsada: 60 + Math.random() * 30,
         discoUsado: 40 + Math.random() * 20
       },
-      apiStats: { /* TODO: Complete implementation */ }
+      apiStats: {
         memoriaUsada: 50 + Math.random() * 40,
         discoUsado: 20 + Math.random() * 30
       },
@@ -359,47 +364,48 @@ export class SharedWebSocketService { /* TODO: Complete implementation */ }
     })
   }
   // Utility methods
-  isConnected(): boolean { /* TODO: Complete implementation */ }
+  isConnected(): boolean {
     return this.ws?.readyState === WebSocket.OPEN || this.simulationInterval !== null
   }
-  getConnectionState(): 'connected' | 'disconnected' | 'reconnecting' { /* TODO: Complete implementation */ }
+  getConnectionState(): 'connected' | 'disconnected' | 'reconnecting' {
     return this.connectionState
   }
-  getLastEventTimestamp(event: string): number | undefined { /* TODO: Complete implementation */ }
-    return this.lastEventTimestamps.get(_event)
+  getLastEventTimestamp(event: string): number | undefined {
+    return this.lastEventTimestamps.get(event)
   }
-  private generateMessageId(): string { /* TODO: Complete implementation */ }
+  private generateMessageId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
   }
   // Typed event methods for common operations
-  emitTransitUpdate(transitId: string, data: unknown): void { /* TODO: Complete implementation */ }
+  emitTransitUpdate(transitId: string, data: any): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, { transitId, ...data })
   }
-  emitPrecintoUpdate(precintoId: string, data: unknown): void { /* TODO: Complete implementation */ }
+  emitPrecintoUpdate(precintoId: string, data: any): void {
     this.send(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, { precintoId, ...data })
   }
-  emitAlertUpdate(alertId: string, data: unknown): void { /* TODO: Complete implementation */ }
+  emitAlertUpdate(alertId: string, data: any): void {
     this.send(SHARED_CONFIG.WS_EVENTS.ALERT_UPDATE, { alertId, ...data })
   }
-  emitTruckPosition(truckId: string, position: unknown): void { /* TODO: Complete implementation */ }
+  emitTruckPosition(truckId: string, position: any): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRUCK_POSITION, { truckId, position })
   }
-  emitCMOMessage(message: unknown): void { /* TODO: Complete implementation */ }
+  emitCMOMessage(message: any): void {
     this.send(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, message)
   }
   // Subscribe to typed events
-  onTransitUpdate(callback: (data: unknown) => void): () => void { /* TODO: Complete implementation */ }
+  onTransitUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, callback)
   }
-  onPrecintoUpdate(callback: (data: unknown) => void): () => void { /* TODO: Complete implementation */ }
+  onPrecintoUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, callback)
   }
-  onAlertNew(callback: (data: unknown) => void): () => void { /* TODO: Complete implementation */ }
+  onAlertNew(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.ALERT_NEW, callback)
   }
-  onSystemUpdate(callback: (data: unknown) => void): () => void { /* TODO: Complete implementation */ }
+  onSystemUpdate(callback: (data: unknown) => void): () => void {
     return this.on(SHARED_CONFIG.WS_EVENTS.SYSTEM_UPDATE, callback)
   }
 }
+
 // Export singleton instance
-export const sharedWebSocketService = new SharedWebSocketService()}
+export const sharedWebSocketService = new SharedWebSocketService()

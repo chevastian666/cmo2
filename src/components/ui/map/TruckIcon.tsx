@@ -59,7 +59,7 @@ export const TruckIcon: React.FC<TruckIconProps> = ({
           shouldAnimate && status === 'critical' && 'animate-pulse',
           'transition-all duration-300'
         )}
-        style={{ transform: `rotate(${_direction}deg)` }}
+        style={{ transform: `rotate(${direction}deg)` }}
         viewBox="0 0 24 24"
         fill="currentColor"
       >
@@ -110,12 +110,12 @@ export const TruckIconDetailed: React.FC<TruckIconProps> = ({
   }
   const getStatusColor = () => {
     switch (status) {
-      case 'critical': {
-  return '#ef4444'; // red-500
-      case 'warning': {
-  return '#f59e0b'; // yellow-500
-      case 'inactive': {
-  return '#6b7280'; // gray-500
+      case 'critical':
+        return '#ef4444'; // red-500
+      case 'warning':
+        return '#f59e0b'; // yellow-500
+      case 'inactive':
+        return '#6b7280'; // gray-500
       default:
         return '#10b981'; // green-500
     }
@@ -129,7 +129,7 @@ export const TruckIconDetailed: React.FC<TruckIconProps> = ({
           shouldAnimate && status === 'critical' && 'animate-pulse',
           'transition-all duration-300'
         )}
-        style={{ transform: `rotate(${_direction}deg)` }}
+        style={{ transform: `rotate(${direction}deg)` }}
         viewBox="0 0 100 100"
         fill="none"
       >

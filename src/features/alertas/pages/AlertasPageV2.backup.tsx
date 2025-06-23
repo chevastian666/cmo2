@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { useAlertasStore } from '../../../store/hooks/useAlertas'
 import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react'
 import { Input} from '@/components/ui/input'
 import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
@@ -52,7 +53,7 @@ const KPICard: React.FC<{
             repeatType: "reverse"
           }}
         >
-          {_icon}
+          {icon}
         </motion.div>
       </div>
     </CardHeader>
@@ -258,7 +259,7 @@ const StatCard: React.FC<{
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div className={cn("p-1.5 rounded", color)}>
-            {_icon}
+            {icon}
           </div>
           <span className="text-sm text-gray-400">{_label}</span>
         </div>
@@ -270,12 +271,14 @@ const StatCard: React.FC<{
   )
 }
 const AlertasPageV2: React.FC = () => {
-
-  const [showHistorialModal, setShowHistorialModal] = useState(_false)
-  const [showVerificarModal, setShowVerificarModal] = useState(_false)
+  const { alertas, alertasActivas, loading, error, filter, actions } = useAlertasStore()
+  const { fetchAlertas, fetchAlertasActivas, atenderAlerta } = actions
+  
+  const [showHistorialModal, setShowHistorialModal] = useState(false)
+  const [showVerificarModal, setShowVerificarModal] = useState(false)
   const [selectedTab, setSelectedTab] = useState('todas')
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(_null)
+  const [selectedAlerta, setSelectedAlerta] = useState<Alerta | null>(null)
     useEffect(() => {
     fetchAlertas()
     fetchAlertasActivas()
@@ -283,8 +286,8 @@ const AlertasPageV2: React.FC = () => {
     const interval = setInterval(() => {
       fetchAlertasActivas()
     }, 30000)
-    return () => clearInterval(_interval)
-  }, [])
+    return () => clearInterval(interval)
+  }, [fetchAlertas, fetchAlertasActivas])
   // Estadísticas calculadas
   const stats = React.useMemo(() => {
     const criticas = alertasActivas.filter(a => a.severidad === 'critica').length
@@ -311,31 +314,28 @@ const AlertasPageV2: React.FC = () => {
         intrusion: alertasActivas.filter(a => a.tipo === 'intrusion').length,
       }
     }
-  }, [alertas])
+  }, [alertas, alertasActivas])
   // Filtrar alertas según tab y búsqueda
   const filteredAlertas = React.useMemo(() => {
     let filtered = [...alertas]
     // Filtro por tab
-    switch (s_electedTab) {
-      case 'activas': {
-  filtered = filtered.filter(a => !a.atendida)
+    switch (selectedTab) {
+      case 'activas':
+        filtered = filtered.filter(a => !a.atendida)
         break
-    }
-    case 'criticas':
+      case 'criticas':
         filtered = filtered.filter(a => a.severidad === 'critica' && !a.atendida)
         break
-    }
-    case 'asignadas':
+      case 'asignadas':
         filtered = filtered.filter(a => a.asignadoA && !a.atendida)
         break
-    }
-    case 'resueltas':
+      case 'resueltas':
         filtered = filtered.filter(a => a.atendida)
         break
     }
     
     // Filtro por búsqueda
-    if (s_earchTerm) {
+    if (searchTerm) {
       filtered = filtered.filter(a => 
         a.precintoId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         a.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -352,18 +352,18 @@ const AlertasPageV2: React.FC = () => {
     }
     
     // Ordenar por fecha descendente
-    filtered.sort((_a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    filtered.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
     return filtered
-  }, [filter])
+  }, [alertas, selectedTab, searchTerm, filter])
   const handleVerificarAlerta = (alerta: Alerta) => {
-    setSelectedAlerta(_alerta)
-    setShowVerificarModal(_true)
+    setSelectedAlerta(alerta)
+    setShowVerificarModal(true)
   }
   const handleVerificarSuccess = async () => {
-    if (s_electedAlerta) {
+    if (selectedAlerta) {
       await atenderAlerta(selectedAlerta.id)
-      setShowVerificarModal(_false)
-      setSelectedAlerta(_null)
+      setShowVerificarModal(false)
+      setSelectedAlerta(null)
       fetchAlertasActivas()
     }
   }
@@ -376,7 +376,7 @@ const AlertasPageV2: React.FC = () => {
           action={
             <AnimatedButton
               variant="danger"
-              onClick={() => setShowHistorialModal(_true)}
+              onClick={() => setShowHistorialModal(true)}
               className="flex items-center gap-2"
             >
               <History className="h-5 w-5" />
@@ -494,10 +494,10 @@ const AlertasPageV2: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Input
                     placeholder="Buscar alertas..."
-                    value={s_earchTerm}
-                    onChange={(_e) => setSearchTerm(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-64 bg-gray-800 border-gray-700"
-                    icon={<Filter className="h-4 w-4 text-gray-400" />}
+                    // icon={<Filter className="h-4 w-4 text-gray-400" />}
                   />
                   
                   <AnimatedButton
@@ -506,7 +506,7 @@ const AlertasPageV2: React.FC = () => {
                       fetchAlertas()
                       fetchAlertasActivas()
                     }}
-                    disabled={_loading}
+                    disabled={loading}
                   >
                     <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                   </AnimatedButton>
@@ -514,7 +514,7 @@ const AlertasPageV2: React.FC = () => {
               </div>
             </CardHeader>
             
-            <Tabs value={s_electedTab} onValueChange={s_etSelectedTab} className="w-full">
+            <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
               <TabsList className="grid w-full grid-cols-5 bg-gray-800">
                 <TabsTrigger value="todas">
                   Todas ({alertas.length})
@@ -533,7 +533,7 @@ const AlertasPageV2: React.FC = () => {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value={s_electedTab} className="mt-0">
+              <TabsContent value={selectedTab} className="mt-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -564,7 +564,7 @@ const AlertasPageV2: React.FC = () => {
                           <td colSpan={6} className="px-6 py-8">
                             <div className="space-y-3">
                               {[1, 2, 3, 4, 5].map(i => (
-                                <AnimatedSkeleton key={_i} className="h-16 w-full" />
+                                <AnimatedSkeleton key={i} className="h-16 w-full" />
                               ))}
                             </div>
                           </td>
@@ -583,12 +583,12 @@ const AlertasPageV2: React.FC = () => {
                           </td>
                         </tr>
                       ) : (<AnimatePresence mode="popLayout">
-                          {filteredAlertas.map((_alerta, index) => (
+                          {filteredAlertas.map((alerta, index) => (
                             <AlertRow
                               key={alerta.id}
-                              alerta={_alerta}
-                              onVerificar={_handleVerificarAlerta}
-                              index={_index}
+                              alerta={alerta}
+                              onVerificar={handleVerificarAlerta}
+                              index={index}
                             />
                           ))}
                         </AnimatePresence>
@@ -604,19 +604,19 @@ const AlertasPageV2: React.FC = () => {
 
       {/* Modal de historial */}
       <HistorialAlertasCriticasModal
-        isOpen={s_howHistorialModal}
-        onClose={() => setShowHistorialModal(_false)}
+        isOpen={showHistorialModal}
+        onClose={() => setShowHistorialModal(false)}
       />
 
       {/* Modal de verificar */}
       {selectedAlerta && (<VerificarAlertaModalV2
-          isOpen={s_howVerificarModal}
+          isOpen={showVerificarModal}
           onClose={() => {
-            setShowVerificarModal(_false)
-            setSelectedAlerta(_null)
+            setShowVerificarModal(false)
+            setSelectedAlerta(null)
           }}
-          alerta={s_electedAlerta}
-          onSuccess={_handleVerificarSuccess}
+          alerta={selectedAlerta}
+          onSuccess={handleVerificarSuccess}
         />
       )}
     </PageTransition>
