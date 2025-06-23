@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import {_X, User, Phone, Flag, AlertCircle} from 'lucide-react'
-import {_useUserInfo} from '../../../hooks/useAuth'
+import { X, User, Phone, Flag, AlertCircle } from 'lucide-react'
+import { useUserInfo } from '../../../hooks/useAuth'
 import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
 import type { Nacionalidad} from '../types'
 interface FormularioCamioneroProps {
@@ -114,7 +114,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               <input
                 type="text"
                 value={formData.nombre}
-                onChange={(__e) => handleChange('nombre', e.target.value)}
+                onChange={(e) => handleChange('nombre', e.target.value)}
                 placeholder="Ej: Juan"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
@@ -131,7 +131,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               <input
                 type="text"
                 value={formData.apellido}
-                onChange={(__e) => handleChange('apellido', e.target.value)}
+                onChange={(e) => handleChange('apellido', e.target.value)}
                 placeholder="Ej: Pérez"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
@@ -150,7 +150,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               </label>
               <select
                 value={formData.tipoDocumento}
-                onChange={(__e) => handleChange('tipoDocumento', e.target.value)}
+                onChange={(e) => handleChange('tipoDocumento', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
               >
@@ -169,7 +169,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               <input
                 type="text"
                 value={formData.documento}
-                onChange={(__e) => handleChange('documento', e.target.value)}
+                onChange={(e) => handleChange('documento', e.target.value)}
                 placeholder="Ej: 12345678"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
@@ -188,7 +188,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               </label>
               <select
                 value={formData.nacionalidad}
-                onChange={(__e) => handleChange('nacionalidad', e.target.value)}
+                onChange={(e) => handleChange('nacionalidad', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
               >
@@ -207,7 +207,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 <input
                   type="text"
                   value={formData.paisOrigen}
-                  onChange={(__e) => handleChange('paisOrigen', e.target.value)}
+                  onChange={(e) => handleChange('paisOrigen', e.target.value)}
                   placeholder="Ej: Perú"
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled={_loading}
@@ -231,7 +231,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               <input
                 type="tel"
                 value={formData.telefonoUruguayo}
-                onChange={(__e) => handleChange('telefonoUruguayo', e.target.value)}
+                onChange={(e) => handleChange('telefonoUruguayo', e.target.value)}
                 placeholder="Ej: 099123456"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
@@ -248,7 +248,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
               <input
                 type="tel"
                 value={formData.telefonoPais}
-                onChange={(__e) => handleChange('telefonoPais', e.target.value)}
+                onChange={(e) => handleChange('telefonoPais', e.target.value)}
                 placeholder="Ej: +541123456789"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={_loading}
@@ -267,7 +267,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
             </label>
             <textarea
               value={formData.comentario}
-              onChange={(__e) => handleChange('comentario', e.target.value)}
+              onChange={(e) => handleChange('comentario', e.target.value)}
               placeholder="Ej: Chofer de confianza, siempre puntual..."
               rows={3}
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { cn} from '../../utils/utils'
 import { StatusBadge} from './StatusBadge'
 import { EmptyState} from './EmptyState'
-import {_AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react'
+import {AlertTriangle, CheckCircle, Info, Bell, ChevronDown, ChevronRight} from 'lucide-react'
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 export interface Alert {
   id: string
@@ -53,19 +53,19 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     const currentAlertIds = new Set(alerts.map(a => a.id))
     const newIds = new Set<string>()
     currentAlertIds.forEach(id => {
-      if (!previousAlertIds.has(_id)) {
-        newIds.add(_id)
+      if (!previousAlertIds.has(id)) {
+        newIds.add(id)
       }
     })
     if (newIds.size > 0) {
-      setNewAlertIds(_newIds)
+      setNewAlertIds(newIds)
       // Detectar si hay alertas críticas nuevas
       const hasCriticalAlert = alerts.some(
         alert => newIds.has(alert.id) && (alert.severity === 'critical' || alert.severity === 'high')
       )
-      if (_hasCriticalAlert) {
+      if (hasCriticalAlert) {
         // Efecto visual de pulso
-        if (_enableVisualPulse) {
+        if (enableVisualPulse) {
           document.body.classList.add('critical-alert-pulse')
           setTimeout(() => {
             document.body.classList.remove('critical-alert-pulse')
@@ -77,9 +77,9 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           try {
             const audio = new Audio('/sounds/alert.mp3')
             audio.volume = 0.5
-            audio.play().catch(e => console.log('No se pudo reproducir el sonido:', e))
-          } catch (_e) {
-            console.log('Error al crear audio:', e)
+            audio.play().catch(() => { /* Error reproduciendo sonido */ })
+          } catch {
+            // Error al crear audio
           }
         }
       }
@@ -90,8 +90,8 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       }, 3000)
     }
 
-    setPreviousAlertIds(_currentAlertIds)
-  }, [alerts])
+    setPreviousAlertIds(currentAlertIds)
+  }, [alerts, previousAlertIds, enableSound, enableVisualPulse])
   // Agrupar alertas por severidad
   const groupedAlerts = useMemo(() => {
     if (!groupByPriority) return null
@@ -127,11 +127,11 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     // Clasificar alertas en grupos
     alerts.forEach(alert => {
       if (alert.severity === 'critical' || alert.severity === 'high') {
-        groups[0].alerts.push(_alert)
+        groups[0].alerts.push(alert)
       } else if (alert.severity === 'medium' || alert.severity === 'low') {
-        groups[1].alerts.push(_alert)
+        groups[1].alerts.push(alert)
       } else {
-        groups[2].alerts.push(_alert)
+        groups[2].alerts.push(alert)
       }
     })
     // Filtrar grupos vacíos
@@ -158,7 +158,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     return variants[severity]
   }
   const formatTimestamp = (timestamp: Date | string) => {
-    const date = timestamp instanceof Date ? timestamp : new Date(_timestamp)
+    const date = timestamp instanceof Date ? timestamp : new Date(timestamp)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     if (diff < 60000) return 'Hace un momento'
@@ -167,13 +167,13 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     return date.toLocaleDateString()
   }
   const toggleGroup = (severity: string) => {
-    const newCollapsed = new Set(_collapsedGroups)
-    if (newCollapsed.has(s_everity)) {
-      newCollapsed.delete(s_everity)
+    const newCollapsed = new Set(collapsedGroups)
+    if (newCollapsed.has(severity)) {
+      newCollapsed.delete(severity)
     } else {
-      newCollapsed.add(s_everity)
+      newCollapsed.add(severity)
     }
-    setCollapsedGroups(_newCollapsed)
+    setCollapsedGroups(newCollapsed)
   }
   const renderAlert = (alert: Alert) => {
     const isNew = newAlertIds.has(alert.id)
@@ -189,7 +189,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           isNew && 'animate-slide-in',
           isNew && alert.severity === 'critical' && 'animate-pulse'
         )}
-        onClick={() => onAlertClick?.(_alert)}
+        onClick={() => onAlertClick?.(alert)}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -238,7 +238,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
           
           {/* Botón de marcar como atendida */}
           {alert.status === 'active' && onAlertAcknowledge && (<button
-              onClick={(_e) => {
+              onClick={(e) => {
                 e.stopPropagation()
                 onAlertAcknowledge(alert.id)
               }}

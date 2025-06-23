@@ -4,16 +4,43 @@ import type { MapMarker, MapRoute } from '../../../components/ui/MapModule'
 import type { TransitInfo } from '../../../components/ui/TransitCard'
 import type { Alert } from '../../../components/ui/AlertsPanel'
 
+// Transit data type
+interface Transito {
+  id: string
+  currentLocation?: {
+    lat: number
+    lng: number
+  }
+  vehiculo?: {
+    matricula: string
+  }
+  estado?: 'demorado' | 'detenido' | 'activo'
+  despachante?: string
+  conductor?: string
+  destino?: string
+}
+
 // Mock service imports - reemplazar con servicios reales
 const transitosService = {
-  getTransitos: async () => {
+  getTransitos: async (): Promise<Transito[]> => {
     // Simular llamada API
     return []
   }
 }
 
+// Alert data type from service
+interface AlertaData {
+  id: string
+  titulo: string
+  descripcion: string
+  severidad: 'low' | 'medium' | 'high' | 'critical'
+  fecha: string
+  tipo?: string
+  ubicacion?: string
+}
+
 const alertasService = {
-  getActivas: async () => {
+  getActivas: async (): Promise<AlertaData[]> => {
     // Simular llamada API
     return []
   }
@@ -35,7 +62,7 @@ export function useMapPolling(initialMarkers: MapMarker[] = [], initialRoutes: M
       const transitos = await transitosService.getTransitos()
       
       // Convertir tránsitos a markers
-      const newMarkers: MapMarker[] = transitos.map((transito: any) => ({
+      const newMarkers: MapMarker[] = transitos.map((transito: Transito) => ({
         id: transito.id,
         lat: transito.currentLocation?.lat || -34.6037,
         lng: transito.currentLocation?.lng || -58.3816,
@@ -100,7 +127,7 @@ export function useTransitPolling(transitId: string) {
     try {
       setIsLoading(true)
       const transitos = await transitosService.getTransitos()
-      const foundTransit = transitos.find((t: any) => t.id === transitId)
+      const foundTransit = transitos.find((t: Transito) => t.id === transitId)
       
       if (foundTransit) {
         // Mapear a TransitInfo
@@ -165,7 +192,7 @@ export function useAlertsPolling() {
   const fetchAlerts = useCallback(async () => {
     try {
       const data = await alertasService.getActivas()
-      return data.map((alert: any) => ({
+      return data.map((alert: AlertaData) => ({
         id: alert.id,
         title: alert.titulo,
         description: alert.descripcion,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_Monitor, Truck, ChevronDown, ExternalLink} from 'lucide-react'
+import {Monitor, Truck, ChevronDown, ExternalLink} from 'lucide-react'
 import { cn} from '../utils/utils'
 interface PanelSwitcherProps {
   currentPanel: 'cmo' | 'encargados'
@@ -7,7 +7,7 @@ interface PanelSwitcherProps {
 
 export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) => {
 
-  const [isOpen, setIsOpen] = useState(_false)
+  const [isOpen, setIsOpen] = useState(false)
   const panels = [
     {
       id: 'cmo',

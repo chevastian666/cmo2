@@ -236,7 +236,14 @@ class RestAPIService {
     })
   }
   // Request handling (_mock)
-  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<any> {
+  // API Response type
+  interface ApiResponse {
+    status: number
+    data: unknown
+    headers?: Record<string, string>
+  }
+
+  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<ApiResponse> {
     const endpoint = this.findEndpoint(path, method)
     if (!endpoint) {
       return {
@@ -597,7 +604,15 @@ class RestAPIService {
     }
     return precintos
   }
-  private async getExportData(filters: unknown): Promise<any[]> {
+  // Export data type
+  interface ExportDataItem {
+    id: number
+    type: string
+    data: string
+    [key: string]: unknown
+  }
+
+  private async getExportData(filters: unknown): Promise<ExportDataItem[]> {
     // Mock export data - in real implementation, this would fetch from database
     return [
       { id: 1, type: 'alert', data: 'Sample alert data' },

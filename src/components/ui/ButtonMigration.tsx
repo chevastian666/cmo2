@@ -76,11 +76,11 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
     )
     return (
       <ShadcnButton
-        ref={_ref}
-        variant={_mappedVariant}
-        size={_mappedSize}
+        ref={ref}
+        variant={mappedVariant}
+        size={mappedSize}
         disabled={disabled || loading}
-        className={_customClasses}
+        className={customClasses}
         {...props}
       >
         {loading ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {_Shield, Save, History, Eye, Users, AlertTriangle} from 'lucide-react'
+import { Shield, Save, History, Eye, Users, AlertTriangle } from 'lucide-react'
 import { useMediaQuery} from '../../../hooks/useMediaQuery'
 import { RolesTable} from '../components/RolesTable'
 import { RoleCard} from '../components/RoleCard'
@@ -12,11 +12,11 @@ import { cn} from '../../../utils/utils'
 const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO']
 export const RolesPage: React.FC = () => {
 
-  const [showHistory, setShowHistory] = useState(_false)
-  const [expandedRole, setExpandedRole] = useState<Role | null>(_null)
-  const [previewMode, setPreviewMode] = useState(_false)
+  const [showHistory, setShowHistory] = useState(false)
+  const [expandedRole, setExpandedRole] = useState<Role | null>(null)
+  const [previewMode, setPreviewMode] = useState(false)
   const [previewRole, setPreviewRole] = useState<Role>('CMO')
-  const [hasChanges, setHasChanges] = useState(_false)
+  const [hasChanges, setHasChanges] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
   const isTablet = useMediaQuery('(max-width: 1024px)')
   // Load permissions on mount
@@ -27,32 +27,32 @@ export const RolesPage: React.FC = () => {
   // Track changes
 
   useEffect(() => {
-    const unsubscribe = useRolesStore.subscribe((s_tate) => state.permissions,
-      () => setHasChanges(_true)
+    const unsubscribe = useRolesStore.subscribe((state) => state.permissions,
+      () => setHasChanges(true)
     )
     return unsubscribe
   }, [])
   const handleSave = async () => {
     try {
       await savePermissions()
-      setHasChanges(_false)
+      setHasChanges(false)
     } catch {
       // Error is handled in the store
     }
   }
   const handlePreviewToggle = () => {
     if (!previewMode) {
-      setPreviewMode(_true)
-      setCurrentUserRole(_previewRole)
+      setPreviewMode(true)
+      setCurrentUserRole(previewRole)
     } else {
-      setPreviewMode(_false)
+      setPreviewMode(false)
       setCurrentUserRole('God'); // Reset to admin
     }
   }
   const handlePreviewRoleChange = (role: Role) => {
-    setPreviewRole(_role)
-    if (_previewMode) {
-      setCurrentUserRole(_role)
+    setPreviewRole(role)
+    if (previewMode) {
+      setCurrentUserRole(role)
     }
   }
   // Check if current user has access
@@ -85,7 +85,7 @@ export const RolesPage: React.FC = () => {
         
         <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => setShowHistory(_true)}
+            onClick={() => setShowHistory(true)}
             className="p-2 sm:px-4 sm:py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
           >
             <History className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -93,7 +93,7 @@ export const RolesPage: React.FC = () => {
           </button>
           
           <button
-            onClick={_handleSave}
+            onClick={handleSave}
             disabled={!hasChanges || saving}
             className={cn(
               "p-2 sm:px-4 sm:py-2 rounded-lg transition-colors flex items-center gap-2",
@@ -130,8 +130,8 @@ export const RolesPage: React.FC = () => {
           
           <div className="flex items-center gap-3">
             <select
-              value={_previewRole}
-              onChange={(_e) => handlePreviewRoleChange(e.target.value as Role)}
+              value={previewRole}
+              onChange={(e) => handlePreviewRoleChange(e.target.value as Role)}
               disabled={!previewMode}
               className={cn(
                 "px-3 py-1.5 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none",
@@ -139,12 +139,12 @@ export const RolesPage: React.FC = () => {
               )}
             >
               {ROLES.map(role => (
-                <option key={_role} value={_role}>{ROLE_LABELS[role]}</option>
+                <option key={role} value={role}>{ROLE_LABELS[role]}</option>
               ))}
             </select>
             
             <button
-              onClick={_handlePreviewToggle}
+              onClick={handlePreviewToggle}
               className={cn(
                 "px-4 py-1.5 rounded-lg text-sm font-medium transition-colors",
                 previewMode
@@ -180,7 +180,7 @@ export const RolesPage: React.FC = () => {
         isMobile || isTablet ? (
           <div className="space-y-4">
             {ROLES.map(role => (
-              <RoleCardSkeleton key={_role} />
+              <RoleCardSkeleton key={role} />
             ))}
           </div>
         ) : (
@@ -192,8 +192,8 @@ export const RolesPage: React.FC = () => {
             <div className="space-y-4">
               {ROLES.map(role => (
                 <RoleCard
-                  key={_role}
-                  role={_role}
+                  key={role}
+                  role={role}
                   expanded={expandedRole === role}
                   onToggleExpand={() => setExpandedRole(
                     expandedRole === role ? null : role
@@ -228,8 +228,8 @@ export const RolesPage: React.FC = () => {
       
       {/* Change History Modal */}
       <ChangeHistory
-        isOpen={s_howHistory}
-        onClose={() => setShowHistory(_false)}
+        isOpen={showHistory}
+        onClose={() => setShowHistory(false)}
       />
     </div>
   )

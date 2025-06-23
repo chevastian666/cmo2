@@ -24,35 +24,35 @@ interface DashboardState {
   updateWidgetSettings: (widgetId: string, settings: unknown) => void
 }
 
-export const useDashboardStore = createStore<DashboardState>((s_et) => ({
+export const useDashboardStore = createStore<DashboardState>((set) => ({
     // Estado inicial
     layouts: null, layoutVersion: 2, // Incrementado para forzar reset
     editMode: false, visibleWidgets: [], widgetSettings: {}, // Acciones
-    setLayouts: (_layouts) => {
-      set((s_tate) => {
+    setLayouts: (layouts) => {
+      set((state) => {
         state.layouts = layouts
       })
     },
     
-    setEditMode: (_editMode) => {
-      set((s_tate) => {
+    setEditMode: (editMode) => {
+      set((state) => {
         state.editMode = editMode
       })
     },
     
-    toggleWidget: (_widgetId) => {
-      set((s_tate) => {
-        const index = state.visibleWidgets.indexOf(_widgetId)
+    toggleWidget: (widgetId) => {
+      set((state) => {
+        const index = state.visibleWidgets.indexOf(widgetId)
         if (index === -1) {
-          state.visibleWidgets.push(_widgetId)
+          state.visibleWidgets.push(widgetId)
         } else {
-          state.visibleWidgets.splice(_index, 1)
+          state.visibleWidgets.splice(index, 1)
         }
       })
     },
     
     resetLayouts: () => {
-      set((s_tate) => {
+      set((state) => {
         state.layouts = null
         state.layoutVersion = 2; // Actualizar a la versión actual
         // También resetear configuraciones
@@ -60,8 +60,8 @@ export const useDashboardStore = createStore<DashboardState>((s_et) => ({
       })
     },
     
-    updateWidgetSettings: (_widgetId, settings) => {
-      set((s_tate) => {
+    updateWidgetSettings: (widgetId, settings) => {
+      set((state) => {
         state.widgetSettings[widgetId] = {
           ...state.widgetSettings[widgetId],
           ...settings
@@ -73,7 +73,7 @@ export const useDashboardStore = createStore<DashboardState>((s_et) => ({
     name: 'dashboard-layout',
     enableImmer: true,
     persist: {
-      partialize: (s_tate) => ({
+      partialize: (state) => ({
         layouts: state.layouts,
         visibleWidgets: state.visibleWidgets,
         widgetSettings: state.widgetSettings

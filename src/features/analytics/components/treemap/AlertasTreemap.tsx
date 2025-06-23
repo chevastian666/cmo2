@@ -11,9 +11,21 @@ import { Label} from '@/components/ui/label'
 import { AlertTriangle, AlertCircle, CheckCircle, XCircle } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformAlertsBySeverity, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
+
+// Alert data structure for treemap
+interface TreemapAlert {
+  id: string
+  tipo: 'critica' | 'alta' | 'media' | 'baja'
+  estado: 'activa' | 'resuelta' | 'pendiente'
+  timestamp: string | number
+  origen?: string
+  timeCategory?: string
+  [key: string]: unknown
+}
+
 export const AlertasTreemap: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const alertas: any[] = []
+  const alertas: TreemapAlert[] = []
   
   const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity')
   const treemapData = useMemo(() => {

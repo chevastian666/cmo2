@@ -16,8 +16,8 @@ export const transitosService = {
     try {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
-        console.log('Using mock data for transitos in development mode')
-        return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
+        // Using mock data for transitos in development mode
+        return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
       }
 
       // Primero intentar con Trokor API si está habilitada
@@ -25,19 +25,19 @@ export const transitosService = {
         try {
           return await trokorService.getTransitosPendientes({ limit: 25 })
         } catch (_trokorError) {
-          console.error('Error con Trokor API, intentando con unified API:', trokorError)
+          // Error con Trokor API, intentando con unified API
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
+        return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
       }
       
       const response = await unifiedAPIService.getTransitosPendientesLucia(25)
       return response
     } catch {
-      console.error('Error fetching transitos pendientes:', _error)
+      // Error fetching transitos pendientes - fallback to mock
       return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
     }
   },
@@ -45,7 +45,7 @@ export const transitosService = {
   getAll: async (filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return Array.from({ length: 20 }, (__, i) => generateMockTransito(_i))
+        return Array.from({ length: 20 }, (_, i) => generateMockTransito(i))
       }
       
       // Map filters to API params
@@ -75,8 +75,8 @@ export const transitosService = {
         vehiculo: transito.vehiculo
       }))
     } catch {
-      console.error('Error fetching all transitos:', _error)
-      return Array.from({ length: 20 }, (__, i) => generateMockTransito(_i))
+      // Error fetching all transitos - fallback to mock
+      return Array.from({ length: 20 }, (_, i) => generateMockTransito(i))
     }
   },
 
@@ -92,7 +92,7 @@ export const transitosService = {
       if (!transito) throw new Error('Transito not found')
       return transito
     } catch {
-      console.error('Error fetching transito:', _error)
+      // Error fetching transito
       return generateMockTransito(parseInt(_id) || 1)
     }
   },
@@ -100,28 +100,28 @@ export const transitosService = {
   actualizarEstado: async (id: string, estado: TransitoPendiente['estado']): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        console.log('Mock: Updating estado', id, estado)
+        // Mock: Updating estado
         return
       }
       
       // TODO: Implement real API call
       throw new Error('Not implemented')
     } catch {
-      console.error('Error updating estado:', _error)
+      // Error updating estado
     }
   },
 
   precintar: async (transitoId: string, precintoId: string): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        console.log('Mock: Precintando transito', transitoId, precintoId)
+        // Mock: Precintando transito
         return
       }
       
       // TODO: Implement real API call
       throw new Error('Not implemented')
     } catch {
-      console.error('Error precintando:', _error)
+      // Error precintando
     }
   },
 
@@ -149,7 +149,7 @@ export const transitosService = {
         tiempoPromedio: stats.tiempoPromedioTransito || 48
       }
     } catch {
-      console.error('Error fetching estadisticas:', _error)
+      // Error fetching estadisticas
       return {
         pendientes: 15,
         enProceso: 8,

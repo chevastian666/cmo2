@@ -19,7 +19,7 @@ interface TimelineNovedadesProps {
 export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
   novedades, loading = false, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, userId, className
 }) => {
-  if (_loading) {
+  if (loading) {
     return <LoadingState variant="skeleton" rows={4} />
   }
 

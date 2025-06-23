@@ -3,6 +3,8 @@
  * Export data to Business Intelligence tools (Tableau, PowerBI, etc.)
  * By Cheva
  */
+
+import type { DataRecord } from '@/types/integrations'
 export interface BIConnection {
   id: string
   name: string
@@ -86,21 +88,43 @@ export interface BIDataset {
   lastUpdate?: Date
 }
 
+// Transformation configuration types
+export interface TransformationConfig {
+  format?: {
+    type: 'date' | 'currency' | 'percentage'
+    locale?: string
+    options?: Record<string, unknown>
+  }
+  calculation?: {
+    operation: 'multiply' | 'divide' | 'add' | 'subtract'
+    factor: number
+  }
+  lookup?: {
+    mapping: Record<string, string | number>
+  }
+  aggregation?: {
+    method: 'sum' | 'avg' | 'count' | 'max' | 'min'
+    groupBy?: string
+  }
+}
+
 export interface BIDataMapping {
   source_field: string
   target_field: string
   data_type: 'string' | 'number' | 'date' | 'boolean' | 'json'
   transformation?: {
     type: 'format' | 'calculation' | 'lookup' | 'aggregation'
-    config: any
+    config: TransformationConfig
   }
   required: boolean
 }
 
+export type FilterValue = string | number | boolean | Date | Array<string | number>
+
 export interface BIDataFilter {
   field: string
   operator: '=' | '!=' | '>' | '<' | '>=' | '<=' | 'in' | 'not_in' | 'contains'
-  value: any
+  value: FilterValue
   description: string
 }
 
@@ -119,13 +143,22 @@ export interface BIExportJob {
   file_size?: number
 }
 
+export interface BIExportMetadata {
+  export_timestamp: string
+  record_count: number
+  dataset_name: string
+  connection_type: string
+  processing_time_ms: number
+  [key: string]: unknown
+}
+
 export interface BIExportResult {
   success: boolean
   job_id: string
   records_exported: number
   export_time: number
   error?: string
-  metadata?: any
+  metadata?: BIExportMetadata
 }
 
 class BIExportService {
@@ -340,7 +373,7 @@ class BIExportService {
   }
 
   // BI Tool specific exports
-  private async exportToBITool(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToBITool(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     switch (connection.type) {
       case 'tableau':
         await this.exportToTableau(connection, data, dataset)
@@ -365,37 +398,37 @@ class BIExportService {
     }
   }
 
-  private async exportToTableau(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToTableau(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.tableau!
     console.log(`Exporting ${data.length} records to Tableau Server: ${config.server_url}`)
     await this.simulateAPICall(1000 + Math.random() * 2000)
   }
 
-  private async exportToPowerBI(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToPowerBI(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.powerbi!
     console.log(`Exporting ${data.length} records to Power BI workspace: ${config.workspace_id}`)
     await this.simulateAPICall(800 + Math.random() * 1500)
   }
 
-  private async exportToQlik(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToQlik(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.qlik!
     console.log(`Exporting ${data.length} records to QlikSense app: ${config.app_id}`)
     await this.simulateAPICall(1200 + Math.random() * 1800)
   }
 
-  private async exportToLooker(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToLooker(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.looker!
     console.log(`Exporting ${data.length} records to Looker: ${config.base_url}`)
     await this.simulateAPICall(900 + Math.random() * 1600)
   }
 
-  private async exportToMetabase(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToMetabase(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.metabase!
     console.log(`Exporting ${data.length} records to Metabase: ${config.server_url}`)
     await this.simulateAPICall(700 + Math.random() * 1300)
   }
 
-  private async exportToGeneric(connection: BIConnection, data: any[], dataset: BIDataset): Promise<void> {
+  private async exportToGeneric(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
     const config = connection.config.generic!
     const headers = { ...config.headers }
 
@@ -436,7 +469,20 @@ class BIExportService {
   }
 
   // Data processing
-  private async fetchDatasetData(dataset: BIDataset): Promise<any[]> {
+  // Dataset data type
+  interface DatasetRecord {
+    id: number
+    timestamp: string
+    alert_count: number
+    transit_count: number
+    precinto_count: number
+    location: string
+    priority: string
+    status: string
+    [key: string]: unknown
+  }
+
+  private async fetchDatasetData(dataset: BIDataset): Promise<DatasetRecord[]> {
     // Mock data fetching
     const mockData = []
     const recordCount = 100 + Math.floor(Math.random() * 900)
@@ -463,9 +509,9 @@ class BIExportService {
     return filteredData
   }
 
-  private transformData(data: any[], mappings: BIDataMapping[]): any[] {
+  private transformData(data: DataRecord[], mappings: BIDataMapping[]): DataRecord[] {
     return data.map(record => {
-      const transformed: any = {}
+      const transformed: DataRecord = {}
       mappings.forEach(mapping => {
         let value = record[mapping.source_field]
 
@@ -482,7 +528,7 @@ class BIExportService {
     })
   }
 
-  private applyFilters(data: any[], filters: BIDataFilter[]): any[] {
+  private applyFilters(data: DataRecord[], filters: BIDataFilter[]): DataRecord[] {
     return data.filter(record => {
       return filters.every(filter => {
         const value = record[filter.field]
@@ -512,35 +558,39 @@ class BIExportService {
     })
   }
 
-  private applyTransformation(value: any, transformation: any): any {
+  private applyTransformation(value: unknown, transformation: { type: string; config: TransformationConfig }): unknown {
     switch (transformation.type) {
       case 'format':
-        if (transformation.config.type === 'date') {
-          return new Date(value).toLocaleDateString(transformation.config.locale)
+        if (transformation.config.format?.type === 'date') {
+          return new Date(String(value)).toLocaleDateString(transformation.config.format.locale)
         }
         return value
       case 'calculation':
-        if (transformation.config.operation === 'multiply') {
-          return value * transformation.config.factor
+        if (transformation.config.calculation?.operation === 'multiply') {
+          return Number(value) * transformation.config.calculation.factor
         }
         return value
       case 'lookup': {
-        const lookup = transformation.config.mapping
-        return lookup[value] || value
+        const lookup = transformation.config.lookup?.mapping
+        if (lookup) {
+          const key = String(value)
+          return lookup[key] || value
+        }
+        return value
       }
       default:
         return value
     }
   }
 
-  private convertDataType(value: any, targetType: string): any {
+  private convertDataType(value: unknown, targetType: string): unknown {
     switch (targetType) {
       case 'string':
         return String(value)
       case 'number':
         return Number(value) || 0
       case 'date':
-        return new Date(value).toISOString()
+        return new Date(String(value)).toISOString()
       case 'boolean':
         return Boolean(value)
       case 'json':
@@ -568,17 +618,17 @@ class BIExportService {
     }
   }
 
-  private async testTableauConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testTableauConnection(config: BIConnectionConfig['tableau']): Promise<{ success: boolean; error?: string }> {
     await this.simulateAPICall(500 + Math.random() * 1000)
     return { success: true }
   }
 
-  private async testPowerBIConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testPowerBIConnection(config: BIConnectionConfig['powerbi']): Promise<{ success: boolean; error?: string }> {
     await this.simulateAPICall(400 + Math.random() * 800)
     return { success: true }
   }
 
-  private async testGenericConnection(config: any): Promise<{ success: boolean; error?: string }> {
+  private async testGenericConnection(config: BIConnectionConfig['generic']): Promise<{ success: boolean; error?: string }> {
     try {
       const response = await fetch(config.endpoint_url, {
         method: 'HEAD',

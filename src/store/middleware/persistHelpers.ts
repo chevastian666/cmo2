@@ -17,8 +17,17 @@ export interface PersistOptions<T> {
 /**
  * Crea una configuración de persist con valores por defecto
  */
-export function createPersistConfig<T>(_options: PersistOptions<T>) {
+export function createPersistConfig<T>(options: PersistOptions<T>) {
 
+  const {
+    name,
+    storage = localStorage,
+    version = 0,
+    partialize,
+    migrate,
+    skipHydration = false
+  } = options
+  
   return {
     name,
     storage,
@@ -34,7 +43,7 @@ export function createPersistConfig<T>(_options: PersistOptions<T>) {
  */
 export function createPersistedStore<T>(name: string, createState: StateCreator<T>, partialize?: (state: T) => Partial<T>
 ) {
-  return persist(_createState, createPersistConfig({
+  return persist(createState, createPersistConfig({
     name,
     partialize
   }))
@@ -47,16 +56,16 @@ export function enableCrossTabSync<T>(storeName: string, getState: () => T,
   setState: (state: Partial<T>) => void
 ) {
   if (typeof window === 'undefined') return
-  window.addEventListener('storage', (_e) => {
-    if (e.key === `cmo_${s_toreName}` && e.newValue) {
+  window.addEventListener('storage', (e) => {
+    if (e.key === `cmo_${storeName}` && e.newValue) {
       try {
         const newState = JSON.parse(e.newValue)
         // Verificar que el estado es válido antes de actualizar
         if (newState && typeof newState === 'object') {
-          setState(_newState)
+          setState(newState)
         }
       } catch {
-        console.error(`Error sincronizando ${s_toreName} entre pestañas:`, error)
+        console.error(`Error sincronizando ${storeName} entre pestañas:`, error)
       }
     }
   })
@@ -67,7 +76,7 @@ export function enableCrossTabSync<T>(storeName: string, getState: () => T,
  */
 export function clearPersistedStore(storeName: string) {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem(`cmo_${s_toreName}`)
+    localStorage.removeItem(`cmo_${storeName}`)
   }
 }
 
@@ -78,16 +87,16 @@ export function exportAllPersistedStates(): Record<string, unknown> {
   if (typeof window === 'undefined') return {}
   const states: Record<string, unknown> = {}
   for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(_i)
+    const key = localStorage.key(i)
     if (key?.startsWith('cmo_')) {
       const storeName = key.replace('cmo_', '')
       try {
-        const value = localStorage.getItem(_key)
-        if (_value) {
-          states[storeName] = JSON.parse(_value)
+        const value = localStorage.getItem(key)
+        if (value) {
+          states[storeName] = JSON.parse(value)
         }
       } catch {
-        console.error(`Error exportando ${_key}:`, error)
+        console.error(`Error exportando ${key}:`, error)
       }
     }
   }
@@ -100,11 +109,11 @@ export function exportAllPersistedStates(): Record<string, unknown> {
  */
 export function importPersistedStates(states: Record<string, unknown>) {
   if (typeof window === 'undefined') return
-  Object.entries(s_tates).forEach(([storeName, state]) => {
+  Object.entries(states).forEach(([storeName, state]) => {
     try {
-      localStorage.setItem(`cmo_${s_toreName}`, JSON.stringify(s_tate))
+      localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state))
     } catch {
-      console.error(`Error importando ${s_toreName}:`, error)
+      console.error(`Error importando ${storeName}:`, error)
     }
   })
 }

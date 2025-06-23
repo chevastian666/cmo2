@@ -265,7 +265,7 @@ export const TenantCustomization: React.FC = () => {
                 <Textarea
                   placeholder="/* Add custom styles here */"
                   value={customization.branding?.customCss || ''}
-                  onChange={(_e) => setCustomization(prev => ({
+                  onChange={(e) => setCustomization(prev => ({
                     ...prev,
                     branding: {
                       ...prev.branding,
@@ -297,7 +297,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>From Name</Label>
                   <Input
                     value={customization.emails?.fromName || ''}
-                    onChange={(_e) => setCustomization(prev => ({
+                    onChange={(e) => setCustomization(prev => ({
                       ...prev,
                       emails: {
                         ...prev.emails,
@@ -313,7 +313,7 @@ export const TenantCustomization: React.FC = () => {
                   <Input
                     type="email"
                     value={customization.emails?.fromEmail || ''}
-                    onChange={(_e) => setCustomization(prev => ({
+                    onChange={(e) => setCustomization(prev => ({
                       ...prev,
                       emails: {
                         ...prev.emails,
@@ -329,7 +329,7 @@ export const TenantCustomization: React.FC = () => {
                 <Label>Email Footer</Label>
                 <Textarea
                   value={customization.emails?.footer || ''}
-                  onChange={(_e) => setCustomization(prev => ({
+                  onChange={(e) => setCustomization(prev => ({
                     ...prev,
                     emails: {
                       ...prev.emails,

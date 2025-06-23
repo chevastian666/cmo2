@@ -188,8 +188,26 @@ export class SharedStateService {
       }
     })
   }
+  // Event handler data types
+  interface TransitUpdateData {
+    action: 'update' | 'complete' | 'new'
+    transitId?: string
+    transit?: TransitoPendiente
+  }
+
+  interface PrecintoUpdateData {
+    action: 'update' | 'activate' | 'deactivate'
+    precintoId?: string
+    precinto?: Precinto
+  }
+
+  interface AlertData {
+    alert?: Alerta
+    [key: string]: unknown
+  }
+
   // Event handlers
-  private handleTransitUpdate(data: any): void {
+  private handleTransitUpdate(data: TransitUpdateData): void {
     const { action, transitId, transit } = data
     switch (action) {
       case 'update':
@@ -203,7 +221,7 @@ export class SharedStateService {
         break
     }
   }
-  private handlePrecintoUpdate(data: any): void {
+  private handlePrecintoUpdate(data: PrecintoUpdateData): void {
     const { action, precintoId, precinto } = data
     switch (action) {
       case 'update':
@@ -217,8 +235,8 @@ export class SharedStateService {
         break
     }
   }
-  private handleNewAlert(data: any): void {
-    const alert = data.alert || data
+  private handleNewAlert(data: AlertData | Alerta): void {
+    const alert = 'alert' in data && data.alert ? data.alert : data as Alerta
     // Add to active alerts
     const alertasActivas = [alert, ...this.state.alertasActivas]
     const alertasRecientes = [alert, ...this.state.alertasRecientes].slice(0, 10)

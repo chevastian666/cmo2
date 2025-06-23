@@ -15,16 +15,43 @@ import {
   transformLogisticsFlow, transformPrecintoLifecycle, transformAlertFlow, transformTimeBasedFlow} from '@/components/charts/sankey/utils/dataTransformers'
 import { motion} from 'framer-motion'
 import { toast} from '@/hooks/use-toast'
+
+// Transit data structure
+interface Transito {
+  id: string
+  origen: string
+  destino: string
+  estado: 'pendiente' | 'en_proceso' | 'completado' | 'cancelado'
+  carga?: {
+    peso: number
+    tipo: string
+  }
+  tiempoEstimado?: number
+  fechaCreacion: string | number
+}
+
+// Flow data structure
+interface FlowData {
+  origin: string
+  destination: string
+  transitCount: number
+  totalVolume: number
+  successCount: number
+  totalTime: number
+  successRate?: number
+  avgTime?: number
+}
+
 export const LogisticsFlowChart: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const transitos: any[] = []
+  const transitos: Transito[] = []
   
   const [timeRange, setTimeRange] = useState('week')
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes')
   const [loading, setLoading] = useState(false)
   // Transform transit data into logistics flows
   const routeFlows = useMemo(() => {
-    const flowMap = new Map<string, any>()
+    const flowMap = new Map<string, FlowData>()
     transitos.forEach(transito => {
       const key = `${transito.origen}-${transito.destino}`
       if (!flowMap.has(key)) {
@@ -116,13 +143,27 @@ export const LogisticsFlowChart: React.FC = () => {
       description: 'El gráfico se descargará en breve.'
     })
   }
-  const handleNodeClick = (node: any) => {
+  // Node and link types from SankeyChart
+  interface SankeyNode {
+    name: string
+    value?: number
+    [key: string]: unknown
+  }
+
+  interface SankeyLink {
+    source: string | SankeyNode
+    target: string | SankeyNode
+    value: number
+    [key: string]: unknown
+  }
+
+  const handleNodeClick = (node: SankeyNode) => {
     toast({
       title: node.name,
       description: `Flujo total: ${node.value?.toLocaleString() || 0}`
     })
   }
-  const handleLinkClick = (link: any) => {
+  const handleLinkClick = (link: SankeyLink) => {
     const source = typeof link.source === 'object' ? link.source.name : link.source
     const target = typeof link.target === 'object' ? link.target.name : link.target
     toast({

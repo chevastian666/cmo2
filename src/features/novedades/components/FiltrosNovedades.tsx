@@ -38,7 +38,7 @@ export const FiltrosNovedadesComponent: React.FC<FiltrosNovedadesProps> = ({
         <input
           type="text"
           value={filtros.busqueda}
-          onChange={(_e) => handleChange('busqueda', e.target.value)}
+          onChange={(e) => handleChange('busqueda', e.target.value)}
           placeholder="Buscar por descripción o palabras clave..."
           className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />

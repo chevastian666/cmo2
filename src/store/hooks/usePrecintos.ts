@@ -7,7 +7,7 @@ export const usePrecintos = () => {
     if (store.precintos.length === 0 && !store.loading) {
       store.fetchPrecintos()
     }
-  }, [])
+  }, [store.precintos.length, store.loading, store.fetchPrecintos])
   return {
     precintos: store.precintos,
     loading: store.loading,
@@ -26,7 +26,7 @@ export const usePrecintosActivos = () => {
     if (store.precintosActivos.length === 0 && !store.loading) {
       store.fetchPrecintosActivos()
     }
-  }, [])
+  }, [store.precintosActivos.length, store.loading, store.fetchPrecintosActivos])
   return {
     precintos: store.precintosActivos,
     loading: store.loading,

@@ -108,7 +108,7 @@ const KPICard = React.memo<{
   trend?: number
   subtitle?: string
   onClick?: () => void
-}>((title, value, icon, color, trend, subtitle, onClick ) => (
+>({ title, value, icon, color, trend, subtitle, onClick }) => (
   <Card 
     className={cn("relative overflow-hidden cursor-pointer transition-all hover:shadow-lg", onClick && "hover:scale-[1.02]")}
     onClick={onClick}

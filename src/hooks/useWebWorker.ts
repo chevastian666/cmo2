@@ -62,7 +62,7 @@ export function useWebWorker<T>(workerPath: string, options: UseWebWorkerOptions
         proxyRef.current = null
       }
     }
-  }, [])
+  }, [workerPath, options.onError, options.fallbackToMainThread, options.terminateOnUnmount])
   const terminate = useCallback(() => {
     if (workerRef.current) {
       workerRef.current.terminate()

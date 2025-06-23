@@ -51,12 +51,12 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
       unsubscribeCreated()
       unsubscribeUpdated()
     }
-  }, [])
+  }, [loadNotifications, loadStats])
   // Reload when filter changes
 
     useEffect(() => {
     loadNotifications()
-  }, [])
+  }, [filter, loadNotifications])
   const handleNotificationAction = async (notificationId: string, action: string, payload?: unknown) => {
     try {
       await notificationService.handleNotificationAction(_notificationId, action, payload)

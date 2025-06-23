@@ -12,7 +12,7 @@ export const estadisticasService = {
     try {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
-        console.log('Using mock data for estadisticas in development mode')
+        // Using mock data for estadisticas in development mode
         return {
           precintosActivos: 156,
           precintosEnTransito: 89,
@@ -56,14 +56,14 @@ export const estadisticasService = {
             reportesPendientes: 0 // TODO: obtener de API
           }
         } catch (_trokorError) {
-          console.error('Error con Trokor API, intentando con unified API:', trokorError)
+          // Error con Trokor API, intentando con unified API
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       return await unifiedAPIService.getEstadisticas()
     } catch {
-      console.error('Error fetching estadisticas:', _error)
+      // Error fetching estadisticas
       // Return default values
       return {
         precintosActivos: 0,
@@ -106,7 +106,7 @@ export const estadisticasService = {
       // TODO: Implement real API call
       return []
     } catch {
-      console.error('Error fetching historico lecturas:', _error)
+      // Error fetching historico lecturas
       return []
     }
   },
@@ -131,7 +131,7 @@ export const estadisticasService = {
       // TODO: Implement real API call
       return []
     } catch {
-      console.error('Error fetching historico alertas:', _error)
+      // Error fetching historico alertas
       return []
     }
   },
@@ -160,7 +160,7 @@ export const estadisticasService = {
         alertasPromedioPorDia: Math.round(stats.alertasActivas * 24 / 7) // Rough estimate
       }
     } catch {
-      console.error('Error fetching rendimiento:', _error)
+      // Error fetching rendimiento
       return {
         tasaExito: 0,
         tiempoPromedioTransito: 0,
@@ -216,7 +216,7 @@ export const estadisticasService = {
         reportesPendientes: stats.reportesPendientes
       }
     } catch {
-      console.error('Error fetching estado sistema:', _error)
+      // Error fetching estado sistema
       return {
         smsPendientes: 0,
         dbStats: {

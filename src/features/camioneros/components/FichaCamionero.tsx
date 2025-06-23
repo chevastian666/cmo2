@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react'
 import { Card, CardHeader, CardContent, Badge, LoadingState} from '../../../components/ui'
-import {_useUserInfo} from '../../../hooks/useAuth'
+import { useUserInfo } from '../../../hooks/useAuth'
 import { exportToCSV} from '../../../utils/export'
 import { notificationService} from '../../../services/shared/notification.service'
 import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
@@ -12,10 +12,10 @@ interface FichaCamioneroProps {
 }
 
 export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose }) => {
-  const _userInfo = useUserInfo()
-  const _canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
+  const userInfo = useUserInfo()
+  const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
-    selectCamionero(__documento)
+    selectCamionero(documento)
     return () => clearSelection()
   }, [documento])
   const _handleExportarHistorial = () => {

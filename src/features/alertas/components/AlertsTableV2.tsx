@@ -21,7 +21,7 @@ export const AlertsTableV2: React.FC = () => {
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const handleAlertClick = (alerta: Alerta) => {
     setSelectedAlertaId(alerta.id)
-    setIsModalOpen(_true)
+    setIsModalOpen(true)
   }
   const handleVerificar = (alerta: Alerta, event: React.MouseEvent) => {
     event.stopPropagation()
@@ -30,28 +30,22 @@ export const AlertsTableV2: React.FC = () => {
       return
     }
     
-    setSelectedAlertaForResponse(_alerta)
-    setIsResponseModalOpen(_true)
+    setSelectedAlertaForResponse(alerta)
+    setIsResponseModalOpen(true)
   }
   const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
     try {
-      await actions.atenderAlerta(_alertaId)
+      await actions.atenderAlerta(alertaId)
       notificationService.success('Alerta respondida correctamente')
-      console.log('Alert response:', {
-        alertaId,
-        motivoId,
-        motivoDescripcion,
-        observaciones,
-        timestamp: new Date().toISOString()
-      })
+      // Alert response handled successfully
     } catch {
       notificationService.error('Error al responder la alerta')
-      console.error('Error responding to alert:', _error)
-      throw _error
+      // Error handled above with notification
+      throw error
     }
   }
   const closeModal = () => {
-    setIsModalOpen(_false)
+    setIsModalOpen(false)
     setSelectedAlertaId(null)
   }
   const getIcon = (tipo: string) => {
@@ -112,12 +106,12 @@ export const AlertsTableV2: React.FC = () => {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: Object.entries(_TIPOS_ALERTA).map(([key, value]) => ({
+      filterOptions: Object.entries(TIPOS_ALERTA).map(([key, value]) => ({
         value: key,
         label: value
       })),
       width: '120px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="flex items-center space-x-2">
           <div className={cn('p-1.5 rounded', getSeveridadColor(item.severidad))}>
             {getIcon(item.tipo)}
@@ -131,7 +125,7 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Precinto',
       sortable: true,
       filterable: true,
-      accessor: (_item) => <span className="font-medium">{item.codigoPrecinto}</span>
+      accessor: (item) => <span className="font-medium">{item.codigoPrecinto}</span>
     },
     {
       key: 'severidad',
@@ -146,7 +140,7 @@ export const AlertsTableV2: React.FC = () => {
         { value: 'baja', label: 'Baja' }
       ],
       width: '120px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <Badge variant={getSeveridadVariant(item.severidad)}>
           {item.severidad}
         </Badge>
@@ -157,7 +151,7 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Mensaje',
       sortable: false,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="max-w-md">
           <p className="text-sm text-muted-foreground truncate">{item.mensaje}</p>
         </div>
@@ -167,7 +161,7 @@ export const AlertsTableV2: React.FC = () => {
       key: 'ubicacion',
       header: 'Ubicación',
       sortable: false,
-      accessor: (_item) => (item.ubicacion ? (
+      accessor: (item) => (item.ubicacion ? (
           <Button
             size="sm"
             variant="default"
@@ -188,7 +182,7 @@ export const AlertsTableV2: React.FC = () => {
       key: 'timestamp',
       header: 'Tiempo',
       sortable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="text-sm">
           <div>{formatTimeAgo(item.timestamp)}</div>
           <div className="text-xs text-muted-foreground">{formatDateTime(item.timestamp)}</div>
@@ -206,7 +200,7 @@ export const AlertsTableV2: React.FC = () => {
         { value: 'true', label: 'Atendida' }
       ],
       width: '100px',
-      accessor: (_item) => (
+      accessor: (item) => (
         <Badge variant={item.atendida ? 'outline' : 'destructive'}>
           {item.atendida ? 'Atendida' : 'Activa'}
         </Badge>
@@ -217,11 +211,11 @@ export const AlertsTableV2: React.FC = () => {
       header: 'Acciones',
       sortable: false,
       width: '120px',
-      accessor: (_item) => (<div className="flex items-center justify-center">
+      accessor: (item) => (<div className="flex items-center justify-center">
           <Button
             size="sm"
             variant={item.atendida ? "secondary" : "default"}
-            onClick={(_e) => handleVerificar(_item, e)}
+            onClick={(e) => handleVerificar(item, e)}
             disabled={item.atendida}
             title={item.atendida ? 'Alerta ya verificada' : 'Responder alerta'}
           >
@@ -232,9 +226,9 @@ export const AlertsTableV2: React.FC = () => {
       )
     }
   ]
-  const handleExport = (_data: Alerta[], format: 'csv' | 'json') => {
+  const handleExport = (data: Alerta[], format: 'csv' | 'json') => {
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `alertas-${_timestamp}`
+    const filename = `alertas-${timestamp}`
     if (format === 'csv') {
       const headers = ['Tipo', 'Precinto', 'Severidad', 'Mensaje', 'Ubicación', 'Fecha/Hora', 'Estado']
       const rows = data.map(a => [
@@ -248,17 +242,17 @@ export const AlertsTableV2: React.FC = () => {
       ])
       const csvContent = [
         headers.join(','),
-        ...rows.map(row => row.map(cell => `"${_cell}"`).join(','))
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
       ].join('\n')
       const blob = new Blob([csvContent], { type: 'text/csv' })
-      const url = URL.createObjectURL(_blob)
+      const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `${_filename}.csv`
+      link.download = `${filename}.csv`
       link.click()
-      URL.revokeObjectURL(_url)
+      URL.revokeObjectURL(url)
     } else {
-      const jsonContent = JSON.stringify(__data, null, 2)
+      const jsonContent = JSON.stringify(data, null, 2)
       const blob = new Blob([jsonContent], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -290,16 +284,16 @@ export const AlertsTableV2: React.FC = () => {
           alerta={selectedAlerta}
           isOpen={isModalOpen}
           onClose={closeModal}
-          onAsignar={(_usuarioId, notas) => {
-            console.log('Asignar:', { usuarioId, notas })
+          onAsignar={(usuarioId, notas) => {
+            // Assignment handled
             notificationService.success('Alerta asignada correctamente')
           }}
-          onComentar={(_mensaje) => {
-            console.log('Comentar:', mensaje)
+          onComentar={(mensaje) => {
+            // Comment added
             notificationService.success('Comentario agregado')
           }}
-          onResolver={(_tipo, descripcion, acciones) => {
-            console.log('Resolver:', { tipo, descripcion, acciones })
+          onResolver={(tipo, descripcion, acciones) => {
+            // Alert resolved
             notificationService.success('Alerta resuelta correctamente')
             closeModal()
           }}

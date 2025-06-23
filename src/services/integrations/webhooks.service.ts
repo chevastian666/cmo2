@@ -304,13 +304,13 @@ class WebhooksService extends EventEmitter {
         case '!=':
           return value !== filter.value
         case '>':
-          return (value as any) > filter.value
+          return Number(value) > Number(filter.value)
         case '<':
-          return (value as any) < filter.value
+          return Number(value) < Number(filter.value)
         case '>=':
-          return (value as any) >= filter.value
+          return Number(value) >= Number(filter.value)
         case '<=':
-          return (value as any) <= filter.value
+          return Number(value) <= Number(filter.value)
         case 'contains':
           return String(value).includes(String(filter.value))
         case 'not_contains':
@@ -321,7 +321,12 @@ class WebhooksService extends EventEmitter {
     })
   }
   private getNestedValue(obj: unknown, path: string): unknown {
-    return path.split('.').reduce((current: any, key) => current?.[key], obj)
+    return path.split('.').reduce((current: unknown, key) => {
+      if (typeof current === 'object' && current !== null && key in current) {
+        return (current as Record<string, unknown>)[key]
+      }
+      return undefined
+    }, obj)
   }
   private async generateSignature(payload: WebhookPayload, secret: string): Promise<string> {
     const encoder = new TextEncoder()

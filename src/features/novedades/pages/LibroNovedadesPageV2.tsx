@@ -10,7 +10,7 @@ import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card'
 import { Badge} from '@/components/ui/badge'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Label} from '@/components/ui/label'
 import { Separator} from '@/components/ui/separator'
 import { Textarea} from '@/components/ui/textarea'
@@ -21,7 +21,7 @@ import {
   PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
 import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedList, AnimatedListItem, AnimatedSpinner} from '@/components/animations/AnimatedComponents'
 import { motion, AnimatePresence} from 'framer-motion'
-import {_useUserInfo} from '@/hooks/useAuth'
+import { useUserInfo } from '@/hooks/useAuth'
 import { notificationService} from '@/services/shared/notification.service'
 import { exportToCSV} from '@/utils/export'
 import { cn} from '@/utils/utils'
@@ -32,9 +32,9 @@ const STORAGE_KEY_FILTROS = 'cmo_novedadesfiltros'
 export const LibroNovedadesPageV2: React.FC = () => {
   console.log('LibroNovedadesPageV2: Componente renderizando')
   const [filtros, setFiltros] = useState<FiltrosNovedades>(() => {
-    const saved = localStorage.getItem(_STORAGE_KEY_FILTROS)
-    if (s_aved) {
-      const parsed = JSON.parse(s_aved)
+    const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
+    if (saved) {
+      const parsed = JSON.parse(saved)
       return {
         ...parsed,
         fecha: parsed.fecha ? new Date(parsed.fecha) : null,
@@ -91,20 +91,20 @@ export const LibroNovedadesPageV2: React.FC = () => {
   // Cargar novedades al montar y cuando cambien los filtros
 
     useEffect(() => {
-    fetchNovedades(_filtros)
+    fetchNovedades(filtros)
   }, [filtros])
   // Guardar filtros en localStorage
 
     useEffect(() => {
-    localStorage.setItem(_STORAGE_KEY_FILTROS, JSON.stringify(_filtros))
+    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
   }, [filtros])
   // Auto-refresh cada minuto
 
     useEffect(() => {
     const interval = setInterval(() => {
-      fetchNovedades(_filtros)
+      fetchNovedades(filtros)
     }, 60000)
-    return () => clearInterval(_interval)
+    return () => clearInterval(interval)
   }, [filtros])
   // Filtrar novedades por tab
   const filteredNovedades = useMemo(() => {
@@ -117,7 +117,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
         return novedades
     }
   }, [novedades])
-  const activeFiltersCount = Object.values(_filtros).filter(v => 
+  const activeFiltersCount = Object.values(filtros).filter(v => 
     v !== '' && v !== false && v !== null && v !== FILTROS_DEFAULT.fecha
   ).length
   const handleExport = () => {
@@ -130,39 +130,39 @@ export const LibroNovedadesPageV2: React.FC = () => {
       'Creado Por': n.creadoPor.nombre,
       Resolución: n.resolucion ? `${n.resolucion.fecha.toLocaleDateString('es-UY')} - ${n.resolucion.usuario.nombre}` : '-'
     }))
-    exportToCSV(_data, `novedades-${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(data, `novedades-${new Date().toISOString().split('T')[0]}`)
   }
-  const handleCrearNovedad = async (_data: unknown) => {
-    await crearNovedad(__data)
-    setShowFormulario(_false)
+  const handleCrearNovedad = async (data: unknown) => {
+    await crearNovedad(data)
+    setShowFormulario(false)
     notificationService.success('Novedad creada', 'La novedad se ha registrado correctamente')
   }
   const handleMarcarResuelta = async (novedadId: string, comentario?: string) => {
     try {
-      await marcarResuelta(_novedadId, comentario)
+      await marcarResuelta(novedadId, comentario)
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta')
-      setNovedadResolucion(_null)
-    } catch (_error) {
+      setNovedadResolucion(null)
+    } catch (error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta')
     }
   }
   const handleAgregarSeguimiento = async (novedadId: string, comentario: string) => {
     try {
-      await agregarSeguimiento(_novedadId, comentario)
+      await agregarSeguimiento(novedadId, comentario)
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente')
-      setNovedadSeguimiento(_null)
-    } catch (_error) {
+      setNovedadSeguimiento(null)
+    } catch (error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento')
     }
   }
   const toggleExpanded = (id: string) => {
-    const newExpanded = new Set(_expandedNovedades)
-    if (newExpanded.has(_id)) {
-      newExpanded.delete(_id)
+    const newExpanded = new Set(expandedNovedades)
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id)
     } else {
-      newExpanded.add(_id)
+      newExpanded.add(id)
     }
-    setExpandedNovedades(_newExpanded)
+    setExpandedNovedades(newExpanded)
   }
   const clearFilters = () => {
     setFiltros(_FILTROS_DEFAULT)
@@ -177,7 +177,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
             <div className="flex items-center gap-2">
               <AnimatedButton
                 variant="outline"
-                onClick={_handleExport}
+                onClick={handleExport}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -186,7 +186,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
               </AnimatedButton>
               {canEdit && (
                 <AnimatedButton
-                  onClick={() => setShowFormulario(_true)}
+                  onClick={() => setShowFormulario(true)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -252,7 +252,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
                     type="text"
                     placeholder="Buscar en descripción..."
                     value={filtros.busqueda}
-                    onChange={(_e) => setFiltros(prev => ({ ...prev, busqueda: e.target.value }))}
+                    onChange={(e) => setFiltros(prev => ({ ...prev, busqueda: e.target.value }))}
                     className="pl-10"
                   />
                 </div>
@@ -268,7 +268,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
                     Filtros
                     {activeFiltersCount > 0 && (
                       <Badge className="ml-2 px-1.5 py-0.5 text-xs">
-                        {_activeFiltersCount}
+                        {activeFiltersCount}
                       </Badge>
                     )}
                   </AnimatedButton>
@@ -286,9 +286,9 @@ export const LibroNovedadesPageV2: React.FC = () => {
                     className="mt-4 pt-4 border-t border-gray-700"
                   >
                     <FilterPanel 
-                      filtros={_filtros} 
-                      onFiltersChange={s_etFiltros}
-                      onClear={_clearFilters}
+                      filtros={filtros} 
+                      onFiltersChange={setFiltros}
+                      onClear={clearFilters}
                     />
                   </motion.div>
                 )}
@@ -301,7 +301,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
         <AnimatedSection delay={0.3}>
           <Card className="bg-gray-800 border-gray-700">
             <CardHeader>
-              <Tabs value={s_electedTab} onValueChange={(_v) => setSelectedTab(v as 'todas' | 'activas' | 'resueltas')}>
+              <Tabs value={selectedTab} onValueChange={(v) => setSelectedTab(v as 'todas' | 'activas' | 'resueltas')}>
                 <TabsList className="grid w-full max-w-md grid-cols-3">
                   <TabsTrigger value="todas">
                     Todas ({novedades.length})
@@ -321,18 +321,18 @@ export const LibroNovedadesPageV2: React.FC = () => {
                   <AnimatedSpinner className="h-8 w-8" />
                 </div>
               ) : filteredNovedades.length === 0 ? (
-                <EmptyState tab={s_electedTab} />
+                <EmptyState tab={selectedTab} />
               ) : (<AnimatedList className="space-y-4">
-                  {filteredNovedades.map((_novedad, index) => (
+                  {filteredNovedades.map((novedad, index) => (
                     <NovedadItem
                       key={novedad.id}
-                      novedad={_novedad}
-                      index={_index}
+                      novedad={novedad}
+                      index={index}
                       isExpanded={expandedNovedades.has(novedad.id)}
                       onToggleExpand={() => toggleExpanded(novedad.id)}
-                      onAddSeguimiento={() => setNovedadSeguimiento(_novedad)}
-                      onResolve={() => setNovedadResolucion(_novedad)}
-                      canEdit={_canEdit}
+                      onAddSeguimiento={() => setNovedadSeguimiento(novedad)}
+                      onResolve={() => setNovedadResolucion(novedad)}
+                      canEdit={canEdit}
                     />
                   ))}
                 </AnimatedList>
@@ -343,24 +343,24 @@ export const LibroNovedadesPageV2: React.FC = () => {
 
         {/* Modales */}
         <FormularioNovedadModal
-          isOpen={s_howFormulario}
+          isOpen={showFormulario}
           onClose={() => setShowFormulario(_false)}
-          onSubmit={_handleCrearNovedad}
-          userInfo={_userInfo}
+          onSubmit={handleCrearNovedad}
+          userInfo={userInfo}
         />
 
         <SeguimientoModal
-          novedad={_novedadSeguimiento}
+          novedad={novedadSeguimiento}
           isOpen={!!novedadSeguimiento}
-          onClose={() => setNovedadSeguimiento(_null)}
-          onSubmit={_handleAgregarSeguimiento}
+          onClose={() => setNovedadSeguimiento(null)}
+          onSubmit={handleAgregarSeguimiento}
         />
 
         <ResolucionModal
-          novedad={_novedadResolucion}
+          novedad={novedadResolucion}
           isOpen={!!novedadResolucion}
-          onClose={() => setNovedadResolucion(_null)}
-          onSubmit={_handleMarcarResuelta}
+          onClose={() => setNovedadResolucion(null)}
+          onSubmit={handleMarcarResuelta}
         />
       </div>
     </PageTransition>
@@ -374,24 +374,24 @@ const StatsCard: React.FC<{
   color: string
   trend?: string
   pulse?: boolean
-}> = (_title, value, icon, color, trend, pulse ) => (
+}> = ({ title, value, icon, color, trend, pulse }) => (
   <AnimatedCard className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors">
     <CardHeader className="px-6 pb-2 pt-4">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium text-gray-400">{_title}</CardDescription>
+        <CardDescription className="text-sm font-medium text-gray-400">{title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg bg-gray-900", color)}
           whileHover={{ rotate: 15 }}
           animate={pulse ? pulseVariants.animate : {}}
         >
-          {_icon}
+          {icon}
         </motion.div>
       </div>
     </CardHeader>
     <CardContent className="px-6 pt-2">
-      <div className="text-3xl font-bold text-white">{_value}</div>
+      <div className="text-3xl font-bold text-white">{value}</div>
       {trend && (
-        <p className="text-sm text-gray-500 mt-1">{_trend}</p>
+        <p className="text-sm text-gray-500 mt-1">{trend}</p>
       )}
     </CardContent>
   </AnimatedCard>
@@ -401,13 +401,13 @@ const FilterPanel: React.FC<{
   filtros: FiltrosNovedades
   onFiltersChange: (filtros: FiltrosNovedades) => void
   onClear: () => void
-}> = (_filtros, onFiltersChange, onClear ) => (<div className="space-y-4">
+}> = ({ filtros, onFiltersChange, onClear }) => (<div className="space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <Label htmlFor="puntoOperacion">Punto de Operación</Label>
         <Select 
           value={filtros.puntoOperacion} 
-          onValueChange={(_v) => onFiltersChange({ ...filtros, puntoOperacion: v })}
+          onValueChange={(v) => onFiltersChange({ ...filtros, puntoOperacion: v })}
         >
           <SelectTrigger id="puntoOperacion" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los puntos" />
@@ -415,7 +415,7 @@ const FilterPanel: React.FC<{
           <SelectContent>
             <SelectItem value="">Todos los puntos</SelectItem>
             {PUNTOS_OPERACION.map(punto => (
-              <SelectItem key={_punto} value={_punto}>{_punto}</SelectItem>
+              <SelectItem key={punto} value={punto}>{punto}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -425,15 +425,15 @@ const FilterPanel: React.FC<{
         <Label htmlFor="tipoNovedad">Tipo de Novedad</Label>
         <Select 
           value={filtros.tipoNovedad} 
-          onValueChange={(_v) => onFiltersChange({ ...filtros, tipoNovedad: v as TipoNovedad | '' })}
+          onValueChange={(v) => onFiltersChange({ ...filtros, tipoNovedad: v as TipoNovedad | '' })}
         >
           <SelectTrigger id="tipoNovedad" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los tipos" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">Todos los tipos</SelectItem>
-            {Object.entries(_TIPOS_NOVEDAD).map(([key, tipo]) => (
-              <SelectItem key={_key} value={_key}>
+            {Object.entries(TIPOS_NOVEDAD).map(([key, tipo]) => (
+              <SelectItem key={key} value={key}>
                 <span className="flex items-center gap-2">
                   <span>{tipo.icon}</span>
                   {tipo.label}
@@ -448,7 +448,7 @@ const FilterPanel: React.FC<{
         <Label htmlFor="estado">Estado</Label>
         <Select 
           value={filtros.estado} 
-          onValueChange={(_v) => onFiltersChange({ ...filtros, estado: v as EstadoNovedad | '' })}
+          onValueChange={(v) => onFiltersChange({ ...filtros, estado: v as EstadoNovedad | '' })}
         >
           <SelectTrigger id="estado" className="mt-1 bg-gray-900 border-gray-700 text-white">
             <SelectValue placeholder="Todos los estados" />
@@ -468,7 +468,7 @@ const FilterPanel: React.FC<{
         <Switch
           id="soloMias"
           checked={filtros.soloMias}
-          onCheckedChange={(_checked) => onFiltersChange({ ...filtros, soloMias: checked })}
+          onCheckedChange={(checked) => onFiltersChange({ ...filtros, soloMias: checked })}
         />
         <Label htmlFor="soloMias">Solo mis novedades</Label>
       </div>
@@ -476,7 +476,7 @@ const FilterPanel: React.FC<{
       <AnimatedButton
         variant="ghost"
         size="sm"
-        onClick={_onClear}
+        onClick={onClear}
       >
         <X className="mr-2 h-4 w-4" />
         Limpiar filtros
@@ -496,14 +496,14 @@ const NovedadItem: React.FC<{
 }> = ({ novedad, index, isExpanded, onToggleExpand, onAddSeguimiento, onResolve, canEdit }) => {
   const tipo = TIPOS_NOVEDAD[novedad.tipoNovedad]
   return (
-    <AnimatedListItem index={_index}>
+    <AnimatedListItem index={index}>
       <AnimatedCard 
         className="overflow-hidden"
         whileHover={{ scale: 1.01 }}
       >
         <div
           className="p-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
-          onClick={_onToggleExpand}
+          onClick={onToggleExpand}
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 flex-1">
@@ -610,7 +610,7 @@ const NovedadItem: React.FC<{
                 {novedad.seguimientos && novedad.seguimientos.length > 0 && (<div>
                     <h5 className="text-sm font-medium text-gray-400 mb-3">Seguimientos</h5>
                     <div className="space-y-3">
-                      {novedad.seguimientos.map((s_eg, idx) => (
+                      {novedad.seguimientos.map((seg, idx) => (
                         <motion.div
                           key={seg.id}
                           initial={{ opacity: 0, x: -20 }}
@@ -655,7 +655,7 @@ const NovedadItem: React.FC<{
                     <AnimatedButton
                       variant="outline"
                       size="sm"
-                      onClick={_onAddSeguimiento}
+                      onClick={onAddSeguimiento}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -665,7 +665,7 @@ const NovedadItem: React.FC<{
                     <AnimatedButton
                       variant="outline"
                       size="sm"
-                      onClick={_onResolve}
+                      onClick={onResolve}
                       className="border-green-600 text-green-400 hover:bg-green-600/20"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -684,7 +684,7 @@ const NovedadItem: React.FC<{
   )
 }
 // Empty State Component
-const EmptyState: React.FC<{ tab: string }> = (tab ) => (
+const EmptyState: React.FC<{ tab: string }> = ({ tab }) => (
   <div className="py-12 text-center">
     <motion.div
       initial={{ scale: 0 }}
@@ -742,7 +742,7 @@ const FormularioNovedadModal: React.FC<{
       archivos: []
     })
   }
-  return (<Dialog open={_isOpen} onOpenChange={_onClose}>
+  return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Nueva Novedad</DialogTitle>
@@ -751,20 +751,20 @@ const FormularioNovedadModal: React.FC<{
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={_handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="puntoOperacion">Punto de Operación *</Label>
               <Select 
                 value={formData.puntoOperacion} 
-                onValueChange={(_v) => setFormData(prev => ({ ...prev, puntoOperacion: v }))}
+                onValueChange={(v) => setFormData(prev => ({ ...prev, puntoOperacion: v }))}
               >
                 <SelectTrigger id="puntoOperacion" className="mt-1 bg-gray-900 border-gray-700 text-white">
                   <SelectValue placeholder="Seleccionar punto" />
                 </SelectTrigger>
                 <SelectContent>
                   {PUNTOS_OPERACION.map(punto => (
-                    <SelectItem key={_punto} value={_punto}>{_punto}</SelectItem>
+                    <SelectItem key={punto} value={punto}>{punto}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -774,14 +774,14 @@ const FormularioNovedadModal: React.FC<{
               <Label htmlFor="tipoNovedad">Tipo de Novedad *</Label>
               <Select 
                 value={formData.tipoNovedad} 
-                onValueChange={(_v) => setFormData(prev => ({ ...prev, tipoNovedad: v as TipoNovedad }))}
+                onValueChange={(v) => setFormData(prev => ({ ...prev, tipoNovedad: v as TipoNovedad }))}
               >
                 <SelectTrigger id="tipoNovedad" className="mt-1 bg-gray-900 border-gray-700 text-white">
                   <SelectValue placeholder="Seleccionar tipo" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(_TIPOS_NOVEDAD).map(([key, tipo]) => (
-                    <SelectItem key={_key} value={_key}>
+                  {Object.entries(TIPOS_NOVEDAD).map(([key, tipo]) => (
+                    <SelectItem key={key} value={key}>
                       <span className="flex items-center gap-2">
                         <span>{tipo.icon}</span>
                         {tipo.label}
@@ -798,7 +798,7 @@ const FormularioNovedadModal: React.FC<{
             <Textarea
               id="descripcion"
               value={formData.descripcion}
-              onChange={(_e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
+              onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
               placeholder="Describa la novedad en detalle..."
               className="mt-1 min-h-32"
             />
@@ -812,7 +812,7 @@ const FormularioNovedadModal: React.FC<{
                 type="file"
                 multiple
                 accept="image/*,.pdf"
-                onChange={(_e) => {
+                onChange={(e) => {
                   const files = Array.from(e.target.files || [])
                   setFormData(prev => ({ ...prev, archivos: files }))
                 }}
@@ -820,14 +820,14 @@ const FormularioNovedadModal: React.FC<{
               />
               {formData.archivos.length > 0 && (
                 <Badge variant="secondary">
-                  {formData.archivos.length} archivo(_s)
+                  {formData.archivos.length} archivo(s)
                 </Badge>
               )}
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={_onClose}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
             <Button type="submit">
@@ -853,12 +853,12 @@ const SeguimientoModal: React.FC<{
       notificationService.warning('Campo requerido', 'Ingrese un comentario')
       return
     }
-    if (_novedad) {
+    if (novedad) {
       onSubmit(novedad.id, comentario)
       setComentario('')
     }
   }
-  return (<Dialog open={_isOpen} onOpenChange={_onClose}>
+  return (<Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Agregar Seguimiento</DialogTitle>
@@ -867,20 +867,20 @@ const SeguimientoModal: React.FC<{
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={_handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="comentario">Comentario</Label>
             <Textarea
               id="comentario"
-              value={_comentario}
-              onChange={(_e) => setComentario(e.target.value)}
+              value={comentario}
+              onChange={(e) => setComentario(e.target.value)}
               placeholder="Ingrese el comentario de seguimiento..."
               className="mt-1 min-h-24"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={_onClose}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
             <Button type="submit">
@@ -902,13 +902,13 @@ const ResolucionModal: React.FC<{
   const [comentario, setComentario] = useState('')
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (_novedad) {
+    if (novedad) {
       onSubmit(novedad.id, comentario || undefined)
       setComentario('')
     }
   }
   return (
-    <Dialog open={_isOpen} onOpenChange={_onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Marcar como Resuelta</DialogTitle>
@@ -917,20 +917,20 @@ const ResolucionModal: React.FC<{
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={_handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="comentarioResolucion">Comentario (_opcional)</Label>
+            <Label htmlFor="comentarioResolucion">Comentario (opcional)</Label>
             <Textarea
               id="comentarioResolucion"
-              value={_comentario}
-              onChange={(_e) => setComentario(e.target.value)}
+              value={comentario}
+              onChange={(e) => setComentario(e.target.value)}
               placeholder="Agregue un comentario sobre la resolución..."
               className="mt-1 min-h-24"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={_onClose}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
             <Button type="submit" className="bg-green-600 hover:bg-green-700">

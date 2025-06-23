@@ -26,26 +26,26 @@ export interface AsyncActionOptions {
  */
 export async function executeAsyncAction<T>(action: () => Promise<T>,
   setLoadingState: (state: LoadingState) => void,
-  _options: AsyncActionOptions = {}
+  options: AsyncActionOptions = {}
 ): Promise<T | null> {
 
   setLoadingState({ status: 'loading' })
   try {
     const result = await action()
     setLoadingState({ status: 'success' })
-    if (showSuccessNotification && successMessage) {
-      notificationService.success(s_uccessMessage)
+    if (options.showSuccessNotification && options.successMessage) {
+      notificationService.success(options.successMessage)
     }
     
     return result
-  } catch {
-    const errorMsg = error instanceof Error ? error.message : errorMessage
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : options.errorMessage || 'Error desconocido'
     setLoadingState({ status: 'error', error: errorMsg })
-    if (s_howErrorNotification) {
-      notificationService.error(_errorMsg)
+    if (options.showErrorNotification !== false) {
+      notificationService.error(errorMsg)
     }
     
-    console.error('Error en acción asíncrona:', _error)
+    console.error('Error en acción asíncrona:', error)
     return null
   }
 }
@@ -56,7 +56,7 @@ export async function executeAsyncAction<T>(action: () => Promise<T>,
 export function createErrorHandlingSlice(): ErrorHandlingState {
   return {
     loadingState: { status: 'idle' },
-    setLoadingState: (s_tate) => ({ loadingState: state })
+    setLoadingState: (state) => ({ loadingState: state })
   }
 }
 

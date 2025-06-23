@@ -112,7 +112,7 @@ class SharedApiService {
           if (response.status === 401 && endpoint !== '/auth/refresh') {
             // Try to refresh token
             const refreshToken = jwtService.getRefreshToken()
-            if (_refreshToken) {
+            if (refreshToken) {
               try {
                 await this.refreshToken()
                 // Retry the original request with new token

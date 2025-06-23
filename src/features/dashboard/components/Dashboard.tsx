@@ -59,23 +59,23 @@ export const Dashboard: React.FC = memo(() => {
     alertasActions?.refresh,
     transitosActions?.refresh
   ]
-  const { refresh: smoothRefresh } = useSmootherRefresh(_refreshFunctions, {
+  const { refresh: smoothRefresh } = useSmootherRefresh(refreshFunctions, {
     onSuccess: () => {
       setLastUpdate(new Date())
       setSecondsUntilRefresh(60)
       showNotification('success')
-      setIsRefreshing(_false)
+      setIsRefreshing(false)
     },
     onError: () => {
       showNotification('error')
-      setIsRefreshing(_false)
+      setIsRefreshing(false)
     },
     minimumDelay: 400
   })
   // Función de recarga que usa el smoothRefresh
   const refreshData = useCallback(async () => {
-    if (_isRefreshing) return
-    setIsRefreshing(_true)
+    if (isRefreshing) return
+    setIsRefreshing(true)
     await smoothRefresh()
   }, [])
   // Auto-refresh cada 60 segundos
@@ -84,7 +84,7 @@ export const Dashboard: React.FC = memo(() => {
     // Recargar inmediatamente al montar
     refreshData()
     // Configurar intervalo de 60 segundos
-    const refreshInterval = setInterval(_refreshData, 60000)
+    const refreshInterval = setInterval(refreshData, 60000)
     // Contador de segundos
     const countdownInterval = setInterval(() => {
       setSecondsUntilRefresh(prev => {
@@ -95,14 +95,14 @@ export const Dashboard: React.FC = memo(() => {
       })
     }, 1000)
     return () => {
-      clearInterval(_refreshInterval)
-      clearInterval(_countdownInterval)
+      clearInterval(refreshInterval)
+      clearInterval(countdownInterval)
     }
-  }, [])
+  }, [refreshData])
   // Solo mostrar skeleton en la carga inicial
   const isInitialLoading = !estadisticas && !precintos && !transitos && (loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas)
   // Show skeleton only on initial load
-  if (_isInitialLoading) {
+  if (isInitialLoading) {
     return (
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
@@ -115,7 +115,7 @@ export const Dashboard: React.FC = memo(() => {
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-gray-400">Actualización automática en:</span>
                 <span className={`font-bold ${secondsUntilRefresh <= 10 ? 'text-yellow-400 animate-pulse' : 'text-white'}`}>
-                  {s_econdsUntilRefresh}s
+                  {secondsUntilRefresh}s
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -133,8 +133,8 @@ export const Dashboard: React.FC = memo(() => {
                 </div>
               </div>
               <button
-                onClick={_refreshData}
-                disabled={_isRefreshing}
+                onClick={refreshData}
+                disabled={isRefreshing}
                 className="p-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 rounded-lg transition-colors"
                 title="Actualizar ahora"
               >

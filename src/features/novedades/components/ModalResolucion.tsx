@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_X, Check, CheckCircle} from 'lucide-react'
+import {X, Check, CheckCircle} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import type { Novedad} from '../types'
@@ -14,11 +14,11 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
   novedad, isOpen, onClose, onSubmit
 }) => {
   const [comentario, setComentario] = useState('')
-  const [loading, setLoading] = useState(_false)
+  const [loading, setLoading] = useState(false)
   if (!isOpen || !novedad) return null
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(_true)
+    setLoading(true)
     try {
       await onSubmit(novedad.id, comentario.trim() || undefined)
       setComentario('')
@@ -26,7 +26,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
     } catch {
       // Error manejado en el componente padre
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   return (
@@ -34,7 +34,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={_onClose}
+        onClick={onClose}
       />
       
       {/* Modal */}
@@ -49,9 +49,9 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
                 </h2>
               </div>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                disabled={_loading}
+                disabled={loading}
               >
                 <X className="h-5 w-5 text-gray-400" />
               </button>
@@ -75,12 +75,12 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
                   Comentario de resolución (_opcional)
                 </label>
                 <textarea
-                  value={_comentario}
-                  onChange={(_e) => setComentario(e.target.value)}
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
                   rows={3}
                   placeholder="Describa cómo se resolvió la novedad..."
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                  disabled={_loading}
+                  disabled={loading}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Puede dejar este campo vacío si no es necesario agregar detalles
@@ -99,15 +99,15 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={_onClose}
-                  disabled={_loading}
+                  onClick={onClose}
+                  disabled={loading}
                   className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  disabled={_loading}
+                  disabled={loading}
                   className={cn(
                     "flex-1 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2",
                     loading

@@ -7,7 +7,7 @@ export const useTransitos = () => {
     if (store.transitos.length === 0 && !store.loading) {
       store.fetchTransitos()
     }
-  }, [])
+  }, [store.transitos.length, store.loading, store.fetchTransitos])
   return {
     transitos: store.transitos,
     loading: store.loading,
@@ -26,7 +26,7 @@ export const useTransitosPendientes = () => {
     if (store.transitosPendientes.length === 0 && !store.loading) {
       store.fetchTransitosPendientes()
     }
-  }, [])
+  }, [store.transitosPendientes.length, store.loading, store.fetchTransitosPendientes])
   return {
     transitos: store.transitosPendientes,
     loading: store.loading,

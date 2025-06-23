@@ -3,7 +3,8 @@ import { wsService } from './WebSocketService'
 import {
   usePrecintosStore, useTransitosStore, useAlertasStore, useSystemStatusStore
 } from '../../store'
-import type { ConnectionData } from './types'
+import type { ConnectionData, PrecintoUpdateData } from './types'
+import type { Precinto } from '../../types'
 import { emitNotification } from '../../features/common/components/RealtimeNotifications'
 
 export interface WebSocketStatus {
@@ -42,7 +43,7 @@ export const useWebSocket = () => {
       }
     })
     // Handle precinto updates
-    wsService.on('onPrecintoUpdate', (data) => {
+    wsService.on('onPrecintoUpdate', (data: PrecintoUpdateData) => {
       const store = usePrecintosStore.getState()
       switch (data.action) {
         case 'update':
@@ -50,9 +51,9 @@ export const useWebSocket = () => {
           break
         case 'create': {
           // Add new precinto to both lists if active
-          const newPrecinto = data.precinto as any
+          const newPrecinto = data.precinto as Precinto
           store.setPrecintos([...store.precintos, newPrecinto])
-          if (['SAL', 'LLE', 'FMF', 'CFM', 'CNP'].includes(newPrecinto.estado)) {
+          if (newPrecinto.estado && ['SAL', 'LLE', 'FMF', 'CFM', 'CNP'].includes(newPrecinto.estado)) {
             store.setPrecintosActivos([...store.precintosActivos, newPrecinto])
           }
           break

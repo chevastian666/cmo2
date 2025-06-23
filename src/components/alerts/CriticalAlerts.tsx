@@ -1,5 +1,5 @@
 import React, { useSyncExternalStore, memo } from 'react'
-import {_AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react'
+import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { alertStore} from '../../stores/alertStore'
 import { PriorityBoundary} from '../priority/withPriority'
@@ -95,7 +95,7 @@ export const CriticalAlerts: React.FC = () => {
     alert => alert.severity === 'critical' || alert.severity === 'high'
   )
   const handleAcknowledge = (alertId: string) => {
-    alertStore.acknowledgeAlert(_alertId)
+    alertStore.acknowledgeAlert(alertId)
   }
   return (
     <PriorityBoundary priority="immediate">
@@ -120,8 +120,8 @@ export const CriticalAlerts: React.FC = () => {
             {criticalAlerts.map(alert => (
               <AlertItem
                 key={alert.id}
-                alert={_alert}
-                onAcknowledge={_handleAcknowledge}
+                alert={alert}
+                onAcknowledge={handleAcknowledge}
               />
             ))}
           </div>
@@ -141,4 +141,4 @@ style.textContent = `
     animation: pulse-subtle 2s ease-in-out infinite
   }
 `
-document.head.appendChild(s_tyle)
+document.head.appendChild(style)

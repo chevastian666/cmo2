@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_X, MessageSquare, Send} from 'lucide-react'
+import {X, MessageSquare, Send} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import type { Novedad} from '../types'
@@ -14,7 +14,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
   novedad, isOpen, onClose, onSubmit
 }) => {
   const [comentario, setComentario] = useState('')
-  const [loading, setLoading] = useState(_false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   if (!isOpen || !novedad) return null
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,7 +29,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
       return
     }
 
-    setLoading(_true)
+    setLoading(true)
     setError('')
     try {
       await onSubmit(novedad.id, comentario.trim())
@@ -38,7 +38,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
     } catch {
       setError('Error al guardar el seguimiento')
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   return (
@@ -46,7 +46,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={_onClose}
+        onClick={onClose}
       />
       
       {/* Modal */}
@@ -61,7 +61,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
                 </h2>
               </div>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
                 disabled={_loading}
               >
@@ -87,8 +87,8 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
                   Comentario de seguimiento *
                 </label>
                 <textarea
-                  value={_comentario}
-                  onChange={(_e) => {
+                  value={comentario}
+                  onChange={(e) => {
                     setComentario(e.target.value)
                     setError('')
                   }}
@@ -98,11 +98,11 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     error ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={_loading}
+                  disabled={loading}
                   autoFocus
                 />
                 {error && (
-                  <p className="text-red-400 text-sm mt-1">{_error}</p>
+                  <p className="text-red-400 text-sm mt-1">{error}</p>
                 )}
                 <p className="text-xs text-gray-500 mt-1">
                   {comentario.length} caracteres
@@ -113,8 +113,8 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={_onClose}
-                  disabled={_loading}
+                  onClick={onClose}
+                  disabled={loading}
                   className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                 >
                   Cancelar

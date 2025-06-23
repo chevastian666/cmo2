@@ -2,7 +2,7 @@
  * Card Component Tests
  * By Cheva
  */
-import { describe, it, expect} from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen} from '@/test/utils/test-utils'
 import { Card, CardContent, CardHeader, CardTitle} from './card'
 describe('Card Components', () => {
@@ -14,12 +14,12 @@ describe('Card Components', () => {
     it('applies custom className', () => {
       render(<Card className="custom-class">Content</Card>)
       const card = screen.getByText('Content').parentElement
-      expect(_card).toHaveClass('custom-class')
+      expect(card).toHaveClass('custom-class')
     })
     it('forwards ref', () => {
       const ref = vi.fn()
-      render(<Card ref={_ref}>Content</Card>)
-      expect(_ref).toHaveBeenCalled()
+      render(<Card ref={ref}>Content</Card>)
+      expect(ref).toHaveBeenCalled()
     })
   })
   describe('CardHeader', () => {
@@ -30,7 +30,7 @@ describe('Card Components', () => {
     it('has correct spacing classes', () => {
       render(<CardHeader>Header</CardHeader>)
       const header = screen.getByText('Header').parentElement
-      expect(_header).toHaveClass('space-y-1.5')
+      expect(header).toHaveClass('space-y-1.5')
     })
   })
   describe('CardTitle', () => {

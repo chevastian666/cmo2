@@ -3,6 +3,20 @@
  * Slack and Discord integration for alerts
  * By Cheva
  */
+
+// Alert data structure for chat messages
+export interface ChatAlert {
+  id?: string
+  title: string
+  message?: string
+  priority?: 'low' | 'medium' | 'high' | 'critical'
+  severity?: 'baja' | 'media' | 'alta' | 'critica'
+  timestamp?: number
+  location?: string
+  precinto_id?: string
+  alert_type?: string
+  [key: string]: unknown
+}
 export interface ChatConfig {
   id: string
   name: string
@@ -66,12 +80,12 @@ class ChatService {
     return this.getAllChatConfigs().filter(config => config.active)
   }
   // Message sending
-  async sendAlert(alertType: string, alert: unknown): Promise<void> {
+  async sendAlert(alertType: string, alert: ChatAlert): Promise<void> {
     const activeConfigs = this.getActiveChatConfigs()
       .filter(config => config.alert_types.includes(alertType))
     if (activeConfigs.length === 0) return
     const promises = activeConfigs.map(config =>
-      this.sendMessage(config, this.formatAlertMessage(alert, alertType, config))
+      this.sendMessage(config, this.formatAlertMessage(alert as ChatAlert, alertType, config))
     )
     await Promise.allSettled(promises)
   }
@@ -101,7 +115,7 @@ class ChatService {
     }
   }
   // Message formatting
-  private formatAlertMessage(alert: any, alertType: string, config: ChatConfig): ChatMessage {
+  private formatAlertMessage(alert: ChatAlert, alertType: string, config: ChatConfig): ChatMessage {
     const severity = this.getAlertSeverity(alert.priority || alert.severity)
     const emoji = this.getAlertEmoji(alertType, severity)
     switch (config.type) {
@@ -115,7 +129,7 @@ class ChatService {
         return { text: `${emoji} ${alert.title || alert.message}` }
     }
   }
-  private formatSlackMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatSlackMessage(alert: ChatAlert, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     const mentions = this.formatSlackMentions(config)
     return {
       text: `${emoji} ${alertType.toUpperCase()} - ${alert.title}`,
@@ -191,7 +205,7 @@ class ChatService {
       ]
     }
   }
-  private formatDiscordMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatDiscordMessage(alert: ChatAlert, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     const mentions = this.formatDiscordMentions(config)
     const color = this.getSeverityColor(severity)
     return {
@@ -229,7 +243,7 @@ class ChatService {
       ]
     }
   }
-  private formatTeamsMessage(alert: any, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
+  private formatTeamsMessage(alert: ChatAlert, alertType: string, config: ChatConfig, emoji: string, severity: string): ChatMessage {
     return {
       text: `${emoji} **${alertType.toUpperCase()}** - ${alert.title}`,
       attachments: [

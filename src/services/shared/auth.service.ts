@@ -58,12 +58,12 @@ class AuthService {
           return true
         }
       }
-    } catch {
-      console.error('Auth check failed:', _error)
+    } catch (error) {
+      console.error('Auth check failed:', error)
       // Try to refresh token if it's expired
       if (jwtService.shouldRefreshToken()) {
         const refreshed = await this.refreshTokens()
-        if (_refreshed) {
+        if (refreshed) {
           return this.checkAuth(); // Retry after refresh
         }
       }
@@ -119,8 +119,8 @@ class AuthService {
     try {
       // Notify server about logout
       await sharedStateService.logout()
-    } catch {
-      console.error('Logout error:', _error)
+    } catch (error) {
+      console.error('Logout error:', error)
     } finally {
       this.clearAuth()
       this.stopIntervals()
@@ -157,8 +157,8 @@ class AuthService {
           
           return true
         }
-      } catch {
-        console.error('Token refresh failed:', _error)
+      } catch (error) {
+        console.error('Token refresh failed:', error)
         return false
       } finally {
         this.refreshPromise = null
@@ -173,7 +173,7 @@ class AuthService {
   getCurrentUser(): Usuario | null {
     // First try to get from token
     const tokenUser = jwtService.getUserFromToken()
-    if (_tokenUser) {
+    if (tokenUser) {
       return tokenUser as Usuario
     }
     

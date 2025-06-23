@@ -8,7 +8,7 @@ export const useAlertas = () => {
     if (store.alertas.length === 0 && !store.loading) {
       store.fetchAlertas()
     }
-  }, [])
+  }, [store.alertas.length, store.loading, store.fetchAlertas])
   return {
     alertas: store.alertas,
     loading: store.loading,
@@ -31,7 +31,7 @@ export const useAlertasActivas = () => {
     if (store.alertasActivas.length === 0 && !store.loading) {
       store.fetchAlertasActivas()
     }
-  }, [])
+  }, [store.alertasActivas.length, store.loading, store.fetchAlertasActivas])
   return {
     alertas: store.alertasActivas,
     loading: store.loading,
@@ -77,14 +77,14 @@ export const useAlertaExtendida = (id: string) => {
   // Subscribe to updates
 
   useEffect(() => {
-    const unsubscribe = useAlertasStore.subscribe((s_tate) => {
-      const updated = state.alertasExtendidas.get(_id)
+    const unsubscribe = useAlertasStore.subscribe((state) => {
+      const updated = state.alertasExtendidas.get(id)
       if (updated && updated !== alertaExtendida) {
-        setAlertaExtendida(_updated)
+        setAlertaExtendida(updated)
       }
     })
     return unsubscribe
-  }, [id])
+  }, [id, alertaExtendida])
   return {
     alerta: alertaExtendida,
     loading,

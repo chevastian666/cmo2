@@ -1,6 +1,6 @@
  
 import React from 'react'
-import {_AlertTriangle} from 'lucide-react'
+import {AlertTriangle} from 'lucide-react'
 export const CriticalAlertsSkeleton: React.FC = () => {
   return (<div className="space-y-4 animate-pulse">
       <div className="flex items-center justify-between">
@@ -12,8 +12,8 @@ export const CriticalAlertsSkeleton: React.FC = () => {
       </div>
 
       <div className="space-y-3">
-        {[1, 2, 3].map((_i) => (
-          <div key={_i} className="p-4 rounded-lg border-2 border-gray-800 bg-gray-900/50">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="p-4 rounded-lg border-2 border-gray-800 bg-gray-900/50">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 flex-1">
                 <div className="w-5 h-5 bg-gray-700 rounded mt-0.5" />

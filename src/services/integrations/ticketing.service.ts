@@ -3,6 +3,21 @@
  * Jira, ServiceNow, and other ticketing platforms
  * By Cheva
  */
+
+// Alert data structure for ticketing
+export interface TicketAlert {
+  id?: string
+  title: string
+  message?: string
+  description?: string
+  priority?: 'low' | 'medium' | 'high' | 'critical'
+  severity?: 'baja' | 'media' | 'alta' | 'critica'
+  timestamp?: number
+  location?: string
+  precinto_id?: string
+  alert_type?: string
+  [key: string]: unknown
+}
 export interface TicketingConfig {
   id: string
   name: string
@@ -88,7 +103,7 @@ class TicketingService {
     return this.getAllTicketingConfigs().filter(config => config.active)
   }
   // Ticket creation
-  async createTicketForAlert(alertType: string, alert: any): Promise<CreatedTicket[]> {
+  async createTicketForAlert(alertType: string, alert: TicketAlert): Promise<CreatedTicket[]> {
     const activeConfigs = this.getActiveTicketingConfigs()
       .filter(config =>
         config.auto_create_tickets &&
@@ -157,7 +172,10 @@ class TicketingService {
     }
   }
   // Platform-specific implementations
-  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  // Platform-specific ticket formats
+  type PlatformTicket = Record<string, unknown>
+
+  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
     switch (config.type) {
       case 'jira':
         return this.formatJiraTicket(config, ticketData)
@@ -171,7 +189,7 @@ class TicketingService {
         return ticketData
     }
   }
-  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -201,7 +219,7 @@ class TicketingService {
       }
     }
   }
-  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -219,7 +237,7 @@ class TicketingService {
       ...ticketData.custom_fields
     }
   }
-  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
     const priorityMap: Record<string, number> = {
       'Critical': 4,
       'High': 3,
@@ -237,7 +255,7 @@ class TicketingService {
       ...ticketData.custom_fields
     }
   }
-  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): any {
+  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
     const priorityMap: Record<string, string> = {
       'Critical': 'urgent',
       'High': 'high',
@@ -305,7 +323,26 @@ class TicketingService {
     }
   }
   // Response parsing
-  private parseTicketResponse(config: TicketingConfig, response: any): CreatedTicket {
+  // Response types from different platforms
+  interface TicketResponse {
+    id?: string
+    key?: string
+    self?: string
+    sys_id?: string
+    display_id?: string
+    number?: string
+    result?: {
+      sys_id?: string
+      number?: string
+    }
+    ticket?: {
+      id?: string
+      url?: string
+    }
+    [key: string]: unknown
+  }
+
+  private parseTicketResponse(config: TicketingConfig, response: TicketResponse): CreatedTicket {
     switch (config.type) {
       case 'jira':
         return {
@@ -359,7 +396,7 @@ class TicketingService {
     return statusMap[statusCode] || 'Unknown'
   }
   // Alert formatting
-  private formatAlertAsTicket(alert: any, alertType: string, config: TicketingConfig): TicketData {
+  private formatAlertAsTicket(alert: TicketAlert, alertType: string, config: TicketingConfig): TicketData {
     const priority = this.mapAlertPriority(alert.priority || alert.severity)
     const type = this.mapAlertType(alertType)
     return {

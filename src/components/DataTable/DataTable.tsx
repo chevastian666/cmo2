@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import {_ChevronLeft, ChevronRight, Search, Download, Filter, X} from 'lucide-react'
+import {ChevronRight, Search, Download, Filter, X} from 'lucide-react'
 import { cn} from '../../utils/utils'
 export interface Column<T> {
   key: keyof T | string
@@ -29,15 +29,17 @@ export interface DataTableProps<T> {
 }
 
 export function DataTable<T extends Record<string, unknown>>({
-  data, columns, searchKeys = [], searchPlaceholder = "Buscar...", itemsPerPageOptions = [10, 25, 50, 100], defaultItemsPerPage = 25, onExport, className, rowClassName, onRowClick, emptyMessage = "No se encontraron datos", title
+  data, columns, searchKeys = [], itemsPerPageOptions = [10, 25, 50, 100], defaultItemsPerPage = 25, onExport, className, rowClassName, onRowClick, title
 }: DataTableProps<T>) {
+  const searchPlaceholder = "Buscar...";
+  const emptyMessage = "No se encontraron datos";
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(_defaultItemsPerPage)
-  const [sortColumn, setSortColumn] = useState<string | null>(_null)
+  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage)
+  const [sortColumn, setSortColumn] = useState<string | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [filters, setFilters] = useState<Record<string, unknown>>({})
-  const [showFilters, setShowFilters] = useState(_false)
+  const [showFilters, setShowFilters] = useState(false)
   // Filter data
    
   const filteredData = useMemo(() => {
@@ -49,39 +51,39 @@ export function DataTable<T extends Record<string, unknown>>({
         searchKeys.some(key => {
           const value = item[key]
           if (value == null) return false
-          return String(_value).toLowerCase().includes(_lowerSearch)
+          return String(value).toLowerCase().includes(lowerSearch)
         })
       )
     }
 
     // Apply column filters
-    Object.entries(_filters).forEach(([key, filterValue]) => {
+    Object.entries(filters).forEach(([key, filterValue]) => {
       if (filterValue !== '' && filterValue != null) {
         filtered = filtered.filter(item => {
           const column = columns.find(col => col.key === key)
           if (!column) return true
-          const itemValue = column.accessor ? column.accessor(_item) : item[key]
+          const itemValue = column.accessor ? column.accessor(item) : item[key]
           if (column.filterType === 'select') {
-            return String(_itemValue) === String(_filterValue)
+            return String(itemValue) === String(filterValue)
           }
           
           if (column.filterType === 'number') {
-            const numValue = Number(_itemValue)
-            const numFilter = Number(_filterValue)
-            return !isNaN(_numValue) && !isNaN(_numFilter) && numValue >= numFilter
+            const numValue = Number(itemValue)
+            const numFilter = Number(filterValue)
+            return !isNaN(numValue) && !isNaN(numFilter) && numValue >= numFilter
           }
 
-          return String(_itemValue).toLowerCase().includes(String(_filterValue).toLowerCase())
+          return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase())
         })
       }
     })
     // Apply sorting
-    if (s_ortColumn) {
-      filtered.sort((_a, b) => {
+    if (sortColumn) {
+      filtered.sort((a, b) => {
         const column = columns.find(col => col.key === sortColumn)
         if (!column) return 0
-        const aValue = column.accessor ? column.accessor(_a) : a[sortColumn]
-        const bValue = column.accessor ? column.accessor(_b) : b[sortColumn]
+        const aValue = column.accessor ? column.accessor(a) : a[sortColumn]
+        const bValue = column.accessor ? column.accessor(b) : b[sortColumn]
         if (aValue == null) return 1
         if (bValue == null) return -1
         const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0
@@ -90,13 +92,13 @@ export function DataTable<T extends Record<string, unknown>>({
     }
 
     return filtered
-  }, [data, filters, columns])
+  }, [data, searchTerm, searchKeys, filters, sortColumn, sortDirection, columns])
   // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage)
    
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage
-    return filteredData.slice(s_tart, start + itemsPerPage)
+    return filteredData.slice(start, start + itemsPerPage)
   }, [currentPage, filteredData, itemsPerPage])
   // Reset to first page when filters change
   React.useEffect(() => {
@@ -112,36 +114,36 @@ export function DataTable<T extends Record<string, unknown>>({
     }
   }
   const handleExport = (format: 'csv' | 'json') => {
-    if (_onExport) {
-      onExport(_filteredData, format)
+    if (onExport) {
+      onExport(filteredData, format)
     } else {
       // Default export implementation
       if (format === 'csv') {
         const headers = columns.map(col => col.header).join(',')
         const rows = filteredData.map(item => 
           columns.map(col => {
-            const value = col.accessor ? col.accessor(_item) : item[col.key]
-            return `"${String(_value).replace(/"/g, '""')}"`
+            const value = col.accessor ? col.accessor(item) : item[col.key]
+            return `"${String(value).replace(/"/g, '""')}"`
           }).join(',')
         )
         const csv = [headers, ...rows].join('\n')
-        downloadFile(_csv, `export-${Date.now()}.csv`, 'text/csv')
+        downloadFile(csv, `export-${Date.now()}.csv`, 'text/csv')
       } else {
-        const json = JSON.stringify(_filteredData, null, 2)
-        downloadFile(_json, `export-${Date.now()}.json`, 'application/json')
+        const json = JSON.stringify(filteredData, null, 2)
+        downloadFile(json, `export-${Date.now()}.json`, 'application/json')
       }
     }
   }
   const downloadFile = (content: string, filename: string, type: string) => {
     const blob = new Blob([content], { type })
-    const url = URL.createObjectURL(_blob)
+    const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
     link.download = filename
-    document.body.appendChild(_link)
+    document.body.appendChild(link)
     link.click()
-    document.body.removeChild(_link)
-    URL.revokeObjectURL(_url)
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
   const filterableColumns = columns.filter(col => col.filterable)
   return (
@@ -149,7 +151,7 @@ export function DataTable<T extends Record<string, unknown>>({
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-          {title && <h3 className="text-xl font-semibold text-white">{_title}</h3>}
+          {title && <h3 className="text-xl font-semibold text-white">{title}</h3>}
           
           <div className="flex flex-col sm:flex-row gap-3 flex-1 sm:max-w-xl">
             {/* Search */}
@@ -157,9 +159,9 @@ export function DataTable<T extends Record<string, unknown>>({
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
-                  value={s_earchTerm}
-                  onChange={(_e) => setSearchTerm(e.target.value)}
-                  placeholder={s_earchPlaceholder}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={searchPlaceholder}
                   className="w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -177,9 +179,9 @@ export function DataTable<T extends Record<string, unknown>>({
               >
                 <Filter className="h-4 w-4" />
                 <span className="hidden sm:inline text-base">Filtros</span>
-                {Object.keys(_filters).length > 0 && (
+                {Object.keys(filters).length > 0 && (
                   <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                    {Object.keys(_filters).length}
+                    {Object.keys(filters).length}
                   </span>
                 )}
               </button>
@@ -212,14 +214,14 @@ export function DataTable<T extends Record<string, unknown>>({
         {/* Filters */}
         {showFilters && filterableColumns.length > 0 && (<div className="mt-4 p-4 bg-gray-700 rounded-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filterableColumns.map((_column) => (<div key={column.key as string}>
+              {filterableColumns.map((column) => (<div key={column.key as string}>
                   <label className="block text-base font-medium text-gray-300 mb-1">
                     {column.header}
                   </label>
                   {column.filterType === 'select' && column.filterOptions ? (
                     <select
                       value={filters[column.key] || ''}
-                      onChange={(_e) => setFilters({ ...filters, [column.key]: e.target.value })}
+                      onChange={(e) => setFilters({ ...filters, [column.key]: e.target.value })}
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-md text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Todos</option>
@@ -232,7 +234,7 @@ export function DataTable<T extends Record<string, unknown>>({
                   ) : (<input
                       type={column.filterType === 'number' ? 'number' : 'text'}
                       value={filters[column.key] || ''}
-                      onChange={(_e) => setFilters({ ...filters, [column.key]: e.target.value })}
+                      onChange={(e) => setFilters({ ...filters, [column.key]: e.target.value })}
                       placeholder={`Filtrar por ${column.header.toLowerCase()}`}
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-md text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -240,7 +242,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 </div>
               ))}
             </div>
-            {Object.keys(_filters).length > 0 && (<button
+            {Object.keys(filters).length > 0 && (<button
                 onClick={() => setFilters({})}
                 className="mt-3 text-base text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
@@ -257,7 +259,7 @@ export function DataTable<T extends Record<string, unknown>>({
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-700">
-              {columns.map((_column) => (
+              {columns.map((column) => (
                 <th
                   key={column.key as string}
                   className={cn(
@@ -266,7 +268,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     column.className
                   )}
                   style={{ width: column.width }}
-                  onClick={() => handleSort(_column)}
+                  onClick={() => handleSort(column)}
                 >
                   <div className="flex items-center gap-1">
                     {column.header}
@@ -284,25 +286,25 @@ export function DataTable<T extends Record<string, unknown>>({
             {paginatedData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="px-4 py-8 text-center text-base text-gray-400">
-                  {_emptyMessage}
+                  {emptyMessage}
                 </td>
               </tr>
-            ) : (paginatedData.map((_item, index) => (
+            ) : (paginatedData.map((item, index) => (
                 <tr
-                  key={_index}
+                  key={index}
                   className={cn(
                     "hover:bg-gray-700/50 transition-colors",
                     onRowClick && "cursor-pointer",
-                    rowClassName && rowClassName(_item, index)
+                    rowClassName && rowClassName(item, index)
                   )}
-                  onClick={() => onRowClick && onRowClick(_item)}
+                  onClick={() => onRowClick && onRowClick(item)}
                 >
-                  {columns.map((_column) => (
+                  {columns.map((column) => (
                     <td
                       key={column.key as string}
                       className={cn("px-4 py-3 text-base text-gray-300", column.className)}
                     >
-                      {column.accessor ? column.accessor(_item) : item[column.key]}
+                      {column.accessor ? column.accessor(item) : item[column.key]}
                     </td>
                   ))}
                 </tr>
@@ -318,12 +320,12 @@ export function DataTable<T extends Record<string, unknown>>({
           <div className="flex items-center gap-2">
             <span className="text-base text-gray-400">Mostrar</span>
             <select
-              value={_itemsPerPage}
-              onChange={(_e) => setItemsPerPage(Number(e.target.value))}
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
               className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {itemsPerPageOptions.map(option => (
-                <option key={_option} value={_option}>{_option}</option>
+                <option key={option} value={option}>{option}</option>
               ))}
             </select>
             <span className="text-base text-gray-400">
@@ -337,15 +339,15 @@ export function DataTable<T extends Record<string, unknown>>({
               disabled={currentPage === 1}
               className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronLeft className="h-5 w-5 text-gray-400" />
+              <ChevronRight className="h-5 w-5 text-gray-400" style={{transform: 'rotate(180deg)'}}/>
             </button>
             
             <span className="text-base text-gray-400">
-              Página {_currentPage} de {totalPages || 1}
+              Página {currentPage} de {totalPages || 1}
             </span>
 
             <button
-              onClick={() => setCurrentPage(prev => Math.min(_totalPages, prev + 1))}
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages || totalPages === 0}
               className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >

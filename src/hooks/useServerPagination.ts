@@ -149,7 +149,7 @@ export function useServerPagination<T>({
     if (isError && error && onError) {
       onError(error as Error)
     }
-  }, [error])
+  }, [error, isError, onError])
   // Debounced search
   const debouncedSearch = useMemo(
     () => debounce((search: string) => {
@@ -233,7 +233,7 @@ export function useServerPagination<T>({
   // Invalidate cache
   const invalidate = useCallback(() => {
     queryClient.invalidateQueries({ queryKey })
-  }, [])
+  }, [queryClient, queryKey])
   // Reset all
   const reset = useCallback(() => {
     setState({
@@ -244,7 +244,7 @@ export function useServerPagination<T>({
       filters: {},
       search: ''
     })
-  }, [])
+  }, [pageSize])
   // Cleanup on unmount
 
     useEffect(() => {
@@ -254,7 +254,7 @@ export function useServerPagination<T>({
       }
       debouncedSearch.cancel()
     }
-  }, [])
+  }, [debouncedSearch])
   return {
     // Data
     data: data?.data || [],

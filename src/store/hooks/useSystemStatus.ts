@@ -7,7 +7,7 @@ export const useSystemStatus = () => {
     if (!store.estadisticas && !store.loading) {
       store.fetchEstadisticas()
     }
-  }, [])
+  }, [store.estadisticas, store.loading, store.fetchEstadisticas])
   return {
     estadisticas: store.estadisticas,
     smsPendientes: store.smsPendientes,

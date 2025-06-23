@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {_Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react'
+import {Play, Pause, RefreshCw, Layers, Zap, Move, Maximize2, Grid, List, AlertCircle, CheckCircle, Info, Settings} from 'lucide-react'
 import { 
   AnimatedCard, AnimatedButton, AnimatedList, AnimatedListItem, AnimatedModal, AnimatedBadge, AnimatedSpinner, AnimatedSkeleton, AnimatedProgress, FadeDiv, ScaleDiv, SlideUpDiv, SlideDownDiv} from './AnimatedComponents'
 import {
@@ -9,16 +9,16 @@ import {
   rotateScaleVariants, pulseVariants, shakeVariants, glowVariants, hoverScaleVariants, hoverLiftVariants, alertCriticalVariants, transitMovingVariants, precintoActiveVariants} from './AnimationPresets'
 export const AnimationsDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basics')
-  const [isModalOpen, setIsModalOpen] = useState(_false)
-  const [isPlaying, setIsPlaying] = useState(_true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [progress, setProgress] = useState(0)
-  const [showGrid, setShowGrid] = useState(_false)
+  const [showGrid, setShowGrid] = useState(false)
   // Simulador de progreso
   React.useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => (prev >= 100 ? 0 : prev + 10))
     }, 1000)
-    return () => clearInterval(_interval)
+    return () => clearInterval(interval)
   }, [])
   const tabs = [
     { id: 'basics', label: 'Básicas', icon: Layers },

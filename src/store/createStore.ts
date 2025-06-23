@@ -26,42 +26,49 @@ export function createStore<T>(stateCreator: StateCreator<
       ['zustand/devtools', never], ['zustand/persist', T], ['zustand/immer', never], ['zustand/subscribeWithSelector', never]
     ], [], T
   >, options: CreateStoreOptions<T>) {
-  const { enableLogger: enableLogger = process.env.NODE_ENV === 'development', enableImmer: enableImmer = true, enableSubscribeWithSelector: enableSelector = true, persist: persistOptions } = options
+  const {
+    name,
+    enableDevtools = process.env.NODE_ENV === 'development',
+    enableLogger = process.env.NODE_ENV === 'development',
+    enableImmer = true,
+    enableSubscribeWithSelector = true,
+    persist: persistOptions
+  } = options
   // Construir la cadena de middlewares dinámicamente
   let enhancedCreator = stateCreator
   // Immer debe ser el más interno para que funcione correctamente
-  if (_enableImmer) {
-    enhancedCreator = immer(_enhancedCreator) as unknown
+  if (enableImmer) {
+    enhancedCreator = immer(enhancedCreator) as unknown
   }
 
   // Logger
-  if (_enableLogger) {
+  if (enableLogger) {
     const loggerConfig: LoggerConfig = typeof enableLogger === 'boolean' 
       ? { name } 
       : { name, ...enableLogger }
-    enhancedCreator = logger(_enhancedCreator, loggerConfig) as unknown
+    enhancedCreator = logger(enhancedCreator, loggerConfig) as unknown
   }
 
   // Persist
-  if (_persistOptions) {
+  if (persistOptions) {
     const persistConfig = createPersistConfig({
       name,
       ...persistOptions
     })
-    enhancedCreator = persist(_enhancedCreator, persistConfig as unknown) as unknown
+    enhancedCreator = persist(enhancedCreator, persistConfig as unknown) as unknown
   }
 
   // DevTools
-  if (_enableDevtools) {
-    enhancedCreator = devtools(_enhancedCreator, { name }) as unknown
+  if (enableDevtools) {
+    enhancedCreator = devtools(enhancedCreator, { name }) as unknown
   }
 
   // Subscribe with selector
-  if (_enableSelector) {
-    enhancedCreator = subscribeWithSelector(_enhancedCreator) as unknown
+  if (enableSubscribeWithSelector) {
+    enhancedCreator = subscribeWithSelector(enhancedCreator) as unknown
   }
 
-  return create(_enhancedCreator)
+  return create(enhancedCreator)
 }
 
 /**
@@ -69,9 +76,9 @@ export function createStore<T>(stateCreator: StateCreator<
  */
 export function createSimpleStore<T>(stateCreator: StateCreator<T>, name?: string) {
   if (process.env.NODE_ENV === 'development' && name) {
-    return create(devtools(s_tateCreator, { name }))
+    return create(devtools(stateCreator, { name }))
   }
-  return create(s_tateCreator)
+  return create(stateCreator)
 }
 
 /**
@@ -99,8 +106,8 @@ export function createSyncedStore<T>(stateCreator: StateCreator<T>, name: string
   })
   // Habilitar sincronización entre pestañas
   if (typeof window !== 'undefined') {
-    window.addEventListener('storage', (_e) => {
-      if (e.key === `cmo_${_name}` && e.newValue) {
+    window.addEventListener('storage', (e) => {
+      if (e.key === `cmo_${name}` && e.newValue) {
         store.persist.rehydrate()
       }
     })
