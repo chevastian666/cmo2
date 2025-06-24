@@ -1,6 +1,6 @@
-import type { Precinto, EventoPrecinto} from '../types/monitoring'
-import { unifiedAPIService} from './api/unified.service'
-import { generateMockPrecinto} from '../utils/mockData'
+import type { Precinto, EventoPrecinto} from '@/types/monitoring'
+import { unifiedAPIService} from './unified.service'
+import { generateMockPrecinto} from '@/utils/mockData'
 export interface PrecintoFilters {
   estado?: string
   tipo?: string

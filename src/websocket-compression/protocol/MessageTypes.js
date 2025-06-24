@@ -154,7 +154,7 @@ export function buildFullStateMessage(precintoId, state) {
   const msg = new BinaryMessage();
   msg.writeUInt8(MESSAGE_TYPES.FULL_STATE);
   msg.writeString(precintoId);
-  msg.writeUInt32(Date.now());
+  msg.writeUInt32(Math.floor(Date.now() / 1000)); // Convert to seconds for 32-bit
   
   // Write all fields
   msg.writeFloat32(state.latitude);
@@ -162,7 +162,9 @@ export function buildFullStateMessage(precintoId, state) {
   msg.writeUInt8(state.status);
   msg.writeFloat32(state.temperature);
   msg.writeUInt8(state.battery);
-  msg.writeUInt32(state.timestamp);
+  // Convert timestamp to seconds if it's in milliseconds
+  const timestamp = state.timestamp > 2147483647 ? Math.floor(state.timestamp / 1000) : state.timestamp;
+  msg.writeUInt32(timestamp);
   msg.writeUInt8(state.signalStrength || 0);
   msg.writeFloat32(state.speed || 0);
   msg.writeUInt16(state.heading || 0);
@@ -175,7 +177,7 @@ export function buildDeltaMessage(precintoId, deltas) {
   const msg = new BinaryMessage();
   msg.writeUInt8(MESSAGE_TYPES.DELTA_UPDATE);
   msg.writeString(precintoId);
-  msg.writeUInt32(Date.now());
+  msg.writeUInt32(Math.floor(Date.now() / 1000)); // Convert to seconds for 32-bit
   msg.writeUInt8(Object.keys(deltas).length); // Number of changed fields
   
   // Write only changed fields
@@ -200,7 +202,9 @@ export function buildDeltaMessage(precintoId, deltas) {
         break;
       
       case FIELD_IDS.TIMESTAMP:
-        msg.writeUInt32(value);
+        // Convert timestamp to seconds if it's in milliseconds
+        const timestamp = value > 2147483647 ? Math.floor(value / 1000) : value;
+        msg.writeUInt32(timestamp);
         break;
       
       case FIELD_IDS.HEADING:
@@ -216,7 +220,7 @@ export function buildDeltaMessage(precintoId, deltas) {
 export function buildBatchDeltaMessage(updates) {
   const msg = new BinaryMessage();
   msg.writeUInt8(MESSAGE_TYPES.BATCH_DELTA);
-  msg.writeUInt32(Date.now());
+  msg.writeUInt32(Math.floor(Date.now() / 1000)); // Convert to seconds for 32-bit
   msg.writeUInt16(updates.length); // Number of updates
   
   for (const { precintoId, deltas } of updates) {

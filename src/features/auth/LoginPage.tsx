@@ -4,12 +4,13 @@ import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Label} from '@/components/ui/label'
 import { Alert, AlertDescription} from '@/components/ui/alert'
+import { useAuth } from '@/hooks/useAuth'
 export const LoginPage: React.FC = () => {
-
+  const { login, isLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [localError, setLocalError] = useState('')
-  const _handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLocalError('')
     if (!email || !password) {
@@ -18,13 +19,13 @@ export const LoginPage: React.FC = () => {
     }
 
     try {
-      await login(_email, password)
+      await login(email, password)
       // Navigation will be handled by the auth state change
-    } catch (err: unknown) {
-      setLocalError(err.message || 'Error al iniciar sesión')
+    } catch (err) {
+      setLocalError((err as Error).message || 'Error al iniciar sesión')
     }
   }
-  const displayError = localError || error
+  const displayError = localError
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
@@ -42,11 +43,11 @@ export const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={_handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {displayError && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{_displayError}</AlertDescription>
+              <AlertDescription>{displayError}</AlertDescription>
             </Alert>
           )}
 
@@ -59,8 +60,8 @@ export const LoginPage: React.FC = () => {
                 type="email"
                 autoComplete="email"
                 required
-                value={_email}
-                onChange={(_e) => setEmail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="usuario@blocktracker.uy"
               />
             </div>
@@ -73,8 +74,8 @@ export const LoginPage: React.FC = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                value={_password}
-                onChange={(_e) => setPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
               />
             </div>
@@ -83,7 +84,7 @@ export const LoginPage: React.FC = () => {
           <div>
             <Button
               type="submit"
-              disabled={_isLoading}
+              disabled={isLoading}
               className="w-full"
               size="default"
             >

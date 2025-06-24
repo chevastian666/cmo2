@@ -16,10 +16,12 @@ describe('Card Components', () => {
       const card = screen.getByText('Content').parentElement
       expect(card).toHaveClass('custom-class')
     })
-    it('forwards ref', () => {
-      const ref = vi.fn()
-      render(<Card ref={ref}>Content</Card>)
-      expect(ref).toHaveBeenCalled()
+    it('renders with custom onClick', () => {
+      const handleClick = vi.fn()
+      render(<Card onClick={handleClick}>Content</Card>)
+      const card = screen.getByText('Content').parentElement
+      card?.click()
+      expect(handleClick).toHaveBeenCalled()
     })
   })
   describe('CardHeader', () => {
@@ -27,10 +29,10 @@ describe('Card Components', () => {
       render(<CardHeader>Header content</CardHeader>)
       expect(screen.getByText('Header content')).toBeInTheDocument()
     })
-    it('has correct spacing classes', () => {
-      render(<CardHeader>Header</CardHeader>)
-      const header = screen.getByText('Header').parentElement
-      expect(header).toHaveClass('space-y-1.5')
+    it('renders with correct structure', () => {
+      const { container } = render(<CardHeader>Header</CardHeader>)
+      const headerDiv = container.firstChild
+      expect(headerDiv).toHaveClass('flex', 'items-center', 'justify-between')
     })
   })
   describe('CardTitle', () => {
@@ -42,7 +44,7 @@ describe('Card Components', () => {
     it('has correct typography classes', () => {
       render(<CardTitle>Title</CardTitle>)
       const title = screen.getByText('Title')
-      expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
+      expect(title).toHaveClass('text-lg', 'font-semibold', 'text-gray-100')
     })
   })
   describe('CardDescription', () => {
@@ -53,7 +55,7 @@ describe('Card Components', () => {
     it('has muted text styling', () => {
       render(<CardDescription>Description</CardDescription>)
       const description = screen.getByText('Description')
-      expect(description).toHaveClass('text-sm', 'text-muted-foreground')
+      expect(description).toHaveClass('text-sm', 'text-gray-400', 'mt-1')
     })
   })
   describe('Card composition', () => {

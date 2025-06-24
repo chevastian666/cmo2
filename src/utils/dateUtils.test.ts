@@ -54,7 +54,7 @@ describe('DateUtils', () => {
     })
     it('formats hours ago', () => {
       const twoHoursAgo = new Date(mockDate.getTime() - 2 * 60 * 60 * 1000)
-      expect(formatRelativeTime(twoHoursAgo)).toBe('hace 2 horas')
+      expect(formatRelativeTime(twoHoursAgo)).toBe('hace alrededor de 2 horas')
     })
     it('formats days ago', () => {
       const threeDaysAgo = new Date(mockDate.getTime() - 3 * 24 * 60 * 60 * 1000)

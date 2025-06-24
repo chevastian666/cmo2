@@ -7,7 +7,7 @@ interface FormularioCamionProps {
 }
 
 export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) => {
-  const userInfo = useUserInfo()
+  const _userInfo = useUserInfo()
   const [formData, setFormData] = useState({
     matricula: '',
     observaciones: '',
@@ -50,8 +50,8 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       //   observaciones: formData.observaciones.trim(),
       //   estado: formData.estado,
       //   creadoPor: {
-      //     id: userInfo.id,
-      //     nombre: userInfo.name
+      //     id: _userInfo.id,
+      //     nombre: _userInfo.name
       //   }
       // })
       onClose()

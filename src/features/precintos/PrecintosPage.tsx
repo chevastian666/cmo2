@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Download, RefreshCw, Plus, XCircle } from 'lucide-react'
-import { PrecintoTable} from '../components/PrecintoTable'
-import { PrecintoFilters } from '../components/PrecintoFilters'
-import { PrecintoDetailModal} from '../components/PrecintoDetailModal'
-import { ErrorBoundary} from '../components/ErrorBoundary'
-import { precintosService} from '../services/precintos.service'
-import { PrecintoStatus} from '../types'
-import type { Precinto, PrecintoFilters as PrecintoFiltersType} from '../types'
+import { PrecintoTable} from './components/PrecintoTable'
+import { PrecintoFilters } from './components/PrecintoFilters'
+import { PrecintoDetailModal} from './components/PrecintoDetailModal'
+import { ErrorBoundary} from '@/components/ErrorBoundary'
+import { precintosService} from '@/services/api/precintos.service'
+import { PrecintoStatus} from './types'
+import type { Precinto, PrecintoFilters as PrecintoFiltersType} from './types'
 export const PrecintosPage: React.FC = () => {
 
   const [precintos, setPrecintos] = useState<Precinto[]>([])

@@ -79,8 +79,8 @@ class CacheService {
   async deduplicateRequest<T>(key: string, fetcher: () => Promise<T>
   ): Promise<T> {
     // Check if there's already a pending request
-    const pending = this.pendingRequests.get(_key)
-    if (_pending) {
+    const pending = this.pendingRequests.get(key)
+    if (pending) {
       const now = Date.now()
       // If request is not too old, return existing promise
       if (now - pending.timestamp < this.REQUEST_TIMEOUT) {

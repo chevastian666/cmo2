@@ -3,14 +3,14 @@
  * By Cheva
  */
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 
 export const handlers = [
-  rest.get('/api/*', (_req, res, ctx) => {
-    return res(ctx.json({ data: [] }))
+  http.get('/api/*', () => {
+    return HttpResponse.json({ data: [] })
   }),
   
-  rest.post('/api/*', (_req, res, ctx) => {
-    return res(ctx.json({ success: true }))
+  http.post('/api/*', () => {
+    return HttpResponse.json({ success: true })
   })
 ]
