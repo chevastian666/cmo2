@@ -3,7 +3,7 @@ import { X, User, MessageSquare, CheckCircle, AlertTriangle, Clock, Shield, Batt
 import { cn} from '../../../utils/utils'
 import { formatDateTime, formatTimeAgo} from '../../../utils/formatters'
 import type { AlertaExtendida, Usuario} from '../../../types'
-import { _TIPOS_ALERTA as TIPOS_ALERTA} from '../../../types/monitoring'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
 import { usuariosService} from '../../../services/usuarios.service'
 interface AlertaDetalleModalProps {
   alerta: AlertaExtendida

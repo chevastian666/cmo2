@@ -3,7 +3,7 @@ import { AlertTriangle, Shield, Battery, Package, Clock, CheckCircle, Navigation
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo, formatDateTime} from '../../../utils/formatters'
 import type { Alerta} from '../../../types'
-import { _TIPOS_ALERTA as TIPOS_ALERTA} from '../../../types/monitoring'
+import { TIPOS_ALERTA} from '../../../types/monitoring'
 import { DataTable} from '../../../components/DataTable'
 import type { Column} from '../../../components/DataTable/DataTable'
 import { AlertaDetalleModal} from './AlertaDetalleModal'
