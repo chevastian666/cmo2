@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react'
 import { Plus, Search, Filter, Download, Building2, MapPin, Phone, Clock, Package, Edit2, Eye, X, Hash, Activity, Map} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import { Badge} from '@/components/ui/badge'
 import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Label} from '@/components/ui/label'

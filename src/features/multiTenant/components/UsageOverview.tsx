@@ -6,7 +6,7 @@
 
 import React from 'react'
 import {Users, Package, Truck, AlertTriangle, Zap, HardDrive, TrendingUp, CreditCard} from 'lucide-react'
-import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import { Progress} from '@/components/ui/progress'
 import { Badge} from '@/components/ui/badge'
 import { Button} from '@/components/ui/button'

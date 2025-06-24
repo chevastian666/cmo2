@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import { Package, Search, AlertCircle, CheckCircle, MapPin, Truck, User, FileText, Phone, Calendar, ChevronRight, ExternalLink, Copy, Hash, Shield, Building, Route, CreditCard} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
 import { Label} from '@/components/ui/label'
 import { 

@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Skeleton} from '@/components/ui/skeleton'
-import { Card, CardContent, CardHeader} from '@/components/ui/Card'
+import { Card, CardContent, CardHeader} from '@/components/ui/card'
 // Table Skeleton Loader
 export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({ 
   rows = 5, columns = 4 

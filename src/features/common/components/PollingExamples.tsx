@@ -3,7 +3,7 @@ import React from 'react'
 import { MapModule} from '../../../components/ui/MapModule'
 import { TransitCard} from '../../../components/ui/TransitCard'
 import { AlertsPanel} from '../../../components/ui/AlertsPanel'
-import { Card} from '../../../components/ui/Card'
+import { Card} from '../../../components/ui/card'
 import { RefreshCw} from 'lucide-react'
 /**
  * Ejemplo de MapModule con actualización automática

@@ -14,7 +14,7 @@ import { Label} from '@/components/ui/label'
 import { Textarea} from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge} from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 interface AlertaDetalleModalProps {
   alerta: AlertaExtendida
   isOpen: boolean

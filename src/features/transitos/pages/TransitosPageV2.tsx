@@ -9,7 +9,7 @@ import { Truck, Download, RefreshCw, MapPin, CheckCircle2, Clock, AlertTriangle,
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
-import { Card, CardContent} from '@/components/ui/Card'
+import { Card, CardContent} from '@/components/ui/card'
 import { Badge} from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs'
 import { useTransitosStore, useAlertasStore, usePrecintosStore} from '@/store/store'

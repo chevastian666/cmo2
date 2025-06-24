@@ -11,7 +11,7 @@ import { Textarea} from '@/components/ui/textarea'
 import { Checkbox} from '@/components/ui/checkbox'
 import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
-import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 // Empresas con RUT
 const EMPRESAS = [
   { nombre: 'Transportes del Sur S.A.', rut: '211234567890' },

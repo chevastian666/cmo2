@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react'
 import { Plus, Download, Filter, RefreshCw, Shield, AlertCircle } from 'lucide-react'
 import { Input} from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card'
 import { 
   PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'
 import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton} from '@/components/animations/AnimatedComponents'

@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react'
 import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Download, Coffee, Fuel} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
+import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/card'
 import { Badge} from '@/components/ui/badge'
 import { Separator} from '@/components/ui/separator'
 import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
