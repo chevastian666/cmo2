@@ -22,16 +22,18 @@ class NotificationService {
     toast(message, { icon: '⚠️' })
   }
 
-  newAlert(alert: any): void {
-    const message = alert?.mensaje || alert?.message || 'Nueva alerta recibida'
+  newAlert(alert: unknown): void {
+    const alertObj = alert as { mensaje?: string; message?: string } | null
+    const message = alertObj?.mensaje || alertObj?.message || 'Nueva alerta recibida'
     toast(message, {
       icon: '🚨',
       duration: 5000
     })
   }
 
-  transitDelayed(transit: any): void {
-    const message = `Tránsito ${transit?.codigo || ''} retrasado`
+  transitDelayed(transit: unknown): void {
+    const transitObj = transit as { codigo?: string } | null
+    const message = `Tránsito ${transitObj?.codigo || ''} retrasado`
     toast(message, {
       icon: '⏰',
       duration: 4000

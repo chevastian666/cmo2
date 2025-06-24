@@ -98,20 +98,26 @@ function App() {
     // Set up notification handlers for real-time events
     const unsubscribers: (() => void)[] = []
     // New alert notifications
-    unsubscribers.push(sharedWebSocketService.onAlertNew((data: any) => {
-        notificationService.newAlert(data.alert || data)
+    unsubscribers.push(sharedWebSocketService.onAlertNew((data: unknown) => {
+        const alertData = data as { alert?: unknown } | unknown
+        notificationService.newAlert(typeof alertData === 'object' && alertData && 'alert' in alertData ? alertData.alert : data)
       })
     )
     // Transit delay notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data: any) => {
-        if (data.status === 'delayed') {
-          notificationService.transitDelayed(data.transit)
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data: unknown) => {
+        const transitData = data as { status?: string; transit?: unknown }
+        if (transitData.status === 'delayed' && transitData.transit) {
+          notificationService.transitDelayed(transitData.transit)
         }
       })
     )
     // CMO message notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data: any) => {
-        notificationService.cmoMessage((data as any).message || data as string)
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data: unknown) => {
+        const messageData = data as { message?: string } | string
+        const message = typeof messageData === 'object' && messageData && 'message' in messageData 
+          ? messageData.message 
+          : String(data)
+        notificationService.cmoMessage(message || '')
       })
     )
     // Initialize stores and fetch initial data

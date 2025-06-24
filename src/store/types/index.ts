@@ -5,7 +5,7 @@
  */
 
 import type { Precinto, Alerta, EstadisticasMonitoreo } from '../../types/monitoring'
-import type { AlertaExtendida, ComentarioAlerta } from '../../types/alerts'
+import type { AlertaExtendida } from '../../types/alerts'
 import type { Transito} from '../../features/transitos/types'
 // Filters for stores
 export interface StoreFilters {

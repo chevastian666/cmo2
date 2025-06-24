@@ -304,7 +304,7 @@ export function DataTable<T extends Record<string, unknown>>({
                       key={column.key as string}
                       className={cn("px-4 py-3 text-base text-gray-300", column.className)}
                     >
-                      {column.accessor ? column.accessor(item) : (item as any)[column.key]}
+                      {column.accessor ? column.accessor(item) : (item as Record<string, unknown>)[column.key]}
                     </td>
                   ))}
                 </tr>

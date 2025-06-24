@@ -35,14 +35,14 @@ class PerformanceMonitor {
           renderTime,
           componentName,
           timestamp: Date.now(),
-          props: props ? Object.keys(props as Record<string, unknown>) : [] as any
+          props: props ? Object.keys(props as Record<string, unknown>) : [] as string[]
         })
         // Keep only last 100 metrics
         if (this.metrics.length > 100) {
           this.metrics.shift()
         }
       })
-      return React.createElement(Component, props as any)
+      return React.createElement(Component, props as React.Attributes)
     }
     return MeasuredComponent as unknown as T
   }
@@ -172,7 +172,7 @@ export function memoize<T extends (...args: unknown[]) => unknown>(
     }
     
     const result = fn(...args)
-    cache.set(key, result as any)
+    cache.set(key, result as ReturnType<T>)
     // Limit cache size
     if (cache.size > 100) {
       const firstKey = cache.keys().next().value
