@@ -2,7 +2,7 @@ import React, { useSyncExternalStore, memo } from 'react'
 import {AlertTriangle, AlertCircle, Shield, Bell} from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { alertStore} from '../../stores/alertStore'
-import { PriorityBoundary} from '../priority/withPriority'
+// import { PriorityBoundary} from '../priority/withPriority' // Not exported
 interface Alert {
   id: string
   type: 'violation' | 'tamper' | 'security' | 'system'
@@ -78,7 +78,7 @@ const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }>
       </div>
     </div>
   )
-}, (_prevProps, nextProps) => {
+}, (prevProps, nextProps) => {
   // Custom comparison for performance
   return prevProps.alert.id === nextProps.alert.id &&
     prevProps.alert.acknowledged === nextProps.alert.acknowledged
@@ -98,7 +98,7 @@ export const CriticalAlerts: React.FC = () => {
     alertStore.acknowledgeAlert(alertId)
   }
   return (
-    <PriorityBoundary priority="immediate">
+    <div data-priority="immediate">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -127,7 +127,7 @@ export const CriticalAlerts: React.FC = () => {
           </div>
         )}
       </div>
-    </PriorityBoundary>
+    </div>
   )
 }
 // Add subtle pulse animation

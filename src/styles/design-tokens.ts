@@ -441,13 +441,13 @@ export const components = {
 // Función para obtener el valor de color por string path
 export const getColor = (path: string): string => {
   const keys = path.split('.')
-  let value: unknown = colors
+  let value: any = colors
   for (const key of keys) {
     value = value[key]
     if (!value) return ''
   }
   
-  return value
+  return typeof value === 'string' ? value : ''
 }
 // Función para obtener el valor de espaciado
 export const getSpacing = (value: number | string): string => {

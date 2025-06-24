@@ -91,27 +91,27 @@ function App() {
     },
     onReconnect: () => {
       console.log('Reconnected to real-time updates')
-      notificationService.info('Conexión Restaurada', 'La conexión en tiempo real ha sido restaurada')
+      notificationService.info('Conexión Restaurada')
     }
   })
   useEffect(() => {
     // Set up notification handlers for real-time events
     const unsubscribers: (() => void)[] = []
     // New alert notifications
-    unsubscribers.push(sharedWebSocketService.onAlertNew((data) => {
+    unsubscribers.push(sharedWebSocketService.onAlertNew((data: any) => {
         notificationService.newAlert(data.alert || data)
       })
     )
     // Transit delay notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data) => {
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, (data: any) => {
         if (data.status === 'delayed') {
           notificationService.transitDelayed(data.transit)
         }
       })
     )
     // CMO message notifications
-    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data) => {
-        notificationService.cmoMessage(data.message || data)
+    unsubscribers.push(sharedWebSocketService.on(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, (data: any) => {
+        notificationService.cmoMessage((data as any).message || data as string)
       })
     )
     // Initialize stores and fetch initial data
@@ -160,13 +160,13 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/modo-tv" element={
-              <Suspense fallback={<LoadingOverlay />}>
+              <Suspense fallback={<LoadingOverlay visible={true} />}>
                 <ModoTVPage />
               </Suspense>
             } />
             <Route path="*" element={
               <LayoutOptimized>
-                <Suspense fallback={<LoadingOverlay />}>
+                <Suspense fallback={<LoadingOverlay visible={true} />}>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/armado" element={<ArmadoPageV2 />} />

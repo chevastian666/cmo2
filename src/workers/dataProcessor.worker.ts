@@ -45,16 +45,16 @@ export class DataProcessor {
               return value === filter.value
             }
             case '>': {
-              return value > filter.value
+              return (value as number) > (filter.value as number)
             }
             case '<': {
-              return value < filter.value
+              return (value as number) < (filter.value as number)
             }
             case '>=': {
-              return value >= filter.value
+              return (value as number) >= (filter.value as number)
             }
             case '<=': {
-              return value <= filter.value
+              return (value as number) <= (filter.value as number)
             }
             case '!=': {
               return value !== filter.value
@@ -250,7 +250,7 @@ export class DataProcessor {
   private extractNumericValues(data: unknown[]): number[] {
     const values: number[] = []
     data.forEach(item => {
-      Object.values(item).forEach(val => {
+      Object.values(item as Record<string, unknown>).forEach(val => {
         if (typeof val === 'number' && !isNaN(val)) {
           values.push(val)
         }

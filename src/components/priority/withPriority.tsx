@@ -4,13 +4,13 @@ import { PriorityProvider, usePriority } from './PriorityProvider';
 export function withPriority<P extends object>(Component: React.ComponentType<P>) {
   return (props: P) => {
     const { priority, isActive, schedulePriorityUpdate, cancelUpdate } = usePriority();
-    const [isPriorityActive, setIsPriorityActive] = useState(_false);
+    const [isPriorityActive, setIsPriorityActive] = useState(false);
 
     useEffect(() => {
-      if (_isActive) {
-        setIsPriorityActive(_true);
+      if (isActive) {
+        setIsPriorityActive(true);
         const timer = setTimeout(() => {
-          setIsPriorityActive(_false);
+          setIsPriorityActive(false);
         }, 5000);
 
         return () => {

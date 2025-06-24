@@ -15,7 +15,7 @@ import { tokenClasses} from '../../styles/useDesignTokens'
 interface AnimatedDivProps {
   children: React.ReactNode
   className?: string
-  [key: string]: unknown; // Allow all motion props
+  // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 
 // Div con fade animation
@@ -347,7 +347,7 @@ interface AnimatedDivProps {
   children: React.ReactNode
   className?: string
   delay?: number
-  [key: string]: unknown; // Allow all motion props
+  // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 
 export const AnimatedDiv: React.FC<AnimatedDivProps> = ({ 

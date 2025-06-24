@@ -11,29 +11,14 @@ import {
   createPrecintosSlice, createTransitosSlice, createAlertasSlice, createSystemStatusSlice} from './slices'
 import type { 
   PrecintosStore, TransitosStore, AlertasStore, SystemStatusStore} from './types'
-// Custom logger middleware for development
-const logger = <T>(config: (set: T, get: T, api: T) => T) => (set: T, get: T, api: T) =>
-  config((...args: Parameters<T>) => {
-      if (import.meta.env.DEV) {
-        console.log('  applying', args)
-      }
-      set(...args)
-      if (import.meta.env.DEV) {
-        console.log('  new state', get())
-      }
-    },
-    get,
-    api
-  );
+// Custom logger middleware for development - removed due to type conflicts
 
 // Store individual para Precintos con middleware mejorado
 export const usePrecintosStore = create<PrecintosStore>()(
   devtools(
     subscribeWithSelector(
       persist(
-        immer(
-          logger(createPrecintosSlice)
-        ),
+        immer(createPrecintosSlice),
         {
           name: 'precintos-storage',
           partialize: (state) => ({ 

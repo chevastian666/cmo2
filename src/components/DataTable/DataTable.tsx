@@ -220,8 +220,8 @@ export function DataTable<T extends Record<string, unknown>>({
                   </label>
                   {column.filterType === 'select' && column.filterOptions ? (
                     <select
-                      value={filters[column.key] || ''}
-                      onChange={(e) => setFilters({ ...filters, [column.key]: e.target.value })}
+                      value={filters[column.key as string] || ''}
+                      onChange={(e) => setFilters({ ...filters, [column.key as string]: e.target.value })}
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-md text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Todos</option>
@@ -233,8 +233,8 @@ export function DataTable<T extends Record<string, unknown>>({
                     </select>
                   ) : (<input
                       type={column.filterType === 'number' ? 'number' : 'text'}
-                      value={filters[column.key] || ''}
-                      onChange={(e) => setFilters({ ...filters, [column.key]: e.target.value })}
+                      value={filters[column.key as string] || ''}
+                      onChange={(e) => setFilters({ ...filters, [column.key as string]: e.target.value })}
                       placeholder={`Filtrar por ${column.header.toLowerCase()}`}
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-md text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -304,7 +304,7 @@ export function DataTable<T extends Record<string, unknown>>({
                       key={column.key as string}
                       className={cn("px-4 py-3 text-base text-gray-300", column.className)}
                     >
-                      {column.accessor ? column.accessor(item) : item[column.key]}
+                      {column.accessor ? column.accessor(item) : (item as any)[column.key]}
                     </td>
                   ))}
                 </tr>

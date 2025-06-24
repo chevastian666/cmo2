@@ -1,28 +1,49 @@
 /**
- * Shared Notification Service (Minimal Version)
+ * Notification Service
  * By Cheva
  */
 
-export class SharedNotificationService {
-  success(message: string) {
-    console.log('Success:', message)
+import { toast } from 'react-hot-toast'
+
+class NotificationService {
+  info(title: string): void {
+    toast(title, { icon: 'ℹ️' })
   }
-  
-  error(message: string) {
-    console.error('Error:', message)
+
+  success(message: string): void {
+    toast.success(message)
   }
-  
-  info(message: string) {
-    console.info('Info:', message)
+
+  error(message: string): void {
+    toast.error(message)
   }
-  
-  warning(message: string) {
-    console.warn('Warning:', message)
+
+  warning(message: string): void {
+    toast(message, { icon: '⚠️' })
   }
-  
-  newAlert() {}
-  transitDelayed() {}
-  cmoMessage() {}
+
+  newAlert(alert: any): void {
+    const message = alert?.mensaje || alert?.message || 'Nueva alerta recibida'
+    toast(message, {
+      icon: '🚨',
+      duration: 5000
+    })
+  }
+
+  transitDelayed(transit: any): void {
+    const message = `Tránsito ${transit?.codigo || ''} retrasado`
+    toast(message, {
+      icon: '⏰',
+      duration: 4000
+    })
+  }
+
+  cmoMessage(message: string): void {
+    toast(message, {
+      icon: '📢',
+      duration: 4000
+    })
+  }
 }
 
-export const notificationService = new SharedNotificationService()
+export const notificationService = new NotificationService()

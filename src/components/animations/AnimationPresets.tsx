@@ -216,7 +216,7 @@ export const pulseVariants = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut" as const
     }
   }
 }
@@ -227,7 +227,7 @@ export const shakeVariants = {
     x: [-10, 10, -10, 10, 0],
     transition: {
       duration: 0.5,
-      ease: "linear"
+      ease: "linear" as const
     }
   }
 }
@@ -245,7 +245,7 @@ export const glowVariants = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut" as const
     }
   }
 }
@@ -265,7 +265,7 @@ export const alertCriticalVariants = {
     transition: {
       duration: 1,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut" as const
     }
   }
 }
@@ -279,7 +279,7 @@ export const transitMovingVariants = {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut" as const
     }
   }
 }
@@ -293,7 +293,7 @@ export const precintoActiveVariants = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut" as const
     }
   }
 }
