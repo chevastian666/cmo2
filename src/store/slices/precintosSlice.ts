@@ -6,6 +6,7 @@
 
 import type { StateCreator} from 'zustand'
 import type { PrecintosStore} from '../types'
+import type { Precinto } from '../../types/monitoring'
 import { precintosService} from '../../services'
 import { generateMockPrecinto} from '../../utils/mockData'
 export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => ({
@@ -112,7 +113,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
 
   // Batch operations
-  batchUpdatePrecintos: (updates: Array<{ id: string; data: any }>) => set((state) => {
+  batchUpdatePrecintos: (updates: Array<{ id: string; data: Partial<Precinto> }>) => set((state) => {
     const precintos = [...state.precintos]
     const precintosActivos = [...state.precintosActivos]
     

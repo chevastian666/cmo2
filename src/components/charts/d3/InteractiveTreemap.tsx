@@ -9,6 +9,14 @@ import * as d3 from 'd3'
 import type { TreemapNode, ChartConfig } from './types'
 import { DEFAULT_CHART_CONFIG } from './types'
 import { formatters, scales, animations, tooltip} from './utils'
+
+// D3 Hierarchy node with treemap layout properties
+interface D3TreemapNode extends d3.HierarchyRectangularNode<TreemapNode> {
+  x0: number
+  y0: number
+  x1: number
+  y1: number
+}
 interface InteractiveTreemapProps {
   data: TreemapNode
   config?: Partial<ChartConfig>
@@ -70,7 +78,10 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .data(root.leaves())
       .enter().append('g')
       .attr('class', 'cell')
-      .attr('transform', d => `translate(${(d as any).x0},${(d as any).y0})`)
+      .attr('transform', d => {
+        const node = d as D3TreemapNode
+        return `translate(${node.x0},${node.y0})`
+      })
       .style('cursor', enableDrillDown ? 'pointer' : 'default')
     // Add cell rectangles
     const rects = cell.append('rect')
@@ -83,8 +94,14 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     // Animate rectangles
     rects.transition()
       .duration(config.animations.duration)
-      .attr('width', d => Math.max(0, (d as any).x1 - (d as any).x0))
-      .attr('height', d => Math.max(0, (d as any).y1 - (d as any).y0))
+      .attr('width', d => {
+        const node = d as D3TreemapNode
+        return Math.max(0, node.x1 - node.x0)
+      })
+      .attr('height', d => {
+        const node = d as D3TreemapNode
+        return Math.max(0, node.y1 - node.y0)
+      })
     // Add cell labels
     const labels = cell.append('text')
       .attr('x', 4)
@@ -96,8 +113,9 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('user-select', 'none')
       .style('opacity', 0)
       .text(d => {
-        const width = (d as any).x1 - (d as any).x0
-        const height = (d as any).y1 - (d as any).y0
+        const node = d as D3TreemapNode
+        const width = node.x1 - node.x0
+        const height = node.y1 - node.y0
         if (width < 50 || height < 20) return ''
         const maxLength = Math.floor(width / 8)
         return d.data.name.length > maxLength 
@@ -114,8 +132,9 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('user-select', 'none')
       .style('opacity', 0)
       .text(d => {
-        const width = (d as any).x1 - (d as any).x0
-        const height = (d as any).y1 - (d as any).y0
+        const node = d as D3TreemapNode
+        const width = node.x1 - node.x0
+        const height = node.y1 - node.y0
         if (width < 60 || height < 35) return ''
         return formatters.number(d.value || 0)
       })
@@ -124,8 +143,14 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     animations.fadeIn(valueLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 400)
     // Add percentage labels for larger cells
     const percentageLabels = cell.append('text')
-      .attr('x', (d: any) => (d.x1 - d.x0) / 2)
-      .attr('y', (d: any) => (d.y1 - d.y0) / 2)
+      .attr('x', d => {
+        const node = d as D3TreemapNode
+        return (node.x1 - node.x0) / 2
+      })
+      .attr('y', d => {
+        const node = d as D3TreemapNode
+        return (node.y1 - node.y0) / 2
+      })
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .style('fill', '#FFFFFF')
@@ -135,8 +160,9 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('user-select', 'none')
       .style('opacity', 0)
       .text(d => {
-        const width = (d as any).x1 - (d as any).x0
-        const height = (d as any).y1 - (d as any).y0
+        const node = d as D3TreemapNode
+        const width = node.x1 - node.x0
+        const height = node.y1 - node.y0
         if (width < 80 || height < 50) return ''
         const percentage = ((d.value || 0) / (root.value || 1)) * 100
         return `${percentage.toFixed(1)}%`
