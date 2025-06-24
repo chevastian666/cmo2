@@ -180,7 +180,7 @@ export const TablaDocumentos: React.FC<TablaDocumentosProps> = ({
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <Badge variant={getColorTipo(doc.tipo) as any} className="text-xs w-fit">
+                    <Badge variant={getColorTipo(doc.tipo) as "default" | "secondary" | "destructive" | "outline" | "success" | "warning"} className="text-xs w-fit">
                       {TIPOS_DOCUMENTO[doc.tipo].label}
                     </Badge>
                     {doc.estado === 'archivado' && (

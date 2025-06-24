@@ -12,7 +12,7 @@ interface DepositoTableProps {
 type SortField = 'codigo' | 'nombre' | 'zona' | 'transitosActivos'
 type SortOrder = 'asc' | 'desc'
 export const DepositoTable: React.FC<DepositoTableProps> = ({
-  depositos, loading, onView, onEdit
+  depositos, loading: _loading, onView, onEdit
 }) => {
   const [sortField, setSortField] = useState<SortField>('codigo')
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc')

@@ -15,17 +15,17 @@ export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({
     <div className="w-full">
       {/* Header */}
       <div className="flex space-x-4 p-4 border-b border-gray-700">
-        {Array.from({ length: columns }).map((__, i) => (
-          <Skeleton key={`header-${_i}`} className="h-4 flex-1" />
+        {Array.from({ length: columns }).map((_, i) => (
+          <Skeleton key={`header-${i}`} className="h-4 flex-1" />
         ))}
       </div>
       
       {/* Rows */}
-      {Array.from({ length: rows }).map((__, rowIndex) => (
-        <div key={`row-${_rowIndex}`} className="flex space-x-4 p-4 border-b border-gray-700">
-          {Array.from({ length: columns }).map((__, colIndex) => (
+      {Array.from({ length: rows }).map((_, rowIndex) => (
+        <div key={`row-${rowIndex}`} className="flex space-x-4 p-4 border-b border-gray-700">
+          {Array.from({ length: columns }).map((_, colIndex) => (
             <Skeleton 
-              key={`cell-${_rowIndex}-${_colIndex}`} 
+              key={`cell-${rowIndex}-${colIndex}`} 
               className="h-4 flex-1"
               style={{ width: `${Math.random() * 40 + 60}%` }}
             />
@@ -59,8 +59,8 @@ export const CardSkeleton: React.FC<{ showHeader?: boolean }> = ({ showHeader = 
 export const FormSkeleton: React.FC<{ fields?: number }> = ({ fields = 4 }) => {
   return (
     <div className="space-y-6">
-      {Array.from({ length: fields }).map((__, i) => (
-        <div key={`field-${_i}`} className="space-y-2">
+      {Array.from({ length: fields }).map((_, i) => (
+        <div key={`field-${i}`} className="space-y-2">
           <Skeleton className="h-4 w-24" /> {/* Label */}
           <Skeleton className="h-10 w-full" /> {/* Input */}
         </div>
@@ -76,8 +76,8 @@ export const FormSkeleton: React.FC<{ fields?: number }> = ({ fields = 4 }) => {
 export const ListSkeleton: React.FC<{ items?: number }> = ({ items = 5 }) => {
   return (
     <div className="space-y-4">
-      {Array.from({ length: items }).map((__, i) => (
-        <div key={`item-${_i}`} className="flex items-center space-x-4 p-4 bg-gray-800 rounded-lg">
+      {Array.from({ length: items }).map((_, i) => (
+        <div key={`item-${i}`} className="flex items-center space-x-4 p-4 bg-gray-800 rounded-lg">
           <Skeleton className="h-12 w-12 rounded-full" /> {/* Avatar */}
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-1/3" />
@@ -93,8 +93,8 @@ export const ListSkeleton: React.FC<{ items?: number }> = ({ items = 5 }) => {
 export const StatsGridSkeleton: React.FC<{ items?: number }> = ({ items = 4 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {Array.from({ length: items }).map((__, i) => (
-        <Card key={`stat-${_i}`}>
+      {Array.from({ length: items }).map((_, i) => (
+        <Card key={`stat-${i}`}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-2">
@@ -118,8 +118,8 @@ export const DetailPageSkeleton: React.FC = () => {
       <div className="bg-gray-800 rounded-lg p-6">
         <Skeleton className="h-8 w-1/3 mb-4" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((__, i) => (
-            <div key={`header-stat-${_i}`} className="space-y-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={`header-stat-${i}`} className="space-y-2">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-6 w-24" />
             </div>
@@ -157,15 +157,15 @@ export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "300px" 
         <div className="relative" style={{ height }}>
           {/* Y-axis labels */}
           <div className="absolute left-0 top-0 h-full flex flex-col justify-between w-8">
-            {Array.from({ length: 5 }).map((__, i) => (
-              <Skeleton key={`y-${_i}`} className="h-3 w-full" />
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={`y-${i}`} className="h-3 w-full" />
             ))}
           </div>
           
           {/* Chart bars/lines */}
           <div className="ml-12 h-full flex items-end space-x-2">
-            {Array.from({ length: 12 }).map((__, i) => (
-              <div key={`bar-${_i}`} className="flex-1 flex flex-col justify-end">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={`bar-${i}`} className="flex-1 flex flex-col justify-end">
                 <Skeleton 
                   className="w-full" 
                   style={{ height: `${Math.random() * 80 + 20}%` }}
@@ -176,8 +176,8 @@ export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "300px" 
           
           {/* X-axis labels */}
           <div className="absolute bottom-0 left-12 right-0 flex justify-between mt-2">
-            {Array.from({ length: 6 }).map((__, i) => (
-              <Skeleton key={`x-${_i}`} className="h-3 w-8" />
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={`x-${i}`} className="h-3 w-8" />
             ))}
           </div>
         </div>
@@ -203,8 +203,8 @@ export const ModalSkeleton: React.FC = () => {
 export const SearchResultSkeleton: React.FC<{ items?: number }> = ({ items = 3 }) => {
   return (
     <div className="space-y-3">
-      {Array.from({ length: items }).map((__, i) => (
-        <div key={`result-${_i}`} className="p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+      {Array.from({ length: items }).map((_, i) => (
+        <div key={`result-${i}`} className="p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
           <div className="flex items-start justify-between">
             <div className="flex-1 space-y-2">
               <Skeleton className="h-5 w-2/3" />
@@ -226,7 +226,7 @@ export const SearchResultSkeleton: React.FC<{ items?: number }> = ({ items = 3 }
 export const WidgetSkeleton: React.FC<{ type?: 'kpi' | 'chart' | 'list' | 'map' }> = ({ 
   type = 'kpi' 
 }) => {
-  switch (_type) {
+  switch (type) {
     case 'chart':
       return <ChartSkeleton height="200px" />
     case 'list':

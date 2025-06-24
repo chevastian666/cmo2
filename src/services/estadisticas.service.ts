@@ -55,15 +55,15 @@ export const estadisticasService = {
             },
             reportesPendientes: 0 // TODO: obtener de API
           }
-        } catch (_trokorError) {
+        } catch {
           // Error con Trokor API, intentando con unified API
         }
       }
       
       // Si no está habilitada Trokor o falló, usar unified API
       return await unifiedAPIService.getEstadisticas()
-    } catch {
-      // Error fetching estadisticas
+    } catch (error) {
+      console.error('Error fetching estadisticas:', error)
       // Return default values
       return {
         precintosActivos: 0,
@@ -105,8 +105,8 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return []
-    } catch {
-      // Error fetching historico lecturas
+    } catch (error) {
+      console.error('Error fetching historico lecturas:', error)
       return []
     }
   },
@@ -130,8 +130,8 @@ export const estadisticasService = {
       
       // TODO: Implement real API call
       return []
-    } catch {
-      // Error fetching historico alertas
+    } catch (error) {
+      console.error('Error fetching historico alertas:', error)
       return []
     }
   },
@@ -159,8 +159,8 @@ export const estadisticasService = {
         lecturasPromedioPorHora: stats.lecturasPorHora,
         alertasPromedioPorDia: Math.round(stats.alertasActivas * 24 / 7) // Rough estimate
       }
-    } catch {
-      // Error fetching rendimiento
+    } catch (error) {
+      console.error('Error fetching rendimiento:', error)
       return {
         tasaExito: 0,
         tiempoPromedioTransito: 0,
@@ -215,8 +215,8 @@ export const estadisticasService = {
         },
         reportesPendientes: stats.reportesPendientes
       }
-    } catch {
-      // Error fetching estado sistema
+    } catch (error) {
+      console.error('Error fetching estado sistema:', error)
       return {
         smsPendientes: 0,
         dbStats: {

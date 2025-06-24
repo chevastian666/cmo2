@@ -26,7 +26,7 @@ export const ToggleGroup: React.FC<ToggleGroupProps> = ({
   return (
     <ToggleGroupContext.Provider value={{ value, onValueChange }}>
       <div className={cn('inline-flex rounded-md shadow-sm', className)} role="group">
-        {_children}
+        {children}
       </div>
     </ToggleGroupContext.Provider>
   )
@@ -64,7 +64,7 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
         className
       )}
     >
-      {_children}
+      {children}
     </button>
   )
 }

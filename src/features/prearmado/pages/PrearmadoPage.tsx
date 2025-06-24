@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate} from 'react-router-dom'
-import {_Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react'
+import {Package, Search, AlertCircle, CheckCircle, Loader} from 'lucide-react'
 import { notificationService} from '../../../services/shared/notification.service'
 import { prearmadoService} from '../services/prearmado.service'
 interface PrearmadoFormData {
@@ -31,9 +31,9 @@ interface TransitInfo {
 
 export const PrearmadoPage: React.FC = () => {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(_false)
-  const [searchPerformed, setSearchPerformed] = useState(_false)
-  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(_null)
+  const [loading, setLoading] = useState(false)
+  const [searchPerformed, setSearchPerformed] = useState(false)
+  const [transitInfo, setTransitInfo] = useState<TransitInfo | null>(null)
   const [formData, setFormData] = useState<PrearmadoFormData>({
     viajeId: '',
     movimientoId: ''
@@ -51,22 +51,22 @@ export const PrearmadoPage: React.FC = () => {
       return
     }
 
-    setLoading(_true)
-    setSearchPerformed(_true)
+    setLoading(true)
+    setSearchPerformed(true)
     try {
       const result = await prearmadoService.searchTransit(formData.viajeId, formData.movimientoId)
-      if (_result) {
-        setTransitInfo(_result)
+      if (result) {
+        setTransitInfo(result)
         notificationService.success('Tránsito encontrado', `Viaje ${formData.viajeId} - Movimiento ${formData.movimientoId}`)
       } else {
-        setTransitInfo(_null)
+        setTransitInfo(null)
         notificationService.error('No encontrado', 'No se encontró información para el viaje y movimiento especificados')
       }
     } catch {
       notificationService.error('Error', 'Error al buscar la información del tránsito')
-      setTransitInfo(_null)
+      setTransitInfo(null)
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   const handlePrearm = () => {
@@ -125,7 +125,7 @@ export const PrearmadoPage: React.FC = () => {
 
       {/* Search Form */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-        <form onSubmit={_handleSearch} className="space-y-4">
+        <form onSubmit={handleSearch} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -299,7 +299,7 @@ export const PrearmadoPage: React.FC = () => {
                 {/* Action Button */}
                 <div className="flex justify-center pt-4">
                   <button
-                    onClick={_handlePrearm}
+                    onClick={handlePrearm}
                     className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center space-x-2 transition-colors"
                   >
                     <Package className="h-5 w-5" />

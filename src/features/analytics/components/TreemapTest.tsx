@@ -41,7 +41,7 @@ const TreemapTest: React.FC = () => {
         </CardHeader>
         <CardContent>
           <SimpleTreemap
-            data={_testData}
+            data={testData}
             width={800}
             height={400}
           />

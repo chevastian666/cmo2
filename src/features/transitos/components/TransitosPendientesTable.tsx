@@ -1,6 +1,7 @@
 import React from 'react'
 import { formatTimeAgo} from '../../../utils/formatters'
 import type { TransitoPendiente} from '../../../types/monitoring'
+import type { Column} from '../../../components/DataTable'
 import { cn} from '../../../utils/utils'
 import { Clock, MessageSquare} from 'lucide-react'
 import { THRESHOLDS} from '../../../constants'
@@ -9,7 +10,7 @@ interface TransitosPendientesTableProps {
   transitos: TransitoPendiente[]
 }
 
-export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> = ({ transitos }) => {
+export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> = ({ transitos: _transitos }) => {
   const getTiempoColor = (timestamp: number) => {
     const now = Math.floor(Date.now() / 1000)
     const diff = now - timestamp
@@ -26,13 +27,13 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       return 'text-red-400'
     }
   }
-  const columns: Column<TransitoPendiente>[] = [
+  const _columns: Column<TransitoPendiente>[] = [
     {
       key: 'numeroViaje',
       header: 'N° de Viaje / MOV',
       sortable: true,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div>
           <div className="flex items-center gap-2">
             <span className="text-base font-medium text-blue-400">{item.numeroViaje}</span>
@@ -58,7 +59,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       header: 'DUA',
       sortable: true,
       filterable: true,
-      accessor: (_item) => item.dua
+      accessor: (item) => item.dua
     },
     {
       key: 'tipoCarga',
@@ -70,14 +71,14 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Contenedor', label: 'Contenedor' },
         { value: 'Enlonada', label: 'Enlonada' }
       ],
-      accessor: (_item) => item.tipoCarga
+      accessor: (item) => item.tipoCarga
     },
     {
       key: 'matricula',
       header: 'Matrícula',
       sortable: true,
       filterable: true,
-      accessor: (_item) => <span className="font-medium">{item.matricula}</span>
+      accessor: (item) => <span className="font-medium">{item.matricula}</span>
     },
     {
       key: 'origen',
@@ -99,7 +100,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Bella Unión', label: 'Bella Unión' },
         { value: 'Aceguá', label: 'Aceguá' }
       ],
-      accessor: (_item) => item.origen
+      accessor: (item) => item.origen
     },
     {
       key: 'destino',
@@ -121,14 +122,14 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         { value: 'Bella Unión', label: 'Bella Unión' },
         { value: 'Aceguá', label: 'Aceguá' }
       ],
-      accessor: (_item) => item.destino
+      accessor: (item) => item.destino
     },
     {
       key: 'despachante',
       header: 'Despachante',
       sortable: true,
       filterable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="max-w-xs truncate" title={item.despachante}>
           {item.despachante}
         </div>
@@ -138,7 +139,7 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       key: 'fechaIngreso',
       header: 'Tiempo Pendiente',
       sortable: true,
-      accessor: (_item) => (
+      accessor: (item) => (
         <div className="flex items-center">
           <Clock className="h-4 w-4 mr-1 text-gray-500" />
           <span className={cn(
@@ -151,9 +152,9 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
       )
     }
   ]
-  const handleExport = (_data: TransitoPendiente[], format: 'csv' | 'json') => {
-    const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `transitos-pendientes-${_timestamp}`
+  const _handleExport = (data: TransitoPendiente[], format: 'csv' | 'json') => {
+    const _timestamp = new Date().toISOString().split('T')[0]
+    const _filename = `transitos-pendientes-${_timestamp}`
     if (format === 'csv') {
       const headers = ['N° Viaje', 'MOV', 'DUA', 'Tipo de Carga', 'Matrícula', 'Origen', 'Destino', 'Despachante', 'Fecha Ingreso']
       const rows = data.map(t => [
@@ -167,16 +168,16 @@ export const TransitosPendientesTable: React.FC<TransitosPendientesTableProps> =
         t.despachante,
         new Date(t.fechaIngreso * 1000).toLocaleString('es-UY')
       ])
-      const csv = [headers, ...rows.map(row => row.map(cell => `"${_cell}"`))].
+      const csv = [headers, ...rows.map(row => row.map(cell => `"${cell}"`))].
         map(row => row.join(',')).join('\n')
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const _blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement('a')
       link.href = URL.createObjectURL(_blob)
       link.download = `${_filename}.csv`
       link.click()
     } else {
-      const jsonData = JSON.stringify(__data, null, 2)
-      const blob = new Blob([jsonData], { type: 'application/json' })
+      const jsonData = JSON.stringify(data, null, 2)
+      const _blob = new Blob([jsonData], { type: 'application/json' })
       const link = document.createElement('a')
       link.href = URL.createObjectURL(_blob)
       link.download = `${_filename}.json`

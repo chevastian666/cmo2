@@ -11,7 +11,7 @@ interface PrecintoDetailModalProps {
 }
 
 export const PrecintoDetailModal: React.FC<PrecintoDetailModalProps> = ({
-  precinto, isOpen, onClose
+  precinto, isOpen, onClose: _onClose
 }) => {
   if (!isOpen || !precinto) return null
   return (

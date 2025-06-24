@@ -1,4 +1,4 @@
-import {_useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 interface MicrointeractionsConfig {
   animationsEnabled: boolean
   animationIntensity: 'low' | 'medium' | 'high'
@@ -9,7 +9,7 @@ interface MicrointeractionsConfig {
 }
 
 export const useMicrointeractions = () => {
-  const [_config, setConfig] = useState<MicrointeractionsConfig>({
+  const [config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
     animationIntensity: 'medium',
     particlesEnabled: true,
@@ -20,8 +20,8 @@ export const useMicrointeractions = () => {
   useEffect(() => {
     // Load config
     const saved = localStorage.getItem('microinteractions-config')
-    if (s_aved) {
-      setConfig(prev => ({ ...prev, ...JSON.parse(s_aved) }))
+    if (saved) {
+      setConfig(prev => ({ ...prev, ...JSON.parse(saved) }))
     }
 
     // Check system preference
@@ -30,8 +30,8 @@ export const useMicrointeractions = () => {
     // Listen for changes
     const handleStorageChange = () => {
       const updated = localStorage.getItem('microinteractions-config')
-      if (_updated) {
-        setConfig(prev => ({ ...prev, ...JSON.parse(_updated) }))
+      if (updated) {
+        setConfig(prev => ({ ...prev, ...JSON.parse(updated) }))
       }
     }
     window.addEventListener('storage', handleStorageChange)
@@ -46,10 +46,10 @@ export const useMicrointeractions = () => {
       medium: '',
       high: 'animation-fast'
     }
-    return `${_baseClass} ${intensityModifier[config.animationIntensity]}`
+    return `${baseClass} ${intensityModifier[config.animationIntensity]}`
   }
   return {
-    _config,
+    config,
     shouldAnimate,
     shouldShowParticles,
     getAnimationClass

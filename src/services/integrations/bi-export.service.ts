@@ -5,6 +5,20 @@
  */
 
 import type { DataRecord } from '@/types/integrations'
+
+// Dataset data type
+interface DatasetRecord {
+  id: number
+  timestamp: string
+  alert_count: number
+  transit_count: number
+  precinto_count: number
+  location: string
+  priority: string
+  status: string
+  [key: string]: unknown
+}
+
 export interface BIConnection {
   id: string
   name: string
@@ -398,31 +412,31 @@ class BIExportService {
     }
   }
 
-  private async exportToTableau(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
+  private async exportToTableau(connection: BIConnection, data: DataRecord[], _dataset: BIDataset): Promise<void> {
     const config = connection.config.tableau!
     console.log(`Exporting ${data.length} records to Tableau Server: ${config.server_url}`)
     await this.simulateAPICall(1000 + Math.random() * 2000)
   }
 
-  private async exportToPowerBI(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
+  private async exportToPowerBI(connection: BIConnection, data: DataRecord[], _dataset: BIDataset): Promise<void> {
     const config = connection.config.powerbi!
     console.log(`Exporting ${data.length} records to Power BI workspace: ${config.workspace_id}`)
     await this.simulateAPICall(800 + Math.random() * 1500)
   }
 
-  private async exportToQlik(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
+  private async exportToQlik(connection: BIConnection, data: DataRecord[], _dataset: BIDataset): Promise<void> {
     const config = connection.config.qlik!
     console.log(`Exporting ${data.length} records to QlikSense app: ${config.app_id}`)
     await this.simulateAPICall(1200 + Math.random() * 1800)
   }
 
-  private async exportToLooker(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
+  private async exportToLooker(connection: BIConnection, data: DataRecord[], _dataset: BIDataset): Promise<void> {
     const config = connection.config.looker!
     console.log(`Exporting ${data.length} records to Looker: ${config.base_url}`)
     await this.simulateAPICall(900 + Math.random() * 1600)
   }
 
-  private async exportToMetabase(connection: BIConnection, data: DataRecord[], dataset: BIDataset): Promise<void> {
+  private async exportToMetabase(connection: BIConnection, data: DataRecord[], _dataset: BIDataset): Promise<void> {
     const config = connection.config.metabase!
     console.log(`Exporting ${data.length} records to Metabase: ${config.server_url}`)
     await this.simulateAPICall(700 + Math.random() * 1300)
@@ -470,17 +484,6 @@ class BIExportService {
 
   // Data processing
   // Dataset data type
-  interface DatasetRecord {
-    id: number
-    timestamp: string
-    alert_count: number
-    transit_count: number
-    precinto_count: number
-    location: string
-    priority: string
-    status: string
-    [key: string]: unknown
-  }
 
   private async fetchDatasetData(dataset: BIDataset): Promise<DatasetRecord[]> {
     // Mock data fetching
@@ -618,12 +621,12 @@ class BIExportService {
     }
   }
 
-  private async testTableauConnection(config: BIConnectionConfig['tableau']): Promise<{ success: boolean; error?: string }> {
+  private async testTableauConnection(_config: BIConnectionConfig['tableau']): Promise<{ success: boolean; error?: string }> {
     await this.simulateAPICall(500 + Math.random() * 1000)
     return { success: true }
   }
 
-  private async testPowerBIConnection(config: BIConnectionConfig['powerbi']): Promise<{ success: boolean; error?: string }> {
+  private async testPowerBIConnection(_config: BIConnectionConfig['powerbi']): Promise<{ success: boolean; error?: string }> {
     await this.simulateAPICall(400 + Math.random() * 800)
     return { success: true }
   }

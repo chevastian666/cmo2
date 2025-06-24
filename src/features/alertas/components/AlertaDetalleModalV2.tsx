@@ -28,7 +28,6 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
   const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
   const [mostrarResolucion, setMostrarResolucion] = useState(false)
   const [nuevoComentario, setNuevoComentario] = useState('')
@@ -41,14 +40,10 @@ export const AlertaDetalleModalV2: React.FC<AlertaDetalleModalProps> = ({
     if (isOpen) {
       cargarUsuarios()
     }
-  }, [])
+  }, [isOpen])
   const cargarUsuarios = async () => {
-    const [users, currentUser] = await Promise.all([
-      usuariosService.getActivos(),
-      usuariosService.getCurrentUser()
-    ])
+    const users = await usuariosService.getActivos()
     setUsuarios(users)
-    setUsuarioActual(currentUser)
   }
   const getIcon = (tipo: string) => {
     switch (tipo) {

@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {_Calendar} from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import { Button} from './button'
 import { cn} from '@/utils/utils'
 interface DatePickerWithRangeProps {
@@ -14,7 +14,7 @@ interface DatePickerWithRangeProps {
 }
 
 export const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({
-  value, onChange, className
+  value, onChange: _onChange, className
 }) => {
   return (
     <Button variant="outline" className={cn("justify-start text-left font-normal", className)}>

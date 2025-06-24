@@ -3,6 +3,7 @@ import { Shield, Info} from 'lucide-react'
 import { PermissionCheckbox, BulkPermissionCheckbox} from './PermissionCheckbox'
 import type { Role, Section, Permission} from '../../../types/roles'
 import { SECTION_LABELS, ROLE_LABELS, PERMISSION_LABELS} from '../../../types/roles'
+import { useRolesStore } from '../../../store/rolesStore'
 const SECTIONS: Section[] = [
   'dashboard',
   'transitos',
@@ -19,6 +20,7 @@ const SECTIONS: Section[] = [
 const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO']
 const PERMISSIONS: Permission[] = ['view', 'create', 'edit', 'delete']
 export const RolesTable: React.FC = () => {
+  const { permissions, setRolePermissions, setSectionPermissions } = useRolesStore()
 
   // Calculate bulk checkbox states for sections
   const sectionBulkStates = useMemo(() => {
@@ -29,7 +31,7 @@ export const RolesTable: React.FC = () => {
       ROLES.forEach(role => {
         PERMISSIONS.forEach(permission => {
           totalPermissions++
-          if (permissions[role][section].includes(_permission)) {
+          if (permissions[role][section].includes(permission)) {
             checkedPermissions++
           }
         })
@@ -50,7 +52,7 @@ export const RolesTable: React.FC = () => {
       SECTIONS.forEach(section => {
         PERMISSIONS.forEach(permission => {
           totalPermissions++
-          if (permissions[role][section].includes(_permission)) {
+          if (permissions[role][section].includes(permission)) {
             checkedPermissions++
           }
         })
@@ -67,16 +69,16 @@ export const RolesTable: React.FC = () => {
     ROLES.forEach(role => {
       newPermissions[role] = checked ? [...PERMISSIONS] : []
     })
-    setSectionPermissions(s_ection, newPermissions)
-  }, [])
+    setSectionPermissions(section, newPermissions)
+  }, [setSectionPermissions])
   const handleRoleBulkToggle = useCallback((role: Role, checked: boolean) => {
     const newPermissions: Record<Section, Permission[]> = {} as unknown
     SECTIONS.forEach(section => {
       newPermissions[section] = checked ? [...PERMISSIONS] : []
     })
-    setRolePermissions(_role, newPermissions)
-  }, [])
-  const hasPermission = (role: Role, section: Section, permission: Permission) => {
+    setRolePermissions(role, newPermissions)
+  }, [setRolePermissions])
+  const hasPermission = (role: Role, section: Section, _permission: Permission) => {
     return permissions[role][section].includes(_permission)
   }
   // Check if permission should be disabled based on cascading rules
@@ -84,7 +86,7 @@ export const RolesTable: React.FC = () => {
     // If it's 'view', it's never disabled
     if (permission === 'view') return false
     // Other permissions are disabled if 'view' is not granted
-    return !hasPermission(_role, section, 'view')
+    return !hasPermission(role, section, 'view')
   }
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
@@ -100,7 +102,7 @@ export const RolesTable: React.FC = () => {
                 </div>
               </th>
               {ROLES.map(role => (
-                <th key={_role} className="px-6 py-4 text-center min-w-[200px]">
+                <th key={role} className="px-6 py-4 text-center min-w-[200px]">
                   <div className="space-y-2">
                     <div className="text-sm font-medium text-white">
                       {ROLE_LABELS[role]}
@@ -108,7 +110,7 @@ export const RolesTable: React.FC = () => {
                     <BulkPermissionCheckbox
                       checked={roleBulkStates[role].checked}
                       indeterminate={roleBulkStates[role].indeterminate}
-                      onChange={(_checked) => handleRoleBulkToggle(_role, checked)}
+                      onChange={(checked) => handleRoleBulkToggle(role, checked)}
                       label="Todos"
                     />
                   </div>
@@ -131,7 +133,7 @@ export const RolesTable: React.FC = () => {
                     />
                   </div>
                 </td>
-                {ROLES.map(role => (
+                {ROLES.map(_role => (
                   <td key={`${s_ection}-${_role}`} className="px-6 py-4">
                     <div className="flex items-center justify-center gap-3">
                       {PERMISSIONS.map(permission => (

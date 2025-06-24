@@ -12,12 +12,12 @@ class ArmadoService {
     try {
       // In development, return mock data
       if (import.meta.env.DEV) {
-        return this.getMockPrecinto(_nqr)
+        return this.getMockPrecinto(nqr)
       }
       
-      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${_nqr}`)
+      const response = await sharedApiService.request('GET', `${this.API_BASE}/precinto/${nqr}`)
       return response.data
-    } catch {
+    } catch (error) {
       console.error('Error searching precinto:', error)
       return null
     }
@@ -32,7 +32,7 @@ class ArmadoService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/pending`)
       return response.data
-    } catch {
+    } catch (error) {
       console.error('Error fetching pending precintos:', error)
       return []
     }
@@ -42,12 +42,12 @@ class ArmadoService {
     try {
       const formData = new FormData()
       formData.append('precintoId', precintoId)
-      photos.forEach((_photo, index) => {
-        formData.append(`photo_${_index}`, photo)
+      photos.forEach((photo, index) => {
+        formData.append(`photo_${index}`, photo)
       })
       // In development, return mock URLs
       if (import.meta.env.DEV) {
-        return photos.map((__, index) => `/uploads/precinto_${_precintoId}_${_index}.jpg`)
+        return photos.map((_, index) => `/uploads/precinto_${precintoId}_${index}.jpg`)
       }
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/photos`, formData, {
@@ -56,7 +56,7 @@ class ArmadoService {
         },
       })
       return response.data.urls
-    } catch {
+    } catch (error) {
       console.error('Error uploading photos:', error)
       return []
     }
@@ -66,16 +66,16 @@ class ArmadoService {
     try {
       // In development, simulate success
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(_resolve, 1500))
+        await new Promise(resolve => setTimeout(resolve, 1500))
         const transitId = Math.floor(Math.random() * 900000 + 100000).toString()
         return { success: true, transitId }
       }
 
       const response = await sharedApiService.request('POST', `${this.API_BASE}/execute`, command)
       return response.data
-    } catch {
+    } catch (error) {
       console.error('Error executing armado:', error)
-      throw _error
+      throw error
     }
   }
 
@@ -87,7 +87,7 @@ class ArmadoService {
     }
 
     // Basic validation - can be enhanced with checksum
-    return /^\d{12}$/.test(_cleanRUT)
+    return /^\d{12}$/.test(cleanRUT)
   }
 
   // Mock data helpers for development
@@ -96,7 +96,7 @@ class ArmadoService {
     const bateria = Math.floor(Math.random() * 80) + 20
     const estados = ['SAL', 'LLE', 'FMF', 'CFM', 'CNP']
     return {
-      id: `p${_randomNum}`,
+      id: `p${randomNum}`,
       codigo: nqr,
       tipo: 'RF-01',
       viaje: Math.floor(Math.random() * 100000 + 7581856).toString(),

@@ -16,7 +16,7 @@ export const ModalResolucion: React.FC<ModalResolucionProps> = ({
   const [comentario, setComentario] = useState('')
   const [loading, setLoading] = useState(false)
   if (!isOpen || !novedad) return null
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     try {

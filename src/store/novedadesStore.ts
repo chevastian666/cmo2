@@ -120,17 +120,27 @@ interface NovedadesState {
   calcularEstadisticas: () => void
 }
 
-export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
-  novedades: [], estadisticas: {
-    totalDia: 0, porTipo: {} as Record<TipoNovedad, number>, porPunto: {} as Record<string, number>, pendientes: 0, resueltas: 0, enSeguimiento: 0
-  }, loading: false, error: null, fetchNovedades: async (_filtros) => {
+export const useNovedadesStore = create<NovedadesState>((set, get) => ({
+  novedades: [],
+  estadisticas: {
+    totalDia: 0,
+    porTipo: {} as Record<TipoNovedad, number>,
+    porPunto: {} as Record<string, number>,
+    pendientes: 0,
+    resueltas: 0,
+    enSeguimiento: 0
+  },
+  loading: false,
+  error: null,
+  
+  fetchNovedades: async (filtros) => {
     set({ loading: true })
     try {
       // Simular llamada a API
-      await new Promise(resolve => setTimeout(_resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
       let novedadesFiltradas = [...mockNovedades]
       // Aplicar filtros si existen
-      if (_filtros) {
+      if (filtros) {
         if (filtros.fecha) {
           novedadesFiltradas = novedadesFiltradas.filter(n => 
             n.fecha.toDateString() === filtros.fecha!.toDateString()
@@ -151,7 +161,7 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
     }
   },
 
-  crearNovedad: async (_data) => {
+  crearNovedad: async (data) => {
     try {
       const nuevaNovedad: Novedad = {
         id: Date.now().toString(),
@@ -168,18 +178,18 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
           rol: 'encargado'
         }
       }
-      set({ novedades: [nuevaNovedad, ...novedades] })
+      set(state => ({ novedades: [nuevaNovedad, ...state.novedades] }))
       get().calcularEstadisticas()
     } catch {
       throw new Error('Error al crear novedad')
     }
   },
 
-  editarNovedad: async (_id, data) => {
+  editarNovedad: async (id, data) => {
     try {
       
-      set({
-        novedades: novedades.map(n => 
+      set(state => ({
+        novedades: state.novedades.map(n => 
           n.id === id 
             ? { 
                 ...n, 
@@ -192,17 +202,17 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
               }
             : n
         )
-      })
-    } catch {
+      }))
+    } catch (_error) {
       throw new Error('Error al editar novedad')
     }
   },
 
-  marcarResuelta: async (_id, comentario) => {
+  marcarResuelta: async (id, comentario) => {
     try {
       
-      set({
-        novedades: novedades.map(n => 
+      set(state => ({
+        novedades: state.novedades.map(n => 
           n.id === id 
             ? { 
                 ...n, 
@@ -218,14 +228,14 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
               }
             : n
         )
-      })
+      }))
       get().calcularEstadisticas()
     } catch {
       throw new Error('Error al marcar como resuelta')
     }
   },
 
-  agregarSeguimiento: async (_id, comentario) => {
+  agregarSeguimiento: async (id, comentario) => {
     try {
       
       const nuevoSeguimiento = {
@@ -237,8 +247,8 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
         },
         comentario
       }
-      set({
-        novedades: novedades.map(n => 
+      set(state => ({
+        novedades: state.novedades.map(n => 
           n.id === id 
             ? { 
                 ...n, 
@@ -247,25 +257,25 @@ export const useNovedadesStore = create<NovedadesState>((s_et, get) => ({
               }
             : n
         )
-      })
+      }))
     } catch {
       throw new Error('Error al agregar seguimiento')
     }
   },
 
   calcularEstadisticas: () => {
-
+    const { novedades } = get()
     const hoy = new Date()
     const novedadesHoy = novedades.filter(n => 
       n.fecha.toDateString() === hoy.toDateString()
     )
     const estadisticas: EstadisticasNovedades = {
       totalDia: novedadesHoy.length,
-      porTipo: novedadesHoy.reduce((_acc, n) => {
+      porTipo: novedadesHoy.reduce((acc, n) => {
         acc[n.tipoNovedad] = (acc[n.tipoNovedad] || 0) + 1
         return acc
       }, {} as Record<string, number>),
-      porPunto: novedadesHoy.reduce((_acc, n) => {
+      porPunto: novedadesHoy.reduce((acc, n) => {
         acc[n.puntoOperacion] = (acc[n.puntoOperacion] || 0) + 1
         return acc
       }, {} as Record<string, number>),

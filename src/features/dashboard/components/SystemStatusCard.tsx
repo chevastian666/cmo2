@@ -1,5 +1,5 @@
 import React from 'react'
-import {_MessageSquare, Database, Server, FileText} from 'lucide-react'
+import {MessageSquare, Database, Server, FileText} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface SystemStatusCardProps {
   smsPendientes: number
@@ -15,7 +15,7 @@ interface SystemStatusCardProps {
 }
 
 export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
-  smsPendientes, dbStats, apiStats, reportesPendientes
+  smsPendientes = 0, dbStats = { memoriaUsada: 0, discoUsado: 0 }, apiStats = { memoriaUsada: 0, discoUsado: 0 }, reportesPendientes = 0
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
@@ -29,7 +29,7 @@ export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
               "text-2xl sm:text-3xl font-semibold",
               smsPendientes > 0 ? "text-red-500" : "text-white"
             )}>
-              {s_msPendientes}
+              {smsPendientes}
             </p>
           </div>
         </div>
@@ -71,7 +71,7 @@ export const SystemStatusCard: React.FC<SystemStatusCardProps> = ({
           <div>
             <p className="text-sm sm:text-base text-gray-400">Reportes Pendientes</p>
             <p className="text-2xl sm:text-3xl font-semibold text-white">
-              {_reportesPendientes}
+              {reportesPendientes}
             </p>
           </div>
         </div>

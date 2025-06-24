@@ -31,8 +31,8 @@ interface NetworkGraphProps {
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({
   data, config: userConfig, onNodeClick, onLinkClick
 }) => {
-  const svgRef = useRef<SVGSVGElement>(_null)
-  const containerRef = useRef<HTMLDivElement>(_null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig])
   // Handle container resize
@@ -72,7 +72,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
         .strength(-300)
         .distanceMax(200)
       )
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('center', d3.forceCenter(dimensions.width / 2, dimensions.height / 2))
       .force('collision', d3.forceCollide()
         .radius(d => sizeScale(d.value) + 5)
       )
@@ -81,10 +81,10 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     // Add zoom behavior
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 4])
-      .on('zoom', (_event) => {
+      .on('zoom', (event) => {
         g.attr('transform', event.transform)
       })
-    svg.call(_zoom)
+    svg.call(zoom)
     // Create tooltip
     const tooltipDiv = tooltip.create(containerRef.current!)
     // Create arrow markers for directed links
@@ -120,8 +120,8 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       .style('opacity', 1)
     // Add link interactions
     links
-      .on('mouseenter', function(_event, d) {
-        d3.select(_this)
+      .on('mouseenter', function(event, d) {
+        d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke', config.colors[0])
@@ -132,19 +132,19 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           <div class="text-sm mt-1">Conexión: ${formatters.number(d.value)}</div>
           ${d.label ? `<div class="text-sm">Tipo: ${d.label}</div>` : ''}
         `
-        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
-        d3.select(_this)
+        d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke', '#6B7280')
           .attr('stroke-opacity', 0.6)
           .attr('stroke-width', d => linkScale(d.value))
-        tooltip.hide(_tooltipDiv)
+        tooltip.hide(tooltipDiv)
       })
-      .on('click', (_event, d) => {
-        onLinkClick?.(_d)
+      .on('click', (event, d) => {
+        onLinkClick?.(d)
       })
     // Create nodes
     const nodes = g.append('g')
@@ -181,12 +181,12 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       .style('user-select', 'none')
       .text(d => d.label.length > 8 ? d.label.slice(0, 8) + '...' : d.label)
       .style('opacity', 0)
-    animations.fadeIn(_labels, config.animations.duration + 300)
+    animations.fadeIn(labels, config.animations.duration + 300)
     // Add node interactions
     nodes
-      .on('mouseenter', function(_event, d) {
-        const circle = d3.select(_this).select('circle')
-        const label = d3.select(_this).select('text')
+      .on('mouseenter', function(event, d) {
+        const circle = d3.select(this).select('circle')
+        const label = d3.select(this).select('text')
         circle.transition()
           .duration(200)
           .attr('r', sizeScale(d.value) + 5)
@@ -215,15 +215,15 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           <div class="text-sm mt-1">Valor: ${formatters.number(d.value)}</div>
           <div class="text-sm">Grupo: ${d.group}</div>
           ${d.metadata ? Object.entries(d.metadata).map(([key, value]) => 
-            `<div class="text-xs text-gray-400">${_key}: ${_value}</div>`
+            `<div class="text-xs text-gray-400">${key}: ${value}</div>`
           ).join('') : ''}
           <div class="text-xs text-gray-400 mt-2">Arrastra para mover</div>
         `
-        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
       })
-      .on('mouseleave', function(_event, d) {
-        const circle = d3.select(_this).select('circle')
-        const label = d3.select(_this).select('text')
+      .on('mouseleave', function(event, d) {
+        const circle = d3.select(this).select('circle')
+        const label = d3.select(this).select('text')
         circle.transition()
           .duration(200)
           .attr('r', sizeScale(d.value))
@@ -237,10 +237,10 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
         links.style('stroke-opacity', 0.6)
         // Reset node opacity
         circles.style('opacity', 1)
-        tooltip.hide(_tooltipDiv)
+        tooltip.hide(tooltipDiv)
       })
-      .on('click', (_event, d) => {
-        onNodeClick?.(_d)
+      .on('click', (event, d) => {
+        onNodeClick?.(d)
       })
     // Create legend
     const groups = [...new Set(data.nodes.map(d => d.group))]
@@ -248,13 +248,13 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       .attr('class', 'legend')
       .attr('transform', `translate(20, 20)`)
     const legendItems = legend.selectAll('.legend-item')
-      .data(_groups)
+      .data(groups)
       .enter().append('g')
       .attr('class', 'legend-item')
-      .attr('transform', (_d, i) => `translate(0, ${i * 25})`)
+      .attr('transform', (d, i) => `translate(0, ${i * 25})`)
     legendItems.append('circle')
       .attr('r', 8)
-      .attr('fill', d => colorScale(_d))
+      .attr('fill', d => colorScale(d))
       .attr('stroke', '#1F2937')
       .attr('stroke-width', 1)
     legendItems.append('text')
@@ -267,17 +267,17 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     // Add statistics
     const stats = g.append('g')
       .attr('class', 'stats')
-      .attr('transform', `translate(${width - 200}, 20)`)
+      .attr('transform', `translate(${dimensions.width - 200}, 20)`)
     const statsData = [
       { label: 'Nodos', value: data.nodes.length },
       { label: 'Enlaces', value: data.links.length },
       { label: 'Grupos', value: groups.length }
     ]
     const statItems = stats.selectAll('.stat-item')
-      .data(s_tatsData)
+      .data(statsData)
       .enter().append('g')
       .attr('class', 'stat-item')
-      .attr('transform', (_d, i) => `translate(0, ${i * 25})`)
+      .attr('transform', (d, i) => `translate(0, ${i * 25})`)
     statItems.append('rect')
       .attr('width', 150)
       .attr('height', 20)
@@ -293,7 +293,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     // Add control buttons
     const controls = g.append('g')
       .attr('class', 'controls')
-      .attr('transform', `translate(${width - 120}, ${height - 100})`)
+      .attr('transform', `translate(${dimensions.width - 120}, ${dimensions.height - 100})`)
     const buttons = [
       { label: 'Reset', action: () => {
         svg.transition()
@@ -305,12 +305,12 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       { label: 'Start', action: () => simulation.restart() }
     ]
     const buttonGroups = controls.selectAll('.button')
-      .data(_buttons)
+      .data(buttons)
       .enter().append('g')
       .attr('class', 'button')
-      .attr('transform', (_d, i) => `translate(0, ${i * 30})`)
+      .attr('transform', (d, i) => `translate(0, ${i * 30})`)
       .style('cursor', 'pointer')
-      .on('click', (_event, d) => d.action())
+      .on('click', (event, d) => d.action())
     buttonGroups.append('rect')
       .attr('width', 60)
       .attr('height', 25)
@@ -351,18 +351,18 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       d.fy = null
     }
 
-  }, [data, config])
+  }, [data, config, dimensions, onNodeClick, onLinkClick])
     useEffect(() => {
     drawNetwork()
-  }, [dimensions])
+  }, [drawNetwork])
   return (
     <div 
-      ref={_containerRef} 
+      ref={containerRef} 
       className="w-full h-full relative"
       style={{ minHeight: '500px' }}
     >
       <svg
-        ref={s_vgRef}
+        ref={svgRef}
         width="100%"
         height="100%"
         style={{ display: 'block' }}

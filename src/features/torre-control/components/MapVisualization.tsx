@@ -19,35 +19,35 @@ interface MapVisualizationProps {
 }
 
 export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
-  const [selectedTab, setSelectedTab] = useState('rutas')
-  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(_null)
-  const [isLoading, setIsLoading] = useState(_true)
+  const [_selectedTab, _setSelectedTab] = useState('rutas')
+  const [selectedTransito, setSelectedTransito] = useState<TransitoTorreControl | null>(null)
+  const [_isLoading, _setIsLoading] = useState(true)
   useEffect(() => {
     // Simulate loading delay to ensure proper mounting
-    const timer = setTimeout(() => {
-      setIsLoading(_false)
+    const _timer = setTimeout(() => {
+      _setIsLoading(false)
     }, 100)
     return () => clearTimeout(_timer)
   }, [])
   // Ensure data is an array
-  const safeData = Array.isArray(_data) ? data : []
+  const safeData = Array.isArray(data) ? data : []
   // Group transitos by route
-  const routeGroups = safeData.reduce((_acc, transito) => {
+  const _routeGroups = safeData.reduce((acc, transito) => {
     const route = `${transito.origen} → ${transito.destino}`
     if (!acc[route]) {
       acc[route] = []
     }
-    acc[route].push(_transito)
+    acc[route].push(transito)
     return acc
   }, {} as Record<string, TransitoTorreControl[]>)
   // Group by status
-  const statusGroups = {
+  const _statusGroups = {
     verde: safeData.filter(t => t.semaforo === 'verde'),
     amarillo: safeData.filter(t => t.semaforo === 'amarillo'),
     rojo: safeData.filter(t => t.semaforo === 'rojo')
   }
   // Sort routes by activity
-  const sortedRoutes = Object.entries(_routeGroups).sort((_a, b) => {
+  const sortedRoutes = Object.entries(_routeGroups).sort((a, b) => {
     const aActivity = a[1].filter(t => t.semaforo !== 'verde').length
     const bActivity = b[1].filter(t => t.semaforo !== 'verde').length
     return bActivity - aActivity
@@ -111,7 +111,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                 const warningCount = transitos.filter(t => t.semaforo === 'amarillo').length
                 return (
                   <motion.div
-                    key={_route}
+                    key={route}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={cn(
@@ -123,7 +123,7 @@ export const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                       <div>
                         <h4 className="font-medium text-white flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-gray-400" />
-                          {_route}
+                          {route}
                         </h4>
                         <p className="text-sm text-gray-400 mt-1">
                           {transitos.length} tránsito{transitos.length !== 1 ? 's' : ''} activo{transitos.length !== 1 ? 's' : ''}

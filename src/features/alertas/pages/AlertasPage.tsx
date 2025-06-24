@@ -6,7 +6,7 @@ import { useAlertasStore} from '../../../store'
 export const AlertasPage: React.FC = () => {
   const alertas = useAlertasStore(state => state.alertas)
   const alertasActivas = useAlertasStore(state => state.alertasActivas)
-  const [showHistorialModal, setShowHistorialModal] = useState(_false)
+  const [showHistorialModal, setShowHistorialModal] = useState(false)
   // Calculate statistics
   const stats = {
     total: alertas.length,
@@ -34,7 +34,7 @@ export const AlertasPage: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setShowHistorialModal(_true)}
+          onClick={() => setShowHistorialModal(true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
         >
           <History className="h-5 w-5" />
@@ -89,10 +89,10 @@ export const AlertasPage: React.FC = () => {
               <div className="mt-2 space-y-1">
                 {Object.entries(stats.porTipo)
                   .filter(([_, count]) => count > 0)
-                  .sort(([, a], [, _b]) => _b - a)
+                  .sort(([, a], [, b]) => b - a)
                   .slice(0, 3)
-                  .map(([tipo, count]) => (
-                    <div key={_tipo} className="flex justify-between text-xs">
+                  .map(([tipo, _count]) => (
+                    <div key={tipo} className="flex justify-between text-xs">
                       <span className="text-gray-300 capitalize">{tipo.replace('_', ' ')}</span>
                       <span className="text-gray-400">{_count}</span>
                     </div>
@@ -108,10 +108,12 @@ export const AlertasPage: React.FC = () => {
       <AlertsTable />
 
       {/* Historial Modal */}
-      <HistorialAlertasCriticasModal
-        isOpen={s_howHistorialModal}
-        onClose={() => setShowHistorialModal(_false)}
-      />
+      {showHistorialModal && (
+        <HistorialAlertasCriticasModal
+          isOpen={showHistorialModal}
+          onClose={() => setShowHistorialModal(false)}
+        />
+      )}
     </div>
   )
 }

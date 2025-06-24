@@ -38,10 +38,10 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
   isOpen, onClose
 }) => {
   const [alertasCriticas, setAlertasCriticas] = useState<AlertaCriticaHistorial[]>([])
-  const [loading, setLoading] = useState(_true)
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all')
-  const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(_null)
+  const [selectedAlerta, setSelectedAlerta] = useState<AlertaCriticaHistorial | null>(null)
   useEffect(() => {
     if (isOpen) {
       fetchAlertasCriticas()
@@ -64,22 +64,22 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
     }
   }, [isOpen, onClose])
   const fetchAlertasCriticas = async () => {
-    setLoading(_true)
+    setLoading(true)
     try {
       // TODO: Replace with actual API call
       // For now, generate mock data
       const mockData: AlertaCriticaHistorial[] = generateMockAlertasCriticas()
-      setAlertasCriticas(_mockData)
-    } catch {
-      console.error('Error fetching critical alerts history:', _error)
+      setAlertasCriticas(mockData)
+    } catch (error) {
+      console.error('Error fetching critical alerts history:', error)
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   const filterAlerts = (alerts: AlertaCriticaHistorial[]) => {
     let filtered = alerts
     // Search filter
-    if (s_earchTerm) {
+    if (searchTerm) {
       filtered = filtered.filter(alert =>
         alert.codigoPrecinto.toLowerCase().includes(searchTerm.toLowerCase()) ||
         alert.mensaje.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,11 +103,11 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
 
     return filtered
   }
-  const filteredAlerts = filterAlerts(_alertasCriticas)
+  const filteredAlerts = filterAlerts(alertasCriticas)
   if (!isOpen) return null
   return (<div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={_onClose} />
+        <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={onClose} />
 
         <div className="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
           {/* Header */}
@@ -127,7 +127,7 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                 </div>
               </div>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-6 w-6" />
@@ -143,8 +143,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    value={s_earchTerm}
-                    onChange={(_e) => setSearchTerm(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Buscar por precinto, mensaje o respuesta..."
                     className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -211,10 +211,10 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                 <p className="text-gray-400">No se encontraron alertas críticas</p>
               </div>
             ) : (<div className="space-y-4">
-                {filteredAlerts.map((_alerta) => (<div
+                {filteredAlerts.map((alerta) => (<div
                     key={alerta.id}
                     className="bg-gray-700 rounded-lg p-4 hover:bg-gray-650 transition-colors cursor-pointer"
-                    onClick={() => setSelectedAlerta(_alerta)}
+                    onClick={() => setSelectedAlerta(alerta)}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -258,8 +258,8 @@ export const HistorialAlertasCriticasModal: React.FC<HistorialAlertasCriticasMod
                             {alerta.respuesta.acciones && alerta.respuesta.acciones.length > 0 && (<div className="mt-2 ml-6">
                                 <p className="text-xs text-gray-500 mb-1">Acciones tomadas:</p>
                                 <ul className="list-disc list-inside text-xs text-gray-400">
-                                  {alerta.respuesta.acciones.map((_accion, index) => (
-                                    <li key={_index}>{_accion}</li>
+                                  {alerta.respuesta.acciones.map((accion, index) => (
+                                    <li key={index}>{accion}</li>
                                   ))}
                                 </ul>
                               </div>
@@ -337,7 +337,7 @@ const AlertaDetailModal: React.FC<{
   return (
     <div className="fixed inset-0 z-60 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
-        <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onClick={_onClose} />
+        <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onClick={onClose} />
         
         <div className="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
           <div className="bg-gray-900 px-6 py-4 border-b border-gray-700">
@@ -346,7 +346,7 @@ const AlertaDetailModal: React.FC<{
                 Detalle de Alerta Crítica
               </h3>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -415,8 +415,8 @@ const AlertaDetailModal: React.FC<{
                     <div className="mb-3">
                       <p className="text-xs text-gray-400">Acciones Tomadas</p>
                       <ul className="list-disc list-inside text-sm text-white mt-1">
-                        {alerta.respuesta.acciones.map((_accion, index) => (
-                          <li key={_index}>{_accion}</li>
+                        {alerta.respuesta.acciones.map((accion, index) => (
+                          <li key={index}>{accion}</li>
                         ))}
                       </ul>
                     </div>
@@ -439,7 +439,7 @@ const AlertaDetailModal: React.FC<{
                   Comentarios ({alerta.comentarios.length})
                 </h4>
                 <div className="space-y-2">
-                  {alerta.comentarios.map((_comentario) => (
+                  {alerta.comentarios.map((comentario) => (
                     <div key={comentario.id} className="bg-gray-700 rounded-lg p-3">
                       <div className="flex items-center gap-2 mb-1">
                         <User className="h-3 w-3 text-gray-400" />
@@ -512,7 +512,7 @@ function generateMockAlertasCriticas(): AlertaCriticaHistorial[] {
         notas: 'Asignado para investigación inmediata'
       } : undefined,
       comentarios: hasComments ? Array.from({ length: Math.floor(Math.random() * 3) + 1 }, (__, j) => ({
-        id: `COM-${_i}-${_j}`,
+        id: `COM-${i}-${j}`,
         usuario: usuarios[Math.floor(Math.random() * usuarios.length)],
         mensaje: [
           'Verificando con el equipo en campo',

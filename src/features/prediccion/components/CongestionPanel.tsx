@@ -26,7 +26,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
   // Analizar congestiones
 
   useEffect(() => {
-    const analyzed = congestionAnalyzer.analizarCongestion(_transitos)
+    const _analyzed = congestionAnalyzer.analizarCongestion(transitos)
     setCongestions(_analyzed)
   }, [transitos])
   // Notificar congestiones detectadas
@@ -35,7 +35,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
     if (onCongestionDetected && congestions.length > 0) {
       onCongestionDetected(_congestions)
     }
-  }, [congestions.length]); // Only depend on length to avoid infinite loops
+  }, [congestions.length, onCongestionDetected]); // Only depend on length to avoid infinite loops
 
   // Contar por severidad
   const countBySeverity = () => {
@@ -93,7 +93,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
                   No se detectan congestiones próximas
                 </p>
               </div>
-            ) : (congestions.map((_congestion, index) => (<CongestionAlert
+            ) : (congestions.map((_congestion, _index) => (<CongestionAlert
                   key={_index}
                   congestion={_congestion}
                   compact
@@ -214,7 +214,7 @@ export const CongestionPanel: React.FC<CongestionPanelProps> = ({
 
             {/* Lista de congestiones */}
             <div className="space-y-3">
-              {congestions.map((_congestion, index) => (<CongestionAlert
+              {congestions.map((_congestion, _index) => (<CongestionAlert
                   key={_index}
                   congestion={_congestion}
                   onClick={() => setSelectedCongestion(_congestion)}

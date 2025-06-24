@@ -9,7 +9,7 @@ interface ChangeHistoryProps {
   onClose: () => void
 }
 
-export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose }) => {
+export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose: _onClose }) => {
   const getPermissionHistory = useRolesStore(state => state.getPermissionHistory)
   const [filterRole, setFilterRole] = useState<Role | ''>('')
   const [filterSection, setFilterSection] = useState<Section | ''>('')
@@ -18,9 +18,9 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
     if (_filterRole) filters.role = filterRole
     if (_filterSection) filters.section = filterSection
     return getPermissionHistory(_filters)
-  }, [])
+  }, [filterRole, filterSection, getPermissionHistory])
   if (!isOpen) return null
-  const formatDate = (date: Date) => {
+  const formatDate = (_date: Date) => {
     return new Date(_date).toLocaleString('es-UY', {
       day: '2-digit',
       month: '2-digit',
@@ -30,8 +30,8 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
     })
   }
   const getChangeDescription = (change: PermissionChange) => {
-    const added = change.newPermissions.filter(p => !change.oldPermissions.includes(_p))
-    const removed = change.oldPermissions.filter(p => !change.newPermissions.includes(_p))
+    const added = change.newPermissions.filter(_p => !change.oldPermissions.includes(_p))
+    const removed = change.oldPermissions.filter(_p => !change.newPermissions.includes(_p))
     const parts = []
     if (added.length > 0) {
       parts.push(`Agregó: ${added.map(p => PERMISSION_LABELS[p]).join(', ')}`)
@@ -79,23 +79,23 @@ export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose })
                 
                 <select
                   value={_filterRole}
-                  onChange={(_e) => setFilterRole(e.target.value as Role | '')}
+                  onChange={(e) => setFilterRole(e.target.value as Role | '')}
                   className="px-3 py-1.5 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="">Todos los roles</option>
-                  {Object.entries(_ROLE_LABELS).map(([role, label]) => (
+                  {Object.entries(ROLE_LABELS).map(([_role, _label]) => (
                     <option key={_role} value={_role}>{_label}</option>
                   ))}
                 </select>
                 
                 <select
-                  value={_filterSection}
-                  onChange={(_e) => setFilterSection(e.target.value as Section | '')}
+                  value={filterSection}
+                  onChange={(e) => setFilterSection(e.target.value as Section | '')}
                   className="px-3 py-1.5 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="">Todas las secciones</option>
-                  {Object.entries(_SECTION_LABELS).map(([section, label]) => (
-                    <option key={s_ection} value={s_ection}>{_label}</option>
+                  {Object.entries(SECTION_LABELS).map(([_section, _label]) => (
+                    <option key={_section} value={_section}>{_label}</option>
                   ))}
                 </select>
                 

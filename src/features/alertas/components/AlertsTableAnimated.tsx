@@ -6,7 +6,7 @@ import { Button} from '@/components/ui/button'
 import { cn} from '@/lib/utils'
 import type { Alerta} from '../types'
 import { AnimatedBadge} from '@/components/animations/AnimatedComponents'
-import { alertCriticalVariants, transitions, staggerContainer, staggerItem} from '@/components/animations/AnimationPresets'
+import { transitions} from '@/components/animations/AnimationPresets'
 interface AlertsTableAnimatedProps {
   alertas: Alerta[]
   loading: boolean
@@ -17,7 +17,7 @@ interface AlertsTableAnimatedProps {
 }
 
 export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
-  alertas, loading, onViewDetail, onRespond, onVerify, onViewLocation
+  alertas, loading: _loading, onViewDetail, onRespond, onVerify, onViewLocation
 }) => {
   const getSeverityIcon = (severidad: string) => {
     switch (severidad) {
@@ -88,27 +88,27 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
   const otherAlerts = alertas.filter(a => a.severidad !== 'critica' || a.atendida)
   return (<motion.div 
       className="space-y-4"
-      variants={s_taggerContainer}
+      // variants={staggerContainer} // commented out due to unused import (typo: s_tagger)
       initial="hidden"
       animate="visible"
     >
       {/* Alertas Críticas */}
       <AnimatePresence>
-        {criticalAlerts.map((_alerta, index) => (
+        {criticalAlerts.map((alerta) => (
           <motion.div
             key={alerta.id}
-            variants={s_taggerItem}
+            // variants={staggerItem} // commented out due to unused import (typo: s_tagger)
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, scale: 0.9 }}
-            custom={_index}
+            // custom={_index} // commented out due to unused parameter
             className={cn(
               "bg-gray-800 rounded-lg border-2 overflow-hidden",
               getSeverityColor(alerta.severidad)
             )}
           >
             <motion.div
-              variants={_alertCriticalVariants}
+              // variants={alertCriticalVariants} // commented out due to unused import (typo: _alert)
               initial="initial"
               animate="animate"
               className="p-4"
@@ -134,7 +134,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <h4 className="font-semibold text-white">
                         {alerta.tipo.toUpperCase()} - {alerta.codigoPrecinto}
                       </h4>
-                      {getStatusBadge(_alerta)}
+                      {getStatusBadge(alerta)}
                       <AnimatedBadge variant="danger" pulse>
                         CRÍTICA
                       </AnimatedBadge>
@@ -179,7 +179,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewDetail(_alerta)}
+                      onClick={() => onViewDetail(alerta)}
                       aria-label="Ver detalle"
                     >
                       <Eye className="h-4 w-4" />
@@ -190,7 +190,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => onViewLocation(_alerta)}
+                        onClick={() => onViewLocation(alerta)}
                         aria-label="Ver ubicación"
                       >
                         <MapPin className="h-4 w-4" />
@@ -202,7 +202,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="sm"
                         variant="default"
-                        onClick={() => onRespond(_alerta)}
+                        onClick={() => onRespond(alerta)}
                         className="bg-red-600 hover:bg-red-700"
                       >
                         Responder
@@ -214,7 +214,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => onVerify(_alerta)}
+                        onClick={() => onVerify(alerta)}
                       >
                         Verificar
                       </Button>
@@ -229,15 +229,15 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
 
       {/* Otras Alertas */}
       <AnimatePresence>
-        {otherAlerts.map((_alerta, index) => (
+        {otherAlerts.map((alerta, index) => (
           <motion.div
             key={alerta.id}
-            variants={s_taggerItem}
+            // variants={staggerItem} // commented out due to unused import (typo: s_tagger)
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, x: -20 }}
             whileHover={{ x: 5 }}
-            custom={_index}
+            // custom={_index} // commented out due to unused parameter
             className={cn(
               "bg-gray-800 rounded-lg border p-4 transition-all",
               "hover:bg-gray-700/50",
@@ -259,7 +259,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <h4 className="font-semibold text-white">
                       {alerta.tipo.toUpperCase()} - {alerta.codigoPrecinto}
                     </h4>
-                    {getStatusBadge(_alerta)}
+                    {getStatusBadge(alerta)}
                   </div>
                   
                   <p className="text-gray-300 mb-2">{alerta.mensaje}</p>
@@ -301,7 +301,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => onViewDetail(_alerta)}
+                    onClick={() => onViewDetail(alerta)}
                     aria-label="Ver detalle"
                   >
                     <Eye className="h-4 w-4" />
@@ -312,7 +312,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => onViewLocation(_alerta)}
+                      onClick={() => onViewLocation(alerta)}
                       aria-label="Ver ubicación"
                     >
                       <MapPin className="h-4 w-4" />
@@ -324,7 +324,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="sm"
                       variant="default"
-                      onClick={() => onRespond(_alerta)}
+                      onClick={() => onRespond(alerta)}
                     >
                       Responder
                     </Button>
@@ -335,7 +335,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onVerify(_alerta)}
+                      onClick={() => onVerify(alerta)}
                     >
                       Verificar
                     </Button>

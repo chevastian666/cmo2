@@ -18,20 +18,20 @@ interface NotificationButtonProps {
 export const NotificationButton: React.FC<NotificationButtonProps> = ({
   className = ''
 }) => {
-  const [isOpen, setIsOpen] = useState(_false)
+  const [isOpen, setIsOpen] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [groups, setGroups] = useState<NotificationGroup[]>([])
+  const [_groups, setGroups] = useState<NotificationGroup[]>([])
   const [stats, setStats] = useState<NotificationStats | undefined>()
   const [filter, setFilter] = useState<NotificationFilter>({})
   const loadStats = React.useCallback(() => {
     const currentStats = notificationService.getStats()
-    setStats(_currentStats)
+    setStats(currentStats)
   }, [])
   const loadNotifications = React.useCallback(() => {
-    const filtered = notificationService.getNotifications(_filter)
-    const grouped = notificationService.getGroupedNotifications(_filter)
-    setNotifications(_filtered)
-    setGroups(_grouped)
+    const filtered = notificationService.getNotifications(filter)
+    const grouped = notificationService.getGroupedNotifications(filter)
+    setNotifications(filtered)
+    setGroups(grouped)
   }, [filter])
   // Load notifications on mount
 
@@ -57,22 +57,22 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
     useEffect(() => {
     loadNotifications()
   }, [filter, loadNotifications])
-  const handleNotificationAction = async (notificationId: string, action: string, payload?: unknown) => {
+  const _handleNotificationAction = async (notificationId: string, action: string, payload?: unknown) => {
     try {
-      await notificationService.handleNotificationAction(_notificationId, action, payload)
-    } catch (_error) {
+      await notificationService.handleNotificationAction(notificationId, action, payload)
+    } catch (error) {
       console.error('Failed to handle notification action:', error)
     }
   }
-  const handleBulkAction = async (notificationIds: string[], action: string) => {
+  const _handleBulkAction = async (notificationIds: string[], action: string) => {
     try {
-      await notificationService.handleBulkAction(_notificationIds, action)
-    } catch (_error) {
+      await notificationService.handleBulkAction(notificationIds, action)
+    } catch (error) {
       console.error('Failed to handle bulk action:', error)
     }
   }
-  const handleFilterChange = (newFilter: NotificationFilter) => {
-    setFilter(_newFilter)
+  const _handleFilterChange = (newFilter: NotificationFilter) => {
+    setFilter(newFilter)
   }
   const unreadCount = stats?.unread || 0
   const hasNotifications = notifications.length > 0
@@ -84,7 +84,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
           hasNotifications 
             ? 'text-blue-400 hover:text-blue-300 hover:bg-gray-700' 
             : 'text-gray-400 hover:text-gray-300 hover:bg-gray-700'
-        } ${_className}`}
+        } ${className}`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -121,11 +121,11 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
       {/* Notification Center */}
       <AnimatePresence>
         {isOpen && (<NotificationCenter
-            isOpen={_isOpen}
-            onClose={() => setIsOpen(_false)}
-            notifications={_notifications}
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            notifications={notifications}
             groups={_groups}
-            stats={s_tats}
+            stats={stats}
             onNotificationAction={_handleNotificationAction}
             onBulkAction={_handleBulkAction}
             onFilterChange={_handleFilterChange}

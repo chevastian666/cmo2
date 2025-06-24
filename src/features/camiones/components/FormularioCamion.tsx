@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {_X, Truck, Camera, AlertCircle} from 'lucide-react'
 import {_useUserInfo} from '../../../hooks/useAuth'
-import { ESTADOS_CAMION} from '../types'
+import { } from '../types'
 import type { EstadoCamion} from '../types'
 interface FormularioCamionProps {
   onClose: () => void
@@ -23,9 +23,9 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
   }
-  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const _handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (_file) {
+    if (file) {
       handleChange('foto', file)
     }
   }
@@ -37,13 +37,13 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
       newErrors.matricula = 'La matrícula debe tener al menos 6 caracteres'
     }
     
-    setErrors(_newErrors)
-    return Object.keys(_newErrors).length === 0
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    setLoading(_true)
+    setLoading(true)
     try {
       await createCamion({
         matricula: formData.matricula.toUpperCase().trim(),
@@ -115,8 +115,8 @@ export const FormularioCamion: React.FC<FormularioCamionProps> = ({ onClose }) =
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={_loading}
             >
-              {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
-                <option key={_key} value={_key}>
+              {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
+                <option key={key} value={key}>
                   {config.icon} {config.label}
                 </option>
               ))}

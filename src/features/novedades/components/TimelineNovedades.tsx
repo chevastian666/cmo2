@@ -17,7 +17,7 @@ interface TimelineNovedadesProps {
 }
 
 export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
-  novedades, loading = false, onMarcarResuelta, onAgregarSeguimiento, onEditar, onVerDetalles, canEdit = false, userId, className
+  novedades, loading = false, onMarcarResuelta: _onMarcarResuelta, onAgregarSeguimiento: _onAgregarSeguimiento, onEditar: _onEditar, onVerDetalles: _onVerDetalles, canEdit: _canEdit = false, userId, className
 }) => {
   if (loading) {
     return <LoadingState variant="skeleton" rows={4} />
@@ -35,11 +35,11 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
   }
 
   // Agrupar novedades por punto de operación
-  const novedadesPorPunto = novedades.reduce((_acc, novedad) => {
+  const _novedadesPorPunto = novedades.reduce((acc, novedad) => {
     if (!acc[novedad.puntoOperacion]) {
       acc[novedad.puntoOperacion] = []
     }
-    acc[novedad.puntoOperacion].push(_novedad)
+    acc[novedad.puntoOperacion].push(novedad)
     return acc
   }, {} as Record<string, Novedad[]>)
   // Ordenar puntos por cantidad de novedades
@@ -47,7 +47,7 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
     .sort(([, a], [, b]) => b.length - a.length)
   return (
     <div className={cn("space-y-6", className)}>
-      {puntosOrdenados.map(([punto, novedadesPunto]) => (<div key={_punto} className="space-y-4">
+      {puntosOrdenados.map(([_punto, novedadesPunto]) => (<div key={_punto} className="space-y-4">
           {/* Header del punto */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-white">
@@ -68,8 +68,8 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
             {/* Novedades */}
             <div className="space-y-4">
               {novedadesPunto
-                .sort((_a, b) => b.fechaCreacion.getTime() - a.fechaCreacion.getTime())
-                .map((_novedad, index) => (
+                .sort((a, b) => b.fechaCreacion.getTime() - a.fechaCreacion.getTime())
+                .map((novedad, index) => (
                   <div key={novedad.id} className="relative flex items-start gap-4">
                     {/* Hora */}
                     <div className="w-20 text-right flex-shrink-0">
@@ -97,7 +97,7 @@ export const TimelineNovedades: React.FC<TimelineNovedadesProps> = ({
                     {/* Card de la novedad */}
                     <div className="flex-1 pb-4">
                       <NovedadCard
-                        novedad={_novedad}
+                        novedad={novedad}
                         onMarcarResuelta={_onMarcarResuelta}
                         onAgregarSeguimiento={_onAgregarSeguimiento}
                         onEditar={_onEditar}

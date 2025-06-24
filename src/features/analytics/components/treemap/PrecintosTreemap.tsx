@@ -10,9 +10,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Building, Package, TrendingUp } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformPrecintosByCompany, createHierarchy} from '@/components/charts/treemap/utils/dataTransformers'
+
+interface MockPrecinto {
+  id: string;
+  codigo: string;
+  empresa?: string;
+  tipo?: string;
+  estado?: string;
+  // Add other precinto properties as needed
+}
+
 export const PrecintosTreemap: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const precintos: any[] = []
+  const precintos = useMemo<MockPrecinto[]>(() => [], [])
   
   const [groupBy, setGroupBy] = useState<'company' | 'type' | 'status'>('company')
   const treemapData = useMemo(() => {
@@ -113,7 +123,7 @@ export const PrecintosTreemap: React.FC = () => {
             showBreadcrumb={true}
             showTooltip={true}
             animated={true}
-            onNodeClick={(node, event) => {
+            onNodeClick={(node, _event) => {
               console.log('Node clicked:', node)
             }}
           />

@@ -4,7 +4,7 @@ import { cn} from '../../utils/utils'
 import { Card} from './Card'
 import { StatusBadge} from './StatusBadge'
 import { InfoRow} from './InfoRow'
-import {_Clock, User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
+import { User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
 export interface TransitInfo {
   id: string
   origin: string
@@ -42,16 +42,16 @@ interface TransitCardProps {
 export const TransitCard: React.FC<TransitCardProps> = ({
   transit, className, onClick, onViewHistory, variant = 'default', showProgress = true
 }) => {
-  const [timeRemaining, setTimeRemaining] = useState<string | null>(_null)
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null)
   useEffect(() => {
     const updateTimeRemaining = () => {
       setTimeRemaining(calculateTimeRemaining())
     }
     updateTimeRemaining()
-    const interval = setInterval(_updateTimeRemaining, 60000); // Update every minute
+    const interval = setInterval(updateTimeRemaining, 60000); // Update every minute
 
-    return () => clearInterval(_interval)
-  }, [calculateTimeRemainingtransit.status])
+    return () => clearInterval(interval)
+  }, [transit.estimatedArrival, transit.status, calculateTimeRemaining])
   const getStatusVariant = (status: TransitInfo['status']): 'success' | 'warning' | 'danger' | 'info' | 'default' => {
     const variants = {
       'in-transit': 'info' as const,
@@ -73,7 +73,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
     return texts[status]
   }
   const formatDate = (date: Date | string) => {
-    const d = date instanceof Date ? date : new Date(_date)
+    const d = date instanceof Date ? date : new Date(date)
     return d.toLocaleString('es-AR', {
       day: '2-digit',
       month: '2-digit',
@@ -81,7 +81,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
       minute: '2-digit'
     })
   }
-  const calculateTimeRemaining = () => {
+  const calculateTimeRemaining = useCallback(() => {
     if (!transit.estimatedArrival || transit.status === 'arrived' || transit.status === 'completed') {
       return null
     }
@@ -95,10 +95,10 @@ export const TransitCard: React.FC<TransitCardProps> = ({
     const days = Math.floor(diff / 86400000)
     const hours = Math.floor((diff % 86400000) / 3600000)
     const minutes = Math.floor((diff % 3600000) / 60000)
-    if (days > 0) return `${_days}d ${_hours}h`
-    if (hours > 0) return `${_hours}h ${_minutes}min`
-    return `${_minutes}min`
-  }
+    if (days > 0) return `${days}d ${hours}h`
+    if (hours > 0) return `${hours}h ${minutes}min`
+    return `${minutes}min`
+  }, [transit.estimatedArrival, transit.status])
   const getTrafficLightStatus = () => {
     if (transit.status === 'stopped' || transit.status === 'delayed') return 'danger'
     if (transit.status === 'arrived' || transit.status === 'completed') return 'success'

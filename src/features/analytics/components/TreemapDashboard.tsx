@@ -19,9 +19,9 @@ import { AlertasTreemap} from './treemap/AlertasTreemap'
 import { OperationalTreemap} from './treemap/OperationalTreemap'
 import { toast} from '@/hooks/use-toast'
 export const TreemapDashboard: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('precintos')
-  const [fullscreenView, setFullscreenView] = useState<string | null>(_null)
-  const handleExport = () => {
+  const [_selectedTab, _setSelectedTab] = useState('precintos')
+  const [fullscreenView, setFullscreenView] = useState<string | null>(null)
+  const _handleExport = () => {
     toast({
       title: 'Exportando visualización',
       description: 'Se generará un archivo SVG de alta resolución.'

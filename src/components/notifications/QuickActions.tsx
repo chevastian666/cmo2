@@ -30,28 +30,28 @@ const snoozeOptions: SnoozeOption[] = [
   { label: '1 día', duration: 1440 }
 ]
 export const QuickActions: React.FC<QuickActionsProps> = ({
-  notification, onAction, compact = false, disabled = false
+  notification, onAction, compact: _compact = false, disabled: _disabled = false
 }) => {
-  const [showSnoozeOptions, setShowSnoozeOptions] = useState(_false)
-  const [showMoreActions, setShowMoreActions] = useState(_false)
-  const handleAcknowledge = () => {
+  const [showSnoozeOptions, setShowSnoozeOptions] = useState(false)
+  const [showMoreActions, setShowMoreActions] = useState(false)
+  const _handleAcknowledge = () => {
     onAction('acknowledge')
   }
   const handleSnooze = (duration: number) => {
     const snoozedUntil = new Date(Date.now() + duration * 60 * 1000)
     onAction('snooze', { snoozedUntil, duration })
-    setShowSnoozeOptions(_false)
+    setShowSnoozeOptions(false)
   }
-  const handleEscalate = () => {
+  const _handleEscalate = () => {
     onAction('escalate')
   }
-  const handleDismiss = () => {
+  const _handleDismiss = () => {
     onAction('dismiss')
   }
-  const handleMarkRead = () => {
+  const _handleMarkRead = () => {
     onAction('mark-read')
   }
-  const handleArchive = () => {
+  const _handleArchive = () => {
     onAction('archive')
   }
   const canAcknowledge = !notification || notification.status === 'unread' || notification.status === 'read'
@@ -91,7 +91,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
                   className="absolute right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-10 min-w-max"
                 >
-                  {snoozeOptions.map((_option) => (<button
+                  {snoozeOptions.map((option) => (<button
                       key={option.duration}
                       onClick={() => handleSnooze(option.duration)}
                       className="block w-full px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
@@ -203,7 +203,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
                 <div className="p-2">
                   <div className="text-xs text-gray-400 mb-2">Posponer por:</div>
                   <div className="grid grid-cols-2 gap-1">
-                    {snoozeOptions.map((_option) => (<button
+                    {snoozeOptions.map((option) => (<button
                         key={option.duration}
                         onClick={() => handleSnooze(option.duration)}
                         className="px-2 py-1 text-sm text-gray-300 hover:bg-gray-700 rounded"

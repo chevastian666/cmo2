@@ -7,7 +7,7 @@ import { Button} from '@/components/ui/button'
 import { Switch} from '@/components/ui/switch'
 import { notificationService} from '@/services/shared/notification.service'
 export const DespachantesPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(_false)
+  const [_showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     nombre: '',
     razonSocial: '',

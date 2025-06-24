@@ -10,20 +10,20 @@ interface BloomingAlertProps {
 }
 
 export const BloomingAlert: React.FC<BloomingAlertProps> = ({
-  children, status, onBloomComplete, className, show = true
+  children: _children, status: _status, onBloomComplete, className, show = true
 }) => {
-  const [isVisible, setIsVisible] = useState(_false)
+  const [isVisible, setIsVisible] = useState(false)
   useEffect(() => {
-    if (s_how) {
-      setIsVisible(_true)
-      const timer = setTimeout(() => {
+    if (show) {
+      setIsVisible(true)
+      const _timer = setTimeout(() => {
         onBloomComplete?.()
       }, 600)
       return () => clearTimeout(_timer)
     } else {
-      setIsVisible(_false)
+      setIsVisible(false)
     }
-  }, [show])
+  }, [show, onBloomComplete])
   if (!isVisible) return null
   return (
     <div className={cn('bloom-container', className)}>

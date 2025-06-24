@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import {_Truck, User, Building, MapPin, FileText, Phone, Hash, Package} from 'lucide-react'
+import { Truck, User, Building, MapPin, FileText, Phone, Hash, Package } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { ORIGENES_DESTINOS} from '../../../constants/locations'
 // Empresas con RUT
@@ -45,7 +45,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
     if (precintoId && data.precintoId !== precintoId) {
       onChange('precintoId', precintoId)
     }
-  }, [])
+  }, [precintoId, data.precintoId, onChange])
   // Auto-complete RUT when empresa is selected
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
         onChange('rutEmpresa', empresa.rut)
       }
     }
-  }, [data.empresa])
+  }, [data.empresa, data.rutEmpresa, onChange])
   // Auto-complete empresa when RUT is entered
 
   useEffect(() => {
@@ -65,10 +65,10 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
         onChange('empresa', empresa.nombre)
       }
     }
-  }, [data.rutEmpresa])
+  }, [data.rutEmpresa, data.empresa, onChange])
   const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const value = e.target.value
-    onChange(_field, value)
+    onChange(field, value)
   }
   const handleCheckboxChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange('tipoEslinga', {
@@ -100,7 +100,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="text"
                   value={data.matricula || ''}
                   onChange={handleInputChange('matricula')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   placeholder="UY-1234"
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
@@ -123,7 +123,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="text"
                   value={data.nombreConductor || ''}
                   onChange={handleInputChange('nombreConductor')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   placeholder="Juan Pérez"
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
@@ -146,7 +146,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="tel"
                   value={data.telefonoConductor || ''}
                   onChange={handleInputChange('telefonoConductor')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   placeholder="099 123 456"
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
@@ -176,7 +176,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                 <select
                   value={data.empresa || ''}
                   onChange={handleInputChange('empresa')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
                     "text-white",
@@ -186,7 +186,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   required
                 >
                   <option value="">Seleccionar empresa...</option>
-                  {EMPRESAS.map((_empresa) => (
+                  {EMPRESAS.map((empresa) => (
                     <option key={empresa.rut} value={empresa.nombre}>
                       {empresa.nombre}
                     </option>
@@ -205,7 +205,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   type="text"
                   value={data.rutEmpresa || ''}
                   onChange={handleInputChange('rutEmpresa')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   placeholder="211234567890"
                   maxLength={12}
                   className={cn(
@@ -236,7 +236,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                 <select
                   value={data.origen || ''}
                   onChange={handleInputChange('origen')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
                     "text-white",
@@ -246,9 +246,9 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   required
                 >
                   <option value="">Seleccionar origen...</option>
-                  {ORIGENES_DESTINOS.map((_lugar) => (
-                    <option key={_lugar} value={_lugar}>
-                      {_lugar}
+                  {ORIGENES_DESTINOS.map((lugar) => (
+                    <option key={lugar} value={lugar}>
+                      {lugar}
                     </option>
                   ))}
                 </select>
@@ -264,7 +264,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                 <select
                   value={data.destino || ''}
                   onChange={handleInputChange('destino')}
-                  disabled={_disabled}
+                  disabled={disabled}
                   className={cn(
                     "w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg",
                     "text-white",
@@ -274,9 +274,9 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                   required
                 >
                   <option value="">Seleccionar destino...</option>
-                  {ORIGENES_DESTINOS.map((_lugar) => (
-                    <option key={_lugar} value={_lugar}>
-                      {_lugar}
+                  {ORIGENES_DESTINOS.map((lugar) => (
+                    <option key={lugar} value={lugar}>
+                      {lugar}
                     </option>
                   ))}
                 </select>
@@ -324,7 +324,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                     type="checkbox"
                     checked={data.tipoEslinga?.larga || false}
                     onChange={handleCheckboxChange('larga')}
-                    disabled={_disabled}
+                    disabled={disabled}
                     className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                   />
                   <span className="ml-2 text-gray-300">Larga</span>
@@ -334,7 +334,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
                     type="checkbox"
                     checked={data.tipoEslinga?.corta || false}
                     onChange={handleCheckboxChange('corta')}
-                    disabled={_disabled}
+                    disabled={disabled}
                     className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                   />
                   <span className="ml-2 text-gray-300">Corta</span>

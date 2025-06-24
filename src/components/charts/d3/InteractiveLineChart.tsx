@@ -37,15 +37,18 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     if (!svgRef.current || !data.length) return
     const svg = d3.select(svgRef.current)
     svg.selectAll('*').remove()
+    
+    const { width, height } = dimensions
+    const margin = config.margin
     const innerWidth = width - margin.left - margin.right
     const innerHeight = height - margin.top - margin.bottom
     // Create scales
     const xScale = scales.createTimeScale(
-      d3.extent(_data, d => d.date) as [Date, Date],
+      d3.extent(data, d => d.date) as [Date, Date],
       [0, innerWidth]
     )
     const yScale = scales.createLinearScale(
-      d3.extent(_data, d => d.value) as [number, number],
+      d3.extent(data, d => d.value) as [number, number],
       [innerHeight, 0]
     )
     // Create zoom behavior
@@ -53,7 +56,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .scaleExtent([1, 10])
       .extent([[0, 0], [width, height]])
       .on('zoom', handleZoom)
-    svg.call(_zoom)
+    svg.call(zoom)
     // Create main group
     const g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
@@ -72,20 +75,20 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     // Create area generator for fill
     const area = d3.area<TimeSeriesData>()
       .x(d => xScale(d.date))
-      .y0(_innerHeight)
+      .y0(innerHeight)
       .y1(d => yScale(d.value))
       .curve(d3.curveMonotoneX)
     // Add grid lines
     const xGrid = g.append('g')
       .attr('class', 'grid')
-      .attr('transform', `translate(0,${_innerHeight})`)
-      .call(d3.axisBottom(_xScale)
+      .attr('transform', `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(xScale)
         .tickSize(-innerHeight)
         .tickFormat(() => '')
       )
     const yGrid = g.append('g')
       .attr('class', 'grid')
-      .call(d3.axisLeft(_yScale)
+      .call(d3.axisLeft(yScale)
         .tickSize(-innerWidth)
         .tickFormat(() => '')
       )
@@ -151,11 +154,11 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .duration(300)
       .attr('r', 4)
     // Create tooltip
-    const tooltipDiv = tooltip.create(containerRef.current!)
+    const _tooltipDiv = tooltip.create(containerRef.current!)
     // Add hover interactions
     dots
-      .on('mouseenter', function(_event, d) {
-        d3.select(_this)
+      .on('mouseenter', function(event, d) {
+        d3.select(this)
           .transition()
           .duration(200)
           .attr('r', 6)
@@ -165,30 +168,30 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
           <div class="text-sm mt-1">Valor: ${formatters.number(d.value)}</div>
           ${d.category ? `<div class="text-sm">Categoría: ${d.category}</div>` : ''}
           ${d.metadata ? Object.entries(d.metadata).map(([key, value]) => 
-            `<div class="text-xs text-gray-400">${_key}: ${_value}</div>`
+            `<div class="text-xs text-gray-400">${key}: ${value}</div>`
           ).join('') : ''}
         `
         tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
-        d3.select(_this)
+        d3.select(this)
           .transition()
           .duration(200)
           .attr('r', 4)
           .attr('stroke-width', 2)
         tooltip.hide(_tooltipDiv)
       })
-      .on('click', (_event, d) => {
-        onDataPointClick?.(_d)
+      .on('click', (_, d) => {
+        onDataPointClick?.(d)
       })
     // Add axes
     const xAxis = g.append('g')
-      .attr('transform', `translate(0,${_innerHeight})`)
-      .call(d3.axisBottom(_xScale)
+      .attr('transform', `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(xScale)
         .tickFormat(formatters.shortDate)
       )
     const yAxis = g.append('g')
-      .call(d3.axisLeft(_yScale)
+      .call(d3.axisLeft(yScale)
         .tickFormat(formatters.number)
       )
     // Style axes
@@ -271,24 +274,24 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .style('font-size', '10px')
       .text('Reset')
     // Show reset button on zoom
-    svg.on('zoom.reset', (_event) => {
+    svg.on('zoom.reset', (event) => {
       const isZoomed = event.transform.k !== 1 || event.transform.x !== 0 || event.transform.y !== 0
       resetButton.transition()
         .duration(200)
         .style('opacity', isZoomed ? 1 : 0)
     })
-  }, [data, config])
+  }, [data, config, dimensions, onDataPointClick, onZoomChange])
     useEffect(() => {
     drawChart()
-  }, [dimensions])
+  }, [drawChart])
   return (
     <div 
-      ref={_containerRef} 
+      ref={containerRef} 
       className="w-full h-full relative"
       style={{ minHeight: '300px' }}
     >
       <svg
-        ref={s_vgRef}
+        ref={svgRef}
         width="100%"
         height="100%"
         style={{ display: 'block' }}

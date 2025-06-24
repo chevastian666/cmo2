@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import {_Download, RefreshCw, Plus, XCircle} from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Download, RefreshCw, Plus, XCircle } from 'lucide-react'
 import { PrecintoTable} from '../components/PrecintoTable'
-import {_PrecintoFilters} from '../components/PrecintoFilters'
+import { PrecintoFilters } from '../components/PrecintoFilters'
 import { PrecintoDetailModal} from '../components/PrecintoDetailModal'
 import { ErrorBoundary} from '../components/ErrorBoundary'
 import { precintosService} from '../services/precintos.service'
@@ -10,92 +10,95 @@ import type { Precinto, PrecintoFilters as PrecintoFiltersType} from '../types'
 export const PrecintosPage: React.FC = () => {
 
   const [precintos, setPrecintos] = useState<Precinto[]>([])
-  const [loading, setLoading] = useState(__true)
-  const [filters, setFilters] = useState<PrecintoFiltersType>(___)
-  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(__null)
-  const [showDetailModal, setShowDetailModal] = useState(__false)
-  const [exporting, setExporting] = useState(__false)
+  const [loading, setLoading] = useState(true)
+  const [filters, setFilters] = useState<PrecintoFiltersType>({})
+  const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [exporting, setExporting] = useState(false)
   // Unique empresas and ubicaciones for filters
-  const _empresas = [...new Set(precintos.map(p => p.empresa).filter(__Boolean))] as string[]
-  const _ubicaciones = [...new Set(precintos.map(p => p.ubicacion).filter(__Boolean))] as string[]
+  const empresas = [...new Set(precintos.map(p => p.empresa).filter(Boolean))] as string[]
+  const ubicaciones = [...new Set(precintos.map(p => p.ubicacion).filter(Boolean))] as string[]
+  const loadPrecintos = useCallback(async () => {
+    try {
+      setLoading(true)
+      const data = await precintosService.getPrecintos(filters)
+      setPrecintos(data)
+    } catch {
+      console.error('Error loading precintos')
+    } finally {
+      setLoading(false)
+    }
+  }, [filters])
+  
   useEffect(() => {
     loadPrecintos()
-  }, [filters])
-  const _loadPrecintos = async () => {
-    try {
-      setLoading(__true)
-      setPrecintos(___data)
-    } catch {
-      console.error('Error loading precintos:', _error)
-    } finally {
-      setLoading(__false)
-    }
+  }, [loadPrecintos])
+  
+  const handleViewDetail = (precinto: Precinto) => {
+    setSelectedPrecinto(precinto)
+    setShowDetailModal(true)
   }
-  const _handleViewDetail = (precinto: Precinto) => {
-    setSelectedPrecinto(__precinto)
-    setShowDetailModal(__true)
-  }
-  const _handleViewMap = (precinto: Precinto) => {
+  const handleViewMap = (precinto: Precinto) => {
     if (precinto.gps) {
       // In a real app, this would open a map modal or navigate to a map view
       console.log('View map for precinto:', precinto.id, precinto.gps)
       alert(`Ver en mapa: Precinto ${precinto.id}\nLat: ${precinto.gps.lat}\nLng: ${precinto.gps.lng}`)
     }
   }
-  const _handleAssign = (precinto: Precinto) => {
+  const handleAssign = (precinto: Precinto) => {
     // In a real app, this would open an assignment modal
     console.log('Assign precinto:', precinto.id)
     alert(`Asignar precinto ${precinto.id}`)
   }
-  const _handleSendCommand = (precinto: Precinto) => {
+  const handleSendCommand = (precinto: Precinto) => {
     // In a real app, this would open a command modal
     console.log('Send command to precinto:', precinto.id)
     alert(`Enviar comando a precinto ${precinto.id}`)
   }
-  const _handleViewHistory = (precinto: Precinto) => {
+  const handleViewHistory = (precinto: Precinto) => {
     // In a real app, this would open a history modal
     console.log('View history for precinto:', precinto.id)
     alert(`Ver historial de precinto ${precinto.id}`)
   }
-  const _handleMarkAsBroken = async (precinto: Precinto) => {
-    const _confirmMessage = `¿Está seguro que desea marcar el precinto ${precinto.id} (${precinto.nserie}) como roto/inutilizable?\n\nEsta acción no se puede deshacer.`
-    if (confirm(__confirmMessage)) {
+  const handleMarkAsBroken = async (precinto: Precinto) => {
+    const confirmMessage = `¿Está seguro que desea marcar el precinto ${precinto.id} (${precinto.nserie}) como roto/inutilizable?\n\nEsta acción no se puede deshacer.`
+    if (confirm(confirmMessage)) {
       try {
-        const _success = await precintosService.updatePrecinto(precinto.id, {
+        const success = await precintosService.updatePrecinto(precinto.id, {
           status: PrecintoStatus.ROTO,
           bateria: 0
         })
-        if (__success) {
+        if (success) {
           alert(`Precinto ${precinto.id} marcado como roto`)
           loadPrecintos(); // Reload the list
         } else {
           alert('Error al marcar el precinto como roto')
         }
       } catch {
-        console.error('Error marking precinto as broken:', _error)
+        console.error('Error marking precinto as broken')
         alert('Error al marcar el precinto como roto')
       }
     }
   }
-  const _handleExport = async () => {
+  const handleExport = async () => {
     try {
-      setExporting(__true)
-      const _csv = await precintosService.exportToCSV(__filters)
+      setExporting(true)
+      const csv = await precintosService.exportToCSV(filters)
       // Create and download file
-      const _blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-      const _link = document.createElement('a')
-      const _url = URL.createObjectURL(__blob)
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
       link.setAttribute('href', url)
       link.setAttribute('download', `precintos_${new Date().toISOString().split('T')[0]}.csv`)
       link.style.visibility = 'hidden'
-      document.body.appendChild(__link)
+      document.body.appendChild(link)
       link.click()
-      document.body.removeChild(__link)
+      document.body.removeChild(link)
     } catch {
-      console.error('Error exporting precintos:', _error)
+      console.error('Error exporting precintos')
       alert('Error al exportar precintos')
     } finally {
-      setExporting(__false)
+      setExporting(false)
     }
   }
   console.log('PrecintosPage: About to return JSX')
@@ -111,15 +114,15 @@ export const PrecintosPage: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={_loadPrecintos}
-            disabled={_loading}
+            onClick={loadPrecintos}
+            disabled={loading}
             className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 flex items-center gap-2 disabled:opacity-50"
           >
             <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
             Actualizar
           </button>
           <button
-            onClick={_handleExport}
+            onClick={handleExport}
             disabled={exporting || loading}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 disabled:opacity-50"
           >
@@ -209,42 +212,42 @@ export const PrecintosPage: React.FC = () => {
       {/* Filters */}
       <ErrorBoundary componentName="PrecintoFilters">
         <PrecintoFilters
-          filters={_filters}
-          onFiltersChange={s_etFilters}
-          empresas={_empresas}
-          ubicaciones={_ubicaciones}
+          filters={filters}
+          onFiltersChange={setFilters}
+          empresas={empresas}
+          ubicaciones={ubicaciones}
         />
       </ErrorBoundary>
 
       {/* Table */}
       <ErrorBoundary componentName="PrecintoTable">
         <PrecintoTable
-          precintos={_precintos}
-          loading={_loading}
-          onViewDetail={_handleViewDetail}
-          onViewMap={_handleViewMap}
-          onAssign={_handleAssign}
-          onSendCommand={_handleSendCommand}
-          onViewHistory={_handleViewHistory}
-          onMarkAsBroken={_handleMarkAsBroken}
+          precintos={precintos}
+          loading={loading}
+          onViewDetail={handleViewDetail}
+          onViewMap={handleViewMap}
+          onAssign={handleAssign}
+          onSendCommand={handleSendCommand}
+          onViewHistory={handleViewHistory}
+          onMarkAsBroken={handleMarkAsBroken}
         />
       </ErrorBoundary>
 
       {/* Detail Modal */}
       <ErrorBoundary componentName="PrecintoDetailModal">
         <PrecintoDetailModal
-          precinto={s_electedPrecinto}
-          isOpen={s_howDetailModal}
+          precinto={selectedPrecinto}
+          isOpen={showDetailModal}
           onClose={() => {
-            setShowDetailModal(__false)
-            setSelectedPrecinto(__null)
+            setShowDetailModal(false)
+            setSelectedPrecinto(null)
           }}
         />
       </ErrorBoundary>
     </div>
   )
-  } catch {
-    console.error('PrecintosPage: Error rendering component:', _error)
+  } catch (error) {
+    console.error('PrecintosPage: Error rendering component:', error)
     return (
       <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg">
         <h2 className="text-red-400 font-bold mb-2">Error rendering PrecintosPage</h2>

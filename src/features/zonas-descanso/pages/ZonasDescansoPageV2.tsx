@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useMemo } from 'react'
-import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Filter, Download, Coffee, Fuel} from 'lucide-react'
+import { MapPin, Search, Navigation, ExternalLink, Map, ChevronRight, Truck, Info, Clock, Download, Coffee, Fuel} from 'lucide-react'
 import { Input} from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
@@ -20,31 +20,30 @@ import { zonasDescansoData} from '../data/zonasDescansoData'
 import type { RutaZonas} from '../data/zonasDescansoData'
 import { InteractiveMap} from '@/components/maps/InteractiveMap'
 import type { MapMarker, MapRoute} from '@/components/maps/InteractiveMap'
-import { staggerContainer, staggerItem} from '@/components/animations/AnimationPresets'
 export const ZonasDescansoPageV2: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedView, setSelectedView] = useState<'list' | 'map'>('list')
   const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set(['Ruta 1']))
-  const [highlightedZone, setHighlightedZone] = useState<string | null>(_null)
+  const [_highlightedZone, _setHighlightedZone] = useState<string | null>(null)
   // Filter zones based on search term
   const filteredData = useMemo(() => {
     if (!searchTerm) return zonasDescansoData
     const lowerSearchTerm = searchTerm.toLowerCase()
     return zonasDescansoData.map(rutaData => {
       const filteredZonas = rutaData.zonas.filter(zona => 
-        zona.ubicacion.toLowerCase().includes(_lowerSearchTerm) ||
-        rutaData.ruta.toLowerCase().includes(_lowerSearchTerm)
+        zona.ubicacion.toLowerCase().includes(lowerSearchTerm) ||
+        rutaData.ruta.toLowerCase().includes(lowerSearchTerm)
       )
       return {
         ...rutaData,
         zonas: filteredZonas
       }
     }).filter(rutaData => rutaData.zonas.length > 0)
-  }, [])
+  }, [searchTerm])
   // Calculate stats
   const stats = useMemo(() => {
-    const totalZonas = zonasDescansoData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
-    const filteredZonas = filteredData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
+    const totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+    const filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
     const totalRutas = zonasDescansoData.length
     const departamentos = new Set(
       zonasDescansoData.flatMap(ruta => 
@@ -60,24 +59,30 @@ export const ZonasDescansoPageV2: React.FC = () => {
       totalRutas,
       departamentos
     }
-  }, [])
+  }, [filteredData])
   const toggleRoute = (ruta: string) => {
-    const newExpanded = new Set(_expandedRoutes)
-    if (newExpanded.has(_ruta)) {
-      newExpanded.delete(_ruta)
+    const newExpanded = new Set(expandedRoutes)
+    if (newExpanded.has(ruta)) {
+      newExpanded.delete(ruta)
     } else {
-      newExpanded.add(_ruta)
+      newExpanded.add(ruta)
     }
-    setExpandedRoutes(_newExpanded)
+    setExpandedRoutes(newExpanded)
   }
   const exportData = () => {
-
+    const data = filteredData.flatMap(ruta => 
+      ruta.zonas.map(zona => ({
+        ruta: ruta.ruta,
+        ubicacion: zona.ubicacion,
+        maps: zona.maps
+      }))
+    )
     const csv = [
       Object.keys(data[0]).join(','),
-      ...data.map(row => Object.values(_row).map(v => `"${_v}"`).join(','))
+      ...data.map(row => Object.values(row).map(v => `"${v}"`).join(','))
     ].join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
-    const url = URL.createObjectURL(_blob)
+    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = 'zonas-descanso.csv'
@@ -92,7 +97,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
           action={
             <AnimatedButton
               variant="outline"
-              onClick={_exportData}
+              onClick={exportData}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -211,7 +216,7 @@ export const ZonasDescansoPageV2: React.FC = () => {
             <RutasListView 
               data={_filteredData}
               expandedRoutes={_expandedRoutes}
-              onToggleRoute={_toggleRoute}
+              onToggleRoute={toggleRoute}
               highlightedZone={_highlightedZone}
               onHighlightZone={s_etHighlightedZone}
               searchTerm={s_earchTerm}
@@ -260,14 +265,14 @@ const RutasListView: React.FC<{
   highlightedZone: string | null
   onHighlightZone: (zone: string | null) => void
   searchTerm: string
-}> = ({ data, expandedRoutes, onToggleRoute, highlightedZone, onHighlightZone, searchTerm }) => {
+}> = ({ data, expandedRoutes, onToggleRoute, highlightedZone: _highlightedZone, onHighlightZone: _onHighlightZone, searchTerm: _searchTerm }) => {
   if (data.length === 0) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
           <MapPin className="h-12 w-12 text-gray-600 mx-auto mb-4" />
           <p className="text-gray-400">
-            No se encontraron zonas de descanso que coincidan con "{s_earchTerm}"
+            No se encontraron zonas de descanso que coincidan con "{_searchTerm}"
           </p>
         </CardContent>
       </Card>
@@ -275,12 +280,12 @@ const RutasListView: React.FC<{
   }
 
   return (<motion.div
-      variants={s_taggerContainer}
+      variants={staggerContainer}
       initial="hidden"
       animate="visible"
       className="space-y-4"
     >
-      {data.map((_rutaData, index) => (<motion.div key={rutaData.ruta} variants={s_taggerItem}>
+      {data.map((rutaData, _index) => (<motion.div key={rutaData.ruta} variants={staggerItem}>
           <AnimatedCard 
             className="overflow-hidden"
             whileHover={{ scale: 1.01 }}
@@ -325,16 +330,16 @@ const RutasListView: React.FC<{
                   <Separator />
                   <div className="p-4">
                     <AnimatedList className="space-y-3">
-                      {rutaData.zonas.map((_zona, zoneIndex) => (<AnimatedListItem
+                      {rutaData.zonas.map((zona, _zoneIndex) => (<AnimatedListItem
                           key={zona.ubicacion}
                           index={_zoneIndex}
-                          onMouseEnter={() => onHighlightZone(zona.ubicacion)}
-                          onMouseLeave={() => onHighlightZone(_null)}
+                          onMouseEnter={() => _onHighlightZone(zona.ubicacion)}
+                          onMouseLeave={() => _onHighlightZone(null)}
                         >
                           <motion.div
                             className={cn(
                               "p-4 bg-gray-800/50 rounded-lg border transition-all",
-                              highlightedZone === zona.ubicacion
+                              _highlightedZone === zona.ubicacion
                                 ? "border-blue-500 bg-gray-800"
                                 : "border-gray-700"
                             )}
@@ -344,13 +349,13 @@ const RutasListView: React.FC<{
                               <div className="flex items-start gap-3 flex-1">
                                 <div className={cn(
                                   "p-2 rounded-lg mt-1",
-                                  highlightedZone === zona.ubicacion
+                                  _highlightedZone === zona.ubicacion
                                     ? "bg-blue-600/30"
                                     : "bg-gray-700"
                                 )}>
                                   <MapPin className={cn(
                                     "h-4 w-4",
-                                    highlightedZone === zona.ubicacion
+                                    _highlightedZone === zona.ubicacion
                                       ? "text-blue-400"
                                       : "text-gray-400"
                                   )} />
@@ -427,7 +432,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       }
       
       // Extract approximate coordinates based on known locations
-      const locationMap: Record<string, { lat: number; lng: number }> = {
+      const _locationMap: Record<string, { lat: number; lng: number }> = {
         'San José': { lat: -34.3375, lng: -56.7139 },
         'Colonia Valdense': { lat: -34.3392, lng: -57.2342 },
         'Florencio Sánchez': { lat: -33.8731, lng: -57.3892 },
@@ -443,20 +448,20 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
       }
       // Find matching location
       for (const [location, coords] of Object.entries(_locationMap)) {
-        if (mapsUrl.includes(_location) || ubicacion.includes(_location)) {
+        if (mapsUrl.includes(location) || ubicacion.includes(location)) {
           return coords
         }
       }
       
       // Default to center of Uruguay
       return { lat: -32.5228, lng: -55.7658 }
-    } catch {
+    } catch (_error) {
       console.error('Error extracting coordinates:', _error)
       return null
     }
   }
   // Convert zones to map markers
-  const markers: MapMarker[] = allZones.map((_zona, index) => {
+  const _markers: MapMarker[] = allZones.map((zona, _index) => {
     const coords = extractCoordinates(zona.maps, zona.ubicacion)
     const hasAncap = zona.ubicacion.toLowerCase().includes('ancap')
     const hasParador = zona.ubicacion.toLowerCase().includes('parador')
@@ -480,7 +485,7 @@ const MapView: React.FC<{ data: RutaZonas[] }> = ({ data }) => {
     }
   })
   // Create routes for major highways
-  const routes: MapRoute[] = [
+  const _routes: MapRoute[] = [
     {
       id: 'ruta-1',
       name: 'Ruta 1',

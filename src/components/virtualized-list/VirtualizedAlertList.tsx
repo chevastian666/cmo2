@@ -16,15 +16,14 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   overscan = 5, 
   onItemClick, 
   onLoadMore, 
-  groupingOptions, 
+  groupingOptions: _groupingOptions, 
   filters: initialFilters, 
   className
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const lastRenderTime = useRef(0)
+  const _containerRef = useRef<HTMLDivElement>(null)
   
   // Infinite loading
-  const { items: loadedAlerts, hasMore } = useInfiniteLoading({
+  const { items: loadedAlerts, hasMore, isLoading } = useInfiniteLoading({
     loadMore: onLoadMore || (async () => ({ alerts: initialAlerts || [], hasMore: false }))
   })
   
@@ -34,8 +33,8 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   // Filtering
   const {
     filteredAlerts,
-    filters,
-    updateFilters,
+    filters: _filters,
+    updateFilters: _updateFilters,
     resetFilters,
     filterCount,
     isFiltering,
@@ -74,13 +73,13 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
 
   // Subscribe to real-time updates
   useAlertSubscription(
-    (newItems: Alert[]) => {
+    (_newItems: Alert[]) => {
       // Handle new items
     },
-    (updatedItem: Alert) => {
+    (_updatedItem: Alert) => {
       // Handle updated item
     },
-    (itemId: string) => {
+    (_itemId: string) => {
       // Handle removed item
     }
   )
@@ -144,8 +143,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
     }
   }, [state.visibleRange, scrollToItem, filteredAlerts.length])
 
-  // Loading state
-  const isLoading = false // Replace with actual loading state
+  // Error state
   const error = null // Replace with actual error state
   
   if (isLoading && alerts.length === 0) {
@@ -220,7 +218,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
         aria-rowcount={filteredAlerts.length}
       >
         <div {...scrollerProps}>
-          {visibleItems.map(({ item, index, style }) => renderItem(item, index, style))}
+          {visibleItems.map(({ item, index, style }) => renderItem(item as Alert, index, style))}
         </div>
 
         {/* Loading more indicator */}

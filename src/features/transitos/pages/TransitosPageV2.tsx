@@ -298,7 +298,6 @@ const TransitosPageV2: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 20
   // Load data once with loading state
-  
     useEffect(() => {
     const loadData = async () => {
       if (!isInitialLoad) return
@@ -309,7 +308,7 @@ const TransitosPageV2: React.FC = () => {
       }
     }
     loadData()
-  }, [])
+  }, [fetchTransitos, isInitialLoad])
   // Obtener lista única de empresas - memoizado
   const empresas = React.useMemo(() => {
     const uniqueEmpresas = new Set(transitos.map(t => t.empresa))
@@ -391,7 +390,7 @@ const TransitosPageV2: React.FC = () => {
       totalPages: total,
       totalItems: filtered.length 
     }
-  }, [transitos])
+  }, [transitos, transitosEnCurso, transitosPendientes, transitosCompletados, activeTab, searchTerm, empresaFilter, fechaFilter, currentPage, itemsPerPage])
   // Estadísticas - optimizadas
   const stats = React.useMemo(() => {
     const alertas = transitos.filter(t => t.estado === 'ALERTA')
@@ -412,7 +411,7 @@ const TransitosPageV2: React.FC = () => {
   }, [transitos, transitosEnCurso, transitosCompletados, transitosPendientes, alertasActivas, precintosActivos])
   const handleExport = useCallback(() => {
     exportToExcel(filteredTransitos, 'transitos')
-  }, [])
+  }, [filteredTransitos])
   const handleViewTransito = useCallback((transito: Transito) => {
     setSelectedTransito(transito)
     setShowDetailModal(true)
@@ -422,12 +421,11 @@ const TransitosPageV2: React.FC = () => {
   }, [])
   const handleRefresh = useCallback(async () => {
     await fetchTransitos()
-  }, [])
+  }, [fetchTransitos])
   // Reset page when changing filters
-  
     useEffect(() => {
     setCurrentPage(1)
-  }, [])
+  }, [searchTerm, empresaFilter, fechaFilter, activeTab])
   return (
     <div className="space-y-6">
       {/* Header */}

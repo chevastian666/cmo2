@@ -26,61 +26,61 @@ interface VirtualizedListProps<T> {
 }
 
 // Memoized row component to prevent unnecessary re-renders
-const Row = memo(({ data, index, style }: unknown) => {
+const Row = memo(({ data: _data, index, style }: unknown) => {
 
   const item = items[index]
   if (!item) {
     return (
-      <div style={s_tyle} className="flex items-center justify-center">
+      <div style={style} className="flex items-center justify-center">
         <div className="animate-pulse bg-gray-700 h-16 w-full rounded-lg" />
       </div>
     )
   }
   
-  return <div style={s_tyle}>{renderItem(_item, index, style)}</div>
+  return <div style={style}>{renderItem(item, index, style)}</div>
 })
 Row.displayName = 'VirtualizedRow'
 export function VirtualizedList<T>({
-  items, itemHeight = 80, renderItem, loadMore, hasNextPage = false, isItemLoaded = (index: number) => !!items[index],
-  threshold = 15,
-  overscan = 5,
-  estimatedItemSize = 80,
+  items, itemHeight = 80, renderItem, loadMore, hasNextPage = false, isItemLoaded: _isItemLoaded = (index: number) => !!items[index],
+  threshold: _threshold = 15,
+  overscan: _overscan = 5,
+  estimatedItemSize: _estimatedItemSize = 80,
   className,
   onScroll,
-  initialScrollOffset = 0,
+  initialScrollOffset: _initialScrollOffset = 0,
   width = '100%',
   height = '100%'
 }: VirtualizedListProps<T>) {
-  const listRef = useRef<List>(_null)
-  const itemCount = hasNextPage ? items.length + 1 : items.length
+  const listRef = useRef<List>(null)
+  const _itemCount = hasNextPage ? items.length + 1 : items.length
   // Get item size - supports both fixed and variable heights
-  const getItemSize = useCallback((index: number) => {
+  const _getItemSize = useCallback((index: number) => {
     if (typeof itemHeight === 'function') {
-      return itemHeight(_index)
+      return itemHeight(index)
     }
     return itemHeight
-  }, [])
+  }, [itemHeight])
   // Memoize item data to prevent unnecessary re-renders
-  const itemData = useMemo(() => ({
+  const _itemData = useMemo(() => ({
     items,
     renderItem
   }), [items, renderItem])
   // Handle scroll events with throttling
-  const handleScroll = useCallback(({ scrollOffset }: { scrollOffset: number }) => {
-    if (_onScroll) {
-      onScroll(s_crollOffset)
+  const _handleScroll = useCallback(({ scrollOffset }: { scrollOffset: number }) => {
+    if (onScroll) {
+      onScroll(scrollOffset)
     }
-  }, [])
+  }, [onScroll])
   // Reset scroll position when items change significantly
-  const resetScroll = useCallback(() => {
+  const _resetScroll = useCallback(() => {
     listRef.current?.scrollToItem(0)
   }, [])
   // Scroll to specific item
-  const scrollToItem = useCallback((index: number, align: 'start' | 'center' | 'end' = 'start') => {
-    listRef.current?.scrollToItem(_index, align)
+  const _scrollToItem = useCallback((index: number, align: 'start' | 'center' | 'end' = 'start') => {
+    listRef.current?.scrollToItem(index, align)
   }, [])
   // Inner list component
-  const InnerList = useCallback(({ height, width }: { height: number; width: number }) => {
+  const InnerList = useCallback(({ height: _height, width: _width }: { height: number; width: number }) => {
     if (loadMore && hasNextPage) {
       return (<InfiniteLoader
           isItemLoaded={_isItemLoaded}
@@ -129,52 +129,15 @@ export function VirtualizedList<T>({
         {_Row}
       </List>
     )
-  }, [overscan, threshold])
+  }, [_estimatedItemSize, _getItemSize, _handleScroll, _initialScrollOffset, _isItemLoaded, _itemCount, _itemData, hasNextPage, loadMore, _overscan, _threshold])
   return (
     <div className={cn("w-full h-full", className)} style={{ width, height }}>
       <AutoSizer>
-        {(_height, width ) => (
-          <InnerList height={_height} width={_width} />
+        {({ height, width: _width }) => (
+          <InnerList height={height} width={_width} />
         )}
       </AutoSizer>
     </div>
   )
 }
 
-// Export utility functions
-export const VirtualizedListUtils = {
-  // Calculate optimal item height based on content
-  calculateItemHeight: (content: string, maxWidth: number, fontSize = 14): number => {
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d')
-    if (!context) return 80
-    context.font = `${_fontSize}px sans-serif`
-    const metrics = context.measureText(_content)
-    const lines = Math.ceil(metrics.width / maxWidth)
-    return Math.max(80, lines * (fontSize * 1.5) + 40); // padding
-  },
-
-  // Create index map for quick lookups
-  createIndexMap: <T extends { id: string }>(items: T[]): Map<string, number> => {
-    const map = new Map<string, number>()
-    items.forEach((_item, index) => {
-      map.set(item.id, index)
-    })
-    return map
-  },
-
-  // Binary search for sorted lists
-  binarySearch: <T,>(items: T[], target: T, compareFn: (a: T, b: T) => number): number => {
-    let left = 0
-    let right = items.length - 1
-    while (left <= right) {
-      const mid = Math.floor((left + right) / 2)
-      const comparison = compareFn(items[mid], target)
-      if (comparison === 0) return mid
-      if (comparison < 0) left = mid + 1
-      else right = mid - 1
-    }
-
-    return -1
-  }
-}

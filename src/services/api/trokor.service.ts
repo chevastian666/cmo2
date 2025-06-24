@@ -116,33 +116,28 @@ class TrokorService {
       // API Key de Trokor no configurada
     }
     
-    const url = new URL(buildTrokorUrl(_endpoint))
+    const url = new URL(buildTrokorUrl(endpoint))
     // Agregar parámetros de query
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          url.searchParams.append(_key, value.toString())
+          url.searchParams.append(key, value.toString())
         }
       })
     }
     
-    try {
-      const response = await fetch(url.toString(), {
-        method,
-        headers: getTrokorHeaders(),
-        body: body ? JSON.stringify(_body) : undefined
-      })
-      if (!response.ok) {
-        const error = await response.text()
-        // Trokor API error
-        throw new Error(`API Error: ${response.status}`)
-      }
-      
-      return await response.json()
-    } catch (error) {
-      // Error en petición a Trokor
-      throw error
+    const response = await fetch(url.toString(), {
+      method,
+      headers: getTrokorHeaders(),
+      body: body ? JSON.stringify(body) : undefined
+    })
+    if (!response.ok) {
+      await response.text()
+      // Trokor API error
+      throw new Error(`API Error: ${response.status}`)
     }
+    
+    return await response.json()
   }
   
   // ==================== TRÁNSITOS ====================
@@ -166,11 +161,12 @@ class TrokorService {
         params
       )
       // Transformar datos usando el adaptador
-      const transitos = response.map(data => TrokorAdapter.transitoPendienteFromAux(_data))
+      const transitos = response.map(data => TrokorAdapter.transitoPendienteFromAux(data))
       // Cachear por 30 segundos
       cacheService.set(cacheKey, transitos, 30000)
       return transitos
-    } catch {
+    } catch (error) {
+      console.error('Error getting transitos pendientes:', error)
       notificationService.error('Error al cargar tránsitos', 'No se pudo conectar con Trokor')
       return []
     }
@@ -214,7 +210,7 @@ class TrokorService {
         total: response.total
       }
     } catch (error) {
-      // Error al obtener tránsitos
+      console.error('Error getting transitos:', error)
       return { data: [], total: 0 }
     }
   }
@@ -268,7 +264,7 @@ class TrokorService {
       cacheService.set(cacheKey, precintosActivos, 15000)
       return precintosActivos
     } catch (error) {
-      // Error al obtener precintos activos
+      console.error('Error getting precintos activos:', error)
       notificationService.error('Error al cargar precintos', 'No se pudo conectar con Trokor')
       return []
     }
@@ -324,7 +320,7 @@ class TrokorService {
       cacheService.set(cacheKey, alertas, 10000)
       return alertas
     } catch (error) {
-      // Error al obtener alertas
+      console.error('Error getting alertas activas:', error)
       notificationService.error('Error al cargar alertas', 'No se pudo conectar con Trokor')
       return []
     }
@@ -342,14 +338,14 @@ class TrokorService {
     try {
       await this.request(
         'POST',
-        TROKOR_CONFIG.ENDPOINTS.ALARMA_VERIFICAR(_alertaId),
+        TROKOR_CONFIG.ENDPOINTS.ALARMA_VERIFICAR(alertaId),
         datos
       )
       // Limpiar caché de alertas
       cacheService.invalidatePattern('trokor:alertas')
       notificationService.success('Alerta verificada', 'La alerta ha sido procesada correctamente')
     } catch (error) {
-      // Error al verificar alerta
+      console.error('Error verificando alerta:', error)
       throw new Error('No se pudo verificar la alerta')
     }
   }
@@ -381,7 +377,7 @@ class TrokorService {
       cacheService.set(cacheKey, estadisticas, 60000)
       return estadisticas
     } catch (error) {
-      // Error al obtener estadísticas
+      console.error('Error getting estadisticas:', error)
       // Devolver valores por defecto
       return {
         precintosActivos: 0,
@@ -417,7 +413,7 @@ class TrokorService {
     try {
       await this.request('GET', TROKOR_CONFIG.ENDPOINTS.SYSTEM_HEALTH)
       return true
-    } catch (error) {
+    } catch {
       return false
     }
   }

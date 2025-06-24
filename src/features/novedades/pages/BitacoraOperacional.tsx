@@ -33,13 +33,39 @@ const TIPOS_BITACORA = {
   mantenimiento: { label: 'Mantenimiento', icon: Shield, color: 'text-orange-400 bg-orange-900/20' }
 } as const
 export const BitacoraOperacional: React.FC = () => {
-  const [showNuevaEntrada, setShowNuevaEntrada] = useState(_false)
+  const [_showNuevaEntrada, _setShowNuevaEntrada] = useState(false)
   const [filtroTipo, setFiltroTipo] = useState<string>('todos')
   const [filtroBusqueda, setFiltroBusqueda] = useState('')
-  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(_null)
-  const [fechaSeleccionada] = useState(new Date())
+  const [entradaSeleccionada, setEntradaSeleccionada] = useState<Novedad | null>(null)
+  const [_fechaSeleccionada] = useState(new Date())
+  const [novedades, setNovedades] = useState<Novedad[]>([])
+  const [loading, setLoading] = useState(true)
   const userInfo = useUserInfo()
-    useEffect(() => {
+  // Mock functions
+  const fetchNovedades = async () => {
+    try {
+      setLoading(true)
+      // TODO: Replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setNovedades([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  interface NovedadData {
+    titulo: string;
+    descripcion: string;
+    tipo: string;
+    prioridad: string;
+    // Add more fields as needed
+  }
+  const crearNovedad = async (_data: NovedadData) => {
+    // TODO: Implement actual creation
+    await fetchNovedades()
+  }
+
+  useEffect(() => {
     fetchNovedades()
   }, [])
   // Agrupar entradas por fecha
@@ -49,19 +75,19 @@ export const BitacoraOperacional: React.FC = () => {
       if (filtroBusqueda && !n.descripcion.toLowerCase().includes(filtroBusqueda.toLowerCase())) return false
       return true
     })
-    const grouped = filtered.reduce((_acc, novedad) => {
+    const grouped = filtered.reduce((acc, novedad) => {
       const fecha = new Date(novedad.fecha).toLocaleDateString('es-UY')
       if (!acc[fecha]) acc[fecha] = []
-      acc[fecha].push(_novedad)
+      acc[fecha].push(novedad)
       return acc
     }, {} as Record<string, Novedad[]>)
     // Ordenar por fecha más reciente
-    return Object.entries(_grouped).sort(([a], [b]) => {
+    return Object.entries(grouped).sort(([a], [b]) => {
       const dateA = new Date(a.split('/').reverse().join('-'))
       const dateB = new Date(b.split('/').reverse().join('-'))
       return dateB.getTime() - dateA.getTime()
     })
-  }, [novedades])
+  }, [novedades, filtroTipo, filtroBusqueda])
   const handleCrearEntrada = async (data: unknown) => {
     try {
       await crearNovedad({
@@ -70,7 +96,7 @@ export const BitacoraOperacional: React.FC = () => {
         puntoOperacion: userInfo.office || 'CMO Central',
         tipoNovedad: data.tipo
       })
-      setShowNuevaEntrada(_false)
+      setShowNuevaEntrada(false)
       notificationService.success('Entrada registrada', 'La entrada se ha agregado a la bitácora')
     } catch (_error) {
       notificationService.error('Error', 'No se pudo registrar la entrada')
@@ -85,7 +111,7 @@ export const BitacoraOperacional: React.FC = () => {
       'Punto Operación': n.puntoOperacion,
       Estado: n.estado
     }))
-    exportToCSV(_datos, `bitacora_${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(datos, `bitacora_${new Date().toISOString().split('T')[0]}`)
     notificationService.success('Exportación completada', 'La bitácora ha sido exportada')
   }
   return (<div className="min-h-screen bg-gray-950">
@@ -104,14 +130,14 @@ export const BitacoraOperacional: React.FC = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={_handleExportar}
+                onClick={handleExportar}
                 className="bg-gray-800 border-gray-700 hover:bg-gray-700"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
               <Button 
-                onClick={() => setShowNuevaEntrada(_true)}
+                onClick={() => setShowNuevaEntrada(true)}
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700"
               >
@@ -157,22 +183,22 @@ export const BitacoraOperacional: React.FC = () => {
                   <Label className="text-xs text-gray-400">Buscar</Label>
                   <Input
                     placeholder="Buscar en bitácora..."
-                    value={_filtroBusqueda}
-                    onChange={(_e) => setFiltroBusqueda(e.target.value)}
+                    value={filtroBusqueda}
+                    onChange={(e) => setFiltroBusqueda(e.target.value)}
                     className="mt-1 bg-gray-800 border-gray-700"
                   />
                 </div>
                 
                 <div>
                   <Label className="text-xs text-gray-400">Tipo de entrada</Label>
-                  <Select value={_filtroTipo} onValueChange={s_etFiltroTipo}>
+                  <Select value={filtroTipo} onValueChange={setFiltroTipo}>
                     <SelectTrigger className="mt-1 bg-gray-800 border-gray-700">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="todos">Todas las entradas</SelectItem>
-                      {Object.entries(_TIPOS_BITACORA).map(([key, tipo]) => (
-                        <SelectItem key={_key} value={_key}>
+                      {Object.entries(TIPOS_BITACORA).map(([key, tipo]) => (
+                        <SelectItem key={key} value={key}>
                           <div className="flex items-center gap-2">
                             <tipo.icon className="h-4 w-4" />
                             {tipo.label}
@@ -193,8 +219,8 @@ export const BitacoraOperacional: React.FC = () => {
               <CardContent>
                 {loading ? (
                   <div className="space-y-3">
-                    {Array.from({ length: 3 }).map((__, i) => (
-                      <div key={_i} className="flex justify-between items-center">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="flex justify-between items-center">
                         <Skeleton variant="text" width="80px" height="12px" />
                         <Skeleton variant="text" width="30px" height="14px" />
                       </div>
@@ -235,7 +261,7 @@ export const BitacoraOperacional: React.FC = () => {
                 {loading ? (
                   // Skeleton Loader
                   <>
-                    {Array.from({ length: 2 }).map((__, dateIndex) => (
+                    {Array.from({ length: 2 }).map((___, _dateIndex) => (
                       <div key={_dateIndex} className="space-y-4">
                         {/* Skeleton de fecha */}
                         <div className="flex items-center gap-4 sticky top-0 bg-gray-950 py-2 z-10">
@@ -248,7 +274,7 @@ export const BitacoraOperacional: React.FC = () => {
                         
                         {/* Skeleton de entradas */}
                         <div className="space-y-3">
-                          {Array.from({ length: 3 }).map((__, entryIndex) => (
+                          {Array.from({ length: 3 }).map((___, _entryIndex) => (
                             <Card key={_entryIndex} className="bg-gray-900 border-gray-800">
                               <CardContent className="p-4">
                                 <div className="flex items-start gap-4">
@@ -288,7 +314,7 @@ export const BitacoraOperacional: React.FC = () => {
                       <p className="text-gray-400">No hay entradas en la bitácora</p>
                     </CardContent>
                   </Card>
-                ) : (entradasPorFecha.map(([fecha, entradas]) => (<div key={_fecha} className="space-y-4">
+                ) : (entradasPorFecha.map(([_fecha, entradas]) => (<div key={_fecha} className="space-y-4">
                       {/* Separador de Fecha */}
                       <div className="flex items-center gap-4 sticky top-0 bg-gray-950 py-2 z-10">
                         <div className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-lg">
@@ -415,8 +441,8 @@ export const BitacoraOperacional: React.FC = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(_TIPOS_BITACORA).map(([key, tipo]) => (
-                        <SelectItem key={_key} value={_key}>
+                      {Object.entries(TIPOS_BITACORA).map(([key, tipo]) => (
+                        <SelectItem key={key} value={key}>
                           <div className="flex items-center gap-2">
                             <tipo.icon className="h-4 w-4" />
                             {tipo.label}

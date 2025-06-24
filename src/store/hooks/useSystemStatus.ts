@@ -1,4 +1,4 @@
-import {_useEffect} from 'react'
+import { useEffect } from 'react'
 import { useSystemStatusStore} from '../store'
 export const useSystemStatus = () => {
   const store = useSystemStatusStore()
@@ -7,7 +7,7 @@ export const useSystemStatus = () => {
     if (!store.estadisticas && !store.loading) {
       store.fetchEstadisticas()
     }
-  }, [store.estadisticas, store.loading, store.fetchEstadisticas])
+  }, [store])
   return {
     estadisticas: store.estadisticas,
     smsPendientes: store.smsPendientes,
@@ -15,7 +15,7 @@ export const useSystemStatus = () => {
     apiStats: store.apiStats,
     reportesPendientes: store.reportesPendientes,
     loading: store.loading,
-    error: store._error,
+    error: store.error,
     actions: {
       updateStatus: store.updateSystemStatus,
       refresh: store.fetchEstadisticas,
@@ -23,8 +23,8 @@ export const useSystemStatus = () => {
   }
 }
 export const useEstadisticas = () => {
-  const estadisticas = useSystemStatusStore((s_tate) => state.estadisticas)
-  const loading = useSystemStatusStore((s_tate) => state.loading)
+  const estadisticas = useSystemStatusStore((state) => state.estadisticas)
+  const loading = useSystemStatusStore((state) => state.loading)
   return {
     data: estadisticas,
     loading,

@@ -11,7 +11,7 @@ interface FichaCamioneroProps {
   onClose: () => void
 }
 
-export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose }) => {
+export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClose: _onClose }) => {
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   useEffect(() => {
@@ -192,8 +192,8 @@ export const FichaCamionero: React.FC<FichaCamioneroProps> = ({ documento, onClo
                   <div>
                     <p className="text-sm text-gray-400 mb-2">Rutas frecuentes</p>
                     <div className="space-y-2">
-                      {estadisticasCamionero.rutasFrecuentes.slice(0, 3).map((_ruta, idx) => (
-                        <div key={_idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                      {estadisticasCamionero.rutasFrecuentes.slice(0, 3).map((ruta, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                           <div className="flex items-center gap-2">
                             <Route className="h-4 w-4 text-gray-500" />
                             <span className="text-sm text-white">

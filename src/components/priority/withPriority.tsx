@@ -14,7 +14,7 @@ export function withPriority<P extends object>(Component: React.ComponentType<P>
         }, 5000);
 
         return () => {
-          clearTimeout(_timer);
+          clearTimeout(timer);
         };
       }
     }, [isActive]);

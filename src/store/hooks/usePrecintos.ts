@@ -1,4 +1,4 @@
-import {_useEffect} from 'react'
+import { useEffect } from 'react'
 import { usePrecintosStore} from '../store'
 export const usePrecintos = () => {
   const store = usePrecintosStore()
@@ -7,11 +7,11 @@ export const usePrecintos = () => {
     if (store.precintos.length === 0 && !store.loading) {
       store.fetchPrecintos()
     }
-  }, [store.precintos.length, store.loading, store.fetchPrecintos])
+  }, [store])
   return {
     precintos: store.precintos,
     loading: store.loading,
-    error: store._error,
+    error: store.error,
     actions: {
       updatePrecinto: store.updatePrecinto,
       removePrecinto: store.removePrecinto,
@@ -26,11 +26,11 @@ export const usePrecintosActivos = () => {
     if (store.precintosActivos.length === 0 && !store.loading) {
       store.fetchPrecintosActivos()
     }
-  }, [store.precintosActivos.length, store.loading, store.fetchPrecintosActivos])
+  }, [store])
   return {
     precintos: store.precintosActivos,
     loading: store.loading,
-    error: store._error,
+    error: store.error,
     actions: {
       updatePrecinto: store.updatePrecinto,
       refresh: store.fetchPrecintosActivos,
@@ -38,8 +38,8 @@ export const usePrecintosActivos = () => {
   }
 }
 export const usePrecinto = (id: string) => {
-  const precintos = usePrecintosStore((s_tate) => state.precintos)
-  const precinto = precintos.find((_p) => p.id === id)
+  const precintos = usePrecintosStore((state) => state.precintos)
+  const precinto = precintos.find((p) => p.id === id)
   return {
     precinto,
     found: !!precinto,

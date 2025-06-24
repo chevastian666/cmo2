@@ -10,7 +10,7 @@ import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/utils/utils'
 import { TreemapProps, TreemapNode, TreemapTooltipData} from './types'
 export const InteractiveTreemap: React.FC<TreemapProps> = ({
-  data, width = 800, height = 600, colorScheme = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'], valueFormat = (_v) => v.toLocaleString(),
+  data, width = 800, height = 600, colorScheme: _colorScheme = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#ef4444'], valueFormat = (v) => v.toLocaleString(),
   onNodeClick,
   onNodeHover,
   animated = true,
@@ -22,11 +22,12 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
   minZoom = 1,
   maxZoom = 100
 }) => {
-  const svgRef = useRef<SVGSVGElement>(_null)
-  const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(_null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [hoveredNode, setHoveredNode] = useState<TreemapTooltipData | null>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [breadcrumb, setBreadcrumb] = useState<string[]>(['Root'])
-  const [, setCurrentRoot] = useState<unknown>(_null);// Create color scale
+  const [, setCurrentRoot] = useState<unknown>(null)
+  // Create color scale
   const colorScale = useMemo(() => {
     const uniqueNames = new Set<string>()
     const extractNames = (node: TreemapNode) => {
@@ -34,35 +35,35 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         node.children.forEach(child => {
           if (child && child.name) {
             uniqueNames.add(child.name)
-            extractNames(_child)
+            extractNames(child)
           }
         })
       }
     }
     if (data && data.children) {
-      extractNames(_data)
+      extractNames(data)
     }
     
     return d3.scaleOrdinal<string>()
-      .domain(Array.from(_uniqueNames))
+      .domain(Array.from(uniqueNames))
       .range(_colorScheme)
-  }, [data])
+  }, [data, _colorScheme])
   // Build treemap layout
   const buildTreemap = useCallback(() => {
     if (!svgRef.current || !data || !data.children || data.children.length === 0) return
     // Clear previous content
     d3.select(svgRef.current).selectAll('*').remove()
     // Create hierarchy
-    const root = d3.hierarchy(_data)
+    const root = d3.hierarchy(data)
       .sum((d: unknown) => d.value || 0)
-      .sort((_a, b) => (b.value || 0) - (a.value || 0))
+      .sort((a, b) => (b.value || 0) - (a.value || 0))
     // Create treemap layout
     const treemapLayout = d3.treemap<TreemapNode>()
       .size([width, height])
       .paddingInner(2)
       .paddingOuter(4)
-      .round(_true)
-    treemapLayout(_root)
+      .round(true)
+    treemapLayout(root)
     // Create main SVG groups
     const svg = d3.select(svgRef.current)
     const defs = svg.append('defs')
@@ -81,10 +82,10 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
     // Create zoom behavior
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([minZoom, maxZoom])
-      .on('zoom', (_event) => {
+      .on('zoom', (event) => {
         g.attr('transform', event.transform.toString())
       })
-    svg.call(_zoom)
+    svg.call(zoom)
     const g = svg.append('g')
     // Draw cells
     const cell = g.selectAll('g')
@@ -105,10 +106,10 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .attr('opacity', animated ? 0 : 1)
       .attr('filter', 'url(#treemap-shadow)')
       .style('cursor', 'pointer')
-    if (_animated) {
+    if (animated) {
       rects.transition()
         .duration(750)
-        .delay((_d, i) => i * 10)
+        .delay((_, i) => i * 10)
         .attr('opacity', 1)
     }
 
@@ -136,16 +137,16 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .attr('font-size', '12px')
       .attr('fill', 'rgba(255, 255, 255, 0.8)')
       .text((d: unknown) => valueFormat(d.value))
-    if (_animated) {
+    if (animated) {
       labels.transition()
         .duration(750)
-        .delay((_d, i) => i * 10 + 100)
+        .delay((_, i) => i * 10 + 100)
         .attr('opacity', 1)
     }
 
     // Add interactivity
     cell
-      .on('click', function(_event, d: unknown) {
+      .on('click', function(event, d: unknown) {
         event.stopPropagation()
         // Zoom to node
         const bounds = [
@@ -164,22 +165,22 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
             zoom.transform as unknown,
             d3.zoomIdentity
               .translate(translate[0], translate[1])
-              .scale(s_cale)
+              .scale(scale)
           )
         // Update breadcrumb
         const path = d.ancestors().reverse().map((node: unknown) => node.data.name)
-        setBreadcrumb(_path)
-        if (_onNodeClick) {
+        setBreadcrumb(path)
+        if (onNodeClick) {
           onNodeClick(d.data, event)
         }
       })
-      .on('mouseenter', function(_event, d: unknown) {
+      .on('mouseenter', function(event, d: unknown) {
         // Highlight node
-        d3.select(_this).select('rect')
+        d3.select(this).select('rect')
           .transition()
           .duration(200)
           .attr('opacity', 0.8)
-        if (s_howTooltip) {
+        if (showTooltip) {
           const ancestors = d.ancestors().reverse()
           const path = ancestors.map((node: unknown) => node.data.name)
           const rootValue = ancestors[0].value || 1
@@ -193,22 +194,22 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
           setMousePosition({ x: event.pageX, y: event.pageY })
         }
 
-        if (_onNodeHover) {
+        if (onNodeHover) {
           onNodeHover(d.data, event)
         }
       })
-      .on('mousemove', function(_event) {
+      .on('mousemove', function(event) {
         setMousePosition({ x: event.pageX, y: event.pageY })
       })
-      .on('mouseleave', function(_event) {
+      .on('mouseleave', function() {
         // Remove highlight
-        d3.select(_this).select('rect')
+        d3.select(this).select('rect')
           .transition()
           .duration(200)
           .attr('opacity', 1)
-        setHoveredNode(_null)
-        if (_onNodeHover) {
-          onNodeHover(_null, event)
+        setHoveredNode(null)
+        if (onNodeHover) {
+          onNodeHover(null, event)
         }
       })
     // Reset zoom on background click
@@ -218,8 +219,8 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         .call(zoom.transform as unknown, d3.zoomIdentity)
       setBreadcrumb(['Root'])
     })
-    setCurrentRoot(_root)
-  }, [data, width, height, animated])
+    setCurrentRoot(root)
+  }, [data, width, height, animated, minZoom, maxZoom, colorScale, onNodeClick, onNodeHover, showTooltip, valueFormat])
     useEffect(() => {
     buildTreemap()
   }, [buildTreemap])
@@ -238,19 +239,19 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
     <div className={cn('relative', className)}>
       {/* Header */}
       {(title || subtitle || showBreadcrumb) && (<div className="mb-4">
-          {title && <h3 className="text-xl font-semibold text-gray-100">{_title}</h3>}
-          {subtitle && <p className="text-sm text-gray-400 mt-1">{s_ubtitle}</p>}
+          {title && <h3 className="text-xl font-semibold text-gray-100">{title}</h3>}
+          {subtitle && <p className="text-sm text-gray-400 mt-1">{subtitle}</p>}
           
           {showBreadcrumb && (
             <div className="flex items-center gap-2 mt-3 text-sm text-gray-400">
-              {breadcrumb.map((_crumb, index) => (
-                <React.Fragment key={_index}>
+              {breadcrumb.map((crumb, index) => (
+                <React.Fragment key={index}>
                   {index > 0 && <span>/</span>}
                   <span className={cn(
                     'cursor-pointer hover:text-gray-200 transition-colors',
                     index === breadcrumb.length - 1 && 'text-gray-200 font-medium'
                   )}>
-                    {_crumb}
+                    {crumb}
                   </span>
                 </React.Fragment>
               ))}
@@ -262,13 +263,13 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       {/* Treemap */}
       <div className="relative bg-gray-900 rounded-lg overflow-hidden">
         <svg
-          ref={s_vgRef}
-          width={_width}
-          height={_height}
+          ref={svgRef}
+          width={width}
+          height={height}
           className="treemap-chart"
           style={{ maxWidth: '100%', height: 'auto' }}
         >
-          <rect width={_width} height={_height} fill="transparent" />
+          <rect width={width} height={height} fill="transparent" />
         </svg>
 
         {/* Controls */}

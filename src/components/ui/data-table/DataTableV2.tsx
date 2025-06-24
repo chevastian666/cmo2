@@ -1,12 +1,23 @@
-import React, { useState, useMemo } from 'react'
-import {_ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from '@tanstack/react-table'
+import React, { useState } from 'react'
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import {
   DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ChevronDown, Search, ChevronLeft, ChevronRight} from 'lucide-react'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -19,11 +30,11 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTableV2<TData, TValue>({
-  columns, data, searchKey, searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
+  columns, data, searchKey, searchPlaceholder: _searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(__)
-  const [rowSelection, setRowSelection] = useState(__)
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
     data,

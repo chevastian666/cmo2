@@ -25,7 +25,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
   const handleChange = (field: keyof FiltersState, value: string) => {
     onChange({ ...filters, [field]: value })
   }
-  const handleReset = () => {
+  const _handleReset = () => {
     onChange({
       estado: '',
       fechaDesde: '',
@@ -147,7 +147,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             >
               <option value="">Todas</option>
               {empresas.map(empresa => (
-                <option key={_empresa} value={_empresa}>{_empresa}</option>
+                <option key={empresa} value={empresa}>{empresa}</option>
               ))}
             </select>
           </div>
@@ -167,7 +167,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             >
               <option value="">Todos</option>
               {ORIGENES_DESTINOS.map(lugar => (
-                <option key={_lugar} value={_lugar}>{_lugar}</option>
+                <option key={lugar} value={lugar}>{lugar}</option>
               ))}
             </select>
           </div>
@@ -187,7 +187,7 @@ export const TransitFilters: React.FC<TransitFiltersProps> = ({ filters, onChang
             >
               <option value="">Todos</option>
               {ORIGENES_DESTINOS.map(lugar => (
-                <option key={_lugar} value={_lugar}>{_lugar}</option>
+                <option key={lugar} value={lugar}>{lugar}</option>
               ))}
             </select>
           </div>

@@ -10,7 +10,7 @@ import { ActivityHeatmap} from './ActivityHeatmap'
 import { NetworkGraph} from './NetworkGraph'
 import { InteractiveTreemap} from './InteractiveTreemap'
 import { 
-  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG} from './types'
+  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG, NetworkNode, NetworkLink} from './types'
 type VisualizationType = 'line' | 'heatmap' | 'network' | 'treemap'
 interface D3VisualizationWidgetProps {
   type: VisualizationType
@@ -123,14 +123,14 @@ const generateTreemapData = (): TreemapNode => {
   }
 }
 export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
-  type, data: providedData, config: userConfig, title, className = '', onDataPointClick, onZoomChange, onNodeClick, onLinkClick
+  type, data: providedData, config: userConfig, title, className = ''
 }) => {
-  const [selectedType, setSelectedType] = useState<VisualizationType>(_type)
+  const [selectedType, setSelectedType] = useState<VisualizationType>(type)
   const config = { ...DEFAULT_CHART_CONFIG, ...userConfig }
   // Generate or use provided data
   const chartData = useMemo(() => {
-    if (_providedData) return providedData
-    switch (s_electedType) {
+    if (providedData) return providedData
+    switch (selectedType) {
       case 'line':
         return generateTimeSeriesData()
       case 'heatmap':
@@ -142,41 +142,35 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
       default:
         return []
     }
-  }, [selectedType, providedData])
+  }, [providedData, selectedType])
   const renderVisualization = () => {
-    switch (s_electedType) {
+    switch (selectedType) {
       case 'line':
         return (
           <InteractiveLineChart
-            data={_chartData}
-            config={_config}
-            onDataPointClick={_onDataPointClick}
-            onZoomChange={_onZoomChange}
+            data={chartData as TimeSeriesData[]}
+            config={config}
           />
         )
       case 'heatmap':
         return (
           <ActivityHeatmap
-            data={_chartData}
-            config={_config}
-            onCellClick={_onDataPointClick}
+            data={chartData as HeatmapData[]}
+            config={config}
           />
         )
       case 'network':
         return (
           <NetworkGraph
-            data={_chartData}
-            config={_config}
-            onNodeClick={_onNodeClick}
-            onLinkClick={_onLinkClick}
+            data={chartData as NetworkData}
+            config={config}
           />
         )
       case 'treemap':
         return (
           <InteractiveTreemap
-            data={_chartData}
-            config={_config}
-            onNodeClick={_onNodeClick}
+            data={chartData as TreemapNode}
+            config={config}
           />
         )
       default:
@@ -191,7 +185,7 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
     { key: 'network', label: 'Red de Conexiones', icon: '🕸️' },
     { key: 'treemap', label: 'Treemap', icon: '🗂️' }
   ]
-  return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${_className}`}>
+  return (<div className={`bg-gray-800 rounded-lg border border-gray-700 ${className}`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-between">
@@ -201,18 +195,18 @@ export const D3VisualizationWidget: React.FC<D3VisualizationWidgetProps> = ({
           
           {/* Type selector */}
           <div className="flex space-x-2">
-            {visualizationTypes.map((_key, label, icon ) => (<button
-                key={_key}
+            {visualizationTypes.map(({ key, label, icon }) => (<button
+                key={key}
                 onClick={() => setSelectedType(key as VisualizationType)}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
                   selectedType === key
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
-                title={_label}
+                title={label}
               >
-                <span className="mr-1">{_icon}</span>
-                {_label}
+                <span className="mr-1">{icon}</span>
+                {label}
               </button>
             ))}
           </div>

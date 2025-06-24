@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { Truck, AlertTriangle, CheckCircle, XCircle, Filter, Activity} from 'lucide-react'
+import { Truck, AlertTriangle, CheckCircle, XCircle, Activity} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { TransitoRow} from './TransitoRow'
 import { TransitoDetailModal} from './TransitoDetailModal'
@@ -27,7 +27,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   const [showFilters, setShowFilters] = useState(false)
   const [showCongestionPanel] = useState(true)
   const [lastUpdate, setLastUpdate] = useState(new Date())
-  const [lastCongestionNotification, setLastCongestionNotification] = useState<string[]>([])
+  const [_lastCongestionNotification] = useState<string[]>([])
   const [filters, setFilters] = useState({
     origen: '',
     destino: '',
@@ -157,7 +157,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
     fetchTransitos()
     const interval = setInterval(fetchTransitos, 10000)
     return () => clearInterval(interval)
-  }, [])
+  }, [fetchTransitos])
   // Filter transitos
   const filteredTransitos = transitos.filter(transito => {
     if (filters.origen && !transito.origen.toLowerCase().includes(filters.origen.toLowerCase())) {
@@ -181,7 +181,7 @@ export const TorreControl: React.FC<TorreControlProps> = ({ className }) => {
   const handleCloseModal = () => {
     setSelectedTransito(null)
   }
-  const getSemaforoIcon = (semaforo: EstadoSemaforo) => {
+  const _getSemaforoIcon = (semaforo: EstadoSemaforo) => {
     switch (semaforo) {
       case 'verde':
         return <CheckCircle className="h-6 w-6 text-green-500" />

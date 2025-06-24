@@ -1,4 +1,4 @@
-import {_useMemo} from 'react'
+import { useMemo } from 'react'
 import { useRolesStore} from '../store/rolesStore'
 import type { Section} from '../types/roles'
 interface AccessPermissions {
@@ -18,26 +18,24 @@ export function useAccess(section: Section, advanced?: true): boolean | AccessPe
   const canAccess = useRolesStore(state => state.canAccess)
   const permissions = useMemo(() => {
     if (!advanced) {
-      return canAccess(s_ection, 'view')
+      return canAccess(section, 'view')
     }
     
     return {
-      canView: canAccess(s_ection, 'view'),
-      canCreate: canAccess(s_ection, 'create'),
-      canEdit: canAccess(s_ection, 'edit'),
-      canDelete: canAccess(s_ection, 'delete'),
-      hasAccess: canAccess(s_ection, 'view')
+      canView: canAccess(section, 'view'),
+      canCreate: canAccess(section, 'create'),
+      canEdit: canAccess(section, 'edit'),
+      canDelete: canAccess(section, 'delete'),
+      hasAccess: canAccess(section, 'view')
     }
-  }, [section, advanced])
+  }, [section, advanced, canAccess])
   return permissions
 }
 
 // Hook to check access for a specific role (useful for preview mode)
 export function useAccessForRole(role: string, section: Section): AccessPermissions {
   const canAccessForRole = useRolesStore(state => state.canAccessForRole)
-  return
-
-    useMemo(() => ({
+  return useMemo(() => ({
     canView: canAccessForRole(role as unknown, section, 'view'),
     canCreate: canAccessForRole(role as unknown, section, 'create'),
     canEdit: canAccessForRole(role as unknown, section, 'edit'),

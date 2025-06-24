@@ -37,7 +37,7 @@ class PrecintosService {
       
       const response = await sharedApiService.request('GET', `${this.API_BASE}/${_id}`)
       return response.data
-    } catch {
+    } catch (error) {
       console.error('Error fetching precinto:', error)
       return null
     }
@@ -46,13 +46,13 @@ class PrecintosService {
   async updatePrecinto(id: string, data: Partial<Precinto>): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(_resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${_id}`, data)
+      const response = await sharedApiService.request('PUT', `${this.API_BASE}/${id}`, data)
       return response.data.success
-    } catch {
+    } catch (error) {
       console.error('Error updating precinto:', error)
       return false
     }
@@ -61,16 +61,16 @@ class PrecintosService {
   async assignPrecinto(id: string, empresaId: string, ubicacion: string): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(_resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('POST', `${this.API_BASE}/${_id}/assign`, {
+      const response = await sharedApiService.request('POST', `${this.API_BASE}/${id}/assign`, {
         empresaId,
         ubicacion
       })
       return response.data.success
-    } catch {
+    } catch (error) {
       console.error('Error assigning precinto:', error)
       return false
     }
@@ -79,16 +79,16 @@ class PrecintosService {
   async sendCommand(id: string, command: string, params?: unknown): Promise<boolean> {
     try {
       if (import.meta.env.DEV) {
-        await new Promise(resolve => setTimeout(_resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         return true
       }
       
-      const response = await sharedApiService.request('POST', `${this.API_BASE}/${_id}/command`, {
+      const response = await sharedApiService.request('POST', `${this.API_BASE}/${id}/command`, {
         command,
         params
       })
       return response.data.success
-    } catch {
+    } catch (error) {
       console.error('Error sending command:', error)
       return false
     }
@@ -139,7 +139,7 @@ class PrecintosService {
         status,
         bateria,
         ultimoReporte: this.generateTimeAgo(),
-        inicioReporte: this.generateTimeAgo(_true),
+        inicioReporte: this.generateTimeAgo(true),
         ubicacion: hasUbicacion ? ubicaciones[Math.floor(Math.random() * ubicaciones.length)] : undefined,
         eslinga: Math.random() > 0.5,
         asignadoTransito: status === PrecintoStatus.ARMADO ? `TR-${Math.floor(Math.random() * 9999).toString().padStart(5, '0')}` : undefined,
@@ -161,11 +161,11 @@ class PrecintosService {
     if (filters?.search) {
       const search = filters.search.toLowerCase()
       filtered = filtered.filter(p => 
-        p.id.includes(s_earch) ||
-        p.nserie.toLowerCase().includes(s_earch) ||
-        p.nqr.includes(s_earch) ||
-        p.telefono.includes(s_earch) ||
-        p.empresa?.toLowerCase().includes(s_earch)
+        p.id.includes(search) ||
+        p.nserie.toLowerCase().includes(search) ||
+        p.nqr.includes(search) ||
+        p.telefono.includes(search) ||
+        p.empresa?.toLowerCase().includes(search)
       )
     }
 
@@ -200,7 +200,7 @@ class PrecintosService {
     for (let i = ranges.length - 1; i >= 0; i--) {
       const value = Math.floor(randomMinutes / ranges[i])
       if (value > 0) {
-        return `${_value} ${units[i]}${value > 1 ? 's' : ''}`
+        return `${value} ${units[i]}${value > 1 ? 's' : ''}`
       }
     }
     
@@ -208,7 +208,7 @@ class PrecintosService {
   }
 
   async exportToCSV(filters?: PrecintoFilters): Promise<string> {
-    const precintos = await this.getPrecintos(_filters)
+    const precintos = await this.getPrecintos(filters)
     const headers = [
       'ID',
       'N° Serie',
@@ -237,7 +237,7 @@ class PrecintosService {
     ])
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${_cell}"`).join(','))
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n')
     return csv
   }

@@ -14,7 +14,7 @@ interface DepositoDetailModalProps {
 }
 
 export const DepositoDetailModal: React.FC<DepositoDetailModalProps> = ({
-  deposito, isOpen, onClose, onEdit
+  deposito, isOpen: _isOpen, onClose: _onClose, onEdit: _onEdit
 }) => {
   const getCapacidadColor = (capacidad: number) => {
     if (capacidad >= 80) return 'text-red-400'

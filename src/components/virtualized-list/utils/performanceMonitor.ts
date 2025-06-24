@@ -28,11 +28,11 @@ export class PerformanceMonitor {
    * Start FPS monitoring
    */
   private startFPSMonitoring(): void {
-    const measureFPS = (currentTime: number) => {
+    const _measureFPS = (currentTime: number) => {
       if (this.lastFrameTime) {
         const delta = currentTime - this.lastFrameTime
         const fps = 1000 / delta
-        this.fpsHistory.push(_fps)
+        this.fpsHistory.push(fps)
         if (this.fpsHistory.length > this.maxHistorySize) {
           this.fpsHistory.shift()
         }
@@ -64,7 +64,7 @@ export class PerformanceMonitor {
    * Measure scroll latency
    */
   measureScrollLatency(latency: number): void {
-    this.scrollLatencies.push(_latency)
+    this.scrollLatencies.push(latency)
     if (this.scrollLatencies.length > this.maxHistorySize) {
       this.scrollLatencies.shift()
     }
@@ -91,7 +91,7 @@ export class PerformanceMonitor {
    */
   private getAverageFPS(): number {
     if (this.fpsHistory.length === 0) return 60
-    const sum = this.fpsHistory.reduce((_a, b) => a + b, 0)
+    const sum = this.fpsHistory.reduce((a, b) => a + b, 0)
     return Math.round(sum / this.fpsHistory.length)
   }
 
@@ -100,7 +100,7 @@ export class PerformanceMonitor {
    */
   private getAverageRenderTime(): number {
     if (this.renderTimes.length === 0) return 0
-    const sum = this.renderTimes.reduce((_a, b) => a + b, 0)
+    const sum = this.renderTimes.reduce((a, b) => a + b, 0)
     return sum / this.renderTimes.length
   }
 
@@ -109,7 +109,7 @@ export class PerformanceMonitor {
    */
   private getAverageScrollLatency(): number {
     if (this.scrollLatencies.length === 0) return 0
-    const sum = this.scrollLatencies.reduce((_a, b) => a + b, 0)
+    const sum = this.scrollLatencies.reduce((a, b) => a + b, 0)
     return sum / this.scrollLatencies.length
   }
 
@@ -237,7 +237,7 @@ export class PerformanceOptimizer {
           scrollThrottleMs: Math.min(100, config.performance.scrollThrottleMs * 2)
         }
       }
-      updateConfig(_optimizedConfig)
+      updateConfig(optimizedConfig)
       this.optimizationApplied = true
       console.log('Auto-applied performance optimizations', optimizedConfig)
       return true
@@ -260,21 +260,21 @@ export class PerformanceOptimizer {
 export const performanceDebug = {
   mark(name: string): void {
     if (typeof performance !== 'undefined') {
-      performance.mark(_name)
+      performance.mark(name)
     }
   },
 
   measure(name: string, startMark: string, endMark?: string): number {
     if (typeof performance !== 'undefined') {
-      const end = endMark || `${s_tartMark}-end`
-      performance.mark(_end)
-      performance.measure(_name, startMark, end)
-      const entries = performance.getEntriesByName(_name, 'measure')
+      const end = endMark || `${startMark}-end`
+      performance.mark(end)
+      performance.measure(name, startMark, end)
+      const entries = performance.getEntriesByName(name, 'measure')
       const duration = entries[entries.length - 1]?.duration || 0
       // Cleanup
-      performance.clearMarks(s_tartMark)
-      performance.clearMarks(_end)
-      performance.clearMeasures(_name)
+      performance.clearMarks(startMark)
+      performance.clearMarks(end)
+      performance.clearMeasures(name)
       return duration
     }
     return 0
@@ -284,7 +284,7 @@ export const performanceDebug = {
     const start = performance.now()
     const result = fn()
     const duration = performance.now() - start
-    console.log(`[Performance] ${_name}: ${duration.toFixed(2)}ms`)
+    console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`)
     return result
   }
 }

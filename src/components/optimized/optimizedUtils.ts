@@ -11,13 +11,13 @@ export interface OptimizationOptions {
 }
 
 export function useOptimizedData<T>(data: T[], options?: OptimizationOptions): T[] {
-  const deps = options?.dependencies || [];
+  const _deps = options?.dependencies || [];
   
   return useMemo(() => {
     let result = [...data];
     
     if (options?.sortBy) {
-      result = result.sort((_a, b) => {
+      result = result.sort((a, b) => {
         const aVal = (a as Record<string, unknown>)[options.sortBy!];
         const bVal = (b as Record<string, unknown>)[options.sortBy!];
         return aVal > bVal ? 1 : -1;
@@ -35,18 +35,18 @@ export function useOptimizedData<T>(data: T[], options?: OptimizationOptions): T
     }
     
     return result;
-  }, [data, options?.sortBy, options?.filterBy?.key, options?.filterBy?.value, options?.limit, ...deps]);
+  }, [data, options?.sortBy, options?.filterBy, options?.limit]);
 }
 
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let _timeout: NodeJS.Timeout | null = null;
   
   return (...args: Parameters<T>) => {
     if (_timeout) clearTimeout(_timeout);
-    timeout = setTimeout(() => func(...args), wait);
+    _timeout = setTimeout(() => func(...args), wait);
   };
 }
 

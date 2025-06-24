@@ -10,7 +10,7 @@ import { TransitosPendientesWrapper} from '../../transitos'
 import { AlertsList} from '../../alertas'
 import { RealtimeIndicator} from './RealtimeIndicator'
 import { KPICards} from './KPICards'
-import {_NotificationSettings} from '../../../components/ui/NotificationSettings'
+import {NotificationSettings} from '../../../components/ui/NotificationSettings'
 import { RefreshCw} from 'lucide-react'
 import './dashboard.css'
 import { DataTransition} from '../../../components/animations/DataTransition'
@@ -24,7 +24,7 @@ export const Dashboard: React.FC = memo(() => {
   const { loading: loadingAlertas, actions: alertasActions } = useAlertasActivas()
   const { loading: loadingTransitos, actions: transitosActions } = useTransitosPendientes()
   const [lastUpdate, setLastUpdate] = useState(new Date())
-  const [isRefreshing, setIsRefreshing] = useState(_false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(60)
   // Función para mostrar notificaciones suaves
   const showNotification = useCallback((type: 'success' | 'error') => {
@@ -39,7 +39,7 @@ export const Dashboard: React.FC = memo(() => {
     // Iniciar con opacidad 0 y desplazado hacia abajo
     notification.style.opacity = '0'
     notification.style.transform = 'translateY(1rem)'
-    document.body.appendChild(_notification)
+    document.body.appendChild(notification)
     // Animar entrada
     requestAnimationFrame(() => {
       notification.style.opacity = '1'
@@ -77,7 +77,7 @@ export const Dashboard: React.FC = memo(() => {
     if (isRefreshing) return
     setIsRefreshing(true)
     await smoothRefresh()
-  }, [])
+  }, [smoothRefresh, isRefreshing])
   // Auto-refresh cada 60 segundos
 
     useEffect(() => {
@@ -100,7 +100,7 @@ export const Dashboard: React.FC = memo(() => {
     }
   }, [refreshData])
   // Solo mostrar skeleton en la carga inicial
-  const isInitialLoading = !estadisticas && !precintos && !transitos && (loadingStatus || loadingPrecintos || loadingTransitos || loadingAlertas)
+  const isInitialLoading = loadingStatus && loadingPrecintos && loadingTransitos && loadingAlertas
   // Show skeleton only on initial load
   if (isInitialLoading) {
     return (
@@ -176,19 +176,19 @@ export const Dashboard: React.FC = memo(() => {
         </div>
         
         {/* Tránsitos Pendientes en LUCIA - PRIORIDAD MÁXIMA */}
-        <DataTransition dataKey={transitos.length}>
-          <TransitosPendientesWrapper transitos={_transitos} />
+        <DataTransition dataKey="transitos">
+          <TransitosPendientesWrapper />
         </DataTransition>
 
         {/* Grid con Precintos Activos y Alertas Activas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <DataTransition dataKey={precintos?.length}>
-              <PrecintosActivosTable precintos={_precintos} />
+            <DataTransition dataKey="precintos">
+              <PrecintosActivosTable />
             </DataTransition>
           </div>
           <div>
-            <DataTransition dataKey={alertas?.length}>
+            <DataTransition dataKey="alertas">
               <AlertsList />
             </DataTransition>
           </div>
@@ -198,17 +198,12 @@ export const Dashboard: React.FC = memo(() => {
       {/* SECCIÓN SECUNDARIA - KPIs y Estado del Sistema */}
       <div className="mt-8 space-y-6">
         {/* KPI Cards */}
-        <DataTransition dataKey={`${transitos.length}-${alertas.length}`}>
-          <KPICards transitos={_transitos} alertas={_alertas} />
+        <DataTransition dataKey="kpis">
+          <KPICards />
         </DataTransition>
 
-        <DataTransition dataKey={`${s_msPendientes}-${_reportesPendientes}`}>
-          <SystemStatusCard
-            smsPendientes={s_msPendientes}
-            dbStats={_dbStats}
-            apiStats={_apiStats}
-            reportesPendientes={_reportesPendientes}
-          />
+        <DataTransition dataKey="status">
+          <SystemStatusCard />
         </DataTransition>
       </div>
     </div>

@@ -25,7 +25,7 @@ interface TreemapAlert {
 
 export const AlertasTreemap: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const alertas: TreemapAlert[] = []
+  const alertas = useMemo<TreemapAlert[]>(() => [], [])
   
   const [groupBy, setGroupBy] = useState<'severity' | 'source' | 'time'>('severity')
   const treemapData = useMemo(() => {

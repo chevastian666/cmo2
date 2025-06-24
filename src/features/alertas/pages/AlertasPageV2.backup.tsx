@@ -6,9 +6,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAlertasStore } from '../../../store/hooks/useAlertas'
-import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, Filter, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react'
+import { AlertTriangle, Shield, TrendingUp, Clock, Users, History, Bell, BellOff, RefreshCw, User, XCircle, CheckCircle2, AlertCircle, Zap} from 'lucide-react'
 import { Input} from '@/components/ui/input'
-import {_Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
 import { Progress} from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
@@ -18,7 +18,7 @@ import { AnimatedCard, AnimatedButton, AnimatedBadge, AnimatedSkeleton, Animated
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/utils/utils'
 import type { Alerta} from '@/types'
-import { fadeInUp} from '@/components/animations/AnimationPresets'
+import { fadeInUp } from '@/components/animations/AnimationPresets'
 import { HistorialAlertasCriticasModal} from '../components/HistorialAlertasCriticasModal'
 import { VerificarAlertaModalV2} from '../components/VerificarAlertaModalV2'
 import { VerificarButton, VerificadoBadge} from '../components/VerificarButton'
@@ -31,16 +31,16 @@ const KPICard: React.FC<{
   trend?: number
   subtitle?: string
   onClick?: () => void
-}> = (_title, value, icon, color, trend, subtitle, onClick ) => (
+}> = ({ title, value, icon, color, trend, subtitle, onClick }) => (
   <AnimatedCard 
     className={cn("relative overflow-hidden cursor-pointer", onClick && "hover:shadow-lg")}
     whileHover={{ scale: 1.02, y: -2 }}
     whileTap={onClick ? { scale: 0.98 } : {}}
-    onClick={_onClick}
+    onClick={onClick}
   >
     <CardHeader className="pb-2">
       <div className="flex items-center justify-between">
-        <CardDescription className="text-sm font-medium">{_title}</CardDescription>
+        <CardDescription className="text-sm font-medium">{title}</CardDescription>
         <motion.div 
           className={cn("p-2 rounded-lg", color)}
           animate={{
@@ -66,10 +66,10 @@ const KPICard: React.FC<{
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            {_value}
+            {value}
           </motion.div>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{s_ubtitle}</p>
+            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
           )}
         </div>
         {trend !== undefined && (
@@ -77,7 +77,7 @@ const KPICard: React.FC<{
             variant={trend > 0 ? "danger" : "success"}
             className="mb-1"
           >
-            {trend > 0 ? '+' : ''}{Math.abs(_trend)}%
+            {trend > 0 ? '+' : ''}{Math.abs(trend)}%
           </AnimatedBadge>
         )}
       </div>
@@ -108,7 +108,7 @@ const AlertRow: React.FC<{
   index: number
 }> = ({ alerta, onVerificar, index }) => {
   const getSeveridadInfo = (severidad: string) => {
-    switch (s_everidad) {
+    switch (severidad) {
       case 'critica':
         return { color: 'danger', icon: <XCircle className="h-4 w-4" />, pulse: true }
       case 'alta':
@@ -137,11 +137,11 @@ const AlertRow: React.FC<{
 
   return (
     <motion.tr
-      variants={_fadeInUp}
+      variants={fadeInUp}
       initial="initial"
       animate="animate"
       exit="exit"
-      custom={_index}
+      custom={index}
       className={cn(
         "border-b border-gray-700 transition-all duration-200 group",
         alerta.atendida ? "opacity-60" : "hover:bg-gray-800/50",
@@ -229,7 +229,7 @@ const AlertRow: React.FC<{
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center justify-end">
           {!alerta.atendida ? (<VerificarButton
-              onClick={() => onVerificar(_alerta)}
+              onClick={() => onVerificar(alerta)}
               variant="gradient"
               size="md"
             />
@@ -252,7 +252,7 @@ const StatCard: React.FC<{
   value: number
   total: number
   color: string
-}> = ({ icon, label, value, total, color }) => {
+}> = ({ icon, _label, value, total, color }) => {
   const percentage = total > 0 ? (value / total) * 100 : 0
   return (
     <AnimatedDiv className="bg-gray-800/50 rounded-lg p-4">
@@ -263,15 +263,15 @@ const StatCard: React.FC<{
           </div>
           <span className="text-sm text-gray-400">{_label}</span>
         </div>
-        <span className="text-lg font-semibold">{_value}</span>
+        <span className="text-lg font-semibold">{value}</span>
       </div>
-      <Progress value={_percentage} className="h-2" />
+      <Progress value={percentage} className="h-2" />
       <p className="text-xs text-gray-500 mt-1">{percentage.toFixed(1)}% del total</p>
     </AnimatedDiv>
   )
 }
 const AlertasPageV2: React.FC = () => {
-  const { alertas, alertasActivas, loading, error, filter, actions } = useAlertasStore()
+  const { alertas, alertasActivas, loading, _error, filter, actions } = useAlertasStore()
   const { fetchAlertas, fetchAlertasActivas, atenderAlerta } = actions
   
   const [showHistorialModal, setShowHistorialModal] = useState(false)

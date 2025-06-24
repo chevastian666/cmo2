@@ -172,7 +172,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   const accessMap: Record<string, boolean> = {}
   
   // Get unique sections
-  const uniqueSections = Array.from(new Set(allNavItems.filter(item => item.section).map(item => item.section!)))
+  const _uniqueSections = Array.from(new Set(allNavItems.filter(item => item.section).map(item => item.section!)))
   
   // Call useAccess hooks for known sections (must be called unconditionally)
   const alertasAccess = useAccess('alertas')

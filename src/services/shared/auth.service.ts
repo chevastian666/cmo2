@@ -5,7 +5,7 @@
 
 import { sharedApiService} from './sharedApi.service'
 import { sharedStateService} from './sharedState.service'
-import { SHARED_CONFIG, hasRole} from '../../config/shared.config'
+import { SHARED_CONFIG} from '../../config/shared.config'
 import { jwtService} from '../jwt.service'
 import type { Usuario} from '../../types'
 import type { LoginResponse} from '../../types/jwt'
@@ -32,7 +32,7 @@ class AuthService {
   // Check current authentication status
   async checkAuth(): Promise<boolean> {
     const token = jwtService.getAccessToken()
-    if (!token || jwtService.isTokenExpired(_token)) {
+    if (!token || jwtService.isTokenExpired(token)) {
       this.notifyListeners({
         user: null,
         isAuthenticated: false,
@@ -44,8 +44,8 @@ class AuthService {
 
     try {
       // Get user from token
-      const userFromToken = jwtService.getUserFromToken(_token)
-      if (_userFromToken) {
+      const userFromToken = jwtService.getUserFromToken(token)
+      if (userFromToken) {
         // Optionally verify with server
         const user = await sharedApiService.getCurrentUser()
         if (_user) {
@@ -179,9 +179,9 @@ class AuthService {
     
     // Fallback to localStorage
     const stored = localStorage.getItem(SHARED_CONFIG.AUTH_USER_KEY)
-    if (s_tored) {
+    if (stored) {
       try {
-        return JSON.parse(s_tored)
+        return JSON.parse(stored)
       } catch {
         return null
       }
@@ -201,12 +201,12 @@ class AuthService {
 
   // Check if user has required role(_s)
   hasRole(requiredRoles: string | string[]): boolean {
-    return jwtService.hasRole(_requiredRoles)
+    return jwtService.hasRole(requiredRoles)
   }
 
   // Check if user has specific permission
   hasPermission(permission: string): boolean {
-    return jwtService.hasPermission(_permission)
+    return jwtService.hasPermission(permission)
   }
 
   // Check if user has access to CMO panel
@@ -239,15 +239,15 @@ class AuthService {
       isLoading: false,
       error: null
     })
-    return () => this.listeners.delete(_listener)
+    return () => this.listeners.delete(listener)
   }
 
   // Private methods
   private notifyListeners(state: AuthState): void {
     this.listeners.forEach(listener => {
       try {
-        listener(s_tate)
-      } catch (_error) {
+        listener(state)
+      } catch (error) {
         console.error('Error in auth listener:', error)
       }
     })

@@ -1,5 +1,5 @@
 export function formatNumber(num: number): string {
-  return new Intl.NumberFormat('es-UY').format(_num)
+  return new Intl.NumberFormat('es-UY').format(num)
 }
 
 export function formatTime24h(timestamp: number): string {
@@ -46,26 +46,26 @@ export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
-  const i = Math.floor(Math.log(_bytes) / Math.log(_k))
-  return parseFloat((bytes / Math.pow(_k, i)).toFixed(2)) + ' ' + sizes[i]
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
 export function formatDuration(seconds: number): string {
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   if (hours > 0) {
-    return `${_hours}h ${_minutes}m`
+    return `${hours}h ${minutes}m`
   }
-  return `${_minutes}m`
+  return `${minutes}m`
 }
 
 export function formatPercentage(value: number, decimals: number = 1): string {
-  return `${value.toFixed(_decimals)}%`
+  return `${value.toFixed(decimals)}%`
 }
 
 export function formatCurrency(value: number, currency: string = 'UYU'): string {
   return new Intl.NumberFormat('es-UY', {
     style: 'currency',
     currency: currency
-  }).format(_value)
+  }).format(value)
 }

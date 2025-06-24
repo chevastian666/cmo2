@@ -1,6 +1,6 @@
  
-import React, { useEffect, useState } from 'react'
-import {_Activity, Zap, Clock, TrendingUp} from 'lucide-react'
+import React, { useEffect, useState, Profiler, ProfilerOnRenderCallback } from 'react'
+import { Zap, Clock, TrendingUp, Activity} from 'lucide-react'
 interface RenderMetric {
   id: string
   phase: 'mount' | 'update'
@@ -35,7 +35,7 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
     let frameCount = 0
     let lastTime = performance.now()
     let rafId: number
-    const measureFPS = () => {
+    const _measureFPS = () => {
       frameCount++
       const currentTime = performance.now()
       if (currentTime >= lastTime + 1000) {
@@ -48,28 +48,28 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
       rafId = requestAnimationFrame(_measureFPS)
     }
     rafId = requestAnimationFrame(_measureFPS)
-    return () => cancelAnimationFrame(_rafId)
+    return () => cancelAnimationFrame(rafId)
   }, [])
   // Memory monitoring
 
   useEffect(() => {
-    const measureMemory = () => {
+    const _measureMemory = () => {
       if ('memory' in performance && (performance as unknown).memory) {
         const memory = (performance as unknown).memory
         const usedMB = Math.round(memory.usedJSHeapSize / 1048576)
         setStats(prev => ({ ...prev, memoryUsage: usedMB }))
       }
     }
-    const interval = setInterval(_measureMemory, 2000)
+    const _interval = setInterval(_measureMemory, 2000)
     return () => clearInterval(_interval)
   }, [])
   // onRender callback removed - not currently used
   // Could be reactivated when wrapping components with React.Profiler
 
   if (!show) return null
-  const fpsColor = stats.fps >= 55 ? 'text-green-400' : 
+  const _fpsColor = stats.fps >= 55 ? 'text-green-400' : 
                    stats.fps >= 30 ? 'text-yellow-400' : 'text-red-400'
-  const renderTimeColor = stats.avgRenderTime <= 16 ? 'text-green-400' :
+  const _renderTimeColor = stats.avgRenderTime <= 16 ? 'text-green-400' :
                          stats.avgRenderTime <= 33 ? 'text-yellow-400' : 'text-red-400'
   return (
     <div className="fixed bottom-4 left-4 bg-gray-900/95 backdrop-blur border border-gray-800 rounded-lg p-4 shadow-lg z-50 min-w-[300px]">
@@ -133,15 +133,15 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
           <TrendingUp className="h-3 w-3 text-gray-400" />
         </div>
         <div className="flex gap-px h-8">
-          {metrics.slice(-30).map((_metric, i) => {
+          {metrics.slice(-30).map((metric, i) => {
             const height = Math.min(100, (metric.actualDuration / 33) * 100)
             const color = metric.actualDuration <= 16 ? 'bg-green-500' :
                          metric.actualDuration <= 33 ? 'bg-yellow-500' : 'bg-red-500'
             return (
               <div
-                key={_i}
-                className={`flex-1 ${_color} opacity-70 transition-all`}
-                style={{ height: `${_height}%`, alignSelf: 'flex-end' }}
+                key={i}
+                className={`flex-1 ${color} opacity-70 transition-all`}
+                style={{ height: `${height}%`, alignSelf: 'flex-end' }}
                 title={`${metric.actualDuration.toFixed(2)}ms`}
               />
             )
@@ -161,8 +161,8 @@ interface ProfiledComponentProps {
 export const ProfiledComponent: React.FC<ProfiledComponentProps> = ({ 
   id, children, onRender 
 }) => {
-  return (<Profiler id={_id} onRender={onRender || (() => {})}>
-      {_children}
+  return (<Profiler id={id} onRender={onRender || (() => {})}>
+      {children}
     </Profiler>
   )
 }

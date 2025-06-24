@@ -8,7 +8,7 @@ import type { StateCreator} from 'zustand'
 import type { PrecintosStore} from '../types'
 import { precintosService} from '../../services'
 import { generateMockPrecinto} from '../../utils/mockData'
-export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
+export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => ({
   // State
   precintos: [],
   precintosActivos: [],
@@ -23,7 +23,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
 
   // Computed Properties (_getters)
   get filteredPrecintos() {
-    
+    const { precintos, filters } = get()
     return precintos.filter(precinto => {
       const matchesSearch = !filters.search || 
         precinto.codigo.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -35,7 +35,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
   },
 
   get precintosStats() {
-    
+    const { precintosActivos } = get()
     return {
       total: precintosActivos.length,
       enTransito: precintosActivos.filter(p => p.estado === 1).length,
@@ -46,84 +46,84 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
   },
 
   // Actions with Immer patterns (handled by middleware)
-  setPrecintos: (_precintos) => set((s_tate) => {
+  setPrecintos: (precintos) => set((state) => {
     state.precintos = precintos
     state.lastUpdate = Date.now()
     state.error = null
   }),
   
-  setPrecintosActivos: (_precintosActivos) => set((s_tate) => {
+  setPrecintosActivos: (precintosActivos) => set((state) => {
     state.precintosActivos = precintosActivos
     state.lastUpdate = Date.now()
     state.error = null
   }),
   
-  updatePrecinto: (_id, data) => set((s_tate) => {
+  updatePrecinto: (id, data) => set((state) => {
     const updateItem = (item: unknown) => item.id === id ? { ...item, ...data } : item
-    state.precintos = state.precintos.map(_updateItem)
-    state.precintosActivos = state.precintosActivos.map(_updateItem)
+    state.precintos = state.precintos.map(updateItem)
+    state.precintosActivos = state.precintosActivos.map(updateItem)
     state.lastUpdate = Date.now()
   }),
   
-  removePrecinto: (_id) => set((s_tate) => {
+  removePrecinto: (id) => set((state) => {
     state.precintos = state.precintos.filter(p => p.id !== id)
     state.precintosActivos = state.precintosActivos.filter(p => p.id !== id)
     state.lastUpdate = Date.now()
   }),
 
-  setFilters: (_filters) => set((s_tate) => {
+  setFilters: (filters) => set((state) => {
     state.filters = { ...state.filters, ...filters }
   }),
 
-  clearFilters: () => set((s_tate) => {
+  clearFilters: () => set((state) => {
     state.filters = { search: '', estado: '', tipo: '' }
   }),
   
-  setLoading: (_loading) => set({ loading }),
+  setLoading: (loading) => set({ loading }),
   
-  setError: (_error) => set({ error }),
+  setError: (error) => set({ error }),
   
   // Async Actions
   fetchPrecintos: async () => {
-
-    setLoading(_true)
-    setError(_null)
+    const { setLoading, setError, setPrecintos } = get()
+    setLoading(true)
+    setError(null)
     try {
       const data = await precintosService.getAll()
-      setPrecintos(_data)
+      setPrecintos(data)
       return data
     } catch {
       // En desarrollo, usar datos mock
-      const mockData = Array.from({ length: 20 }, (__, i) => generateMockPrecinto(_i))
-      setPrecintos(_mockData)
-      console.warn('Using mock data for precintos:', _error)
+      const mockData = Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
+      setPrecintos(mockData)
+      console.warn('Using mock data for precintos:', error)
       return mockData
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   },
   
   fetchPrecintosActivos: async () => {
-
-    setLoading(_true)
-    setError(_null)
+    const { setLoading, setError, setPrecintosActivos } = get()
+    setLoading(true)
+    setError(null)
     try {
       const data = await precintosService.getActivos()
-      setPrecintosActivos(_data)
+      setPrecintosActivos(data)
       return data
     } catch {
       // En desarrollo, usar datos mock
-      const mockData = Array.from({ length: 10 }, (__, i) => generateMockPrecinto(_i))
-      setPrecintosActivos(_mockData)
-      console.warn('Using mock data for precintos activos:', _error)
+      const mockData = Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
+      setPrecintosActivos(mockData)
+      console.warn('Using mock data for precintos activos:', error)
       return mockData
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   },
 
   // Batch operations
-  batchUpdatePrecintos: (updates: Array<{ id: string; data: unknown }>) => set((s_tate) => {
+  batchUpdatePrecintos: (updates: Array<{ id: string; data: unknown }>) => set((state) => {
     updates.forEach(({ id, data }) => {
       const index = state.precintos.findIndex(p => p.id === id)
       if (index !== -1) {
@@ -139,7 +139,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
   }),
 
   // Reset store
-  reset: () => set((s_tate) => {
+  reset: () => set((state) => {
     state.precintos = []
     state.precintosActivos = []
     state.loading = false
@@ -150,12 +150,12 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (s_et) => ({
 
   // Legacy computed properties
   getPrecintosConAlertas: () => {
-
+    const { precintosActivos } = get()
     return precintosActivos.filter(p => p.estado === 3)
   },
 
   getPrecintosBajaBateria: () => {
-
+    const { precintosActivos } = get()
     return precintosActivos.filter(p => p.bateria && p.bateria < 20)
   }
 })

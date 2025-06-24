@@ -10,9 +10,21 @@ import { ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group'
 import { MapPin, Truck, Clock } from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import { transformTransitsByRoute, createHierarchy, transformByTimePeriod} from '@/components/charts/treemap/utils/dataTransformers'
+
+interface MockTransito {
+  id: string;
+  ruta?: string;
+  origen?: string;
+  destino?: string;
+  fechaInicio?: Date | string;
+  estado?: string;
+  retraso?: number;
+  // Add other transito properties as needed
+}
+
 export const TransitosTreemap: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const transitos: any[] = []
+  const transitos = useMemo<MockTransito[]>(() => [], [])
   
   const [viewMode, setViewMode] = useState<'routes' | 'timeline' | 'delays'>('routes')
   const treemapData = useMemo(() => {

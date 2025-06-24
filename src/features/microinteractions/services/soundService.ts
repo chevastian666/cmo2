@@ -32,8 +32,8 @@ class ASMRSoundService {
   private initializeAudioContext() {
     try {
       this.audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)()
-    } catch {
-      console.warn('Web Audio API not supported:', _error)
+    } catch (error) {
+      console.warn('Web Audio API not supported:', error)
     }
   }
 
@@ -48,17 +48,17 @@ class ASMRSoundService {
 
     for (const [name, path] of Object.entries(this.soundPaths)) {
       try {
-        const response = await fetch(_path)
+        const response = await fetch(path)
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`)
         }
         const arrayBuffer = await response.arrayBuffer()
-        const audioBuffer = await this.audioContext.decodeAudioData(_arrayBuffer)
-        this.sounds.set(_name, audioBuffer)
-      } catch {
+        const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer)
+        this.sounds.set(name, audioBuffer)
+      } catch (error) {
         // Silently fail in production, only log in development
         if (process.env.NODE_ENV === 'development') {
-          console.debug(`Sound ${_name} not available`)
+          console.debug(`Sound ${name} not available:`, error)
         }
       }
     }
@@ -66,22 +66,22 @@ class ASMRSoundService {
 
   private loadConfig() {
     const savedConfig = localStorage.getItem('asmr-sound-config')
-    if (s_avedConfig) {
-      this.config = { ...this._config, ...JSON.parse(s_avedConfig) }
+    if (savedConfig) {
+      this.config = { ...this.config, ...JSON.parse(savedConfig) }
     }
 
     // Check system preference
     if (this.config.respectedSystemPreference) {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (_prefersReducedMotion) {
+      if (prefersReducedMotion) {
         this.config.enabled = false
       }
     }
   }
 
   saveConfig(updates: Partial<SoundConfig>) {
-    this.config = { ...this._config, ...updates }
-    localStorage.setItem('asmr-sound-config', JSON.stringify(this._config))
+    this.config = { ...this.config, ...updates }
+    localStorage.setItem('asmr-sound-config', JSON.stringify(this.config))
   }
 
   async play(soundName: string, options?: { volume?: number; pitch?: number }) {
@@ -89,17 +89,17 @@ class ASMRSoundService {
       return
     }
 
-    const buffer = this.sounds.get(s_oundName)
+    const buffer = this.sounds.get(soundName)
     if (!buffer) return
     try {
       const source = this.audioContext.createBufferSource()
       const gainNode = this.audioContext.createGain()
       source.buffer = buffer
-      source.connect(_gainNode)
+      source.connect(gainNode)
       gainNode.connect(this.audioContext.destination)
       // Set volume
       const volume = (options?.volume ?? 1) * this.config.volume
-      gainNode.gain.setValueAtTime(_volume, this.audioContext.currentTime)
+      gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime)
       // Set pitch if provided
       if (options?.pitch) {
         source.playbackRate.setValueAtTime(options.pitch, this.audioContext.currentTime)
@@ -107,10 +107,10 @@ class ASMRSoundService {
 
       // Add slight randomization for organic feel
       const detune = (Math.random() - 0.5) * 20; // ±10 cents
-      source.detune.setValueAtTime(_detune, this.audioContext.currentTime)
+      source.detune.setValueAtTime(detune, this.audioContext.currentTime)
       source.start()
-    } catch {
-      console.warn('Error playing sound:', _error)
+    } catch (error) {
+      console.warn('Error playing sound:', error)
     }
   }
 

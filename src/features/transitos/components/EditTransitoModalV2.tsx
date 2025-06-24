@@ -15,7 +15,7 @@ interface EditTransitoModalProps {
 }
 
 export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
-  isOpen, onClose, transito, onSuccess
+  isOpen: _isOpen, onClose, transito, onSuccess
 }) => {
   const [formData, setFormData] = useState({
     dua: '',
@@ -30,11 +30,11 @@ export const EditTransitoModalV2: React.FC<EditTransitoModalProps> = ({
       })
     }
   }, [transito])
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!transito) return
     try {
-      setLoading(_true)
+      setLoading(true)
       // Call the update service
       await transitosService.updateTransito(transito.id, {
         dua: formData.dua,

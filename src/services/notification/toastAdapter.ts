@@ -63,25 +63,25 @@ export class ToastNotificationAdapter {
 
   // Compatibility methods for existing notification service
   show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', options?: NotificationOptions) {
-    switch (_type) {
+    switch (type) {
       case 'success': {
-  this.success(_message, undefined, options)
+  this.success(message, undefined, options)
         break
     }
       case 'error': {
-        this.error(_message, undefined, options)
+        this.error(message, undefined, options)
         break
       }
       case 'warning': {
-        this.warning(_message, undefined, options)
+        this.warning(message, undefined, options)
         break
       }
       default:
-        this.info(_message, undefined, options)
+        this.info(message, undefined, options)
     }
   }
 
-  dismiss(toastId?: string) {
+  dismiss(_toastId?: string) {
     // shadcn/ui toast doesn't expose individual dismiss by ID
     // Users can click the X button to dismiss
     toast({

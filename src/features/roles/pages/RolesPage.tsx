@@ -11,7 +11,17 @@ import { ROLE_LABELS} from '../../../types/roles'
 import { cn} from '../../../utils/utils'
 const ROLES: Role[] = ['God', 'Gerente', 'Supervisor', 'CMO']
 export const RolesPage: React.FC = () => {
-
+  // Get store functions and state
+  const { 
+    permissions: _permissions, 
+    loading, 
+    saving, 
+    currentUserRole, 
+    loadPermissions, 
+    savePermissions, 
+    setCurrentUserRole 
+  } = useRolesStore()
+  
   const [showHistory, setShowHistory] = useState(false)
   const [expandedRole, setExpandedRole] = useState<Role | null>(null)
   const [previewMode, setPreviewMode] = useState(false)
@@ -23,7 +33,7 @@ export const RolesPage: React.FC = () => {
 
   useEffect(() => {
     loadPermissions()
-  }, [])
+  }, [loadPermissions])
   // Track changes
 
   useEffect(() => {

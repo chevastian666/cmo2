@@ -47,9 +47,9 @@ class JWTService {
     try {
       const tokenToDecode = token || this.getAccessToken()
       if (!tokenToDecode) return null
-      return jwtDecode<DecodedToken>(_tokenToDecode)
-    } catch {
-      console.error('Error decoding token:', _error)
+      return jwtDecode<DecodedToken>(tokenToDecode)
+    } catch (error) {
+      console.error('Error decoding token:', error)
       return null
     }
   }
@@ -59,12 +59,12 @@ class JWTService {
    */
   isTokenExpired(token?: string): boolean {
     try {
-      const decoded = this.decodeToken(_token)
+      const decoded = this.decodeToken(token)
       if (!decoded || !decoded.exp) return true
       const expiryTime = decoded.exp * 1000; // Convert to milliseconds
       const currentTime = Date.now()
       return currentTime >= expiryTime
-    } catch {
+    } catch (_error) {
       return true
     }
   }
@@ -74,13 +74,13 @@ class JWTService {
    */
   shouldRefreshToken(token?: string): boolean {
     try {
-      const decoded = this.decodeToken(_token)
+      const decoded = this.decodeToken(token)
       if (!decoded || !decoded.exp) return true
       const expiryTime = decoded.exp * 1000
       const currentTime = Date.now()
       // Refresh if token expires in less than buffer time
       return (expiryTime - currentTime) <= this.TOKEN_EXPIRY_BUFFER
-    } catch {
+    } catch (_error) {
       return true
     }
   }
@@ -90,12 +90,12 @@ class JWTService {
    */
   getTimeUntilExpiry(token?: string): number | null {
     try {
-      const decoded = this.decodeToken(_token)
+      const decoded = this.decodeToken(token)
       if (!decoded || !decoded.exp) return null
       const expiryTime = decoded.exp * 1000
       const currentTime = Date.now()
       return Math.max(0, expiryTime - currentTime)
-    } catch {
+    } catch (_error) {
       return null
     }
   }
@@ -104,7 +104,7 @@ class JWTService {
    * Get user info from token
    */
   getUserFromToken(token?: string): DecodedToken['user'] | null {
-    const decoded = this.decodeToken(_token)
+    const decoded = this.decodeToken(token)
     if (!decoded) return null
     return {
       id: decoded.id,
@@ -119,27 +119,27 @@ class JWTService {
    * Check if user has specific permission
    */
   hasPermission(permission: string, token?: string): boolean {
-    const decoded = this.decodeToken(_token)
+    const decoded = this.decodeToken(token)
     if (!decoded || !decoded.permisos) return false
-    return decoded.permisos.includes(_permission)
+    return decoded.permisos.includes(permission)
   }
 
   /**
    * Check if user has specific role
    */
   hasRole(role: string | string[], token?: string): boolean {
-    const decoded = this.decodeToken(_token)
+    const decoded = this.decodeToken(token)
     if (!decoded) return false
-    const roles = Array.isArray(_role) ? role : [role]
+    const roles = Array.isArray(role) ? role : [role]
     return roles.includes(decoded.rol)
   }
 
   /**
    * Format authorization header
    */
-  getAuthHeader(): { Authorization: string } | {} {
+  getAuthHeader(): { Authorization: string } | Record<string, never> {
     const token = this.getAccessToken()
-    return token ? { Authorization: `Bearer ${_token}` } : {}
+    return token ? { Authorization: `Bearer ${token}` } : {}
   }
 
   /**
@@ -148,7 +148,7 @@ class JWTService {
   isValidTokenFormat(token: string): boolean {
     // Basic JWT format validation
     const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/
-    return jwtRegex.test(_token)
+    return jwtRegex.test(token)
   }
 
   /**

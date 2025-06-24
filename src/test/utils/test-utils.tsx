@@ -40,15 +40,15 @@ const customRender = (
   
   const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     return (
-      <QueryClientProvider client={_queryClient}>
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          {_children}
+          {children}
         </BrowserRouter>
       </QueryClientProvider>
     )
   }
   
-  return render(_ui, { wrapper: AllTheProviders, ...renderOptions })
+  return render(ui, { wrapper: AllTheProviders, ...renderOptions })
 }
 
 // Re-export everything
@@ -57,14 +57,14 @@ export * from '@testing-library/react'
 export { customRender as render }
 
 // Test helpers
-const waitForLoadingToFinish = () =>
+export const waitForLoadingToFinish = () =>
   Promise.resolve()
 
 // Mock navigation
-const mockNavigate = vi.fn()
+export const mockNavigate = vi.fn()
 
 // Mock user data
-const mockUser = {
+export const mockUser = {
   id: '1',
   name: 'Test User',
   email: 'test@example.com',
@@ -80,5 +80,17 @@ export const mockAuth = {
   hasPermission: vi.fn(() => true)
 }
 
-// Export test helpers
-export { waitForLoadingToFinish, mockNavigate, mockUser }
+// Mock precinto factory
+export const createMockPrecinto = (overrides = {}) => ({
+  id: '1',
+  codigo: 'PRE-001',
+  empresa: 'Test Company',
+  estado: 'activo',
+  descripcion: 'Test precinto',
+  fecha_creacion: new Date().toISOString(),
+  ubicacion_actual: { lat: -34.603722, lng: -58.381592 },
+  bateria: 100,
+  temperatura: 20,
+  ...overrides
+})
+

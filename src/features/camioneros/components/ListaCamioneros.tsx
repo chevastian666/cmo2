@@ -6,19 +6,23 @@ import { FormularioCamionero} from './FormularioCamionero'
 import type { FiltrosCamionero, Nacionalidad} from '../types'
 import { NACIONALIDADES, FILTROS_CAMIONERO_DEFAULT} from '../types'
 export const ListaCamioneros: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamionero>(__FILTROS_CAMIONERO_DEFAULT)
-  const [mostrarFormulario, setMostrarFormulario] = useState(__false)
-  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(__null)
+  const [filtros, setFiltros] = useState<FiltrosCamionero>(FILTROS_CAMIONERO_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [camioneroSeleccionado, setCamioneroSeleccionado] = useState<string | null>(null)
   useEffect(() => {
-    fetchCamioneros(__filtros)
+    // Mock fetchCamioneros function
+    const fetchCamioneros = async (filtros: FiltrosCamionero) => {
+      console.log('Fetching camioneros with filters:', filtros);
+    };
+    fetchCamioneros(filtros)
   }, [filtros])
-  const _handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamionero>) => {
+  const handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamionero>) => {
     setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
   }
-  if (__camioneroSeleccionado) {
+  if (camioneroSeleccionado) {
     return (<FichaCamionero 
-        documento={_camioneroSeleccionado} 
-        onClose={() => setCamioneroSeleccionado(__null)} 
+        documento={camioneroSeleccionado} 
+        onClose={() => setCamioneroSeleccionado(null)} 
       />
     )
   }
@@ -36,7 +40,7 @@ export const ListaCamioneros: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setMostrarFormulario(__true)}
+          onClick={() => setMostrarFormulario(true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
@@ -68,8 +72,8 @@ export const ListaCamioneros: React.FC = () => {
             >
               <option value="">Todas las nacionalidades</option>
               {Object.entries(__NACIONALIDADES).map(([key, label]) => (
-                <option key={_key} value={_key}>
-                  {_label}
+                <option key={key} value={key}>
+                  {label}
                 </option>
               ))}
             </select>
@@ -176,7 +180,7 @@ export const ListaCamioneros: React.FC = () => {
       )}
 
       {/* Modal de formulario */}
-      {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(__false)} />
+      {mostrarFormulario && (<FormularioCamionero onClose={() => setMostrarFormulario(false)} />
       )}
     </div>
   )

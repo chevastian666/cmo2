@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Camera, Upload, X} from 'lucide-react'
+import { Camera, Upload, X, ImageIcon} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface PhotoUploaderProps {
   onPhotosChange: (photos: File[]) => void
@@ -13,13 +13,13 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
 }) => {
   const [photos, setPhotos] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
-  const [dragActive, setDragActive] = useState(_false)
-  const fileInputRef = useRef<HTMLInputElement>(_null)
+  const [dragActive, setDragActive] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const handleFiles = (files: FileList | null) => {
     if (!files) return
     const validFiles: File[] = []
     const errors: string[] = []
-    Array.from(_files).forEach(file => {
+    Array.from(files).forEach(file => {
       // Check file type
       if (!file.type.startsWith('image/')) {
         errors.push(`${file.name} no es una imagen válida`)
@@ -29,25 +29,25 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       // Check file size
       const sizeMB = file.size / (1024 * 1024)
       if (sizeMB > maxSizeMB) {
-        errors.push(`${file.name} excede el tamaño máximo de ${_maxSizeMB}MB`)
+        errors.push(`${file.name} excede el tamaño máximo de ${maxSizeMB}MB`)
         return
       }
 
       // Check max photos
       if (photos.length + validFiles.length >= maxPhotos) {
-        errors.push(`Máximo ${_maxPhotos} fotos permitidas`)
+        errors.push(`Máximo ${maxPhotos} fotos permitidas`)
         return
       }
 
-      validFiles.push(_file)
+      validFiles.push(file)
       // Create preview
       const reader = new FileReader()
-      reader.onload = (_e) => {
+      reader.onload = (e) => {
         if (e.target?.result) {
           setPreviews(prev => [...prev, e.target!.result as string])
         }
       }
-      reader.readAsDataURL(_file)
+      reader.readAsDataURL(file)
     })
     if (errors.length > 0) {
       alert(errors.join('\n'))
@@ -55,41 +55,41 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
 
     if (validFiles.length > 0) {
       const newPhotos = [...photos, ...validFiles].slice(0, maxPhotos)
-      setPhotos(_newPhotos)
-      onPhotosChange(_newPhotos)
+      setPhotos(newPhotos)
+      onPhotosChange(newPhotos)
     }
   }
-  const handleDrag = (e: React.DragEvent) => {
+  const _handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(_true)
+      setDragActive(true)
     } else if (e.type === "dragleave") {
-      setDragActive(_false)
+      setDragActive(false)
     }
   }
-  const handleDrop = (e: React.DragEvent) => {
+  const _handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setDragActive(_false)
+    setDragActive(false)
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFiles(e.dataTransfer.files)
     }
   }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     if (e.target.files && e.target.files[0]) {
       handleFiles(e.target.files)
     }
   }
   const removePhoto = (index: number) => {
-    const newPhotos = photos.filter((__, i) => i !== index)
-    const newPreviews = previews.filter((__, i) => i !== index)
-    setPhotos(_newPhotos)
-    setPreviews(_newPreviews)
-    onPhotosChange(_newPhotos)
+    const newPhotos = photos.filter((_photo, i) => i !== index)
+    const newPreviews = previews.filter((_preview, i) => i !== index)
+    setPhotos(newPhotos)
+    setPreviews(newPreviews)
+    onPhotosChange(newPhotos)
   }
-  const openCamera = () => {
+  const _openCamera = () => {
     if (fileInputRef.current) {
       fileInputRef.current.setAttribute('capture', 'environment')
       fileInputRef.current.click()
@@ -103,7 +103,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
           Fotos del Precinto
         </h2>
         <span className="text-sm text-gray-400">
-          {_totalPhotos} / {_maxPhotos} fotos
+          {totalPhotos} / {maxPhotos} fotos
         </span>
       </div>
 
@@ -112,10 +112,10 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         <div className="mb-4">
           <p className="text-sm text-gray-400 mb-2">Fotos existentes:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {existingPhotos.map((_photo, index) => (
-              <div key={`existing-${_index}`} className="relative group">
+            {existingPhotos.map((photo, index) => (
+              <div key={`existing-${index}`} className="relative group">
                 <img
-                  src={_photo}
+                  src={photo}
                   alt={`Foto existente ${index + 1}`}
                   className="w-full h-24 object-cover rounded-lg border border-gray-600"
                 />
@@ -141,7 +141,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         onDrop={_handleDrop}
       >
         <input
-          ref={_fileInputRef}
+          ref={fileInputRef}
           type="file"
           multiple
           accept="image/*"
@@ -195,14 +195,14 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       {photos.length > 0 && (<div className="mt-4">
           <p className="text-sm text-gray-400 mb-2">Nuevas fotos:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {previews.map((_preview, index) => (<div key={`new-${_index}`} className="relative group">
+            {previews.map((preview, index) => (<div key={`new-${index}`} className="relative group">
                 <img
-                  src={_preview}
+                  src={preview}
                   alt={`Nueva foto ${index + 1}`}
                   className="w-full h-24 object-cover rounded-lg border border-gray-600"
                 />
                 <button
-                  onClick={() => removePhoto(_index)}
+                  onClick={() => removePhoto(index)}
                   className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   title="Eliminar foto"
                 >
@@ -217,7 +217,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       <div className="mt-4 p-3 bg-gray-700 rounded-lg">
         <p className="text-xs text-gray-400">
           <strong>Formatos aceptados:</strong> JPG, PNG, GIF, WEBP. 
-          Máximo {_maxSizeMB}MB por imagen.
+          Máximo {maxSizeMB}MB por imagen.
         </p>
       </div>
     </div>

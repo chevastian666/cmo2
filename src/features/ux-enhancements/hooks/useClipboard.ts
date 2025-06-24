@@ -1,15 +1,25 @@
-import {_useCallback, useEffect} from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { detectClipboardContent, generateSmartPaste} from '../utils/clipboardDetector'
 import type { ClipboardEntry} from '../types'
 export function useClipboard() {
+  const [history, setHistory] = useState<ClipboardEntry[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+  
+  const addEntry = useCallback((entry: ClipboardEntry) => {
+    setHistory(prev => [entry, ...prev].slice(0, 50)) // Keep last 50 entries
+  }, [])
+  
+  const getFilteredHistory = useCallback(() => {
+    return history
+  }, [history])
 
   // Copy to clipboard with smart detection
   const copyToClipboard = useCallback(async (
     content: string, metadata?: Partial<ClipboardEntry['metadata']>) => {
     try {
-      await navigator.clipboard.writeText(_content)
+      await navigator.clipboard.writeText(content)
       // Detect content type
-      const detection = detectClipboardContent(_content)
+      const detection = detectClipboardContent(content)
       // Add to history
       addEntry({
         content,
@@ -21,21 +31,21 @@ export function useClipboard() {
           precintoId: detection.extractedData?.id || metadata?.precintoId,
           alertId: metadata?.alertId
         },
-        tags: generateTags(_content, detection.type),
+        tags: generateTags(content, detection.type),
         formatted: {
-          form: generateSmartPaste(_content, 'form'),
-          search: generateSmartPaste(_content, 'search'),
-          report: generateSmartPaste(_content, 'report'),
-          message: generateSmartPaste(_content, 'message')
+          form: generateSmartPaste(content, 'form'),
+          search: generateSmartPaste(content, 'search'),
+          report: generateSmartPaste(content, 'report'),
+          message: generateSmartPaste(content, 'message')
         }
       })
       // Show notification
       showNotification('Copiado al portapapeles', 'success')
     } catch {
-      console.error('Error copying to clipboard:', _error)
+      console.error('Error copying to clipboard:', error)
       showNotification('Error al copiar', 'error')
     }
-  }, [])
+  }, [addEntry])
   // Paste from clipboard with smart formatting
   const pasteFromClipboard = useCallback(async (
     targetContext: 'form' | 'search' | 'report' | 'message' = 'form'
@@ -43,9 +53,9 @@ export function useClipboard() {
     try {
       const content = await navigator.clipboard.readText()
       // Generate smart paste based on context
-      const formattedContent = generateSmartPaste(_content, targetContext)
+      const formattedContent = generateSmartPaste(content, targetContext)
       // Track paste action
-      const detection = detectClipboardContent(_content)
+      const detection = detectClipboardContent(content)
       addEntry({
         content,
         type: detection.type,
@@ -54,17 +64,17 @@ export function useClipboard() {
           operatorId: 'system',
           context: { targetContext }
         },
-        tags: generateTags(_content, detection.type),
+        tags: generateTags(content, detection.type),
         formatted: {
           [targetContext]: formattedContent
         }
       })
       return formattedContent
     } catch {
-      console.error('Error pasting from clipboard:', _error)
-      throw _error
+      console.error('Error pasting from clipboard:', error)
+      throw error
     }
-  }, [])
+  }, [addEntry])
   // Paste specific entry from history
   const pasteFromHistory = useCallback(async (
     entryId: string, targetContext: 'form' | 'search' | 'report' | 'message' = 'form') => {
@@ -72,11 +82,11 @@ export function useClipboard() {
     if (!entry) return
     const content = entry.formatted?.[targetContext] || entry.content
     try {
-      await navigator.clipboard.writeText(_content)
+      await navigator.clipboard.writeText(content)
       showNotification('Pegado desde historial', 'success')
       return content
     } catch {
-      console.error('Error pasting from history:', _error)
+      console.error('Error pasting from history:', error)
       showNotification('Error al pegar', 'error')
     }
   }, [history])
@@ -97,7 +107,7 @@ export function useClipboard() {
             // Check if this is new content
             const lastEntry = history[0]
             if (!lastEntry || lastEntry.content !== text) {
-              const detection = detectClipboardContent(_text)
+              const detection = detectClipboardContent(text)
               // Only auto-add if it's relevant content
               if (detection.confidence > 0.7) {
                 addEntry({
@@ -108,7 +118,7 @@ export function useClipboard() {
                     operatorId: 'system',
                     context: { confidence: detection.confidence }
                   },
-                  tags: generateTags(_text, detection.type)
+                  tags: generateTags(text, detection.type)
                 })
               }
             }
@@ -120,11 +130,11 @@ export function useClipboard() {
       }
     }
     // Check clipboard periodically when panel is open
-    if (_isOpen) {
-      const interval = setInterval(_checkClipboard, 2000)
-      return () => clearInterval(_interval)
+    if (isOpen) {
+      const interval = setInterval(checkClipboard, 2000)
+      return () => clearInterval(interval)
     }
-  }, [history])
+  }, [history, isOpen, addEntry])
   // Keyboard shortcuts
 
     useEffect(() => {
@@ -137,7 +147,7 @@ export function useClipboard() {
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [isOpen])
   return {
     copyToClipboard,
     pasteFromClipboard,
@@ -153,7 +163,7 @@ function generateTags(content: string, type: string): string[] {
   const tags = [type]
   // Add date tag
   const today = new Date().toLocaleDateString('es-ES')
-  tags.push(_today)
+  tags.push(today)
   // Add content-based tags
   if (content.includes('CRITICA') || content.includes('CRITICAL')) {
     tags.push('crítico')
@@ -171,8 +181,8 @@ function generateTags(content: string, type: string): string[] {
 function showNotification(message: string, type: 'success' | 'error') {
   // This would integrate with your notification system
   if (type === 'success') {
-    console.log(`✅ ${_message}`)
+    console.log(`✅ ${message}`)
   } else {
-    console.error(`❌ ${_message}`)
+    console.error(`❌ ${message}`)
   }
 }

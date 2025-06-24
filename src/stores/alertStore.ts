@@ -31,9 +31,9 @@ class AlertStore {
 
   // Subscribe to store changes
   subscribe = (listener: Listener): (() => void) => {
-    this.listeners.add(_listener)
+    this.listeners.add(listener)
     return () => {
-      this.listeners.delete(_listener)
+      this.listeners.delete(listener)
     }
   }
   // Get current snapshot

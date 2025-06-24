@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { X, AlertCircle, AlertTriangle, Shield, CheckCircle } from 'lucide-react'
 import { cn} from '../../../utils/utils'
 export interface Notification {
@@ -20,18 +20,12 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
   position = 'top-right', maxNotifications = 5
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([])
-  // Listen for custom notification events
-
-  useEffect(() => {
-    const handleNotification = (event: CustomEvent<Notification>) => {
-      addNotification(event.detail)
-    }
-    window.addEventListener('realtime-notification' as unknown, handleNotification)
-    return () => {
-      window.removeEventListener('realtime-notification' as unknown, handleNotification)
-    }
+  
+  const removeNotification = useCallback((id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id))
   }, [])
-  const addNotification = (notification: Notification) => {
+  
+  const addNotification = useCallback((notification: Notification) => {
     setNotifications(prev => {
       const newNotifications = [notification, ...prev].slice(0, maxNotifications)
       // Auto-dismiss after 5 seconds if enabled
@@ -43,10 +37,18 @@ export const RealtimeNotifications: React.FC<RealtimeNotificationsProps> = ({
       
       return newNotifications
     })
-  }
-  const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id))
-  }
+  }, [maxNotifications, removeNotification])
+  
+  // Listen for custom notification events
+  useEffect(() => {
+    const handleNotification = (event: CustomEvent<Notification>) => {
+      addNotification(event.detail)
+    }
+    window.addEventListener('realtime-notification' as unknown, handleNotification)
+    return () => {
+      window.removeEventListener('realtime-notification' as unknown, handleNotification)
+    }
+  }, [addNotification])
   const getIcon = (type: Notification['type']) => {
     switch (type) {
       case 'info':

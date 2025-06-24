@@ -12,9 +12,9 @@ interface DepositoFiltersProps {
 }
 
 export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
-  filters, onFiltersChange, onClose
+  filters, onFiltersChange, onClose: _onClose
 }) => {
-  const handleReset = () => {
+  const _handleReset = () => {
     onFiltersChange({
       tipo: '',
       zona: '',
@@ -50,7 +50,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todos</SelectItem>
               {DEPOSITO_TIPOS.map(tipo => (
-                <SelectItem key={_tipo} value={_tipo}>{_tipo}</SelectItem>
+                <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -61,7 +61,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
           <Label>Zona</Label>
           <Select
             value={filters.zona}
-            onValueChange={(_value) => onFiltersChange({ ...filters, zona: value })}
+            onValueChange={(value) => onFiltersChange({ ...filters, zona: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todas" />
@@ -69,7 +69,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todas</SelectItem>
               {DEPOSITO_ZONAS.map(zona => (
-                <SelectItem key={_zona} value={_zona}>{_zona}</SelectItem>
+                <SelectItem key={zona} value={zona}>{zona}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -88,7 +88,7 @@ export const DepositoFilters: React.FC<DepositoFiltersProps> = ({
             <SelectContent>
               <SelectItem value="">Todos</SelectItem>
               {DEPOSITO_ZONAS.map(zona => (
-                <SelectItem key={_zona} value={_zona}>{_zona}</SelectItem>
+                <SelectItem key={zona} value={zona}>{zona}</SelectItem>
               ))}
             </SelectContent>
           </Select>

@@ -12,9 +12,28 @@ import { Activity, Layers, Zap, Target} from 'lucide-react'
 import { InteractiveTreemap} from '@/components/charts/treemap/InteractiveTreemap'
 import type { TreemapData, TreemapNode} from '@/components/charts/treemap/types'
 export const OperationalTreemap: React.FC = () => {
+  // Mock data - should be replaced with actual data from store or props
+  const precintos = useMemo(() => [
+    { id: 1, estado: 'activado' },
+    { id: 2, estado: 'en_transito' },
+    { id: 3, estado: 'creado' },
+    { id: 4, estado: 'alarma' }
+  ], [])
+  
+  const transitos = useMemo(() => [
+    { id: 1, estado: 'en_curso', origen: 'Madrid', destino: 'Barcelona' },
+    { id: 2, estado: 'completado', origen: 'Barcelona', destino: 'Valencia' },
+    { id: 3, estado: 'retrasado', origen: 'Valencia', destino: 'Madrid' }
+  ], [])
+  
+  const alertas = useMemo(() => [
+    { id: 1, tipo: 'critica', estado: 'activa', transitoId: 1 },
+    { id: 2, tipo: 'alta', estado: 'activa', transitoId: 2 },
+    { id: 3, tipo: 'media', estado: 'resuelta', transitoId: 3 }
+  ], [])
 
   const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview')
-  const operationalData = useMemo((): TreemapData => {
+  const _operationalData = useMemo((): TreemapData => {
     if (viewMode === 'overview') {
       // General operational overview
       const precintosNode: TreemapNode = {
@@ -96,10 +115,10 @@ export const OperationalTreemap: React.FC = () => {
       const routeEfficiency = new Map<string, { completed: number; total: number }>()
       transitos.forEach(t => {
         const route = `${t.origen} → ${t.destino}`
-        if (!routeEfficiency.has(_route)) {
-          routeEfficiency.set(_route, { completed: 0, total: 0 })
+        if (!routeEfficiency.has(route)) {
+          routeEfficiency.set(route, { completed: 0, total: 0 })
         }
-        const stats = routeEfficiency.get(_route)!
+        const stats = routeEfficiency.get(route)!
         stats.total++
         if (t.estado === 'completado') {
           stats.completed++
@@ -130,9 +149,9 @@ export const OperationalTreemap: React.FC = () => {
       alertas.forEach(alert => {
         if (alert.transitoId) {
           const transito = transitos.find(t => t.id === alert.transitoId)
-          if (_transito) {
+          if (transito) {
             const route = `${transito.origen} → ${transito.destino}`
-            riskMap.set(_route, (riskMap.get(_route) || 0) + 
+            riskMap.set(route, (riskMap.get(route) || 0) + 
               (alert.tipo === 'critica' ? 10 : alert.tipo === 'alta' ? 5 : 1))
           }
         }
@@ -150,7 +169,7 @@ export const OperationalTreemap: React.FC = () => {
         children: children.length > 0 ? children : [{ name: 'Sin riesgos detectados', value: 1, color: '#10b981' }]
       }
     }
-  }, [precintos, transitos, alertas])
+  }, [viewMode, precintos, transitos, alertas])
   const stats = useMemo(() => {
     const totalOperations = precintos.length + transitos.length
     const activeOperations = precintos.filter(p => p.estado === 'en_transito').length + 

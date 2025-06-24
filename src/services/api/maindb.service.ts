@@ -29,13 +29,13 @@ class MainDBService {
         if (params?.empresaid) queryParams.append('empresaid', params.empresaid.toString())
         if (params?.page) queryParams.append('page', params.page.toString())
         if (params?.limit) queryParams.append('limit', params.limit.toString())
-        const response = await fetch(`${_url}?${_queryParams}`, {
+        const response = await fetch(`${url}?${queryParams}`, {
           headers: getTrokorHeaders()
         })
         if (!response.ok) throw new Error('Failed to fetch precintos')
         const data = await response.json()
         return data
-      } catch (_error) {
+      } catch (error) {
         console.error('Error fetching from Trokor API:', error)
         // Fallback to mock data
         return sharedApiService.request('GET', `${this.API_BASE}/precintos`, null, params)
@@ -46,11 +46,11 @@ class MainDBService {
   }
 
   async getPrecintoByNQR(nqr: string): Promise<Precinto | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/precintos/nqr/${_nqr}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/precintos/nqr/${nqr}`)
   }
 
   async updatePrecintoStatus(precintoid: number, status: number): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/precintos/${_precintoid}/status`, { status })
+    return sharedApiService.request('PUT', `${this.API_BASE}/precintos/${precintoid}/status`, { status })
   }
 
   // ==================== VIAJES ====================
@@ -67,7 +67,7 @@ class MainDBService {
   }
 
   async getViajeByPvid(pvid: number): Promise<PrecintoViaje | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/viajes/${_pvid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/viajes/${pvid}`)
   }
 
   async createViaje(viaje: Partial<PrecintoViaje>): Promise<PrecintoViaje> {
@@ -75,7 +75,7 @@ class MainDBService {
   }
 
   async updateViaje(pvid: number, updates: Partial<PrecintoViaje>): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/viajes/${_pvid}`, updates)
+    return sharedApiService.request('PUT', `${this.API_BASE}/viajes/${pvid}`, updates)
   }
 
   // ==================== ALARMAS ====================
@@ -92,11 +92,11 @@ class MainDBService {
   }
 
   async getAlarmasByPrecinto(precintoid: number): Promise<AlarmSystem[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/alarmas/precinto/${_precintoid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/alarmas/precinto/${precintoid}`)
   }
 
   async updateAlarmaStatus(asid: number, status: number): Promise<boolean> {
-    return sharedApiService.request('PUT', `${this.API_BASE}/alarmas/${_asid}/status`, { status })
+    return sharedApiService.request('PUT', `${this.API_BASE}/alarmas/${asid}/status`, { status })
   }
 
   // ==================== EMPRESAS ====================
@@ -110,7 +110,7 @@ class MainDBService {
   }
 
   async getEmpresaById(empresaid: number): Promise<Empresa | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/empresas/${_empresaid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/empresas/${empresaid}`)
   }
 
   // ==================== USUARIOS ====================
@@ -134,17 +134,17 @@ class MainDBService {
   }
 
   async getLocationById(plid: number): Promise<PrecintoLocation | null> {
-    return sharedApiService.request('GET', `${this.API_BASE}/locations/${_plid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/locations/${plid}`)
   }
 
   // ==================== REPORTES ADUANA ====================
 
   async getReportesAduana(pvid: number): Promise<PrecintoAduanaReport[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/reportes-aduana/${_pvid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/reportes-aduana/${pvid}`)
   }
 
   async getAlarmasAduana(pvid: number): Promise<PrecintoAduanaAlarma[]> {
-    return sharedApiService.request('GET', `${this.API_BASE}/alarmas-aduana/${_pvid}`)
+    return sharedApiService.request('GET', `${this.API_BASE}/alarmas-aduana/${pvid}`)
   }
 
   // ==================== MAPPERS ====================
@@ -232,7 +232,7 @@ class MainDBService {
       'intrusion': 'Intrusión detectada'
     }
     const baseMessage = baseMessages[alarmtype?.toLowerCase() || ''] || 'Alerta de seguridad'
-    return extradata ? `${_baseMessage}: ${_extradata}` : baseMessage
+    return extradata ? `${baseMessage}: ${extradata}` : baseMessage
   }
 
   private getAlarmSeverity(alarmtype?: string): Alerta['severidad'] {
@@ -251,7 +251,7 @@ class MainDBService {
     if (!extradata) return undefined
     // Intentar parsear coordenadas del extradata
     const match = extradata.match(/lat:(-?\d+\.?\d*),lng:(-?\d+\.?\d*)/)
-    if (_match) {
+    if (match) {
       return {
         lat: parseFloat(match[1]),
         lng: parseFloat(match[2])

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback } from 'react'
+import { cn } from '../../../utils/utils'
 interface Particle {
   x: number
   y: number
@@ -23,9 +24,9 @@ const statusColors = {
   normal: 'rgba(34, 197, 94, ', alert: 'rgba(251, 191, 36, ', critical: 'rgba(239, 68, 68, '
 }
 export const ParticleTrail: React.FC<ParticleTrailProps> = ({
-  x, y, isMoving, speed, status, className
+  x, y, isMoving, speed: _speed, status, className
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(_null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>()
   const prevPosRef = useRef({ x, y })
@@ -37,8 +38,8 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
     return {
       x,
       y,
-      vx: Math.cos(_angle) * velocity,
-      vy: Math.sin(_angle) * velocity,
+      vx: Math.cos(angle) * velocity,
+      vy: Math.sin(angle) * velocity,
       life,
       maxLife: life,
       size: Math.random() * 3 + 2,
@@ -77,14 +78,14 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
           const t = i / steps
           const px = prevPosRef.current.x + dx * t
           const py = prevPosRef.current.y + dy * t
-          particlesRef.current.push(createParticle(_px, py))
+          particlesRef.current.push(createParticle(px, py))
         }
         prevPosRef.current = { x, y }
       }
     }
 
-    animationRef.current = requestAnimationFrame(_updateParticles)
-  }, [x, y])
+    animationRef.current = requestAnimationFrame(updateParticles)
+  }, [x, y, isMoving, createParticle])
     useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -103,10 +104,10 @@ export const ParticleTrail: React.FC<ParticleTrailProps> = ({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [updateParticles])
   return (
     <canvas
-      ref={_canvasRef}
+      ref={canvasRef}
       className={cn(
         'fixed inset-0 pointer-events-none z-10',
         className

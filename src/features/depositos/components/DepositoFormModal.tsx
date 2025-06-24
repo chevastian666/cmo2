@@ -10,7 +10,7 @@ interface DepositoFormModalProps {
 }
 
 export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
-  deposito, isOpen, onClose, onSave
+  deposito, isOpen, onClose: _onClose, onSave
 }) => {
   const [formData, setFormData] = useState({
     codigo: '',
@@ -88,13 +88,13 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
       newErrors.lng = 'La longitud debe ser un número válido'
     }
 
-    setErrors(_newErrors)
-    return Object.keys(_newErrors).length === 0
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
-  const handleSubmit = (e: React.FormEvent) => {
+  const _handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    const data: Partial<Deposito> = {
+    const _data: Partial<Deposito> = {
       codigo: parseInt(formData.codigo),
       nombre: formData.nombre,
       alias: formData.alias,
@@ -255,7 +255,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   >
                     <option value="">Seleccionar tipo</option>
                     {DEPOSITO_TIPOS.map(tipo => (
-                      <option key={_tipo} value={_tipo}>{_tipo}</option>
+                      <option key={tipo} value={tipo}>{tipo}</option>
                     ))}
                   </select>
                   {errors.tipo && (
@@ -274,7 +274,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   >
                     <option value="">Seleccionar zona</option>
                     {DEPOSITO_ZONAS.map(zona => (
-                      <option key={_zona} value={_zona}>{_zona}</option>
+                      <option key={zona} value={zona}>{zona}</option>
                     ))}
                   </select>
                   {errors.zona && (
@@ -293,7 +293,7 @@ export const DepositoFormModal: React.FC<DepositoFormModalProps> = ({
                   >
                     <option value="">Seleccionar padre</option>
                     {DEPOSITO_ZONAS.map(zona => (
-                      <option key={_zona} value={_zona}>{_zona}</option>
+                      <option key={zona} value={zona}>{zona}</option>
                     ))}
                   </select>
                   {errors.padre && (

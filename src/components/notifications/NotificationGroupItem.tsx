@@ -18,20 +18,20 @@ interface NotificationGroupItemProps {
 }
 
 export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
-  group, selectedNotifications, onSelect, onAction, expanded = false
+  group, selectedNotifications, onSelect, onAction, expanded: _expanded = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(!group.collapsed)
-  const toggleExpanded = () => {
+  const _toggleExpanded = () => {
     setIsExpanded(!isExpanded)
   }
-  const selectAll = () => {
+  const _selectAll = () => {
     const allSelected = group.notifications.every(n => selectedNotifications.has(n.id))
     group.notifications.forEach(n => {
       onSelect(n.id, !allSelected)
     })
   }
   const latestNotification = group.notifications[0]
-  const priorityColor = {
+  const _priorityColor = {
     low: 'text-gray-400',
     normal: 'text-blue-400',
     high: 'text-yellow-400',
@@ -97,7 +97,7 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
           {/* Group Actions */}
           <div className="flex items-center space-x-2">
             <button
-              onClick={s_electAll}
+              onClick={_selectAll}
               className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
             >
               {group.notifications.every(n => selectedNotifications.has(n.id)) 
@@ -117,13 +117,13 @@ export const NotificationGroupItem: React.FC<NotificationGroupItemProps> = ({
             exit={{ height: 0, opacity: 0 }}
             className="border-l-2 border-gray-600 ml-4 overflow-hidden"
           >
-            {group.notifications.map((_notification) => (
+            {group.notifications.map((notification) => (
               <NotificationItem
                 key={notification.id}
-                notification={_notification}
+                notification={notification}
                 isSelected={selectedNotifications.has(notification.id)}
-                onSelect={(s_elected) => onSelect(notification.id, selected)}
-                onAction={(_action, payload) => onAction(notification.id, action, payload)}
+                onSelect={(selected) => onSelect(notification.id, selected)}
+                onAction={(action, payload) => onAction(notification.id, action, payload)}
                 expanded={_expanded}
               />
             ))}

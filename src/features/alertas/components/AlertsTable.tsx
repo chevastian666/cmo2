@@ -336,7 +336,7 @@ const AlertDetailModalWrapper: React.FC<{
   alertaId: string
   isOpen: boolean
   onClose: () => void
-}> = ({ alertaId, isOpen, onClose }) => {
+}> = ({ isOpen, onClose }) => {
   // TODO: Fetch alerta data
   const alerta = null
   const loading = false

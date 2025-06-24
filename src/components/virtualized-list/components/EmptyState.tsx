@@ -23,12 +23,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
       
       <h3 className="text-lg font-semibold text-white mb-2">
-        {_title}
+        {title}
       </h3>
       
       {description && (
         <p className="text-sm text-gray-400 mb-6 max-w-md">
-          {_description}
+          {description}
         </p>
       )}
       

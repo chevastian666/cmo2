@@ -55,12 +55,12 @@ class CamionesService {
 
   async getCamiones(filtros?: FiltrosCamion): Promise<Camion[]> {
     let camiones = Array.from(this.camiones.values())
-    if (_filtros) {
+    if (filtros) {
       // Filtrar por búsqueda (matrícula)
       if (filtros.busqueda) {
         const busqueda = filtros.busqueda.toLowerCase()
         camiones = camiones.filter(c => 
-          c.matricula.toLowerCase().includes(_busqueda)
+          c.matricula.toLowerCase().includes(busqueda)
         )
       }
 
@@ -76,13 +76,13 @@ class CamionesService {
       }
     }
 
-    return camiones.sort((_a, b) => 
+    return camiones.sort((a, b) => 
       b.fechaActualizacion.getTime() - a.fechaActualizacion.getTime()
     )
   }
 
   async getCamionByMatricula(matricula: string): Promise<Camion | null> {
-    return this.camiones.get(_matricula) || null
+    return this.camiones.get(matricula) || null
   }
 
   async getTransitosCamion(matricula: string, limit: number = 5): Promise<TransitoCamion[]> {
@@ -119,15 +119,15 @@ class CamionesService {
     transitosCamion.forEach(t => {
       if (t.vehiculo?.conductor) {
         const key = t.vehiculo.conductor.documento || t.vehiculo.conductor.nombre
-        const current = camioneroCount.get(_key) || { nombre: t.vehiculo.conductor.nombre, cantidad: 0 }
+        const current = camioneroCount.get(key) || { nombre: t.vehiculo.conductor.nombre, cantidad: 0 }
         current.cantidad++
-        camioneroCount.set(_key, current)
+        camioneroCount.set(key, current)
       }
     })
     // Encontrar el camionero más frecuente
     let camioneroFrecuente
     let maxViajes = 0
-    camioneroCount.forEach((_value, key) => {
+    camioneroCount.forEach((value, key) => {
       if (value.cantidad > maxViajes) {
         maxViajes = value.cantidad
         camioneroFrecuente = {
@@ -141,14 +141,14 @@ class CamionesService {
     const rutasCount = new Map<string, number>()
     transitosCamion.forEach(t => {
       const ruta = `${t.origen}-${t.destino}`
-      rutasCount.set(_ruta, (rutasCount.get(_ruta) || 0) + 1)
+      rutasCount.set(ruta, (rutasCount.get(ruta) || 0) + 1)
     })
     const rutasFrecuentes = Array.from(rutasCount.entries())
       .map(([ruta, cantidad]) => {
         const [origen, destino] = ruta.split('-')
         return { origen, destino, cantidad }
       })
-      .sort((_a, b) => b.cantidad - a.cantidad)
+      .sort((a, b) => b.cantidad - a.cantidad)
       .slice(0, 5)
     return {
       totalTransitos: transitosCamion.length,
@@ -160,7 +160,7 @@ class CamionesService {
 
   async createCamion(data: Omit<Camion, 'id' | 'fechaRegistro' | 'fechaActualizacion'>): Promise<Camion> {
     const camion: Camion = {
-      ..._data,
+      ...data,
       id: Date.now().toString(),
       fechaRegistro: new Date(),
       fechaActualizacion: new Date()
@@ -170,27 +170,27 @@ class CamionesService {
   }
 
   async updateCamion(matricula: string, data: Partial<Camion>): Promise<Camion | null> {
-    const camion = this.camiones.get(_matricula)
+    const camion = this.camiones.get(matricula)
     if (!camion) return null
     const updated = {
       ...camion,
-      ..._data,
+      ...data,
       matricula: camion.matricula, // No permitir cambiar la matrícula
       fechaActualizacion: new Date()
     }
-    this.camiones.set(_matricula, updated)
+    this.camiones.set(matricula, updated)
     return updated
   }
 
   async updateEstadoCamion(matricula: string, estado: EstadoCamion): Promise<boolean> {
-    const camion = this.camiones.get(_matricula)
+    const camion = this.camiones.get(matricula)
     if (!camion) return false
     camion.estado = estado
     camion.fechaActualizacion = new Date()
     return true
   }
 
-  async uploadFotoCamion(matricula: string, foto: File): Promise<string> {
+  async uploadFotoCamion(_matricula: string, _foto: File): Promise<string> {
     // Simular upload y retornar URL
     return `https://images.unsplash.com/photo-${Date.now()}?w=400`
   }

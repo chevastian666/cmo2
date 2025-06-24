@@ -15,7 +15,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
-  const handleSubmit = (e: React.FormEvent) => {
+  const _handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!nqr.trim()) {
       inputRef.current?.focus()

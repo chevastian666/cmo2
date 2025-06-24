@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react'
-import {_Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'
+import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'
 import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 import { notificationService} from '../../../services/shared/notification.service'
 import type { TipoNovedad} from '../types'
-import { PUNTOS_OPERACION, TIPOS_NOVEDAD} from '../types'
+import { PUNTOS_OPERACION, TIPOS_NOVEDAD as _TIPOS_NOVEDAD} from '../types'
 interface FormularioNovedadProps {
   onSubmit: (data: FormData) => Promise<void>
   puntoOperacionDefault?: string
@@ -20,7 +20,7 @@ interface FormData {
 }
 
 export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
-  onSubmit, puntoOperacionDefault = '', className
+  onSubmit, puntoOperacionDefault = '', className: _className
 }) => {
   const [formData, setFormData] = useState<FormData>({
     fecha: new Date().toISOString().split('T')[0],
@@ -29,10 +29,10 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     descripcion: ''
   })
   const [archivos, setArchivos] = useState<File[]>([])
-  const [loading, setLoading] = useState(_false)
-  const [errors, setErrors] = useState<Record<string, string>>(__)
-  const fileInputRef = useRef<HTMLInputElement>(_null)
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const _handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     const validFiles = files.filter(file => {
       const isImage = file.type.startsWith('image/')
@@ -69,7 +69,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
     setErrors(_newErrors)
     return Object.keys(_newErrors).length === 0
   }
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateForm()) return
     setLoading(_true)
@@ -137,7 +137,7 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             >
               <option value="">Seleccionar punto...</option>
               {PUNTOS_OPERACION.map(punto => (
-                <option key={_punto} value={_punto}>{_punto}</option>
+                <option key={punto} value={punto}>{punto}</option>
               ))}
             </select>
             {errors.puntoOperacion && (
@@ -222,13 +222,13 @@ export const FormularioNovedad: React.FC<FormularioNovedadProps> = ({
             </button>
             
             {archivos.length > 0 && (<div className="mt-2 space-y-1">
-                {archivos.map((_file, index) => (<div key={_index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                {archivos.map((file, index) => (<div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
                     <span className="text-sm text-gray-300 truncate flex-1">
                       {file.name}
                     </span>
                     <button
                       type="button"
-                      onClick={() => removeFile(_index)}
+                      onClick={() => removeFile(index)}
                       className="ml-2 p-1 hover:bg-gray-700 rounded"
                     >
                       <X className="h-4 w-4 text-gray-400" />

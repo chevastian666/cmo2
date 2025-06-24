@@ -27,18 +27,18 @@ export const MapRenderer: React.FC<MapRendererProps> = ({ precintos, onPrecintoC
   const defaultCenter: LatLngExpression = [-34.8836, -56.1819]; // Montevideo
 
   return (
-    <MapContainer center={_defaultCenter} zoom={13} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={defaultCenter} zoom={13} style={{ height: '100%', width: '100%' }}>
       <TileLayer
-        url="https://{_s}.tile.openstreetmap.org/{_z}/{_x}/{_y}.png"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {precintos.map((_precinto) => (
+      {precintos.map((precinto) => (
         <Marker
           key={precinto.id}
           position={[precinto.lat, precinto.lng]}
-          icon={_customIcon}
+          icon={customIcon}
           eventHandlers={{
-            click: () => onPrecintoClick?.(_precinto),
+            click: () => onPrecintoClick?.(precinto),
           }}
         >
           <Popup>

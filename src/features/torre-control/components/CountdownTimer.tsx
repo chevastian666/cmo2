@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { cn} from '../../../utils/utils'
 interface CountdownTimerProps {
   targetTime: Date
@@ -6,31 +6,33 @@ interface CountdownTimerProps {
 }
 
 export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, className }) => {
-  const [timeLeft, setTimeLeft] = useState('')
-  const [isOverdue, setIsOverdue] = useState(_false)
-  useEffect(() => {
-    const calculateTimeLeft = () => {
+  const [_timeLeft, _setTimeLeft] = useState('')
+  const [isOverdue, setIsOverdue] = useState(false)
+  
+  const calculateTimeLeft = useCallback(() => {
       const now = new Date().getTime()
       const target = targetTime.getTime()
       const difference = target - now
       if (difference < 0) {
-        setIsOverdue(_true)
-        const overdueDiff = Math.abs(_difference)
+        setIsOverdue(true)
+        const overdueDiff = Math.abs(difference)
         const hours = Math.floor(overdueDiff / (1000 * 60 * 60))
         const minutes = Math.floor((overdueDiff % (1000 * 60 * 60)) / (1000 * 60))
-        setTimeLeft(`-${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`)
+        _setTimeLeft(`-${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`)
       } else {
-        setIsOverdue(_false)
+        setIsOverdue(false)
         const hours = Math.floor(difference / (1000 * 60 * 60))
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-        setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`)
+        _setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`)
       }
-    }
+    }, [targetTime])
+    
+  useEffect(() => {
     calculateTimeLeft()
-    const timer = setInterval(_calculateTimeLeft, 30000); // Update every 30 seconds
+    const _timer = setInterval(calculateTimeLeft, 30000); // Update every 30 seconds
 
     return () => clearInterval(_timer)
-  }, [])
+  }, [calculateTimeLeft])
   return (
     <span className={cn(
       "font-mono text-lg tracking-wider",

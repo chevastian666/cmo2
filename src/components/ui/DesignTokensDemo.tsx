@@ -18,12 +18,12 @@ export const DesignTokensDemo: React.FC = () => {
           <h3 className="text-lg font-medium text-gray-300 mb-3">Escala de Grises</h3>
           <div className="grid grid-cols-11 gap-2">
             {Object.entries(designTokens.colors.gray).map(([key, value]) => (
-              <div key={_key} className="text-center">
+              <div key={key} className="text-center">
                 <div 
                   className="w-full h-16 rounded-md border border-gray-600 mb-2"
                   style={{ backgroundColor: value }}
                 />
-                <p className="text-xs text-gray-400">gray-{_key}</p>
+                <p className="text-xs text-gray-400">gray-{key}</p>
               </div>
             ))}
           </div>
@@ -33,13 +33,13 @@ export const DesignTokensDemo: React.FC = () => {
         <div className="mb-6">
           <h3 className="text-lg font-medium text-gray-300 mb-3">Colores Semánticos</h3>
           <div className="grid grid-cols-5 gap-4">
-            {['primary', 'success', 'warning', 'error', 'info'].map((_color) => (
-              <div key={_color} className="text-center">
+            {['primary', 'success', 'warning', 'error', 'info'].map((color) => (
+              <div key={color} className="text-center">
                 <div 
                   className="w-full h-16 rounded-md mb-2"
                   style={{ backgroundColor: designTokens.colors[color as keyof typeof designTokens.colors][500] }}
                 />
-                <p className="text-sm text-gray-300 capitalize">{_color}</p>
+                <p className="text-sm text-gray-300 capitalize">{color}</p>
               </div>
             ))}
           </div>
@@ -52,13 +52,13 @@ export const DesignTokensDemo: React.FC = () => {
             <div className="space-y-2">
               {transitStates.map(state => (
                 <div 
-                  key={s_tate}
+                  key={state}
                   className={combineTokenClasses(
                     "px-3 py-2 rounded-md text-sm font-medium",
                     getStateClasses('transit', state)
                   )}
                 >
-                  {s_tate}
+                  {state}
                 </div>
               ))}
             </div>
@@ -69,13 +69,13 @@ export const DesignTokensDemo: React.FC = () => {
             <div className="space-y-2">
               {alertLevels.map(level => (
                 <div 
-                  key={_level}
+                  key={level}
                   className={combineTokenClasses(
                     "px-3 py-2 rounded-md text-sm font-medium",
                     getStateClasses('alert', level)
                   )}
                 >
-                  {_level}
+                  {level}
                 </div>
               ))}
             </div>
@@ -86,13 +86,13 @@ export const DesignTokensDemo: React.FC = () => {
             <div className="space-y-2">
               {precintoStates.map(state => (
                 <div 
-                  key={s_tate}
+                  key={state}
                   className={combineTokenClasses(
                     "px-3 py-2 rounded-md text-sm font-medium",
                     getStateClasses('precinto', state)
                   )}
                 >
-                  {s_tate}
+                  {state}
                 </div>
               ))}
             </div>
@@ -105,8 +105,8 @@ export const DesignTokensDemo: React.FC = () => {
         <h2 className="text-xl font-semibold text-white mb-4">Espaciado</h2>
         <div className="space-y-3">
           {[0, 1, 2, 3, 4, 6, 8, 12, 16].map(space => (
-            <div key={s_pace} className="flex items-center gap-4">
-              <span className="text-sm text-gray-400 w-20">p-{s_pace}</span>
+            <div key={space} className="flex items-center gap-4">
+              <span className="text-sm text-gray-400 w-20">p-{space}</span>
               <div className={`bg-blue-500 h-8 rounded`} style={{ width: designTokens.spacing[space as keyof typeof designTokens.spacing] }} />
               <span className="text-xs text-gray-500">{designTokens.spacing[space as keyof typeof designTokens.spacing]}</span>
             </div>
@@ -119,8 +119,8 @@ export const DesignTokensDemo: React.FC = () => {
         <h2 className="text-xl font-semibold text-white mb-4">Tipografía</h2>
         <div className="space-y-4">
           {Object.entries(designTokens.typography.fontSize).map(([key, [size]]) => (
-            <div key={_key} className={`text-gray-300`} style={{ fontSize: size }}>
-              <span className="font-semibold">{_key}</span> - {s_ize} - Lorem ipsum dolor sit amet
+            <div key={key} className={`text-gray-300`} style={{ fontSize: size }}>
+              <span className="font-semibold">{key}</span> - {size} - Lorem ipsum dolor sit amet
             </div>
           ))}
         </div>
@@ -202,13 +202,13 @@ export const DesignTokensDemo: React.FC = () => {
           <div className="flex flex-wrap gap-3">
             {Object.keys(tokenClasses.components.badge).filter(k => k !== 'base').map(variant => (
               <span 
-                key={_variant}
+                key={variant}
                 className={combineTokenClasses(
                   tokenClasses.components.badge.base,
                   tokenClasses.components.badge[variant as keyof typeof tokenClasses.components.badge]
                 )}
               >
-                {_variant}
+                {variant}
               </span>
             ))}
           </div>
@@ -220,14 +220,14 @@ export const DesignTokensDemo: React.FC = () => {
           <div className="space-y-3">
             {['info', 'success', 'warning', 'error'].map(type => (
               <div 
-                key={_type}
+                key={type}
                 className={combineTokenClasses(
                   tokenClasses.components.alert.base,
                   tokenClasses.components.alert[type as keyof typeof tokenClasses.components.alert]
                 )}
               >
-                <p className="font-medium capitalize">{_type} Alert</p>
-                <p className="text-sm opacity-90">This is an {_type} message</p>
+                <p className="font-medium capitalize">{type} Alert</p>
+                <p className="text-sm opacity-90">This is an {type} message</p>
               </div>
             ))}
           </div>
@@ -278,11 +278,11 @@ export const DesignTokensDemo: React.FC = () => {
         <div className="grid grid-cols-5 gap-4">
           {Object.entries(designTokens.shadows.dark).map(([key, value]) => (
             <div 
-              key={_key}
+              key={key}
               className="bg-gray-800 p-6 rounded-lg text-center"
               style={{ boxShadow: value }}
             >
-              <p className="text-sm text-gray-300">shadow-dark-{_key}</p>
+              <p className="text-sm text-gray-300">shadow-dark-{key}</p>
             </div>
           ))}
         </div>
@@ -293,13 +293,13 @@ export const DesignTokensDemo: React.FC = () => {
         <h2 className="text-xl font-semibold text-white mb-4">Border Radius</h2>
         <div className="grid grid-cols-8 gap-4">
           {Object.entries(designTokens.borders.borderRadius).map(([key, value]) => (
-            <div key={_key} className="text-center">
+            <div key={key} className="text-center">
               <div 
                 className="w-full h-16 bg-blue-500 mb-2"
                 style={{ borderRadius: value }}
               />
-              <p className="text-xs text-gray-400">rounded-{_key}</p>
-              <p className="text-xs text-gray-500">{_value}</p>
+              <p className="text-xs text-gray-400">rounded-{key}</p>
+              <p className="text-xs text-gray-500">{value}</p>
             </div>
           ))}
         </div>

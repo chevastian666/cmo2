@@ -19,9 +19,9 @@ interface VerificarAlertaModalProps {
 export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
   alerta, isOpen, onClose, onVerificar
 }) => {
-  const [verificando, setVerificando] = useState(_false)
+  const [verificando, setVerificando] = useState(false)
   const [comentario, setComentario] = useState('')
-  const [showComentario, setShowComentario] = useState(_false)
+  const [showComentario, setShowComentario] = useState(false)
   // Handle ESC key to close modal
 
   useEffect(() => {
@@ -30,13 +30,13 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
         onClose()
       }
     }
-    if (_isOpen) {
+    if (isOpen) {
       document.addEventListener('keydown', handleEsc)
       return () => {
         document.removeEventListener('keydown', handleEsc)
       }
     }
-  }, [])
+  }, [isOpen, onClose])
   const getIcon = (tipo: string) => {
     switch (tipo) {
       case 'violacion':
@@ -75,16 +75,16 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
       return
     }
 
-    setVerificando(_true)
+    setVerificando(true)
     try {
       await onVerificar(alerta.id, comentario || undefined)
       notificationService.success(`Alerta ${alerta.codigoPrecinto} verificada correctamente`)
       onClose()
-    } catch {
+    } catch (error) {
       notificationService.error('Error al verificar la alerta')
-      console.error('Error verifying alert:', _error)
+      console.error('Error verifying alert:', error)
     } finally {
-      setVerificando(_false)
+      setVerificando(false)
     }
   }
   if (!isOpen) return null
@@ -93,7 +93,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div 
           className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" 
-          onClick={_onClose}
+          onClick={onClose}
         />
 
         <div className="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
@@ -190,8 +190,8 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
               </button>
               
               {showComentario && (<textarea
-                  value={_comentario}
-                  onChange={(_e) => setComentario(e.target.value)}
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
                   placeholder="Agregar un comentario sobre la verificación..."
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   rows={3}
@@ -217,7 +217,7 @@ export const VerificarAlertaModal: React.FC<VerificarAlertaModalProps> = ({
             {/* Action Buttons */}
             <div className="flex gap-3">
               <button
-                onClick={_handleVerificar}
+                onClick={handleVerificar}
                 disabled={verificando || alerta.atendida}
                 className={cn(
                   "flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import {_AlertTriangle} from 'lucide-react'
+import {AlertTriangle} from 'lucide-react'
 import { useNavigate} from 'react-router-dom'
 import { cn} from '../../../utils/utils'
 interface AlarmCount {
@@ -9,12 +9,22 @@ interface AlarmCount {
 }
 
 export const AlarmSummary: React.FC = () => {
-
   const navigate = useNavigate()
+  interface Alerta {
+    codigoPrecinto?: string;
+    descripcion?: string;
+    tipo?: string;
+    tipoMovimiento?: string;
+    severidad?: 'baja' | 'media' | 'alta' | 'critica';
+    alertCode?: string;
+    // Add other alert properties as needed
+  }
+  const alertas = useMemo(() => [] as Alerta[], [])
+  const loading = false
   const alarmCounts = useMemo(() => {
     if (!alertas || alertas.length === 0) return []
     // Group alarms by type or code
-    const counts = alertas.reduce<Record<string, AlarmCount>>((_acc, alerta) => {
+    const counts = alertas.reduce<Record<string, AlarmCount>>((acc, alerta) => {
       // Try to extract alarm code from precinto code
       let alarmCode = 'UNK'
       // Check if the precinto code matches known patterns (_PTN, DTN, BBJ, etc.)
@@ -23,8 +33,8 @@ export const AlarmSummary: React.FC = () => {
         const knownCodes = ['PTN', 'DTN', 'BBJ', 'BT', 'RF']
         const upperCode = alerta.codigoPrecinto.toUpperCase()
         // Find matching code
-        const matchedCode = knownCodes.find(code => upperCode.startsWith(_code))
-        if (_matchedCode) {
+        const matchedCode = knownCodes.find(code => upperCode.startsWith(code))
+        if (matchedCode) {
           alarmCode = matchedCode
         } else {
           // Default to first 2-3 letters
@@ -50,14 +60,14 @@ export const AlarmSummary: React.FC = () => {
       return acc
     }, {})
     // Convert to array and sort by severity then by code
-    return Object.values(_counts).sort((_a, b) => {
+    return Object.values(counts).sort((a, b) => {
       const severityOrder = ['critica', 'alta', 'media', 'baja']
       const severityDiff = severityOrder.indexOf(a.severity) - severityOrder.indexOf(b.severity)
       if (severityDiff !== 0) return severityDiff
       return a.code.localeCompare(b.code)
     })
   }, [alertas])
-  if (_loading) {
+  if (loading) {
     return (
       <div className="flex items-center space-x-1 text-xs text-gray-400">
         <div className="animate-pulse">Cargando alertas...</div>
@@ -74,15 +84,15 @@ export const AlarmSummary: React.FC = () => {
     )
   }
 
-  const totalAlarms = alarmCounts.reduce((s_um, alarm) => sum + alarm.count, 0)
+  const totalAlarms = alarmCounts.reduce((sum, alarm) => sum + alarm.count, 0)
   const handleClick = () => {
     navigate('/alertas')
   }
   return (
     <div 
       className="flex items-center space-x-2 px-2 py-1 rounded-md hover:bg-gray-700 transition-colors cursor-pointer"
-      title={`${_totalAlarms} alerta${totalAlarms !== 1 ? 's' : ''} activa${totalAlarms !== 1 ? 's' : ''}`}
-      onClick={_handleClick}
+      title={`${totalAlarms} alerta${totalAlarms !== 1 ? 's' : ''} activa${totalAlarms !== 1 ? 's' : ''}`}
+      onClick={handleClick}
     >
       <AlertTriangle className={cn(
         "h-4 w-4",
@@ -92,7 +102,7 @@ export const AlarmSummary: React.FC = () => {
         'text-blue-500'
       )} />
       <div className="flex items-center space-x-1 text-xs">
-        {alarmCounts.map((_alarm, index) => (
+        {alarmCounts.map((alarm, index) => (
           <React.Fragment key={alarm.code}>
             {index > 0 && <span className="text-gray-500">•</span>}
             <span 

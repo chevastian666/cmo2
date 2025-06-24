@@ -12,7 +12,6 @@ import { ConnectionStatus} from './ConnectionStatus'
 import { RealtimeNotifications} from './RealtimeNotifications'
 import { AlarmSummary} from './AlarmSummary'
 import { Sidebar} from './Sidebar'
-import { useAlertasActivas} from '../../../store/hooks'
 import {_useUserInfo} from '../../../hooks/useAuth'
 import { useConnectionStatus} from '../../../hooks/useSharedState'
 import { PanelSwitcher} from '../../../components/PanelSwitcher'
@@ -22,11 +21,11 @@ interface LayoutProps {
   children: React.ReactNode
 }
 
-export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(_false)
-  const [userMenuOpen, setUserMenuOpen] = useState(_false)
-  const location = useLocation()
-  const connectionStatus = useConnectionStatus()
+export const LayoutOptimized: React.FC<LayoutProps> = ({ children: _children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const _location = useLocation()
+  const _connectionStatus = useConnectionStatus()
   const userInfo = useUserInfo()
   return (<div className="min-h-screen bg-gray-950 text-gray-100">
       {/* Sidebar */}

@@ -32,11 +32,11 @@ const SankeyMinimal: React.FC = () => {
         <CardContent>
           <div className="bg-gray-900 rounded-lg p-4" style={{ minHeight: '400px' }}>
             <SankeyChart
-              data={_testData}
+              data={testData}
               width={800}
               height={400}
-              animated={_false}
-              interactive={_true}
+              animated={false}
+              interactive={true}
             />
           </div>
         </CardContent>

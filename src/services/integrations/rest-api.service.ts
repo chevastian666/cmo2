@@ -3,6 +3,21 @@
  * Express.js server with OpenAPI specification
  * By Cheva
  */
+// API Response type for internal use
+interface ApiResponse {
+  status: number
+  data: unknown
+  headers?: Record<string, string>
+}
+
+// Export data type
+interface ExportDataItem {
+  id: number
+  type: string
+  data: string
+  [key: string]: unknown
+}
+
 export interface APIEndpoint {
   id: string
   path: string
@@ -235,16 +250,10 @@ class RestAPIService {
       })
     })
   }
-  // Request handling (_mock)
-  // API Response type
-  interface ApiResponse {
-    status: number
-    data: unknown
-    headers?: Record<string, string>
-  }
-
-  async handleRequest(path: string, method: string, params: unknown = {}, headers: unknown = {}): Promise<ApiResponse> {
-    const endpoint = this.findEndpoint(path, method)
+  
+  // Request handling (mock)
+  async handleRequest(path: string, method: string, params: unknown = {}, _headers: unknown = {}): Promise<ApiResponse> {
+    const endpoint = this.findEndpoint(path, method as APIEndpoint['method'])
     if (!endpoint) {
       return {
         status: 404,
@@ -604,15 +613,8 @@ class RestAPIService {
     }
     return precintos
   }
-  // Export data type
-  interface ExportDataItem {
-    id: number
-    type: string
-    data: string
-    [key: string]: unknown
-  }
 
-  private async getExportData(filters: unknown): Promise<ExportDataItem[]> {
+  private async getExportData(_filters: unknown): Promise<ExportDataItem[]> {
     // Mock export data - in real implementation, this would fetch from database
     return [
       { id: 1, type: 'alert', data: 'Sample alert data' },

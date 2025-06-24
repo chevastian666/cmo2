@@ -1,4 +1,4 @@
-import {_useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { authService} from '../services/shared/auth.service'
 import type { Usuario} from '../types'
 interface UseAuthReturn {
@@ -22,20 +22,16 @@ export function useAuth(): UseAuthReturn {
   })
   useEffect(() => {
     // Subscribe to auth state changes
-    const unsubscribe = authService.subscribe((_authState) => {
-      setState(_authState)
+    const unsubscribe = authService.subscribe((authState) => {
+      setState(authState)
     })
     // Initialize auth check
     authService.checkAuth()
     return unsubscribe
   }, [])
   const login = async (email: string, password: string): Promise<Usuario> => {
-    try {
-      const user = await authService.login(_email, password)
-      return user
-    } catch (error: unknown) {
-      throw error
-    }
+    const user = await authService.login(email, password)
+    return user
   }
   const logout = async (): Promise<void> => {
     await authService.logout()
@@ -44,9 +40,9 @@ export function useAuth(): UseAuthReturn {
     ...state,
     login,
     logout,
-    hasRole: authService.hasRole.bind(_authService),
-    canAccessCMO: authService.canAccessCMO.bind(_authService),
-    canAccessEncargados: authService.canAccessEncargados.bind(_authService)
+    hasRole: authService.hasRole.bind(authService),
+    canAccessCMO: authService.canAccessCMO.bind(authService),
+    canAccessEncargados: authService.canAccessEncargados.bind(authService)
   }
 }
 
@@ -56,8 +52,8 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
   isLoading: boolean
   user: Usuario | null
 } {
-
-  const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(_requiredRoles))
+  const { user, isAuthenticated, isLoading, hasRole } = useAuth()
+  const isAuthorized = isAuthenticated && (!requiredRoles || hasRole(requiredRoles))
   return {
     isAuthorized,
     isLoading,
@@ -67,7 +63,7 @@ export function useRequireAuth(requiredRoles?: string | string[]): {
 
 // Hook for user info
 export function useUserInfo() {
-
+  const { user } = useAuth()
   return {
     name: user?.nombre || 'Usuario',
     email: user?.email || '',

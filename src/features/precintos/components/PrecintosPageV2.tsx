@@ -143,8 +143,11 @@ const PrecintosPageV2: React.FC = () => {
   const [sortBy, setSortBy] = useState('fecha')
   const fetchPrecintos = async () => {
     setLoading(true)
-    // Mock data or actual API call
-    setLoading(false)
+    // TODO: Replace with actual API call
+    setTimeout(() => {
+      setPrecintos([])
+      setLoading(false)
+    }, 1000)
   }
 
   useEffect(() => {
@@ -188,7 +191,7 @@ const PrecintosPageV2: React.FC = () => {
     activos: precintosActivos.length,
     conAlertas: getPrecintosConAlertas().length,
     bajaBateria: getPrecintosBajaBateria().length
-  }), [])
+  }), [precintos.length])
   const handleExport = () => {
     exportToExcel(filteredPrecintos, 'precintos')
   }

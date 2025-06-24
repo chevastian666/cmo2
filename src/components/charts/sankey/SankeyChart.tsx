@@ -12,7 +12,7 @@ interface SankeyChartProps {
   height?: number
 }
 
-export const SankeyChart: React.FC<SankeyChartProps> = ({ width = 800, height = 400 }) => {
+export const SankeyChart: React.FC<SankeyChartProps> = ({ width: _width = 800, height: _height = 400 }) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="text-gray-400">Sankey Chart Component</div>

@@ -29,7 +29,7 @@ export const TransitoDetailModal: React.FC<TransitoDetailModalProps> = ({
         document.removeEventListener('keydown', handleEsc)
       }
     }
-  }, [])
+  }, [isOpen, onClose])
   const handleTimelineChange = (value: number) => {
     setTimelinePosition(value)
     // Calculate the time based on position

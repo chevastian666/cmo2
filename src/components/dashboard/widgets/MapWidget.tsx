@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import {_MapPin, Navigation, Activity} from 'lucide-react'
+import { Navigation, Activity} from 'lucide-react'
 interface MapWidgetProps {
   showControls?: boolean
   showLegend?: boolean

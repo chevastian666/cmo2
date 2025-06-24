@@ -25,9 +25,9 @@ export const MicrointeractionsSettings: React.FC = () => {
   // Load config from localStorage
 
   useEffect(() => {
-    const saved = localStorage.getItem('microinteractions-config')
-    if (s_aved) {
-      const parsed = JSON.parse(s_aved)
+    const _saved = localStorage.getItem('microinteractions-config')
+    if (_saved) {
+      const parsed = JSON.parse(_saved)
       setConfig(prev => ({ ...prev, ...parsed }))
     }
 
@@ -42,7 +42,7 @@ export const MicrointeractionsSettings: React.FC = () => {
   }, [])
   // Save config changes
   const updateConfig = (updates: Partial<MicrointeractionsConfig>) => {
-    const newConfig = { ..._config, ...updates }
+    const _newConfig = { ...config, ...updates }
     setConfig(_newConfig)
     localStorage.setItem('microinteractions-config', JSON.stringify(_newConfig))
     // Update sound service
@@ -53,10 +53,10 @@ export const MicrointeractionsSettings: React.FC = () => {
       asmrSoundService.setVolume(updates.soundVolume!)
     }
   }
-  const handleToggle = () => {
-    if (_isOpen) {
+  const _handleToggle = () => {
+    if (isOpen) {
       playClose()
-      setIsOpen(_false)
+      setIsOpen(false)
     } else {
       playOpen()
       setIsOpen(_true)

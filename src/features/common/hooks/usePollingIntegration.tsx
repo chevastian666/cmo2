@@ -185,26 +185,22 @@ export function useTransitPolling(transitId: string) {
  */
 export function useAlertsPolling() {
   const [alerts, setAlerts] = useState<Alert[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, _setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const [hasNewCriticalAlert, setHasNewCriticalAlert] = useState(false)
   
   const fetchAlerts = useCallback(async () => {
-    try {
-      const data = await alertasService.getActivas()
-      return data.map((alert: AlertaData) => ({
-        id: alert.id,
-        title: alert.titulo,
-        description: alert.descripcion,
-        severity: alert.severidad,
-        timestamp: alert.fecha,
-        source: alert.fuente,
-        status: alert.estado || 'active',
-        metadata: alert.metadata
-      }))
-    } catch (err) {
-      throw err
-    }
+    const data = await alertasService.getActivas()
+    return data.map((alert: AlertaData) => ({
+      id: alert.id,
+      title: alert.titulo,
+      description: alert.descripcion,
+      severity: alert.severidad,
+      timestamp: alert.fecha,
+      source: alert.fuente,
+      status: alert.estado || 'active',
+      metadata: alert.metadata
+    }))
   }, [])
   
   const handleAlertsChange = useCallback((newAlerts: Alert[]) => {

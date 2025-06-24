@@ -13,7 +13,7 @@ export interface VirtualizedListProps<T> {
 export const VirtualizedList = <T,>({
   items, itemHeight, containerHeight, renderItem, overscan = 3, className, onScroll
 }: VirtualizedListProps<T>) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(_null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [scrollTop, setScrollTop] = useState(0)
   const totalHeight = items.length * itemHeight
   // visibleCount removed - unused
@@ -22,45 +22,45 @@ export const VirtualizedList = <T,>({
     items.length - 1,
     Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
   )
-  const visibleItems = items.slice(s_tartIndex, endIndex + 1)
+  const visibleItems = items.slice(startIndex, endIndex + 1)
   const offsetY = startIndex * itemHeight
   const handleScroll = useCallback(() => {
     if (scrollContainerRef.current) {
       const newScrollTop = scrollContainerRef.current.scrollTop
-      setScrollTop(_newScrollTop)
-      onScroll?.(_newScrollTop)
+      setScrollTop(newScrollTop)
+      onScroll?.(newScrollTop)
     }
-  }, [])
+  }, [onScroll])
     useEffect(() => {
     const container = scrollContainerRef.current
-    if (_container) {
+    if (container) {
       container.addEventListener('scroll', handleScroll, { passive: true })
       return () => container.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [handleScroll])
   return (
     <div
-      ref={s_crollContainerRef}
+      ref={scrollContainerRef}
       className={cn('overflow-auto', className)}
       style={{ height: containerHeight }}
     >
       <div style={{ height: totalHeight, position: 'relative' }}>
         <div
           style={{
-            transform: `translateY(${_offsetY}px)`,
+            transform: `translateY(${offsetY}px)`,
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
           }}
         >
-          {visibleItems.map((_item, index) => (
+          {visibleItems.map((item, index) => (
             <div
               key={startIndex + index}
               style={{ height: itemHeight }}
               className="virtualized-item"
             >
-              {renderItem(_item, startIndex + index)}
+              {renderItem(item, startIndex + index)}
             </div>
           ))}
         </div>
@@ -69,7 +69,7 @@ export const VirtualizedList = <T,>({
   )
 }
 // Properly type the memoized component
-export const MemoizedVirtualizedList = memo(_VirtualizedList) as typeof VirtualizedList
+export const MemoizedVirtualizedList = memo(VirtualizedList) as typeof VirtualizedList
 // Virtualized Table Component
 export interface VirtualizedTableProps<T> {
   items: T[]
@@ -92,7 +92,7 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
 }: VirtualizedTableProps<T>) => {
   const renderRow = useCallback((item: T, index: number) => {
     const rowClass = typeof rowClassName === 'function' 
-      ? rowClassName(_item, index) 
+      ? rowClassName(item, index) 
       : rowClassName
     return (
       <div
@@ -100,21 +100,21 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
           'flex items-center border-b border-gray-700 hover:bg-gray-700/50 transition-colors cursor-pointer',
           rowClass
         )}
-        onClick={() => onRowClick?.(_item, index)}
+        onClick={() => onRowClick?.(item, index)}
         style={{ height: rowHeight }}
       >
-        {columns.map((_column) => (
+        {columns.map((column) => (
           <div
             key={column.key}
             className="px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap"
             style={{ width: column.width || `${100 / columns.length}%` }}
           >
-            {column.render ? column.render(_item) : item[column.key]}
+            {column.render ? column.render(item) : item[column.key] as React.ReactNode}
           </div>
         ))}
       </div>
     )
-  }, [columns])
+  }, [columns, onRowClick, rowClassName, rowHeight])
   return (
     <div className={cn('bg-gray-800 rounded-lg overflow-hidden', className)}>
       {/* Header */}
@@ -122,7 +122,7 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
         'flex items-center bg-gray-900 border-b border-gray-700 sticky top-0 z-10',
         headerClassName
       )}>
-        {columns.map((_column) => (
+        {columns.map((column) => (
           <div
             key={column.key}
             className="px-4 py-3 font-semibold text-gray-300 text-sm uppercase tracking-wider"
@@ -135,14 +135,14 @@ export const VirtualizedTable = <T extends Record<string, unknown>,>({
 
       {/* Virtualized Body */}
       <VirtualizedList
-        items={_items}
-        itemHeight={_rowHeight}
-        containerHeight={_containerHeight}
-        renderItem={_renderRow}
+        items={items}
+        itemHeight={rowHeight}
+        containerHeight={containerHeight}
+        renderItem={renderRow}
         className="virtualized-table-body"
       />
     </div>
   )
 }
 // Properly type the memoized component
-export const MemoizedVirtualizedTable = memo(_VirtualizedTable) as typeof VirtualizedTable
+export const MemoizedVirtualizedTable = memo(VirtualizedTable) as typeof VirtualizedTable

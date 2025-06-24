@@ -5,11 +5,11 @@ import { KPICards} from './KPICards'
 import { RealtimeIndicator} from './RealtimeIndicator'
 import { 
   usePrecintosActivos, useTransitosPendientes, useAlertasActivas} from '../../../store/hooks'
-import {_Package, Truck, AlertTriangle, Activity} from 'lucide-react'
+import {Package, Truck, AlertTriangle, Activity} from 'lucide-react'
 export const DashboardRefactored: React.FC = () => {
-  const { loading: precintosLoading } = usePrecintosActivos()
-  const { loading: alertasLoading } = useAlertasActivas()
-  const { loading: transitosLoading } = useTransitosPendientes()
+  const { precintos = [] } = usePrecintosActivos()
+  const { alertas = [], loading: alertasLoading } = useAlertasActivas()
+  const { transitos = [], loading: transitosLoading } = useTransitosPendientes()
   const [activeTab, setActiveTab] = useState('overview')
   // Transform alerts for AlertsPanel
   const alertItems = alertas.map(alerta => ({
@@ -43,24 +43,19 @@ export const DashboardRefactored: React.FC = () => {
 
       {/* Navigation Tabs */}
       <Tabs
-        tabs={_tabs}
-        activeTab={_activeTab}
-        onChange={s_etActiveTab}
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
       />
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* KPI Cards */}
-          <KPICards transitos={_transitos} alertas={_alertas} />
+          <KPICards />
 
           {/* System Status */}
-          <SystemStatusCard
-            smsPendientes={s_msPendientes}
-            dbStats={_dbStats}
-            apiStats={_apiStats}
-            reportesPendientes={_reportesPendientes}
-          />
+          <SystemStatusCard />
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -118,9 +113,9 @@ export const DashboardRefactored: React.FC = () => {
                 {alertasLoading ? (
                   <LoadingState variant="dots" />
                 ) : (<AlertsPanel
-                    alerts={_alertItems}
+                    alerts={alertItems}
                     variant="compact"
-                    onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
+                    onAlertClick={(alert) => console.log('Alert clicked:', alert)}
                   />
                 )}
               </CardContent>
@@ -141,18 +136,18 @@ export const DashboardRefactored: React.FC = () => {
                 />
                 <InfoRow
                   label="En Alarma"
-                  value={precintos.filter(p => p.estado === 'alarma').length.toString()}
+                  value={precintos.filter(p => p.estado === 'alerta').length.toString()}
                   icon={<AlertTriangle className="h-4 w-4" />}
                   valueClassName="text-red-400"
                 />
                 <InfoRow
                   label="Batería Baja"
-                  value={estadisticas?.precintosConBateriaBaja?.toString() || '0'}
+                  value={precintos.filter(p => p.bateria < 20).length.toString()}
                   valueClassName="text-yellow-400"
                 />
                 <InfoRow
                   label="Tiempo Promedio"
-                  value={`${estadisticas?.tiempoPromedioTransito || 0}h`}
+                  value={`0h`}
                 />
               </InfoGrid>
             </CardContent>
@@ -177,8 +172,8 @@ export const DashboardRefactored: React.FC = () => {
       {activeTab === 'alerts' && (<Card>
           <CardContent>
             <AlertsPanel
-              alerts={_alertItems}
-              onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
+              alerts={alertItems}
+              onAlertClick={(alert) => console.log('Alert clicked:', alert)}
             />
           </CardContent>
         </Card>

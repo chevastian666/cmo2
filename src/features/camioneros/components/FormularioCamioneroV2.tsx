@@ -7,14 +7,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from '@
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Textarea} from '@/components/ui/textarea'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription} from '@/components/ui/alert'
-import {_Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
-import {_useUserInfo} from '../../../hooks/useAuth'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+// import { useUserInfo } from '../../../hooks/useAuth'
 import { NACIONALIDADES, TIPOS_DOCUMENTO} from '../types'
-import type { Nacionalidad} from '../types'
+import type { } from '../types'
 // Define the form schema with Zod
-const _formSchema = z.object({
+const formSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio').trim(),
   apellido: z.string().min(1, 'El apellido es obligatorio').trim(),
   tipoDocumento: z.enum(['CI', 'PASAPORTE', 'DNI'] as const),
@@ -24,13 +24,13 @@ const _formSchema = z.object({
   telefonoUruguayo: z.string().optional(),
   telefonoPais: z.string().optional(),
   comentario: z.string().optional(),
-}).refine((___data) => {
+}).refine((data) => {
   // At least one phone is required
   return data.telefonoUruguayo || data.telefonoPais
 }, {
   message: 'Debe proporcionar al menos un teléfono de contacto',
   path: ['telefonoUruguayo'],
-}).refine((___data) => {
+}).refine((data) => {
   // If nacionalidad is 'Otro', paisOrigen is required
   if (data.nacionalidad === 'Otro') {
     return data.paisOrigen && data.paisOrigen.trim().length > 0
@@ -47,11 +47,11 @@ interface FormularioCamioneroProps {
 }
 
 export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOpen, onClose }) => {
-  const _userInfo = useUserInfo()
-  const [loading, setLoading] = useState(__false)
-  const [generalError, setGeneralError] = useState<string | null>(__null)
-  const _form = useForm<FormData>({
-    resolver: zodResolver(__formSchema),
+  // const userInfo = useUserInfo()
+  const [loading, setLoading] = useState(false)
+  const [generalError, setGeneralError] = useState<string | null>(null)
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       nombre: '',
       apellido: '',
@@ -64,10 +64,32 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
       comentario: '',
     },
   })
-  const _handleSubmit = async (_data: FormData) => {
-    setLoading(__true)
-    setGeneralError(__null)
+  const handleSubmit = async (data: FormData) => {
+    setLoading(true)
+    setGeneralError(null)
     try {
+      // Mock createCamionero function
+      interface CamioneroData {
+        nombre: string;
+        apellido: string;
+        documento: string;
+        tipoDocumento: string;
+        nacionalidad: string;
+        paisOrigen: string;
+        telefonoUruguayo: string;
+        telefonoPais: string;
+        comentario: string;
+        creadoPor: {
+          id: string | number;
+          nombre: string;
+        };
+      }
+      const createCamionero = async (data: CamioneroData) => {
+        console.log('Creating camionero:', data);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      };
+      
       await createCamionero({
         nombre: data.nombre.trim(),
         apellido: data.apellido.trim(),
@@ -79,8 +101,8 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
         telefonoPais: data.telefonoPais?.trim() || '',
         comentario: data.comentario?.trim() || '',
         creadoPor: {
-          id: userInfo.id,
-          nombre: userInfo.name
+          id: 'user-1',
+          nombre: 'Current User'
         }
       })
       form.reset()
@@ -88,12 +110,12 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
     } catch {
       setGeneralError('Error al registrar el camionero')
     } finally {
-      setLoading(__false)
+      setLoading(false)
     }
   }
-  const _nacionalidadValue = form.watch('nacionalidad')
+  const nacionalidadValue = form.watch('nacionalidad')
   return (
-    <Dialog open={_isOpen} onOpenChange={_onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -103,11 +125,11 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(__handleSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             {generalError && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{_generalError}</AlertDescription>
+                <AlertDescription>{generalError}</AlertDescription>
               </Alert>
             )}
 
@@ -123,7 +145,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                       <Input
                         placeholder="Ej: Juan"
                         className="bg-gray-800 border-gray-700"
-                        disabled={_loading}
+                        disabled={loading}
                         {...field}
                       />
                     </FormControl>
@@ -142,7 +164,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                       <Input
                         placeholder="Ej: Pérez"
                         className="bg-gray-800 border-gray-700"
-                        disabled={_loading}
+                        disabled={loading}
                         {...field}
                       />
                     </FormControl>
@@ -171,9 +193,9 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.entries(__TIPOS_DOCUMENTO).map(([key, label]) => (
-                          <SelectItem key={_key} value={_key}>
-                            {_label}
+                        {Object.entries(TIPOS_DOCUMENTO).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -193,7 +215,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                       <Input
                         placeholder="Ej: 12345678"
                         className="bg-gray-800 border-gray-700"
-                        disabled={_loading}
+                        disabled={loading}
                         {...field}
                       />
                     </FormControl>
@@ -222,9 +244,9 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.entries(__NACIONALIDADES).map(([key, label]) => (
-                          <SelectItem key={_key} value={_key}>
-                            {_label}
+                        {Object.entries(NACIONALIDADES).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -244,7 +266,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         <Input
                           placeholder="Ej: Perú"
                           className="bg-gray-800 border-gray-700"
-                          disabled={_loading}
+                          disabled={loading}
                           {...field}
                         />
                       </FormControl>
@@ -273,7 +295,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         type="tel"
                         placeholder="Ej: 099123456"
                         className="bg-gray-800 border-gray-700"
-                        disabled={_loading}
+                        disabled={loading}
                         {...field}
                       />
                     </FormControl>
@@ -301,7 +323,7 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
                         type="tel"
                         placeholder="Ej: +541123456789"
                         className="bg-gray-800 border-gray-700"
-                        disabled={_loading}
+                        disabled={loading}
                         {...field}
                       />
                     </FormControl>
@@ -336,8 +358,8 @@ export const FormularioCamioneroV2: React.FC<FormularioCamioneroProps> = ({ isOp
               <Button
                 type="button"
                 variant="secondary"
-                onClick={_onClose}
-                disabled={_loading}
+                onClick={onClose}
+                disabled={loading}
               >
                 Cancelar
               </Button>

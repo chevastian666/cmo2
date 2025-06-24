@@ -112,7 +112,7 @@ export const PrecintoFilters: React.FC<PrecintoFiltersProps> = ({
             />
             <datalist id="ubicaciones-list">
               {ubicaciones.map(ubicacion => (
-                <option key={_ubicacion} value={_ubicacion} />
+                <option key={ubicacion} value={ubicacion} />
               ))}
             </datalist>
           </div>

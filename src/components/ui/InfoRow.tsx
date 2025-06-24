@@ -14,12 +14,12 @@ interface InfoRowProps {
 export const InfoRow: React.FC<InfoRowProps> = ({
   label, value, className, variant = 'default', icon, extra, copyable = false
 }) => {
-  const [copied, setCopied] = React.useState(_false)
+  const [copied, setCopied] = React.useState(false)
   const handleCopy = async () => {
     if (typeof value === 'string') {
-      await navigator.clipboard.writeText(_value)
-      setCopied(_true)
-      setTimeout(() => setCopied(_false), 2000)
+      await navigator.clipboard.writeText(value)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
   }
   const variantStyles = {
@@ -50,28 +50,28 @@ export const InfoRow: React.FC<InfoRowProps> = ({
       <div className="flex items-center gap-2 min-w-0">
         {icon && (
           <span className="text-gray-400 flex-shrink-0">
-            {_icon}
+            {icon}
           </span>
         )}
         <span className={cn('font-medium', styles.label)}>
-          {_label}:
+          {label}:
         </span>
       </div>
       
       <div className="flex items-center gap-2 ml-4">
         <span className={cn('truncate', styles.value)}>
-          {_value}
+          {value}
         </span>
         
         {extra && (
           <span className="text-sm text-gray-500">
-            {_extra}
+            {extra}
           </span>
         )}
         
         {copyable && (
           <button
-            onClick={_handleCopy}
+            onClick={handleCopy}
             className="text-gray-400 hover:text-gray-300 transition-colors p-1"
             title={copied ? 'Copiado!' : 'Copiar'}
           >
@@ -107,7 +107,7 @@ export const InfoGrid: React.FC<InfoGridProps> = ({
   }
   return (
     <div className={cn('grid gap-4', gridCols[columns], className)}>
-      {_children}
+      {children}
     </div>
   )
 }
@@ -120,9 +120,9 @@ interface InfoSectionProps {
 }
 
 export const InfoSection: React.FC<InfoSectionProps> = ({
-  title, children, className, collapsible = false, defaultOpen = true
+  title: _title, children: _children, className, collapsible = false, defaultOpen = true
 }) => {
-  const [isOpen, setIsOpen] = React.useState(_defaultOpen)
+  const [isOpen, setIsOpen] = React.useState(defaultOpen)
   return (
     <div className={cn('space-y-3', className)}>
       <div 

@@ -1,4 +1,4 @@
-import {_useRef, useState, useCallback, useEffect, useMemo} from 'react'
+import {useRef, useState, useCallback, useEffect, useMemo} from 'react'
 import { calculateVisibleRange, calculateTotalHeight, calculateScrollVelocity, calculatePrefetchRange} from '../utils/scrollCalculations'
 import { ScrollPredictor} from '../utils/prefetchStrategies'
 import { VirtualListMemoryManager} from '../utils/memoryManager'
@@ -45,14 +45,14 @@ export function useVirtualization({
     accessibility: { ...defaultConfig.accessibility, ...userConfig?.accessibility }
   }), [userConfig])
   // Refs
-  const containerRef = useRef<HTMLDivElement>(_null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const scrollPredictor = useRef(new ScrollPredictor())
   const memoryManager = useRef(new VirtualListMemoryManager(config.performance.recycleThreshold))
   const performanceMonitor = useRef(new PerformanceMonitor())
   const scrollTimeout = useRef<NodeJS.Timeout>()
   const lastScrollTime = useRef(0)
   const lastScrollTop = useRef(0)
-  const isScrolling = useRef(_false)
+  const isScrolling = useRef(false)
   // State
   const [state, setState] = useState<VirtualListState>({
     scrollTop: 0,
@@ -71,7 +71,7 @@ export function useVirtualization({
   // Calculate visible items
   const visibleItems = useMemo(() => {
     const [start, end] = state.visibleRange
-    return items.slice(s_tart, end + 1).map((_item, index) => ({
+    return items.slice(start, end + 1).map((item, index) => ({
       item,
       index: start + index,
       style: {
@@ -83,7 +83,7 @@ export function useVirtualization({
         height: typeof itemHeight === 'function' ? itemHeight(start + index) : itemHeight
       }
     }))
-  }, [items, state.visibleRange])
+  }, [items, state.visibleRange, getItemOffset, itemHeight])
   // Get item offset
   const getItemOffset = useCallback((index: number): number => {
     if (typeof itemHeight === 'number') {
@@ -92,24 +92,24 @@ export function useVirtualization({
 
     let offset = 0
     for (let i = 0; i < index; i++) {
-      offset += state.cachedHeights.get(_i) ?? itemHeight(_i)
+      offset += state.cachedHeights.get(i) ?? itemHeight(i)
     }
     return offset
-  }, [state.cachedHeights])
+  }, [state.cachedHeights, itemHeight])
   // Handle scroll with performance optimization
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const scrollTop = e.currentTarget.scrollTop
     const now = performance.now()
     // Calculate scroll metrics
     const deltaTime = now - lastScrollTime.current
-    const velocity = calculateScrollVelocity(s_crollTop, lastScrollTop.current, deltaTime)
+    const velocity = calculateScrollVelocity(scrollTop, lastScrollTop.current, deltaTime)
     const direction = velocity > 0 ? 'down' : velocity < 0 ? 'up' : null
     // Update refs
     lastScrollTime.current = now
     lastScrollTop.current = scrollTop
     isScrolling.current = true
     // Analyze scroll pattern
-    scrollPredictor.current.analyzeScrollPattern(s_crollTop, now)
+    scrollPredictor.current.analyzeScrollPattern(scrollTop, now)
     // Clear existing timeout
     if (scrollTimeout.current) {
       clearTimeout(scrollTimeout.current)
@@ -136,7 +136,7 @@ export function useVirtualization({
         // Update prefetched items
         const newPrefetchedItems = new Set<number>()
         for (let i = prefetchStart; i <= prefetchEnd; i++) {
-          newPrefetchedItems.add(_i)
+          newPrefetchedItems.add(i)
         }
 
         setState(prev => ({
@@ -151,7 +151,7 @@ export function useVirtualization({
       })
       // Measure scroll latency
       const latency = performance.now() - now
-      performanceMonitor.current.measureScrollLatency(_latency)
+      performanceMonitor.current.measureScrollLatency(latency)
     }
     // Apply throttling based on performance
     if (deltaTime >= config.performance.scrollThrottleMs) {
@@ -164,17 +164,17 @@ export function useVirtualization({
       setState(prev => ({ ...prev, isScrolling: false }))
     }, 150)
     // Call user's onScroll handler
-    onScroll?.(s_crollTop)
-  }, [items.length, overscan, config.performance])
+    onScroll?.(scrollTop)
+  }, [items.length, itemHeight, containerHeight, overscan, config.performance, onScroll])
   // Scroll to item
   const scrollToItem = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
     if (!containerRef.current) return
-    const offset = getItemOffset(_index)
+    const offset = getItemOffset(index)
     containerRef.current.scrollTo({
       top: offset,
       behavior
     })
-  }, [])
+  }, [getItemOffset])
   // Scroll to offset
   const scrollToOffset = useCallback((offset: number, behavior: ScrollBehavior = 'smooth') => {
     if (!containerRef.current) return
@@ -187,7 +187,7 @@ export function useVirtualization({
   const updateItemHeight = useCallback((index: number, height: number) => {
     setState(prev => {
       const newCachedHeights = new Map(prev.cachedHeights)
-      newCachedHeights.set(_index, height)
+      newCachedHeights.set(index, height)
       return { ...prev, cachedHeights: newCachedHeights }
     })
   }, [])
@@ -203,11 +203,14 @@ export function useVirtualization({
   // Cleanup on unmount
 
     useEffect(() => {
+      const memoryManagerInstance = memoryManager.current
+      const performanceMonitorInstance = performanceMonitor.current
+      const scrollPredictorInstance = scrollPredictor.current
      
     return () => {
-      memoryManager.current.cleanup()
-      performanceMonitor.current.destroy()
-      scrollPredictor.current.reset()
+      memoryManagerInstance.cleanup()
+      performanceMonitorInstance.destroy()
+      scrollPredictorInstance.reset()
     }
   }, [])
   return {

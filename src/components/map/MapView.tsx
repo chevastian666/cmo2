@@ -17,7 +17,7 @@ interface MapViewProps {
 export const MapView: React.FC<MapViewProps> = ({ precintos, onPrecintoClick }) => {
   return (
     <div className="h-full w-full">
-      <MapRenderer precintos={_precintos} onPrecintoClick={_onPrecintoClick} />
+      <MapRenderer precintos={precintos} onPrecintoClick={onPrecintoClick} />
     </div>
   );
 };

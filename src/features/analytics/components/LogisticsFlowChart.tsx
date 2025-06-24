@@ -44,7 +44,7 @@ interface FlowData {
 
 export const LogisticsFlowChart: React.FC = () => {
   // Mock data - in production, replace with real data from store or API
-  const transitos: Transito[] = []
+  const transitos = useMemo<Transito[]>(() => [], [])
   
   const [timeRange, setTimeRange] = useState('week')
   const [flowType, setFlowType] = useState<'routes' | 'lifecycle' | 'alerts' | 'time'>('routes')
@@ -83,8 +83,6 @@ export const LogisticsFlowChart: React.FC = () => {
   }, [transitos])
   // Precinto lifecycle data
   const lifecycleData = useMemo(() => {
-    const stages = ['created', 'activated', 'in_transit', 'completed', 'deactivated']
-    // const stageCount = new Map<string, number>()
     // Mock data - in production, calculate from real precinto data
     return [
       { stage: 'created' as const, count: 1000, nextStage: 'activated', dropoffCount: 50 },

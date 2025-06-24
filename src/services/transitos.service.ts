@@ -12,7 +12,7 @@ export interface TransitoFilters {
 }
 
 export const transitosService = {
-  getPendientes: async (filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
+  getPendientes: async (_filters?: TransitoFilters): Promise<TransitoPendiente[]> => {
     try {
       // En desarrollo, usar datos mock a menos que se habilite explícitamente la API real
       if (import.meta.env.DEV && import.meta.env.VITE_USE_REAL_API !== 'true') {
@@ -24,7 +24,7 @@ export const transitosService = {
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
           return await trokorService.getTransitosPendientes({ limit: 25 })
-        } catch (_trokorError) {
+        } catch {
           // Error con Trokor API, intentando con unified API
         }
       }
@@ -38,7 +38,7 @@ export const transitosService = {
       return response
     } catch {
       // Error fetching transitos pendientes - fallback to mock
-      return Array.from({ length: 12 }, (__, i) => generateMockTransito(_i))
+      return Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
     }
   },
 
@@ -83,7 +83,7 @@ export const transitosService = {
   getById: async (id: string): Promise<TransitoPendiente> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockTransito(parseInt(_id) || 1)
+        return generateMockTransito(parseInt(id) || 1)
       }
       
       // For now, get all and find by id
@@ -93,11 +93,11 @@ export const transitosService = {
       return transito
     } catch {
       // Error fetching transito
-      return generateMockTransito(parseInt(_id) || 1)
+      return generateMockTransito(parseInt(id) || 1)
     }
   },
 
-  actualizarEstado: async (id: string, estado: TransitoPendiente['estado']): Promise<void> => {
+  actualizarEstado: async (_id: string, _estado: TransitoPendiente['estado']): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Mock: Updating estado
@@ -111,7 +111,7 @@ export const transitosService = {
     }
   },
 
-  precintar: async (transitoId: string, precintoId: string): Promise<void> => {
+  precintar: async (_transitoId: string, _precintoId: string): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Mock: Precintando transito

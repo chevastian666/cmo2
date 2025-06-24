@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Layout, Save, RotateCcw} from 'lucide-react'
+import { Truck, AlertTriangle, Clock, MapPin, RefreshCw, Filter, Activity, Monitor, Zap, Radio, Gauge, TrendingUp, Save, RotateCcw} from 'lucide-react'
 import { Input} from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -146,7 +146,7 @@ const LiveFeedWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) =>
 }
 const MetricsWidget: React.FC<{ data: TransitoTorreControl[] }> = ({ data }) => {
   const metrics = {
-    velocidadPromedio: Math.round(data.reduce((acc, t) => acc + (60), 0) / data.length),
+    velocidadPromedio: Math.round(data.reduce((acc, _t) => acc + (60), 0) / data.length),
     tiempoPromedio: Math.round(data.reduce((acc, t) => acc + (Math.floor((new Date(t.eta).getTime() - new Date(t.fechaSalida).getTime()) / 60000)), 0) / data.length),
     eficiencia: Math.round((data.filter(t => t.semaforo === 'verde').length / data.length) * 100),
     alertasActivas: data.filter(t => t.alertas && t.alertas.length > 0).length
@@ -331,7 +331,7 @@ export const TorreControlV2: React.FC = () => {
     fetchTransitos()
     const interval = setInterval(fetchTransitos, 30000)
     return () => clearInterval(interval)
-  }, [])
+  }, [fetchTransitos])
   // Filter data
   const filteredTransitos = React.useMemo(() => {
     let filtered = [...transitos]
@@ -420,7 +420,7 @@ export const TorreControlV2: React.FC = () => {
         widgetsCount: widgets.length
       })
     }
-  }, [transitos, loading, layouts, widgets])
+  }, [transitos, loading, widgets, filteredTransitos.length, selectedView])
   return (
     <ErrorBoundary>
       <PageTransition>

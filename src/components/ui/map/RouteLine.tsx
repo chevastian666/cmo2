@@ -24,7 +24,7 @@ export const RouteLine: React.FC<RouteLineProps> = ({
 }) => {
   if (points.length < 2) return null
   // Convert lat/lng to SVG path
-  const pathData = points.reduce((path, point, index) => {
+  const _pathData = points.reduce((path, point, index) => {
     const command = index === 0 ? 'M' : 'L'
     return `${path} ${command} ${point.lng},${point.lat}`
   }, '')
@@ -57,9 +57,9 @@ export const RouteLine: React.FC<RouteLineProps> = ({
       <path
         d={_pathData}
         fill="none"
-        stroke={_color}
-        strokeWidth={_width}
-        strokeOpacity={_opacity}
+        stroke={color}
+        strokeWidth={width}
+        strokeOpacity={opacity}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeDasharray={getStrokeDasharray()}
@@ -73,12 +73,12 @@ export const RouteLine: React.FC<RouteLineProps> = ({
         <path
           d={_pathData}
           fill="none"
-          stroke={_color}
+          stroke={color}
           strokeWidth={width + 1}
           strokeOpacity={1}
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeDasharray={`${_progress}% ${100 - progress}%`}
+          strokeDasharray={`${progress}% ${100 - progress}%`}
           className="transition-all duration-500"
         />
       )}
@@ -86,11 +86,11 @@ export const RouteLine: React.FC<RouteLineProps> = ({
       {/* Arrow indicators */}
       {showArrows && points.length > 1 && (
         <g className="route-arrows">
-          {points.slice(0, -1).map((_point, index) => {
-            const nextPoint = points[index + 1]
-            const midX = (point.lng + nextPoint.lng) / 2
-            const midY = (point.lat + nextPoint.lat) / 2
-            const angle = Math.atan2(
+          {points.slice(0, -1).map((point, _index) => {
+            const nextPoint = points[_index + 1]
+            const _midX = (point.lng + nextPoint.lng) / 2
+            const _midY = (point.lat + nextPoint.lat) / 2
+            const _angle = Math.atan2(
               nextPoint.lat - point.lat,
               nextPoint.lng - point.lng
             ) * (180 / Math.PI)
@@ -102,7 +102,7 @@ export const RouteLine: React.FC<RouteLineProps> = ({
                 <path
                   d="M -5,-3 L 0,0 L -5,3"
                   fill="none"
-                  stroke={_color}
+                  stroke={color}
                   strokeWidth={2}
                   strokeOpacity={opacity * 0.7}
                   className={cn(
@@ -122,8 +122,8 @@ export const RouteLine: React.FC<RouteLineProps> = ({
           cx={points[0].lng}
           cy={points[0].lat}
           r={width * 2}
-          fill={_color}
-          fillOpacity={_opacity}
+          fill={color}
+          fillOpacity={opacity}
           className="animate-pulse"
         >
           <animate
@@ -138,13 +138,13 @@ export const RouteLine: React.FC<RouteLineProps> = ({
         <g transform={`translate(${points[points.length - 1].lng},${points[points.length - 1].lat})`}>
           <circle
             r={width * 2}
-            fill={_color}
-            fillOpacity={_opacity}
+            fill={color}
+            fillOpacity={opacity}
           />
           <path
             d="M -6,-6 L 0,0 L -6,6 L -3,0 Z"
-            fill={_color}
-            fillOpacity={_opacity}
+            fill={color}
+            fillOpacity={opacity}
           />
         </g>
       </g>
@@ -157,40 +157,40 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
   pulseEffect?: boolean
   flowSpeed?: number
 }> = ({
-  points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ...props
+  points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ..._props
 }) => {
   if (points.length < 2) return null
-  const pathData = points.reduce((path, point, index) => {
+  const _pathData = points.reduce((path, point, index) => {
     const command = index === 0 ? 'M' : 'L'
     return `${path} ${command} ${point.lng},${point.lat}`
   }, '')
-  const pathId = `route-path-${Math.random().toString(36).substr(2, 9)}`
+  const _pathId = `route-path-${Math.random().toString(36).substr(2, 9)}`
   return (
     <g className={cn('animated-route-group', className)}>
       <defs>
         {/* Gradient for flow effect */}
         <linearGradient id={`flow-gradient-${_pathId}`}>
-          <stop offset="0%" stopColor={_color} stopOpacity="0">
+          <stop offset="0%" stopColor={color} stopOpacity="0">
             <animate
               attributeName="offset"
               values="-0.5;1.5"
-              dur={`${_flowSpeed}s`}
+              dur={`${flowSpeed}s`}
               repeatCount="indefinite"
             />
           </stop>
-          <stop offset="50%" stopColor={_color} stopOpacity="1">
+          <stop offset="50%" stopColor={color} stopOpacity="1">
             <animate
               attributeName="offset"
               values="0;2"
-              dur={`${_flowSpeed}s`}
+              dur={`${flowSpeed}s`}
               repeatCount="indefinite"
             />
           </stop>
-          <stop offset="100%" stopColor={_color} stopOpacity="0">
+          <stop offset="100%" stopColor={color} stopOpacity="0">
             <animate
               attributeName="offset"
               values="0.5;2.5"
-              dur={`${_flowSpeed}s`}
+              dur={`${flowSpeed}s`}
               repeatCount="indefinite"
             />
           </stop>
@@ -213,7 +213,7 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
         <path
           d={_pathData}
           fill="none"
-          stroke={_color}
+          stroke={color}
           strokeWidth={width * 3}
           strokeOpacity={opacity * 0.3}
           strokeLinecap="round"
@@ -229,9 +229,9 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
       <path
         d={_pathData}
         fill="none"
-        stroke={_color}
-        strokeWidth={_width}
-        strokeOpacity={_opacity}
+        stroke={color}
+        strokeWidth={width}
+        strokeOpacity={opacity}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -241,19 +241,19 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
         d={_pathData}
         fill="none"
         stroke={`url(#flow-gradient-${_pathId})`}
-        strokeWidth={_width}
+        strokeWidth={width}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
 
       {/* Directional particles */}
       <g className="route-particles">
-        {[0, 0.33, 0.66].map((_offset, index) => (
+        {[0, 0.33, 0.66].map((offset, _index) => (
           <circle
             key={_index}
             r={width / 2}
-            fill={_color}
-            fillOpacity={_opacity}>
+            fill={color}
+            fillOpacity={opacity}>
             <animateMotion
               dur={`${flowSpeed * 1.5}s`}
               repeatCount="indefinite"

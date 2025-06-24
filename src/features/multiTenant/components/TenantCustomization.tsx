@@ -21,13 +21,13 @@ export const TenantCustomization: React.FC = () => {
   const [customization, setCustomization] = useState<TCustomization>(
     currentTenant?.customization || {} as TCustomization
   )
-  const [loading, setLoading] = useState(_false)
-  const [previewMode, setPreviewMode] = useState(_false)
+  const [_loading, setLoading] = useState(false)
+  const [previewMode, setPreviewMode] = useState(false)
   const canWhiteLabel = checkFeature('whiteLabeling')
-  const handleSave = async () => {
-    setLoading(_true)
+  const _handleSave = async () => {
+    setLoading(true)
     try {
-      await updateTenantCustomization(_customization)
+      await updateTenantCustomization(customization)
       toast({
         title: 'Customization saved',
         description: 'Your branding changes have been applied successfully.'
@@ -41,11 +41,11 @@ export const TenantCustomization: React.FC = () => {
         variant: 'destructive'
       })
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
-  const handleReset = () => {
-    if (_currentTenant) {
+  const _handleReset = () => {
+    if (currentTenant) {
       setCustomization(currentTenant.customization)
       applyTheme(currentTenant.customization.branding)
     }
@@ -185,7 +185,7 @@ export const TenantCustomization: React.FC = () => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={_handleLogoUpload}
+                    onChange={handleLogoUpload}
                     className="max-w-xs"
                   />
                 </div>
@@ -200,7 +200,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Primary Color</Label>
                   <ColorPicker
                     value={customization.branding?.primaryColor || '#1e40af'}
-                    onChange={(_color) => setCustomization(prev => ({
+                    onChange={(color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,
@@ -214,7 +214,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Secondary Color</Label>
                   <ColorPicker
                     value={customization.branding?.secondaryColor || '#3b82f6'}
-                    onChange={(_color) => setCustomization(prev => ({
+                    onChange={(color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,
@@ -228,7 +228,7 @@ export const TenantCustomization: React.FC = () => {
                   <Label>Accent Color</Label>
                   <ColorPicker
                     value={customization.branding?.accentColor || '#60a5fa'}
-                    onChange={(_color) => setCustomization(prev => ({
+                    onChange={(color) => setCustomization(prev => ({
                       ...prev,
                       branding: {
                         ...prev.branding,

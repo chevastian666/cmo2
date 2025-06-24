@@ -8,12 +8,24 @@ import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { TreemapChart} from '@/components/charts/treemap/TreemapChart'
-import {_Package, Truck, AlertTriangle} from 'lucide-react'
+import { Package, Truck, AlertTriangle } from 'lucide-react'
+
+interface MockPrecinto {
+  estado?: string;
+}
+interface MockTransito {
+  estado?: string;
+}
+interface MockAlerta {
+  tipo?: string;
+}
+
 const TreemapDashboardSimple: React.FC = () => {
   const [activeTab, setActiveTab] = useState('precintos')
   // Transform precintos data
   const precintosData = useMemo(() => {
     // Use mock data if no real data available
+    const precintos: MockPrecinto[] = [];
     if (!precintos || precintos.length === 0) {
       return {
         name: 'Precintos',
@@ -29,7 +41,7 @@ const TreemapDashboardSimple: React.FC = () => {
     const grouped = new Map<string, number>()
     precintos.forEach(p => {
       const key = p.estado || 'unknown'
-      grouped.set(_key, (grouped.get(_key) || 0) + 1)
+      grouped.set(key, (grouped.get(key) || 0) + 1)
     })
     return {
       name: 'Precintos',
@@ -42,6 +54,7 @@ const TreemapDashboardSimple: React.FC = () => {
   // Transform transitos data
   const transitosData = useMemo(() => {
     // Use mock data if no real data available
+    const transitos: MockTransito[] = [];
     if (!transitos || transitos.length === 0) {
       return {
         name: 'Tránsitos',
@@ -57,7 +70,7 @@ const TreemapDashboardSimple: React.FC = () => {
     const grouped = new Map<string, number>()
     transitos.forEach(t => {
       const key = t.estado || 'unknown'
-      grouped.set(_key, (grouped.get(_key) || 0) + 1)
+      grouped.set(key, (grouped.get(key) || 0) + 1)
     })
     return {
       name: 'Tránsitos',
@@ -70,6 +83,7 @@ const TreemapDashboardSimple: React.FC = () => {
   // Transform alertas data
   const alertasData = useMemo(() => {
     // Use mock data if no real data available
+    const alertas: MockAlerta[] = [];
     if (!alertas || alertas.length === 0) {
       return {
         name: 'Alertas',
@@ -85,7 +99,7 @@ const TreemapDashboardSimple: React.FC = () => {
     const grouped = new Map<string, number>()
     alertas.forEach(a => {
       const key = a.tipo || 'unknown'
-      grouped.set(_key, (grouped.get(_key) || 0) + 1)
+      grouped.set(key, (grouped.get(key) || 0) + 1)
     })
     return {
       name: 'Alertas',
@@ -102,7 +116,7 @@ const TreemapDashboardSimple: React.FC = () => {
         <p className="text-gray-400 mt-1">Visualización jerárquica de datos CMO</p>
       </div>
 
-      <Tabs value={_activeTab} onValueChange={s_etActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="precintos" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
@@ -126,7 +140,7 @@ const TreemapDashboardSimple: React.FC = () => {
             <CardContent>
               <div className="bg-gray-900 rounded-lg p-4">
                 {precintosData.children.length > 0 ? (
-                  <TreemapChart data={_precintosData} width={800} height={500} />
+                  <TreemapChart data={precintosData} width={800} height={500} />
                 ) : (
                   <div className="h-[500px] flex items-center justify-center text-gray-500">
                     No hay datos de precintos disponibles
@@ -145,7 +159,7 @@ const TreemapDashboardSimple: React.FC = () => {
             <CardContent>
               <div className="bg-gray-900 rounded-lg p-4">
                 {transitosData.children.length > 0 ? (
-                  <TreemapChart data={_transitosData} width={800} height={500} />
+                  <TreemapChart data={transitosData} width={800} height={500} />
                 ) : (
                   <div className="h-[500px] flex items-center justify-center text-gray-500">
                     No hay datos de tránsitos disponibles
@@ -164,7 +178,7 @@ const TreemapDashboardSimple: React.FC = () => {
             <CardContent>
               <div className="bg-gray-900 rounded-lg p-4">
                 {alertasData.children.length > 0 ? (
-                  <TreemapChart data={_alertasData} width={800} height={500} />
+                  <TreemapChart data={alertasData} width={800} height={500} />
                 ) : (
                   <div className="h-[500px] flex items-center justify-center text-gray-500">
                     No hay alertas activas

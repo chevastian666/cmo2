@@ -83,7 +83,7 @@ const breadcrumbConfig: BreadcrumbConfig = {
 }
 export const BreadcrumbNav: React.FC = () => {
   const location = useLocation()
-  const currentPath = location.pathname
+  const _currentPath = location.pathname
   // Build breadcrumb trail
   const getBreadcrumbTrail = (path: string): string[] => {
     const trail: string[] = []

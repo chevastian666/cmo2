@@ -198,7 +198,7 @@ export class ScrollPredictor {
   /**
    * Get current acceleration
    */
-  private getCurrentAcceleration(): number {
+  private _getCurrentAcceleration(): number {
     if (this.scrollHistory.length < 3) return 0
     const recent = this.scrollHistory.slice(-3)
     const v1 = recent[1].velocity

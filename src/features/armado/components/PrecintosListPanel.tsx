@@ -25,7 +25,7 @@ export const PrecintosListPanel: React.FC<PrecintosListPanelProps> = ({
     p.nqr.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.location?.toLowerCase().includes(searchTerm.toLowerCase())
   )
-  const handleRefresh = async () => {
+  const _handleRefresh = async () => {
     setIsRefreshing(_true)
     await onRefresh()
     setTimeout(() => setIsRefreshing(_false), 500)

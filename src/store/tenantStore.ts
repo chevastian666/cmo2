@@ -31,11 +31,11 @@ interface TenantStore {
 
 export const useTenantStore = create<TenantStore>()(devtools(
     persist(
-      immer((s_et, get) => ({
+      immer((set, get) => ({
         // Initial state
         currentTenant: null, currentUser: null, tenants: [], isLoading: false, error: null, // Computed getters
         get context() {
-
+          const { currentTenant, currentUser } = get()
           if (!currentTenant || !currentUser) return null
           return {
             tenant: currentTenant,
@@ -52,21 +52,21 @@ export const useTenantStore = create<TenantStore>()(devtools(
         },
         
         // Actions
-        setCurrentTenant: (_tenant) => set((s_tate) => {
+        setCurrentTenant: (tenant) => set((state) => {
           state.currentTenant = tenant
           state.error = null
         }),
         
-        setCurrentUser: (_user) => set((s_tate) => {
+        setCurrentUser: (user) => set((state) => {
           state.currentUser = user
         }),
         
-        setTenants: (_tenants) => set((s_tate) => {
+        setTenants: (tenants) => set((state) => {
           state.tenants = tenants
         }),
         
-        switchTenant: async (_tenantId) => {
-          set((s_tate) => {
+        switchTenant: async (tenantId) => {
+          set((state) => {
             state.isLoading = true
             state.error = null
           })
@@ -78,7 +78,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
             }
             
             // Update current tenant
-            set((s_tate) => {
+            set((state) => {
               state.currentTenant = tenant
               state.isLoading = false
             })
@@ -86,15 +86,15 @@ export const useTenantStore = create<TenantStore>()(devtools(
             localStorage.setItem('lastTenantId', tenantId)
             // Reload app data for new tenant context
             window.location.reload()
-          } catch {
-            set((s_tate) => {
+          } catch (error) {
+            set((state) => {
               state.error = error instanceof Error ? error.message : 'Failed to switch tenant'
               state.isLoading = false
             })
           }
         },
         
-        updateTenantSettings: (s_ettings) => set((s_tate) => {
+        updateTenantSettings: (settings) => set((state) => {
           if (state.currentTenant) {
             state.currentTenant.settings = {
               ...state.currentTenant.settings,
@@ -103,7 +103,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
           }
         }),
         
-        updateTenantCustomization: (_customization) => set((s_tate) => {
+        updateTenantCustomization: (customization) => set((state) => {
           if (state.currentTenant) {
             state.currentTenant.customization = {
               ...state.currentTenant.customization,
@@ -112,18 +112,18 @@ export const useTenantStore = create<TenantStore>()(devtools(
           }
         }),
         
-        checkFeature: (_feature) => {
+        checkFeature: (feature) => {
           const tenant = get().currentTenant
           if (!tenant) return false
-          return tenant.plan.features.includes(_feature)
+          return tenant.plan.features.includes(feature)
         },
         
-        checkLimit: (_resource, amount = 1) => {
+        checkLimit: (resource, amount = 1) => {
           const tenant = get().currentTenant
           if (!tenant) return false
           const limits = tenant.plan.limits
           const usage = tenant.usage.current
-          switch (_resource) {
+          switch (resource) {
             case 'users':
               return (usage.users + amount) <= limits.users
             case 'precintos':
@@ -139,7 +139,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
           }
         },
         
-        clearTenant: () => set((s_tate) => {
+        clearTenant: () => set((state) => {
           state.currentTenant = null
           state.currentUser = null
           state.tenants = []
@@ -148,7 +148,7 @@ export const useTenantStore = create<TenantStore>()(devtools(
       })),
       {
         name: 'tenant-store',
-        partialize: (s_tate) => ({
+        partialize: (state) => ({
           currentTenant: state.currentTenant,
           currentUser: state.currentUser,
           tenants: state.tenants

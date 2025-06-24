@@ -33,7 +33,7 @@ export const AlertsTableV2: React.FC = () => {
     setSelectedAlertaForResponse(alerta)
     setIsResponseModalOpen(true)
   }
-  const handleResponderAlerta = async (alertaId: string, motivoId: number, motivoDescripcion: string, observaciones?: string) => {
+  const handleResponderAlerta = async (alertaId: string, _motivoId: number, _motivoDescripcion: string, _observaciones?: string) => {
     try {
       await actions.atenderAlerta(alertaId)
       notificationService.success('Alerta respondida correctamente')
@@ -284,15 +284,15 @@ export const AlertsTableV2: React.FC = () => {
           alerta={selectedAlerta}
           isOpen={isModalOpen}
           onClose={closeModal}
-          onAsignar={(usuarioId, notas) => {
+          onAsignar={(_usuarioId, _notas) => {
             // Assignment handled
             notificationService.success('Alerta asignada correctamente')
           }}
-          onComentar={(mensaje) => {
+          onComentar={(_mensaje) => {
             // Comment added
             notificationService.success('Comentario agregado')
           }}
-          onResolver={(tipo, descripcion, acciones) => {
+          onResolver={(_tipo, _descripcion, _acciones) => {
             // Alert resolved
             notificationService.success('Alerta resuelta correctamente')
             closeModal()

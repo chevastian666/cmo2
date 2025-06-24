@@ -52,13 +52,19 @@ export const LibroNovedadesPageV2: React.FC = () => {
   const [expandedNovedades, setExpandedNovedades] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false)
   const [novedades, setNovedades] = useState<Novedad[]>([])
-  const [estadisticas, setEstadisticas] = useState<any>(null)
+  const [estadisticas, setEstadisticas] = useState<{
+    totalDia: number;
+    pendientes: number;
+    enSeguimiento: number;
+    resueltas: number;
+    porTipo: Record<string, number>;
+  } | null>(null)
   
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor' || userInfo.role === 'encargado'
   
   // Mock functions - replace with actual API calls
-  const fetchNovedades = async (filtros: FiltrosNovedades) => {
+  const fetchNovedades = async (_filtros: FiltrosNovedades) => {
     setLoading(true)
     // TODO: Implement actual API call
     setTimeout(() => {
@@ -116,7 +122,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       default:
         return novedades
     }
-  }, [novedades])
+  }, [novedades, selectedTab])
   const activeFiltersCount = Object.values(filtros).filter(v => 
     v !== '' && v !== false && v !== null && v !== FILTROS_DEFAULT.fecha
   ).length
@@ -142,7 +148,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await marcarResuelta(novedadId, comentario)
       notificationService.success('Novedad resuelta', 'La novedad se ha marcado como resuelta')
       setNovedadResolucion(null)
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo marcar la novedad como resuelta')
     }
   }
@@ -151,7 +157,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
       await agregarSeguimiento(novedadId, comentario)
       notificationService.success('Seguimiento agregado', 'Se ha agregado el seguimiento correctamente')
       setNovedadSeguimiento(null)
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo agregar el seguimiento')
     }
   }
@@ -165,7 +171,7 @@ export const LibroNovedadesPageV2: React.FC = () => {
     setExpandedNovedades(newExpanded)
   }
   const clearFilters = () => {
-    setFiltros(_FILTROS_DEFAULT)
+    setFiltros(FILTROS_DEFAULT)
   }
   return (<PageTransition>
       <div className="space-y-6">

@@ -13,7 +13,7 @@ interface TransitDetailModalProps {
 export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
   isOpen, onClose, transito
 }) => {
-  const [mapError] = useState(_false)
+  const [_mapError] = useState(_false)
   const [showFullImage, setShowFullImage] = useState(_false)
   const [timelinePosition, setTimelinePosition] = useState(100); // 0-100 representing journey progress
   const [selectedTime, setSelectedTime] = useState<Date>(new Date())
@@ -35,7 +35,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
         document.removeEventListener('keydown', handleEsc)
       }
     }
-  }, [transito])
+  }, [transito, isOpen, onClose])
   const handleTimelineChange = (value: number) => {
     setTimelinePosition(_value)
     // Calculate the time based on position
@@ -43,10 +43,10 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
       new Date(transito.eta).getTime() - new Date(transito.fechaSalida).getTime() :
       6 * 60 * 60 * 1000; // Default 6 hours
     const currentDuration = (totalDuration * value) / 100
-    const currentTime = new Date(new Date(transito.fechaSalida).getTime() + currentDuration)
+    const _currentTime = new Date(new Date(transito.fechaSalida).getTime() + currentDuration)
     setSelectedTime(_currentTime)
   }
-  const togglePlayTimeline = () => {
+  const _togglePlayTimeline = () => {
     if (_isPlayingTimeline) {
       // Stop playing
       if (playIntervalRef.current) {
@@ -88,8 +88,8 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
   const calculateDuration = () => {
     if (!transito.eta) return 'N/A'
     const duration = new Date(transito.eta).getTime() - new Date(transito.fechaSalida).getTime()
-    const hours = Math.floor(duration / (1000 * 60 * 60))
-    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
+    const _hours = Math.floor(duration / (1000 * 60 * 60))
+    const _minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
     return `${_hours}h ${_minutes}m`
   }
   // Mock additional data for enhanced view
@@ -396,7 +396,7 @@ export const TransitDetailModalEnhanced: React.FC<TransitDetailModalProps> = ({
                       Alertas Activas ({transito.alertas.length})
                     </h3>
                     <div className="space-y-2">
-                      {transito.alertas.map((_alerta, index) => (
+                      {transito.alertas.map((_alerta, _index) => (
                         <div key={_index} className="bg-red-900/20 border border-red-800 rounded-lg p-3 flex items-start space-x-3">
                           <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
                           <p className="text-sm text-red-300">{_alerta}</p>

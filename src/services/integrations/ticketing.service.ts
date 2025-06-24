@@ -4,6 +4,20 @@
  * By Cheva
  */
 
+// Response parsing
+interface TicketResponse {
+  id?: string | number;
+  key?: string;
+  result?: {
+    sys_id: string;
+    number: string;
+    state: string;
+  };
+  status?: number;
+  created_at?: string;
+  url?: string;
+}
+
 // Alert data structure for ticketing
 export interface TicketAlert {
   id?: string
@@ -172,10 +186,7 @@ class TicketingService {
     }
   }
   // Platform-specific implementations
-  // Platform-specific ticket formats
-  type PlatformTicket = Record<string, unknown>
-
-  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
+  private formatTicketForPlatform(config: TicketingConfig, ticketData: Partial<TicketData>): Record<string, unknown> {
     switch (config.type) {
       case 'jira':
         return this.formatJiraTicket(config, ticketData)
@@ -189,7 +200,7 @@ class TicketingService {
         return ticketData
     }
   }
-  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
+  private formatJiraTicket(config: TicketingConfig, ticketData: Partial<TicketData>): Record<string, unknown> {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -219,7 +230,7 @@ class TicketingService {
       }
     }
   }
-  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
+  private formatServiceNowTicket(config: TicketingConfig, ticketData: Partial<TicketData>): Record<string, unknown> {
     const priorityMap: Record<string, string> = {
       'Critical': '1',
       'High': '2',
@@ -237,7 +248,7 @@ class TicketingService {
       ...ticketData.custom_fields
     }
   }
-  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
+  private formatFreshdeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): Record<string, unknown> {
     const priorityMap: Record<string, number> = {
       'Critical': 4,
       'High': 3,
@@ -255,7 +266,7 @@ class TicketingService {
       ...ticketData.custom_fields
     }
   }
-  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): PlatformTicket {
+  private formatZendeskTicket(config: TicketingConfig, ticketData: Partial<TicketData>): Record<string, unknown> {
     const priorityMap: Record<string, string> = {
       'Critical': 'urgent',
       'High': 'high',
@@ -323,25 +334,6 @@ class TicketingService {
     }
   }
   // Response parsing
-  // Response types from different platforms
-  interface TicketResponse {
-    id?: string
-    key?: string
-    self?: string
-    sys_id?: string
-    display_id?: string
-    number?: string
-    result?: {
-      sys_id?: string
-      number?: string
-    }
-    ticket?: {
-      id?: string
-      url?: string
-    }
-    [key: string]: unknown
-  }
-
   private parseTicketResponse(config: TicketingConfig, response: TicketResponse): CreatedTicket {
     switch (config.type) {
       case 'jira':
@@ -415,7 +407,7 @@ class TicketingService {
       }
     }
   }
-  private buildAlertDescription(alert: any, alertType: string): string {
+  private buildAlertDescription(alert: AlertData, alertType: string): string {
     const sections = [
       `**Tipo de Alerta:** ${alertType}`,
       `**Descripción:** ${alert.message || alert.description}`,

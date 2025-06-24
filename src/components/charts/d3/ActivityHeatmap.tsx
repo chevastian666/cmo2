@@ -19,8 +19,8 @@ const HOURS = Array.from({ length: 24 }, (__, i) => i)
 export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
   data, config: userConfig, onCellClick
 }) => {
-  const svgRef = useRef<SVGSVGElement>(_null)
-  const containerRef = useRef<HTMLDivElement>(_null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig])
   // Handle container resize
@@ -38,6 +38,9 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     if (!svgRef.current || !data.length) return
     const svg = d3.select(svgRef.current)
     svg.selectAll('*').remove()
+    
+    const { width, height } = dimensions
+    const margin = config.margin
     const innerWidth = width - margin.left - margin.right
     const innerHeight = height - margin.top - margin.bottom
     // Calculate cell dimensions
@@ -45,12 +48,12 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     const cellHeight = innerHeight / 7
     // Create scales
     const colorScale = d3.scaleSequential(d3.interpolateBlues)
-      .domain(d3.extent(_data, d => d.value) as [number, number])
+      .domain(d3.extent(data, d => d.value) as [number, number])
     // Create main group
     const g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
     // Create tooltip
-    const tooltipDiv = tooltip.create(containerRef.current!)
+    const _tooltipDiv = tooltip.create(containerRef.current!)
     // Create data grid
     const dataGrid = new Map()
     data.forEach(d => {
@@ -58,11 +61,11 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     })
     // Create cells
     const cells = g.selectAll('.cell')
-      .data(DAYS.flatMap((_day, dayIndex) => 
+      .data(DAYS.flatMap((_, dayIndex) => 
         HOURS.map(hour => ({
           day: dayIndex,
           hour,
-          data: dataGrid.get(`${_dayIndex}-${_hour}`) || { day: dayIndex, hour, value: 0 }
+          data: dataGrid.get(`${dayIndex}-${hour}`) || { day: dayIndex, hour, value: 0 }
         }))
       ))
       .enter().append('g')
@@ -80,13 +83,13 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('opacity', 0)
     // Animate cells appearance
     rects.transition()
-      .delay((_d, i) => i * 10)
+      .delay((_, i) => i * 10)
       .duration(config.animations.duration)
       .style('opacity', 1)
     // Add hover effects
     cells
-      .on('mouseenter', function(_event, d) {
-        const rect = d3.select(_this).select('rect')
+      .on('mouseenter', function(event, d) {
+        const rect = d3.select(this).select('rect')
         rect.transition()
           .duration(200)
           .attr('stroke', config.colors[0])
@@ -102,7 +105,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
         tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
-        const rect = d3.select(_this).select('rect')
+        const rect = d3.select(this).select('rect')
         rect.transition()
           .duration(200)
           .attr('stroke', '#374151')
@@ -110,16 +113,16 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
           .style('opacity', 1)
         tooltip.hide(_tooltipDiv)
       })
-      .on('click', (_event, d) => {
+      .on('click', (_, d) => {
         onCellClick?.(d.data)
       })
     // Add day labels
     const dayLabels = g.selectAll('.day-label')
-      .data(_DAYS)
+      .data(DAYS)
       .enter().append('text')
       .attr('class', 'day-label')
       .attr('x', -10)
-      .attr('y', (_d, i) => i * cellHeight + cellHeight / 2)
+      .attr('y', (_, i) => i * cellHeight + cellHeight / 2)
       .attr('dy', '0.35em')
       .style('text-anchor', 'end')
       .style('fill', '#9CA3AF')
@@ -127,7 +130,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('font-weight', '500')
       .text(d => d)
       .style('opacity', 0)
-    animations.fadeIn(_dayLabels, config.animations.duration)
+    animations.fadeIn(dayLabels, config.animations.duration)
     // Add hour labels
     const hourLabels = g.selectAll('.hour-label')
       .data(HOURS.filter(h => h % 3 === 0)) // Show every 3 hours
@@ -138,9 +141,9 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('text-anchor', 'middle')
       .style('fill', '#9CA3AF')
       .style('font-size', '12px')
-      .text(d => `${_d}:00`)
+      .text(d => `${d}:00`)
       .style('opacity', 0)
-    animations.fadeIn(_hourLabels, config.animations.duration)
+    animations.fadeIn(hourLabels, config.animations.duration)
     // Add color legend
     const legendWidth = 200
     const legendHeight = 10
@@ -170,12 +173,12 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     const legendScale = d3.scaleLinear()
       .domain(colorScale.domain())
       .range([0, legendWidth])
-    const legendAxis = d3.axisBottom(_legendScale)
+    const legendAxis = d3.axisBottom(legendScale)
       .ticks(5)
       .tickFormat(formatters.number)
     legend.append('g')
-      .attr('transform', `translate(0, ${_legendHeight})`)
-      .call(_legendAxis)
+      .attr('transform', `translate(0, ${legendHeight})`)
+      .call(legendAxis)
       .selectAll('text')
       .style('fill', '#9CA3AF')
       .style('font-size', '10px')
@@ -200,21 +203,21 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('font-weight', '600')
       .text('Mapa de Calor - Actividad por Hora y Día')
       .style('opacity', 0)
-    animations.fadeIn(_title, config.animations.duration)
+    animations.fadeIn(title, config.animations.duration)
     // Add statistics panel
     const stats = g.append('g')
       .attr('class', 'stats')
       .attr('transform', `translate(${innerWidth - 150}, 20)`)
     const statsData = [
-      { label: 'Máximo', value: d3.max(_data, d => d.value) || 0 },
-      { label: 'Promedio', value: d3.mean(_data, d => d.value) || 0 },
-      { label: 'Total', value: d3.sum(_data, d => d.value) }
+      { label: 'Máximo', value: d3.max(data, d => d.value) || 0 },
+      { label: 'Promedio', value: d3.mean(data, d => d.value) || 0 },
+      { label: 'Total', value: d3.sum(data, d => d.value) }
     ]
     const statItems = stats.selectAll('.stat-item')
-      .data(s_tatsData)
+      .data(statsData)
       .enter().append('g')
       .attr('class', 'stat-item')
-      .attr('transform', (_d, i) => `translate(0, ${i * 25})`)
+      .attr('transform', (_, i) => `translate(0, ${i * 25})`)
     statItems.append('rect')
       .attr('width', 140)
       .attr('height', 20)
@@ -227,19 +230,19 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('fill', '#9CA3AF')
       .style('font-size', '11px')
       .text(d => `${d.label}: ${formatters.number(d.value)}`)
-    animations.fadeIn(s_tats, config.animations.duration + 300)
-  }, [data, config])
+    animations.fadeIn(stats, config.animations.duration + 300)
+  }, [data, config, dimensions, onCellClick])
     useEffect(() => {
     drawHeatmap()
-  }, [dimensions])
+  }, [drawHeatmap])
   return (
     <div 
-      ref={_containerRef} 
+      ref={containerRef} 
       className="w-full h-full relative"
       style={{ minHeight: '400px' }}
     >
       <svg
-        ref={s_vgRef}
+        ref={svgRef}
         width="100%"
         height="100%"
         style={{ display: 'block' }}

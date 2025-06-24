@@ -45,7 +45,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
     if (precintoId && data.precintoId !== precintoId) {
       onChange('precintoId', precintoId)
     }
-  }, [])
+  }, [data.precintoId, onChange, precintoId])
   // Auto-complete RUT when empresa is selected
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
         onChange('rutEmpresa', empresa.rut)
       }
     }
-  }, [data.empresa])
+  }, [data.empresa, data.rutEmpresa, onChange])
   // Auto-complete empresa when RUT is entered
 
   useEffect(() => {
@@ -65,8 +65,8 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
         onChange('empresa', empresa.nombre)
       }
     }
-  }, [data.rutEmpresa])
-  const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  }, [data.rutEmpresa, data.empresa, onChange])
+  const handleInputChange = (_field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const value = e.target.value
     onChange(_field, value)
   }

@@ -1,6 +1,6 @@
  
 import React, { useState, useEffect } from 'react'
-import {_Bell, BellOff, Volume2, VolumeX, AlertTriangle} from 'lucide-react'
+import { Bell, BellOff, Volume2, VolumeX, AlertTriangle } from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { notificationService} from '../../services/shared/notification.service'
 export interface NotificationSettingsProps {
@@ -11,19 +11,19 @@ export interface NotificationSettingsProps {
 export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ 
   className, compact = false 
 }) => {
-  const [soundEnabled, setSoundEnabled] = useState(_true)
-  const [notificationsEnabled, setNotificationsEnabled] = useState(_true)
-  const [criticalOnly, setCriticalOnly] = useState(_false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
+  const [criticalOnly, setCriticalOnly] = useState(false)
   useEffect(() => {
     // Load saved preferences
-    const savedPrefs = localStorage.getItem('notificationPreferences')
-    if (s_avedPrefs) {
-      const prefs = JSON.parse(s_avedPrefs)
-      setSoundEnabled(prefs.soundEnabled ?? true)
-      setNotificationsEnabled(prefs.notificationsEnabled ?? true)
-      setCriticalOnly(prefs.criticalOnly ?? false)
+    const _savedPrefs = localStorage.getItem('notificationPreferences')
+    if (_savedPrefs) {
+      const _prefs = JSON.parse(_savedPrefs)
+      setSoundEnabled(_prefs.soundEnabled ?? true)
+      setNotificationsEnabled(_prefs.notificationsEnabled ?? true)
+      setCriticalOnly(_prefs.criticalOnly ?? false)
       // Apply settings
-      notificationService.setSoundEnabled(prefs.soundEnabled ?? true)
+      notificationService.setSoundEnabled(_prefs.soundEnabled ?? true)
     }
   }, [])
   const savePreferences = (updates: Partial<{
@@ -37,25 +37,25 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
       criticalOnly,
       ...updates
     }
-    localStorage.setItem('notificationPreferences', JSON.stringify(_prefs))
+    localStorage.setItem('notificationPreferences', JSON.stringify(prefs))
   }
-  const handleSoundToggle = () => {
+  const _handleSoundToggle = () => {
     const newValue = !soundEnabled
-    setSoundEnabled(_newValue)
-    notificationService.setSoundEnabled(_newValue)
+    setSoundEnabled(newValue)
+    notificationService.setSoundEnabled(newValue)
     savePreferences({ soundEnabled: newValue })
   }
-  const handleNotificationsToggle = () => {
+  const _handleNotificationsToggle = () => {
     const newValue = !notificationsEnabled
-    setNotificationsEnabled(_newValue)
+    setNotificationsEnabled(newValue)
     savePreferences({ notificationsEnabled: newValue })
   }
-  const handleCriticalOnlyToggle = () => {
+  const _handleCriticalOnlyToggle = () => {
     const newValue = !criticalOnly
-    setCriticalOnly(_newValue)
+    setCriticalOnly(newValue)
     savePreferences({ criticalOnly: newValue })
   }
-  if (_compact) {
+  if (compact) {
     return (
       <div className={cn('flex items-center gap-2', className)}>
         <button

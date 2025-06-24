@@ -3,8 +3,8 @@
  * By Cheva
  */
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen} from '@/test/utils/test-utils'
-import { Card, CardContent, CardHeader, CardTitle} from './card'
+import { render, screen } from '@/test/utils/test-utils'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from './card'
 describe('Card Components', () => {
   describe('Card', () => {
     it('renders correctly', () => {
@@ -42,7 +42,7 @@ describe('Card Components', () => {
     it('has correct typography classes', () => {
       render(<CardTitle>Title</CardTitle>)
       const title = screen.getByText('Title')
-      expect(_title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
+      expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
     })
   })
   describe('CardDescription', () => {
@@ -53,7 +53,7 @@ describe('Card Components', () => {
     it('has muted text styling', () => {
       render(<CardDescription>Description</CardDescription>)
       const description = screen.getByText('Description')
-      expect(_description).toHaveClass('text-sm', 'text-muted-foreground')
+      expect(description).toHaveClass('text-sm', 'text-muted-foreground')
     })
   })
   describe('Card composition', () => {

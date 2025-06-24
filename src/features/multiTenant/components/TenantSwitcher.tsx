@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
 import { cn} from '@/utils/utils'
 export const TenantSwitcher: React.FC = () => {
 
-  const [open, setOpen] = useState(_false)
+  const [open, _setOpen] = useState(false)
   if (!currentTenant) {
     return null
   }

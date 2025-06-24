@@ -1,19 +1,22 @@
 import React, { useState, useMemo } from 'react'
-import {_Plus, Search, Filter, Download, Building2} from 'lucide-react'
+import {Plus, Search, Filter, Download, Building2} from 'lucide-react'
 import { DepositoTable} from '../components/DepositoTable'
-import {_DepositoFilters} from '../components/DepositoFilters'
+import {DepositoFilters} from '../components/DepositoFilters'
 import { DepositoDetailModal} from '../components/DepositoDetailModal'
 import { DepositoFormModal} from '../components/DepositoFormModal'
 import { exportToCSV} from '../../../utils/export'
 import type { Deposito} from '../types'
-export const DepositosPage: React.FC = () => {
 
+export const DepositosPage: React.FC = () => {
+  // Mock data - replace with actual data from API/store
+  const [depositos] = useState<Deposito[]>([])
+  
   const [searchTerm, setSearchTerm] = useState('')
-  const [showFilters, setShowFilters] = useState(_false)
-  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(_null)
-  const [showDetail, setShowDetail] = useState(_false)
-  const [showForm, setShowForm] = useState(_false)
-  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(_null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null)
   const [filters, setFilters] = useState({
     tipo: '',
     zona: '',
@@ -24,36 +27,38 @@ export const DepositosPage: React.FC = () => {
       const matchesSearch = searchTerm === '' || 
         deposito.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         deposito.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deposito.codigo.toString().includes(s_earchTerm)
+        deposito.codigo.toString().includes(searchTerm)
       const matchesTipo = !filters.tipo || deposito.tipo === filters.tipo
       const matchesZona = !filters.zona || deposito.zona === filters.zona
       const matchesPadre = !filters.padre || deposito.padre === filters.padre
       return matchesSearch && matchesTipo && matchesZona && matchesPadre
     })
-  }, [depositos, filters])
+  }, [depositos, searchTerm, filters])
   const handleExport = () => {
 
-    exportToCSV(__data, 'depositos')
+    exportToCSV(filteredDepositos, 'depositos')
   }
   const handleView = (deposito: Deposito) => {
-    setSelectedDeposito(_deposito)
-    setShowDetail(_true)
+    setSelectedDeposito(deposito)
+    setShowDetail(true)
   }
   const handleEdit = (deposito: Deposito) => {
-    setEditingDeposito(_deposito)
-    setShowForm(_true)
+    setEditingDeposito(deposito)
+    setShowForm(true)
   }
   const handleAdd = () => {
-    setEditingDeposito(_null)
-    setShowForm(_true)
+    setEditingDeposito(null)
+    setShowForm(true)
   }
-  const handleSave = (_data: Partial<Deposito>) => {
-    if (_editingDeposito) {
-      updateDeposito(editingDeposito.id, _data)
+  const handleSave = (data: Partial<Deposito>) => {
+    if (editingDeposito) {
+      // TODO: Implement updateDeposito
+      console.log('Update deposito:', editingDeposito.id, data)
     } else {
-      addDeposito(data as Omit<Deposito, 'id'>)
+      // TODO: Implement addDeposito
+      console.log('Add deposito:', data)
     }
-    setShowForm(_false)
+    setShowForm(false)
   }
   return (<div className="space-y-6">
       {/* Header */}
@@ -61,14 +66,14 @@ export const DepositosPage: React.FC = () => {
         <h1 className="text-2xl font-bold text-white">Depósitos</h1>
         <div className="flex gap-2">
           <button
-            onClick={_handleExport}
+            onClick={handleExport}
             className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
           >
             <Download className="h-4 w-4" />
             Exportar CSV
           </button>
           <button
-            onClick={_handleAdd}
+            onClick={handleAdd}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
           >
             <Plus className="h-4 w-4" />
@@ -84,8 +89,8 @@ export const DepositosPage: React.FC = () => {
           <input
             type="text"
             placeholder="Buscar por código, nombre o alias..."
-            value={s_earchTerm}
-            onChange={(_e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -95,9 +100,9 @@ export const DepositosPage: React.FC = () => {
         >
           <Filter className="h-4 w-4" />
           Filtros
-          {Object.values(_filters).some(v => v !== '') && (
+          {Object.values(filters).some(v => v !== '') && (
             <span className="bg-blue-600 text-xs rounded-full px-2 py-0.5">
-              {Object.values(_filters).filter(v => v !== '').length}
+              {Object.values(filters).filter(v => v !== '').length}
             </span>
           )}
         </button>
@@ -105,9 +110,9 @@ export const DepositosPage: React.FC = () => {
 
       {/* Filters Panel */}
       {showFilters && (<DepositoFilters
-          filters={_filters}
-          onFiltersChange={s_etFilters}
-          onClose={() => setShowFilters(_false)}
+          filters={filters}
+          onFiltersChange={setFilters}
+          onClose={() => setShowFilters(false)}
         />
       )}
 
@@ -117,7 +122,7 @@ export const DepositosPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-400 text-sm">Total Depósitos</p>
-              <p className="text-2xl font-bold text-white">{depositos.length}</p>
+              <p className="text-2xl font-bold text-white">{filteredDepositos.length}</p>
             </div>
             <Building2 className="h-8 w-8 text-blue-500" />
           </div>
@@ -127,7 +132,7 @@ export const DepositosPage: React.FC = () => {
             <div>
               <p className="text-gray-400 text-sm">Tránsitos Activos</p>
               <p className="text-2xl font-bold text-white">
-                {depositos.reduce((_acc, d) => acc + d.transitosActivos, 0)}
+                {filteredDepositos.reduce((acc, d) => acc + d.transitosActivos, 0)}
               </p>
             </div>
             <div className="h-8 w-8 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -139,30 +144,30 @@ export const DepositosPage: React.FC = () => {
 
       {/* Table */}
       <DepositoTable
-        depositos={_filteredDepositos}
-        loading={_loading}
-        onView={_handleView}
-        onEdit={_handleEdit}
+        depositos={filteredDepositos}
+        loading={false}
+        onView={handleView}
+        onEdit={handleEdit}
       />
 
       {/* Detail Modal */}
       {showDetail && selectedDeposito && (<DepositoDetailModal
-          deposito={s_electedDeposito}
-          isOpen={s_howDetail}
-          onClose={() => setShowDetail(_false)}
+          deposito={selectedDeposito}
+          isOpen={showDetail}
+          onClose={() => setShowDetail(false)}
           onEdit={() => {
-            setShowDetail(_false)
-            handleEdit(s_electedDeposito)
+            setShowDetail(false)
+            handleEdit(selectedDeposito)
           }}
         />
       )}
 
       {/* Form Modal */}
       {showForm && (<DepositoFormModal
-          deposito={_editingDeposito}
-          isOpen={s_howForm}
-          onClose={() => setShowForm(_false)}
-          onSave={_handleSave}
+          deposito={editingDeposito}
+          isOpen={showForm}
+          onClose={() => setShowForm(false)}
+          onSave={handleSave}
         />
       )}
     </div>

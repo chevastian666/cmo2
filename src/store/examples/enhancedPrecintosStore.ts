@@ -27,18 +27,19 @@ interface PrecintosState {
   getPrecintosCount: () => number
 }
 
-export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get) => ({
+export const useEnhancedPrecintosStore = createStore<PrecintosState>((set, get) => ({
     // Estado inicial
     precintos: [], selectedPrecinto: null, filters: {}, loadingState: { status: 'idle' }, // Acciones con manejo de errores estandarizado
     fetchPrecintos: async () => {
       await executeAsyncAction(async () => {
 
-          set((s_tate) => {
-            state.precintos = _data
+          const data = await precintosService.getPrecintos()
+          set((state) => {
+            state.precintos = data
           })
-          return _data
+          return data
         },
-        (_loadingState) => set({ loadingState }),
+        (loadingState) => set({ loadingState }),
         {
           errorMessage: 'Error al cargar precintos',
           successMessage: 'Precintos cargados exitosamente',
@@ -47,16 +48,16 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
       )
     },
     
-    selectPrecinto: (_precinto) => {
-      set((s_tate) => {
+    selectPrecinto: (precinto) => {
+      set((state) => {
         state.selectedPrecinto = precinto
       })
     },
     
-    updatePrecinto: async (_id, updates) => {
+    updatePrecinto: async (id, updates) => {
       await executeAsyncAction(async () => {
-          const updated = await precintosService.updatePrecinto(_id, updates)
-          set((s_tate) => {
+          const updated = await precintosService.updatePrecinto(id, updates)
+          set((state) => {
             const index = state.precintos.findIndex(p => p.id === id)
             if (index !== -1) {
               state.precintos[index] = updated
@@ -67,7 +68,7 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
           })
           return updated
         },
-        (_loadingState) => set({ loadingState }),
+        (loadingState) => set({ loadingState }),
         {
           errorMessage: 'Error al actualizar precinto',
           successMessage: 'Precinto actualizado exitosamente',
@@ -76,15 +77,15 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
       )
     },
     
-    setFilters: (_filters) => {
-      set((s_tate) => {
+    setFilters: (filters) => {
+      set((state) => {
         state.filters = { ...state.filters, ...filters }
       })
     },
     
     // Computed selectors
     getFilteredPrecintos: () => {
-
+      const { precintos, filters } = get()
       let filtered = [...precintos]
       if (filters.estado) {
         filtered = filtered.filter(p => p.estado === filters.estado)
@@ -93,8 +94,8 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
       if (filters.search) {
         const search = filters.search.toLowerCase()
         filtered = filtered.filter(p => 
-          p.codigo.toLowerCase().includes(s_earch) ||
-          p.descripcion?.toLowerCase().includes(s_earch)
+          p.codigo.toLowerCase().includes(search) ||
+          p.descripcion?.toLowerCase().includes(search)
         )
       }
       
@@ -112,10 +113,10 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
     enableLogger: {
       collapsed: true,
       diff: true,
-      actionFilter: (_action) => !action.includes('loadingState') // Filtrar acciones de loading
+      actionFilter: (action) => !action.includes('loadingState') // Filtrar acciones de loading
     },
     persist: {
-      partialize: (s_tate) => ({
+      partialize: (state) => ({
         filters: state.filters,
         selectedPrecinto: state.selectedPrecinto
       })
@@ -124,21 +125,21 @@ export const useEnhancedPrecintosStore = createStore<PrecintosState>((s_et, get)
 )
 // Suscripciones con selector para optimización
 export const subscribeToPrecintos = (callback: (precintos: Precinto[]) => void) => {
-  return useEnhancedPrecintosStore.subscribe((s_tate) => state.precintos,
+  return useEnhancedPrecintosStore.subscribe((state) => state.precintos,
     callback
   )
 }
 export const subscribeToSelectedPrecinto = (callback: (precinto: Precinto | null) => void) => {
-  return useEnhancedPrecintosStore.subscribe((s_tate) => state.selectedPrecinto,
+  return useEnhancedPrecintosStore.subscribe((state) => state.selectedPrecinto,
     callback
   )
 }
 // Hooks específicos para casos de uso comunes
 export const useFilteredPrecintos = () => {
-  return useEnhancedPrecintosStore((s_tate) => state.getFilteredPrecintos())
+  return useEnhancedPrecintosStore((state) => state.getFilteredPrecintos())
 }
 export const usePrecintosLoading = () => {
-  const loadingState = useEnhancedPrecintosStore((s_tate) => state.loadingState)
+  const loadingState = useEnhancedPrecintosStore((state) => state.loadingState)
   return {
     isLoading: loadingState.status === 'loading',
     isError: loadingState.status === 'error',
@@ -146,5 +147,5 @@ export const usePrecintosLoading = () => {
   }
 }
 export const useSelectedPrecinto = () => {
-  return useEnhancedPrecintosStore((s_tate) => state.selectedPrecinto)
+  return useEnhancedPrecintosStore((state) => state.selectedPrecinto)
 }

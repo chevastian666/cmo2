@@ -79,31 +79,31 @@ export class SmartCache extends EventEmitter {
       lastAccess: Date.now(),
       size
     }
-    this.cache.set(_key, entry)
+    this.cache.set(key, entry)
     this.currentSize += size
     // Update tag index
     tags.forEach(tag => {
-      if (!this.tagIndex.has(_tag)) {
-        this.tagIndex.set(_tag, new Set())
+      if (!this.tagIndex.has(tag)) {
+        this.tagIndex.set(tag, new Set())
       }
-      this.tagIndex.get(_tag)!.add(_key)
+      this.tagIndex.get(tag)!.add(key)
     })
     // Update access queue
-    this.updateAccessQueue(_key)
+    this.updateAccessQueue(key)
     this.emit('set', key, data)
   }
 
   // Get a value from cache
   get<T>(key: string): T | null {
-    const entry = this.cache.get(_key)
+    const entry = this.cache.get(key)
     if (!entry) {
       this.emit('miss', key)
       return null
     }
 
     // Check if expired
-    if (this.isExpired(_entry)) {
-      this.delete(_key)
+    if (this.isExpired(entry)) {
+      this.delete(key)
       this.emit('miss', key)
       return null
     }
@@ -111,17 +111,17 @@ export class SmartCache extends EventEmitter {
     // Update access info
     entry.accessCount++
     entry.lastAccess = Date.now()
-    this.updateAccessQueue(_key)
+    this.updateAccessQueue(key)
     this.emit('hit', key)
     return entry.data as T
   }
 
   // Check if key exists and is valid
   has(key: string): boolean {
-    const entry = this.cache.get(_key)
+    const entry = this.cache.get(key)
     if (!entry) return false
-    if (this.isExpired(_entry)) {
-      this.delete(_key)
+    if (this.isExpired(entry)) {
+      this.delete(key)
       return false
     }
     
@@ -130,25 +130,25 @@ export class SmartCache extends EventEmitter {
 
   // Delete a specific key
   delete(key: string): boolean {
-    const entry = this.cache.get(_key)
+    const entry = this.cache.get(key)
     if (!entry) return false
     // Remove from cache
-    this.cache.delete(_key)
+    this.cache.delete(key)
     this.currentSize -= entry.size
     // Remove from tag index
     entry.tags.forEach(tag => {
-      const keys = this.tagIndex.get(_tag)
-      if (_keys) {
-        keys.delete(_key)
+      const keys = this.tagIndex.get(tag)
+      if (keys) {
+        keys.delete(key)
         if (keys.size === 0) {
-          this.tagIndex.delete(_tag)
+          this.tagIndex.delete(tag)
         }
       }
     })
     // Remove from access queue
-    const index = this.accessQueue.indexOf(_key)
+    const index = this.accessQueue.indexOf(key)
     if (index > -1) {
-      this.accessQueue.splice(_index, 1)
+      this.accessQueue.splice(index, 1)
     }
 
     this.emit('delete', key)
@@ -159,12 +159,12 @@ export class SmartCache extends EventEmitter {
   invalidateByTags(tags: string[]): number {
     const keysToDelete = new Set<string>()
     tags.forEach(tag => {
-      const keys = this.tagIndex.get(_tag)
-      if (_keys) {
-        keys.forEach(key => keysToDelete.add(_key))
+      const keys = this.tagIndex.get(tag)
+      if (keys) {
+        keys.forEach(key => keysToDelete.add(key))
       }
     })
-    keysToDelete.forEach(key => this.delete(_key))
+    keysToDelete.forEach(key => this.delete(key))
     this.emit('invalidate', tags, keysToDelete.size)
     return keysToDelete.size
   }
@@ -172,12 +172,12 @@ export class SmartCache extends EventEmitter {
   // Invalidate by pattern
   invalidateByPattern(pattern: RegExp): number {
     const keysToDelete: string[] = []
-    this.cache.forEach((__, key) => {
-      if (pattern.test(_key)) {
-        keysToDelete.push(_key)
+    this.cache.forEach((_, key) => {
+      if (pattern.test(key)) {
+        keysToDelete.push(key)
       }
     })
-    keysToDelete.forEach(key => this.delete(_key))
+    keysToDelete.forEach(key => this.delete(key))
     this.emit('invalidate', pattern, keysToDelete.length)
     return keysToDelete.length
   }
@@ -220,16 +220,16 @@ export class SmartCache extends EventEmitter {
 
   private estimateSize(data: unknown): number {
     // Rough estimation of object size
-    const str = JSON.stringify(_data)
+    const str = JSON.stringify(data)
     return str.length * 2; // 2 bytes per character
   }
 
   private updateAccessQueue(key: string): void {
-    const index = this.accessQueue.indexOf(_key)
+    const index = this.accessQueue.indexOf(key)
     if (index > -1) {
-      this.accessQueue.splice(_index, 1)
+      this.accessQueue.splice(index, 1)
     }
-    this.accessQueue.push(_key)
+    this.accessQueue.push(key)
   }
 
   private evictLRU(requiredSize: number): void {
@@ -246,35 +246,35 @@ export class SmartCache extends EventEmitter {
     })
     for (const [key, entry] of entries) {
       if (freedSize >= requiredSize) break
-      toEvict.push(_key)
+      toEvict.push(key)
       freedSize += entry.size
     }
 
     toEvict.forEach(key => {
-      this.delete(_key)
-      this.options.onEvict(_key, 'size')
+      this.delete(key)
+      this.options.onEvict(key, 'size')
     })
   }
 
   private evictOldest(): void {
     const oldestKey = this.accessQueue[0]
-    if (_oldestKey) {
-      this.delete(_oldestKey)
-      this.options.onEvict(_oldestKey, 'size')
+    if (oldestKey) {
+      this.delete(oldestKey)
+      this.options.onEvict(oldestKey, 'size')
     }
   }
 
   private cleanup(): void {
-    const now = Date.now()
+    const _now = Date.now()
     const toDelete: string[] = []
-    this.cache.forEach((_entry, key) => {
-      if (this.isExpired(_entry)) {
-        toDelete.push(_key)
+    this.cache.forEach((entry, key) => {
+      if (this.isExpired(entry)) {
+        toDelete.push(key)
       }
     })
     toDelete.forEach(key => {
-      this.delete(_key)
-      this.options.onEvict(_key, 'ttl')
+      this.delete(key)
+      this.options.onEvict(key, 'ttl')
     })
     if (toDelete.length > 0) {
       this.emit('cleanup', toDelete.length)
@@ -311,30 +311,30 @@ export const globalCache = new SmartCache({
 })
 // React hook for using cache
 export function useSmartCache(namespace: string) {
-  const prefixedKey = (key: string) => `${_namespace}:${_key}`
+  const prefixedKey = (key: string) => `${namespace}:${key}`
   return {
     set: <T>(key: string, data: T, options?: { ttl?: number; tags?: string[] }) => {
-      globalCache.set(prefixedKey(_key), data, options)
+      globalCache.set(prefixedKey(key), data, options)
     },
     
     get: <T>(key: string): T | null => {
-      return globalCache.get<T>(prefixedKey(_key))
+      return globalCache.get<T>(prefixedKey(key))
     },
     
     has: (key: string): boolean => {
-      return globalCache.has(prefixedKey(_key))
+      return globalCache.has(prefixedKey(key))
     },
     
     delete: (key: string): boolean => {
-      return globalCache.delete(prefixedKey(_key))
+      return globalCache.delete(prefixedKey(key))
     },
     
     invalidateByTags: (tags: string[]): number => {
-      return globalCache.invalidateByTags(tags.map(tag => `${_namespace}:${_tag}`))
+      return globalCache.invalidateByTags(tags.map(tag => `${namespace}:${tag}`))
     },
     
     clear: () => {
-      globalCache.invalidateByPattern(new RegExp(`^${_namespace}:`))
+      globalCache.invalidateByPattern(new RegExp(`^${namespace}:`))
     }
   }
 }

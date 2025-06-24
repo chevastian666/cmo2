@@ -83,11 +83,11 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
 }
 export const useRolesStore = create<RolesStore>()(devtools(
     persist(
-      (s_et, get) => ({
+      (set, get) => ({
         permissions: defaultPermissions, currentUserRole: 'God', // Default to God for development
-        permissionHistory: [], loading: false, saving: false, updatePermissions: (_role, section, permissions) => {
+        permissionHistory: [], loading: false, saving: false, updatePermissions: (role, section, permissions) => {
           const oldPermissions = get().permissions[role][section]
-          set((s_tate) => ({
+          set((state) => ({
             permissions: {
               ...state.permissions,
               [role]: {
@@ -108,11 +108,11 @@ export const useRolesStore = create<RolesStore>()(devtools(
           })
         },
 
-        togglePermission: (_role, section, permission) => {
+        togglePermission: (role, section, permission) => {
           const currentPermissions = get().permissions[role][section]
-          const hasPermission = currentPermissions.includes(_permission)
+          const hasPermission = currentPermissions.includes(permission)
           let newPermissions: Permission[]
-          if (_hasPermission) {
+          if (hasPermission) {
             // Remove permission
             newPermissions = currentPermissions.filter(p => p !== permission)
             // Cascade removal: if removing 'view', remove all permissions
@@ -128,11 +128,11 @@ export const useRolesStore = create<RolesStore>()(devtools(
             }
           }
           
-          get().updatePermissions(_role, section, newPermissions)
+          get().updatePermissions(role, section, newPermissions)
         },
 
-        setRolePermissions: (_role, permissions) => {
-          set((s_tate) => ({
+        setRolePermissions: (role, permissions) => {
+          set((state) => ({
             permissions: {
               ...state.permissions,
               [role]: permissions
@@ -140,29 +140,29 @@ export const useRolesStore = create<RolesStore>()(devtools(
           }))
         },
 
-        setSectionPermissions: (s_ection, permissions) => {
+        setSectionPermissions: (section, permissions) => {
           const newPermissions = { ...get().permissions }
-          Object.keys(_permissions).forEach((_role) => {
+          Object.keys(permissions).forEach((role) => {
             newPermissions[role as Role][section] = permissions[role as Role]
           })
           set({ permissions: newPermissions })
         },
 
-        canAccess: (s_ection, permission = 'view') => {
-
-          return permissions[currentUserRole][section].includes(_permission)
+        canAccess: (section, permission = 'view') => {
+          const { permissions, currentUserRole } = get()
+          return permissions[currentUserRole][section].includes(permission)
         },
 
-        canAccessForRole: (_role, section, permission = 'view') => {
-
-          return permissions[role][section].includes(_permission)
+        canAccessForRole: (role, section, permission = 'view') => {
+          const { permissions } = get()
+          return permissions[role][section].includes(permission)
         },
 
         loadPermissions: async () => {
           set({ loading: true })
           try {
             // Simulate API call
-            await new Promise(resolve => setTimeout(_resolve, 1000))
+            await new Promise(resolve => setTimeout(resolve, 1000))
             // In production, fetch from API
             // const response = await api.getPermissions()
             // set({ permissions: response.data })
@@ -178,7 +178,7 @@ export const useRolesStore = create<RolesStore>()(devtools(
           set({ saving: true })
           try {
             // Simulate API call
-            await new Promise(resolve => setTimeout(_resolve, 1500))
+            await new Promise(resolve => setTimeout(resolve, 1500))
             // In production, save to API
             // await api.savePermissions(get().permissions)
             notificationService.success('Permisos guardados correctamente')
@@ -189,22 +189,22 @@ export const useRolesStore = create<RolesStore>()(devtools(
           }
         },
 
-        setCurrentUserRole: (_role) => {
+        setCurrentUserRole: (role) => {
           set({ currentUserRole: role })
         },
 
-        addHistoryEntry: (_change) => {
+        addHistoryEntry: (change) => {
           const entry: PermissionChange = {
             ...change,
             id: `${Date.now()}-${Math.random()}`,
             timestamp: new Date()
           }
-          set((s_tate) => ({
+          set((state) => ({
             permissionHistory: [entry, ...state.permissionHistory].slice(0, 100) // Keep last 100 entries
           }))
         },
 
-        getPermissionHistory: (_filters) => {
+        getPermissionHistory: (filters) => {
           let history = get().permissionHistory
           if (filters?.role) {
             history = history.filter(h => h.role === filters.role)
@@ -219,7 +219,7 @@ export const useRolesStore = create<RolesStore>()(devtools(
       }),
       {
         name: 'roles-store',
-        partialize: (s_tate) => ({
+        partialize: (state) => ({
           permissions: state.permissions,
           currentUserRole: state.currentUserRole,
           permissionHistory: state.permissionHistory

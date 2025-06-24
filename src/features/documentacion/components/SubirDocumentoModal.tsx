@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { X, Upload, FileText} from 'lucide-react'
-import { Card, CardHeader, CardContent} from '@/components/ui/card'
-import { Badge} from '@/components/ui/badge'
-import { cn} from '../../../utils/utils'
-import { notificationService} from '../../../services/shared/notification.service'
-import type { TipoDocumento} from '../types'
-import { TIPOS_DOCUMENTO} from '../types'
+import { X, Upload, FileText } from 'lucide-react'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '../../../utils/utils'
+import { notificationService } from '../../../services/shared/notification.service'
+import type { TipoDocumento } from '../types'
+import { TIPOS_DOCUMENTO } from '../types'
 interface SubirDocumentoModalProps {
   isOpen: boolean
   onClose: () => void
@@ -33,14 +33,14 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
     confidencial: false,
     fechaDocumento: new Date().toISOString().split('T')[0]
   })
-  const [archivo, setArchivo] = useState<File | null>(_null)
-  const [loading, setLoading] = useState(_false)
+  const [archivo, setArchivo] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const fileInputRef = useRef<HTMLInputElement>(_null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   if (!isOpen) return null
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (_file) {
+    if (file) {
       if (file.type !== 'application/pdf') {
         setErrors({ ...errors, archivo: 'Solo se permiten archivos PDF' })
         return
@@ -49,7 +49,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
         setErrors({ ...errors, archivo: 'El archivo no puede superar los 10MB' })
         return
       }
-      setArchivo(_file)
+      setArchivo(file)
       setErrors({ ...errors, archivo: '' })
     }
   }
@@ -63,12 +63,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       newErrors.numeroDUA = 'El número de DUA es requerido para este tipo'
     }
 
-    setErrors(_newErrors)
-    return Object.keys(_newErrors).length === 0
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
   const handleSubmit = async () => {
     if (!validateForm()) return
-    setLoading(_true)
+    setLoading(true)
     try {
       await onSubmit({
         ...formData as FormData,
@@ -79,20 +79,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
     } catch {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente')
     } finally {
-      setLoading(_false)
-    }
-  }
-  const handleReset = () => {
-    setFormData({
-      tipo: 'DUA',
-      destacado: false,
-      confidencial: false,
-      fechaDocumento: new Date().toISOString().split('T')[0]
-    })
-    setArchivo(_null)
-    setErrors({})
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      setLoading(false)
     }
   }
   return (
@@ -100,7 +87,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-75 z-40"
-        onClick={_onClose}
+        onClick={onClose}
       />
       
       {/* Modal */}
@@ -116,9 +103,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </h2>
               </div>
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                disabled={_loading}
+                disabled={loading}
               >
                 <X className="h-5 w-5 text-gray-400" />
               </button>
@@ -135,15 +122,15 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </label>
                 <select
                   value={formData.tipo}
-                  onChange={(_e) => setFormData({ ...formData, tipo: e.target.value as TipoDocumento })}
+                  onChange={(e) => setFormData({ ...formData, tipo: e.target.value as TipoDocumento })}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.tipo ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={_loading}
+                  disabled={loading}
                 >
-                  {Object.entries(_TIPOS_DOCUMENTO).map(([key, config]) => (
-                    <option key={_key} value={_key}>{config.label}</option>
+                  {Object.entries(TIPOS_DOCUMENTO).map(([key, config]) => (
+                    <option key={key} value={key}>{config.label}</option>
                   ))}
                 </select>
                 {errors.tipo && <p className="text-red-400 text-sm mt-1">{errors.tipo}</p>}
@@ -157,13 +144,13 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="text"
                     value={formData.numeroDUA || ''}
-                    onChange={(_e) => setFormData({ ...formData, numeroDUA: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, numeroDUA: e.target.value })}
                     placeholder="Ej: 2024/123456"
                     className={cn(
                       "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                       errors.numeroDUA ? "border-red-500" : "border-gray-700"
                     )}
-                    disabled={_loading}
+                    disabled={loading}
                   />
                   {errors.numeroDUA && <p className="text-red-400 text-sm mt-1">{errors.numeroDUA}</p>}
                 </div>
@@ -177,12 +164,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 <input
                   type="date"
                   value={formData.fechaDocumento || ''}
-                  onChange={(_e) => setFormData({ ...formData, fechaDocumento: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, fechaDocumento: e.target.value })}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.fechaDocumento ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={_loading}
+                  disabled={loading}
                 />
                 {errors.fechaDocumento && <p className="text-red-400 text-sm mt-1">{errors.fechaDocumento}</p>}
               </div>
@@ -195,10 +182,10 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 <input
                   type="text"
                   value={formData.empresa || ''}
-                  onChange={(_e) => setFormData({ ...formData, empresa: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
                   placeholder="Nombre de la empresa"
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={_loading}
+                  disabled={loading}
                 />
               </div>
 
@@ -209,14 +196,14 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 </label>
                 <textarea
                   value={formData.descripcion || ''}
-                  onChange={(_e) => setFormData({ ...formData, descripcion: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
                   placeholder="Breve descripción del contenido del documento"
                   rows={3}
                   className={cn(
                     "w-full px-3 py-2 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500",
                     errors.descripcion ? "border-red-500" : "border-gray-700"
                   )}
-                  disabled={_loading}
+                  disabled={loading}
                 />
                 {errors.descripcion && <p className="text-red-400 text-sm mt-1">{errors.descripcion}</p>}
               </div>
@@ -229,10 +216,10 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                 <input
                   type="text"
                   value={formData.palabrasClave || ''}
-                  onChange={(_e) => setFormData({ ...formData, palabrasClave: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, palabrasClave: e.target.value })}
                   placeholder="autorización, importación, contenedor"
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={_loading}
+                  disabled={loading}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Las palabras clave ayudan a encontrar el documento más fácilmente
@@ -250,12 +237,12 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   "hover:border-blue-500 transition-colors"
                 )}>
                   <input
-                    ref={_fileInputRef}
+                    ref={fileInputRef}
                     type="file"
                     accept=".pdf,application/pdf"
-                    onChange={_handleFileChange}
+                    onChange={handleFileChange}
                     className="hidden"
-                    disabled={_loading}
+                    disabled={loading}
                   />
                   
                   {archivo ? (
@@ -268,7 +255,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="text-blue-400 hover:text-blue-300 text-sm"
-                        disabled={_loading}
+                        disabled={loading}
                       >
                         Cambiar archivo
                       </button>
@@ -278,7 +265,7 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                        disabled={_loading}
+                        disabled={loading}
                       >
                         Seleccionar archivo PDF
                       </button>
@@ -297,9 +284,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="checkbox"
                     checked={formData.destacado || false}
-                    onChange={(_e) => setFormData({ ...formData, destacado: e.target.checked })}
+                    onChange={(e) => setFormData({ ...formData, destacado: e.target.checked })}
                     className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500"
-                    disabled={_loading}
+                    disabled={loading}
                   />
                   <span className="text-gray-300">Marcar como destacado</span>
                   <Badge variant="yellow" className="text-xs">⭐</Badge>
@@ -309,9 +296,9 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
                   <input
                     type="checkbox"
                     checked={formData.confidencial || false}
-                    onChange={(_e) => setFormData({ ...formData, confidencial: e.target.checked })}
+                    onChange={(e) => setFormData({ ...formData, confidencial: e.target.checked })}
                     className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500"
-                    disabled={_loading}
+                    disabled={loading}
                   />
                   <span className="text-gray-300">Documento confidencial</span>
                   <Badge variant="red" className="text-xs">🔒</Badge>
@@ -323,7 +310,16 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
           {/* Footer */}
           <div className="p-4 border-t border-gray-700 flex justify-between">
             <button
-              onClick={_handleReset}
+              onClick={() => {
+                setFormData({
+                  tipo: 'DUA',
+                  destacado: false,
+                  confidencial: false,
+                  fechaDocumento: new Date().toISOString().split('T')[0]
+                })
+                setArchivo(null)
+                setErrors({})
+              }}
               className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
               disabled={_loading}
             >
@@ -331,15 +327,15 @@ export const SubirDocumentoModal: React.FC<SubirDocumentoModalProps> = ({
             </button>
             <div className="flex gap-3">
               <button
-                onClick={_onClose}
+                onClick={onClose}
                 className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
-                disabled={_loading}
+                disabled={loading}
               >
                 Cancelar
               </button>
               <button
-                onClick={_handleSubmit}
-                disabled={_loading}
+                onClick={handleSubmit}
+                disabled={loading}
                 className={cn(
                   "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
                   loading 

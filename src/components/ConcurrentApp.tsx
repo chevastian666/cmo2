@@ -72,7 +72,7 @@ export const ConcurrentApp: React.FC = () => {
         return updated
       })
     }, 5000)
-    return () => clearInterval(_interval)
+    return () => clearInterval(interval)
   }, [])
   return (<PriorityProvider enableMetrics>
       <div className="min-h-screen bg-gray-950 text-gray-100 p-4">

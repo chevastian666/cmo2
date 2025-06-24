@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-import { useCallback, useRef} from 'react'
+import { useCallback, useRef } from 'react'
 interface UseSmootherRefreshOptions {
   onSuccess?: () => void
   onError?: (error: unknown) => void
@@ -11,10 +11,11 @@ interface UseSmootherRefreshOptions {
 }
 
 export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknown>) | undefined>,
-  options: UseSmootherRefreshOptions = {}
+  _options: UseSmootherRefreshOptions = {}
 ) => {
+  const { onSuccess, onError, minimumDelay = 300 } = _options
 
-  const isRefreshing = useRef(_false)
+  const isRefreshing = useRef(false)
   const refresh = useCallback(async () => {
     if (isRefreshing.current) return
     isRefreshing.current = true
@@ -32,16 +33,16 @@ export const useSmootherRefresh = (refreshFunctions: Array<(() => Promise<unknow
       // Asegurar un delay mínimo para evitar parpadeos
       const elapsedTime = Date.now() - startTime
       if (elapsedTime < minimumDelay) {
-        await new Promise(resolve => setTimeout(_resolve, minimumDelay - elapsedTime))
+        await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsedTime))
       }
       
       onSuccess?.()
-    } catch (_error) {
+    } catch (error) {
       console.error('Error en actualización suave:', error)
-      onError?.(_error)
+      onError?.(error)
     } finally {
       isRefreshing.current = false
     }
-  }, [])
+  }, [refreshFunctions, onSuccess, onError, minimumDelay])
   return { refresh, isRefreshing: isRefreshing.current }
 }

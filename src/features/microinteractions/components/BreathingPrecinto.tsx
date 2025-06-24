@@ -13,10 +13,10 @@ interface BreathingPrecintoProps {
 export const BreathingPrecinto: React.FC<BreathingPrecintoProps> = ({
   status, children, className, disabled = false
 }) => {
-  const breathingClass = disabled ? '' : `seal-breathing-${s_tatus}`
+  const breathingClass = disabled ? '' : `seal-breathing-${status}`
   return (
-    <div className={cn(_breathingClass, className)}>
-      {_children}
+    <div className={cn(breathingClass, className)}>
+      {children}
     </div>
   )
 }

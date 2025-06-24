@@ -51,8 +51,9 @@ export const alertasService = {
           }
           
           return filtered
-        } catch (_trokorError) {
+        } catch (error) {
           // Error con Trokor API, intentando con unified API
+          console.error('Trokor API error:', error)
         }
       }
       
@@ -84,8 +85,9 @@ export const alertasService = {
       }
       
       return filtered
-    } catch {
+    } catch (error) {
       // Error fetching alertas - fallback to mock
+      console.error('Error fetching alertas:', error)
       return Array.from({ length: 20 }, (_, i) => generateMockAlerta(i))
     }
   },
@@ -96,8 +98,9 @@ export const alertasService = {
       if (import.meta.env.VITE_USE_REAL_API === 'true') {
         try {
           return await trokorService.getAlertasActivas({ limit: 10 })
-        } catch (_trokorError) {
+        } catch (error) {
           // Error con Trokor API, intentando con unified API
+          console.error('Trokor API error:', error)
         }
       }
       
@@ -111,8 +114,9 @@ export const alertasService = {
         limit: 10
       })
       return response.data
-    } catch {
+    } catch (error) {
       // Error fetching alertas activas - fallback to mock
+      console.error('Error fetching alertas activas:', error)
       return Array.from({ length: 5 }, (_, i) => generateMockAlerta(i))
     }
   },
@@ -120,7 +124,7 @@ export const alertasService = {
   getById: async (id: string): Promise<Alerta> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        return generateMockAlerta(parseInt(_id) || 1)
+        return generateMockAlerta(parseInt(id) || 1)
       }
       
       // For now, get all and find by id
@@ -128,13 +132,14 @@ export const alertasService = {
       const alerta = all.find(a => a.id === id)
       if (!alerta) throw new Error('Alerta not found')
       return alerta
-    } catch {
+    } catch (error) {
       // Error fetching alerta
-      return generateMockAlerta(parseInt(_id) || 1)
+      console.error('Error fetching alerta:', error)
+      return generateMockAlerta(parseInt(id) || 1)
     }
   },
 
-  atender: async (id: string, observaciones?: string): Promise<void> => {
+  atender: async (_id: string, _observaciones?: string): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Mock: Atendiendo alerta
@@ -143,8 +148,9 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented')
-    } catch {
+    } catch (error) {
       // Error atendiendo alerta
+      console.error('Error atendiendo alerta:', error)
     }
   },
 
@@ -154,30 +160,20 @@ export const alertasService = {
     observaciones: string
     verificadoPor: string
   }): Promise<void> => {
-    try {
-      // Primero intentar con Trokor API si está habilitada
-      if (import.meta.env.VITE_USE_REAL_API === 'true') {
-        try {
-          await trokorService.verificarAlerta(_id, datos)
-          return
-        } catch (_trokorError) {
-          // Error con Trokor API
-          throw trokorError
-        }
-      }
-      
-      // Si no está habilitada Trokor, simular
-      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
-        // Mock: Verificando alerta
-        return
-      }
-      
-      // TODO: Implement unified API call if needed
-      throw new Error('Not implemented')
-    } catch {
-      // Error verificando alerta
-      throw error
+    // Primero intentar con Trokor API si está habilitada
+    if (import.meta.env.VITE_USE_REAL_API === 'true') {
+      await trokorService.verificarAlerta(id, datos)
+      return
     }
+    
+    // Si no está habilitada Trokor, simular
+    if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+      // Mock: Verificando alerta
+      return
+    }
+    
+    // TODO: Implement unified API call if needed
+    throw new Error('Not implemented')
   },
 
   crear: async (alerta: Omit<Alerta, 'id' | 'timestamp'>): Promise<Alerta> => {
@@ -192,20 +188,21 @@ export const alertasService = {
       
       // TODO: Implement real API call
       throw new Error('Not implemented')
-    } catch {
+    } catch (error) {
       // Error creating alerta
+      console.error('Error creating alerta:', error)
       throw error
     }
   },
 
-  getEstadisticas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
+  getEstadisticas: async (_horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Return mock statistics
         const now = Date.now() / 1000
         const interval = 3600; // 1 hour
         const stats = []
-        for (let i = 0; i < horas; i++) {
+        for (let i = 0; i < _horas; i++) {
           stats.push({
             timestamp: now - (i * interval),
             cantidad: Math.floor(Math.random() * 10),
@@ -218,8 +215,9 @@ export const alertasService = {
       
       // TODO: Implement real API call
       return []
-    } catch {
+    } catch (error) {
       // Error fetching estadisticas
+      console.error('Error fetching estadisticas:', error)
       return []
     }
   },

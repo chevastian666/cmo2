@@ -77,20 +77,20 @@ interface DocumentosState {
   registrarLog: (log: Omit<LogAuditoria, 'id' | 'fecha'>) => void
 }
 
-export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
+export const useDocumentosStore = create<DocumentosState>((set, get) => ({
   documentos: [], estadisticas: null, loading: false, error: null, logs: [], fetchDocumentos: async () => {
     set({ loading: true })
     try {
       // Simular llamada a API
-      await new Promise(resolve => setTimeout(_resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
       // Calcular estadísticas
       const estadisticas: EstadisticasDocumentacion = {
         totalDocumentos: mockDocumentos.length,
-        porTipo: mockDocumentos.reduce((_acc, doc) => {
+        porTipo: mockDocumentos.reduce((acc, doc) => {
           acc[doc.tipo] = (acc[doc.tipo] || 0) + 1
           return acc
         }, {} as Record<string, number>),
-        espacioUsado: mockDocumentos.reduce((_acc, doc) => acc + doc.tamanioArchivo, 0),
+        espacioUsado: mockDocumentos.reduce((acc, doc) => acc + doc.tamanioArchivo, 0),
         documentosMes: mockDocumentos.filter(doc => {
           const mesActual = new Date().getMonth()
           return doc.fechaSubida.getMonth() === mesActual
@@ -111,24 +111,24 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
     }
   },
 
-  uploadDocumento: async (data: unknown) => {
+  uploadDocumento: async (_data: unknown) => {
     try {
       // Simular subida
-      await new Promise(resolve => setTimeout(_resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, 1000))
       const nuevoDoc: Documento = {
         id: Date.now().toString(),
-        tipo: data.tipo,
-        numeroDUA: data.numeroDUA,
-        fechaDocumento: new Date(data.fechaDocumento),
+        tipo: _data.tipo,
+        numeroDUA: _data.numeroDUA,
+        fechaDocumento: new Date(_data.fechaDocumento),
         fechaSubida: new Date(),
-        descripcion: data.descripcion,
-        palabrasClave: data.palabrasClave ? data.palabrasClave.split(',').map((p: string) => p.trim()) : [],
-        nombreArchivo: data.archivo.name,
-        tamanioArchivo: data.archivo.size,
-        rutaArchivo: `/docs/${data.archivo.name}`,
-        empresa: data.empresa,
-        destacado: data.destacado,
-        confidencial: data.confidencial,
+        descripcion: _data.descripcion,
+        palabrasClave: _data.palabrasClave ? _data.palabrasClave.split(',').map((p: string) => p.trim()) : [],
+        nombreArchivo: _data.archivo.name,
+        tamanioArchivo: _data.archivo.size,
+        rutaArchivo: `/docs/${_data.archivo.name}`,
+        empresa: _data.empresa,
+        destacado: _data.destacado,
+        confidencial: _data.confidencial,
         subidoPor: {
           id: '1',
           nombre: 'Usuario Actual',
@@ -136,7 +136,7 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
         },
         estado: 'activo'
       }
-      set({ documentos: [...documentos, nuevoDoc] })
+      set(state => ({ documentos: [...state.documentos, nuevoDoc] }))
       // Registrar log
       get().registrarLog({
         documentoId: nuevoDoc.id,
@@ -150,10 +150,10 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
     }
   },
 
-  deleteDocumento: async (_id) => {
+  deleteDocumento: async (id) => {
     try {
 
-      set({ documentos: documentos.filter(d => d.id !== id) })
+      set(state => ({ documentos: state.documentos.filter(d => d.id !== id) }))
       // Registrar log
       get().registrarLog({
         documentoId: id,
@@ -167,11 +167,11 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
     }
   },
 
-  updateDocumento: async (_id, updates) => {
+  updateDocumento: async (id, updates) => {
     try {
       
-      set({
-        documentos: documentos.map(d => 
+      set(state => ({
+        documentos: state.documentos.map(d => 
           d.id === id 
             ? { 
                 ...d, 
@@ -184,7 +184,7 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
               }
             : d
         )
-      })
+      }))
       // Registrar log
       get().registrarLog({
         documentoId: id,
@@ -192,14 +192,14 @@ export const useDocumentosStore = create<DocumentosState>((s_et, get) => ({
         usuarioId: '1',
         usuarioNombre: 'Usuario Actual',
         ip: '192.168.1.1',
-        detalles: JSON.stringify(_updates)
+        detalles: JSON.stringify(updates)
       })
     } catch {
       throw new Error('Error al actualizar documento')
     }
   },
 
-  registrarLog: (_log) => {
+  registrarLog: (log) => {
     const nuevoLog: LogAuditoria = {
       ...log,
       id: Date.now().toString(),

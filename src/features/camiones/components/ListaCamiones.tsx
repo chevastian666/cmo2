@@ -6,22 +6,22 @@ import { FormularioCamion} from './FormularioCamion'
 import type { FiltrosCamion, EstadoCamion} from '../types'
 import { ESTADOS_CAMION, FILTROS_CAMION_DEFAULT} from '../types'
 export const ListaCamiones: React.FC = () => {
-  const [filtros, setFiltros] = useState<FiltrosCamion>(_FILTROS_CAMION_DEFAULT)
-  const [mostrarFormulario, setMostrarFormulario] = useState(_false)
-  const [camionSeleccionado, setCamionSeleccionado] = useState<string | null>(_null)
+  const [filtros, setFiltros] = useState<FiltrosCamion>(FILTROS_CAMION_DEFAULT)
+  const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [_camionSeleccionado, setCamionSeleccionado] = useState<string | null>(null)
   useEffect(() => {
-    fetchCamiones(_filtros)
+    fetchCamiones(filtros)
   }, [filtros])
   const handleFiltrosChange = (nuevosFiltros: Partial<FiltrosCamion>) => {
     setFiltros(prev => ({ ...prev, ...nuevosFiltros }))
   }
   const handleEstadoChange = async (matricula: string, estado: EstadoCamion) => {
-    await updateEstadoCamion(_matricula, estado)
+    await updateEstadoCamion(matricula, estado)
   }
   if (_camionSeleccionado) {
     return (<FichaCamion 
         matricula={_camionSeleccionado} 
-        onClose={() => setCamionSeleccionado(_null)} 
+        onClose={() => setCamionSeleccionado(null)} 
       />
     )
   }
@@ -70,8 +70,8 @@ export const ListaCamiones: React.FC = () => {
               className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos los estados</option>
-              {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
-                <option key={_key} value={_key}>
+              {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
+                <option key={key} value={key}>
                   {config.icon} {config.label}
                 </option>
               ))}
@@ -163,8 +163,8 @@ export const ListaCamiones: React.FC = () => {
                       onClick={(_e) => e.stopPropagation()}
                       className="flex-1 px-2 py-1 text-xs bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      {Object.entries(_ESTADOS_CAMION).map(([key, config]) => (
-                        <option key={_key} value={_key}>
+                      {Object.entries(ESTADOS_CAMION).map(([key, config]) => (
+                        <option key={key} value={key}>
                           {config.label}
                         </option>
                       ))}

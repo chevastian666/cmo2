@@ -27,12 +27,12 @@ export const transformPrecintosByCompany = (
   precintos.forEach(precinto => {
     const company = precinto.empresa || 'Sin Empresa'
     const status = precinto.estado
-    if (!companiesMap.has(_company)) {
-      companiesMap.set(_company, new Map())
+    if (!companiesMap.has(company)) {
+      companiesMap.set(company, new Map())
     }
 
-    const statusMap = companiesMap.get(_company)!
-    statusMap.set(s_tatus, (statusMap.get(s_tatus) || 0) + 1)
+    const statusMap = companiesMap.get(company)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
   })
   const children: TreemapNode[] = Array.from(companiesMap.entries()).map(
     ([company, statusMap]) => ({
@@ -40,7 +40,7 @@ export const transformPrecintosByCompany = (
       children: Array.from(statusMap.entries()).map(([status, count]) => ({
         name: status,
         value: count,
-        color: getStatusColor(s_tatus)
+        color: getStatusColor(status)
       }))
     })
   )
@@ -74,12 +74,12 @@ export const transformTransitsByRoute = (
   transitos.forEach(transito => {
     const route = `${transito.origen} → ${transito.destino}`
     const status = transito.estado
-    if (!routesMap.has(_route)) {
-      routesMap.set(_route, new Map())
+    if (!routesMap.has(route)) {
+      routesMap.set(route, new Map())
     }
 
-    const statusMap = routesMap.get(_route)!
-    statusMap.set(s_tatus, (statusMap.get(s_tatus) || 0) + 1)
+    const statusMap = routesMap.get(route)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
   })
   const children: TreemapNode[] = Array.from(routesMap.entries()).map(
     ([route, statusMap]) => ({
@@ -87,7 +87,7 @@ export const transformTransitsByRoute = (
       children: Array.from(statusMap.entries()).map(([status, count]) => ({
         name: status,
         value: count,
-        color: getTransitStatusColor(s_tatus)
+        color: getTransitStatusColor(status)
       }))
     })
   )
@@ -121,12 +121,12 @@ export const transformAlertsBySeverity = (
   alertas.forEach(alerta => {
     const severity = alerta.tipo
     const status = alerta.estado || 'activa'
-    if (!severityMap.has(s_everity)) {
-      severityMap.set(s_everity, new Map())
+    if (!severityMap.has(severity)) {
+      severityMap.set(severity, new Map())
     }
 
-    const statusMap = severityMap.get(s_everity)!
-    statusMap.set(s_tatus, (statusMap.get(s_tatus) || 0) + 1)
+    const statusMap = severityMap.get(severity)!
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
   })
   const children: TreemapNode[] = Array.from(severityMap.entries()).map(
     ([severity, statusMap]) => ({
@@ -134,9 +134,9 @@ export const transformAlertsBySeverity = (
       children: Array.from(statusMap.entries()).map(([status, count]) => ({
         name: status,
         value: count,
-        color: getAlertStatusColor(s_tatus)
+        color: getAlertStatusColor(status)
       })),
-      color: getSeverityColor(s_everity)
+      color: getSeverityColor(severity)
     })
   )
   return {
@@ -154,7 +154,7 @@ export const transformAlertsBySeverity = (
 export const transformByTimePeriod = (
   data: unknown[],
   dateField: string,
-  groupBy: 'day' | 'week' | 'month' = 'day'
+  _groupBy: 'day' | 'week' | 'month' = 'day'
 ): TreemapData => {
   const timeMap = new Map<string, Map<string, number>>()
   data.forEach(item => {
@@ -166,7 +166,7 @@ export const transformByTimePeriod = (
         break
     }
     case 'week': {
-        const weekStart = new Date(_date)
+        const weekStart = new Date(date)
         weekStart.setDate(date.getDate() - date.getDay())
         period = `Semana del ${weekStart.toLocaleDateString()}`
         break
@@ -177,12 +177,12 @@ export const transformByTimePeriod = (
     }
 
     const type = item.tipo || item.estado || 'otros'
-    if (!timeMap.has(_period)) {
-      timeMap.set(_period, new Map())
+    if (!timeMap.has(period)) {
+      timeMap.set(period, new Map())
     }
 
-    const typeMap = timeMap.get(_period)!
-    typeMap.set(_type, (typeMap.get(_type) || 0) + 1)
+    const typeMap = timeMap.get(period)!
+    typeMap.set(type, (typeMap.get(type) || 0) + 1)
   })
   const children: TreemapNode[] = Array.from(timeMap.entries()).map(
     ([period, typeMap]) => ({
@@ -211,7 +211,7 @@ export const createHierarchy = (
   }
   data.forEach(item => {
     let currentLevel = root
-    levels.forEach((_level, index) => {
+    levels.forEach((level, index) => {
       const value = item[level] || 'Sin Definir'
       let child = currentLevel.children?.find(c => c.name === value)
       if (!child) {
@@ -223,7 +223,7 @@ export const createHierarchy = (
         if (!currentLevel.children) {
           currentLevel.children = []
         }
-        currentLevel.children.push(_child)
+        currentLevel.children.push(child)
       } else if (index === levels.length - 1 && child.value) {
         child.value += 1
       }
@@ -235,14 +235,14 @@ export const createHierarchy = (
   const calculateValues = (node: TreemapNode): number => {
     if (node.value) return node.value
     if (node.children) {
-      node.value = node.children.reduce((s_um, child) => 
-        sum + calculateValues(_child), 0
+      node.value = node.children.reduce((sum, child) => 
+        sum + calculateValues(child), 0
       )
     }
     
     return node.value || 0
   }
-  calculateValues(_root)
+  calculateValues(root)
   return root as TreemapData
 }
 // Helper functions for colors

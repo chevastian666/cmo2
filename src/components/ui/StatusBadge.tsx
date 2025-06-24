@@ -60,10 +60,10 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     >
       {icon && (
         <span className={cn(iconSizes[size], 'flex-shrink-0')}>
-          {_icon}
+          {icon}
         </span>
       )}
-      {_children}
+      {children}
     </span>
   )
 }

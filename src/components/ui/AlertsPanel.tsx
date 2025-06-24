@@ -42,7 +42,7 @@ interface AlertGroup {
 }
 
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({
-  alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title = 'Alertas Activas', emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
+  alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title: _title = 'Alertas Activas', emptyMessage: _emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
 }) => {
   const [newAlertIds, setNewAlertIds] = useState<Set<string>>(new Set())
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
@@ -136,7 +136,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     })
     // Filtrar grupos vacíos
     return groups.filter(group => group.alerts.length > 0)
-  }, [alerts])
+  }, [alerts, groupByPriority])
   const getSeverityColor = (severity: AlertSeverity) => {
     const colors = {
       critical: 'border-red-500 bg-red-500/10',
@@ -175,7 +175,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     }
     setCollapsedGroups(newCollapsed)
   }
-  const renderAlert = (alert: Alert) => {
+  const _renderAlert = (alert: Alert) => {
     const isNew = newAlertIds.has(alert.id)
     return (
       <div

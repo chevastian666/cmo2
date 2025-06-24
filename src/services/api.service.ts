@@ -11,58 +11,71 @@ const api = axios.create({
 })
 export const monitoringApi = {
   // Precintos
-  getPrecintos: async (filtros?: { estado?: string; tipo?: string }): Promise<Precinto[]> => {
-    
+  getPrecintos: async (_filtros?: { estado?: string; tipo?: string }): Promise<Precinto[]> => {
+    // TODO: Implement
+    const data: Precinto[] = []
     return data
   },
 
-  getPrecinto: async (id: string): Promise<Precinto> => {
-
+  getPrecinto: async (_id: string): Promise<Precinto> => {
+    // TODO: Implement
+    const data = {} as Precinto
     return data
   },
 
   // Eventos
-  getEventos: async (precintoId?: string, limit = 50): Promise<EventoPrecinto[]> => {
+  getEventos: async (_precintoId?: string, _limit = 50): Promise<EventoPrecinto[]> => {
+    // TODO: Implement
+    const data: EventoPrecinto[] = []
 
     return data
   },
 
   // Estadísticas
   getEstadisticas: async (): Promise<EstadisticasMonitoreo> => {
-
+    // TODO: Implement
+    const data = {} as EstadisticasMonitoreo
     return data
   },
 
   // Alertas
-  getAlertas: async (activas = true): Promise<Alerta[]> => {
+  getAlertas: async (_activas = true): Promise<Alerta[]> => {
+    // TODO: Implement
+    const data: Alerta[] = []
 
     return data
   },
 
   atenderAlerta: async (id: string): Promise<void> => {
-    await api.patch(`/alertas/${_id}/atender`)
+    await api.patch(`/alertas/${id}/atender`)
   },
 
   // Puntos de Control
   getPuntosControl: async (): Promise<PuntoControl[]> => {
-
+    // TODO: Implement
+    const data: PuntoControl[] = []
     return data
   },
 
   // Históricos
-  getHistoricoLecturas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number }>> => {
+  getHistoricoLecturas: async (_horas = 24): Promise<Array<{ timestamp: number; cantidad: number }>> => {
+    // TODO: Implement
+    const data: Array<{ timestamp: number; cantidad: number }> = []
     
     return data
   },
 
-  getHistoricoAlertas: async (horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
+  getHistoricoAlertas: async (_horas = 24): Promise<Array<{ timestamp: number; cantidad: number; tipo: string }>> => {
+    // TODO: Implement
+    const data: Array<{ timestamp: number; cantidad: number; tipo: string }> = []
     
     return data
   },
 
   // Tránsitos
   getTransitosPendientes: async (): Promise<TransitoPendiente[]> => {
-
+    // TODO: Implement
+    const data: TransitoPendiente[] = []
     return data
   },
 }

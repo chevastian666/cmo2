@@ -8,7 +8,7 @@ interface ZonasDescansoSearchProps {
 }
 
 export const ZonasDescansoSearch: React.FC<ZonasDescansoSearchProps> = ({
-  searchTerm, onSearchChange, totalZonas, filteredZonas
+  searchTerm, onSearchChange, totalZonas: _totalZonas, filteredZonas: _filteredZonas
 }) => {
   return (<div className="bg-gray-800 rounded-lg border border-gray-700 p-4">
       <div className="relative">

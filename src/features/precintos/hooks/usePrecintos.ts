@@ -1,6 +1,7 @@
-import { useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
-import { precintosService} from '../../../services/precintos.service'
-import { QUERY_KEYS} from '../../../config'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { precintosService } from '../../../services/precintos.service'
+import { QUERY_KEYS } from '../../../config'
+import type { PrecintoFilters } from '../../../types'
 export const usePrecintos = (filters?: PrecintoFilters) => {
   return useQuery({
     queryKey: [QUERY_KEYS.PRECINTOS, filters], queryFn: () => precintosService.getAll(filters),
@@ -40,7 +41,7 @@ export const useDesactivarPrecinto = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, motivo }: { id: string; motivo?: string }) => 
-      precintosService.desactivar(_id, motivo),
+      precintosService.desactivar(id, motivo),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PRECINTOS] })
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ESTADISTICAS] })

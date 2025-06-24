@@ -6,7 +6,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Input, InputProps} from '@/components/ui/input'
-import {_Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react'
+import { Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
 export interface FeedbackInputProps extends Omit<InputProps, 'type'> {
@@ -26,40 +26,40 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   type = 'text', validationFn, validationMessage, debounceMs = 500, showValidationIcon = true, showPasswordToggle = true, onValidationChange, showSearchIcon = true, clearable = false, onClear, className, onChange, value, ...props
 }) => {
   const [localValue, setLocalValue] = useState(value || '')
-  const [isValidating, setIsValidating] = useState(_false)
-  const [isValid, setIsValid] = useState<boolean | null>(_null)
-  const [isFocused, setIsFocused] = useState(_false)
-  const [showPassword, setShowPassword] = useState(_false)
+  const [isValidating, setIsValidating] = useState(false)
+  const [isValid, setIsValid] = useState<boolean | null>(null)
+  const [isFocused, setIsFocused] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const debounceTimerRef = useRef<NodeJS.Timeout>()
   useEffect(() => {
     if (value !== undefined) {
-      setLocalValue(_value)
+      setLocalValue(value as string)
     }
   }, [value])
   const handleValidation = async (val: string) => {
     if (!validationFn || !val) {
-      setIsValid(_null)
+      setIsValid(null)
       return
     }
 
-    setIsValidating(_true)
+    setIsValidating(true)
     try {
-      const result = await validationFn(_val)
-      setIsValid(_result)
-      onValidationChange?.(_result)
+      const result = await validationFn(val)
+      setIsValid(result)
+      onValidationChange?.(result)
     } catch {
-      setIsValid(_false)
-      onValidationChange?.(_false)
+      setIsValid(false)
+      onValidationChange?.(false)
     } finally {
-      setIsValidating(_false)
+      setIsValidating(false)
     }
   }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
+  const _handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
+    const _newValue = _e.target.value
     setLocalValue(_newValue)
     onChange?.(_e)
     // Debounced validation
-    if (_validationFn) {
+    if (validationFn) {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current)
       }
@@ -69,20 +69,28 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
           handleValidation(_newValue)
         }, debounceMs)
       } else {
-        setIsValid(_null)
+        setIsValid(null)
       }
     }
   }
-  const handleClear = () => {
+  const _handleClear = () => {
     setLocalValue('')
-    setIsValid(_null)
+    setIsValid(null)
     onClear?.()
     // Create synthetic event
     const input = document.createElement('input')
     input.value = ''
-    const event = new Event('change', { bubbles: true }) as unknown
-    Object.defineProperty(_event, 'target', { value: input })
-    onChange?.(_event)
+    const syntheticEvent = {
+      target: input,
+      currentTarget: input,
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      bubbles: true,
+      cancelable: true,
+      type: 'change',
+      nativeEvent: new Event('change')
+    } as React.ChangeEvent<HTMLInputElement>
+    onChange?.(syntheticEvent)
   }
   const getIcon = () => {
     if (isValidating && showValidationIcon) {
@@ -103,16 +111,16 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
 
     return null
   }
-  const inputType = type === 'password' && showPassword ? 'text' : type
+  const _inputType = type === 'password' && showPassword ? 'text' : type
   return (<div className="relative">
       <div className="relative">
         <Input
           {...props}
           type={_inputType}
-          value={_localValue}
+          value={localValue}
           onChange={_handleChange}
-          onFocus={() => setIsFocused(_true)}
-          onBlur={() => setIsFocused(_false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           className={cn(
             'pr-10 transition-all duration-200',
             isFocused && 'ring-2 ring-blue-500 ring-offset-1 ring-offset-gray-900',
@@ -190,7 +198,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
             transition={{ duration: 0.15 }}
             className="text-xs text-red-500 mt-1"
           >
-            {_validationMessage}
+            {validationMessage}
           </motion.p>
         )}
       </AnimatePresence>
@@ -209,11 +217,11 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   )
 }
 // Preset validation functions
-export const emailValidation = (email: string): boolean => {
+export const emailValidation = (_email: string): boolean => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return regex.test(_email)
 }
-export const urlValidation = (url: string): boolean => {
+export const urlValidation = (_url: string): boolean => {
   try {
     new URL(_url)
     return true

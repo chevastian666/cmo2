@@ -26,7 +26,7 @@ const EMPRESAS = [
   { nombre: 'Express Cargo S.R.L.', rut: '210123456789' }
 ]
 // Form validation schema
-const formSchema = z.object({
+const _formSchema = z.object({
   matricula: z.string().min(1, 'La matrícula es requerida'),
   nombreConductor: z.string().min(1, 'El nombre del conductor es requerido'),
   telefonoConductor: z.string().min(1, 'El teléfono es requerido'),
@@ -43,7 +43,7 @@ const formSchema = z.object({
   precintoId: z.string().min(1, 'El ID del precinto es requerido'),
   observaciones: z.string().optional(),
 })
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof _formSchema>
 interface ArmFormV2Props {
   data: Partial<FormData>
   onChange: (field: string, value: unknown) => void
@@ -73,19 +73,19 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   // Watch form changes and propagate to parent
   const watchedValues = form.watch()
   useEffect(() => {
-    Object.entries(_watchedValues).forEach(([key, value]) => {
-      if (JSON.stringify(data[key as keyof FormData]) !== JSON.stringify(_value)) {
-        onChange(_key, value)
+    Object.entries(watchedValues).forEach(([key, value]) => {
+      if (JSON.stringify(data[key as keyof FormData]) !== JSON.stringify(value)) {
+        onChange(key, value)
       }
     })
-  }, [])
+  }, [watchedValues, data, onChange])
   // Auto-complete precinto ID when provided
 
   useEffect(() => {
     if (precintoId && form.getValues('precintoId') !== precintoId) {
       form.setValue('precintoId', precintoId)
     }
-  }, [])
+  }, [precintoId, form])
   // Auto-complete RUT when empresa is selected
   const selectedEmpresa = form.watch('empresa')
   useEffect(() => {
@@ -95,8 +95,8 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
         form.setValue('rutEmpresa', empresa.rut)
       }
     }
-  }, [form])
-  const handleSubmit = (_data: FormData) => {
+  }, [selectedEmpresa, form])
+  const _handleSubmit = (_data: FormData) => {
     if (_onSubmit) {
       onSubmit(_data)
     }

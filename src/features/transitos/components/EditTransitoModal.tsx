@@ -41,8 +41,8 @@ export const EditTransitoModal: React.FC<EditTransitoModalProps> = ({
     return () => {
       document.removeEventListener('keydown', handleEscKey)
     }
-  }, [])
-  const handleSubmit = async (e: React.FormEvent) => {
+  }, [isOpen, onClose])
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!transito) return
     try {

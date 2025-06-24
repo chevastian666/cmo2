@@ -64,7 +64,7 @@ const matchesSearch = (alerta: Alerta, searchTerm: string): boolean => {
   return (
     alerta.precintoId.toLowerCase().includes(search) ||
     alerta.descripcion.toLowerCase().includes(search) ||
-    alerta.tipo.toLowerCase().includes(s_earch)
+    alerta.tipo.toLowerCase().includes(search)
   )
 }
 // Loading skeleton mejorado
@@ -108,7 +108,7 @@ const KPICard = React.memo<{
   trend?: number
   subtitle?: string
   onClick?: () => void
->({ title, value, icon, color, trend, subtitle, onClick }) => (
+}>(({ title, value, icon, color, trend, subtitle, onClick }) => (
   <Card 
     className={cn("relative overflow-hidden cursor-pointer transition-all hover:shadow-lg", onClick && "hover:scale-[1.02]")}
     onClick={onClick}
@@ -142,8 +142,7 @@ const KPICard = React.memo<{
 const AlertRow = React.memo<{
   alerta: Alerta
   onVerificar: (alerta: Alerta) => void
-  index: number
-}>(({ alerta, onVerificar, index }) => {
+}>(({ alerta, onVerificar }) => {
   const severidadInfo = React.useMemo(() => getSeveridadInfo(alerta.severidad), [alerta.severidad])
   const tipoInfo = React.useMemo(() => getTipoInfo(alerta.tipo), [alerta.tipo])
   const timeAgo = React.useMemo(() => {
@@ -273,7 +272,7 @@ const AlertasPageV2: React.FC = () => {
       }
     }
     loadData()
-  }, [])
+  }, [fetchAlertas, fetchAlertasActivas, isInitialLoad])
   // Estadísticas calculadas con memoización optimizada
   const stats = React.useMemo(() => {
     if (!alertas.length && !alertasActivas.length) {

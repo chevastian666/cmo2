@@ -22,7 +22,7 @@ interface TransitTableProps {
 }
 
 export const TransitTable: React.FC<TransitTableProps> = memo(({
-  transitos, loading, currentPage, totalItems, itemsPerPage, sortField, sortOrder, onPageChange, onItemsPerPageChange, onSort, onViewDetail, onViewMap, onMarkDesprecintado, onEdit
+  transitos, loading, currentPage, totalItems, itemsPerPage, sortField, sortOrder, onPageChange, onItemsPerPageChange, onSort, onViewDetail, onViewMap: _onViewMap, onMarkDesprecintado, onEdit
 }) => {
   const totalPages = useMemo(() => 
     Math.max(1, Math.ceil(totalItems / itemsPerPage)), 
@@ -35,7 +35,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
         page === totalPages || 
         Math.abs(page - currentPage) <= 1
       )
-  }, [])
+  }, [currentPage, totalPages])
   const SortIcon = ({ field }: { field: string }) => {
     if (sortField !== field) return <div className="w-4 h-4" />
     return sortOrder === 'asc' ? 
@@ -160,7 +160,7 @@ export const TransitTable: React.FC<TransitTableProps> = memo(({
           </thead>
           <tbody className="divide-y divide-gray-700">
             {transitos.map((_transito) => {
-              const timeRemaining = getTimeRemaining(transito.eta)
+              const _timeRemaining = getTimeRemaining(transito.eta)
               return (
                 <tr key={transito.id} className="hover:bg-gray-700/50 transition-colors">
                   <td className="px-4 py-3 text-sm text-white font-medium">

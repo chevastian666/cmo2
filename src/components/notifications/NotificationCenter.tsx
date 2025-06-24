@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, Check, Clock, AlertTriangle } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { NotificationItem } from './NotificationItem';
 import { NotificationFilters } from './NotificationFilters';
 import { NotificationGroupItem } from './NotificationGroupItem';
 import { QuickActions } from './QuickActions';
-import type { NotificationFilter, NotificationType, NotificationPriority } from '@/types/notifications';
+import type { NotificationFilter } from '@/types/notifications';
 
 interface NotificationCenterProps {
   className?: string;

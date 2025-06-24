@@ -7,7 +7,7 @@ import { Truck, AlertTriangle, Activity, MapPin} from 'lucide-react'
  */
 export const CompositionExample: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState('overview')
-  const [isLoading, setIsLoading] = React.useState(_false)
+  const [_isLoading, _setIsLoading] = React.useState(false)
   // Example data
   const mockAlerts = [
     {
@@ -67,7 +67,7 @@ export const CompositionExample: React.FC = () => {
         </CardHeader>
         
         <div className="border-b border-gray-700">
-          <Tabs tabs={_tabs} activeTab={_activeTab} onChange={s_etActiveTab} />
+          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
         
         <CardContent>
@@ -79,7 +79,7 @@ export const CompositionExample: React.FC = () => {
                   <h3 className="font-medium text-white">Tránsito Activo</h3>
                 </CardHeader>
                 <CardContent>
-                  <TransitCard transit={_mockTransit} variant="compact" />
+                  <TransitCard transit={mockTransit} variant="compact" />
                 </CardContent>
               </Card>
               
@@ -90,9 +90,9 @@ export const CompositionExample: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <AlertsPanel 
-                    alerts={_mockAlerts} 
+                    alerts={mockAlerts} 
                     variant="compact"
-                    onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
+                    onAlertClick={(alert) => console.log('Alert clicked:', alert)}
                   />
                 </CardContent>
               </Card>
@@ -101,7 +101,7 @@ export const CompositionExample: React.FC = () => {
           
           {activeTab === 'transits' && (
             <div className="space-y-4">
-              <TransitCard transit={_mockTransit} variant="detailed" />
+              <TransitCard transit={mockTransit} variant="detailed" />
               <InfoGrid>
                 <InfoRow label="Total en viaje" value="12" />
                 <InfoRow label="Pendientes" value="5" />
@@ -113,7 +113,7 @@ export const CompositionExample: React.FC = () => {
           
           {activeTab === 'alerts' && (<AlertsPanel 
               alerts={[...mockAlerts, ...mockAlerts, ...mockAlerts]} 
-              onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
+              onAlertClick={(alert) => console.log('Alert clicked:', alert)}
             />
           )}
           

@@ -494,7 +494,7 @@ class GraphQLService {
       metadata: { detailed: true }
     }
   }
-  private async mockResolveTransits(args: unknown): Promise<unknown[]> {
+  private async mockResolveTransits(_args: unknown): Promise<unknown[]> {
     const transits = []
     const limit = 10
     for (let i = 0; i < limit; i++) {
@@ -518,7 +518,7 @@ class GraphQLService {
     }
     return transits
   }
-  private async mockResolvePrecintos(args: unknown): Promise<unknown[]> {
+  private async mockResolvePrecintos(_args: unknown): Promise<unknown[]> {
     const precintos = []
     const limit = 20
     for (let i = 0; i < limit; i++) {

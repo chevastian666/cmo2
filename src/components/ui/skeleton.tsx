@@ -57,7 +57,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
 }) => {
   return (
     <div className={cn("space-y-2", className)}>
-      {Array.from({ length: lines }).map((__, i) => (
+      {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
           key={_i}
           variant="text"
@@ -88,21 +88,21 @@ export const SkeletonTable: React.FC<{ rows?: number; columns?: number; classNam
   return (
     <div className={cn("w-full", className)}>
       {/* Header */}
-      <div className="grid gap-4 p-4 border-b border-gray-800" style={{ gridTemplateColumns: `repeat(${_columns}, 1fr)` }}>
-        {Array.from({ length: columns }).map((__, i) => (
-          <Skeleton key={_i} variant="text" height="1rem" width="80%" />
+      <div className="grid gap-4 p-4 border-b border-gray-800" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+        {Array.from({ length: columns }).map((_, i) => (
+          <Skeleton key={i} variant="text" height="1rem" width="80%" />
         ))}
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((__, rowIndex) => (
         <div 
-          key={_rowIndex} 
+          key={rowIndex} 
           className="grid gap-4 p-4 border-b border-gray-800"
-          style={{ gridTemplateColumns: `repeat(${_columns}, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
         >
           {Array.from({ length: columns }).map((__, colIndex) => (
             <Skeleton 
-              key={_colIndex} 
+              key={colIndex} 
               variant="text" 
               width={colIndex === 0 ? "60%" : "90%"}
             />
@@ -117,8 +117,8 @@ export const SkeletonList: React.FC<{ items?: number; className?: string }> = ({
 }) => {
   return (
     <div className={cn("space-y-3", className)}>
-      {Array.from({ length: items }).map((__, i) => (
-        <div key={_i} className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg">
+      {Array.from({ length: items }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg">
           <Skeleton variant="circular" width="40px" height="40px" />
           <div className="flex-1 space-y-2">
             <Skeleton variant="text" width="60%" />
@@ -135,8 +135,8 @@ export const SkeletonDashboard: React.FC<{ className?: string }> = ({ className 
     <div className={cn("space-y-6", className)}>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {Array.from({ length: 4 }).map((__, i) => (
-          <div key={_i} className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-gray-900 border border-gray-800 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <Skeleton variant="text" width="60%" height="0.875rem" />
               <Skeleton variant="circular" width="32px" height="32px" />

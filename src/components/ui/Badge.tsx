@@ -67,10 +67,10 @@ export const Badge: React.FC<BadgeProps> = ({
         />
       )}
       
-      {_children}
+      {children}
       
       {removable && (<button
-          onClick={(_e) => {
+          onClick={(e) => {
             e.stopPropagation()
             onRemove?.()
           }}
@@ -99,15 +99,15 @@ interface BadgeGroupProps {
 export const BadgeGroup: React.FC<BadgeGroupProps> = ({
   children, className, max
 }) => {
-  const items = React.Children.toArray(_children)
+  const items = React.Children.toArray(children)
   const visibleItems = max ? items.slice(0, max) : items
   const hiddenCount = max && items.length > max ? items.length - max : 0
   return (
     <div className={cn('inline-flex items-center gap-1.5 flex-wrap', className)}>
-      {_visibleItems}
+      {visibleItems}
       {hiddenCount > 0 && (
         <Badge variant="default" size="sm">
-          +{_hiddenCount}
+          +{hiddenCount}
         </Badge>
       )}
     </div>

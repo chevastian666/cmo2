@@ -29,34 +29,34 @@ export class GroupingService {
     const groups = new Map<string, NotificationGroup>()
     const ungrouped: Notification[] = []
     // Sort notifications by timestamp (newest first)
-    const sortedNotifications = [...notifications].sort((_a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    const sortedNotifications = [...notifications].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     )
     for (const notification of sortedNotifications) {
-      const groupKey = this.getGroupKey(_notification, options)
+      const groupKey = this.getGroupKey(notification, options)
       if (!groupKey) {
-        ungrouped.push(_notification)
+        ungrouped.push(notification)
         continue
       }
 
-      let group = groups.get(_groupKey)
+      let group = groups.get(groupKey)
       if (!group) {
         // Create new group
         group = {
           id: this.generateGroupId(),
-          label: this.generateGroupLabel(_notification, options),
+          label: this.generateGroupLabel(notification, options),
           type: notification.type,
           priority: notification.priority,
           count: 0,
           latestTimestamp: notification.timestamp,
           notifications: [],
-          collapsed: this.shouldAutoCollapse(_notification, options)
+          collapsed: this.shouldAutoCollapse(notification, options)
         }
-        groups.set(_groupKey, group)
+        groups.set(groupKey, group)
       }
 
       // Add to existing group if not at max size
       if (group.notifications.length < options.maxGroupSize) {
-        group.notifications.push(_notification)
+        group.notifications.push(notification)
         group.count = group.notifications.length
         // Update group properties
         if (notification.timestamp > group.latestTimestamp) {
@@ -68,7 +68,7 @@ export class GroupingService {
           group.priority = notification.priority
         }
       } else {
-        ungrouped.push(_notification)
+        ungrouped.push(notification)
       }
     }
 
@@ -88,7 +88,7 @@ export class GroupingService {
       })
     })
     // Sort groups by latest timestamp
-    return result.sort((_a, b) => b.latestTimestamp.getTime() - a.latestTimestamp.getTime())
+    return result.sort((a, b) => b.latestTimestamp.getTime() - a.latestTimestamp.getTime())
   }
 
   /**
@@ -113,9 +113,9 @@ export class GroupingService {
 
     // Group similar alert patterns
     if (notification.type === 'alert') {
-      const alertPattern = this.extractAlertPattern(_notification)
-      if (_alertPattern) {
-        keyParts.push(`pattern:${_alertPattern}`)
+      const alertPattern = this.extractAlertPattern(notification)
+      if (alertPattern) {
+        keyParts.push(`pattern:${alertPattern}`)
       }
     }
 
@@ -126,7 +126,9 @@ export class GroupingService {
   /**
    * Extract alert pattern for grouping similar alerts
    */
-  private extractAlertPattern(_notification: Notification): string | null {
+  private extractAlertPattern(notification: Notification): string | null {
+    const title = notification.title
+    const message = notification.message
 
     // Common alert patterns
     const patterns = [
@@ -144,7 +146,7 @@ export class GroupingService {
       { regex: /(retraso|demora|atraso)/i, pattern: 'delay' }
     ]
     for (const { regex, pattern } of patterns) {
-      if (regex.test(_title) || regex.test(_message)) {
+      if (regex.test(title) || regex.test(message)) {
         return pattern
       }
     }
@@ -170,9 +172,9 @@ export class GroupingService {
 
     // Check for alert patterns
     if (notification.type === 'alert') {
-      const pattern = this.extractAlertPattern(_notification)
-      if (_pattern) {
-        return this.getPatternLabel(_pattern)
+      const pattern = this.extractAlertPattern(notification)
+      if (pattern) {
+        return this.getPatternLabel(pattern)
       }
     }
 
@@ -254,7 +256,7 @@ export class GroupingService {
       const similar = groups.filter(g => 
         g.id !== group.id && 
         !processed.has(g.id) &&
-        this.areGroupsSimilar(_group, g)
+        this.areGroupsSimilar(group, g)
       )
       if (similar.length > 0) {
         // Merge similar groups
@@ -265,17 +267,17 @@ export class GroupingService {
             ...group.notifications,
             ...similar.flatMap(g => g.notifications)
           ],
-          count: group.count + similar.reduce((s_um, g) => sum + g.count, 0),
+          count: group.count + similar.reduce((sum, g) => sum + g.count, 0),
           latestTimestamp: new Date(Math.max(
             group.latestTimestamp.getTime(),
             ...similar.map(g => g.latestTimestamp.getTime())
           ))
         }
-        merged.push(_mergedGroup)
+        merged.push(mergedGroup)
         processed.add(group.id)
         similar.forEach(g => processed.add(g.id))
       } else {
-        merged.push(_group)
+        merged.push(group)
         processed.add(group.id)
       }
     }
@@ -296,7 +298,7 @@ export class GroupingService {
    * Calculate Levenshtein distance between two strings
    */
   private getLevenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(_null).map(() => Array(str1.length + 1).fill(_null))
+    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null))
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j
     for (let j = 1; j <= str2.length; j++) {

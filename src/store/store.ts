@@ -12,8 +12,8 @@ import {
 import type { 
   PrecintosStore, TransitosStore, AlertasStore, SystemStatusStore} from './types'
 // Custom logger middleware for development
-const logger = (config: unknown) => (set: unknown, get: unknown, api: unknown) =>
-  config((...args: unknown[]) => {
+const logger = <T>(config: (set: T, get: T, api: T) => T) => (set: T, get: T, api: T) =>
+  config((...args: Parameters<T>) => {
       if (import.meta.env.DEV) {
         console.log('  applying', args)
       }
@@ -24,7 +24,8 @@ const logger = (config: unknown) => (set: unknown, get: unknown, api: unknown) =
     },
     get,
     api
-  )
+  );
+
 // Store individual para Precintos con middleware mejorado
 export const usePrecintosStore = create<PrecintosStore>()(
   devtools(
@@ -45,7 +46,7 @@ export const usePrecintosStore = create<PrecintosStore>()(
             if (version === 0) {
               // Migration logic if needed
             }
-            return persistedState
+            return persistedState as PrecintosStore
           }
         }
       )
@@ -221,8 +222,8 @@ const setupStoreSubscriptions = () => {
     }
   )
   // Update alerts when precinto status changes to critical
-  usePrecintosStore.subscribe((s_tate) => state.precintosActivos,
-    (_precintos) => {
+  usePrecintosStore.subscribe((state) => state.precintosActivos,
+    (precintos) => {
       const criticosNuevos = precintos.filter(p => p.estado === 3)
       // In a real app, this would create new alerts
       console.log('Precintos críticos:', criticosNuevos.length)

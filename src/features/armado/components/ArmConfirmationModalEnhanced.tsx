@@ -73,7 +73,7 @@ interface ArmConfirmationModalProps {
 }
 
 export const ArmConfirmationModalEnhanced: React.FC<ArmConfirmationModalProps> = ({
-  isOpen, onClose, onConfirm, precinto, transito
+  isOpen, onClose: _onClose, onConfirm: _onConfirm, precinto, transito
 }) => {
   if (!isOpen || !precinto) return null
   const hasWarnings = precinto.bateria < 20 || 

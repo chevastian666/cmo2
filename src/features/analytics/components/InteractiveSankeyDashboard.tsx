@@ -26,13 +26,13 @@ const InteractiveSankeyDashboard: React.FC = () => {
     from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     to: new Date()
   })
-  const [fullscreenChart, setFullscreenChart] = useState<string | null>(_null)
-  const [isRefreshing, setIsRefreshing] = useState(_false)
+  const [fullscreenChart, setFullscreenChart] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const handleRefresh = async () => {
-    setIsRefreshing(_true)
+    setIsRefreshing(true)
     // Simulate data refresh
-    await new Promise(resolve => setTimeout(_resolve, 2000))
-    setIsRefreshing(_false)
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    setIsRefreshing(false)
     toast({
       title: 'Datos actualizados',
       description: 'Los gráficos han sido actualizados con los datos más recientes.'
@@ -78,15 +78,15 @@ const InteractiveSankeyDashboard: React.FC = () => {
         
         <div className="flex flex-wrap gap-2">
           <DatePickerWithRange
-            value={_dateRange}
-            onChange={s_etDateRange}
+            value={dateRange}
+            onChange={setDateRange}
             className="w-auto"
           />
           
           <Button
             variant="outline"
-            onClick={_handleRefresh}
-            disabled={_isRefreshing}
+            onClick={handleRefresh}
+            disabled={isRefreshing}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Actualizar
@@ -94,7 +94,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
           
           <Button
             variant="outline"
-            onClick={_handleExportAll}
+            onClick={handleExportAll}
           >
             <Download className="h-4 w-4 mr-2" />
             Exportar Todo
@@ -176,7 +176,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
+        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="logistics">Flujos Logísticos</TabsTrigger>
             <TabsTrigger value="lifecycle">Ciclo de Vida</TabsTrigger>
@@ -301,7 +301,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
       </motion.div>
 
       {/* Fullscreen Dialog */}
-      <Dialog open={!!fullscreenChart} onOpenChange={() => setFullscreenChart(_null)}>
+      <Dialog open={!!fullscreenChart} onOpenChange={() => setFullscreenChart(null)}>
         <DialogContent className="max-w-[90vw] max-h-[90vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>

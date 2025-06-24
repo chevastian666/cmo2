@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_MapPin, Maximize2, X} from 'lucide-react'
+import {MapPin, Maximize2, X} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 interface MapPreviewProps {
   lat: number
@@ -11,7 +11,7 @@ interface MapPreviewProps {
 export const MapPreview: React.FC<MapPreviewProps> = ({ 
   lat, lng, title = 'Ubicación', height = '300px' 
 }) => {
-  const [isFullscreen, setIsFullscreen] = useState(_false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen)
   }
@@ -28,7 +28,7 @@ export const MapPreview: React.FC<MapPreviewProps> = ({
               Ubicación del Precinto
             </h3>
             <button
-              onClick={_toggleFullscreen}
+              onClick={toggleFullscreen}
               className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
               title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
             >
@@ -54,7 +54,7 @@ export const MapPreview: React.FC<MapPreviewProps> = ({
               </p>
             </div>
             <div className="mt-4 p-4 bg-gray-800 rounded-lg">
-              <p className="text-sm font-medium text-gray-300 mb-1">{_title}</p>
+              <p className="text-sm font-medium text-gray-300 mb-1">{title}</p>
               <p className="text-xs text-gray-400">
                 Lat: {lat.toFixed(6)}, Lng: {lng.toFixed(6)}
               </p>
@@ -74,7 +74,7 @@ export const MapPreview: React.FC<MapPreviewProps> = ({
       {isFullscreen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40"
-          onClick={_toggleFullscreen}
+          onClick={toggleFullscreen}
         />
       )}
     </>

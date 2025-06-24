@@ -6,16 +6,16 @@
 import { useState, useEffect} from 'react'
 // Hook para detectar cambios en los datos
 export const useDataChange = <T>(data: T) => {
-  const [hasChanged, setHasChanged] = useState(_false)
-  const [prevData, setPrevData] = useState(_data)
+  const [hasChanged, setHasChanged] = useState(false)
+  const [prevData, setPrevData] = useState(data)
   useEffect(() => {
-    if (JSON.stringify(_data) !== JSON.stringify(_prevData)) {
-      setHasChanged(_true)
-      setPrevData(_data)
-      const timer = setTimeout(() => setHasChanged(_false), 500)
-      return () => clearTimeout(_timer)
+    if (JSON.stringify(data) !== JSON.stringify(prevData)) {
+      setHasChanged(true)
+      setPrevData(data)
+      const timer = setTimeout(() => setHasChanged(false), 500)
+      return () => clearTimeout(timer)
     }
-  }, [data])
+  }, [data, prevData])
   return hasChanged
 }
 // Variantes de animación reutilizables

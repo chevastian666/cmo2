@@ -4,6 +4,27 @@ import { jwtService } from '../jwt.service'
 type EventCallback = (data: unknown) => void
 type ConnectionCallback = (status: 'connected' | 'disconnected' | 'reconnecting') => void
 
+interface WebSocketMessage {
+  type: string;
+  data?: unknown;
+  timestamp?: number;
+}
+
+interface CMOMessage {
+  type: string;
+  title: string;
+  message: string;
+  timestamp?: number;
+  priority?: string;
+}
+
+interface TruckPosition {
+  lat: number;
+  lng: number;
+  speed?: number;
+  heading?: number;
+}
+
 interface QueuedMessage {
   id: string
   type: string
@@ -103,7 +124,7 @@ export class SharedWebSocketService {
       this.scheduleReconnect()
     }
   }
-  private handleMessage(message: any): void {
+  private handleMessage(message: WebSocketMessage): void {
     const { type, data, timestamp } = message
     // Handle system messages
     switch (type) {
@@ -203,7 +224,7 @@ export class SharedWebSocketService {
     for (const message of messages) {
       try {
         this.ws!.send(JSON.stringify(message))
-      } catch (error) {
+      } catch (_error) {
         if (message.retries < 3) {
           message.retries++
           this.messageQueue.push(message)
@@ -377,19 +398,19 @@ export class SharedWebSocketService {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
   }
   // Typed event methods for common operations
-  emitTransitUpdate(transitId: string, data: any): void {
+  emitTransitUpdate(transitId: string, data: Record<string, unknown>): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRANSIT_UPDATE, { transitId, ...data })
   }
-  emitPrecintoUpdate(precintoId: string, data: any): void {
+  emitPrecintoUpdate(precintoId: string, data: Record<string, unknown>): void {
     this.send(SHARED_CONFIG.WS_EVENTS.PRECINTO_UPDATE, { precintoId, ...data })
   }
-  emitAlertUpdate(alertId: string, data: any): void {
+  emitAlertUpdate(alertId: string, data: Record<string, unknown>): void {
     this.send(SHARED_CONFIG.WS_EVENTS.ALERT_UPDATE, { alertId, ...data })
   }
-  emitTruckPosition(truckId: string, position: any): void {
+  emitTruckPosition(truckId: string, position: TruckPosition): void {
     this.send(SHARED_CONFIG.WS_EVENTS.TRUCK_POSITION, { truckId, position })
   }
-  emitCMOMessage(message: any): void {
+  emitCMOMessage(message: CMOMessage): void {
     this.send(SHARED_CONFIG.WS_EVENTS.CMO_MESSAGE, message)
   }
   // Subscribe to typed events

@@ -21,7 +21,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
 
     onSearch(nqr.trim())
   }
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const _handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       handleSubmit(e)
     }

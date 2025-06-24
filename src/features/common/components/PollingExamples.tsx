@@ -9,24 +9,43 @@ import { RefreshCw} from 'lucide-react'
  * Ejemplo de MapModule con actualización automática
  */
 export const MapWithPolling: React.FC = () => {
+  // Mock state for example
+  const isLoading = false
+  const error = null
+  interface MapMarker {
+    id: string;
+    position: { lat: number; lng: number };
+    // Add other marker properties as needed
+  }
+  interface MapRoute {
+    id: string;
+    path: Array<{ lat: number; lng: number }>;
+    // Add other route properties as needed
+  }
+  const markers: MapMarker[] = []
+  const routes: MapRoute[] = []
+  
+  const refresh = () => {
+    console.log('Refreshing map data...')
+  }
 
   return (<Card className="relative">
       <div className="absolute top-4 right-4 z-10">
         <button
-          onClick={_refresh}
+          onClick={refresh}
           className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-          disabled={_isLoading}
+          disabled={isLoading}
         >
           <RefreshCw className={`h-4 w-4 text-gray-400 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
       </div>
       
       <MapModule
-        markers={_markers}
-        routes={_routes}
+        markers={markers}
+        routes={routes}
         height="500px"
         useDetailedIcons
-        onMarkerClick={(_marker) => {
+        onMarkerClick={(marker) => {
           console.log('Marker clicked:', marker)
         }}
       />
@@ -43,6 +62,19 @@ export const MapWithPolling: React.FC = () => {
  * Ejemplo de TransitCard con actualización automática
  */
 export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transitId }) => {
+  // Mock state for example
+  const isLoading = false
+  const error = null
+  const transit = {
+    id: transitId,
+    vehicleId: 'ABC123',
+    origin: 'Montevideo',
+    destination: 'Buenos Aires',
+    status: 'en_transito' as const,
+    startTime: Date.now() / 1000,
+    cargo: { type: 'General', description: 'Mercancía general' },
+    driver: { name: 'Juan Pérez', id: '12345678' }
+  }
 
   if (isLoading && !transit) {
     return (
@@ -52,7 +84,7 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
     )
   }
 
-  if (_error) {
+  if (error) {
     return (
       <Card className="text-red-400">
         Error cargando tránsito
@@ -65,8 +97,8 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
   }
 
   return (<TransitCard
-      transit={_transit}
-      onViewHistory={(_plate) => {
+      transit={transit}
+      onViewHistory={(plate) => {
         console.log('Ver historial de:', plate)
       }}
     />
@@ -76,6 +108,27 @@ export const TransitCardWithPolling: React.FC<{ transitId: string }> = ({ transi
  * Ejemplo de AlertsPanel con actualización automática
  */
 export const AlertsPanelWithPolling: React.FC = () => {
+  // Mock state for example
+  const hasNewCriticalAlert = false
+  const isLoading = false
+  const error = null
+  interface Alert {
+    id: string;
+    type: string;
+    severity: string;
+    message: string;
+    timestamp: Date;
+    // Add other alert properties as needed
+  }
+  const alerts: Alert[] = []
+  
+  const refresh = () => {
+    console.log('Refreshing alerts...')
+  }
+  
+  const acknowledgeAlert = (alertId: string) => {
+    console.log('Acknowledging alert:', alertId)
+  }
 
   return (
     <div className="space-y-4">
@@ -95,20 +148,20 @@ export const AlertsPanelWithPolling: React.FC = () => {
       <div className="relative">
         {/* Botón de actualización manual */}
         <button
-          onClick={_refresh}
+          onClick={refresh}
           className="absolute -top-2 right-2 z-10 p-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-          disabled={_isLoading}
+          disabled={isLoading}
           title="Actualizar alertas"
         >
           <RefreshCw className={`h-3.5 w-3.5 text-gray-400 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
 
         <AlertsPanel
-          alerts={_alerts}
-          onAlertClick={(_alert) => {
+          alerts={alerts}
+          onAlertClick={(alert) => {
             console.log('Alert clicked:', alert)
           }}
-          onAlertAcknowledge={_acknowledgeAlert}
+          onAlertAcknowledge={acknowledgeAlert}
           groupByPriority
           enableSound
           enableVisualPulse

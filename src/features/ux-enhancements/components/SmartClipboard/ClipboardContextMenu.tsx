@@ -8,7 +8,7 @@ interface ClipboardContextMenuProps {
 }
 
 export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
-  selection, position, onClose
+  selection: _selection, position, onClose
 }) => {
 
   const handleCopy = async (_context: string) => {
@@ -47,9 +47,9 @@ export const ClipboardContextMenu: React.FC<ClipboardContextMenuProps> = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
     >
-      {menuItems.map((_item, index) => (
+      {menuItems.map((item, index) => (
         <button
-          key={_index}
+          key={index}
           onClick={item.action}
           className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-700 transition-colors text-left"
         >

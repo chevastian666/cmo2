@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {_Package, AlertCircle, Loader} from 'lucide-react'
+import {Package, AlertCircle, Loader} from 'lucide-react'
 import { useNavigate, useLocation} from 'react-router-dom'
 import { PrecintoSearch} from '../components/PrecintoSearchCompact'
 import { PrecintoStatus} from '../components/PrecintoStatusCompact'
@@ -53,9 +53,9 @@ interface ArmadoData {
 export const ArmadoPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [loading, setLoading] = useState(_false)
-  const [searchError, setSearchError] = useState<string | null>(_null)
-  const [showConfirmModal, setShowConfirmModal] = useState(_false)
+  const [loading, setLoading] = useState(false)
+  const [_searchError, setSearchError] = useState<string | null>(null)
+  const [_showConfirmModal, setShowConfirmModal] = useState(false)
   // Check if we have prearm data from navigation state
   const prearmData = location.state?.prearmData
   const [armadoData, setArmadoData] = useState<ArmadoData>({
@@ -101,8 +101,8 @@ export const ArmadoPage: React.FC = () => {
     fotosExistentes: []
   })
   const handleSearchPrecinto = async (nqr: string) => {
-    setLoading(_true)
-    setSearchError(_null)
+    setLoading(true)
+    setSearchError(null)
     try {
       const precinto = await armadoService.searchPrecinto(_nqr)
       if (!precinto) {
@@ -141,13 +141,13 @@ export const ArmadoPage: React.FC = () => {
       }))
       notificationService.success(
         'Precinto Encontrado',
-        `Precinto ${_nqr} cargado correctamente`
+        `Precinto ${nqr} cargado correctamente`
       )
     } catch (error: unknown) {
       setSearchError(error.message || 'Error al buscar precinto')
       notificationService.error('Error', error.message || 'Error al buscar precinto')
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   const handleTransitoUpdate = (field: string, value: unknown) => {
@@ -210,11 +210,11 @@ export const ArmadoPage: React.FC = () => {
       return
     }
 
-    setShowConfirmModal(_true)
+    setShowConfirmModal(true)
   }
   const handleExecuteArmado = async () => {
-    setShowConfirmModal(_false)
-    setLoading(_true)
+    setShowConfirmModal(false)
+    setLoading(true)
     try {
 
       if (!precinto) {
@@ -292,19 +292,19 @@ export const ArmadoPage: React.FC = () => {
         error.message || 'Error al ejecutar el armado'
       )
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   }
   // Show notification if we have prearm data
 
   useEffect(() => {
-    if (_prearmData) {
+    if (prearmData) {
       notificationService.info(
         'Datos precargados',
         `Se han cargado los datos del viaje ${prearmData.viajeId} - Movimiento ${prearmData.movimientoId}`
       )
     }
-  }, [])
+  }, [prearmData])
   return (
     <div className="space-y-6">
       <div>
@@ -325,9 +325,9 @@ export const ArmadoPage: React.FC = () => {
       <div className="space-y-4">
         {/* Search */}
         <PrecintoSearch 
-          onSearch={_handleSearchPrecinto}
-          loading={_loading}
-          error={s_earchError}
+          onSearch={handleSearchPrecinto}
+          loading={loading}
+          error={_searchError}
         />
 
         {/* Precinto Status */}
@@ -349,14 +349,14 @@ export const ArmadoPage: React.FC = () => {
             {/* Transit Form */}
             <ArmFormEnhanced
               data={armadoData.transito}
-              onChange={_handleTransitoUpdate}
-              disabled={_loading}
+              onChange={handleTransitoUpdate}
+              disabled={loading}
               precintoId={armadoData.precinto.codigo}
             />
 
             {/* Photo Uploader */}
             <PhotoUploader
-              onPhotosChange={_handlePhotosChange}
+              onPhotosChange={handlePhotosChange}
               existingPhotos={armadoData.fotosExistentes}
               maxPhotos={5}
             />
@@ -371,14 +371,14 @@ export const ArmadoPage: React.FC = () => {
                     fotosExistentes: []
                   })}
                   className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors w-full sm:w-auto"
-                  disabled={_loading}
+                  disabled={loading}
                 >
                   Cancelar
                 </button>
                 <button
-                  onClick={_handleConfirmArmado}
+                  onClick={handleConfirmArmado}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 w-full sm:w-auto"
-                  disabled={_loading}
+                  disabled={loading}
                 >
                   {loading ? (
                     <>
@@ -409,9 +409,9 @@ export const ArmadoPage: React.FC = () => {
 
       {/* Confirmation Modal */}
       <ArmConfirmationModalEnhanced
-        isOpen={s_howConfirmModal}
-        onClose={() => setShowConfirmModal(_false)}
-        onConfirm={_handleExecuteArmado}
+        isOpen={_showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleExecuteArmado}
         precinto={armadoData.precinto}
         transito={armadoData.transito}
       />

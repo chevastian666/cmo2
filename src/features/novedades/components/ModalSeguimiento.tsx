@@ -17,7 +17,7 @@ export const ModalSeguimiento: React.FC<ModalSeguimientoProps> = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   if (!isOpen || !novedad) return null
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!comentario.trim()) {
       setError('El comentario es requerido')

@@ -40,10 +40,10 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
   const menuRef = useRef<HTMLDivElement>(null)
   const [selectedAction, setSelectedAction] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const controls = useAnimation()
+  const _controls = useAnimation()
   
   // Filter actions based on permissions
-  const canUseAction = (permissions: string[]) => {
+  const canUseAction = (_permissions: string[]) => {
     // For now, return true. In real implementation, check user permissions
     return true
   }
@@ -92,7 +92,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
     }
 
     onClose()
-  }, [context, customizable, onClose])
+  }, [context, customizable, onClose, settings.hapticFeedback])
   
   // Handle click outside
   useEffect(() => {
@@ -162,7 +162,7 @@ export const RadialMenu: React.FC<RadialMenuProps> = ({
   )
   
   // Gesture support for touch devices
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((_e: React.TouchEvent) => {
     if (!gestureEnabled) return
     setIsDragging(true)
   }, [gestureEnabled])

@@ -6,7 +6,7 @@ import { APP_CONFIG} from '../../../config'
 import { ConnectionStatus} from './ConnectionStatus'
 import { RealtimeNotifications} from './RealtimeNotifications'
 import { AlarmSummary} from './AlarmSummary'
-import { useAlertasActivas} from '../../../store/hooks'
+import { } from '../../../store/hooks'
 import {_useUserInfo} from '../../../hooks/useAuth'
 import { useConnectionStatus} from '../../../hooks/useSharedState'
 import { PanelSwitcher} from '../../../components/PanelSwitcher'
@@ -17,10 +17,10 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   console.log('Layout: Rendering with children:', children)
-  const [sidebarOpen, setSidebarOpen] = useState(_false)
-  const [userMenuOpen, setUserMenuOpen] = useState(_false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
   const location = useLocation()
-  const connectionStatus = useConnectionStatus()
+  const _connectionStatus = useConnectionStatus()
   const userInfo = useUserInfo()
   return (<div className="min-h-screen bg-gray-900 text-gray-100">
       <header className="bg-gray-800 border-b border-gray-700">

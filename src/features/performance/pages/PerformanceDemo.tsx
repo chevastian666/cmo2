@@ -4,8 +4,8 @@
  * By Cheva
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useCallback, useMemo as _useMemo, useEffect } from 'react'
+import { motion as _motion } from 'framer-motion'
 import { Database, Zap, Activity, TrendingUp, Clock, MemoryStick, Cpu, Play, RefreshCw } from 'lucide-react'
 import { VirtualizedList } from '@/components/optimized/VirtualizedList'
 import { OptimizedCard, OptimizedTableRow } from '@/components/optimized/OptimizedComponents'
@@ -40,7 +40,17 @@ function generateLargeDataset(count: number) {
 export const PerformanceDemo: React.FC = () => {
   const [dataSize, setDataSize] = useState(1000000); // 1 million records
   const [isGenerating, setIsGenerating] = useState(false)
-  const [dataset, setDataset] = useState<any[]>([])
+  const [dataset, setDataset] = useState<{
+    id: string;
+    timestamp: number;
+    value: number;
+    quantity: number;
+    price: number;
+    status: string;
+    location: string;
+    user: string;
+    description: string;
+  }[]>([])
   const [metrics, setMetrics] = useState({
     generationTime: 0,
     processingTime: 0,
@@ -52,14 +62,14 @@ export const PerformanceDemo: React.FC = () => {
   // Performance monitoring
   const measurePerformance = useCallback((fn: () => void | Promise<void>, metricName: keyof typeof metrics) => {
     const startTime = performance.now()
-    const startMemory = (performance as any).memory?.usedJSHeapSize || 0
+    const startMemory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0
     
     const result = fn()
     
     if (result instanceof Promise) {
       return result.then(() => {
         const endTime = performance.now()
-        const endMemory = (performance as any).memory?.usedJSHeapSize || 0
+        const endMemory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0
         setMetrics(prev => ({
           ...prev,
           [metricName]: endTime - startTime,
@@ -68,7 +78,7 @@ export const PerformanceDemo: React.FC = () => {
       })
     } else {
       const endTime = performance.now()
-      const endMemory = (performance as any).memory?.usedJSHeapSize || 0
+      const endMemory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0
       setMetrics(prev => ({
         ...prev,
         [metricName]: endTime - startTime,
@@ -84,7 +94,7 @@ export const PerformanceDemo: React.FC = () => {
       // Generate in chunks to avoid blocking UI
       const chunkSize = 100000
       const chunks = Math.ceil(dataSize / chunkSize)
-      let allData: any[] = []
+      let allData: typeof dataset = []
       
       for (let i = 0; i < chunks; i++) {
         const size = Math.min(chunkSize, dataSize - i * chunkSize)
@@ -103,7 +113,7 @@ export const PerformanceDemo: React.FC = () => {
   const { processLargeDataset, isReady: workerReady } = useDataProcessor()
   
   // Smart cache
-  const cache = useSmartCache('performance-demo')
+  const _cache = useSmartCache('performance-demo')
   
   // Server pagination mock
   const paginatedData = useServerPagination({
@@ -155,17 +165,17 @@ export const PerformanceDemo: React.FC = () => {
   })
   
   // Debounced search
-  const handleSearch = useDebouncedCallback((search: string) => {
+  const _handleSearch = useDebouncedCallback((search: string) => {
     paginatedData.setSearch(search)
   }, { delay: 300 })
   
   // Throttled scroll handler
-  const handleScroll = useThrottledCallback((scrollOffset: number) => {
+  const _handleScroll = useThrottledCallback((scrollOffset: number) => {
     console.log('Scroll offset:', scrollOffset)
   }, { delay: 100 })
   
   // Batched updates for real-time data
-  const { addUpdate: addRealtimeUpdate } = useBatchedUpdates((updates: any[]) => {
+  const { addUpdate: _addRealtimeUpdate } = useBatchedUpdates((updates: Array<{ id: string; [key: string]: unknown }>) => {
     // Process updates...
     console.log('Processing batch updates:', updates.length)
   }, { maxBatchSize: 1000, flushDelay: 100 })
@@ -191,7 +201,7 @@ export const PerformanceDemo: React.FC = () => {
   }, [generateData])
   
   // Render virtualized list item
-  const renderVirtualizedItem = useCallback((item: any, index: number, style: React.CSSProperties) => (
+  const renderVirtualizedItem = useCallback((item: typeof dataset[0], index: number, style: React.CSSProperties) => (
     <div style={style} className="flex items-center px-4 py-2 border-b border-gray-700 hover:bg-gray-800">
       <div className="flex-1">
         <div className="font-medium text-white">{item.id}</div>
@@ -312,7 +322,7 @@ export const PerformanceDemo: React.FC = () => {
             ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
-                onClick={() => setSelectedTab(key as any)}
+                onClick={() => setSelectedTab(key as 'virtualized' | 'paginated' | 'analytics')}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   selectedTab === key
                     ? 'bg-blue-600 text-white'

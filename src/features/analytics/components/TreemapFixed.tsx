@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
-import {_Package, Truck, AlertTriangle, TrendingUp} from 'lucide-react'
+import { Package, Truck, AlertTriangle } from 'lucide-react'
 const TreemapFixed: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview')
   // Datos de ejemplo para visualización
@@ -31,12 +31,18 @@ const TreemapFixed: React.FC = () => {
       { name: 'Bajas', value: 34, color: '#3b82f6', percentage: 38 }
     ]
   }
-  const TreemapBlock = ({ item, index }: { item: unknown; index: number }) => {
+  interface TreemapItem {
+    name: string;
+    value: number;
+    color: string;
+    percentage: number;
+  }
+  const TreemapBlock = ({ item, index }: { item: TreemapItem; index: number }) => {
     const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-2', 'col-span-2 row-span-1', 'col-span-1 row-span-1']
     const sizeClass = sizes[index % sizes.length]
     return (
       <div
-        className={`${s_izeClass} relative rounded-lg p-4 text-white transition-all hover:scale-105 hover:shadow-xl cursor-pointer`}
+        className={`${sizeClass} relative rounded-lg p-4 text-white transition-all hover:scale-105 hover:shadow-xl cursor-pointer`}
         style={{ backgroundColor: item.color }}
       >
         <div className="flex flex-col justify-between h-full">
@@ -51,14 +57,14 @@ const TreemapFixed: React.FC = () => {
       </div>
     )
   }
-  const currentData = activeTab === 'precintos' ? mockData.precintos : 
+  const _currentData = activeTab === 'precintos' ? mockData.precintos : 
                      activeTab === 'transitos' ? mockData.transitos : 
                      mockData.alertas
-  const stats = {
-    precintos: precintos.length || 450,
-    transitos: transitos.length || 162,
-    alertas: alertas.length || 89
-  }
+  const stats = useMemo(() => ({
+    precintos: 450,
+    transitos: 162,
+    alertas: 89
+  }), [])
   return (<div className="p-6 space-y-6">
       {/* Header */}
       <div>
@@ -120,7 +126,7 @@ const TreemapFixed: React.FC = () => {
       </div>
 
       {/* Treemap Visualization */}
-      <Tabs value={_activeTab} onValueChange={s_etActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">General</TabsTrigger>
           <TabsTrigger value="precintos">Precintos</TabsTrigger>
@@ -162,8 +168,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.precintos.map((_item, index) => (
-                  <TreemapBlock key={_index} item={_item} index={_index} />
+                {mockData.precintos.map((item, index) => (
+                  <TreemapBlock key={index} item={item} index={index} />
                 ))}
               </div>
             </CardContent>
@@ -177,8 +183,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.transitos.map((_item, index) => (
-                  <TreemapBlock key={_index} item={_item} index={_index} />
+                {mockData.transitos.map((item, index) => (
+                  <TreemapBlock key={index} item={item} index={index} />
                 ))}
               </div>
             </CardContent>
@@ -192,8 +198,8 @@ const TreemapFixed: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3" style={{ minHeight: '400px' }}>
-                {mockData.alertas.map((_item, index) => (
-                  <TreemapBlock key={_index} item={_item} index={_index} />
+                {mockData.alertas.map((item, index) => (
+                  <TreemapBlock key={index} item={item} index={index} />
                 ))}
               </div>
             </CardContent>

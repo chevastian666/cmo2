@@ -1,4 +1,4 @@
-import {_useState, useCallback, useRef, useEffect} from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import type { Alert} from '../types/alerts'
 interface UseInfiniteLoadingProps {
   loadMore: (page: number) => Promise<{
@@ -35,9 +35,9 @@ export function useInfiniteLoading({
     total: undefined,
     retryCount: 0
   })
-  const loadingRef = useRef(_false)
+  const loadingRef = useRef(false)
   const retryTimeoutRef = useRef<NodeJS.Timeout>()
-  const mountedRef = useRef(_true)
+  const mountedRef = useRef(true)
   // Load initial data
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export function useInfiniteLoading({
         clearTimeout(retryTimeoutRef.current)
       }
     }
-  }, [])
+  }, [loadInitialData])
   // Load initial data
   const loadInitialData = useCallback(async () => {
     if (loadingRef.current) return
@@ -68,7 +68,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }))
-    } catch {
+    } catch (error) {
       if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
@@ -86,7 +86,7 @@ export function useInfiniteLoading({
     } finally {
       loadingRef.current = false
     }
-  }, [state.retryCount])
+  }, [state.retryCount, loadMore, retryDelay, maxRetries])
   // Load more data
   const loadMoreData = useCallback(async () => {
     if (loadingRef.current || !state.hasMore || state.isLoadingMore) return
@@ -105,7 +105,7 @@ export function useInfiniteLoading({
         error: null,
         retryCount: 0
       }))
-    } catch {
+    } catch (error) {
       if (!mountedRef.current) return
       setState(prev => ({
         ...prev,
@@ -123,14 +123,14 @@ export function useInfiniteLoading({
     } finally {
       loadingRef.current = false
     }
-  }, [state.hasMore, state.isLoadingMore, state.page, state.retryCount])
+  }, [state.hasMore, state.isLoadingMore, state.page, state.retryCount, loadMore, retryDelay, maxRetries])
   // Check if should load more based on scroll position
   const checkLoadMore = useCallback((scrollTop: number, scrollHeight: number, clientHeight: number) => {
     const distanceFromBottom = scrollHeight - scrollTop - clientHeight
-    if (distanceFromBottom < threshold && state.hasMore && !state.isLoadingMore && !state._error) {
+    if (distanceFromBottom < threshold && state.hasMore && !state.isLoadingMore && !state.error) {
       loadMoreData()
     }
-  }, [threshold, state.hasMore, state.isLoadingMore, state._error])
+  }, [threshold, state.hasMore, state.isLoadingMore, state.error, loadMoreData])
   // Retry failed load
   const retry = useCallback(() => {
     setState(prev => ({ ...prev, retryCount: 0, error: null }))
@@ -139,7 +139,7 @@ export function useInfiniteLoading({
     } else {
       loadMoreData()
     }
-  }, [state.items.length])
+  }, [state.items.length, loadInitialData, loadMoreData])
   // Reset and reload
   const reset = useCallback(() => {
     setState({
@@ -153,7 +153,7 @@ export function useInfiniteLoading({
       retryCount: 0
     })
     loadInitialData()
-  }, [])
+  }, [loadInitialData])
   // Insert new items at the beginning (for real-time updates)
   const prependItems = useCallback((newItems: Alert[]) => {
     setState(prev => ({
@@ -184,7 +184,7 @@ export function useInfiniteLoading({
     isLoading: state.isLoading,
     isLoadingMore: state.isLoadingMore,
     hasMore: state.hasMore,
-    error: state._error,
+    error: state.error,
     total: state.total,
     loadMoreData,
     checkLoadMore,
@@ -212,7 +212,7 @@ export function useAlertSubscription(onNewAlert: (alert: Alert) => void,
       onRemove: onRemoveAlert
     })
     return unsubscribe
-  }, [])
+  }, [onNewAlert, onUpdateAlert, onRemoveAlert])
 }
 
 // Mock subscription function - replace with actual implementation
@@ -240,8 +240,8 @@ function subscribeToAlertUpdates(handlers: {
         status: 'active',
         assignedTo: undefined
       }
-      handlers.onNew(_mockAlert)
+      handlers.onNew(mockAlert)
     }
   }, 5000)
-  return () => clearInterval(_interval)
+  return () => clearInterval(interval)
 }

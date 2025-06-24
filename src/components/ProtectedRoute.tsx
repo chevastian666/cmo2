@@ -41,8 +41,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       )
     }
     
-    return <Navigate to={_redirectTo} replace />
+    return <Navigate to={redirectTo} replace />
   }
   
-  return <>{_children}</>
+  return <>{children}</>
 }

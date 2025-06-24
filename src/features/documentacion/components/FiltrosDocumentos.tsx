@@ -2,7 +2,7 @@ import React from 'react'
 import { Search, Calendar, Star, Lock, RotateCcw} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { FiltrosDocumentos} from '../types'
-import { TIPOS_DOCUMENTO, FILTROS_DEFAULT} from '../types'
+import { TIPOS_DOCUMENTO as _TIPOS_DOCUMENTO, FILTROS_DEFAULT as _FILTROS_DEFAULT} from '../types'
 interface FiltrosDocumentosProps {
   filtros: FiltrosDocumentos
   onFiltrosChange: (filtros: FiltrosDocumentos) => void
@@ -19,7 +19,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
       [key]: value
     })
   }
-  const handleReset = () => {
+  const _handleReset = () => {
     onFiltrosChange(_FILTROS_DEFAULT)
   }
   const tienesFiltrosActivos = () => {
@@ -57,7 +57,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         >
           <option value="">Todos los tipos</option>
           {Object.entries(_TIPOS_DOCUMENTO).map(([key, config]) => (
-            <option key={_key} value={_key}>{config.label}</option>
+            <option key={key} value={key}>{config.label}</option>
           ))}
         </select>
 
@@ -78,7 +78,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         >
           <option value="">Todas las empresas</option>
           {empresas.map(empresa => (
-            <option key={_empresa} value={_empresa}>{_empresa}</option>
+            <option key={empresa} value={empresa}>{empresa}</option>
           ))}
         </select>
 

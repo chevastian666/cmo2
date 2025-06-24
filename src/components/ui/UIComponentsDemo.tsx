@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, CardContent, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton} from './index'
+import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, MapMarker, Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton } from './index'
 export const UIComponentsDemo: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('tabs')
   // Sample data
@@ -60,7 +60,7 @@ export const UIComponentsDemo: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-100 mb-8">UI Components Demo</h1>
         
-        <Tabs value={s_electedTab} onValueChange={s_etSelectedTab}>
+        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
           <TabsList className="mb-8">
             <TabsTrigger value="tabs">Tabs</TabsTrigger>
             <TabsTrigger value="alerts">Alerts</TabsTrigger>
@@ -99,13 +99,13 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="alerts">
             <div className="space-y-6">
               <AlertsPanel
-                alerts={s_ampleAlerts}
+                alerts={sampleAlerts}
                 title="Panel de Alertas"
-                onAlertClick={(_alert) => console.log('Alert clicked:', alert)}
+                onAlertClick={(alert) => console.log('Alert clicked:', alert)}
               />
               
               <AlertsPanel
-                alerts={s_ampleAlerts}
+                alerts={sampleAlerts}
                 variant="compact"
                 title="Panel Compacto"
                 maxHeight="200px"
@@ -122,8 +122,8 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="transit">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <TransitCard
-                transit={s_ampleTransit}
-                onClick={(_t) => console.log('Transit clicked:', t)}
+                transit={sampleTransit}
+                onClick={(t) => console.log('Transit clicked:', t)}
               />
               
               <TransitCard
@@ -194,9 +194,9 @@ export const UIComponentsDemo: React.FC = () => {
           <TabsContent value="map">
             <div className="space-y-6">
               <MapModule
-                markers={s_ampleMarkers}
+                markers={sampleMarkers}
                 height="500px"
-                onMarkerClick={(_marker) => console.log('Marker clicked:', marker)}
+                onMarkerClick={(marker) => console.log('Marker clicked:', marker)}
               />
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -204,14 +204,14 @@ export const UIComponentsDemo: React.FC = () => {
                   markers={sampleMarkers.slice(0, 2)}
                   variant="compact"
                   height="300px"
-                  showControls={_false}
+                  showControls={false}
                 />
                 
                 <MapModule
                   markers={[sampleMarkers[2]]}
                   variant="compact"
                   height="300px"
-                  showLegend={_false}
+                  showLegend={false}
                 />
               </div>
             </div>

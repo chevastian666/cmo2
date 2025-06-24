@@ -1,5 +1,5 @@
 import React from 'react'
-import {_X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
+import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import type { ConfiguracionTV} from '../types'
 import { PUNTOS_OPERACION_TV} from '../types'
@@ -10,7 +10,7 @@ interface ConfiguracionModalProps {
 }
 
 export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
-  configuracion, onClose, onChange
+  configuracion, onClose: _onClose, onChange
 }) => {
   return (<div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 rounded-lg max-w-lg w-full border border-gray-700">
@@ -57,7 +57,7 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
               >
                 <option value="">Seleccionar punto específico</option>
                 {PUNTOS_OPERACION_TV.map(punto => (
-                  <option key={_punto} value={_punto}>{_punto}</option>
+                  <option key={punto} value={punto}>{punto}</option>
                 ))}
               </select>
             </div>
@@ -88,8 +88,8 @@ export const ConfiguracionModal: React.FC<ConfiguracionModalProps> = ({
                       cols === 2 && "grid-cols-2",
                       cols === 3 && "grid-cols-3"
                     )}>
-                      {Array.from({ length: cols }).map((__, i) => (
-                        <div key={_i} className="w-8 h-12 bg-current opacity-50 rounded" />
+                      {Array.from({ length: cols }).map((_item, i) => (
+                        <div key={i} className="w-8 h-12 bg-current opacity-50 rounded" />
                       ))}
                     </div>
                   </div>

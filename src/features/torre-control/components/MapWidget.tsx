@@ -18,7 +18,7 @@ export const MapWidget: React.FC<MapWidgetProps> = ({ data }) => {
       setMounted(_true)
     }, 50)
     return () => {
-      clearTimeout(_timer)
+      clearTimeout(timer)
       setMounted(_false)
     }
   }, [])

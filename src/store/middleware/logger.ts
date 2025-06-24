@@ -35,15 +35,16 @@ type Logger = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = []
 >(f: StateCreator<T, Mps, Mcs>, _options?: LoggerConfig) => StateCreator<T, Mps, Mcs>
-type LoggerImpl = <T>(f: StateCreator<T, [], []>, _options?: LoggerConfig) => StateCreator<T, [], []>
-const loggerImpl: LoggerImpl = (_f, _options = {}) => (s_et, get, store) => {
+type LoggerImpl = <T>(f: StateCreator<T, [], []>, options?: LoggerConfig) => StateCreator<T, [], []>
+const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
 
+  const { name = store.name || 'Store', enabled = true, collapsed = false, diff = false, timestamp = true, duration = false, actionFilter = () => true, stateFilter = (state) => state, colors = {} } = options
   const mergedColors = { ...defaultColors, ...colors }
   let startTime: number
   const loggedSet: typeof set = (...args) => {
     const [nextStateOrUpdater] = args
     const action = (nextStateOrUpdater as { type?: string })?.type || 'anonymous'
-    if (!enabled || !actionFilter(_action)) {
+    if (!enabled || !actionFilter(action)) {
       return set(...args)
     }
 
@@ -56,17 +57,17 @@ const loggerImpl: LoggerImpl = (_f, _options = {}) => (s_et, get, store) => {
       const took = endTime - startTime
       const groupMethod = collapsed ? console.groupCollapsed : console.group
       // Título del grupo
-      const title = `${_name} | ${_action}${timestamp ? ` @ ${new Date().toLocaleTimeString()}` : ''}${duration ? ` (${took.toFixed(2)}ms)` : ''}`
-      groupMethod(`%c${_title}`, `color: ${mergedColors.title}; font-weight: bold;`)
+      const title = `${name} | ${action}${timestamp ? ` @ ${new Date().toLocaleTimeString()}` : ''}${duration ? ` (${took.toFixed(2)}ms)` : ''}`
+      groupMethod(`%c${title}`, `color: ${mergedColors.title}; font-weight: bold;`)
       // Estado previo
-      console.log('%cprev state', `color: ${mergedColors.prevState}; font-weight: bold;`, stateFilter(_prevState))
+      console.log('%cprev state', `color: ${mergedColors.prevState}; font-weight: bold;`, stateFilter(prevState))
       // Acción
       console.log('%caction    ', `color: ${mergedColors.action}; font-weight: bold;`, action, nextStateOrUpdater)
       // Estado siguiente
-      console.log('%cnext state', `color: ${mergedColors.nextState}; font-weight: bold;`, stateFilter(_nextState))
+      console.log('%cnext state', `color: ${mergedColors.nextState}; font-weight: bold;`, stateFilter(nextState))
       // Diff opcional
-      if (_diff) {
-        console.log('%cdiff      ', 'color: #E0E0E0; font-weight: bold;', getDiff(_prevState, nextState))
+      if (diff) {
+        console.log('%cdiff      ', 'color: #E0E0E0; font-weight: bold;', getDiff(prevState, nextState))
       }
       
       console.groupEnd()
@@ -74,16 +75,16 @@ const loggerImpl: LoggerImpl = (_f, _options = {}) => (s_et, get, store) => {
     try {
       set(...args)
       log()
-    } catch {
-      console.group(`%c${_name} | ERROR`, `color: ${mergedColors._error}; font-weight: bold;`)
-      console._error('Error in action:', action)
-      console._error(__error)
+    } catch (error) {
+      console.group(`%c${name} | ERROR`, `color: ${mergedColors._error}; font-weight: bold;`)
+      console.error('Error in action:', action)
+      console.error(error)
       console.groupEnd()
-      throw _error
+      throw error
     }
   }
   store.setState = loggedSet
-  return f(_loggedSet, get, store)
+  return f(loggedSet, get, store)
 }
 // Función helper para calcular diff
 function getDiff(prev: unknown, next: unknown): Record<string, { from: unknown; to: unknown }> {

@@ -44,6 +44,7 @@ Object.defineProperty(navigator, 'geolocation', {
 })
 
 // Mock de Google Maps
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(global as any).google = {
   maps: {
     Map: vi.fn(() => ({

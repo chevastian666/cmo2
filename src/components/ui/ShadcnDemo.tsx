@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button} from './button'
 import { Input} from './input'
-import { Select, } from './select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from './dialog'
-import {_AlertCircle, Check, X, ArrowRight, User, Table} from 'lucide-react'
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './dialog'
+import { AlertCircle, Check, X, ArrowRight, User, Table } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle} from './Card'
 import { Alert, AlertDescription, AlertTitle} from './alert'
 import { FormularioCamioneroV2} from '../../features/camioneros/components/FormularioCamioneroV2'
@@ -13,10 +13,10 @@ import { VerificarAlertaModalV2} from '../../features/alertas/components/Verific
 import { EditTransitoModalV2} from '../../features/transitos/components/EditTransitoModalV2'
 import { Label} from './label'
 import { Checkbox} from './checkbox'
-import {_RadioGroup, RadioGroupItem} from './radio-group'
+import { RadioGroup, RadioGroupItem } from './radio-group'
 import { Switch} from './switch'
 import {
-  Popover, PopoverContent, PopoverTrigger, } from './popover'
+  Popover, PopoverContent, PopoverTrigger } from './popover'
 import { Info} from 'lucide-react'
 import { Skeleton} from './skeleton'
 import { CardSkeleton, ListItemSkeleton, FormSkeleton} from './CardSkeleton'
@@ -45,12 +45,12 @@ const mockTransito = {
   dua: '123456'
 }
 export default function ShadcnDemo() {
-  const [open, setOpen] = React.useState(_false)
-  const [formOpen, setFormOpen] = React.useState(_false)
-  const [tableOpen, setTableOpen] = React.useState(_false)
-  const [loadingDemo, setLoadingDemo] = React.useState(_false)
-  const [verificarOpen, setVerificarOpen] = React.useState(_false)
-  const [editTransitoOpen, setEditTransitoOpen] = React.useState(_false)
+  const [open, setOpen] = React.useState(false)
+  const [formOpen, setFormOpen] = React.useState(false)
+  const [tableOpen, setTableOpen] = React.useState(false)
+  const [loadingDemo, setLoadingDemo] = React.useState(false)
+  const [verificarOpen, setVerificarOpen] = React.useState(false)
+  const [editTransitoOpen, setEditTransitoOpen] = React.useState(false)
   return (<>
     <div className="space-y-8 p-8">
       <h1 className="text-2xl font-bold mb-8">shadcn/ui Components Demo</h1>
@@ -120,7 +120,7 @@ export default function ShadcnDemo() {
       {/* Dialog Section */}
       <section>
         <h2 className="text-xl font-semibold mb-4">Dialog</h2>
-        <Dialog open={_open} onOpenChange={s_etOpen}>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>Open Dialog</Button>
           </DialogTrigger>
@@ -133,10 +133,10 @@ export default function ShadcnDemo() {
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-end gap-3 mt-4">
-              <Button variant="outline" onClick={() => setOpen(_false)}>
+              <Button variant="outline" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={() => setOpen(_false)}>
+              <Button variant="destructive" onClick={() => setOpen(false)}>
                 <X className="mr-2 h-4 w-4" />
                 Delete Account
               </Button>
@@ -267,13 +267,13 @@ export default function ShadcnDemo() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => setFormOpen(_true)} className="w-full sm:w-auto">
+            <Button onClick={() => setFormOpen(true)} className="w-full sm:w-auto">
               <User className="mr-2 h-4 w-4" />
               Open Driver Registration Form
             </Button>
           </CardContent>
         </Card>
-        <FormularioCamioneroV2 isOpen={_formOpen} onClose={() => setFormOpen(_false)} />
+        <FormularioCamioneroV2 isOpen={formOpen} onClose={() => setFormOpen(false)} />
       </section>
 
       {/* Popover Example */}
@@ -359,7 +359,7 @@ export default function ShadcnDemo() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Dialog open={_tableOpen} onOpenChange={s_etTableOpen}>
+            <Dialog open={tableOpen} onOpenChange={setTableOpen}>
               <DialogTrigger asChild>
                 <Button className="w-full sm:w-auto">
                   <Table className="mr-2 h-4 w-4" />
@@ -405,7 +405,7 @@ export default function ShadcnDemo() {
                   <h4 className="text-sm font-medium mb-3">Card Skeleton</h4>
                   <div className="grid gap-4 md:grid-cols-3">
                     <CardSkeleton />
-                    <CardSkeleton showDescription={_false} />
+                    <CardSkeleton showDescription={false} />
                     <CardSkeleton showChart />
                   </div>
                 </div>
@@ -427,10 +427,10 @@ export default function ShadcnDemo() {
                 <div>
                   <Button 
                     onClick={() => {
-                      setLoadingDemo(_true)
-                      setTimeout(() => setLoadingDemo(_false), 3000)
+                      setLoadingDemo(true)
+                      setTimeout(() => setLoadingDemo(false), 3000)
                     }}
-                    disabled={_loadingDemo}
+                    disabled={loadingDemo}
                   >
                     {loadingDemo ? (
                       <>
@@ -443,12 +443,12 @@ export default function ShadcnDemo() {
                   </Button>
                   
                   {loadingDemo && (
-                    <Dialog open={_loadingDemo} onOpenChange={s_etLoadingDemo}>
+                    <Dialog open={loadingDemo} onOpenChange={setLoadingDemo}>
                       <DialogContent className="max-w-6xl">
                         <DialogHeader>
                           <DialogTitle>Loading Data...</DialogTitle>
                         </DialogHeader>
-                        <PrecintosTableV2 loading={_true} />
+                        <PrecintosTableV2 loading={true} />
                       </DialogContent>
                     </Dialog>
                   )}
@@ -479,7 +479,7 @@ export default function ShadcnDemo() {
                       Data table con ordenamiento, filtrado, paginación y popovers
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => setTableOpen(_true)}>
+                  <Button size="sm" variant="outline" onClick={() => setTableOpen(true)}>
                     View
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -492,7 +492,7 @@ export default function ShadcnDemo() {
                       Complete form with react-hook-form, Zod validation, and shadcn/ui
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => setFormOpen(_true)}>
+                  <Button size="sm" variant="outline" onClick={() => setFormOpen(true)}>
                     View
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -557,7 +557,7 @@ export default function ShadcnDemo() {
                       Alert verification modal with status badges and actions
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => setVerificarOpen(_true)}>
+                  <Button size="sm" variant="outline" onClick={() => setVerificarOpen(true)}>
                     View
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -570,7 +570,7 @@ export default function ShadcnDemo() {
                       Edit transit modal with form validation
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => setEditTransitoOpen(_true)}>
+                  <Button size="sm" variant="outline" onClick={() => setEditTransitoOpen(true)}>
                     View
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -646,22 +646,22 @@ export default function ShadcnDemo() {
     </div>
 
     {/* Modal Instances */}
-    <FormularioCamioneroV2 isOpen={_formOpen} onClose={() => setFormOpen(_false)} />
+    <FormularioCamioneroV2 isOpen={formOpen} onClose={() => setFormOpen(false)} />
     
     <VerificarAlertaModalV2
-      alerta={mockAlerta as unknown}
-      isOpen={_verificarOpen}
-      onClose={() => setVerificarOpen(_false)}
+      alerta={mockAlerta}
+      isOpen={verificarOpen}
+      onClose={() => setVerificarOpen(false)}
       onVerificar={async () => {
         console.log('Verificando alerta...')
-        await new Promise(resolve => setTimeout(_resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }}
     />
     
     <EditTransitoModalV2
-      transito={mockTransito as unknown}
-      isOpen={_editTransitoOpen}
-      onClose={() => setEditTransitoOpen(_false)}
+      transito={mockTransito}
+      isOpen={editTransitoOpen}
+      onClose={() => setEditTransitoOpen(false)}
       onSuccess={() => console.log('Transito editado')}
     />
     </>

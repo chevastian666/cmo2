@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
-import {_ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle} from 'lucide-react'
+import { ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle } from 'lucide-react'
 import { cn} from '@/lib/utils'
 import { Button} from '@/components/ui/button'
 import { PrecintoStatusBadge} from './PrecintoStatusBadge'
@@ -22,59 +22,59 @@ interface PrecintoTableAnimatedProps {
 }
 
 export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
-  precintos, loading, onViewDetail, onViewMap, onAssign, onSendCommand, onViewHistory, onMarkAsBroken
+  precintos, loading: _loading, onViewDetail, onViewMap, onAssign: _onAssign, onSendCommand, onViewHistory, onMarkAsBroken
 }) => {
   const [sortField, setSortField] = React.useState<keyof Precinto>('id')
   const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc')
   const [currentPage, setCurrentPage] = React.useState(1)
-  const _itemsPerPage = 10
-  const _handleSort = (field: keyof Precinto) => {
+  const itemsPerPage = 10
+  const handleSort = (field: keyof Precinto) => {
     if (field === sortField) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(__field)
+      setSortField(field)
       setSortDirection('asc')
     }
   }
-  const _sortedPrecintos = [...precintos].sort((_a, b) => {
+  const sortedPrecintos = [...precintos].sort((a, b) => {
     let aValue = a[sortField]
     let bValue = b[sortField]
     if (aValue === undefined) aValue = ''
     if (bValue === undefined) bValue = ''
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortDirection === 'asc' 
-        ? aValue.localeCompare(__bValue)
-        : bValue.localeCompare(__aValue)
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue)
     }
 
     if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
     if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
     return 0
   })
-  const _paginatedPrecintos = sortedPrecintos.slice(
+  const paginatedPrecintos = sortedPrecintos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
-  const _totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
-  const _SortIcon = ({ field }: { field: keyof Precinto }) => {
+  const totalPages = Math.max(1, Math.ceil(sortedPrecintos.length / itemsPerPage))
+  const SortIcon = ({ field }: { field: keyof Precinto }) => {
     if (sortField !== field) return <div className="w-4 h-4" />
     return sortDirection === 'asc' ? 
       <ChevronUp className="h-4 w-4" /> : 
       <ChevronDown className="h-4 w-4" />
   }
-  const _SortableHeader = ({ field, children }: { field: keyof Precinto; children: React.ReactNode }) => (<motion.th 
-      onClick={() => handleSort(__field)}
+  const SortableHeader = ({ field, children }: { field: keyof Precinto; children: React.ReactNode }) => (<motion.th 
+      onClick={() => handleSort(field)}
       className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
       <div className="flex items-center gap-1">
-        {_children}
-        <SortIcon field={_field} />
+        {children}
+        <SortIcon field={field} />
       </div>
     </motion.th>
   )
-  if (__loading) {
+  if (_loading) {
     return (
       <motion.div 
         className="bg-gray-800 rounded-lg p-8 text-center"
@@ -135,7 +135,7 @@ export const PrecintoTableAnimated: React.FC<PrecintoTableAnimatedProps> = ({
           </thead>
           <tbody className="divide-y divide-gray-700">
             <AnimatePresence mode="popLayout">
-              {paginatedPrecintos.map((_precinto, index) => (
+              {paginatedPrecintos.map((precinto, index) => (
                 <motion.tr 
                   key={precinto.id}
                   layout

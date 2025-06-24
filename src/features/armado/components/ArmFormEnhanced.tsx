@@ -150,7 +150,7 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
     if (precintoId && data.precintoId !== precintoId) {
       onChange('precintoId', precintoId)
     }
-  }, [])
+  }, [data.precintoId, onChange, precintoId])
   // Auto-complete RUT when empresa is selected
 
   useEffect(() => {
@@ -160,7 +160,7 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
         onChange('rutEmpresa', empresa.rut)
       }
     }
-  }, [data.empresa])
+  }, [data.empresa, data.rutEmpresa, onChange])
   // Auto-complete empresa when RUT is entered
 
   useEffect(() => {
@@ -170,13 +170,13 @@ export const ArmFormEnhanced: React.FC<ArmFormProps> = ({ data, onChange, disabl
         onChange('empresa', empresa.nombre)
       }
     }
-  }, [data.rutEmpresa])
+  }, [data.rutEmpresa, data.empresa, onChange])
   // Filter depositos based on selected ubicacion
   const getDepositosByUbicacion = (ubicacionId: string) => {
     if (!ubicacionId) return DEPOSITOS
     return DEPOSITOS.filter(d => d.ubicacion === ubicacionId)
   }
-  const handleInputChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (_field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const value = e.target.value
     onChange(_field, value)
   }

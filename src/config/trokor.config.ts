@@ -3,7 +3,7 @@
  * By Cheva
  */
 
-export const _TROKOR_CONFIG = {
+export const TROKOR_CONFIG = {
   // Base URLs
   API_BASE: import.meta.env.VITE_TROKOR_API_BASE || 'https://api.trokor.com/api',
   MAINDB_BASE: import.meta.env.VITE_TROKOR_MAINDB_BASE || 'https://maindb.trokor.com',
@@ -24,35 +24,35 @@ export const _TROKOR_CONFIG = {
     // Precintos
     PRECINTOS: '/precintos',
     PRECINTOS_ACTIVOS: '/precintos/activos',
-    PRECINTO_BY_ID: (id: string) => `/precintos/${_id}`,
-    PRECINTO_BY_NQR: (nqr: string) => `/precintos/nqr/${_nqr}`,
-    PRECINTO_STATUS: (id: string) => `/precintos/${_id}/status`,
-    PRECINTO_FINALIZAR: (id: string) => `/precintos/${_id}/finalizar`,
+    PRECINTO_BY_ID: (_id: string) => `/precintos/${_id}`,
+    PRECINTO_BY_NQR: (_nqr: string) => `/precintos/nqr/${_nqr}`,
+    PRECINTO_STATUS: (_id: string) => `/precintos/${_id}/status`,
+    PRECINTO_FINALIZAR: (_id: string) => `/precintos/${_id}/finalizar`,
     
     // Viajes (Tránsitos)
     VIAJES: '/viajes',
-    VIAJE_BY_ID: (id: string) => `/viajes/${_id}`,
+    VIAJE_BY_ID: (_id: string) => `/viajes/${_id}`,
     VIAJES_PENDIENTES: '/viajes/pendientes',
-    VIAJE_PRECINTAR: (id: string) => `/viajes/${_id}/precintar`,
+    VIAJE_PRECINTAR: (_id: string) => `/viajes/${_id}/precintar`,
     
     // Alarmas
     ALARMAS: '/alarmas',
-    ALARMA_BY_ID: (id: string) => `/alarmas/${_id}`,
+    ALARMA_BY_ID: (_id: string) => `/alarmas/${_id}`,
     ALARMAS_ACTIVAS: '/alarmas/activas',
-    ALARMA_ATENDER: (id: string) => `/alarmas/${_id}/atender`,
-    ALARMA_VERIFICAR: (id: string) => `/alarmas/${_id}/verificar`,
+    ALARMA_ATENDER: (_id: string) => `/alarmas/${_id}/atender`,
+    ALARMA_VERIFICAR: (_id: string) => `/alarmas/${_id}/verificar`,
     
     // Empresas
     EMPRESAS: '/empresas',
-    EMPRESA_BY_ID: (id: string) => `/empresas/${_id}`,
+    EMPRESA_BY_ID: (_id: string) => `/empresas/${_id}`,
     
     // Usuarios
     USUARIOS: '/usuarios',
-    USUARIO_BY_ID: (id: string) => `/usuarios/${_id}`,
+    USUARIO_BY_ID: (_id: string) => `/usuarios/${_id}`,
     
     // Ubicaciones
     UBICACIONES: '/ubicaciones',
-    UBICACION_BY_PRECINTO: (precintoId: string) => `/ubicaciones/precinto/${_precintoId}`,
+    UBICACION_BY_PRECINTO: (_precintoId: string) => `/ubicaciones/precinto/${_precintoId}`,
     
     // Estadísticas
     ESTADISTICAS: '/estadisticas',
@@ -125,7 +125,7 @@ export const _TROKOR_CONFIG = {
   }
 }
 // Helper para obtener headers con autenticación
-export const _getTrokorHeaders = (): HeadersInit => {
+export const getTrokorHeaders = (): HeadersInit => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   }
@@ -138,13 +138,13 @@ export const _getTrokorHeaders = (): HeadersInit => {
   }
   
   const _token = localStorage.getItem('trokor_token')
-  if (__token) {
+  if (_token) {
     headers['Authorization'] = `Bearer ${_token}`
   }
   
   return headers
 }
 // Helper para construir URLs completas
-export const _buildTrokorUrl = (endpoint: string, base: string = TROKOR_CONFIG.API_BASE): string => {
+export const buildTrokorUrl = (_endpoint: string, _base: string = TROKOR_CONFIG.API_BASE): string => {
   return `${_base}${_endpoint}`
 }

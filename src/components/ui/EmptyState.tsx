@@ -14,7 +14,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  title, message, icon = 'default', action, className, size = 'md'
+  title, message: _message, icon = 'default', action, className, size = 'md'
 }) => {
   const sizeStyles = {
     sm: {

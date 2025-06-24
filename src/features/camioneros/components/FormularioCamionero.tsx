@@ -8,7 +8,7 @@ interface FormularioCamioneroProps {
 }
 
 export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClose }) => {
-  const _userInfo = useUserInfo()
+  const userInfo = useUserInfo()
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -20,15 +20,15 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
     telefonoPais: '',
     comentario: ''
   })
-  const [errors, setErrors] = useState<Record<string, string>>(___)
-  const [loading, setLoading] = useState(__false)
-  const _handleChange = (field: string, value: unknown) => {
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [loading, setLoading] = useState(false)
+  const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
   }
-  const _validate = () => {
+  const validate = () => {
     const newErrors: Record<string, string> = {}
     if (!formData.nombre.trim()) {
       newErrors.nombre = 'El nombre es obligatorio'
@@ -50,14 +50,36 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
       newErrors.telefono = 'Debe proporcionar al menos un teléfono de contacto'
     }
     
-    setErrors(__newErrors)
-    return Object.keys(__newErrors).length === 0
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
-  const _handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    setLoading(__true)
+    setLoading(true)
     try {
+      // Mock createCamionero function
+      interface CamioneroData {
+        nombre: string;
+        apellido: string;
+        documento: string;
+        tipoDocumento: string;
+        nacionalidad: string;
+        paisOrigen: string;
+        telefonoUruguayo: string;
+        telefonoPais: string;
+        comentario: string;
+        creadoPor: {
+          id: string | number;
+          nombre: string;
+        };
+      }
+      const createCamionero = async (data: CamioneroData) => {
+        console.log('Creating camionero:', data);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      };
+      
       await createCamionero({
         nombre: formData.nombre.trim(),
         apellido: formData.apellido.trim(),
@@ -77,7 +99,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
     } catch {
       setErrors({ general: 'Error al registrar el camionero' })
     } finally {
-      setLoading(__false)
+      setLoading(false)
     }
   }
   return (
@@ -90,14 +112,14 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
             Registrar Camionero
           </h3>
           <button
-            onClick={_onClose}
+            onClick={onClose}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <X className="h-5 w-5 text-gray-400" />
           </button>
         </div>
 
-        <form onSubmit={_handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {errors.general && (
             <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
@@ -117,7 +139,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 onChange={(e) => handleChange('nombre', e.target.value)}
                 placeholder="Ej: Juan"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               />
               {errors.nombre && (
                 <p className="mt-1 text-sm text-red-500">{errors.nombre}</p>
@@ -134,7 +156,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 onChange={(e) => handleChange('apellido', e.target.value)}
                 placeholder="Ej: Pérez"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               />
               {errors.apellido && (
                 <p className="mt-1 text-sm text-red-500">{errors.apellido}</p>
@@ -152,11 +174,11 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 value={formData.tipoDocumento}
                 onChange={(e) => handleChange('tipoDocumento', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               >
-                {Object.entries(__TIPOS_DOCUMENTO).map(([key, label]) => (
-                  <option key={_key} value={_key}>
-                    {_label}
+                {Object.entries(TIPOS_DOCUMENTO).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
                   </option>
                 ))}
               </select>
@@ -172,7 +194,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 onChange={(e) => handleChange('documento', e.target.value)}
                 placeholder="Ej: 12345678"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               />
               {errors.documento && (
                 <p className="mt-1 text-sm text-red-500">{errors.documento}</p>
@@ -190,11 +212,11 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 value={formData.nacionalidad}
                 onChange={(e) => handleChange('nacionalidad', e.target.value)}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               >
-                {Object.entries(__NACIONALIDADES).map(([key, label]) => (
-                  <option key={_key} value={_key}>
-                    {_label}
+                {Object.entries(NACIONALIDADES).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
                   </option>
                 ))}
               </select>
@@ -210,7 +232,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                   onChange={(e) => handleChange('paisOrigen', e.target.value)}
                   placeholder="Ej: Perú"
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={_loading}
+                  disabled={loading}
                 />
                 {errors.paisOrigen && (
                   <p className="mt-1 text-sm text-red-500">{errors.paisOrigen}</p>
@@ -234,7 +256,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 onChange={(e) => handleChange('telefonoUruguayo', e.target.value)}
                 placeholder="Ej: 099123456"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               />
             </div>
 
@@ -251,7 +273,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
                 onChange={(e) => handleChange('telefonoPais', e.target.value)}
                 placeholder="Ej: +541123456789"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={_loading}
+                disabled={loading}
               />
             </div>
           </div>
@@ -279,7 +301,7 @@ export const FormularioCamionero: React.FC<FormularioCamioneroProps> = ({ onClos
           <div className="flex gap-3 pt-4">
             <button
               type="button"
-              onClick={_onClose}
+              onClick={onClose}
               className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
               disabled={_loading}
             >

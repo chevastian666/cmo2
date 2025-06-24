@@ -65,7 +65,7 @@ export function useSyncStoreActions() {
       useSystemStatusStore
     ]
     // Store original actions
-    const originalActions = stores.map(store => ({
+    const _originalActions = stores.map(store => ({
       store,
       actions: { ...store.getState() }
     }))

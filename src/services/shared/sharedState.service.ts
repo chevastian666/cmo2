@@ -5,6 +5,35 @@ import type {
   Precinto, TransitoPendiente, Alerta, Usuario
 } from '../../types'
 
+type Transito = TransitoPendiente
+
+interface TransitUpdateData {
+  action: 'update' | 'complete' | 'new';
+  transitId?: string;
+  transit?: Transito;
+}
+
+interface PrecintoUpdateData {
+  action: 'update' | 'activate' | 'deactivate';
+  precintoId?: string;
+  precinto?: Precinto;
+}
+
+interface CMOMessageData {
+  type: string;
+  title: string;
+  message: string;
+  timestamp?: number;
+  priority?: string;
+}
+
+interface VehicleUpdateData {
+  vehicleId: string;
+  location?: { lat: number; lng: number };
+  status?: string;
+  // Add other vehicle properties as needed
+}
+
 interface SharedState {
   // User & Auth
   currentUser: Usuario | null
@@ -188,24 +217,6 @@ export class SharedStateService {
       }
     })
   }
-  // Event handler data types
-  interface TransitUpdateData {
-    action: 'update' | 'complete' | 'new'
-    transitId?: string
-    transit?: TransitoPendiente
-  }
-
-  interface PrecintoUpdateData {
-    action: 'update' | 'activate' | 'deactivate'
-    precintoId?: string
-    precinto?: Precinto
-  }
-
-  interface AlertData {
-    alert?: Alerta
-    [key: string]: unknown
-  }
-
   // Event handlers
   private handleTransitUpdate(data: TransitUpdateData): void {
     const { action, transitId, transit } = data
@@ -235,7 +246,7 @@ export class SharedStateService {
         break
     }
   }
-  private handleNewAlert(data: AlertData | Alerta): void {
+  private handleNewAlert(data: Alerta): void {
     const alert = 'alert' in data && data.alert ? data.alert : data as Alerta
     // Add to active alerts
     const alertasActivas = [alert, ...this.state.alertasActivas]
@@ -248,15 +259,15 @@ export class SharedStateService {
       })
     }
   }
-  private handleCMOMessage(data: any): void {
+  private handleCMOMessage(data: CMOMessageData): void {
     const message = data.message || data
     const cmoMessages = [message, ...this.state.cmoMessages]
     const unreadCmoMessages = this.state.unreadCmoMessages + (message.read ? 0 : 1)
     this.updateState({ cmoMessages, unreadCmoMessages })
   }
-  private handleVehicleUpdate(data: any): void {
+  private handleVehicleUpdate(data: VehicleUpdateData): void {
     const { truckId, position } = data
-    const vehiculosEnRuta = this.state.vehiculosEnRuta.map((v: any) =>
+    const vehiculosEnRuta = this.state.vehiculosEnRuta.map((v) =>
       v.id === truckId ? { ...v, position, lastUpdate: Date.now() } : v
     )
     this.updateState({ vehiculosEnRuta })
@@ -375,7 +386,7 @@ export class SharedStateService {
   }
   async markCMOMessageAsRead(messageId: string): Promise<void> {
     await sharedApiService.markMessageAsRead(messageId)
-    const cmoMessages = this.state.cmoMessages.map((m: any) =>
+    const cmoMessages = this.state.cmoMessages.map((m) =>
       m.id === messageId ? { ...m, read: true } : m
     )
     const unreadCmoMessages = Math.max(0, this.state.unreadCmoMessages - 1)

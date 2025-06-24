@@ -5,27 +5,27 @@ import { RutaAccordion} from '../components/RutaAccordion'
 import { ZonasDescansoSearch} from '../components/ZonasDescansoSearch'
 import { ZonasDescansoStats} from '../components/ZonasDescansoStats'
 export const ZonasDescansoPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, _setSearchTerm] = useState('')
   // Filter zones based on search term
   const filteredData = useMemo(() => {
     if (!searchTerm) return zonasDescansoData
     const lowerSearchTerm = searchTerm.toLowerCase()
     return zonasDescansoData.map(rutaData => {
       const filteredZonas = rutaData.zonas.filter(zona => 
-        zona.nombre.toLowerCase().includes(_lowerSearchTerm) ||
-        zona.ubicacion.toLowerCase().includes(_lowerSearchTerm) ||
-        rutaData.ruta.toLowerCase().includes(_lowerSearchTerm)
+        zona.nombre.toLowerCase().includes(lowerSearchTerm) ||
+        zona.ubicacion.toLowerCase().includes(lowerSearchTerm) ||
+        rutaData.ruta.toLowerCase().includes(lowerSearchTerm)
       )
       return {
         ...rutaData,
         zonas: filteredZonas
       }
     }).filter(rutaData => rutaData.zonas.length > 0)
-  }, [])
+  }, [searchTerm])
   // Calculate stats
-  const totalZonas = zonasDescansoData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
-  const filteredZonas = filteredData.reduce((s_um, ruta) => sum + ruta.zonas.length, 0)
-  const totalRutas = zonasDescansoData.length
+  const _totalZonas = zonasDescansoData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+  const _filteredZonas = filteredData.reduce((sum, ruta) => sum + ruta.zonas.length, 0)
+  const _totalRutas = zonasDescansoData.length
   return (<div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center sm:text-left">

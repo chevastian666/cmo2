@@ -14,10 +14,10 @@ import type {
   NotificationPreferences as NotificationPrefsType, NotificationType, NotificationPriority, NotificationStats} from '../../../types/notifications'
 import { DEFAULT_SOUNDS} from '../../../types/notifications'
 export const NotificationSystemDemo: React.FC = () => {
-  const [preferences, setPreferences] = useState<NotificationPrefsType | null>(_null)
-  const [stats, setStats] = useState<NotificationStats | null>(_null)
-  const [pushSupported, setPushSupported] = useState(_false)
-  const [pushSubscribed, setPushSubscribed] = useState(_false)
+  const [preferences, setPreferences] = useState<NotificationPrefsType | null>(null)
+  const [stats, setStats] = useState<NotificationStats | null>(null)
+  const [pushSupported, setPushSupported] = useState(false)
+  const [pushSubscribed, setPushSubscribed] = useState(false)
   const [activeTab, setActiveTab] = useState<'demo' | 'preferences' | 'stats'>('demo')
   useEffect(() => {
     initializeDemo()
@@ -27,20 +27,20 @@ export const NotificationSystemDemo: React.FC = () => {
     await notificationService.initialize()
     // Load preferences
     const prefs = await notificationService.loadPreferences()
-    setPreferences(_prefs)
+    setPreferences(prefs)
     // Load stats
     const currentStats = notificationService.getStats()
-    setStats(_currentStats)
+    setStats(currentStats)
     // Check push notification support
     const supported = pushNotificationService.isSupported()
-    setPushSupported(s_upported)
-    if (s_upported) {
+    setPushSupported(supported)
+    if (supported) {
       const subscribed = await pushNotificationService.isSubscribed()
-      setPushSubscribed(s_ubscribed)
+      setPushSubscribed(subscribed)
     }
   }
   const createTestNotification = async (type: NotificationType, priority: NotificationPriority, title: string, message: string) => {
-    await notificationService.createNotification(_type, title, message, {
+    await notificationService.createNotification(type, title, message, {
       priority,
       metadata: {
         source: 'demo',
@@ -49,7 +49,7 @@ export const NotificationSystemDemo: React.FC = () => {
     })
     // Update stats
     const currentStats = notificationService.getStats()
-    setStats(_currentStats)
+    setStats(currentStats)
   }
   const testPushPermission = async () => {
     try {
@@ -58,13 +58,13 @@ export const NotificationSystemDemo: React.FC = () => {
         const subscription = await pushNotificationService.subscribe()
         setPushSubscribed(!!subscription)
       }
-    } catch (_error) {
+    } catch (error) {
       console.error('Failed to test push permission:', error)
     }
   }
   const testNotificationChannels = async () => {
     await notificationService.testNotification('in-app', 'system')
-    if (_pushSubscribed) {
+    if (pushSubscribed) {
       await notificationService.testNotification('push', 'system')
     }
   }
@@ -104,28 +104,28 @@ export const NotificationSystemDemo: React.FC = () => {
     for (const notif of sampleNotifications) {
       await createTestNotification(notif.type, notif.priority, notif.title, notif.message)
       // Add delay between notifications
-      await new Promise(resolve => setTimeout(_resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
     }
   }
   const handlePreferencesUpdate = async (newPreferences: NotificationPrefsType) => {
-    await notificationService.updatePreferences(_newPreferences)
-    setPreferences(_newPreferences)
+    await notificationService.updatePreferences(newPreferences)
+    setPreferences(newPreferences)
   }
   const handleTestSound = async (soundUrl: string, volume: number) => {
     try {
-      const audio = new Audio(s_oundUrl)
+      const audio = new Audio(soundUrl)
       audio.volume = volume
       await audio.play()
-    } catch (_error) {
+    } catch (error) {
       console.error('Failed to play sound:', error)
     }
   }
   const clearAllNotifications = async () => {
     const allNotifications = notificationService.getNotifications()
     const notificationIds = allNotifications.map(n => n.id)
-    await notificationService.handleBulkAction(_notificationIds, 'dismiss')
+    await notificationService.handleBulkAction(notificationIds, 'dismiss')
     const currentStats = notificationService.getStats()
-    setStats(_currentStats)
+    setStats(currentStats)
   }
   return (<div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
@@ -163,9 +163,9 @@ export const NotificationSystemDemo: React.FC = () => {
           <div className="flex space-x-1 bg-gray-800 rounded-lg p-1">
             {[
               { key: 'demo', label: 'Demostración', icon: TestTube2 }, { key: 'preferences', label: 'Preferencias', icon: Settings }, { key: 'stats', label: 'Estadísticas', icon: TrendingUp }
-            ].map((_key, label, icon: Icon ) => (<button
-                key={_key}
-                onClick={() => setActiveTab(key as unknown)}
+            ].map(({ key, label, icon: Icon }) => (<button
+                key={key}
+                onClick={() => setActiveTab(key as 'demo' | 'preferences' | 'stats')}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   activeTab === key
                     ? 'bg-blue-600 text-white'
@@ -173,7 +173,7 @@ export const NotificationSystemDemo: React.FC = () => {
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                <span>{_label}</span>
+                <span>{label}</span>
               </button>
             ))}
           </div>
@@ -208,7 +208,7 @@ export const NotificationSystemDemo: React.FC = () => {
                   </button>
                   
                   <button
-                    onClick={_generateSampleNotifications}
+                    onClick={generateSampleNotifications}
                     className="flex items-center space-x-2 p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     <Bell className="w-5 h-5" />
@@ -216,7 +216,7 @@ export const NotificationSystemDemo: React.FC = () => {
                   </button>
                   
                   <button
-                    onClick={_testNotificationChannels}
+                    onClick={testNotificationChannels}
                     className="flex items-center space-x-2 p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <TestTube2 className="w-5 h-5" />
@@ -224,7 +224,7 @@ export const NotificationSystemDemo: React.FC = () => {
                   </button>
                   
                   <button
-                    onClick={_clearAllNotifications}
+                    onClick={clearAllNotifications}
                     className="flex items-center space-x-2 p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                   >
                     <CheckCircle className="w-5 h-5" />
@@ -252,7 +252,7 @@ export const NotificationSystemDemo: React.FC = () => {
                     </div>
                     
                     <button
-                      onClick={_testPushPermission}
+                      onClick={testPushPermission}
                       disabled={!pushSupported}
                       className={`px-4 py-2 rounded-lg transition-colors ${
                         pushSubscribed
@@ -273,7 +273,7 @@ export const NotificationSystemDemo: React.FC = () => {
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {DEFAULT_SOUNDS.map((s_ound) => (<div key={sound.id} className="bg-gray-700 rounded-lg p-4">
+                  {DEFAULT_SOUNDS.map((sound) => (<div key={sound.id} className="bg-gray-700 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-white">{sound.name}</span>
                         <button
@@ -313,8 +313,8 @@ export const NotificationSystemDemo: React.FC = () => {
                   <div>
                     <h3 className="font-medium text-white mb-3">⚡ Acciones Rápidas</h3>
                     <ul className="space-y-2 text-gray-300">
-                      <li>• ✅ Confirmar (_acknowledge)</li>
-                      <li>• ⏰ Posponer (s_nooze)</li>
+                      <li>• ✅ Confirmar (acknowledge)</li>
+                      <li>• ⏰ Posponer (snooze)</li>
                       <li>• ⬆️ Escalar a supervisor</li>
                       <li>• 👁️ Marcar como leído</li>
                       <li>• 🗂️ Archivar</li>
@@ -355,9 +355,9 @@ export const NotificationSystemDemo: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
             >
               <NotificationPreferences
-                preferences={_preferences}
-                onSave={_handlePreferencesUpdate}
-                onTest={notificationService.testNotification.bind(_notificationService)}
+                preferences={preferences}
+                onSave={handlePreferencesUpdate}
+                onTest={notificationService.testNotification.bind(notificationService)}
               />
             </motion.div>
           )}
@@ -418,9 +418,9 @@ export const NotificationSystemDemo: React.FC = () => {
                   <h3 className="text-lg font-semibold text-white mb-4">Por Tipo</h3>
                   <div className="space-y-3">
                     {Object.entries(stats.byType).map(([type, count]) => (
-                      <div key={_type} className="flex items-center justify-between">
-                        <span className="text-gray-300 capitalize">{_type}</span>
-                        <span className="text-white font-medium">{_count}</span>
+                      <div key={type} className="flex items-center justify-between">
+                        <span className="text-gray-300 capitalize">{type}</span>
+                        <span className="text-white font-medium">{count}</span>
                       </div>
                     ))}
                   </div>
@@ -430,9 +430,9 @@ export const NotificationSystemDemo: React.FC = () => {
                   <h3 className="text-lg font-semibold text-white mb-4">Por Prioridad</h3>
                   <div className="space-y-3">
                     {Object.entries(stats.byPriority).map(([priority, count]) => (
-                      <div key={_priority} className="flex items-center justify-between">
-                        <span className="text-gray-300 capitalize">{_priority}</span>
-                        <span className="text-white font-medium">{_count}</span>
+                      <div key={priority} className="flex items-center justify-between">
+                        <span className="text-gray-300 capitalize">{priority}</span>
+                        <span className="text-white font-medium">{count}</span>
                       </div>
                     ))}
                   </div>

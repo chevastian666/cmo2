@@ -7,13 +7,13 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { Responsive, WidthProvider} from 'react-grid-layout'
 import type { Layout, Layouts} from 'react-grid-layout'
-import {_Settings, Lock, Unlock, Save, RotateCcw} from 'lucide-react'
+import { Lock, Unlock, Save, RotateCcw} from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { motion, AnimatePresence} from 'framer-motion'
 // CSS de react-grid-layout
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
-const ResponsiveGridLayout = WidthProvider(_Responsive)
+const ResponsiveGridLayout = WidthProvider(Responsive)
 export interface WidgetConfig {
   id: string
   type: string
@@ -130,15 +130,15 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       xxs: generateLayout(2)
     }
   }, [widgets])
-  const currentLayouts = layouts || defaultLayouts
+  const _currentLayouts = layouts || defaultLayouts
   const handleLayoutChange = useCallback((layout: Layout[], layouts: Layouts) => {
-    setLayouts(_layouts)
-    onLayoutChange?.(_layouts)
+    setLayouts(layouts)
+    onLayoutChange?.(layouts)
   }, [onLayoutChange])
   const toggleEditMode = () => {
     setEditMode(!editMode)
   }
-  const saveLayouts = () => {
+  const _saveLayouts = () => {
     // Los layouts ya se guardan automáticamente en el store con persist
     // Esta función es para feedback visual
     const notification = document.createElement('div')
@@ -154,7 +154,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={_toggleEditMode}
+          onClick={toggleEditMode}
           className={cn(
             'p-2 rounded-lg transition-all duration-200',
             editMode
@@ -202,7 +202,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
           isDragging && 'cursor-grabbing'
         )}
         layouts={_currentLayouts}
-        onLayoutChange={_handleLayoutChange}
+        onLayoutChange={handleLayoutChange}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         rowHeight={70}

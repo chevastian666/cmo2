@@ -13,10 +13,10 @@ export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
     const cleanupAutoRefresh = setupAutoRefresh()
     // Cleanup on unmount
     return () => {
-      if (_cleanupAutoRefresh) {
+      if (cleanupAutoRefresh) {
         cleanupAutoRefresh()
       }
     }
   }, [])
-  return <>{_children}</>
+  return <>{children}</>
 }

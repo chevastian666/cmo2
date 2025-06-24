@@ -1,5 +1,5 @@
 import React, { useTransition, useState, memo, useDeferredValue } from 'react'
-import {_Package, Search, RefreshCw} from 'lucide-react'
+import { Search, RefreshCw} from 'lucide-react'
 import { PriorityBoundary} from '../priority/withPriority'
 import { DashboardSkeleton} from './DashboardSkeleton'
 interface Precinto {

@@ -17,7 +17,7 @@ export const SubPanelesPage: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', handleEsc)
     }
-  }, [])
+  }, [showModal])
   return (<div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>

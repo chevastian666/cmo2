@@ -24,11 +24,11 @@ class CacheService {
    * Get data from cache if valid
    */
   get<T>(key: string): T | null {
-    const entry = this.cache.get(_key)
+    const entry = this.cache.get(key)
     if (!entry) return null
     const now = Date.now()
     if (now - entry.timestamp > entry.ttl) {
-      this.cache.delete(_key)
+      this.cache.delete(key)
       return null
     }
     
@@ -39,7 +39,7 @@ class CacheService {
    * Set data in cache
    */
   set<T>(key: string, data: T, ttl: number = this.DEFAULT_TTL): void {
-    this.cache.set(_key, {
+    this.cache.set(key, {
       data,
       timestamp: Date.now(),
       ttl
@@ -50,17 +50,17 @@ class CacheService {
    * Clear specific cache entry
    */
   invalidate(key: string): void {
-    this.cache.delete(_key)
+    this.cache.delete(key)
   }
 
   /**
    * Clear all cache entries matching a pattern
    */
   invalidatePattern(pattern: string | RegExp): void {
-    const regex = typeof pattern === 'string' ? new RegExp(_pattern) : pattern
+    const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern
     for (const key of this.cache.keys()) {
-      if (regex.test(_key)) {
-        this.cache.delete(_key)
+      if (regex.test(key)) {
+        this.cache.delete(key)
       }
     }
   }
@@ -135,14 +135,14 @@ class CacheService {
     // Clean expired cache entries
     for (const [key, entry] of this.cache.entries()) {
       if (now - entry.timestamp > entry.ttl) {
-        this.cache.delete(_key)
+        this.cache.delete(key)
       }
     }
 
     // Clean stale pending requests
     for (const [key, pending] of this.pendingRequests.entries()) {
       if (now - pending.timestamp > this.REQUEST_TIMEOUT) {
-        this.pendingRequests.delete(_key)
+        this.pendingRequests.delete(key)
       }
     }
   }

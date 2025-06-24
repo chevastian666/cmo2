@@ -2753,7 +2753,7 @@ const mockDepositos: Deposito[] = [
     precintosActivos: 45
   }
 ]
-export const useDepositosStore = create<DepositosState>((s_et) => ({
+export const useDepositosStore = create<DepositosState>((set) => ({
   depositos: [], loading: false, error: null, fetchDepositos: async () => {
     set({ loading: true })
     // Simulate API call
@@ -2762,28 +2762,28 @@ export const useDepositosStore = create<DepositosState>((s_et) => ({
     }, 500)
   },
   
-  addDeposito: (_deposito) => {
+  addDeposito: (deposito) => {
     const newDeposito: Deposito = {
       ...deposito,
       id: Date.now().toString(),
       transitosActivos: 0,
       precintosActivos: 0
     }
-    set((s_tate) => ({
+    set((state) => ({
       depositos: [...state.depositos, newDeposito]
     }))
   },
   
-  updateDeposito: (_id, updates) => {
-    set((s_tate) => ({
+  updateDeposito: (id, updates) => {
+    set((state) => ({
       depositos: state.depositos.map(d => 
         d.id === id ? { ...d, ...updates } : d
       )
     }))
   },
   
-  deleteDeposito: (_id) => {
-    set((s_tate) => ({
+  deleteDeposito: (id) => {
+    set((state) => ({
       depositos: state.depositos.filter(d => d.id !== id)
     }))
   }

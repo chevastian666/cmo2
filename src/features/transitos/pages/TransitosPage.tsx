@@ -3,10 +3,10 @@
  * By Cheva
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Truck, Download} from 'lucide-react'
 import { TransitTable} from '../components/TransitTable'
-import {_TransitFilters} from '../components/TransitFilters'
+import {TransitFilters} from '../components/TransitFilters'
 import { EditTransitoModal} from '../components/EditTransitoModal'
 import { notificationService} from '../../../services/shared/notification.service'
 import { transitosService} from '../services/transitos.service'
@@ -14,10 +14,10 @@ import type { Transito} from '../types'
 export const TransitosPage: React.FC = () => {
   const [transitos, setTransitos] = useState<Transito[]>([])
   const [totalTransitos, setTotalTransitos] = useState(0)
-  const [loading, setLoading] = useState(_true)
-  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(_null)
-  const [showDetailModal, setShowDetailModal] = useState(_false)
-  const [showEditModal, setShowEditModal] = useState(_false)
+  const [loading, setLoading] = useState(true)
+  const [selectedTransito, setSelectedTransito] = useState<Transito | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
@@ -35,14 +35,14 @@ export const TransitosPage: React.FC = () => {
     searchText: ''
   })
   // Debounce timer for filters
-  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(_null)
+  const [filterDebounce, setFilterDebounce] = useState<NodeJS.Timeout | null>(null)
   // Load transitos with server-side pagination
-  const loadTransitos = async () => {
+  const loadTransitos = useCallback(async () => {
     try {
-      setLoading(_true)
+      setLoading(true)
       // Build filters object for API
       const apiFilters: Record<string, unknown> = {}
-      Object.entries(_filters).forEach(([key, value]) => {
+      Object.entries(filters).forEach(([key, value]) => {
         if (value && value !== '') {
           apiFilters[key] = value
         }
@@ -54,25 +54,26 @@ export const TransitosPage: React.FC = () => {
         sortOrder: sortOrder,
         filters: apiFilters
       })
-      setTransitos(response._data)
+      setTransitos(response.data)
       setTotalTransitos(response.total)
-    } catch {
-      console.error('Error loading transitos:', _error)
+    } catch (error) {
+      console.error('Error loading transitos:', error)
       notificationService.error('Error', 'No se pudieron cargar los tránsitos')
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
-  }
+  }, [currentPage, itemsPerPage, sortField, sortOrder, filters])
+  
   // Load data on mount and when pagination/sort changes
 
   useEffect(() => {
     loadTransitos()
-  }, [])
+  }, [loadTransitos])
   // Debounced filter loading
 
   useEffect(() => {
-    if (_filterDebounce) {
-      clearTimeout(_filterDebounce)
+    if (filterDebounce) {
+      clearTimeout(filterDebounce)
     }
     
     const timeout = setTimeout(() => {
@@ -80,38 +81,38 @@ export const TransitosPage: React.FC = () => {
       loadTransitos()
     }, 500); // 500ms debounce
     
-    setFilterDebounce(_timeout)
+    setFilterDebounce(timeout)
     return () => {
-      if (_timeout) clearTimeout(_timeout)
+      if (timeout) clearTimeout(timeout)
     }
-  }, [filters])
+  }, [filters, filterDebounce, loadTransitos])
   // Auto-refresh every 30 seconds
 
   useEffect(() => {
-    const interval = setInterval(_loadTransitos, 30000)
-    return () => clearInterval(_interval)
-  }, [filters])
+    const interval = setInterval(loadTransitos, 30000)
+    return () => clearInterval(interval)
+  }, [loadTransitos])
   const handleFilterChange = (newFilters: typeof filters) => {
-    setFilters(_newFilters)
+    setFilters(newFilters)
   }
   const handleSort = (field: string) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortField(_field)
+      setSortField(field)
       setSortOrder('asc')
     }
   }
   const handlePageChange = (page: number) => {
-    setCurrentPage(_page)
+    setCurrentPage(page)
   }
   const handleItemsPerPageChange = (items: number) => {
-    setItemsPerPage(_items)
+    setItemsPerPage(items)
     setCurrentPage(1); // Reset to first page
   }
   const handleViewDetail = (transito: Transito) => {
-    setSelectedTransito(_transito)
-    setShowDetailModal(_true)
+    setSelectedTransito(transito)
+    setShowDetailModal(true)
   }
   const handleViewMap = (transito: Transito) => {
     // Open map in new tab or modal
@@ -127,14 +128,14 @@ export const TransitosPage: React.FC = () => {
     }
   }
   const handleEdit = (transito: Transito) => {
-    setSelectedTransito(_transito)
-    setShowEditModal(_true)
+    setSelectedTransito(transito)
+    setShowEditModal(true)
   }
   const handleExport = () => {
-    const csvContent = generateCSV(_transitos)
-    downloadCSV(_csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`)
+    const csvContent = generateCSV(transitos)
+    downloadCSV(csvContent, `transitos_${new Date().toISOString().split('T')[0]}.csv`)
   }
-  const generateCSV = (_data: Transito[]) => {
+  const generateCSV = (data: Transito[]) => {
     const headers = ['DUA', 'Precinto', 'Estado', 'Fecha Salida', 'ETA', 'Origen', 'Destino', 'Empresa', 'Encargado']
     const rows = data.map(t => [
       t.dua,
@@ -152,7 +153,7 @@ export const TransitosPage: React.FC = () => {
   const downloadCSV = (content: string, filename: string) => {
     const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement('a')
-    link.href = URL.createObjectURL(_blob)
+    link.href = URL.createObjectURL(blob)
     link.download = filename
     link.click()
   }
@@ -170,7 +171,7 @@ export const TransitosPage: React.FC = () => {
         </div>
         
         <button
-          onClick={_handleExport}
+          onClick={handleExport}
           className="px-3 py-2 sm:px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-sm sm:text-base self-start sm:self-auto"
         >
           <Download className="h-4 w-4" />
@@ -181,47 +182,47 @@ export const TransitosPage: React.FC = () => {
 
       {/* Filters */}
       <TransitFilters 
-        filters={_filters}
-        onChange={_handleFilterChange}
-        transitos={_transitos}
+        filters={filters}
+        onChange={handleFilterChange}
+        transitos={transitos}
       />
 
       {/* Table */}
       <TransitTable
-        transitos={_transitos}
-        loading={_loading}
-        currentPage={_currentPage}
-        totalItems={_totalTransitos}
-        itemsPerPage={_itemsPerPage}
-        sortField={s_ortField}
-        sortOrder={s_ortOrder}
-        onPageChange={_handlePageChange}
-        onItemsPerPageChange={_handleItemsPerPageChange}
-        onSort={_handleSort}
-        onViewDetail={_handleViewDetail}
-        onViewMap={_handleViewMap}
-        onMarkDesprecintado={_handleMarkDesprecintado}
-        onEdit={_handleEdit}
+        transitos={transitos}
+        loading={loading}
+        currentPage={currentPage}
+        totalItems={totalTransitos}
+        itemsPerPage={itemsPerPage}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        onPageChange={handlePageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        onSort={handleSort}
+        onViewDetail={handleViewDetail}
+        onViewMap={handleViewMap}
+        onMarkDesprecintado={handleMarkDesprecintado}
+        onEdit={handleEdit}
       />
 
       {/* Detail Modal */}
       {selectedTransito && (
         <TransitDetailModal
-          isOpen={s_howDetailModal}
+          isOpen={showDetailModal}
           onClose={() => {
-            setShowDetailModal(_false)
-            setSelectedTransito(_null)
+            setShowDetailModal(false)
+            setSelectedTransito(null)
           }}
-          transito={s_electedTransito}
+          transito={selectedTransito}
         />
       )}
 
       {/* Edit Modal */}
       <EditTransitoModal
-        isOpen={s_howEditModal}
+        isOpen={showEditModal}
         onClose={() => {
-          setShowEditModal(_false)
-          setSelectedTransito(_null)
+          setShowEditModal(false)
+          setSelectedTransito(null)
         }}
         transito={s_electedTransito}
         onSuccess={() => {

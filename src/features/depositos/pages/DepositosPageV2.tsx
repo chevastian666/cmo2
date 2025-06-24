@@ -24,16 +24,15 @@ import { DepositoDetailModal} from '../components/DepositoDetailModal'
 import { DepositoFormModal} from '../components/DepositoFormModal'
 import { InteractiveMap} from '@/components/maps/InteractiveMap'
 import type { MapMarker} from '@/components/maps/InteractiveMap'
-import { staggerItem, fadeInUp} from '@/components/animations/AnimationPresets'
 export const DepositosPageV2: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [showFilters, setShowFilters] = useState(_false)
-  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(_null)
-  const [showDetail, setShowDetail] = useState(_false)
-  const [showForm, setShowForm] = useState(_false)
-  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(_null)
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedDeposito, setSelectedDeposito] = useState<Deposito | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [editingDeposito, setEditingDeposito] = useState<Deposito | null>(null)
+  const [_expandedRows, _setExpandedRows] = useState<Set<string>>(new Set())
   const [selectedView, setSelectedView] = useState<'grid' | 'table' | 'map'>('table')
   const [filters, setFilters] = useState<DepositoFilters>({
     tipo: '',
@@ -51,7 +50,7 @@ export const DepositosPageV2: React.FC = () => {
       const matchesPadre = !filters.padre || deposito.padre === filters.padre
       return matchesSearch && matchesTipo && matchesZona && matchesPadre
     })
-  }, [depositos, filters])
+  }, [filters, searchTerm])
   const activeFiltersCount = Object.values(_filters).filter(v => v !== '').length
   const stats = useMemo(() => {
     const totalTransitos = depositos.reduce((_acc, d) => acc + d.transitosActivos, 0)
@@ -62,11 +61,11 @@ export const DepositosPageV2: React.FC = () => {
       total: depositos.length,
       active: activeDepositos,
       transitos: totalTransitos,
-      avgOccupancy: Math.round(_avgOccupancy)
+      avgOccupancy: Math.round(avgOccupancy)
     }
-  }, [depositos])
-  const handleExport = () => {
-    const data = filteredDepositos.map(d => ({
+  }, [])
+  const _handleExport = () => {
+    const _data = filteredDepositos.map(d => ({
       Código: d.codigo,
       Nombre: d.nombre,
       Alias: d.alias,
@@ -80,36 +79,36 @@ export const DepositosPageV2: React.FC = () => {
     }))
     exportToCSV(_data, 'depositos')
   }
-  const handleView = (deposito: Deposito) => {
+  const _handleView = (_deposito: Deposito) => {
     setSelectedDeposito(_deposito)
-    setShowDetail(_true)
+    setShowDetail(true)
   }
-  const handleEdit = (deposito: Deposito) => {
+  const _handleEdit = (_deposito: Deposito) => {
     setEditingDeposito(_deposito)
-    setShowForm(_true)
+    setShowForm(true)
   }
-  const handleAdd = () => {
-    setEditingDeposito(_null)
-    setShowForm(_true)
+  const _handleAdd = () => {
+    setEditingDeposito(null)
+    setShowForm(true)
   }
-  const handleSave = (_data: Partial<Deposito>) => {
-    if (_editingDeposito) {
-      updateDeposito(editingDeposito.id, data)
+  const _handleSave = (_data: Partial<Deposito>) => {
+    if (editingDeposito) {
+      updateDeposito(editingDeposito.id, _data)
     } else {
-      addDeposito(data as Omit<Deposito, 'id'>)
+      addDeposito(_data as Omit<Deposito, 'id'>)
     }
-    setShowForm(_false)
+    setShowForm(false)
   }
-  const toggleRowExpand = (id: string) => {
+  const _toggleRowExpand = (_id: string) => {
     const newExpanded = new Set(_expandedRows)
     if (newExpanded.has(_id)) {
       newExpanded.delete(_id)
     } else {
       newExpanded.add(_id)
     }
-    setExpandedRows(_newExpanded)
+    _setExpandedRows(newExpanded)
   }
-  const clearFilters = () => {
+  const _clearFilters = () => {
     setFilters({ tipo: '', zona: '', padre: '' })
     setSearchTerm('')
   }
@@ -194,7 +193,7 @@ export const DepositosPageV2: React.FC = () => {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Select value={s_electedView} onValueChange={(v: unknown) => setSelectedView(_v)}>
+                  <Select value={selectedView} onValueChange={(_v: unknown) => setSelectedView(_v)}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
@@ -285,7 +284,7 @@ export const DepositosPageV2: React.FC = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="">Todos los padres</SelectItem>
-                            {Array.from(new Set(depositos.map(d => d.padre))).map(padre => (
+                            {Array.from(new Set(depositos.map(d => d.padre))).map(_padre => (
                               <SelectItem key={_padre} value={_padre}>{_padre}</SelectItem>
                             ))}
                           </SelectContent>
@@ -402,7 +401,7 @@ const DepositosTable: React.FC<{
   onEdit: (deposito: Deposito) => void
   expandedRows: Set<string>
   onToggleExpand: (id: string) => void
-}> = ({ depositos, loading, onView, onEdit, expandedRows, onToggleExpand }) => {
+}> = ({ depositos, _loading, onView, onEdit, expandedRows, onToggleExpand }) => {
   if (_loading) {
     return (
       <Card>
@@ -457,7 +456,7 @@ const DepositosTable: React.FC<{
             </thead>
             <tbody className="divide-y divide-gray-700">
               <AnimatePresence>
-                {depositos.map((_deposito, index) => (<React.Fragment key={deposito.id}>
+                {depositos.map((deposito, _index) => (<React.Fragment key={deposito.id}>
                     <motion.tr
                       variants={_fadeInUp}
                       initial="hidden"
@@ -617,11 +616,11 @@ const DepositosGrid: React.FC<{
   loading: boolean
   onView: (deposito: Deposito) => void
   onEdit: (deposito: Deposito) => void
-}> = ({ depositos, loading, onView, onEdit }) => {
+}> = ({ depositos, _loading, onView, onEdit }) => {
   if (_loading) {
     return (
       <AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[...Array(6)].map((__, i) => (
+        {[...Array(6)].map((___, _i) => (
           <AnimatedSkeleton key={_i} className="h-64" />
         ))}
       </AnimatedGrid>
@@ -629,7 +628,7 @@ const DepositosGrid: React.FC<{
   }
 
   return (<AnimatedGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {depositos.map((_deposito, index) => (<AnimatedCard
+      {depositos.map((deposito, _index) => (<AnimatedCard
           key={deposito.id}
           variants={s_taggerItem}
           whileHover={{ y: -8, scale: 1.02 }}
@@ -713,7 +712,7 @@ const DepositosMap: React.FC<{
   depositos: Deposito[]
   loading: boolean
   onView: (deposito: Deposito) => void
-}> = ({ depositos, loading, onView }) => {
+}> = ({ depositos, _loading, onView }) => {
   if (_loading) {
     return (
       <Card>
@@ -727,7 +726,7 @@ const DepositosMap: React.FC<{
   }
 
   // Convert depositos to map markers
-  const markers: MapMarker[] = depositos.map(deposito => ({
+  const _markers: MapMarker[] = depositos.map(deposito => ({
     id: deposito.id,
     position: { lat: deposito.lat, lng: deposito.lng },
     title: deposito.nombre,
@@ -753,7 +752,7 @@ const DepositosMap: React.FC<{
       showLegend={_true}
       showSearch={_true}
       onMarkerClick={(_marker) => {
-        const deposito = depositos.find(d => d.id === marker.id)
+        const _deposito = depositos.find(d => d.id === marker.id)
         if (_deposito) onView(_deposito)
       }}
     />

@@ -330,10 +330,10 @@ class ChatService {
   private formatDiscordMentions(config: ChatConfig): string | null {
     const mentions = []
     if (config.mention_users?.length) {
-      mentions.push(...config.mention_users.map(user => `<@${_user}>`))
+      mentions.push(...config.mention_users.map(user => `<@${user}>`))
     }
     if (config.mention_roles?.length) {
-      mentions.push(...config.mention_roles.map(role => `<@&${_role}>`))
+      mentions.push(...config.mention_roles.map(role => `<@&${role}>`))
     }
     return mentions.length > 0 ? mentions.join(' ') : null
   }
@@ -383,14 +383,14 @@ class ChatService {
   private saveChatConfigs(): void {
     try {
       const configsArray = Array.from(this.configs.values())
-      localStorage.setItem('cmo_chat_configs', JSON.stringify(configsArray))
+      localStorage.setItem('cmo_chatconfigs', JSON.stringify(configsArray))
     } catch (error) {
       console.error('Failed to save chat configs:', error)
     }
   }
   loadChatConfigs(): void {
     try {
-      const stored = localStorage.getItem('cmo_chat_configs')
+      const stored = localStorage.getItem('cmo_chatconfigs')
       if (stored) {
         const configsArray: ChatConfig[] = JSON.parse(stored)
         this.configs.clear()

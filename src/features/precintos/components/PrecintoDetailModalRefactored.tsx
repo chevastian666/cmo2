@@ -12,9 +12,9 @@ interface PrecintoDetailModalRefactoredProps {
 }
 
 export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactoredProps> = ({
-  precinto, isOpen, onClose
+  precinto, isOpen, onClose: _onClose
 }) => {
-  const [activeTab, setActiveTab] = React.useState('info')
+  const [_activeTab, _setActiveTab] = React.useState('info')
   const _statusInfo = getStatusInfo(precinto.estado as unknown)
   if (!isOpen) return null
   const _tabs = [
@@ -24,7 +24,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
     { id: 'history', label: 'Historial', icon: <AlertTriangle className="h-4 w-4" /> }
   ]
   // Create map markers
-  const mapMarkers: MapModuleProps['markers'] = precinto.ubicacionActual ? [{
+  const _mapMarkers: MapModuleProps['markers'] = precinto.ubicacionActual ? [{
     id: precinto.id,
     position: [precinto.ubicacionActual.lat, precinto.ubicacionActual.lng],
     type: 'vehicle',
@@ -34,7 +34,7 @@ export const PrecintoDetailModalRefactored: React.FC<PrecintoDetailModalRefactor
     }
   }] : []
   // Create route if we have origin and destination
-  const mapRoute: MapModuleProps['route'] = precinto.ruta ? {
+  const _mapRoute: MapModuleProps['route'] = precinto.ruta ? {
     id: 'main-route',
     points: [
       [-34.9011, -56.1645], // Mock origin coordinates

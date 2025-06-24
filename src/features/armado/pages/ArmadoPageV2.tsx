@@ -71,8 +71,8 @@ const PrecintoSearchEnhanced: React.FC<{
             <Input
               placeholder="Buscar precinto por código (ej: BT20240001)..."
               value={value}
-              onChange={(_e) => onChange(e.target.value)}
-              onKeyPress={(_e) => e.key === 'Enter' && handleSearch()}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               className="pl-10 pr-10 h-12 text-base"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -246,7 +246,7 @@ const PrecintoSearchEnhanced: React.FC<{
             No se encontraron precintos disponibles
           </p>
           <p className="text-xs text-gray-500">
-            No hay precintos con el código "<span className="text-gray-400 font-mono">{_value}</span>" disponibles para armar
+            No hay precintos con el código "<span className="text-gray-400 font-mono">{value}</span>" disponibles para armar
           </p>
           <p className="text-xs text-gray-600 mt-3">
             Los precintos deben estar en estado SAL o LLE para poder ser armados
@@ -259,7 +259,7 @@ const PrecintoSearchEnhanced: React.FC<{
 // Main Component
 export const ArmadoPageV2: React.FC = () => {
   const navigate = useNavigate()
-  const location = useLocation()
+  const _location = useLocation()
   const [loading, setLoading] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [selectedPrecinto, setSelectedPrecinto] = useState<Precinto | null>(null)
@@ -349,7 +349,7 @@ export const ArmadoPageV2: React.FC = () => {
         />
 
         {/* Formulario completo en una sola página */}
-        <form onSubmit={(_e) => { e.preventDefault(); handleSubmit(); }} className="space-y-6">
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-6">
           {/* Sección 1: Selección de Precinto */}
           <AnimatedSection delay={0.1}>
             <Card>
@@ -409,7 +409,7 @@ export const ArmadoPageV2: React.FC = () => {
                       <Label htmlFor="tipoViaje">Tipo de Viaje *</Label>
                       <Select 
                         value={formData.tipoViaje} 
-                        onValueChange={(_v) => setFormData(prev => ({ ...prev, tipoViaje: v as unknown }))}
+                        onValueChange={(v) => setFormData(prev => ({ ...prev, tipoViaje: v as 'Tránsito' | 'GEX' | 'Monitoreo externo' | '' }))}
                         required
                       >
                         <SelectTrigger id="tipoViaje">
@@ -429,7 +429,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="dua"
                         placeholder="Número de DUA"
                         value={formData.dua}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, dua: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, dua: e.target.value }))}
                         required
                       />
                     </div>
@@ -453,7 +453,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="matricula"
                         placeholder="ABC 1234"
                         value={formData.matricula}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, matricula: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, matricula: e.target.value }))}
                         required
                       />
                     </div>
@@ -464,7 +464,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="matriculaRemolque"
                         placeholder="DEF 5678"
                         value={formData.matriculaRemolque}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, matriculaRemolque: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, matriculaRemolque: e.target.value }))}
                       />
                     </div>
 
@@ -474,7 +474,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="contenedorId"
                         placeholder="CONT123456"
                         value={formData.contenedorId}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, contenedorId: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, contenedorId: e.target.value }))}
                       />
                     </div>
                   </CardContent>
@@ -498,7 +498,7 @@ export const ArmadoPageV2: React.FC = () => {
                           id="origen"
                           placeholder="Montevideo"
                           value={formData.origen}
-                          onChange={(_e) => setFormData(prev => ({ ...prev, origen: e.target.value }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, origen: e.target.value }))}
                         />
                       </div>
 
@@ -508,7 +508,7 @@ export const ArmadoPageV2: React.FC = () => {
                           id="destino"
                           placeholder="Rivera"
                           value={formData.destino}
-                          onChange={(_e) => setFormData(prev => ({ ...prev, destino: e.target.value }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, destino: e.target.value }))}
                         />
                       </div>
                     </div>
@@ -520,7 +520,7 @@ export const ArmadoPageV2: React.FC = () => {
                           id="depositoInicio"
                           placeholder="Depósito A"
                           value={formData.depositoInicio}
-                          onChange={(_e) => setFormData(prev => ({ ...prev, depositoInicio: e.target.value }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, depositoInicio: e.target.value }))}
                         />
                       </div>
 
@@ -530,7 +530,7 @@ export const ArmadoPageV2: React.FC = () => {
                           id="depositoFin"
                           placeholder="Depósito B"
                           value={formData.depositoFin}
-                          onChange={(_e) => setFormData(prev => ({ ...prev, depositoFin: e.target.value }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, depositoFin: e.target.value }))}
                         />
                       </div>
                     </div>
@@ -557,7 +557,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="nombreConductor"
                         placeholder="Juan Pérez"
                         value={formData.nombreConductor}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, nombreConductor: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, nombreConductor: e.target.value }))}
                         required
                       />
                     </div>
@@ -567,7 +567,7 @@ export const ArmadoPageV2: React.FC = () => {
                         <Label htmlFor="tipoDocumento">Tipo Documento</Label>
                         <Select 
                           value={formData.tipoDocumentoConductor} 
-                          onValueChange={(_v) => setFormData(prev => ({ ...prev, tipoDocumentoConductor: v }))}
+                          onValueChange={(v) => setFormData(prev => ({ ...prev, tipoDocumentoConductor: v }))}
                         >
                           <SelectTrigger id="tipoDocumento">
                             <SelectValue />
@@ -586,7 +586,7 @@ export const ArmadoPageV2: React.FC = () => {
                           id="numeroDocumento"
                           placeholder="12345678"
                           value={formData.numeroDocumentoConductor}
-                          onChange={(_e) => setFormData(prev => ({ ...prev, numeroDocumentoConductor: e.target.value }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, numeroDocumentoConductor: e.target.value }))}
                         />
                       </div>
                     </div>
@@ -597,7 +597,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="telefono"
                         placeholder="+598 99 123 456"
                         value={formData.telefonoConductor}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, telefonoConductor: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, telefonoConductor: e.target.value }))}
                       />
                     </div>
                   </CardContent>
@@ -620,7 +620,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="empresa"
                         placeholder="Transportes S.A."
                         value={formData.empresa}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, empresa: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, empresa: e.target.value }))}
                       />
                     </div>
 
@@ -630,7 +630,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="rutEmpresa"
                         placeholder="123456789012"
                         value={formData.rutEmpresa}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, rutEmpresa: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, rutEmpresa: e.target.value }))}
                       />
                     </div>
 
@@ -641,12 +641,12 @@ export const ArmadoPageV2: React.FC = () => {
                       <Input
                         placeholder="Empresa secundaria"
                         value={formData.empresaSecundaria}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, empresaSecundaria: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, empresaSecundaria: e.target.value }))}
                       />
                       <Input
                         placeholder="RUT secundario"
                         value={formData.rutEmpresaSecundaria}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, rutEmpresaSecundaria: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, rutEmpresaSecundaria: e.target.value }))}
                       />
                     </div>
                   </CardContent>
@@ -667,7 +667,7 @@ export const ArmadoPageV2: React.FC = () => {
                           <Checkbox 
                             id="eslingaLarga"
                             checked={formData.tipoEslinga.larga}
-                            onCheckedChange={(_checked) => 
+                            onCheckedChange={(checked) => 
                               setFormData(prev => ({ 
                                 ...prev, 
                                 tipoEslinga: { ...prev.tipoEslinga, larga: checked as boolean }
@@ -680,7 +680,7 @@ export const ArmadoPageV2: React.FC = () => {
                           <Checkbox 
                             id="eslingaCorta"
                             checked={formData.tipoEslinga.corta}
-                            onCheckedChange={(_checked) => 
+                            onCheckedChange={(checked) => 
                               setFormData(prev => ({ 
                                 ...prev, 
                                 tipoEslinga: { ...prev.tipoEslinga, corta: checked as boolean }
@@ -698,7 +698,7 @@ export const ArmadoPageV2: React.FC = () => {
                         id="observaciones"
                         placeholder="Notas adicionales..."
                         value={formData.observaciones}
-                        onChange={(_e) => setFormData(prev => ({ ...prev, observaciones: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, observaciones: e.target.value }))}
                         rows={3}
                       />
                     </div>

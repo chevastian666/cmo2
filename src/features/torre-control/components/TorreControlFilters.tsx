@@ -25,12 +25,12 @@ export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
         </div>
         <select
           value={filters.origen}
-          onChange={(_e) => handleChange('origen', e.target.value)}
+          onChange={(e) => handleChange('origen', e.target.value)}
           className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="">Todos los orígenes</option>
           {origenOptions.map(origen => (
-            <option key={_origen} value={_origen}>{_origen}</option>
+            <option key={origen} value={origen}>{origen}</option>
           ))}
         </select>
       </div>
@@ -42,12 +42,12 @@ export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
         </div>
         <select
           value={filters.destino}
-          onChange={(_e) => handleChange('destino', e.target.value)}
+          onChange={(e) => handleChange('destino', e.target.value)}
           className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="">Todos los destinos</option>
           {destinoOptions.map(destino => (
-            <option key={_destino} value={_destino}>{_destino}</option>
+            <option key={destino} value={destino}>{destino}</option>
           ))}
         </select>
       </div>
@@ -59,7 +59,7 @@ export const TorreControlFilters: React.FC<TorreControlFiltersProps> = ({
         </div>
         <select
           value={filters.estado}
-          onChange={(_e) => handleChange('estado', e.target.value as EstadoSemaforo | '')}
+          onChange={(e) => handleChange('estado', e.target.value as EstadoSemaforo | '')}
           className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="">Todos los estados</option>

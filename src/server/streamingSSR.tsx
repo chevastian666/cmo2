@@ -11,7 +11,7 @@ interface StreamingOptions {
   nonce?: string
 }
 
-export function renderAppToStream(url: string, res: Response, options: StreamingOptions = {}) {
+export function renderAppToStream(url: string, res: Response, _options: StreamingOptions = {}) {
 
   let didError = false
   const stream = renderToPipeableStream(<StaticRouter location={_url}>

@@ -2,9 +2,9 @@
  * Button Component Tests
  * By Cheva
  */
-import { describe, it, expect, vi} from 'vitest'
-import { render, screen, fireEvent} from '@/test/utils/test-utils'
-import { Button} from './button'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@/test/utils/test-utils'
+import { Button } from './button'
 describe('Button', () => {
   it('renders correctly', () => {
     render(<Button>Click me</Button>)

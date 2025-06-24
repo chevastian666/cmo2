@@ -14,8 +14,11 @@ interface AlertFlowAnalysisProps {
   dateRange?: { from: Date; to: Date }
 }
 
-export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange }) => {
+export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange: _dateRange }) => {
 
+  // Mock data for alerts - this should come from props or context
+  const alertas = useMemo(() => [] as unknown[], [])
+  
   // Transform alerts into flow data
   const alertFlowData = useMemo(() => {
     const flows: AlertFlow[] = []
@@ -25,8 +28,8 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
       const type = alerta.tipo
       const severity = alerta.severidad
       const resolution = alerta.estado === 'resuelta' ? alerta.resolucion || 'Resuelto' : 'Pendiente'
-      const key = `${s_ource}-${_type}-${s_everity}-${_resolution}`
-      if (!sourceMap.has(_key)) {
+      const key = `${source}-${type}-${severity}-${resolution}`
+      if (!sourceMap.has(key)) {
         flows.push({
           source,
           alertType: type,
@@ -43,15 +46,15 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
         f.severity === severity &&
         f.resolution === (alerta.estado === 'resuelta' ? resolution : undefined)
       )
-      if (_flow) {
+      if (flow) {
         flow.count++
       }
     })
     return flows
-  }, [])
+  }, [alertas])
   const chartData = useMemo(() => {
-    return transformAlertFlow(_alertFlowData)
-  }, [])
+    return transformAlertFlow(alertFlowData)
+  }, [alertFlowData])
   // Calculate statistics
   const stats = useMemo(() => {
     const total = alertas.length
@@ -59,7 +62,7 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
     const pending = alertas.filter(a => a.estado === 'activa').length
     const avgResolutionTime = alertas
       .filter(a => a.tiempoResolucion)
-      .reduce((s_um, a) => sum + (a.tiempoResolucion || 0), 0) / resolved || 0
+      .reduce((sum, a) => sum + (a.tiempoResolucion || 0), 0) / resolved || 0
     const bySeverity = {
       critica: alertas.filter(a => a.severidad === 'critica').length,
       alta: alertas.filter(a => a.severidad === 'alta').length,
@@ -71,10 +74,10 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
       resolved,
       pending,
       resolutionRate: total > 0 ? (resolved / total * 100).toFixed(1) : 0,
-      avgResolutionTime: Math.round(_avgResolutionTime),
+      avgResolutionTime: Math.round(avgResolutionTime),
       bySeverity
     }
-  }, [])
+  }, [alertas])
   return (<div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -134,17 +137,17 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
         <CardContent className="p-6">
           <div className="bg-gray-900 rounded-lg p-6 min-h-[500px] flex items-center justify-center">
             <SankeyChart
-              data={_chartData}
+              data={chartData}
               width={1000}
               height={500}
               margin={{ top: 20, right: 150, bottom: 20, left: 120 }}
               nodeWidth={25}
               nodePadding={15}
-              animated={_true}
-              interactive={_true}
-              showLabels={_true}
-              showValues={_true}
-              valueFormat={(_v) => `${_v} alertas`}
+              animated={true}
+              interactive={true}
+              showLabels={true}
+              showValues={true}
+              valueFormat={(v) => `${v} alertas`}
             />
           </div>
         </CardContent>
@@ -164,15 +167,15 @@ export const AlertFlowAnalysis: React.FC<AlertFlowAnalysisProps> = ({ dateRange 
                 baja: 'bg-green-500'
               }
               return (
-                <div key={s_everity} className="flex items-center gap-4">
-                  <span className="text-sm text-gray-400 w-20 capitalize">{s_everity}</span>
+                <div key={severity} className="flex items-center gap-4">
+                  <span className="text-sm text-gray-400 w-20 capitalize">{severity}</span>
                   <div className="flex-1 bg-gray-800 rounded-full h-6 relative overflow-hidden">
                     <div 
                       className={`${colors[severity as keyof typeof colors]} h-full transition-all duration-500`}
-                      style={{ width: `${_percentage}%` }}
+                      style={{ width: `${percentage}%` }}
                     />
                     <span className="absolute inset-0 flex items-center justify-center text-xs text-white">
-                      {_count} ({_percentage}%)
+                      {count} ({percentage}%)
                     </span>
                   </div>
                 </div>

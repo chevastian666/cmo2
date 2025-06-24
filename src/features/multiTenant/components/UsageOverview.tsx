@@ -89,14 +89,14 @@ export const UsageOverview: React.FC = () => {
     return 'bg-green-500'
   }
   // Mock historical data for chart
-  const historicalData = usage.history.slice(-30).map((_h, index) => ({
+  const _historicalData = usage.history.slice(-30).map((h, _index) => ({
     date: new Date(h.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
     transitos: h.metrics.transitos || 0,
     alerts: h.metrics.alerts || 0,
     apiCalls: h.metrics.apiCalls || 0
   }))
   const totalOverageCost = Object.values(usage.overage || {})
-    .reduce((s_um, overage) => sum + overage.cost, 0)
+    .reduce((sum, overage) => sum + overage.cost, 0)
   return (<div className="space-y-6">
       {/* Usage Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -254,8 +254,8 @@ export const UsageOverview: React.FC = () => {
           <CardContent>
             <div className="space-y-3">
               {Object.entries(usage.overage || {}).map(([resource, overage]) => (
-                <div key={_resource} className="flex items-center justify-between text-sm">
-                  <span className="capitalize">{_resource}</span>
+                <div key={resource} className="flex items-center justify-between text-sm">
+                  <span className="capitalize">{resource}</span>
                   <div className="flex items-center gap-4">
                     <span className="text-gray-500">
                       +{overage.amount} units

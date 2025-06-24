@@ -18,7 +18,6 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
   alerta, isOpen, onClose, onAsignar, onComentar, onResolver
 }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null)
   const [mostrarAsignacion, setMostrarAsignacion] = useState(false)
   const [mostrarResolucion, setMostrarResolucion] = useState(false)
   const [nuevoComentario, setNuevoComentario] = useState('')
@@ -31,14 +30,10 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
     if (isOpen) {
       cargarUsuarios()
     }
-  }, [])
+  }, [isOpen])
   const cargarUsuarios = async () => {
-    const [users, currentUser] = await Promise.all([
-      usuariosService.getActivos(),
-      usuariosService.getCurrentUser()
-    ])
+    const users = await usuariosService.getActivos()
     setUsuarios(users)
-    setUsuarioActual(currentUser)
   }
   const getIcon = (tipo: string) => {
     switch (tipo) {
@@ -118,7 +113,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
     setAccionesTomadas(nuevasAcciones)
   }
   const eliminarAccion = (index: number) => {
-    setAccionesTomadas(accionesTomadas.filter((__, i) => i !== index))
+    setAccionesTomadas(accionesTomadas.filter((_, i) => i !== index))
   }
   if (!isOpen) return null
   return (
@@ -147,7 +142,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
               </div>
             </div>
             <button
-              onClick={_onClose}
+              onClick={onClose}
               className="text-gray-400 hover:text-white transition-colors"
             >
               <X className="h-6 w-6" />
@@ -228,8 +223,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       <div className="space-y-4">
                         <h4 className="text-lg font-medium text-white">Asignar a Usuario</h4>
                         <select
-                          value={_usuarioSeleccionado}
-                          onChange={(_e) => setUsuarioSeleccionado(e.target.value)}
+                          value={usuarioSeleccionado}
+                          onChange={(e) => setUsuarioSeleccionado(e.target.value)}
                           className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-base text-white"
                         >
                           <option value="">Seleccionar usuario...</option>
@@ -240,22 +235,22 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                           ))}
                         </select>
                         <textarea
-                          value={_notasAsignacion}
-                          onChange={(_e) => setNotasAsignacion(e.target.value)}
-                          placeholder="Notas de asignación (_opcional)"
+                          value={notasAsignacion}
+                          onChange={(e) => setNotasAsignacion(e.target.value)}
+                          placeholder="Notas de asignación (opcional)"
                           className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-base text-white"
                           rows={2}
                         />
                         <div className="flex space-x-2">
                           <button
-                            onClick={_handleAsignar}
+                            onClick={handleAsignar}
                             disabled={!usuarioSeleccionado}
                             className="px-4 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Asignar
                           </button>
                           <button
-                            onClick={() => setMostrarAsignacion(_false)}
+                            onClick={() => setMostrarAsignacion(false)}
                             className="px-4 py-2 bg-gray-700 text-base text-white rounded-md hover:bg-gray-600"
                           >
                             Cancelar
@@ -263,7 +258,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                         </div>
                       </div>
                     ) : (<button
-                        onClick={() => setMostrarAsignacion(_true)}
+                        onClick={() => setMostrarAsignacion(true)}
                         className="w-full px-4 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2"
                       >
                         <User className="h-4 w-4" />
@@ -279,7 +274,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   <div className="space-y-3 max-h-60 overflow-y-auto">
                     {alerta.comentarios.length === 0 ? (
                       <p className="text-gray-400 text-base">No hay comentarios aún</p>
-                    ) : (alerta.comentarios.map((_comentario) => (
+                    ) : (alerta.comentarios.map((comentario) => (
                         <div key={comentario.id} className="bg-gray-800 rounded-lg p-3">
                           <div className="flex items-start space-x-3">
                             <img
@@ -310,14 +305,14 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                   {!alerta.resolucion && (<div className="mt-4 flex space-x-2">
                       <input
                         type="text"
-                        value={_nuevoComentario}
-                        onChange={(_e) => setNuevoComentario(e.target.value)}
-                        onKeyPress={(_e) => e.key === 'Enter' && handleComentar()}
+                        value={nuevoComentario}
+                        onChange={(e) => setNuevoComentario(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleComentar()}
                         placeholder="Agregar comentario..."
                         className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                       />
                       <button
-                        onClick={_handleComentar}
+                        onClick={handleComentar}
                         disabled={!nuevoComentario.trim()}
                         className="px-3 py-2 bg-blue-600 text-base text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -334,7 +329,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                 <div className="bg-gray-900 rounded-lg p-4">
                   <h4 className="text-lg font-medium text-white mb-3">Historial</h4>
                   <div className="space-y-3">
-                    {alerta.historial.map((_evento, index) => (
+                    {alerta.historial.map((evento, index) => (
                       <div key={evento.id} className="flex items-start space-x-3">
                         <div className={cn(
                           'w-2 h-2 rounded-full mt-1.5',
@@ -373,8 +368,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       {alerta.resolucion.accionesTomadas && alerta.resolucion.accionesTomadas.length > 0 && (<div className="mt-3">
                           <p className="text-sm text-gray-400 mb-1">Acciones tomadas:</p>
                           <ul className="list-disc list-inside text-base text-gray-300 space-y-1">
-                            {alerta.resolucion.accionesTomadas.map((_accion, i) => (
-                              <li key={_i}>{_accion}</li>
+                            {alerta.resolucion.accionesTomadas.map((accion, i) => (
+                              <li key={i}>{accion}</li>
                             ))}
                           </ul>
                         </div>
@@ -390,7 +385,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                     </div>
                   </div>
                 ) : !mostrarResolucion && alerta.asignacion && (<button
-                    onClick={() => setMostrarResolucion(_true)}
+                    onClick={() => setMostrarResolucion(true)}
                     className="w-full px-4 py-2 bg-green-600 text-base text-white rounded-md hover:bg-green-700 flex items-center justify-center space-x-2"
                   >
                     <CheckCircle className="h-4 w-4" />
@@ -402,8 +397,8 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                 {mostrarResolucion && (<div className="bg-gray-900 rounded-lg p-4 space-y-4">
                     <h4 className="text-lg font-medium text-white">Resolver Alerta</h4>
                     <select
-                      value={_tipoResolucion}
-                      onChange={(_e) => setTipoResolucion(e.target.value)}
+                      value={tipoResolucion}
+                      onChange={(e) => setTipoResolucion(e.target.value)}
                       className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                     >
                       <option value="resuelta">Resuelta</option>
@@ -412,24 +407,24 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                       <option value="sin_accion">Sin Acción Requerida</option>
                     </select>
                     <textarea
-                      value={_descripcionResolucion}
-                      onChange={(_e) => setDescripcionResolucion(e.target.value)}
+                      value={descripcionResolucion}
+                      onChange={(e) => setDescripcionResolucion(e.target.value)}
                       placeholder="Descripción de la resolución..."
                       className="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white text-base"
                       rows={3}
                     />
                     <div>
                       <p className="text-base text-gray-400 mb-2">Acciones tomadas:</p>
-                      {accionesTomadas.map((_accion, index) => (<div key={_index} className="flex space-x-2 mb-2">
+                      {accionesTomadas.map((accion, index) => (<div key={index} className="flex space-x-2 mb-2">
                           <input
                             type="text"
-                            value={_accion}
-                            onChange={(_e) => actualizarAccion(_index, e.target.value)}
+                            value={accion}
+                            onChange={(e) => actualizarAccion(index, e.target.value)}
                             placeholder="Acción tomada..."
                             className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-3 py-1 text-white text-base"
                           />
                           {accionesTomadas.length > 1 && (<button
-                              onClick={() => eliminarAccion(_index)}
+                              onClick={() => eliminarAccion(index)}
                               className="text-red-400 hover:text-red-300"
                             >
                               <X className="h-4 w-4" />
@@ -438,7 +433,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                         </div>
                       ))}
                       <button
-                        onClick={_agregarAccion}
+                        onClick={agregarAccion}
                         className="text-base text-blue-400 hover:text-blue-300"
                       >
                         + Agregar acción
@@ -446,7 +441,7 @@ export const AlertaDetalleModal: React.FC<AlertaDetalleModalProps> = ({
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={_handleResolver}
+                        onClick={handleResolver}
                         disabled={!descripcionResolucion.trim()}
                         className="flex-1 px-4 py-2 bg-green-600 text-base text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >

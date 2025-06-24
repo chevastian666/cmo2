@@ -9,10 +9,10 @@ interface TransitDetailModalProps {
 }
 
 export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
-  isOpen, onClose, transito
+  isOpen, onClose: _onClose, transito
 }) => {
   if (!isOpen) return null
-  const progressPercentage = transito.progreso || 0
+  const _progressPercentage = transito.progreso || 0
   return (
     <>
       {/* Backdrop */}
@@ -166,10 +166,10 @@ export const TransitDetailModal: React.FC<TransitDetailModalProps> = ({
                       Alertas Activas
                     </h3>
                     <div className="space-y-2">
-                      {transito.alertas.map((_alerta, index) => (
-                        <div key={_index} className="bg-red-900/20 border border-red-800 rounded-lg p-3 flex items-start space-x-3">
+                      {transito.alertas.map((alerta, index) => (
+                        <div key={index} className="bg-red-900/20 border border-red-800 rounded-lg p-3 flex items-start space-x-3">
                           <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0" />
-                          <p className="text-sm text-red-300">{_alerta}</p>
+                          <p className="text-sm text-red-300">{alerta}</p>
                         </div>
                       ))}
                     </div>

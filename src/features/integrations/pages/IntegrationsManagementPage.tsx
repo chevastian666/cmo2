@@ -98,86 +98,86 @@ const IntegrationsManagementPage: React.FC = () => {
     })
   }
   const toggleWebhook = (id: string) => {
-    const webhook = webhooksService.getWebhook(_id)
-    if (_webhook) {
-      webhooksService.updateWebhook(_id, { active: !webhook.active })
+    const webhook = webhooksService.getWebhook(id)
+    if (webhook) {
+      webhooksService.updateWebhook(id, { active: !webhook.active })
       loadData()
     }
   }
   const toggleChatConfig = (id: string) => {
-    const config = chatService.getChatConfig(_id)
-    if (_config) {
-      chatService.updateChatConfig(_id, { active: !config.active })
+    const config = chatService.getChatConfig(id)
+    if (config) {
+      chatService.updateChatConfig(id, { active: !config.active })
       loadData()
     }
   }
   const toggleTicketingConfig = (id: string) => {
-    const config = ticketingService.getTicketingConfig(_id)
-    if (_config) {
-      ticketingService.updateTicketingConfig(_id, { active: !config.active })
+    const config = ticketingService.getTicketingConfig(id)
+    if (config) {
+      ticketingService.updateTicketingConfig(id, { active: !config.active })
       loadData()
     }
   }
   const toggleApiEndpoint = (id: string) => {
-    const endpoint = restAPIService.getEndpoint(_id)
-    if (_endpoint) {
-      restAPIService.updateEndpoint(_id, { enabled: !endpoint.enabled })
+    const endpoint = restAPIService.getEndpoint(id)
+    if (endpoint) {
+      restAPIService.updateEndpoint(id, { enabled: !endpoint.enabled })
       loadData()
     }
   }
   const toggleBiConnection = (id: string) => {
-    const connection = biExportService.getConnection(_id)
-    if (_connection) {
-      biExportService.updateConnection(_id, { active: !connection.active })
+    const connection = biExportService.getConnection(id)
+    if (connection) {
+      biExportService.updateConnection(id, { active: !connection.active })
       loadData()
     }
   }
   const testWebhook = async (id: string) => {
     try {
-      await webhooksService.testWebhook(_id)
+      await webhooksService.testWebhook(id)
       alert('Webhook test sent successfully!')
-    } catch (_error) {
-      alert(`Webhook test failed: ${_error}`)
+    } catch (error) {
+      alert(`Webhook test failed: ${error}`)
     }
   }
   const testChatConfig = async (id: string) => {
     try {
-      const config = chatService.getChatConfig(_id)
-      if (_config) {
-        await chatService.testConnection(_config)
+      const config = chatService.getChatConfig(id)
+      if (config) {
+        await chatService.testConnection(config)
         alert('Chat integration test sent successfully!')
       }
-    } catch (_error) {
-      alert(`Chat test failed: ${_error}`)
+    } catch (error) {
+      alert(`Chat test failed: ${error}`)
     }
   }
   const testTicketingConfig = async (id: string) => {
     try {
-      const config = ticketingService.getTicketingConfig(_id)
-      if (_config) {
-        const result = await ticketingService.testConnection(_config)
+      const config = ticketingService.getTicketingConfig(id)
+      if (config) {
+        const result = await ticketingService.testConnection(config)
         alert(result ? 'Ticketing connection successful!' : 'Ticketing connection failed!')
       }
-    } catch (_error) {
-      alert(`Ticketing test failed: ${_error}`)
+    } catch (error) {
+      alert(`Ticketing test failed: ${error}`)
     }
   }
   const testBiConnection = async (id: string) => {
     try {
-      const connection = biExportService.getConnection(_id)
-      if (_connection) {
-        const result = await biExportService.testConnection(_connection)
+      const connection = biExportService.getConnection(id)
+      if (connection) {
+        const result = await biExportService.testConnection(connection)
         alert(result.success ? 'BI connection successful!' : `BI connection failed: ${result.error}`)
       }
-    } catch (_error) {
-      alert(`BI test failed: ${_error}`)
+    } catch (error) {
+      alert(`BI test failed: ${error}`)
     }
   }
   const getStatusColor = (active: boolean): string => {
     return active ? 'bg-green-500' : 'bg-gray-500'
   }
   const formatDate = (date: Date): string => {
-    return new Date(_date).toLocaleDateString() + ' ' + new Date(_date).toLocaleTimeString()
+    return new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString()
   }
   return (
     <div className="p-6 space-y-6">
@@ -189,7 +189,7 @@ const IntegrationsManagementPage: React.FC = () => {
             Administra todas las integraciones externas del sistema CMO
           </p>
         </div>
-        <Button variant="outline" onClick={_loadData}>
+        <Button variant="outline" onClick={loadData}>
           <Activity className="w-4 h-4 mr-2" />
           Actualizar
         </Button>
@@ -503,7 +503,7 @@ const IntegrationsManagementPage: React.FC = () => {
                             <Badge variant="outline">{endpoint.authentication}</Badge>
                           )}
                           {endpoint.tags.map(tag => (
-                            <Badge key={_tag} variant="secondary">{_tag}</Badge>
+                            <Badge key={tag} variant="secondary">{tag}</Badge>
                           ))}
                         </div>
                       </div>

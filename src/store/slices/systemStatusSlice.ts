@@ -20,12 +20,12 @@ const mockEstadisticas = {
   },
   reportesPendientes: 15
 }
-export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (s_et) => ({
+export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, get) => ({
   // State
   estadisticas: null, smsPendientes: 0, dbStats: {
     memoriaUsada: 0, discoUsado: 0, }, apiStats: {
     memoriaUsada: 0, discoUsado: 0, }, reportesPendientes: 0, loading: false, error: null, lastUpdate: null, // Actions
-  setEstadisticas: (_estadisticas) => set({ 
+  setEstadisticas: (estadisticas) => set({ 
     estadisticas, 
     smsPendientes: estadisticas.smsPendientes,
     dbStats: estadisticas.dbStats,
@@ -34,50 +34,50 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (s_et) =
     lastUpdate: Date.now() 
   }),
   
-  updateSystemStatus: (s_tatus) => set((s_tate) => ({
+  updateSystemStatus: (status) => set((state) => ({
     ...state,
     ...status,
     lastUpdate: Date.now()
   })),
   
-  setLoading: (_loading) => set({ loading }),
+  setLoading: (loading) => set({ loading }),
   
-  setError: (_error) => set({ error }),
+  setError: (error) => set({ error }),
   
   fetchEstadisticas: async () => {
-
-    setLoading(_true)
-    setError(_null)
+    const { setLoading, setError, setEstadisticas } = get()
+    setLoading(true)
+    setError(null)
     try {
 
-      setEstadisticas(__data)
+      // const data = await estadisticasService.getAll()
+      setEstadisticas(mockEstadisticas)
     } catch {
       // En desarrollo, usar datos mock
-      setEstadisticas(_mockEstadisticas)
-      console.warn('Using mock data for estadisticas:', _error)
+      setEstadisticas(mockEstadisticas)
+      console.warn('Using mock data for estadisticas:', error)
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   },
   
   fetchSystemStatus: async () => {
-
-    setLoading(_true)
-    setError(_null)
+    const { setLoading, setError, updateSystemStatus } = get()
+    setLoading(true)
+    setError(null)
     try {
 
-      updateSystemStatus(__data)
-    } catch {
-      // En desarrollo, usar datos mock
+      // const data = await systemService.getStatus()
       updateSystemStatus({
         smsPendientes: mockEstadisticas.smsPendientes,
         dbStats: mockEstadisticas.dbStats,
         apiStats: mockEstadisticas.apiStats,
         reportesPendientes: mockEstadisticas.reportesPendientes,
       })
-      console.warn('Using mock data for system status:', _error)
+    } catch {
+      console.warn('Using mock data for system status:', error)
     } finally {
-      setLoading(_false)
+      setLoading(false)
     }
   },
 })

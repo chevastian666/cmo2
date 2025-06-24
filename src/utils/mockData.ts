@@ -1,11 +1,11 @@
-import { UBICACIONES_URUGUAY, TIPO_CARGA, ESTADO_PRECINTO, SEVERIDAD_ALERTA} from '../constants'
-import { DESPACHANTES} from '../constants/locations'
-import type { Precinto, TransitoPendiente, Alerta} from '../types'
+import { UBICACIONES_URUGUAY, TIPO_CARGA, ESTADO_PRECINTO, SEVERIDAD_ALERTA } from '../constants'
+import { DESPACHANTES } from '../constants/locations'
+import type { Precinto, TransitoPendiente, Alerta } from '../types'
 export const generateMockPrecinto = (index: number): Precinto => {
-  const estados = Object.values(_ESTADO_PRECINTO)
+  const estados = Object.values(ESTADO_PRECINTO)
   const estado = estados[Math.floor(Math.random() * estados.length)] as keyof typeof ESTADO_PRECINTO
   return {
-    id: `pr-${_index}`,
+    id: `pr-${index}`,
     codigo: `BT${String(2024000 + index).padStart(8, '0')}`,
     numeroPrecinto: Math.floor(Math.random() * 1000) + 1,
     viaje: String(1000000 + Math.floor(Math.random() * 8999999)),
@@ -53,7 +53,7 @@ export const generateMockTransito = (index: number): TransitoPendiente => {
     'Precinto debe ser colocado por supervisor'
   ][Math.floor(Math.random() * 7)] : undefined
   return {
-    id: `tr-${_index}`,
+    id: `tr-${index}`,
     numeroViaje: String(7581856 + Math.floor(Math.random() * 100000)),
     mov: Math.floor(Math.random() * 9999) + 1,
     dua: String(788553 + Math.floor(Math.random() * 11000)),
@@ -68,10 +68,10 @@ export const generateMockTransito = (index: number): TransitoPendiente => {
   }
 }
 export const generateMockTransitos = (count: number = 10): TransitoPendiente[] => {
-  return Array.from({ length: count }, (__, i) => generateMockTransito(_i))
+  return Array.from({ length: count }, (_, i) => generateMockTransito(i))
 }
 export const generateMockPrecintos = (count: number = 20): Precinto[] => {
-  return Array.from({ length: count }, (__, i) => generateMockPrecinto(_i))
+  return Array.from({ length: count }, (_, i) => generateMockPrecinto(i))
 }
 export const generateMockAlerta = (index: number): Alerta => {
   const tipos: Array<Alerta['tipo']> = ['AAR', 'BBJ', 'DEM', 'DNR', 'DTN', 'NPG', 'NPN', 'PTN', 'SNA']
@@ -90,7 +90,7 @@ export const generateMockAlerta = (index: number): Alerta => {
     'SNA': 'Salida no autorizada detectada del depósito'
   }
   return {
-    id: `ALR-${_index}`,
+    id: `ALR-${index}`,
     tipo: tipoSeleccionado,
     precintoId: `pr-${Math.floor(Math.random() * 20)}`,
     codigoPrecinto: `BT${String(2024000 + Math.floor(Math.random() * 1000)).padStart(8, '0')}`,

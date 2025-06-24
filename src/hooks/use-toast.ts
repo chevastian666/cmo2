@@ -16,7 +16,7 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-const actionTypes = {
+const _actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
   DISMISS_TOAST: "DISMISS_TOAST",
@@ -30,7 +30,7 @@ function genId() {
   return count.toString()
 }
 
-type ActionType = typeof actionTypes
+type ActionType = typeof _actionTypes
 
 type Action =
   | {
@@ -57,19 +57,19 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(_toastId)) {
+  if (toastTimeouts.has(toastId)) {
     return
   }
 
   const timeout = setTimeout(() => {
-    toastTimeouts.delete(_toastId)
+    toastTimeouts.delete(toastId)
     dispatch({
       type: "REMOVE_TOAST",
       toastId: toastId,
     })
   }, TOAST_REMOVE_DELAY)
 
-  toastTimeouts.set(_toastId, timeout)
+  toastTimeouts.set(toastId, timeout)
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -143,7 +143,7 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
-  const update = (_props: ToasterToast) =>
+  const update = (props: ToasterToast) =>
     dispatch({
       type: "UPDATE_TOAST",
       toast: { ...props, id },
@@ -166,14 +166,14 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  const [state, setState] = React.useState<State>(_memoryState)
+  const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
-    listeners.push(s_etState)
+    listeners.push(setState)
     return () => {
-      const index = listeners.indexOf(s_etState)
+      const index = listeners.indexOf(setState)
       if (index > -1) {
-        listeners.splice(_index, 1)
+        listeners.splice(index, 1)
       }
     }
   }, [state])

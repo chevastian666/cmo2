@@ -24,12 +24,12 @@ interface PrecintosActivosTableProps {
 }
 
 export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(({ precintos = [] }) => {
-  const [sortColumn, setSortColumn] = useState<string | null>(_null)
+  const [sortColumn, setSortColumn] = useState<string | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-  const [selectedPrecinto, setSelectedPrecinto] = useState<PrecintoActivoType | null>(_null)
-  const [showCommandsModal, setShowCommandsModal] = useState(_false)
-  const [selectedTransitoId, setSelectedTransitoId] = useState<string | null>(_null)
-  const [showTransitoModal, setShowTransitoModal] = useState(_false)
+  const [selectedPrecinto, setSelectedPrecinto] = useState<PrecintoActivoType | null>(null)
+  const [showCommandsModal, setShowCommandsModal] = useState(false)
+  const [selectedTransitoId, setSelectedTransitoId] = useState<string | null>(null)
+  const [showTransitoModal, setShowTransitoModal] = useState(false)
   // Lista de depósitos
   const depositos = [
     'Rilcomar',
@@ -44,7 +44,23 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
     'Puerto Nueva Palmira'
   ]
   // Map the incoming precintos to the expected format
-  const mappedPrecintos: PrecintoActivo[] = precintos.map((p: unknown) => ({
+  interface PrecintoData {
+    id: string;
+    codigo?: string;
+    nserie?: string;
+    numeroPrecinto?: number | string;
+    nqr?: string;
+    estado?: string;
+    bateria: number;
+    ubicacion?: { direccion?: string } | string;
+    destino?: string;
+    viaje?: string;
+    mov?: string;
+    ultimoReporte?: string;
+    asignadoTransito?: string;
+    transitoId?: string;
+  }
+  const mappedPrecintos: PrecintoActivo[] = precintos.map((p: PrecintoData) => ({
     id: p.id,
     nserie: p.codigo || p.nserie || `BT${p.id}`,
     nqr: p.numeroPrecinto?.toString() || p.nqr || Math.floor(Math.random() * 1000 + 1).toString(),
@@ -58,7 +74,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
     transitoId: p.asignadoTransito || p.transitoId
   }))
   // Generate mock data if no precintos provided
-  const mockPrecintos: PrecintoActivo[] = mappedPrecintos.length > 0 ? mappedPrecintos : [
+  const mockPrecintos: PrecintoActivo[] = useMemo(() => mappedPrecintos.length > 0 ? mappedPrecintos : [
     {
       id: '1',
       nserie: 'BT123456',
@@ -119,7 +135,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
       ultimoReporte: '30 minutos',
       transitoId: 'TR-00005'
     }
-  ]
+  ], [mappedPrecintos])
   const getBatteryColor = (level?: number) => {
     if (!level) return 'text-gray-500'
     if (level >= 60) return 'text-green-500'
@@ -131,40 +147,40 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
     if (sortColumn === column) {
       setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortColumn(_column)
+      setSortColumn(column)
       setSortDirection('asc')
     }
-  }, [])
+  }, [sortColumn])
   // Datos ordenados
   const sortedPrecintos = useMemo(() => {
     const dataToSort = mappedPrecintos.length > 0 ? mappedPrecintos : mockPrecintos
     if (!sortColumn) return dataToSort
-    return [...dataToSort].sort((_a, b) => {
-      let aValue: unknown = a[sortColumn as keyof PrecintoActivo]
-      let bValue: unknown = b[sortColumn as keyof PrecintoActivo]
+    return [...dataToSort].sort((a, b) => {
+      let aValue: string | number = a[sortColumn as keyof PrecintoActivo]
+      let bValue: string | number = b[sortColumn as keyof PrecintoActivo]
       // Manejo especial para columnas numéricas
       if (sortColumn === 'nqr' || sortColumn === 'bateria') {
-        aValue = parseInt(_aValue) || 0
-        bValue = parseInt(_bValue) || 0
+        aValue = parseInt(aValue) || 0
+        bValue = parseInt(bValue) || 0
       }
 
       // Manejo especial para tiempo de reporte
       if (sortColumn === 'ultimoReporte') {
         // Convertir a minutos para ordenar
         const parseTime = (time: string) => {
-          if (time.includes('minuto')) return parseInt(_time) || 1
-          if (time.includes('hora')) return (parseInt(_time) || 1) * 60
+          if (time.includes('minuto')) return parseInt(time) || 1
+          if (time.includes('hora')) return (parseInt(time) || 1) * 60
           return 0
         }
-        aValue = parseTime(_aValue)
-        bValue = parseTime(_bValue)
+        aValue = parseTime(aValue)
+        bValue = parseTime(bValue)
       }
 
       if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
       if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
       return 0
     })
-  }, [])
+  }, [mockPrecintos, sortColumn, sortDirection, mappedPrecintos])
   return (<div className="bg-gray-800 rounded-lg border-2 border-blue-600/50 shadow-lg shadow-blue-600/10">
       <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-700 flex justify-between items-center">
         <div className="flex items-center gap-3">
@@ -277,7 +293,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {sortedPrecintos.map((_precinto) => (<tr key={precinto.id} className="hover:bg-gray-700/50 transition-colors">
+            {sortedPrecintos.map((precinto) => (<tr key={precinto.id} className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="text-lg font-bold text-white">
@@ -286,10 +302,10 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
                     <Button
                       size="icon"
                       variant="default"
-                      onClick={(_e) => {
+                      onClick={(e) => {
                         e.stopPropagation()
                         setSelectedPrecinto(precinto as PrecintoActivoType)
-                        setShowCommandsModal(_true)
+                        setShowCommandsModal(true)
                       }}
                       className="h-8 w-8"
                       title="Enviar comandos al precinto"
@@ -345,7 +361,7 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
                         variant="secondary"
                         onClick={() => {
                           setSelectedTransitoId(precinto.transitoId!)
-                          setShowTransitoModal(_true)
+                          setShowTransitoModal(true)
                         }}
                         className="h-8 w-8"
                         title="Ver detalles del tránsito"
@@ -369,22 +385,22 @@ export const PrecintosActivosTable: React.FC<PrecintosActivosTableProps> = memo(
       
       {/* Commands Modal */}
       {selectedPrecinto && (<PrecintoCommandsModal
-          precinto={s_electedPrecinto}
-          isOpen={s_howCommandsModal}
+          precinto={selectedPrecinto}
+          isOpen={showCommandsModal}
           onClose={() => {
-            setShowCommandsModal(_false)
-            setSelectedPrecinto(_null)
+            setShowCommandsModal(false)
+            setSelectedPrecinto(null)
           }}
         />
       )}
       
       {/* Transito Detail Modal */}
       {selectedTransitoId && (<TransitoDetailModal
-          transitoId={s_electedTransitoId}
-          isOpen={s_howTransitoModal}
+          transitoId={selectedTransitoId}
+          isOpen={showTransitoModal}
           onClose={() => {
-            setShowTransitoModal(_false)
-            setSelectedTransitoId(_null)
+            setShowTransitoModal(false)
+            setSelectedTransitoId(null)
           }}
         />
       )}

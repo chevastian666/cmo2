@@ -82,15 +82,15 @@ export class WebSocketService {
       // Mark connection as active for polling fallback
       window.localStorage.setItem('ws-connected', 'true')
     }
-    this.ws.onmessage = (_event) => {
+    this.ws.onmessage = (event) => {
       try {
         const message: WebSocketMessage = JSON.parse(event.data)
-        this.handleMessage(_message)
+        this.handleMessage(message)
       } catch {
         console.error('Failed to parse WebSocket message:', error)
       }
     }
-    this.ws.onerror = (_error) => {
+    this.ws.onerror = (error) => {
       console.error('WebSocket error:', error)
       this.eventHandlers.onError?.(new Error('WebSocket connection error'))
     }
@@ -151,7 +151,7 @@ export class WebSocketService {
   }
 
   private notifyConnectionChange(data: ConnectionData): void {
-    this.eventHandlers.onConnectionChange?.(_data)
+    this.eventHandlers.onConnectionChange?.(data)
   }
 
   // Simulation methods for development

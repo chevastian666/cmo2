@@ -31,14 +31,14 @@ interface ArmConfirmationModalProps {
 }
 
 export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
-  isOpen, onClose, onConfirm, precinto, transito
+  isOpen, onClose, onConfirm: _onConfirm, precinto, transito
 }) => {
   if (!precinto) return null
   const hasWarnings = precinto.bateria < 20 || 
                       (Date.now() / 1000 - precinto.fechaUltimaLectura) > 3600 ||
                       precinto.eslinga.estado === 'violada'
   return (
-    <Dialog open={_isOpen} onOpenChange={_onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">

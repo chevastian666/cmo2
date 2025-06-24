@@ -11,7 +11,7 @@ export interface PrecintoFilters {
 }
 
 export const precintosService = {
-  getAll: async (filters?: PrecintoFilters): Promise<Precinto[]> => {
+  getAll: async (_filters?: PrecintoFilters): Promise<Precinto[]> => {
     try {
       // In development, return mock data
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
@@ -19,9 +19,9 @@ export const precintosService = {
       }
       
       // Use unified API service
-      const response = await unifiedAPIService.getPrecintosActivos(filters?.limit || 100)
+      const response = await unifiedAPIService.getPrecintosActivos(_filters?.limit || 100)
       return response
-    } catch (error) {
+    } catch {
       // Error fetching precintos - fallback to mock data
       return Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
     }
@@ -65,7 +65,7 @@ export const precintosService = {
             asignadoA: pa.asignadoTransito,
             eventos: []
           }))
-        } catch (_trokorError) {
+        } catch {
           // Error con Trokor API, intentando con unified API
         }
       }
@@ -88,7 +88,7 @@ export const precintosService = {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Return mock events
         return Array.from({ length: Math.min(limit, 10) }, (_, i) => ({
-          id: `EVT-${_i}`,
+          id: `EVT-${i}`,
           tipo: ['apertura', 'cierre', 'movimiento', 'alerta'][Math.floor(Math.random() * 4)] as unknown,
           timestamp: Date.now() - i * 3600000,
           descripcion: 'Evento de prueba',
@@ -121,7 +121,7 @@ export const precintosService = {
     }
   },
 
-  desactivar: async (id: string, motivo?: string): Promise<void> => {
+  desactivar: async (_id: string, _motivo?: string): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Mock: Desactivating precinto
@@ -135,7 +135,7 @@ export const precintosService = {
     }
   },
 
-  actualizarUbicacion: async (id: string, lat: number, lng: number): Promise<void> => {
+  actualizarUbicacion: async (_id: string, _lat: number, _lng: number): Promise<void> => {
     try {
       if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
         // Mock: Updating location

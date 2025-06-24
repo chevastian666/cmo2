@@ -20,7 +20,7 @@ interface State {
 
 class AnalyticsErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(_props)
+    super(props)
     this.state = { hasError: false, _error: null, errorInfo: null }
   }
 

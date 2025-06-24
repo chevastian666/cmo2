@@ -65,7 +65,7 @@ const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
       })
     } else {
       // Check for dynamic routes (with :param)
-      const dynamicKey = Object.keys(_routeConfig).find(key => {
+      const _dynamicKey = Object.keys(_routeConfig).find(key => {
         const regex = new RegExp('^' + key.replace(/:[^/]+/g, '[^/]+') + '$')
         return regex.test(_currentPath)
       })
@@ -117,11 +117,11 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   if (displayItems.length === 0) return null
   return (
     <nav aria-label="Breadcrumb" className={cn('flex items-center space-x-2 text-sm', className)}>
-      {displayItems.map((_item, index) => {
+      {displayItems.map((item, index) => {
         const isLast = index === displayItems.length - 1
         const isEllipsis = item.label === '...'
         return (
-          <React.Fragment key={_index}>
+          <React.Fragment key={index}>
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -160,7 +160,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
                 transition={{ delay: index * 0.05 + 0.025 }}
                 className="text-gray-600"
               >
-                {s_eparator}
+                {separator}
               </motion.span>
             )}
           </React.Fragment>

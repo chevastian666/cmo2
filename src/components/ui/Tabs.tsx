@@ -6,7 +6,7 @@ interface TabsContextValue {
   setActiveTab: (value: string) => void
 }
 
-const TabsContext = createContext<TabsContextValue | undefined>(_undefined)
+const TabsContext = createContext<TabsContextValue | undefined>(undefined)
 interface TabsProps {
   defaultValue?: string
   value?: string
@@ -21,14 +21,14 @@ export const Tabs: React.FC<TabsProps> = ({
   const [activeTab, setActiveTab] = useState(value || defaultValue || '')
   const handleTabChange = (newValue: string) => {
     if (!value) {
-      setActiveTab(_newValue)
+      setActiveTab(newValue)
     }
-    onValueChange?.(_newValue)
+    onValueChange?.(newValue)
   }
   return (
     <TabsContext.Provider value={{ activeTab: value || activeTab, setActiveTab: handleTabChange }}>
       <div className={cn('w-full', className)}>
-        {_children}
+        {children}
       </div>
     </TabsContext.Provider>
   )
@@ -38,7 +38,7 @@ interface TabsListProps {
   children: React.ReactNode
 }
 
-export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
+export const TabsList: React.FC<TabsListProps> = ({ className, children: _children }) => {
   return (
     <div className={cn(
       'inline-flex h-10 items-center justify-center rounded-md bg-gray-800 p-1 text-gray-400',
@@ -56,21 +56,22 @@ interface TabsTriggerProps {
 }
 
 export const TabsTrigger: React.FC<TabsTriggerProps> = ({ 
-  value, className, children, disabled = false 
+  value, className, children: _children, disabled = false 
 }) => {
-  const context = useContext(_TabsContext)
+  const context = useContext(TabsContext)
   if (!context) {
     throw new Error('TabsTrigger must be used within Tabs')
   }
 
+  const { activeTab, setActiveTab } = context
   const isActive = activeTab === value
   return (
     <button
       type="button"
       role="tab"
-      aria-selected={_isActive}
-      aria-disabled={_disabled}
-      disabled={_disabled}
+      aria-selected={isActive}
+      aria-disabled={disabled}
+      disabled={disabled}
       data-state={isActive ? 'active' : 'inactive'}
       className={cn(
         'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5',
@@ -82,7 +83,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
           : 'text-gray-400 hover:text-gray-100',
         className
       )}
-      onClick={() => !disabled && setActiveTab(_value)}
+      onClick={() => !disabled && setActiveTab(value)}
     >
       {_children}
     </button>
@@ -94,12 +95,13 @@ interface TabsContentProps {
   children: React.ReactNode
 }
 
-export const TabsContent: React.FC<TabsContentProps> = ({ value, className, children }) => {
-  const context = useContext(_TabsContext)
+export const TabsContent: React.FC<TabsContentProps> = ({ value, className, children: _children }) => {
+  const context = useContext(TabsContext)
   if (!context) {
     throw new Error('TabsContent must be used within Tabs')
   }
 
+  const { activeTab } = context
   if (activeTab !== value) {
     return null
   }

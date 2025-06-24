@@ -93,9 +93,9 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
         initial="initial"
         animate="animate"
         exit="exit"
-        className={_className}
+        className={className}
       >
-        {_children}
+        {children}
       </motion.div>
     </AnimatePresence>
   )
@@ -124,9 +124,9 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
           delay
         }
       }}
-      className={_className}
+      className={className}
     >
-      {_children}
+      {children}
     </motion.section>
   )
 }
@@ -144,14 +144,14 @@ export const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
   title, subtitle, className = "" 
 }) => {
   return (
-    <motion.div className={`mb-6 ${_className}`}>
+    <motion.div className={`mb-6 ${className}`}>
       <motion.h1
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={transitions.smooth}
         className="text-3xl font-bold text-white"
       >
-        {_title}
+        {title}
       </motion.h1>
       {subtitle && (
         <motion.p
@@ -160,7 +160,7 @@ export const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
           transition={{ ...transitions.smooth, delay: 0.1 }}
           className="text-gray-400 mt-2"
         >
-          {s_ubtitle}
+          {subtitle}
         </motion.p>
       )}
     </motion.div>
@@ -187,7 +187,7 @@ export const AnimatedLayout: React.FC<AnimatedLayoutProps> = ({
           transition={transitions.smooth}
           className="w-64 bg-gray-800 border-r border-gray-700"
         >
-          {s_idebar}
+          {sidebar}
         </motion.aside>
       )}
       
@@ -197,7 +197,7 @@ export const AnimatedLayout: React.FC<AnimatedLayoutProps> = ({
         transition={{ ...transitions.smooth, delay: 0.2 }}
         className="flex-1 overflow-auto"
       >
-        {_children}
+        {children}
       </motion.main>
     </div>
   )
@@ -223,9 +223,9 @@ export const AnimatedTabPanel: React.FC<AnimatedTabPanelProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={transitions.smooth}
-          className={_className}
+          className={className}
         >
-          {_children}
+          {children}
         </motion.div>
       )}
     </AnimatePresence>
@@ -245,7 +245,7 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
   children, className = "", staggerDelay = 0.05
 }) => {
   return (<motion.div
-      className={_className}
+      className={className}
       initial="hidden"
       animate="visible"
       variants={{
@@ -256,9 +256,9 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
         }
       }}
     >
-      {React.Children.map(_children, (_child, index) => (
+      {React.Children.map(children, (child, index) => (
         <motion.div
-          key={_index}
+          key={index}
           variants={{
             hidden: { opacity: 0, scale: 0.8 },
             visible: { 
@@ -268,7 +268,7 @@ export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
             }
           }}
         >
-          {_child}
+          {child}
         </motion.div>
       ))}
     </motion.div>

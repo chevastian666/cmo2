@@ -127,7 +127,7 @@ export const ArmadoWaitingPage: React.FC = () => {
     return 'warning'
   }
   // Fetch transit data
-  const fetchTransitData = async () => {
+  const fetchTransitData = useCallback(async () => {
     if (!transitId) return
     try {
       // In a real implementation, this would call the API
@@ -198,7 +198,7 @@ export const ArmadoWaitingPage: React.FC = () => {
       notificationService.error('Error', 'No se pudo cargar la información del tránsito')
       setLoading(false)
     }
-  }
+  }, [transitId])
   // Copy to clipboard
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -217,7 +217,7 @@ export const ArmadoWaitingPage: React.FC = () => {
       setTimeout(() => {
         navigate('/transitos')
       }, 2000)
-    } catch (error) {
+    } catch (_error) {
       notificationService.error('Error', 'No se pudo confirmar la salida')
     }
   }
@@ -236,7 +236,7 @@ export const ArmadoWaitingPage: React.FC = () => {
 
       return () => clearInterval(interval)
     }
-  }, [pollingActive, transitId])
+  }, [pollingActive, transitId, fetchTransitData])
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -260,7 +260,7 @@ export const ArmadoWaitingPage: React.FC = () => {
   }
 
   const hasCustomsExit = transitData.aduana?.some(a => a.OprId === 'SAL')
-  const lastCustomsStatus = transitData.aduana?.[transitData.aduana.length - 1]
+  const _lastCustomsStatus = transitData.aduana?.[transitData.aduana.length - 1]
   return (
     <div className="space-y-6">
       <div>

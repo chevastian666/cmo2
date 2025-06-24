@@ -1,48 +1,90 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, FileText, Download} from 'lucide-react'
-import { Card, CardHeader, CardContent} from '@/components/ui/card'
-import { FiltrosDocumentosComponent} from './FiltrosDocumentos'
-import { TablaDocumentos} from './TablaDocumentos'
-import { SubirDocumentoModal} from './SubirDocumentoModal'
-import { VisualizadorPDF} from './VisualizadorPDF'
-import { useUserInfo} from '../../../hooks/useAuth'
-import { notificationService} from '../../../services/shared/notification.service'
-import { exportToCSV} from '../../../utils/export'
-import type { Documento, FiltrosDocumentos} from '../types'
-import { FILTROS_DEFAULT} from '../types'
+import { Plus, FileText, Download } from 'lucide-react'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
+import { FiltrosDocumentosComponent } from './FiltrosDocumentos'
+import { TablaDocumentos } from './TablaDocumentos'
+import { SubirDocumentoModal } from './SubirDocumentoModal'
+import { VisualizadorPDF } from './VisualizadorPDF'
+import { useUserInfo } from '../../../hooks/useAuth'
+import { notificationService } from '../../../services/shared/notification.service'
+import { exportToCSV } from '../../../utils/export'
+import type { Documento, FiltrosDocumentos } from '../types'
+import { FILTROS_DEFAULT } from '../types'
 const STORAGE_KEY_FILTROS = 'cmo_documentacion_filtros'
+
 export const CentroDocumentacion: React.FC = () => {
   const [filtros, setFiltros] = useState<FiltrosDocumentos>(() => {
     try {
-      const saved = localStorage.getItem(_STORAGE_KEY_FILTROS)
-      return saved ? JSON.parse(s_aved) : FILTROS_DEFAULT
+      const saved = localStorage.getItem(STORAGE_KEY_FILTROS)
+      return saved ? JSON.parse(saved) : FILTROS_DEFAULT
     } catch {
       return FILTROS_DEFAULT
     }
   })
-  const [showSubirModal, setShowSubirModal] = useState(_false)
-  const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(_null)
+  const [showSubirModal, setShowSubirModal] = useState(false)
+  const [documentoVisualizando, setDocumentoVisualizando] = useState<Documento | null>(null)
+  const [documentos, setDocumentos] = useState<Documento[]>([])
+  const [loading, setLoading] = useState(true)
+  interface Estadisticas {
+    totalDocumentos: number;
+    porTipo: Record<string, number>;
+    porEmpresa: Record<string, number>;
+    tamanioTotal: number;
+    documentosDestacados: number;
+    documentosConfidenciales: number;
+  }
+  const [estadisticas, setEstadisticas] = useState<Estadisticas | null>(null)
+  
   const userInfo = useUserInfo()
   const canEdit = userInfo.role === 'admin' || userInfo.role === 'supervisor'
   const canDelete = userInfo.role === 'admin'
-  console.log('User info:', userInfo)
-  console.log('Can edit:', canEdit)
-  console.log('Show modal state:', showSubirModal)
-    useEffect(() => {
+  // Mock fetch function
+  const fetchDocumentos = async () => {
+    try {
+      setLoading(true)
+      // TODO: Replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setDocumentos([])
+      setEstadisticas({
+        totalDocumentos: 0,
+        porTipo: { DUA: 0, Autorizacion: 0 },
+        documentosMes: 0,
+        espacioUsado: 0
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Mock upload function
+  const uploadDocumento = async (_data: unknown) => {
+    // TODO: Implement actual upload
+    await new Promise(resolve => setTimeout(resolve, 1000))
+  }
+
+  // Mock delete function
+  const deleteDocumento = async (_id: string) => {
+    // TODO: Implement actual delete
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    await fetchDocumentos()
+  }
+
+  useEffect(() => {
     fetchDocumentos()
   }, [])
-    useEffect(() => {
-    localStorage.setItem(_STORAGE_KEY_FILTROS, JSON.stringify(_filtros))
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(filtros))
   }, [filtros])
   // Filtrar documentos
   const documentosFiltrados = documentos.filter(doc => {
     // Búsqueda global
     if (filtros.busqueda) {
       const busqueda = filtros.busqueda.toLowerCase()
-      const coincide = doc.descripcion.toLowerCase().includes(_busqueda) ||
-                      doc.palabrasClave.some(p => p.toLowerCase().includes(_busqueda)) ||
-                      (doc.numeroDUA && doc.numeroDUA.toLowerCase().includes(_busqueda)) ||
-                      doc.nombreArchivo.toLowerCase().includes(_busqueda)
+      const coincide = doc.descripcion.toLowerCase().includes(busqueda) ||
+                      doc.palabrasClave.some(p => p.toLowerCase().includes(busqueda)) ||
+                      (doc.numeroDUA && doc.numeroDUA.toLowerCase().includes(busqueda)) ||
+                      doc.nombreArchivo.toLowerCase().includes(busqueda)
       if (!coincide) return false
     }
 
@@ -69,16 +111,17 @@ export const CentroDocumentacion: React.FC = () => {
   })
   // Obtener empresas únicas
   const empresasUnicas = [...new Set(documentos.map(doc => doc.empresa))]
+  
   // Handlers
   const handleUpload = async (data: unknown) => {
     try {
-      await uploadDocumento(_data)
+      await uploadDocumento(data)
       notificationService.success('Documento subido', 'El documento se ha guardado correctamente')
-      setShowSubirModal(_false)
-      fetchDocumentos(); // Recargar documentos
-    } catch (_error) {
+      setShowSubirModal(false)
+      fetchDocumentos() // Recargar documentos
+    } catch (error) {
       notificationService.error('Error al subir documento', 'Por favor intente nuevamente')
-      throw error; // Re-throw para que el modal maneje el estado de loading
+      throw error // Re-throw para que el modal maneje el estado de loading
     }
   }
   const handleDescargar = (doc: Documento) => {
@@ -86,9 +129,9 @@ export const CentroDocumentacion: React.FC = () => {
     const link = document.createElement('a')
     link.href = downloadUrl
     link.download = doc.nombreArchivo
-    document.body.appendChild(_link)
+    document.body.appendChild(link)
     link.click()
-    document.body.removeChild(_link)
+    document.body.removeChild(link)
     notificationService.success('Descarga iniciada', `Descargando ${doc.nombreArchivo}`)
   }
   const handleEliminar = async (doc: Documento) => {
@@ -119,10 +162,10 @@ export const CentroDocumentacion: React.FC = () => {
       Destacado: doc.destacado ? 'Sí' : 'No',
       Confidencial: doc.confidencial ? 'Sí' : 'No'
     }))
-    exportToCSV(_datosExportar, `documentos_${new Date().toISOString().split('T')[0]}`)
+    exportToCSV(datosExportar, `documentos_${new Date().toISOString().split('T')[0]}`)
     notificationService.success('Exportación completada', 'Los documentos se han exportado correctamente')
   }
-  if (_loading) {
+  if (loading) {
     return (
       <div className="p-6">
         <p className="text-white">Cargando documentos...</p>
@@ -143,7 +186,7 @@ export const CentroDocumentacion: React.FC = () => {
         <div className="flex gap-2">
           {documentosFiltrados.length > 0 && (
             <button
-              onClick={_handleExportar}
+              onClick={handleExportar}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
             >
               <Download className="h-5 w-5" />
@@ -153,7 +196,7 @@ export const CentroDocumentacion: React.FC = () => {
           {canEdit && (<button
               onClick={() => {
                 console.log('Button clicked, setting showSubirModal to true')
-                setShowSubirModal(_true)
+                setShowSubirModal(true)
               }}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
             >
@@ -235,9 +278,9 @@ export const CentroDocumentacion: React.FC = () => {
       <Card>
         <CardContent className="p-4">
           <FiltrosDocumentosComponent
-            filtros={_filtros}
-            onFiltrosChange={s_etFiltros}
-            empresas={_empresasUnicas}
+            filtros={filtros}
+            onFiltrosChange={setFiltros}
+            empresas={empresasUnicas}
           />
         </CardContent>
       </Card>
@@ -253,29 +296,28 @@ export const CentroDocumentacion: React.FC = () => {
         </CardHeader>
         <CardContent className="p-0">
           <TablaDocumentos
-            documentos={_documentosFiltrados}
-            onDescargar={_handleDescargar}
-            onVisualizar={s_etDocumentoVisualizando}
+            documentos={documentosFiltrados}
+            onDescargar={handleDescargar}
+            onVisualizar={setDocumentoVisualizando}
             onEliminar={canDelete ? handleEliminar : undefined}
-            loading={_loading}
+            loading={loading}
           />
         </CardContent>
       </Card>
 
       {/* Modales */}
       {showSubirModal && (<SubirDocumentoModal
-          isOpen={s_howSubirModal}
+          isOpen={showSubirModal}
           onClose={() => {
-            console.log('Modal closing')
-            setShowSubirModal(_false)
+            setShowSubirModal(false)
           }}
-          onSubmit={_handleUpload}
+          onSubmit={handleUpload}
         />
       )}
 
       {documentoVisualizando && (<VisualizadorPDF
-          documento={_documentoVisualizando}
-          onClose={() => setDocumentoVisualizando(_null)}
+          documento={documentoVisualizando}
+          onClose={() => setDocumentoVisualizando(null)}
         />
       )}
     </div>
