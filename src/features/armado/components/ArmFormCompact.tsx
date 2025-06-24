@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'
-import { ORIGENES_DESTINOS} from '../../../constants/locations'
+import { _ORIGENES_DESTINOS as ORIGENES_DESTINOS } from '../../../constants/locations'
 // Empresas con RUT
 const EMPRESAS = [
   { nombre: 'Transportes del Sur S.A.', rut: '211234567890' },

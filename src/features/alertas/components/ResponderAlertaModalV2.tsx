@@ -7,7 +7,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import { Textarea} from '@/components/ui/textarea'
 import { cn} from '@/lib/utils'
 import type { Alerta} from '../../../types'
-import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { _TIPOS_ALERTA as TIPOS_ALERTA} from '../../../types/monitoring'
 import { notificationService} from '../../../services/shared/notification.service'
 interface ResponderAlertaModalProps {
   alerta: Alerta | null

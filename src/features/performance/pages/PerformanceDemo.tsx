@@ -4,8 +4,7 @@
  * By Cheva
  */
 
-import React, { useState, useCallback, useMemo as _useMemo, useEffect } from 'react'
-import { motion as _motion } from 'framer-motion'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Database, Zap, Activity, TrendingUp, Clock, MemoryStick, Cpu, Play, RefreshCw } from 'lucide-react'
 import { VirtualizedList } from '@/components/optimized/VirtualizedList'
 import { OptimizedCard, OptimizedTableRow } from '@/components/optimized/OptimizedComponents'
@@ -165,12 +164,12 @@ export const PerformanceDemo: React.FC = () => {
   })
   
   // Debounced search
-  const _handleSearch = useDebouncedCallback((search: string) => {
+  const handleSearch = useDebouncedCallback((search: string) => {
     paginatedData.setSearch(search)
   }, { delay: 300 })
   
   // Throttled scroll handler
-  const _handleScroll = useThrottledCallback((scrollOffset: number) => {
+  const handleScroll = useThrottledCallback((scrollOffset: number) => {
     console.log('Scroll offset:', scrollOffset)
   }, { delay: 100 })
   

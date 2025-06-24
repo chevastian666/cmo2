@@ -8,15 +8,19 @@ interface KPICardsProps {
 }
 
 export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
+  // Ensure arrays are defined
+  const safeTransitos = transitos || []
+  const safeAlertas = alertas || []
+  
   // Calculate transit statistics
-  const transitosActivos = transitos.filter(t => t.estado === 'en_proceso').length
-  const transitosEnViaje = transitos.filter(t => t.estado === 'en_proceso').length
-  const transitosPendientesPrecintar = transitos.filter(t => t.estado === 'pendiente').length
-  const transitosPendientesDesprecintar = transitos.filter(t => t.estado === 'precintado').length
+  const transitosActivos = safeTransitos.filter(t => t.estado === 'en_proceso').length
+  const transitosEnViaje = safeTransitos.filter(t => t.estado === 'en_proceso').length
+  const transitosPendientesPrecintar = safeTransitos.filter(t => t.estado === 'pendiente').length
+  const transitosPendientesDesprecintar = safeTransitos.filter(t => t.estado === 'precintado').length
   // Calculate alerts by priority
-  const alertasCriticas = alertas.filter(a => a.severidad === 'critica' || a.severidad === 'alta').length
-  const alertasMedias = alertas.filter(a => a.severidad === 'media').length
-  const alertasBajas = alertas.filter(a => a.severidad === 'baja').length
+  const alertasCriticas = safeAlertas.filter(a => a.severidad === 'critica' || a.severidad === 'alta').length
+  const alertasMedias = safeAlertas.filter(a => a.severidad === 'media').length
+  const alertasBajas = safeAlertas.filter(a => a.severidad === 'baja').length
   const kpiData = [
     // Transit KPIs
     {
@@ -86,12 +90,12 @@ export const KPICards: React.FC<KPICardsProps> = ({ transitos, alertas }) => {
     },
     {
       title: 'Total Alertas',
-      value: alertas.length,
+      value: safeAlertas.length,
       subtitle: 'Todas las prioridades',
       icon: <AlertTriangle className="h-6 w-6" />,
       color: 'text-indigo-500',
       bgColor: 'bg-indigo-500/20',
-      trend: alertas.length > 10 ? 'up' : 'neutral'
+      trend: safeAlertas.length > 10 ? 'up' : 'neutral'
     }
   ]
   const getTrendIcon = (trend: string) => {

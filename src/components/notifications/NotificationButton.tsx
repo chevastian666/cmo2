@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { Bell, BellOff} from 'lucide-react'
-import { NotificationCenter} from './NotificationCenter'
+import NotificationCenter from './NotificationCenter'
 import { notificationService} from '../../services/notifications/notificationService'
 import type { 
   Notification, NotificationFilter, NotificationGroup, NotificationStats} from '../../types/notifications'

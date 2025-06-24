@@ -1,4 +1,4 @@
-import { SHARED_CONFIG, formatApiEndpoint} from '../../config/shared.config'
+import { _SHARED_CONFIG as SHARED_CONFIG, _formatApiEndpoint as formatApiEndpoint} from '../../config/shared.config'
 import { jwtService} from '../jwt.service'
 import type { 
   Precinto, TransitoPendiente, Alerta, EstadisticasMonitoreo, Usuario} from '../../types'

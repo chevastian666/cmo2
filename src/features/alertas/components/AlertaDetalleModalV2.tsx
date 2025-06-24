@@ -3,7 +3,7 @@ import { User, MessageSquare, CheckCircle, AlertTriangle, Clock, MapPin, Shield,
 import { cn} from '@/lib/utils'
 import { formatDateTime, formatTimeAgo} from '../../../utils/formatters'
 import type { AlertaExtendida, Usuario} from '../../../types'
-import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { _TIPOS_ALERTA as TIPOS_ALERTA} from '../../../types/monitoring'
 import { usuariosService} from '../../../services/usuarios.service'
 // shadcn/ui components
 import {

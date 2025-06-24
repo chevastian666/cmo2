@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {Map, Filter, Layers, Search, X, Building2, Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'
-import { DESPACHANTES} from '../../../constants/locations'
+import { _DESPACHANTES as DESPACHANTES} from '../../../constants/locations'
 export interface MapFilters {
   searchTerm: string
   selectedDespachante: string

@@ -3,7 +3,7 @@ import { AlertTriangle, Shield, MapPin, Clock, CheckCircle, Unlock, Navigation, 
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo} from '../../../utils/formatters'
 import type { Alerta} from '../../../types'
-import { TIPOS_ALERTA} from '../../../types/monitoring'
+import { _TIPOS_ALERTA as TIPOS_ALERTA} from '../../../types/monitoring'
 import { ResponderAlertaModal} from './ResponderAlertaModal'
 import { notificationService} from '../../../services/shared/notification.service'
 // Alarm codes mapping

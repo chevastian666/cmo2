@@ -3,7 +3,7 @@ import { useForm} from 'react-hook-form'
 import { zodResolver} from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Truck, User, Phone, Hash, Package} from 'lucide-react'
-import { ORIGENES_DESTINOS} from '../../../constants/locations'
+import { _ORIGENES_DESTINOS as ORIGENES_DESTINOS } from '../../../constants/locations'
 // shadcn/ui components
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'

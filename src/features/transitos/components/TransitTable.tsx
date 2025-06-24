@@ -1,5 +1,5 @@
 import React, { Fragment, memo, useMemo } from 'react'
-import {_ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react'
+import {ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { TransitStatus} from './TransitStatus'
 import { TransitTableSkeleton} from './TransitTableSkeleton'

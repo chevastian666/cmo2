@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {_Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
+import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { formatTimeAgo} from '../../../utils/formatters'
 interface PrecintoListItem {

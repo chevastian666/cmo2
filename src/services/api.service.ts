@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { Precinto, EventoPrecinto, EstadisticasMonitoreo, Alerta, PuntoControl, TransitoPendiente} from '../types/monitoring'
-import { API_CONFIG} from '../config'
+import { _API_CONFIG as API_CONFIG} from '../config'
 const API_BASE_URL = API_CONFIG.BASE_URL
 const api = axios.create({
   baseURL: API_BASE_URL,

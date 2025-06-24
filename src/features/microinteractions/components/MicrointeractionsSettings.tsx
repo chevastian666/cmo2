@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {_Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react'
+import {Volume2, VolumeX, Sparkles, Settings, X} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { asmrSoundService, useASMRSound} from '../services/soundService'
 interface MicrointeractionsConfig {
@@ -12,9 +12,9 @@ interface MicrointeractionsConfig {
 }
 
 export const MicrointeractionsSettings: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(_false)
-  const { config: soundConfig } = useASMRSound()
-  const [_config, setConfig] = useState<MicrointeractionsConfig>({
+  const [isOpen, setIsOpen] = useState(false)
+  const { config: soundConfig, playHover, playOpen, playClose } = useASMRSound()
+  const [config, setConfig] = useState<MicrointeractionsConfig>({
     animationsEnabled: true,
     animationIntensity: 'medium',
     particlesEnabled: true,
@@ -25,9 +25,9 @@ export const MicrointeractionsSettings: React.FC = () => {
   // Load config from localStorage
 
   useEffect(() => {
-    const _saved = localStorage.getItem('microinteractions-config')
-    if (_saved) {
-      const parsed = JSON.parse(_saved)
+    const saved = localStorage.getItem('microinteractions-config')
+    if (saved) {
+      const parsed = JSON.parse(saved)
       setConfig(prev => ({ ...prev, ...parsed }))
     }
 
@@ -42,9 +42,9 @@ export const MicrointeractionsSettings: React.FC = () => {
   }, [])
   // Save config changes
   const updateConfig = (updates: Partial<MicrointeractionsConfig>) => {
-    const _newConfig = { ...config, ...updates }
-    setConfig(_newConfig)
-    localStorage.setItem('microinteractions-config', JSON.stringify(_newConfig))
+    const newConfig = { ...config, ...updates }
+    setConfig(newConfig)
+    localStorage.setItem('microinteractions-config', JSON.stringify(newConfig))
     // Update sound service
     if ('soundsEnabled' in updates) {
       asmrSoundService.setEnabled(updates.soundsEnabled!)
@@ -53,19 +53,19 @@ export const MicrointeractionsSettings: React.FC = () => {
       asmrSoundService.setVolume(updates.soundVolume!)
     }
   }
-  const _handleToggle = () => {
+  const handleToggle = () => {
     if (isOpen) {
       playClose()
       setIsOpen(false)
     } else {
       playOpen()
-      setIsOpen(_true)
+      setIsOpen(true)
     }
   }
   return (<>
       {/* Settings Button */}
       <button
-        onClick={_handleToggle}
+        onClick={handleToggle}
         onMouseEnter={() => playHover()}
         className="fixed bottom-4 right-4 p-3 bg-gray-800 hover:bg-gray-700 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
         title="Configuración de microinteracciones"
@@ -78,7 +78,7 @@ export const MicrointeractionsSettings: React.FC = () => {
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/50 z-50"
-            onClick={_handleToggle}
+            onClick={handleToggle}
           />
 
           {/* Panel */}
@@ -90,7 +90,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                 <h3 className="font-semibold text-white">Microinteracciones</h3>
               </div>
               <button
-                onClick={_handleToggle}
+                onClick={handleToggle}
                 className="p-1 hover:bg-gray-800 rounded transition-colors"
               >
                 <X className="h-4 w-4 text-gray-400" />
@@ -106,7 +106,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={config.animationsEnabled && !config.reducedMotion}
-                    onChange={(_e) => updateConfig({ animationsEnabled: e.target.checked })}
+                    onChange={(e) => updateConfig({ animationsEnabled: e.target.checked })}
                     disabled={config.reducedMotion}
                     className="toggle-checkbox"
                   />
@@ -118,7 +118,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                     <div className="flex gap-2">
                       {(['low', 'medium', 'high'] as const).map(level => (
                         <button
-                          key={_level}
+                          key={level}
                           onClick={() => updateConfig({ animationIntensity: level })}
                           className={cn(
                             'px-3 py-1 text-xs rounded transition-colors',
@@ -141,7 +141,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={config.particlesEnabled && !config.reducedMotion}
-                  onChange={(_e) => updateConfig({ particlesEnabled: e.target.checked })}
+                  onChange={(e) => updateConfig({ particlesEnabled: e.target.checked })}
                   disabled={config.reducedMotion}
                   className="toggle-checkbox"
                 />
@@ -157,7 +157,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={config.soundsEnabled}
-                    onChange={(_e) => updateConfig({ soundsEnabled: e.target.checked })}
+                    onChange={(e) => updateConfig({ soundsEnabled: e.target.checked })}
                     className="toggle-checkbox"
                   />
                 </label>
@@ -169,7 +169,7 @@ export const MicrointeractionsSettings: React.FC = () => {
                       min="0"
                       max="100"
                       value={config.soundVolume * 100}
-                      onChange={(_e) => updateConfig({ soundVolume: Number(e.target.value) / 100 })}
+                      onChange={(e) => updateConfig({ soundVolume: Number(e.target.value) / 100 })}
                       className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                     />
                     <div className="text-xs text-gray-500 text-right">{Math.round(config.soundVolume * 100)}%</div>

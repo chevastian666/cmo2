@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react'
-import {_Building2, Check, ChevronDown, Plus} from 'lucide-react'
+import {Building2, Check, ChevronDown, Plus} from 'lucide-react'
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
 import { Button} from '@/components/ui/button'

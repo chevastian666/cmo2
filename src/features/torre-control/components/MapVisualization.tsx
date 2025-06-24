@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import {_MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react'
+import {MapPin, Navigation, Activity, AlertTriangle, TrendingUp, Clock, Truck} from 'lucide-react'
 import { Card} from '@/components/ui/Card'
 import { Badge} from '@/components/ui/badge'
 import { Progress} from '@/components/ui/progress'

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import {_MapPin} from 'lucide-react'
+import {MapPin} from 'lucide-react'
 import { zonasDescansoData} from '../data/zonasDescansoData'
 import { RutaAccordion} from '../components/RutaAccordion'
 import { ZonasDescansoSearch} from '../components/ZonasDescansoSearch'

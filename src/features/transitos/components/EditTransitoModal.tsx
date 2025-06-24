@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {_X} from 'lucide-react'
+import {X} from 'lucide-react'
 import { notificationService} from '../../../services/shared/notification.service'
 import { transitosService} from '../services/transitos.service'
 import type { Transito} from '../types'

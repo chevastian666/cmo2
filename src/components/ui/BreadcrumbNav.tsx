@@ -97,11 +97,11 @@ export const BreadcrumbNav: React.FC = () => {
       }
     }
 
-    if (_currentConfig) {
-      trail.unshift(_path)
+    if (currentConfig) {
+      trail.unshift(path)
       let parentPath = currentConfig.parent
       while (parentPath && breadcrumbConfig[parentPath]) {
-        trail.unshift(_parentPath)
+        trail.unshift(parentPath)
         parentPath = breadcrumbConfig[parentPath].parent
       }
     }
@@ -113,7 +113,7 @@ export const BreadcrumbNav: React.FC = () => {
   return (<Breadcrumb className="mb-4">
       <BreadcrumbList>
         {trail.map((_path, index) => {
-          const config = breadcrumbConfig[path]
+          const config = breadcrumbConfig[_path]
           const isLast = index === trail.length - 1
           return (
             <React.Fragment key={_path}>

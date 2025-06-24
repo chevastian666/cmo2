@@ -59,7 +59,7 @@ import { useSharedIntegration, useSyncStoreActions} from './hooks/useSharedInteg
 import { useWebSocket} from './hooks/useWebSocket'
 import { notificationService} from './services/shared/notification.service'
 import { sharedWebSocketService} from './services/shared/sharedWebSocket.service'
-import { SHARED_CONFIG} from './config/shared.config'
+import { _SHARED_CONFIG as SHARED_CONFIG} from './config/shared.config'
 import { Toaster} from '@/components/ui/toaster'
 import GlobalErrorBoundary from './components/GlobalErrorBoundary'
 // import TreemapDirect from './features/analytics/components/TreemapDirect'

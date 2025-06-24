@@ -1,5 +1,5 @@
 import React from 'react'
-import {_Search, X} from 'lucide-react'
+import {Search, X} from 'lucide-react'
 interface ZonasDescansoSearchProps {
   searchTerm: string
   onSearchChange: (value: string) => void

@@ -150,11 +150,17 @@ export const useRolesStore = create<RolesStore>()(devtools(
 
         canAccess: (section, permission = 'view') => {
           const { permissions, currentUserRole } = get()
+          if (!permissions[currentUserRole] || !permissions[currentUserRole][section]) {
+            return false
+          }
           return permissions[currentUserRole][section].includes(permission)
         },
 
         canAccessForRole: (role, section, permission = 'view') => {
           const { permissions } = get()
+          if (!permissions[role] || !permissions[role][section]) {
+            return false
+          }
           return permissions[role][section].includes(permission)
         },
 

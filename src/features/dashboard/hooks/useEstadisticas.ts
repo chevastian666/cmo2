@@ -1,6 +1,6 @@
 import { useQuery} from '@tanstack/react-query'
 import { estadisticasService} from '../../../services/estadisticas.service'
-import { QUERY_KEYS} from '../../../config'
+import { _QUERY_KEYS as QUERY_KEYS } from '../../../config'
 export const useEstadisticas = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.ESTADISTICAS],

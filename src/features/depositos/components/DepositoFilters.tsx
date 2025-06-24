@@ -1,5 +1,5 @@
 import React from 'react'
-import {_X, Filter} from 'lucide-react'
+import {X, Filter} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Label} from '@/components/ui/label'
 import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'

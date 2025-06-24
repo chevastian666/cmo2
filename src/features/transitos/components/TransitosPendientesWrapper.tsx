@@ -21,12 +21,12 @@ export const TransitosPendientesWrapper: React.FC<TransitosPendientesWrapperProp
             </div>
           </div>
           <span className="text-lg font-semibold text-yellow-400 bg-yellow-900/30 px-3 py-1 rounded-lg">
-            {transitos.length} pendientes
+            {transitos?.length || 0} pendientes
           </span>
         </div>
       </div>
       <div className="p-4">
-        <TransitosPendientesTable transitos={_transitos} />
+        <TransitosPendientesTable transitos={transitos || []} />
       </div>
     </div>
   )

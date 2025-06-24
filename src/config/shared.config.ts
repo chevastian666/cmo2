@@ -131,22 +131,22 @@ export const _SHARED_CONFIG = {
 }
 // Helper to get authenticated headers
 export const _getAuthHeaders = (): HeadersInit => {
-  const _token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY)
+  const _token = localStorage.getItem(_SHARED_CONFIG.AUTH_TOKEN_KEY)
   return {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${_token}` })
+    ...(_token && { 'Authorization': `Bearer ${_token}` })
   }
 }
 // Helper to check if user has role
 export const _hasRole = (userRole: string, requiredRoles: string[]): boolean => {
-  return requiredRoles.includes(__userRole)
+  return requiredRoles.includes(userRole)
 }
 // Helper to format API endpoint
 export const _formatApiEndpoint = (endpoint: string): string => {
   if (!endpoint) {
     console.error('formatApiEndpoint called with undefined endpoint')
-    return SHARED_CONFIG.API_BASE_URL
+    return _SHARED_CONFIG.API_BASE_URL
   }
-  const _baseUrl = SHARED_CONFIG.API_BASE_URL
-  return endpoint.startsWith('/') ? `${_baseUrl}${_endpoint}` : `${_baseUrl}/${_endpoint}`
+  const _baseUrl = _SHARED_CONFIG.API_BASE_URL
+  return endpoint.startsWith('/') ? `${_baseUrl}${endpoint}` : `${_baseUrl}/${endpoint}`
 }

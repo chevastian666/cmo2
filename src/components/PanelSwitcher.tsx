@@ -6,6 +6,9 @@ interface PanelSwitcherProps {
 }
 
 export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) => {
+  // Mock authorization functions - in real app these would come from auth service
+  const canAccessCMO = () => true
+  const canAccessEncargados = () => true
 
   const [isOpen, setIsOpen] = useState(false)
   const panels = [
@@ -34,7 +37,7 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
     if (panel.id !== currentPanel) {
       window.location.href = panel.url
     }
-    setIsOpen(_false)
+    setIsOpen(false)
   }
   return (<div className="relative">
       <button
@@ -56,32 +59,32 @@ export const PanelSwitcher: React.FC<PanelSwitcherProps> = ({ currentPanel }) =>
       {isOpen && (<>
           <div 
             className="fixed inset-0 z-10" 
-            onClick={() => setIsOpen(_false)}
+            onClick={() => setIsOpen(false)}
           />
           <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-md shadow-lg border border-gray-700 z-20">
             <div className="p-2">
               <p className="text-sm text-gray-500 px-2 py-1">Cambiar Panel</p>
               {availablePanels.map((_panel) => (<button
-                  key={panel.id}
+                  key={_panel.id}
                   onClick={() => handlePanelSwitch(_panel)}
                   className={cn(
                     "w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left transition-colors",
-                    panel.id === currentPanel
+                    _panel.id === currentPanel
                       ? "bg-gray-700 text-white"
                       : "hover:bg-gray-700 text-gray-300"
                   )}
                 >
-                  <panel.icon className="h-5 w-5" />
+                  <_panel.icon className="h-5 w-5" />
                   <div className="flex-1">
-                    <p className="text-base font-medium">{panel.name}</p>
-                    {panel.id === 'cmo' && (
+                    <p className="text-base font-medium">{_panel.name}</p>
+                    {_panel.id === 'cmo' && (
                       <p className="text-sm text-gray-500">Monitoreo en tiempo real</p>
                     )}
-                    {panel.id === 'encargados' && (
+                    {_panel.id === 'encargados' && (
                       <p className="text-sm text-gray-500">Gestión de tránsitos</p>
                     )}
                   </div>
-                  {panel.id !== currentPanel && (
+                  {_panel.id !== currentPanel && (
                     <ExternalLink className="h-4 w-4 text-gray-500" />
                   )}
                 </button>

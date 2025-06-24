@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import {_X, Clock, User, Shield, Filter, FileText} from 'lucide-react'
+import {X, Clock, User, Shield, Filter, FileText} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { useRolesStore} from '../../../store/rolesStore'
 import type { PermissionChange, Role, Section} from '../../../types/roles'

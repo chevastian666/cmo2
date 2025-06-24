@@ -5,7 +5,7 @@
 
 import { sharedApiService} from './sharedApi.service'
 import { sharedStateService} from './sharedState.service'
-import { SHARED_CONFIG} from '../../config/shared.config'
+import { _SHARED_CONFIG as SHARED_CONFIG} from '../../config/shared.config'
 import { jwtService} from '../jwt.service'
 import type { Usuario} from '../../types'
 import type { LoginResponse} from '../../types/jwt'
@@ -48,7 +48,7 @@ class AuthService {
       if (userFromToken) {
         // Optionally verify with server
         const user = await sharedApiService.getCurrentUser()
-        if (_user) {
+        if (user) {
           this.notifyListeners({
             user,
             isAuthenticated: true,
@@ -83,7 +83,7 @@ class AuthService {
       error: null
     })
     try {
-      const response = await sharedApiService.login(_email, password) as LoginResponse
+      const response = await sharedApiService.login(email, password) as LoginResponse
       console.log('Login response:', response); // Debug log
       
       // Save JWT tokens
@@ -230,7 +230,7 @@ class AuthService {
 
   // Subscribe to auth state changes
   subscribe(listener: AuthListener): () => void {
-    this.listeners.add(_listener)
+    this.listeners.add(listener)
     // Immediately notify with current state
     const user = this.getCurrentUser()
     listener({
@@ -342,9 +342,9 @@ class AuthService {
     const minutes = Math.floor(ms / 60000)
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
-    if (days > 0) return `${_days} day${days > 1 ? 's' : ''}`
-    if (hours > 0) return `${_hours} hour${hours > 1 ? 's' : ''}`
-    if (minutes > 0) return `${_minutes} minute${minutes > 1 ? 's' : ''}`
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''}`
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`
     return 'Less than a minute'
   }
 }
