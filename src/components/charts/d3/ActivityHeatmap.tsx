@@ -6,7 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as d3 from 'd3'
-import { HeatmapData, ChartConfig, DEFAULT_CHART_CONFIG} from './types'
+import { DEFAULT_CHART_CONFIG } from './types'
+import type { HeatmapData, ChartConfig } from './types'
 import { formatters, animations, tooltip} from './utils'
 interface ActivityHeatmapProps {
   data: HeatmapData[]
@@ -53,7 +54,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
     const g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
     // Create tooltip
-    const _tooltipDiv = tooltip.create(containerRef.current!)
+    const tooltipDiv = tooltip.create(containerRef.current!)
     // Create data grid
     const dataGrid = new Map()
     data.forEach(d => {
@@ -102,7 +103,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
           ${d.data.label ? `<div class="text-sm">Tipo: ${d.data.label}</div>` : ''}
           <div class="text-xs text-gray-400 mt-2">Click para más detalles</div>
         `
-        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
         const rect = d3.select(this).select('rect')
@@ -111,7 +112,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
           .attr('stroke', '#374151')
           .attr('stroke-width', 0.5)
           .style('opacity', 1)
-        tooltip.hide(_tooltipDiv)
+        tooltip.hide(tooltipDiv)
       })
       .on('click', (_, d) => {
         onCellClick?.(d.data)
@@ -130,7 +131,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('font-weight', '500')
       .text(d => d)
       .style('opacity', 0)
-    animations.fadeIn(dayLabels, config.animations.duration)
+    animations.fadeIn(dayLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration)
     // Add hour labels
     const hourLabels = g.selectAll('.hour-label')
       .data(HOURS.filter(h => h % 3 === 0)) // Show every 3 hours
@@ -143,7 +144,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('font-size', '12px')
       .text(d => `${d}:00`)
       .style('opacity', 0)
-    animations.fadeIn(hourLabels, config.animations.duration)
+    animations.fadeIn(hourLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration)
     // Add color legend
     const legendWidth = 200
     const legendHeight = 10
@@ -203,7 +204,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('font-weight', '600')
       .text('Mapa de Calor - Actividad por Hora y Día')
       .style('opacity', 0)
-    animations.fadeIn(title, config.animations.duration)
+    animations.fadeIn(title as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration)
     // Add statistics panel
     const stats = g.append('g')
       .attr('class', 'stats')
@@ -230,7 +231,7 @@ export const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       .style('fill', '#9CA3AF')
       .style('font-size', '11px')
       .text(d => `${d.label}: ${formatters.number(d.value)}`)
-    animations.fadeIn(stats, config.animations.duration + 300)
+    animations.fadeIn(stats as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 300)
   }, [data, config, dimensions, onCellClick])
     useEffect(() => {
     drawHeatmap()

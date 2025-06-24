@@ -35,7 +35,7 @@ class PerformanceMonitor {
           renderTime,
           componentName,
           timestamp: Date.now(),
-          props: props ? Object.keys(props as Record<string, unknown>) : [] as string[]
+          props: props ? Object.keys(props as Record<string, unknown>).reduce((acc, key) => ({ ...acc, [key]: key }), {}) : {}
         })
         // Keep only last 100 metrics
         if (this.metrics.length > 100) {

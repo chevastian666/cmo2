@@ -5,14 +5,14 @@
  */
 
 import React from 'react'
-import { motion, AnimatePresence} from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { useLocation} from 'react-router-dom'
 import { transitions} from './AnimationPresets'
 // ==========================================
 // VARIANTES DE TRANSICIÓN DE PÁGINA
 // ==========================================
 
-const pageVariants = {
+const pageVariants: Variants = {
   initial: {
     opacity: 0,
     x: -20
@@ -31,7 +31,7 @@ const pageVariants = {
     transition: transitions.fast
   }
 }
-const fadePageVariants = {
+const fadePageVariants: Variants = {
   initial: {
     opacity: 0
   },
@@ -39,18 +39,18 @@ const fadePageVariants = {
     opacity: 1,
     transition: {
       duration: 0.3,
-      ease: "easeOut"
+      ease: "easeOut" as const
     }
   },
   exit: {
     opacity: 0,
     transition: {
       duration: 0.2,
-      ease: "easeIn"
+      ease: "easeIn" as const
     }
   }
 }
-const slideUpPageVariants = {
+const slideUpPageVariants: Variants = {
   initial: {
     opacity: 0,
     y: 30

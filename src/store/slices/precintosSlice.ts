@@ -46,38 +46,27 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
 
   // Actions with Immer patterns (handled by middleware)
-  setPrecintos: (precintos) => set((state) => {
-    state.precintos = precintos
-    state.lastUpdate = Date.now()
-    state.error = null
-  }),
+  setPrecintos: (precintos) => set({ precintos, lastUpdate: Date.now(), error: null }),
   
-  setPrecintosActivos: (precintosActivos) => set((state) => {
-    state.precintosActivos = precintosActivos
-    state.lastUpdate = Date.now()
-    state.error = null
-  }),
+  setPrecintosActivos: (precintosActivos) => set({ precintosActivos, lastUpdate: Date.now(), error: null }),
   
-  updatePrecinto: (id, data) => set((state) => {
-    const updateItem = (item: unknown) => item.id === id ? { ...item, ...data } : item
-    state.precintos = state.precintos.map(updateItem)
-    state.precintosActivos = state.precintosActivos.map(updateItem)
-    state.lastUpdate = Date.now()
-  }),
+  updatePrecinto: (id, data) => set((state) => ({
+    precintos: state.precintos.map(item => item.id === id ? { ...item, ...data } : item),
+    precintosActivos: state.precintosActivos.map(item => item.id === id ? { ...item, ...data } : item),
+    lastUpdate: Date.now()
+  })),
   
-  removePrecinto: (id) => set((state) => {
-    state.precintos = state.precintos.filter(p => p.id !== id)
-    state.precintosActivos = state.precintosActivos.filter(p => p.id !== id)
-    state.lastUpdate = Date.now()
-  }),
+  removePrecinto: (id) => set((state) => ({
+    precintos: state.precintos.filter(p => p.id !== id),
+    precintosActivos: state.precintosActivos.filter(p => p.id !== id),
+    lastUpdate: Date.now()
+  })),
 
-  setFilters: (filters) => set((state) => {
-    state.filters = { ...state.filters, ...filters }
-  }),
+  setFilters: (filters) => set((state) => ({
+    filters: { ...state.filters, ...filters }
+  })),
 
-  clearFilters: () => set((state) => {
-    state.filters = { search: '', estado: '', tipo: '' }
-  }),
+  clearFilters: () => set({ filters: { search: '', estado: '', tipo: '' } }),
   
   setLoading: (loading) => set({ loading }),
   
@@ -92,7 +81,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       const data = await precintosService.getAll()
       setPrecintos(data)
       return data
-    } catch {
+    } catch (error) {
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 20 }, (_, i) => generateMockPrecinto(i))
       setPrecintos(mockData)
@@ -111,7 +100,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
       const data = await precintosService.getActivos()
       setPrecintosActivos(data)
       return data
-    } catch {
+    } catch (error) {
       // En desarrollo, usar datos mock
       const mockData = Array.from({ length: 10 }, (_, i) => generateMockPrecinto(i))
       setPrecintosActivos(mockData)
@@ -123,35 +112,39 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
   },
 
   // Batch operations
-  batchUpdatePrecintos: (updates: Array<{ id: string; data: unknown }>) => set((state) => {
+  batchUpdatePrecintos: (updates: Array<{ id: string; data: any }>) => set((state) => {
+    const precintos = [...state.precintos]
+    const precintosActivos = [...state.precintosActivos]
+    
     updates.forEach(({ id, data }) => {
-      const index = state.precintos.findIndex(p => p.id === id)
+      const index = precintos.findIndex(p => p.id === id)
       if (index !== -1) {
-        state.precintos[index] = { ...state.precintos[index], ...data }
+        precintos[index] = { ...precintos[index], ...data }
       }
       
-      const activeIndex = state.precintosActivos.findIndex(p => p.id === id)
+      const activeIndex = precintosActivos.findIndex(p => p.id === id)
       if (activeIndex !== -1) {
-        state.precintosActivos[activeIndex] = { ...state.precintosActivos[activeIndex], ...data }
+        precintosActivos[activeIndex] = { ...precintosActivos[activeIndex], ...data }
       }
     })
-    state.lastUpdate = Date.now()
+    
+    return { precintos, precintosActivos, lastUpdate: Date.now() }
   }),
 
   // Reset store
-  reset: () => set((state) => {
-    state.precintos = []
-    state.precintosActivos = []
-    state.loading = false
-    state.error = null
-    state.lastUpdate = null
-    state.filters = { search: '', estado: '', tipo: '' }
-  }),
+  reset: () => set(() => ({
+    precintos: [],
+    precintosActivos: [],
+    loading: false,
+    error: null,
+    lastUpdate: null,
+    filters: { search: '', estado: '', tipo: '' }
+  })),
 
   // Legacy computed properties
   getPrecintosConAlertas: () => {
     const { precintosActivos } = get()
-    return precintosActivos.filter(p => p.estado === 3)
+    return precintosActivos.filter(p => p.estado === 'FMF')
   },
 
   getPrecintosBajaBateria: () => {

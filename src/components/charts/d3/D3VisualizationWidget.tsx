@@ -9,8 +9,10 @@ import { InteractiveLineChart} from './InteractiveLineChart'
 import { ActivityHeatmap} from './ActivityHeatmap'
 import { NetworkGraph} from './NetworkGraph'
 import { InteractiveTreemap} from './InteractiveTreemap'
-import { 
-  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, DEFAULT_CHART_CONFIG, NetworkNode, NetworkLink} from './types'
+import { DEFAULT_CHART_CONFIG } from './types'
+import type { 
+  TimeSeriesData, HeatmapData, NetworkData, TreemapNode, ChartConfig, NetworkNode, NetworkLink
+} from './types'
 type VisualizationType = 'line' | 'heatmap' | 'network' | 'treemap'
 interface D3VisualizationWidgetProps {
   type: VisualizationType

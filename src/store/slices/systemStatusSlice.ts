@@ -24,7 +24,37 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
   // State
   estadisticas: null, smsPendientes: 0, dbStats: {
     memoriaUsada: 0, discoUsado: 0, }, apiStats: {
-    memoriaUsada: 0, discoUsado: 0, }, reportesPendientes: 0, loading: false, error: null, lastUpdate: null, // Actions
+    memoriaUsada: 0, discoUsado: 0, }, reportesPendientes: 0, loading: false, error: null, lastUpdate: null,
+  performance: {
+    avgResponseTime: 0,
+    activeConnections: 0,
+    requestsPerMinute: 0,
+    errorRate: 0
+  },
+  // Computed properties
+  get systemHealth() {
+    const { dbStats, apiStats } = get()
+    const maxUsage = Math.max(dbStats.memoriaUsada, apiStats.memoriaUsada, dbStats.discoUsado, apiStats.discoUsado)
+    if (maxUsage > 90) return 'critical'
+    if (maxUsage > 70) return 'warning'
+    return 'healthy'
+  },
+  
+  get memoryUsagePercent() {
+    const { dbStats, apiStats } = get()
+    return Math.max(dbStats.memoriaUsada, apiStats.memoriaUsada)
+  },
+  
+  get diskUsagePercent() {
+    const { dbStats, apiStats } = get()
+    return Math.max(dbStats.discoUsado, apiStats.discoUsado)
+  },
+  
+  get isSystemOverloaded() {
+    const { performance } = get()
+    return performance.avgResponseTime > 1000 || performance.errorRate > 5
+  },
+  // Actions
   setEstadisticas: (estadisticas) => set({ 
     estadisticas, 
     smsPendientes: estadisticas.smsPendientes,
@@ -49,13 +79,14 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
     setLoading(true)
     setError(null)
     try {
-
       // const data = await estadisticasService.getAll()
       setEstadisticas(mockEstadisticas)
-    } catch {
+      return mockEstadisticas
+    } catch (error) {
       // En desarrollo, usar datos mock
       setEstadisticas(mockEstadisticas)
       console.warn('Using mock data for estadisticas:', error)
+      return mockEstadisticas
     } finally {
       setLoading(false)
     }
@@ -74,10 +105,32 @@ export const createSystemStatusSlice: StateCreator<SystemStatusStore> = (set, ge
         apiStats: mockEstadisticas.apiStats,
         reportesPendientes: mockEstadisticas.reportesPendientes,
       })
-    } catch {
+    } catch (error) {
       console.warn('Using mock data for system status:', error)
     } finally {
       setLoading(false)
     }
   },
+  
+  updatePerformanceMetrics: (metrics) => set(state => ({
+    ...state,
+    performance: { ...state.performance, ...metrics }
+  })),
+  
+  reset: () => set({
+    estadisticas: null,
+    smsPendientes: 0,
+    dbStats: { memoriaUsada: 0, discoUsado: 0 },
+    apiStats: { memoriaUsada: 0, discoUsado: 0 },
+    reportesPendientes: 0,
+    loading: false,
+    error: null,
+    lastUpdate: null,
+    performance: {
+      avgResponseTime: 0,
+      activeConnections: 0,
+      requestsPerMinute: 0,
+      errorRate: 0
+    }
+  }),
 })

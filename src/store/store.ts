@@ -209,7 +209,7 @@ const setupStoreSubscriptions = () => {
   // Update alerts when precinto status changes to critical
   usePrecintosStore.subscribe((state) => state.precintosActivos,
     (precintos) => {
-      const criticosNuevos = precintos.filter(p => p.estado === 3)
+      const criticosNuevos = precintos.filter(p => p.estado === 'FMF')
       // In a real app, this would create new alerts
       console.log('Precintos críticos:', criticosNuevos.length)
     }

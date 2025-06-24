@@ -12,7 +12,7 @@ const generateMockPrecintos = (count: number) => {
   return Array.from({ length: count }, (__, i) => ({
     id: `precinto-${i}`,
     code: `PRECINTO-${String(i + 1).padStart(3, '0')}`,
-    status: ['active', 'inactive', 'transit', 'alert'][Math.floor(Math.random() * 4)] as unknown,
+    status: ['active', 'inactive', 'transit', 'alert'][Math.floor(Math.random() * 4)] as 'active' | 'inactive' | 'transit' | 'alert',
     location: ['Buenos Aires', 'Rosario', 'Córdoba', 'Mendoza'][Math.floor(Math.random() * 4)],
     temperature: 15 + Math.random() * 20,
     battery: 20 + Math.random() * 80,
@@ -26,7 +26,7 @@ const generateMockLocations = (count: number) => {
     precintoId: `PRECINTO-${String(i + 1).padStart(3, '0')}`,
     lat: -34.6037 + (Math.random() - 0.5) * 0.5,
     lng: -58.3816 + (Math.random() - 0.5) * 0.5,
-    status: ['active', 'inactive', 'alert'][Math.floor(Math.random() * 3)] as unknown,
+    status: ['active', 'inactive', 'alert'][Math.floor(Math.random() * 3)] as 'active' | 'inactive' | 'alert',
     lastUpdate: new Date(Date.now() - Math.random() * 300000),
     speed: Math.random() > 0.7 ? Math.random() * 100 : 0,
     heading: Math.random() * 360
@@ -118,7 +118,13 @@ export const ConcurrentApp: React.FC = () => {
             <ProfiledComponent id="map-view">
               <Suspense fallback={<MapSkeleton />}>
                 <div className="h-[600px]">
-                  <MapView data={locations} className="h-full" />
+                  <MapView precintos={locations.map(loc => ({
+                    id: loc.id,
+                    lat: loc.lat,
+                    lng: loc.lng,
+                    estado: loc.status,
+                    codigo: loc.precintoId
+                  }))} />
                 </div>
               </Suspense>
             </ProfiledComponent>

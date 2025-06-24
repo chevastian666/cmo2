@@ -1,6 +1,6 @@
 import type { StateCreator} from 'zustand'
 import type { TransitosStore} from '../types'
-// Transito type import removed - using TransitoPendiente from store types
+import type { Transito } from '../../features/transitos/types'
 import { transitosService} from '../../services'
 import { generateMockTransito} from '../../utils/mockData'
 import { notificationService} from '../../services/shared/notification.service'
@@ -44,26 +44,55 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
     setError(null)
     try {
 
-      const data = await transitosService.getTransitos()
-      setTransitos(data)
+      const pendientes = await transitosService.getAll()
+      // Convert TransitoPendiente to Transito for transitos array
+      const transitos: Transito[] = pendientes.map(p => ({
+        id: p.id || String(p.mov),
+        dua: p.dua,
+        precinto: '',
+        viaje: p.numeroViaje,
+        mov: p.mov,
+        estado: p.estado === 'pendiente' ? 'PENDIENTE' : 
+                p.estado === 'en_proceso' ? 'EN_TRANSITO' : 'COMPLETADO',
+        fechaSalida: new Date().toISOString(),
+        encargado: p.despachante,
+        origen: p.origen,
+        destino: p.destino,
+        empresa: p.empresa || '',
+        matricula: p.matricula,
+        chofer: p.chofer || '',
+        precintoId: '',
+        fechaInicio: new Date()
+      }))
+      setTransitos(transitos)
+      return transitos
     } catch (error) {
       // En desarrollo, usar datos mock con estados variados
-      const mockData = Array.from({ length: 20 }, (_, i) => {
-        const transito = generateMockTransito(i)
-        // Asignar diferentes estados para mejor testing
-        if (i < 8) transito.estado = 'EN_TRANSITO'
-        else if (i < 14) transito.estado = 'COMPLETADO'
-        else if (i < 18) transito.estado = 'PENDIENTE'
-        else transito.estado = 'ALERTA'
-        // Agregar progreso para tránsitos en curso
-        if (transito.estado === 'EN_TRANSITO') {
-          transito.progreso = Math.floor(Math.random() * 100)
+      // Generate mock Transito data, not TransitoPendiente
+      const mockData: Transito[] = Array.from({ length: 20 }, (_, i) => {
+        const pending = generateMockTransito(i)
+        return {
+          id: pending.id || String(i),
+          dua: pending.dua,
+          precinto: `P${i}`,
+          viaje: pending.numeroViaje,
+          mov: pending.mov,
+          estado: i < 8 ? 'EN_TRANSITO' : i < 14 ? 'COMPLETADO' : 'PENDIENTE',
+          fechaSalida: new Date().toISOString(),
+          encargado: pending.despachante,
+          origen: pending.origen,
+          destino: pending.destino,
+          empresa: pending.empresa || '',
+          matricula: pending.matricula,
+          chofer: pending.chofer || '',
+          precintoId: `P${i}`,
+          fechaInicio: new Date(),
+          progreso: i < 8 ? Math.floor(Math.random() * 100) : undefined
         }
-        
-        return transito
       })
       setTransitos(mockData)
       console.warn('Using mock data for transitos:', error)
+      return mockData
     } finally {
       setLoading(false)
     }
@@ -75,46 +104,44 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
     setError(null)
     try {
 
-      const data = await transitosService.getTransitosPendientes()
+      const data = await transitosService.getPendientes()
       setTransitosPendientes(data)
+      return []
     } catch (error) {
       // En desarrollo, usar datos mock
-      const mockData = Array.from({ length: 12 }, (_, i) => {
-        const transito = generateMockTransito(i)
-        transito.estado = 'PENDIENTE'
-        return transito
-      })
+      const mockData = Array.from({ length: 12 }, (_, i) => generateMockTransito(i))
       setTransitosPendientes(mockData)
       console.warn('Using mock data for transitos pendientes:', error)
+      return []
     } finally {
       setLoading(false)
     }
   },
   
   precintarTransito: async (transitoId, precintoId) => {
-
+    const { setError, updateTransito } = get()
     setError(null)
     try {
       await transitosService.precintar(transitoId, precintoId)
       updateTransito(transitoId, { estado: 'EN_TRANSITO' })
-      notificationService.success('Tránsito Precintado', 'El tránsito ha sido precintado exitosamente')
+      notificationService.success('Tránsito precintado exitosamente')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Error al precintar tránsito')
-      notificationService.error('Error', 'No se pudo precintar el tránsito')
+      notificationService.error('No se pudo precintar el tránsito')
       throw error
     }
   },
   
   markDesprecintado: async (transitoId) => {
-
+    const { setError, updateTransito } = get()
     setError(null)
     try {
       await transitosService.markDesprecintado(transitoId)
-      updateTransito(transitoId, { estado: 'COMPLETADO', fechaLlegada: new Date().toISOString() })
-      notificationService.success('Tránsito Completado', 'El tránsito ha sido marcado como desprecintado')
+      updateTransito(transitoId, { estado: 'COMPLETADO' })
+      notificationService.success('Tránsito Completado')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Error al marcar como desprecintado')
-      notificationService.error('Error', 'No se pudo actualizar el estado del tránsito')
+      notificationService.error('Error')
       throw error
     }
   },

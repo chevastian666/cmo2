@@ -6,7 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as d3 from 'd3'
-import { NetworkData, NetworkNode, NetworkLink, ChartConfig, DEFAULT_CHART_CONFIG} from './types'
+import type { NetworkData, NetworkNode, NetworkLink, ChartConfig } from './types'
+import { DEFAULT_CHART_CONFIG } from './types'
 import { formatters, scales, animations, tooltip} from './utils'
 // D3 Simulation types
 interface SimulationNode extends NetworkNode {

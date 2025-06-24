@@ -6,7 +6,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as d3 from 'd3'
-import { TimeSeriesData, ChartConfig, DEFAULT_CHART_CONFIG} from './types'
+import { DEFAULT_CHART_CONFIG } from './types'
+import type { TimeSeriesData, ChartConfig } from './types'
 import { formatters, scales, animations, tooltip} from './utils'
 interface InteractiveLineChartProps {
   data: TimeSeriesData[]
@@ -18,8 +19,8 @@ interface InteractiveLineChartProps {
 export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
   data, config: userConfig, onDataPointClick, onZoomChange
 }) => {
-  const svgRef = useRef<SVGSVGElement>(_null)
-  const containerRef = useRef<HTMLDivElement>(_null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
   const config = useMemo(() => ({ ...DEFAULT_CHART_CONFIG, ...userConfig }), [userConfig])
   // Handle container resize
@@ -116,14 +117,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('stop-opacity', 0)
     // Add area with animation
     const areaPath = g.append('path')
-      .datum(_data)
+      .datum(data)
       .attr('fill', 'url(#area-gradient)')
       .attr('clip-path', 'url(#clip)')
       .attr('d', area)
-    animations.fadeIn(_areaPath, config.animations.duration)
+    animations.fadeIn(areaPath as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration)
     // Add line with animation
     const linePath = g.append('path')
-      .datum(_data)
+      .datum(data)
       .attr('fill', 'none')
       .attr('stroke', config.colors[0])
       .attr('stroke-width', 2)
@@ -131,14 +132,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('d', line)
     const totalLength = (linePath.node() as SVGPathElement).getTotalLength()
     linePath
-      .attr('stroke-dasharray', `${_totalLength} ${_totalLength}`)
+      .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
       .attr('stroke-dashoffset', totalLength)
       .transition()
       .duration(config.animations.duration)
       .attr('stroke-dashoffset', 0)
     // Add data points
     const dots = g.selectAll('.dot')
-      .data(_data)
+      .data(data)
       .enter().append('circle')
       .attr('class', 'dot')
       .attr('clip-path', 'url(#clip)')
@@ -150,11 +151,11 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
       .attr('stroke-width', 2)
     // Animate dots appearance
     dots.transition()
-      .delay((_d, i) => i * 50)
+      .delay((_, i) => i * 50)
       .duration(300)
       .attr('r', 4)
     // Create tooltip
-    const _tooltipDiv = tooltip.create(containerRef.current!)
+    const tooltipDiv = tooltip.create(containerRef.current!)
     // Add hover interactions
     dots
       .on('mouseenter', function(event, d) {
@@ -171,7 +172,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
             `<div class="text-xs text-gray-400">${key}: ${value}</div>`
           ).join('') : ''}
         `
-        tooltip.show(_tooltipDiv, content, event.pageX, event.pageY)
+        tooltip.show(tooltipDiv, content, event.pageX, event.pageY)
       })
       .on('mouseleave', function() {
         d3.select(this)
@@ -179,7 +180,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
           .duration(200)
           .attr('r', 4)
           .attr('stroke-width', 2)
-        tooltip.hide(_tooltipDiv)
+        tooltip.hide(tooltipDiv)
       })
       .on('click', (_, d) => {
         onDataPointClick?.(d)
@@ -188,7 +189,7 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     const xAxis = g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale)
-        .tickFormat(formatters.shortDate)
+        .tickFormat((d) => formatters.shortDate(d as Date))
       )
     const yAxis = g.append('g')
       .call(d3.axisLeft(yScale)
@@ -222,8 +223,8 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     function handleZoom(event: d3.D3ZoomEvent<SVGSVGElement, unknown>) {
       const { transform } = event
       // Update scales
-      const newXScale = transform.rescaleX(_xScale)
-      const newYScale = transform.rescaleY(_yScale)
+      const newXScale = transform.rescaleX(xScale)
+      const newYScale = transform.rescaleY(yScale)
       // Update line and area
       const newLine = line.x(d => newXScale(d.date)).y(d => newYScale(d.value))
       const newArea = area.x(d => newXScale(d.date)).y1(d => newYScale(d.value))
@@ -234,14 +235,14 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         .attr('cx', d => newXScale(d.date))
         .attr('cy', d => newYScale(d.value))
       // Update axes
-      xAxis.call(d3.axisBottom(_newXScale).tickFormat(formatters.shortDate))
-      yAxis.call(d3.axisLeft(_newYScale).tickFormat(formatters.number))
+      xAxis.call(d3.axisBottom(newXScale).tickFormat((d) => formatters.shortDate(d as Date)))
+      yAxis.call(d3.axisLeft(newYScale).tickFormat((d) => formatters.number(d as number)))
       // Update grid
-      xGrid.call(d3.axisBottom(_newXScale)
+      xGrid.call(d3.axisBottom(newXScale)
         .tickSize(-innerHeight)
         .tickFormat(() => '')
       )
-      yGrid.call(d3.axisLeft(_newYScale)
+      yGrid.call(d3.axisLeft(newYScale)
         .tickSize(-innerWidth)
         .tickFormat(() => '')
       )

@@ -4,7 +4,7 @@
  * By Cheva
  */
 
-import type { Precinto, Alerta, EstadisticasMonitoreo } from '../../types/monitoring'
+import type { Precinto, Alerta, EstadisticasMonitoreo, TransitoPendiente } from '../../types/monitoring'
 import type { AlertaExtendida } from '../../types/alerts'
 import type { Transito} from '../../features/transitos/types'
 // Filters for stores
@@ -63,7 +63,7 @@ export type PrecintosStore = PrecintosState & PrecintosComputedProperties & Prec
 // Transitos Store
 export interface TransitosState {
   transitos: Transito[]
-  transitosPendientes: Transito[]
+  transitosPendientes: TransitoPendiente[]
   loading: boolean
   error: string | null
   lastUpdate: number | null
@@ -93,7 +93,7 @@ export interface TransitosComputedProperties {
 
 export interface TransitosActions {
   setTransitos: (transitos: Transito[]) => void
-  setTransitosPendientes: (transitos: Transito[]) => void
+  setTransitosPendientes: (transitos: TransitoPendiente[]) => void
   updateTransito: (id: string, data: Partial<Transito>) => void
   removeTransito: (id: string) => void
   setLoading: (loading: boolean) => void

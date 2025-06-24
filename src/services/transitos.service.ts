@@ -158,4 +158,18 @@ export const transitosService = {
       }
     }
   },
+
+  markDesprecintado: async (_transitoId: string): Promise<void> => {
+    try {
+      if (import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_API) {
+        // Mock: Marking transito as desprecintado
+        return
+      }
+      
+      // TODO: Implement real API call
+      throw new Error('Not implemented')
+    } catch {
+      // Error marking desprecintado
+    }
+  }
 }
