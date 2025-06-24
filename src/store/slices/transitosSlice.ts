@@ -6,7 +6,47 @@ import { generateMockTransito} from '../../utils/mockData'
 import { notificationService} from '../../services/shared/notification.service'
 export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => ({
   // State
-  transitos: [], transitosPendientes: [], loading: false, error: null, lastUpdate: null, // Computed getters
+  transitos: [],
+  transitosPendientes: [],
+  loading: false,
+  error: null,
+  lastUpdate: null,
+  filters: {
+    search: '',
+    estado: '',
+    tipo: '',
+    origen: undefined,
+    destino: undefined,
+    fechaDesde: undefined,
+    fechaHasta: undefined
+  },
+  
+  // Computed getters
+  get filteredTransitos() {
+    const { transitos, filters } = get()
+    return transitos.filter(transito => {
+      const matchesSearch = !filters.search || 
+        transito.dua.toLowerCase().includes(filters.search.toLowerCase()) ||
+        transito.empresa?.toLowerCase().includes(filters.search.toLowerCase())
+      const matchesEstado = !filters.estado || transito.estado === filters.estado
+      const matchesOrigen = !filters.origen || transito.origen === filters.origen
+      const matchesDestino = !filters.destino || transito.destino === filters.destino
+      return matchesSearch && matchesEstado && matchesOrigen && matchesDestino
+    })
+  },
+  
+  get transitosStats() {
+    const { transitos } = get()
+    return {
+      total: transitos.length,
+      enCurso: transitos.filter(t => t.estado === 'EN_TRANSITO').length,
+      completados: transitos.filter(t => t.estado === 'COMPLETADO').length,
+      conAlertas: transitos.filter(t => t.estado === 'ALERTA').length,
+      demorados: transitos.filter(t => t.estado === 'EN_TRANSITO' && t.tiempoRestante && t.tiempoRestante < 0).length
+    }
+  },
+  
+  // Legacy computed getters
   get transitosEnCurso() {
     return get().transitos.filter(t => t.estado === 'EN_TRANSITO')
   },
@@ -37,6 +77,22 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   setLoading: (loading) => set({ loading }),
   
   setError: (error) => set({ error }),
+  
+  setFilters: (filters) => set((state) => ({
+    filters: { ...state.filters, ...filters }
+  })),
+  
+  clearFilters: () => set({
+    filters: {
+      search: '',
+      estado: '',
+      tipo: '',
+      origen: undefined,
+      destino: undefined,
+      fechaDesde: undefined,
+      fechaHasta: undefined
+    }
+  }),
   
   fetchTransitos: async () => {
     const { setLoading, setError, setTransitos } = get()
@@ -145,4 +201,40 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
       throw error
     }
   },
+  
+  batchUpdateTransitos: (updates) => set((state) => {
+    const transitos = [...state.transitos]
+    const transitosPendientes = [...state.transitosPendientes]
+    
+    updates.forEach(({ id, data }) => {
+      const index = transitos.findIndex(t => t.id === id)
+      if (index !== -1) {
+        transitos[index] = { ...transitos[index], ...data }
+      }
+      
+      const pendingIndex = transitosPendientes.findIndex(t => t.id === id)
+      if (pendingIndex !== -1) {
+        transitosPendientes[pendingIndex] = { ...transitosPendientes[pendingIndex], ...data }
+      }
+    })
+    
+    return { transitos, transitosPendientes, lastUpdate: Date.now() }
+  }),
+  
+  reset: () => set({
+    transitos: [],
+    transitosPendientes: [],
+    loading: false,
+    error: null,
+    lastUpdate: null,
+    filters: {
+      search: '',
+      estado: '',
+      tipo: '',
+      origen: undefined,
+      destino: undefined,
+      fechaDesde: undefined,
+      fechaHasta: undefined
+    }
+  }),
 })

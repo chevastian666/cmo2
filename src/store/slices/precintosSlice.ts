@@ -27,8 +27,7 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
     const { precintos, filters } = get()
     return precintos.filter(precinto => {
       const matchesSearch = !filters.search || 
-        precinto.codigo.toLowerCase().includes(filters.search.toLowerCase()) ||
-        precinto.matricula?.toLowerCase().includes(filters.search.toLowerCase())
+        precinto.codigo.toLowerCase().includes(filters.search.toLowerCase())
       const matchesEstado = !filters.estado || precinto.estado === filters.estado
       const matchesTipo = !filters.tipo || precinto.tipo === filters.tipo
       return matchesSearch && matchesEstado && matchesTipo
@@ -39,10 +38,10 @@ export const createPrecintosSlice: StateCreator<PrecintosStore> = (set, get) => 
     const { precintosActivos } = get()
     return {
       total: precintosActivos.length,
-      enTransito: precintosActivos.filter(p => p.estado === 1).length,
-      conNovedad: precintosActivos.filter(p => p.estado === 2).length,
-      conAlerta: precintosActivos.filter(p => p.estado === 3).length,
-      finalizados: precintosActivos.filter(p => p.estado === 4).length
+      enTransito: precintosActivos.filter(p => p.estado === 'SAL').length,
+      conNovedad: precintosActivos.filter(p => p.estado === 'LLE').length,
+      conAlerta: precintosActivos.filter(p => p.estado === 'FMF').length,
+      finalizados: precintosActivos.filter(p => p.estado === 'CFM' || p.estado === 'CNP').length
     }
   },
 

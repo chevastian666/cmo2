@@ -170,7 +170,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     animations.fadeIn(percentageLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 600)
     // Add interactions
     cell
-      .on('mouseenter', function(_event, d) {
+      .on('mouseenter', function(event, d) {
         d3.select(this).select('rect')
           .transition()
           .duration(200)

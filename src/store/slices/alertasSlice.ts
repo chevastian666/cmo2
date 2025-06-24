@@ -381,7 +381,7 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
         resueltoPorId: currentUser.id,
         resueltoPor: currentUser,
         timestamp: Math.floor(Date.now() / 1000),
-        tipoResolucion: tipo as unknown,
+        tipoResolucion: tipo as "resuelta" | "falsa_alarma" | "duplicada" | "sin_accion",
         descripcion,
         accionesTomadas: acciones
       }
