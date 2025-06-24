@@ -2,18 +2,17 @@
 import React from 'react'
 import { cn} from '../../utils/utils'
 export type CardVariant = 'default' | 'elevated' | 'bordered' | 'ghost'
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
   variant?: CardVariant
   noPadding?: boolean
-  onClick?: () => void
   header?: React.ReactNode
   footer?: React.ReactNode
 }
 
 export const Card: React.FC<CardProps> = ({
-  children, className, variant = 'default', noPadding = false, onClick, header, footer
+  children, className, variant = 'default', noPadding = false, onClick, header, footer, ...props
 }) => {
   const variantStyles = {
     default: 'bg-gray-800 border-gray-700',
@@ -30,6 +29,7 @@ export const Card: React.FC<CardProps> = ({
         className
       )}
       onClick={onClick}
+      {...props}
     >
       {header && (
         <div className={cn(
@@ -55,80 +55,84 @@ export const Card: React.FC<CardProps> = ({
     </div>
   )
 }
-interface CardHeaderProps {
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
   actions?: React.ReactNode
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({
-  children, className, actions
+  children, className, actions, ...props
 }) => {
   return (
-    <div className={cn('flex items-center justify-between', className)}>
-      <div className="flex-1">
-        {children}
-      </div>
-      {actions && (
-        <div className="flex items-center gap-2 ml-4">
-          {actions}
-        </div>
+    <div className={cn('flex items-center justify-between', className)} {...props}>
+      {actions ? (
+        <>
+          <div className="flex-1">
+            {children}
+          </div>
+          <div className="flex items-center gap-2 ml-4">
+            {actions}
+          </div>
+        </>
+      ) : (
+        children
       )}
     </div>
   )
 }
-interface CardTitleProps {
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode
   className?: string
 }
 
 export const CardTitle: React.FC<CardTitleProps> = ({
-  children, className
+  children, className, ...props
 }) => {
   return (
-    <h3 className={cn('text-lg font-semibold text-gray-100', className)}>
+    <h3 className={cn('text-lg font-semibold text-gray-100', className)} {...props}>
       {children}
     </h3>
   )
 }
-interface CardDescriptionProps {
+interface CardDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
 }
 
 export const CardDescription: React.FC<CardDescriptionProps> = ({
-  children, className
+  children, className, ...props
 }) => {
   return (
-    <p className={cn('text-sm text-gray-400 mt-1', className)}>
+    <div className={cn('text-sm text-gray-400 mt-1', className)} {...props}>
       {children}
-    </p>
+    </div>
   )
 }
-interface CardContentProps {
+interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
 }
 
 export const CardContent: React.FC<CardContentProps> = ({
-  children, className
+  children, className, ...props
 }) => {
   return (
-    <div className={cn('text-gray-300', className)}>
+    <div className={cn('text-gray-300', className)} {...props}>
       {children}
     </div>
   )
 }
-interface CardFooterProps {
+interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
 }
 
 export const CardFooter: React.FC<CardFooterProps> = ({
-  children, className
+  children, className, ...props
 }) => {
   return (
-    <div className={cn('flex items-center justify-end gap-2', className)}>
+    <div className={cn('flex items-center justify-end gap-2', className)} {...props}>
       {children}
     </div>
   )

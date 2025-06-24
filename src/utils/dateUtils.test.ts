@@ -18,7 +18,7 @@ describe('DateUtils', () => {
   })
   describe('formatDate', () => {
     it('formats date correctly', () => {
-      const date = new Date(Date.UTC(2024, 0, 15, 0, 0, 0))
+      const date = new Date(2024, 0, 15, 12, 0, 0)
       expect(formatDate(date)).toBe('15/01/2024')
     })
     it('formats date string correctly', () => {
@@ -29,7 +29,7 @@ describe('DateUtils', () => {
       expect(formatDate(undefined)).toBe('-')
     })
     it('formats with custom format', () => {
-      const date = new Date(Date.UTC(2024, 0, 15, 0, 0, 0))
+      const date = new Date(2024, 0, 15, 12, 0, 0)
       expect(formatDate(date, 'dd MMM yyyy')).toBe('15 ene 2024')
     })
   })
