@@ -32,17 +32,24 @@ jobs:
     - name: Run unit tests
       run: |
         echo "Running unit tests..."
-        npm run test:unit || (echo "Unit tests failed" && exit 1)
+        echo "Current directory: $(pwd)"
+        echo "Test files found:"
+        find src -name "*.test.*" -o -name "*.spec.*" | head -20
+        npm run test:unit || (echo "Unit tests failed with exit code $?" && exit 1)
     
     - name: Run integration tests
       run: |
         echo "Running integration tests..."
         npm run test:integration || echo "No integration tests found or some failed"
+      continue-on-error: true
     
     - name: Generate coverage report
       run: |
         echo "Generating coverage report..."
         npm run test:coverage || echo "Coverage generation failed"
+        echo "Coverage files:"
+        find . -name "coverage-final.json" -o -name "coverage" -type d | head -10
+      continue-on-error: true
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

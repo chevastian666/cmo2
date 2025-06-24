@@ -9,8 +9,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    pool: 'forks',
+    pool: process.env.CI ? 'forks' : 'threads',
     passWithNoTests: false,
+    reporters: process.env.CI ? ['verbose', 'json'] : ['verbose'],
+    outputFile: process.env.CI ? './test-results.json' : undefined,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

@@ -87,14 +87,14 @@ class CacheService {
         return pending.promise as Promise<T>
       }
       // Otherwise, remove stale pending request
-      this.pendingRequests.delete(_key)
+      this.pendingRequests.delete(key)
     }
 
     // Create new request promise
     const promise = fetcher().finally(() => {
-      this.pendingRequests.delete(_key)
+      this.pendingRequests.delete(key)
     })
-    this.pendingRequests.set(_key, {
+    this.pendingRequests.set(key, {
       promise,
       timestamp: Date.now()
     })
@@ -116,7 +116,7 @@ class CacheService {
         expiredEntries++
       }
       // Rough size estimation
-      totalSize += JSON.stringify(entry._data).length
+      totalSize += JSON.stringify(entry.data).length
     }
 
     return {
