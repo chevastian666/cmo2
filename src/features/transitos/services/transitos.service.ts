@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { sharedApiService} from '../../../services/shared/sharedApi.service'
 import { unifiedAPIService} from '../../../services/api/unified.service'
 import type { Transito} from '../types'

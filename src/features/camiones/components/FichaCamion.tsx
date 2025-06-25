@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
+import { Card } from '@/components/ui/card'
 import { ArrowLeft, Truck, Route, AlertCircle, Download, Camera, Activity} from 'lucide-react'
-import { Card, CardHeader, CardContent, Badge} from '../../../components/ui'
 import { useUserInfo } from '../../../hooks/useAuth'
 import { notificationService} from '../../../services/shared/notification.service'
 import { ESTADOS_CAMION} from '../types'

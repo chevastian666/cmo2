@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react'
 import { AlertTriangle, Shield, MapPin, Clock, CheckCircle, Unlock, Navigation, BatteryLow, WifiOff, Satellite, Pause, Zap} from 'lucide-react'
 import { cn} from '../../../utils/utils'

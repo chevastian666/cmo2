@@ -81,3 +81,4 @@ export const FILTROS_CAMION_DEFAULT: FiltrosCamion = {
   estado: '',
   conTransitosRecientes: false
 }
+

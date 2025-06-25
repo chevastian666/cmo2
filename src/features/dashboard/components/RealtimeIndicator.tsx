@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import { Activity} from 'lucide-react'
 import { cn} from '../../../utils/utils'

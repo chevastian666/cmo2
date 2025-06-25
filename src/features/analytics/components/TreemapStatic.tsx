@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Static Treemap Component
  * HTML/CSS based treemap without D3

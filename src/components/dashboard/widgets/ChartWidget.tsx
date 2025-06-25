@@ -7,10 +7,20 @@ import React from 'react'
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts'
 import { useDashboardStore} from '../../../store/dashboardStore'
 import { D3VisualizationWidget} from '../../charts/d3/D3VisualizationWidget'
+
+interface TimeSeriesData {
+  date: Date;
+  value: number;
+}interface ChartData {
+  name: string
+  value: number
+  value2?: number
+}
+
 interface ChartWidgetProps {
   widgetId: string
   type?: 'line' | 'bar' | 'area' | 'pie' | 'd3-line' | 'd3-heatmap' | 'd3-network' | 'd3-treemap'
-  data?: unknown[]
+  data?: ChartData[]
   dataKey?: string
   xAxisKey?: string
   colors?: string[]
@@ -21,7 +31,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
 }) => {
   const widgetSettings = useDashboardStore(state => state.widgetSettings[widgetId])
   // Datos de ejemplo si no se proporcionan
-  const chartData = defaultData || [
+  const chartData: ChartData[] = defaultData || [
     { name: 'Lun', value: 400, value2: 240 },
     { name: 'Mar', value: 300, value2: 139 },
     { name: 'Mie', value: 200, value2: 380 },
@@ -30,7 +40,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
     { name: 'Sab', value: 239, value2: 380 },
     { name: 'Dom', value: 349, value2: 430 }
   ]
-  const pieData = [
+  const pieData: ChartData[] = [
     { name: 'Activos', value: 400 },
     { name: 'En Tránsito', value: 300 },
     { name: 'Completados', value: 300 },
@@ -44,7 +54,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       return (
         <D3VisualizationWidget
           type={d3Type}
-          data={chartData} // Use generated data
+          data={chartData as unknown as TimeSeriesData[]} // Type assertion for D3 compatibility
           config={{ colors }}
           title={`D3.js ${d3Type.charAt(0).toUpperCase() + d3Type.slice(1)} Chart`}
         />

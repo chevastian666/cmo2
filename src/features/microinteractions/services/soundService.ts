@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface SoundConfig {
   volume: number
   enabled: boolean

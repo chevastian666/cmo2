@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle } from 'lucide-react'

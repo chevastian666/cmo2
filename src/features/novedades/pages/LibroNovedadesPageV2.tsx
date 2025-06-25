@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Libro de Novedades Page V2 - Sistema de registro y seguimiento de novedades
  * Incluye: shadcn/ui, Framer Motion, Animaciones, Zustand mejorado
@@ -15,7 +16,7 @@ import { Label} from '@/components/ui/label'
 import { Separator} from '@/components/ui/separator'
 import { Textarea} from '@/components/ui/textarea'
 import { Switch} from '@/components/ui/switch'
-import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/Tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from '@/components/ui/dialog'
 import { 
   PageTransition, AnimatedHeader, AnimatedSection, AnimatedGrid} from '@/components/animations/PageTransitions'

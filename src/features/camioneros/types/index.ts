@@ -56,25 +56,19 @@ export interface EstadisticasCamionero {
 }
 
 // Nacionalidades disponibles
-export const NACIONALIDADES: Record<Nacionalidad, string> = {
-  'Uruguay': '🇺🇾 Uruguay',
-  'Argentina': '🇦🇷 Argentina',
-  'Brasil': '🇧🇷 Brasil',
-  'Paraguay': '🇵🇾 Paraguay',
-  'Chile': '🇨🇱 Chile',
-  'Bolivia': '🇧🇴 Bolivia',
-  'Otro': '🌍 Otro'
-}
-// Tipos de documento
-export const _TIPOS_DOCUMENTO = {
-  'CI': 'Cédula de Identidad',
-  'Pasaporte': 'Pasaporte',
-  'Otro': 'Otro documento'
-} as const
-// Filtros para búsqueda
+export const NACIONALIDADES = [
+  'Uruguay', 'Argentina', 'Brasil', 'Paraguay', 'Chile', 'Bolivia', 'Otro'
+]
+
+export const TIPOS_DOCUMENTO = [
+  { value: 'CI', label: 'Cédula de Identidad' },
+  { value: 'Pasaporte', label: 'Pasaporte' },
+  { value: 'DNI', label: 'DNI' }
+]
+
 export interface FiltrosCamionero {
-  busqueda: string; // Por nombre, apellido o documento
-  nacionalidad: Nacionalidad | ''
+  busqueda: string
+  nacionalidad: string
   conTransitosRecientes: boolean
 }
 
@@ -83,3 +77,4 @@ export const FILTROS_CAMIONERO_DEFAULT: FiltrosCamionero = {
   nacionalidad: '',
   conTransitosRecientes: false
 }
+

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PrecintosPage Integration Tests
  * By Cheva

@@ -154,8 +154,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 size="sm"
                 variant="secondary"
                 onClick={handleZoomIn}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <ZoomIn className="h-4 w-4" />
               </AnimatedButton>
@@ -163,8 +163,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 size="sm"
                 variant="secondary"
                 onClick={handleZoomOut}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <ZoomOut className="h-4 w-4" />
               </AnimatedButton>
@@ -172,8 +172,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 size="sm"
                 variant="secondary"
                 onClick={handleCenter}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <Navigation2 className="h-4 w-4" />
               </AnimatedButton>
@@ -181,8 +181,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 size="sm"
                 variant="secondary"
                 onClick={toggleFullscreen}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <Maximize2 className="h-4 w-4" />
               </AnimatedButton>
@@ -336,8 +336,6 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                   {/* Selected Marker Details */}
                   {selectedMarker && (
                     <AnimatedDiv
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
                       className="p-4 bg-gray-800 rounded-lg"
                     >
                       <h4 className="font-medium text-white mb-2">{selectedMarker.title}</h4>

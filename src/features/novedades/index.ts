@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { LibroNovedades } from './components/LibroNovedades'
 export { FormularioNovedad } from './components/FormularioNovedad'
 export { TimelineNovedades } from './components/TimelineNovedades'

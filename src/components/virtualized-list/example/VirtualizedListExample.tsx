@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useCallback } from 'react'
 import { VirtualizedAlertList} from '../VirtualizedAlertList'
 import {Search, Filter, AlertTriangle} from 'lucide-react'

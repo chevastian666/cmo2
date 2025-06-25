@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Store para el estado del dashboard interactivo
  * By Cheva

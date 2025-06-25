@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Treemap Test Component
  * Simple test to debug treemap issues

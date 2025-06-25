@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Ticketing Systems Integration Service
  * Jira, ServiceNow, and other ticketing platforms

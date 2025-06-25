@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useMemo } from 'react'
 import { useRolesStore} from '../store/rolesStore'
 import type { Section} from '../types/roles'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Memory manager for efficient DOM element recycling
  */

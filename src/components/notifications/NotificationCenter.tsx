@@ -8,6 +8,8 @@ import { NotificationGroupItem } from './NotificationGroupItem';
 import { QuickActions } from './QuickActions';
 import type { NotificationFilter } from '@/types/notifications';
 
+
+
 interface NotificationCenterProps {
   className?: string;
 }
@@ -29,11 +31,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
     getGroupedNotifications
   } = useNotificationStore();
   
-  const groups = groupByType ? getGroupedNotifications() : [];
-
   const filteredNotifications = groupByType 
     ? getGroupedNotifications()
-    : getNotificationsByFilter(filter);
+    : getNotificationsByFilter({ type: filter.types?.[0], read: filter.unreadOnly ? false : undefined });
 
   // Auto-close after marking all as read
   useEffect(() => {
@@ -134,36 +134,54 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                   <div className="p-4 space-y-4">
                     {groupByType ? (
                       // Grouped view
-                      groups.map(group => (
-                        <NotificationGroupItem
-                          key={group.id}
-                          group={group}
-                          selectedNotifications={new Set()}
-                          onSelect={() => {}}
-                          onAction={(id, action) => {
-                            if (action === 'acknowledge') acknowledgeNotification(id)
-                            else if (action === 'snooze') snoozeNotification(id, 30)
-                            else if (action === 'dismiss') dismissNotification(id)
-                            else if (action === 'read') markAsRead(id)
-                          }}
-                        />
-                      ))
+                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((group: any) => {
+                        const groupData: any = {
+                          ...group,
+                          id: group.id || group.type,
+                          label: group.label || group.type,
+                          priority: group.priority || 'normal',
+                          latestTimestamp: group.latestTimestamp || new Date(),
+                          collapsed: group.collapsed || false
+                        }
+                        return (
+                          <NotificationGroupItem
+                            key={groupData.id}
+                            group={groupData}
+                            selectedNotifications={new Set()}
+                            onSelect={() => {}}
+                            onAction={(id, action) => {
+                              if (action === 'acknowledge') acknowledgeNotification(id)
+                              else if (action === 'snooze') snoozeNotification(id, 30)
+                              else if (action === 'dismiss') dismissNotification(id)
+                              else if (action === 'read') markAsRead(id)
+                            }}
+                          />
+                        )
+                      })
                     ) : (
                       // Individual view
-                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map(notification => (
-                        <NotificationItem
-                          key={notification.id}
-                          notification={notification}
-                          isSelected={false}
-                          onSelect={() => {}}
-                          onAction={(action) => {
-                            if (action === 'acknowledge') acknowledgeNotification(notification.id)
-                            else if (action === 'snooze') snoozeNotification(notification.id, 30)
-                            else if (action === 'dismiss') dismissNotification(notification.id)
-                            else if (action === 'read') markAsRead(notification.id)
-                          }}
-                        />
-                      ))
+                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((notification: any) => {
+                        const notificationData: any = {
+                          ...notification,
+                          priority: notification.priority || 'normal',
+                          status: notification.status || 'unread',
+                          metadata: notification.metadata || {}
+                        }
+                        return (
+                          <NotificationItem
+                            key={notification.id}
+                            notification={notificationData}
+                            isSelected={false}
+                            onSelect={() => {}}
+                            onAction={(action) => {
+                              if (action === 'acknowledge') acknowledgeNotification(notification.id)
+                              else if (action === 'snooze') snoozeNotification(notification.id, 30)
+                              else if (action === 'dismiss') dismissNotification(notification.id)
+                              else if (action === 'read') markAsRead(notification.id)
+                            }}
+                          />
+                        )
+                      })
                     )}
                   </div>
                 )}

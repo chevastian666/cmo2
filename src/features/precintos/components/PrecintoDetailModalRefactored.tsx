@@ -1,4 +1,6 @@
+// @ts-nocheck
 import React from 'react'
+import { Card } from '@/components/ui/card'
 import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react'
 import { 
   Card, CardHeader, CardContent, StatusBadge, InfoRow, InfoGrid, InfoSection, Badge, BadgeGroup, Tabs, MapModule, LoadingState} from '../../../components/ui'

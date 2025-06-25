@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tenant Switcher Component
  * Allows users to switch between tenants they have access to

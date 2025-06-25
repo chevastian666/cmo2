@@ -103,7 +103,7 @@ export const PrecintoSearch: React.FC<PrecintoSearchProps> = ({
               setNqr('')
               inputRef.current?.focus()
             }}
-            disabled={_loading}
+            disabled={loading}
             className={cn(
               "px-4 py-3 rounded-lg font-medium transition-colors",
               "bg-gray-700 text-gray-300 hover:bg-gray-600",

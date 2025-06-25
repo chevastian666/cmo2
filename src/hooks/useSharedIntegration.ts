@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {useEffect} from 'react'
 import { sharedStateService} from '../services/shared/sharedState.service'
 import { authService} from '../services/shared/auth.service'

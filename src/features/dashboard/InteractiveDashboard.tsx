@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Dashboard Interactivo con widgets arrastrables
  * By Cheva

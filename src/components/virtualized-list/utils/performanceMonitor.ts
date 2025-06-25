@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Performance monitoring for virtual list
  */

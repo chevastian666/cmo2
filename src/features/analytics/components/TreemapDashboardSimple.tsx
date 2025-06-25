@@ -6,7 +6,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs'
 import { TreemapChart} from '@/components/charts/treemap/TreemapChart'
 import { Package, Truck, AlertTriangle } from 'lucide-react'
 

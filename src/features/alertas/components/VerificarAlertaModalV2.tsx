@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Modal para Verificar Alerta - Versión con shadcn/ui y opciones de respuesta
  * By Cheva

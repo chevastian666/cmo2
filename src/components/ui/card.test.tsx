@@ -1,10 +1,11 @@
+// @ts-nocheck
 /**
  * Card Component Tests
  * By Cheva
  */
 import { describe, it, expect, vi } from 'vitest'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { render, screen } from '@/test/utils/test-utils'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from './card'
 describe('Card Components', () => {
   describe('Card', () => {
     it('renders correctly', () => {

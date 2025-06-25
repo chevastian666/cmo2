@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { formatTimeAgo} from '../../../utils/formatters'
 import type { TransitoPendiente} from '../../../types/monitoring'

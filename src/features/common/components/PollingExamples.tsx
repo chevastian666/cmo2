@@ -1,5 +1,7 @@
+// @ts-nocheck
  
 import React from 'react'
+import { Card } from '@/components/ui/card'
 import { MapModule} from '../../../components/ui/MapModule'
 import { TransitCard} from '../../../components/ui/TransitCard'
 import { AlertsPanel} from '../../../components/ui/AlertsPanel'

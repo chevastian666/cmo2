@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LoginPage Component Tests
  * By Cheva

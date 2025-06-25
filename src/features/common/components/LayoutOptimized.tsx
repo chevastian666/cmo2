@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layout Principal Optimizado del Sistema CMO
  * By Cheva

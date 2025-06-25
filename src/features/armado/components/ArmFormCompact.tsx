@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
 import { Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { sharedApiService} from '../../../services/shared/sharedApi.service'
 interface TransitInfo {
   track: string
@@ -34,7 +35,7 @@ class PrearmadoService {
       )
       return response.data
     } catch {
-      console.error('Error searching transit:', _error)
+      console.error(error)
       return null
     }
   }

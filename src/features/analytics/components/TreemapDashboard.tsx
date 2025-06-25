@@ -7,7 +7,7 @@
 import React, { useState } from 'react'
 import { motion} from 'framer-motion'
 import { Info, Download, Maximize2, Grid3X3, Package, Truck, AlertTriangle, Building} from 'lucide-react'
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs'
 import { Button} from '@/components/ui/button'
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'

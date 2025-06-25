@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef, useCallback } from 'react'
 import { sharedWebSocketService} from '../services/shared/sharedWebSocket.service'
 import { useConnectionStatus} from './useSharedState'

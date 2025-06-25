@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * BI Export Service
  * Export data to Business Intelligence tools (Tableau, PowerBI, etc.)

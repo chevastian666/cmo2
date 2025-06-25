@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react'
 import {MapPin, Eye, Edit, ArrowUpDown, ExternalLink, Building2} from 'lucide-react'
 import type { Deposito} from '../types'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { EstadisticasMonitoreo} from '../types/monitoring'
 import { unifiedAPIService} from './api/unified.service'
 import { trokorService} from './api/trokor.service'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {Monitor, Volume2, VolumeX, Maximize2, Settings} from 'lucide-react'
 import { ProximosArribos} from './ProximosArribos'

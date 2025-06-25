@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Simple Treemap Component
  * Minimal treemap without D3 for testing

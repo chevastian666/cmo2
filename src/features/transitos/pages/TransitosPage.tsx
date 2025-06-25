@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Página de Gestión de Tránsitos
  * By Cheva

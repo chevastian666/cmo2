@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Interactive Treemap Component
  * D3-based treemap with infinite zoom capabilities

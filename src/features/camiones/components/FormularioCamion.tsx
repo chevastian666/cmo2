@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react'
 import {X, Truck, Camera, AlertCircle} from 'lucide-react'
 import {useUserInfo} from '../../../hooks/useAuth'

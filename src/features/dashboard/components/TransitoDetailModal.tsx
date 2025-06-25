@@ -1,7 +1,7 @@
  
 import React, { useEffect, useRef, useState } from 'react'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { X, User, MapPin, Clock, Package, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Link2} from 'lucide-react'
-import { Card, CardHeader, CardContent} from '../../../components/ui'
 import { cn} from '../../../utils/utils'
 export interface TransitoDashboard {
   id: string
@@ -577,7 +577,7 @@ export const TransitoDetailModal: React.FC<TransitoDetailModalProps> = ({
                 src={transito.fotoPrecintado} 
                 alt="Precinto colocado - Vista completa"
                 className="max-w-full max-h-[90vh] object-contain rounded-lg"
-                onClick={(_e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
               />
               <button
                 onClick={() => setShowFullImage(false)}

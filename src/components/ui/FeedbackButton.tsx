@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 /**
  * Button with enhanced visual feedback

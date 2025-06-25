@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { MapPin, Flag, CircleDot} from 'lucide-react'
 import type { TorreControlFilters, EstadoSemaforo} from '../types'

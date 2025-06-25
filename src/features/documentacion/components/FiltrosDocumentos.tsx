@@ -41,7 +41,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         <input
           type="text"
           value={filtros.busqueda}
-          onChange={(_e) => handleChange('busqueda', e.target.value)}
+          onChange={(e) => handleChange('busqueda', e.target.value)}
           placeholder="Buscar por descripción, palabras clave, DUA..."
           className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
@@ -52,7 +52,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         {/* Tipo de documento */}
         <select
           value={filtros.tipo}
-          onChange={(_e) => handleChange('tipo', e.target.value)}
+          onChange={(e) => handleChange('tipo', e.target.value)}
           className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Todos los tipos</option>
@@ -65,7 +65,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         <input
           type="text"
           value={filtros.numeroDUA}
-          onChange={(_e) => handleChange('numeroDUA', e.target.value)}
+          onChange={(e) => handleChange('numeroDUA', e.target.value)}
           placeholder="Número DUA"
           className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -73,7 +73,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         {/* Empresa */}
         <select
           value={filtros.empresa}
-          onChange={(_e) => handleChange('empresa', e.target.value)}
+          onChange={(e) => handleChange('empresa', e.target.value)}
           className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Todas las empresas</option>
@@ -88,7 +88,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
           <input
             type="date"
             value={filtros.fechaDesde ? filtros.fechaDesde.toISOString().split('T')[0] : ''}
-            onChange={(_e) => handleChange('fechaDesde', e.target.value ? new Date(e.target.value) : null)}
+            onChange={(e) => handleChange('fechaDesde', e.target.value ? new Date(e.target.value) : null)}
             className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Desde"
           />
@@ -100,7 +100,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
           <input
             type="date"
             value={filtros.fechaHasta ? filtros.fechaHasta.toISOString().split('T')[0] : ''}
-            onChange={(_e) => handleChange('fechaHasta', e.target.value ? new Date(e.target.value) : null)}
+            onChange={(e) => handleChange('fechaHasta', e.target.value ? new Date(e.target.value) : null)}
             className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Hasta"
           />
@@ -109,7 +109,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
         {/* Estado */}
         <select
           value={filtros.estado}
-          onChange={(_e) => handleChange('estado', e.target.value)}
+          onChange={(e) => handleChange('estado', e.target.value)}
           className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="activo">Activos</option>
@@ -124,7 +124,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
           <input
             type="checkbox"
             checked={filtros.soloDestacados}
-            onChange={(_e) => handleChange('soloDestacados', e.target.checked)}
+            onChange={(e) => handleChange('soloDestacados', e.target.checked)}
             className="w-4 h-4 text-yellow-600 bg-gray-800 border-gray-700 rounded focus:ring-yellow-500"
           />
           <Star className={cn(
@@ -143,7 +143,7 @@ export const FiltrosDocumentosComponent: React.FC<FiltrosDocumentosProps> = ({
           <input
             type="checkbox"
             checked={filtros.incluirConfidenciales}
-            onChange={(_e) => handleChange('incluirConfidenciales', e.target.checked)}
+            onChange={(e) => handleChange('incluirConfidenciales', e.target.checked)}
             className="w-4 h-4 text-red-600 bg-gray-800 border-gray-700 rounded focus:ring-red-500"
           />
           <Lock className={cn(

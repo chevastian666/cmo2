@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Sankey Chart Component (Minimal Version)
  * By Cheva

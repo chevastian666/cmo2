@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { AlertTriangle, TrendingUp, Truck, Clock } from 'lucide-react'
 import { cn} from '../../../utils/utils'

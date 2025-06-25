@@ -16,8 +16,8 @@ export const ZonasDescansoSearch: React.FC<ZonasDescansoSearchProps> = ({
         <input
           type="text"
           placeholder="Buscar por ruta, nombre o ubicación..."
-          value={s_earchTerm}
-          onChange={(_e) => onSearchChange(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
           className="w-full pl-10 pr-10 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
         {searchTerm && (<button

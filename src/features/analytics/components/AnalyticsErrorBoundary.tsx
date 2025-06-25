@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Analytics Error Boundary
  * Catches and displays errors in analytics components

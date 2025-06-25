@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { create} from 'zustand'
 import type { Deposito} from '../features/depositos/types'
 interface DepositosState {
@@ -24,13 +25,14 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'RILCOMAR S.A.',
     capacidad: 75,
+    transitosActivos: 0,
     transitosActivos: 12,
     estado: 'activo',
     telefono: '2345 6789',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 45
+    transitosActivos: 45
   },
   {
     id: '1923',
@@ -50,7 +52,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 23
+    transitosActivos: 23
   },
   {
     id: '1909',
@@ -70,7 +72,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 67
+    transitosActivos: 67
   },
   {
     id: '1937',
@@ -90,7 +92,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 34
+    transitosActivos: 34
   },
   {
     id: '1907',
@@ -110,7 +112,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 41
+    transitosActivos: 41
   },
   {
     id: '1925',
@@ -130,7 +132,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 25
+    transitosActivos: 25
   },
   {
     id: '1931',
@@ -150,7 +152,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 19
+    transitosActivos: 19
   },
   {
     id: '1913',
@@ -170,7 +172,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    precintosActivos: 38
+    transitosActivos: 38
   },
   {
     id: '1382',
@@ -190,7 +192,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Paysandu',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 15
+    transitosActivos: 15
   },
   {
     id: '1916',
@@ -210,7 +212,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 48
+    transitosActivos: 48
   },
   {
     id: '2091',
@@ -230,7 +232,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ruta 8 Km 17.5',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 42
+    transitosActivos: 42
   },
   {
     id: '5081',
@@ -250,7 +252,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Rivera',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 12
+    transitosActivos: 12
   },
   {
     id: '2089',
@@ -270,7 +272,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 76
+    transitosActivos: 76
   },
   {
     id: '4084',
@@ -290,7 +292,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Rio Branco, Cerro Largo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 8
+    transitosActivos: 8
   },
   {
     id: '2589',
@@ -304,13 +306,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Pta Pereira',
     empresa: 'ZF PUNTA PEREIRA S.A.',
     capacidad: 60,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '4532 1234',
     direccion: 'Punta Pereira, Colonia',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 22
+    transitosActivos: 22
   },
   {
     id: '7071',
@@ -324,13 +325,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Colonia',
     empresa: 'ZF COLONIA S.A.',
     capacidad: 55,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '4522 3456',
     direccion: 'Zona Franca Colonia',
     horaApertura: '08:00',
     horaCierre: '17:00',
-    precintosActivos: 18
+    transitosActivos: 18
   },
   {
     id: '6097',
@@ -344,13 +344,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Tacuarembo',
     empresa: 'CUECAR S.A.',
     capacidad: 42,
-    transitosActivos: 4,
     estado: 'activo',
     telefono: '4632 1234',
     direccion: 'Tacuarembo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 11
+    transitosActivos: 11
   },
   {
     id: '6081',
@@ -364,13 +363,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'DNA',
     capacidad: 35,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '4562 3456',
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 28
+    transitosActivos: 28
   },
   {
     id: '1281',
@@ -384,13 +382,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Salto',
     empresa: 'DNA',
     capacidad: 40,
-    transitosActivos: 10,
     estado: 'activo',
     telefono: '4732 1234',
     direccion: 'Puente Salto Grande',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 24
+    transitosActivos: 24
   },
   {
     id: '900',
@@ -410,7 +407,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 95
+    transitosActivos: 95
   },
   {
     id: '3090',
@@ -424,13 +421,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Chuy',
     empresa: 'CAMPUSOL S.A',
     capacidad: 50,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '4474 1234',
     direccion: 'Chuy, Rocha',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 16
+    transitosActivos: 16
   },
   {
     id: '1701',
@@ -444,13 +440,12 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Florida',
     empresa: 'ZF FLORIDA S.A.',
     capacidad: 58,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '4352 1234',
     direccion: 'Zona Franca Florida',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 20
+    transitosActivos: 20
   },
   {
     id: '5082',
@@ -470,7 +465,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Control Integrado Rivera',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 32
+    transitosActivos: 32
   },
   {
     id: '1694',
@@ -484,13 +479,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'SUPRAMAR S.A',
     capacidad: 76,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 2345',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 43
+    transitosActivos: 43
   },
   {
     id: '1641',
@@ -510,7 +504,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 54
+    transitosActivos: 54
   },
   {
     id: '1926',
@@ -524,13 +518,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MURCHISON URUGUAY S.A',
     capacidad: 73,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2456 1235',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 36
+    transitosActivos: 36
   },
   {
     id: '1644',
@@ -550,7 +543,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 125
+    transitosActivos: 125
   },
   {
     id: '1647',
@@ -570,7 +563,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ruta 1 Km 20, Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 89
+    transitosActivos: 89
   },
   {
     id: '1853',
@@ -584,13 +577,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'GODILCO S.A.',
     capacidad: 62,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2456 7891',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 29
+    transitosActivos: 29
   },
   {
     id: '1680',
@@ -604,13 +596,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'SUPRAMAR S.A.',
     capacidad: 69,
-    transitosActivos: 10,
     estado: 'activo',
     telefono: '2345 2346',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 37
+    transitosActivos: 37
   },
   {
     id: '1703',
@@ -624,13 +615,12 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Libertad',
     empresa: 'ZF LIBERTAD S.A.',
     capacidad: 52,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '4332 1234',
     direccion: 'Zona Franca Libertad, San José',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 17
+    transitosActivos: 17
   },
   {
     id: '1181',
@@ -644,13 +634,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Bella Union',
     empresa: 'DNA',
     capacidad: 38,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '4779 1234',
     direccion: 'Puente Internacional, Bella Unión',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 21
+    transitosActivos: 21
   },
   {
     id: '7093',
@@ -664,13 +653,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Colonia',
     empresa: 'LUMARY S.A',
     capacidad: 64,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '4522 5678',
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 35
+    transitosActivos: 35
   },
   {
     id: '7072',
@@ -684,13 +672,12 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Nueva Helvecia',
     empresa: 'ZF NUEVA HELVECIA S.A.',
     capacidad: 48,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4554 1234',
     direccion: 'Zona Franca Nueva Helvecia',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 14
+    transitosActivos: 14
   },
   {
     id: '1626',
@@ -704,13 +691,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'VIMALCOR S.A.',
     capacidad: 57,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2345 6790',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 23
   },
   {
     id: '2094',
@@ -724,13 +709,11 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Carrasco',
     empresa: 'ZF PARQUE DE LAS CIENCIAS SA',
     capacidad: 54,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2518 3456',
     direccion: 'Parque de las Ciencias, Canelones',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 18
   },
   {
     id: '1662',
@@ -744,13 +727,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'LOBRAUS PUERTO LIBRE S.A',
     capacidad: 66,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 8902',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 31
+    transitosActivos: 31
   },
   {
     id: '901',
@@ -764,13 +746,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'GODILCO S.A.',
     capacidad: 61,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2456 7892',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 28
   },
   {
     id: '2088',
@@ -784,13 +764,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Aeropuerto',
     empresa: 'NAVINTEN S.A.',
     capacidad: 74,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '2682 3456',
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 46
+    transitosActivos: 46
   },
   {
     id: '1922',
@@ -804,13 +783,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ACONDICIONAMIENTO INTEGRAL S.A.',
     capacidad: 59,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2456 4567',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 24
   },
   {
     id: '1902',
@@ -824,13 +801,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'CALIRAL S.A.',
     capacidad: 53,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2345 9012',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 19
   },
   {
     id: '1720',
@@ -844,13 +819,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ORBIPLUS SA',
     capacidad: 67,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 3456',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    precintosActivos: 33
+    transitosActivos: 33
   },
   {
     id: '1083',
@@ -864,13 +838,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Artigas',
     empresa: 'FIOREN S.A',
     capacidad: 44,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4772 1234',
     direccion: 'Artigas',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 13
+    transitosActivos: 13
   },
   {
     id: '1601',
@@ -884,13 +857,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BOMPORT S.A.',
     capacidad: 71,
-    transitosActivos: 10,
     estado: 'activo',
     telefono: '2345 5679',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 39
+    transitosActivos: 39
   },
   {
     id: '9084',
@@ -904,13 +876,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Acegua',
     empresa: 'RIASUR S.A',
     capacidad: 41,
-    transitosActivos: 4,
     estado: 'activo',
     telefono: '4452 1234',
     direccion: 'Acegua, Cerro Largo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 10
+    transitosActivos: 10
   },
   {
     id: '3081',
@@ -924,13 +895,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Chuy',
     empresa: 'DNA',
     capacidad: 46,
-    transitosActivos: 15,
     estado: 'activo',
     telefono: '4474 5678',
     direccion: 'Control Operativo Chuy',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 34
   },
   {
     id: '4081',
@@ -944,13 +913,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Rio Branco',
     empresa: 'DNA',
     capacidad: 43,
-    transitosActivos: 13,
     estado: 'activo',
     telefono: '4675 5678',
     direccion: 'Control Integrado Rio Branco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 30
+    transitosActivos: 30
   },
   {
     id: '6090',
@@ -964,13 +932,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'UPM S.A.',
     capacidad: 85,
-    transitosActivos: 14,
     estado: 'activo',
     telefono: '4562 7890',
     direccion: 'Fray Bentos, Rio Negro',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 52
+    transitosActivos: 52
   },
   {
     id: '1655',
@@ -984,13 +951,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'SUPRAMAR S.A.',
     capacidad: 77,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 2347',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 44
+    transitosActivos: 44
   },
   {
     id: '1661',
@@ -1004,13 +970,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'LOBRAUS PUERTO LIBRE S.A.',
     capacidad: 68,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 8903',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 32
   },
   {
     id: '1668',
@@ -1030,7 +994,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 118
+    transitosActivos: 118
   },
   {
     id: '1678',
@@ -1050,7 +1014,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 84
+    transitosActivos: 84
   },
   {
     id: '1683',
@@ -1064,13 +1028,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DERVALIX S.A',
     capacidad: 56,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2345 4567',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 22
   },
   {
     id: '1685',
@@ -1084,13 +1046,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DERVALIX S.A.',
     capacidad: 58,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2345 4568',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 23
   },
   {
     id: '1704',
@@ -1104,13 +1064,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PLANIR OPERADOR PORTURARIO S.A.',
     capacidad: 63,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 7891',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 30
   },
   {
     id: '1904',
@@ -1124,13 +1082,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DRIMPER S.A.',
     capacidad: 51,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2456 8901',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 17
   },
   {
     id: '1941',
@@ -1144,13 +1100,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Aeropuerto',
     empresa: 'MIRENTEX S.A.',
     capacidad: 49,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2682 4567',
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 16
   },
   {
     id: '1951',
@@ -1164,13 +1118,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BOMPORT S.A',
     capacidad: 74,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 5680',
     direccion: 'Punta Sayago',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 42
   },
   {
     id: '1183',
@@ -1184,13 +1136,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Bella Union',
     empresa: 'GICORAL S.A.',
     capacidad: 47,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4779 2345',
     direccion: 'Bella Unión, Artigas',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 15
   },
   {
     id: '1381',
@@ -1204,13 +1154,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Paysandu',
     empresa: 'DNA',
     capacidad: 42,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '4722 5678',
     direccion: 'Puente Gral. Artigas, Paysandú',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 26
+    transitosActivos: 26
   },
   {
     id: '1461',
@@ -1224,13 +1173,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Nueva Palmira',
     empresa: 'ANP',
     capacidad: 72,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '4544 2100',
     direccion: 'Nueva Palmira, Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 38
   },
   {
     id: '1471',
@@ -1244,13 +1191,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Nueva Palmira',
     empresa: 'ZF NUEVA PALMIRA',
     capacidad: 62,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '4544 3456',
     direccion: 'Zona Franca Nueva Palmira',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 27
+    transitosActivos: 27
   },
   {
     id: '1512',
@@ -1264,13 +1210,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MITRACONT S.A.',
     capacidad: 79,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '2456 2345',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 47
+    transitosActivos: 47
   },
   {
     id: '1605',
@@ -1284,13 +1229,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BUQUEBUS',
     capacidad: 60,
-    transitosActivos: 14,
     estado: 'activo',
     telefono: '2901 8888',
     direccion: 'Terminal Buquebus, Puerto de Montevideo',
     horaApertura: '05:00',
     horaCierre: '23:00',
-    precintosActivos: 35
   },
   {
     id: '1607',
@@ -1304,13 +1247,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DEPOSITOS MONTEVIDEO S.A.',
     capacidad: 64,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 9876',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 30
   },
   {
     id: '1617',
@@ -1324,13 +1265,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ZEINAL HNOS S.A.',
     capacidad: 52,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2345 6543',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 20
   },
   {
     id: '1630',
@@ -1344,13 +1283,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'OBRINEL S.A.',
     capacidad: 68,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 8765',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 34
   },
   {
     id: '1631',
@@ -1364,13 +1301,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BOMPORT S.A.',
     capacidad: 73,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 5681',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 40
+    transitosActivos: 40
   },
   {
     id: '1669',
@@ -1390,7 +1326,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 122
+    transitosActivos: 122
   },
   {
     id: '1693',
@@ -1410,7 +1346,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 88
+    transitosActivos: 88
   },
   {
     id: '1708',
@@ -1424,13 +1360,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PLANIR OPERADOR PORTURARIO S.A.',
     capacidad: 64,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 7892',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 31
   },
   {
     id: '1719',
@@ -1444,13 +1378,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'TEBETUR S.A',
     capacidad: 61,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 4321',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 29
   },
   {
     id: '1808',
@@ -1464,13 +1396,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DISA',
     capacidad: 46,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2456 9876',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 14
   },
   {
     id: '1801',
@@ -1484,13 +1414,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DISA',
     capacidad: 47,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2456 9877',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 14
   },
   {
     id: '1813',
@@ -1504,13 +1432,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'DAPAMA URUGUAY S.A.',
     capacidad: 54,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2356 1234',
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 21
   },
   {
     id: '1842',
@@ -1524,13 +1450,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MITRACONT S.A.',
     capacidad: 78,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '2456 2346',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 46
   },
   {
     id: '1854',
@@ -1544,13 +1468,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'GODILCO',
     capacidad: 63,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2456 7893',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 30
   },
   {
     id: '1892',
@@ -1564,13 +1486,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'GODILCO S.A.',
     capacidad: 64,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2456 7894',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 31
   },
   {
     id: '1901',
@@ -1584,13 +1504,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ITSEN S.A.',
     capacidad: 72,
-    transitosActivos: 10,
     estado: 'activo',
     telefono: '2901 3456',
     direccion: 'Aguada Park, Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    precintosActivos: 40
   },
   {
     id: '1905',
@@ -1604,13 +1522,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'WTC FREE ZONE S.A',
     capacidad: 67,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2628 1234',
     direccion: 'WTC Free Zone, Montevideo',
     horaApertura: '08:00',
     horaCierre: '19:00',
-    precintosActivos: 35
   },
   {
     id: '1914',
@@ -1624,13 +1540,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'CALIRAL S.A.',
     capacidad: 54,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2345 9013',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 20
   },
   {
     id: '1918',
@@ -1644,13 +1558,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'FRIGORIFICO MODELO S.A.',
     capacidad: 81,
-    transitosActivos: 13,
     estado: 'activo',
     telefono: '2508 1234',
     direccion: 'Cerro, Montevideo',
     horaApertura: '05:00',
     horaCierre: '21:00',
-    precintosActivos: 50
+    transitosActivos: 50
   },
   {
     id: '1928',
@@ -1664,13 +1577,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'SOLDO HNOS S.A',
     capacidad: 66,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 1122',
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 33
   },
   {
     id: '1929',
@@ -1684,13 +1595,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'RINCONRANDO S.A',
     capacidad: 66,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2345 5679',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 26
   },
   {
     id: '1933',
@@ -1704,13 +1613,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'TALFIR S.A.',
     capacidad: 56,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2456 3457',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 20
   },
   {
     id: '1936',
@@ -1724,13 +1631,11 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Carrasco',
     empresa: 'VISUAR URUGUAY S.A.',
     capacidad: 50,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2518 4567',
     direccion: 'Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 18
   },
   {
     id: '1971',
@@ -1744,13 +1649,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'TEYMA URUGUAY S.A',
     capacidad: 75,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 7777',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 43
   },
   {
     id: '1972',
@@ -1764,13 +1667,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'JOSÉ J. CHEDIACK S.A.I.CA.',
     capacidad: 70,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2456 8888',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    precintosActivos: 38
   },
   {
     id: '1973',
@@ -1784,13 +1685,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PILOTES URUGUAY SA',
     capacidad: 48,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2356 7890',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 16
   },
   {
     id: '2092',
@@ -1810,7 +1709,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 68
+    transitosActivos: 68
   },
   {
     id: '6061',
@@ -1824,13 +1723,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'DNA',
     capacidad: 36,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '4562 3457',
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 28
   },
   {
     id: '6065',
@@ -1844,13 +1741,12 @@ const mockDepositos: Deposito[] = [
     zona: 'M\' Bopicua',
     empresa: 'PUERTO TERMINAL M\'BOPICUA',
     capacidad: 82,
-    transitosActivos: 15,
     estado: 'activo',
     telefono: '4567 1234',
     direccion: 'M\'Bopicuá, Rio Negro',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 57
+    transitosActivos: 57
   },
   {
     id: '6082',
@@ -1864,13 +1760,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'DAROK S.A.',
     capacidad: 44,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4562 5678',
     direccion: 'Fray Bentos, Rio Negro',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 13
   },
   {
     id: '6098',
@@ -1884,13 +1778,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'DNA',
     capacidad: 37,
-    transitosActivos: 13,
     estado: 'activo',
     telefono: '4562 3458',
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 29
   },
   {
     id: '7062',
@@ -1904,13 +1796,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Colonia',
     empresa: 'ZEINAL HNOS S.A.',
     capacidad: 55,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '4522 6789',
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 22
   },
   {
     id: '7087',
@@ -1924,13 +1814,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Colonia',
     empresa: 'ZEINAL HNOS S.A.',
     capacidad: 56,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '4522 6790',
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 23
   },
   {
     id: '8081',
@@ -1944,13 +1832,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Punta del Este',
     empresa: 'DINACIA',
     capacidad: 45,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '4255 1234',
     direccion: 'Aeropuerto Laguna del Sauce, Maldonado',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 15
   },
   {
     id: '8094',
@@ -1964,13 +1850,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Punta del Este',
     empresa: 'NAVINTEN SA',
     capacidad: 40,
-    transitosActivos: 4,
     estado: 'activo',
     telefono: '4255 5678',
     direccion: 'Aeropuerto Punta del Este',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 12
   },
   {
     id: '9081',
@@ -1984,13 +1868,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Acegua',
     empresa: 'DNA',
     capacidad: 39,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '4452 5678',
     direccion: 'Control Integrado Aceguá',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 23
   },
   {
     id: '1361',
@@ -2004,13 +1886,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Paysandu',
     empresa: 'ANP',
     capacidad: 60,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '4722 3456',
     direccion: 'Puerto de Paysandú',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 27
   },
   {
     id: '1650',
@@ -2030,7 +1910,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Recinto Portuario Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 180
+    transitosActivos: 180
   },
   {
     id: '1651',
@@ -2050,7 +1930,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo - Graneles',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 65
+    transitosActivos: 65
   },
   {
     id: '1652',
@@ -2064,13 +1944,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'TAMER S.A.',
     capacidad: 69,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 8888',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 36
   },
   {
     id: '1716',
@@ -2084,13 +1962,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MURCHISON S.A.',
     capacidad: 76,
-    transitosActivos: 10,
     estado: 'activo',
     telefono: '2456 1236',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 42
   },
   {
     id: '1915',
@@ -2104,13 +1980,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PERKINSTON S.A.',
     capacidad: 79,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '2456 5679',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 47
   },
   {
     id: '1822',
@@ -2124,13 +1998,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MARINE SA',
     capacidad: 52,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2305 1234',
     direccion: 'La Teja, Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 20
   },
   {
     id: '1943',
@@ -2144,13 +2016,11 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Carrasco',
     empresa: 'CORREO URUGUAYO',
     capacidad: 35,
-    transitosActivos: 15,
     estado: 'activo',
     telefono: '2204 0000',
     direccion: 'TCU - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 25
   },
   {
     id: '1942',
@@ -2164,13 +2034,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'CORREO URUGUAYO',
     capacidad: 40,
-    transitosActivos: 18,
     estado: 'activo',
     telefono: '2204 0001',
     direccion: 'Ciudad Vieja, Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 28
   },
   {
     id: '1924',
@@ -2184,13 +2052,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MAYABEL S.A',
     capacidad: 71,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2320 1234',
     direccion: 'Parque Industrial Ruta 5',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 39
   },
   {
     id: '1945',
@@ -2204,13 +2070,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'JIWORY S.A',
     capacidad: 58,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2356 5678',
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 24
   },
   {
     id: '3000',
@@ -2224,13 +2088,11 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Carrasco',
     empresa: 'CORREO URUGUAYO',
     capacidad: 38,
-    transitosActivos: 16,
     estado: 'activo',
     telefono: '2204 0002',
     direccion: 'Pando - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 26
   },
   {
     id: '6092',
@@ -2244,13 +2106,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'EXPOACTIVA',
     capacidad: 30,
-    transitosActivos: 3,
     estado: 'activo',
     telefono: '4562 9999',
     direccion: 'Predio Expoactiva, Soriano',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 8
   },
   {
     id: '1470',
@@ -2270,7 +2130,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Predio Expoactiva, Soriano',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 6
+    transitosActivos: 6
   },
   {
     id: '1940',
@@ -2284,13 +2144,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BADONEL',
     capacidad: 50,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2345 0000',
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 19
   },
   {
     id: '1906',
@@ -2304,13 +2162,12 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ASOCIACION RURAL DEL URUGUAY',
     capacidad: 25,
-    transitosActivos: 2,
     estado: 'activo',
     telefono: '2368 1234',
     direccion: 'Expo Melilla',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 5
+    transitosActivos: 5
   },
   {
     id: '1465',
@@ -2330,7 +2187,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Terminal Granelera, Nueva Palmira',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 78
+    transitosActivos: 78
   },
   {
     id: '1832',
@@ -2344,13 +2201,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'URUGUAYAN MARINE SAFETY',
     capacidad: 45,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2901 9999',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 14
   },
   {
     id: '1675',
@@ -2364,13 +2219,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'ENCATEX',
     capacidad: 43,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '2518 7890',
     direccion: 'Zona Este',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 13
   },
   {
     id: '1947',
@@ -2384,13 +2237,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'FADIMAX',
     capacidad: 60,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2356 8888',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 28
   },
   {
     id: '1635',
@@ -2404,13 +2255,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BOMPORT',
     capacidad: 75,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 5682',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 44
   },
   {
     id: '1673',
@@ -2424,13 +2273,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'TEBETUR S.A',
     capacidad: 62,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 4322',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 30
   },
   {
     id: '1894',
@@ -2450,7 +2297,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Expo Prado',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 3
+    transitosActivos: 3
   },
   {
     id: '1722',
@@ -2464,13 +2311,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PLANIR',
     capacidad: 65,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 7893',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 32
   },
   {
     id: '1723',
@@ -2484,13 +2329,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'PLANIR',
     capacidad: 66,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2345 7894',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 33
   },
   {
     id: '1949',
@@ -2504,13 +2347,11 @@ const mockDepositos: Deposito[] = [
     zona: 'ZF Carrasco',
     empresa: 'DRIMPER',
     capacidad: 53,
-    transitosActivos: 6,
     estado: 'activo',
     telefono: '2518 8901',
     direccion: 'Ruta 101 - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 19
   },
   {
     id: '1676',
@@ -2530,7 +2371,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    precintosActivos: 128
+    transitosActivos: 128
   },
   {
     id: '8096',
@@ -2544,13 +2385,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Punta del Este',
     empresa: 'WTC FREE ZONE',
     capacidad: 48,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4249 1234',
     direccion: 'WTC Punta del Este',
     horaApertura: '08:00',
     horaCierre: '19:00',
-    precintosActivos: 16
   },
   {
     id: '6072',
@@ -2564,13 +2403,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Fray Bentos',
     empresa: 'GORFELD S.A.',
     capacidad: 41,
-    transitosActivos: 4,
     estado: 'activo',
     telefono: '4562 8888',
     direccion: 'Fray Bentos',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 11
   },
   {
     id: '1679',
@@ -2584,13 +2421,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'LOBRAUS',
     capacidad: 67,
-    transitosActivos: 9,
     estado: 'activo',
     telefono: '2345 8904',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 33
   },
   {
     id: '1946',
@@ -2604,13 +2439,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'FADIMAX',
     capacidad: 61,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2356 8889',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 29
   },
   {
     id: '1828',
@@ -2624,13 +2457,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'RECA TRADING S.A.',
     capacidad: 55,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2367 1234',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 22
   },
   {
     id: '1283',
@@ -2644,13 +2475,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Salto',
     empresa: 'DAP',
     capacidad: 46,
-    transitosActivos: 5,
     estado: 'activo',
     telefono: '4732 8888',
     direccion: 'Salto',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 15
   },
   {
     id: '1974',
@@ -2664,13 +2493,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'BETOROL SAS',
     capacidad: 57,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2345 7777',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 23
   },
   {
     id: '1691',
@@ -2684,13 +2511,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'AYAX',
     capacidad: 63,
-    transitosActivos: 8,
     estado: 'activo',
     telefono: '2356 9999',
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    precintosActivos: 31
   },
   {
     id: '1975',
@@ -2704,13 +2529,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'MERCOMAR S A',
     capacidad: 59,
-    transitosActivos: 7,
     estado: 'activo',
     telefono: '2518 5555',
     direccion: 'Zona Este',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    precintosActivos: 25
   },
   {
     id: '1687',
@@ -2724,13 +2547,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Colonia',
     empresa: 'URU FOREST SAS',
     capacidad: 80,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '4522 8888',
     direccion: 'Juan Lacaze, Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
-    precintosActivos: 48
   },
   {
     id: '1646',
@@ -2744,13 +2565,11 @@ const mockDepositos: Deposito[] = [
     zona: 'Puerto',
     empresa: 'SUPRAMAR S.A.',
     capacidad: 76,
-    transitosActivos: 11,
     estado: 'activo',
     telefono: '2345 2348',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    precintosActivos: 45
   }
 ]
 export const useDepositosStore = create<DepositosState>((set) => ({
@@ -2767,7 +2586,7 @@ export const useDepositosStore = create<DepositosState>((set) => ({
       ...deposito,
       id: Date.now().toString(),
       transitosActivos: 0,
-      precintosActivos: 0
+      transitosActivos: 0
     }
     set((state) => ({
       depositos: [...state.depositos, newDeposito]

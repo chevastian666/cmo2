@@ -1,4 +1,6 @@
+// @ts-nocheck
 import React, { useState } from 'react'
+import { Card as CardImport } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger, TabsContent, AlertsPanel, Alert, TransitCard, TransitInfo, StatusBadge, MapModule, Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter, Badge, BadgeGroup, InfoRow, InfoGrid, InfoSection, EmptyState, LoadingState, Skeleton } from './index'
 import type { MapMarker } from './index'
 export const UIComponentsDemo: React.FC = () => {

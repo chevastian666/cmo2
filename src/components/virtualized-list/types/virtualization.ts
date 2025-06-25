@@ -18,7 +18,7 @@ export interface VirtualizedAlertListProps {
   containerHeight: number
   overscan?: number
   onItemClick?: (alert: Alert, index: number) => void
-  onLoadMore?: () => Promise<Alert[]>
+  onLoadMore?: () => Promise<{ alerts: Alert[], hasMore: boolean }>
   groupingOptions?: GroupingOptions
   filters?: AlertFilters
   className?: string
@@ -34,12 +34,7 @@ export interface VirtualListState {
   scrollVelocity: number
 }
 
-export interface GroupingOptions {
-  groupBy: 'timestamp' | 'severity' | 'location' | 'status'
-  timeGranularity?: 'hour' | 'day' | 'week'
-  collapsible: boolean
-  showCounts: boolean
-}
+// Additional grouping options interface - removed duplicate
 
 export interface ScrollMetrics {
   scrollTop: number
@@ -81,4 +76,4 @@ export interface ItemRenderer<T> {
   }): React.ReactElement
 }
 
-import type { Alert} from './alerts'
+// Alert type imported from monitoring

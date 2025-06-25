@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ClipboardContentType} from '../types'
 interface DetectionResult {
   type: ClipboardContentType

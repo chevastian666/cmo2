@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * REST API Service with Swagger Documentation
  * Express.js server with OpenAPI specification

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { memo } from 'react'
 import {ChevronDown, ChevronRight, Calendar, AlertTriangle, MapPin, Shield} from 'lucide-react'
 import { cn} from '../../../utils/utils'

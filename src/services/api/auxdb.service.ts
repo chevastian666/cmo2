@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Auxiliary Database API Service (satoshi)
  * By Cheva

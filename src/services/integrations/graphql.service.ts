@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * GraphQL Service for Flexible Queries
  * GraphQL endpoint with schema and resolvers

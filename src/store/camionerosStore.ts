@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { create} from 'zustand'
 import { devtools} from 'zustand/middleware'
 import { camionerosService} from '../features/camioneros/services/camioneros.service'

@@ -21,7 +21,7 @@ interface AnimatedDivProps {
 }
 
 // Div con fade animation
-export const FadeDiv: React.FC<AnimatedDivProps> = ({ children, className = "", ...props }
+export const FadeDiv: React.FC<AnimatedDivProps> = ({ children, className = "" }
 ) => (
   <motion.div
     variants={fadeVariants}
@@ -29,13 +29,12 @@ export const FadeDiv: React.FC<AnimatedDivProps> = ({ children, className = "", 
     animate="visible"
     exit="exit"
     className={className}
-    {...props}
   >
     {children}
   </motion.div>
 )
 // Div con scale animation
-export const ScaleDiv: React.FC<AnimatedDivProps> = ({ children, className = "", ...props }
+export const ScaleDiv: React.FC<AnimatedDivProps> = ({ children, className = "" }
 ) => (
   <motion.div
     variants={scaleVariants}
@@ -43,13 +42,12 @@ export const ScaleDiv: React.FC<AnimatedDivProps> = ({ children, className = "",
     animate="visible"
     exit="exit"
     className={className}
-    {...props}
   >
     {children}
   </motion.div>
 )
 // Div con slide up animation
-export const SlideUpDiv: React.FC<AnimatedDivProps> = ({ children, className = "", ...props }
+export const SlideUpDiv: React.FC<AnimatedDivProps> = ({ children, className = "" }
 ) => (
   <motion.div
     variants={slideUpVariants}
@@ -57,13 +55,12 @@ export const SlideUpDiv: React.FC<AnimatedDivProps> = ({ children, className = "
     animate="visible"
     exit="exit"
     className={className}
-    {...props}
   >
     {children}
   </motion.div>
 )
 // Div con slide down animation
-export const SlideDownDiv: React.FC<AnimatedDivProps> = ({ children, className = "", ...props }
+export const SlideDownDiv: React.FC<AnimatedDivProps> = ({ children, className = "" }
 ) => (
   <motion.div
     variants={slideDownVariants}
@@ -71,7 +68,6 @@ export const SlideDownDiv: React.FC<AnimatedDivProps> = ({ children, className =
     animate="visible"
     exit="exit"
     className={className}
-    {...props}
   >
     {children}
   </motion.div>
@@ -98,8 +94,8 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
       variants={hover ? hoverLiftVariants : scaleVariants}
       initial={hover ? "initial" : "hidden"}
       animate={hover ? "initial" : "visible"}
-      whileHover={hover ? "hover" : undefined}
-      whileTap={hover ? "tap" : undefined}
+      whileHover={hover ? hoverLiftVariants.hover : undefined}
+      whileTap={hover ? hoverLiftVariants.tap : undefined}
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
@@ -114,8 +110,8 @@ interface AnimatedButtonProps {
   onClick?: () => void
   disabled?: boolean
   size?: string
-  whileHover?: string
-  whileTap?: string
+  whileHover?: any
+  whileTap?: any
 }
 
 // Botón animado
@@ -135,8 +131,8 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       className={baseClasses}
       variants={hoverScaleVariants}
       initial="initial"
-      whileHover={whileHover || (!disabled ? "hover" : undefined)}
-      whileTap={whileTap || (!disabled ? "tap" : undefined)}
+      whileHover={whileHover || (!disabled ? hoverScaleVariants.hover : undefined)}
+      whileTap={whileTap || (!disabled ? hoverScaleVariants.tap : undefined)}
       onClick={onClick}
       disabled={disabled}
     >

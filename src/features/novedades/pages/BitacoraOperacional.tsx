@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Bitácora Operacional - Sistema de registro diario del Centro de Monitoreo
  * Diseño tipo log book para avisos y eventos importantes

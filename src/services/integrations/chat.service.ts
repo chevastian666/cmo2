@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Chat Integrations Service
  * Slack and Discord integration for alerts

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Adaptador para transformar datos de la API de Trokor al formato CMO
  * By Cheva

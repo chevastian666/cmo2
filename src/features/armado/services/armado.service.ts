@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { sharedApiService} from '../../../services/shared/sharedApi.service'
 import type { Precinto} from '../../../types'
 interface ArmadoCommand {

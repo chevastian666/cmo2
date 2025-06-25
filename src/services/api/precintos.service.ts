@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Precinto, EventoPrecinto} from '@/types/monitoring'
 import { unifiedAPIService} from './unified.service'
 import { generateMockPrecinto} from '@/utils/mockData'

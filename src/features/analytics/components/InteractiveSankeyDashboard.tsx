@@ -13,7 +13,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
 import {
   Popover, PopoverContent, PopoverTrigger, } from '@/components/ui/popover'
-import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/Tabs'
 import { LogisticsFlowChart} from './LogisticsFlowChart'
 import { PrecintoLifecycleFlow} from './PrecintoLifecycleFlow'
 import { AlertFlowAnalysis} from './AlertFlowAnalysis'
