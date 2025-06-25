@@ -46,10 +46,12 @@ export function createPersistedStore<T>(
   createState: StateCreator<T>,
   partialize?: (state: T) => Partial<T>
 ) {
-  return persist(createState, createPersistConfig({
+  const config = createPersistConfig({
     name,
     partialize
-  }) as any)
+  })
+  // Type assertion needed due to zustand's complex persist typing
+  return persist(createState, config as Parameters<typeof persist<T>>[1])
 }
 
 /**

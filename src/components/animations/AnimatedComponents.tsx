@@ -358,7 +358,7 @@ interface AnimatedDivPropsExtended {
 }
 
 export const AnimatedDiv: React.FC<AnimatedDivPropsExtended> = ({ 
-  children, className = "", delay = 0, ...props
+  children, className = "", delay = 0
 }) => {
   return (
     <motion.div
