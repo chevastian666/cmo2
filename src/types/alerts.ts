@@ -87,3 +87,6 @@ export interface EstadisticasAlertas {
     tiempoPromedio: number
   }[]
 }
+
+// Export alias for compatibility
+export type AlertaFilters = FiltrosAlertas

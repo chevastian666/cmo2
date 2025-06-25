@@ -1,17 +1,26 @@
 /**
- * Alertas Store Slice with Enhanced Zustand Patterns
- * Includes: Immer integration, computed properties, batch operations
+ * Alertas Slice - Enhanced with best practices
  * By Cheva
  */
 
-import type { StateCreator} from 'zustand'
-import type { AlertasStore} from '../types'
-import type { AlertaExtendida, ComentarioAlerta, AsignacionAlerta, ResolucionAlerta, HistorialAlerta} from '../../types'
-import { alertasService} from '../../services'
-import { generateMockAlertas} from '../../utils/mockData'
-import { usuariosService} from '../../services/usuarios.service'
+import type { StateCreator } from 'zustand'
+import type { 
+  AlertasState, 
+  AlertasActions, 
+  AlertasComputedProperties, 
+  AlertasStore 
+} from '../types'
+import type { Alerta } from '../../types/monitoring'
+import type { AlertaExtendida } from '../../types/alerts'
+import { alertasService } from '../../services/alertas.service'
+import { generateMockAlertas } from '../../utils/mockData'
 
-export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
+export const createAlertasSlice: StateCreator<
+  AlertasStore,
+  [],
+  [],
+  AlertasState & AlertasActions & AlertasComputedProperties
+> = (set, get) => ({
   // State
   alertas: [],
   alertasActivas: [],
@@ -23,123 +32,112 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
     search: ''
   },
 
-  // Computed Properties (getters)
+  // Computed properties
+  get alertasCriticas() {
+    return get().alertasActivas.filter(a => a.severidad === 'critica')
+  },
+
+  get alertasAltas() {
+    return get().alertasActivas.filter(a => a.severidad === 'alta')
+  },
+
+  get alertasMedias() {
+    return get().alertasActivas.filter(a => a.severidad === 'media')
+  },
+
+  get alertasBajas() {
+    return get().alertasActivas.filter(a => a.severidad === 'baja')
+  },
+
   get filteredAlertas() {
     const { alertas, filter } = get()
-    let filtered = [...alertas]
-    if (filter.search) {
-      const searchLower = filter.search.toLowerCase()
-      filtered = filtered.filter(a => 
-        a.tipo.toLowerCase().includes(searchLower) ||
-        a.descripcion?.toLowerCase().includes(searchLower) ||
-        a.dua?.toLowerCase().includes(searchLower)
-      )
-    }
-
-    if (filter.tipo) {
-      filtered = filtered.filter(a => a.tipo === filter.tipo)
-    }
-
-    if (filter.severidad) {
-      filtered = filtered.filter(a => a.severidad === filter.severidad)
-    }
-
-    if (filter.atendida !== undefined) {
-      filtered = filtered.filter(a => a.atendida === filter.atendida)
-    }
-
-    if (filter.estado) {
-      switch (filter.estado) {
-        case 'activas': {
-  filtered = filtered.filter(a => !a.atendida)
-          break
-    }
-    case 'asignadas': {
-          const asignadas = Array.from(get().alertasExtendidas.values())
-            .filter(ext => ext.asignacion)
-            .map(ext => ext.id)
-          filtered = filtered.filter(a => asignadas.includes(a.id))
-          break
-        }
-        case 'resueltas': {
-          const resueltas = Array.from(get().alertasExtendidas.values())
-            .filter(ext => ext.resolucion)
-            .map(ext => ext.id)
-          filtered = filtered.filter(a => resueltas.includes(a.id))
-          break
-        }
-      }
-    }
-
-    return filtered
+    if (!filter.search) return alertas
+    
+    const searchLower = filter.search.toLowerCase()
+    return alertas.filter(alerta => 
+      alerta.mensaje.toLowerCase().includes(searchLower) ||
+      alerta.codigoPrecinto.toLowerCase().includes(searchLower) ||
+      alerta.tipo.toLowerCase().includes(searchLower)
+    )
   },
 
   get alertasStats() {
-    const { alertas, alertasExtendidas } = get()
-    const extendedMap = new Map(alertasExtendidas)
+    const { alertasActivas, alertas } = get()
     return {
-      total: alertas.length,
-      criticas: alertas.filter(a => a.severidad === 'critica').length,
-      altas: alertas.filter(a => a.severidad === 'alta').length,
-      medias: alertas.filter(a => a.severidad === 'media').length,
-      bajas: alertas.filter(a => a.severidad === 'baja').length,
+      total: alertasActivas.length,
+      criticas: alertasActivas.filter(a => a.severidad === 'critica').length,
+      altas: alertasActivas.filter(a => a.severidad === 'alta').length,
+      medias: alertasActivas.filter(a => a.severidad === 'media').length,
+      bajas: alertasActivas.filter(a => a.severidad === 'baja').length,
       sinAtender: alertas.filter(a => !a.atendida).length,
-      asignadas: Array.from(extendedMap.values()).filter(ext => ext.asignacion).length,
-      resueltas: Array.from(extendedMap.values()).filter(ext => ext.resolucion).length
+      asignadas: 0, // TODO: Implement when assignment feature is added
+      resueltas: alertas.filter(a => a.atendida).length
     }
   },
 
-  get alertasCriticas() {
-    const { alertasActivas } = get()
-    return alertasActivas.filter(a => a.severidad === 'critica')
-  },
-
-  get alertasPorTipo() {
-    const { alertas } = get()
-    const tipoMap = new Map<string, typeof alertas>()
-    alertas.forEach(alerta => {
-      const tipo = alerta.tipo
-      if (!tipoMap.has(tipo)) {
-        tipoMap.set(tipo, [])
-      }
-      tipoMap.get(tipo)!.push(alerta)
+  get alertasByPrecinto() {
+    const map = new Map<string, Alerta[]>()
+    get().alertas.forEach(alerta => {
+      const list = map.get(alerta.precintoId) || []
+      list.push(alerta)
+      map.set(alerta.precintoId, list)
     })
-    return tipoMap
+    return map
   },
 
-  // Actions with Immer patterns
-  setAlertas: (alertas) => set((state) => {
-    state.alertas = alertas
-    state.lastUpdate = Date.now()
-    state.error = null
-  }),
+  get recentAlertas() {
+    const now = Date.now()
+    const hourAgo = now - 3600000 // 1 hour
+    return get().alertas
+      .filter(a => a.timestamp > hourAgo)
+      .sort((a, b) => b.timestamp - a.timestamp)
+  },
+
+  get alertasTrend() {
+    const { alertas } = get()
+    const now = Date.now()
+    const dayAgo = now - 86400000 // 24 hours
+    
+    // Group by hour
+    const hourlyData = new Map<number, number>()
+    alertas.forEach(alerta => {
+      if (alerta.timestamp > dayAgo) {
+        const hour = new Date(alerta.timestamp).getHours()
+        hourlyData.set(hour, (hourlyData.get(hour) || 0) + 1)
+      }
+    })
+    
+    // Convert to array for chart
+    return Array.from({ length: 24 }, (_, hour) => ({
+      hour,
+      count: hourlyData.get(hour) || 0
+    }))
+  },
+
+  // Actions
+  setAlertas: (alertas) => set({ alertas, lastUpdate: Date.now() }),
   
-  setAlertasActivas: (alertasActivas) => set((state) => {
-    state.alertasActivas = alertasActivas
-    state.lastUpdate = Date.now()
-    state.error = null
-  }),
+  setAlertasActivas: (alertasActivas) => set({ alertasActivas, lastUpdate: Date.now() }),
   
-  addAlerta: (alerta) => set((state) => {
-    state.alertas.push(alerta)
-    if (!alerta.atendida) {
-      state.alertasActivas.push(alerta)
-    }
-    state.lastUpdate = Date.now()
-  }),
+  addAlerta: (alerta) => set((state) => ({
+    alertas: [alerta, ...state.alertas],
+    alertasActivas: alerta.atendida ? state.alertasActivas : [alerta, ...state.alertasActivas],
+    lastUpdate: Date.now()
+  })),
   
-  updateAlerta: (id, data) => set((state) => {
-    const updateItem = (item: unknown) => item.id === id ? { ...item, ...data } : item
-    state.alertas = state.alertas.map(updateItem)
-    state.alertasActivas = state.alertasActivas.map(updateItem)
-    state.lastUpdate = Date.now()
-  }),
+  updateAlerta: (id, data) => set((state) => ({
+    ...state,
+    alertas: state.alertas.map(item => item.id === id ? { ...item, ...data } : item),
+    alertasActivas: state.alertasActivas.map(item => item.id === id ? { ...item, ...data } : item),
+    lastUpdate: Date.now()
+  })),
   
-  removeAlerta: (id) => set((state) => {
-    state.alertas = state.alertas.filter(a => a.id !== id)
-    state.alertasActivas = state.alertasActivas.filter(a => a.id !== id)
-    state.lastUpdate = Date.now()
-  }),
+  removeAlerta: (id) => set((state) => ({
+    ...state,
+    alertas: state.alertas.filter(a => a.id !== id),
+    alertasActivas: state.alertasActivas.filter(a => a.id !== id),
+    lastUpdate: Date.now()
+  })),
   
   atenderAlerta: async (id) => {
     const { setError, updateAlerta } = get()
@@ -148,37 +146,42 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
       await alertasService.atender(id)
       updateAlerta(id, { atendida: true })
       // Remove from active alerts
-      set((state) => {
-        state.alertasActivas = state.alertasActivas.filter(a => a.id !== id)
-      })
+      set((state) => ({
+        ...state,
+        alertasActivas: state.alertasActivas.filter(a => a.id !== id)
+      }))
     } catch (error) {
       // En desarrollo, simular atención
       updateAlerta(id, { atendida: true })
-      set((state) => {
-        state.alertasActivas = state.alertasActivas.filter(a => a.id !== id)
-      })
+      set((state) => ({
+        ...state,
+        alertasActivas: state.alertasActivas.filter(a => a.id !== id)
+      }))
       console.warn('Simulating alert attention:', error)
     }
   },
   
-  setFilter: (filter) => set((state) => {
-    state.filter = { ...state.filter, ...filter }
-  }),
+  setFilter: (filter) => set((state) => ({
+    ...state,
+    filter: { ...state.filter, ...filter }
+  })),
 
-  clearFilter: () => set((state) => {
-    state.filter = { search: '' }
-  }),
+  clearFilter: () => set((state) => ({
+    ...state,
+    filter: { search: '' }
+  })),
   
   setLoading: (loading) => set({ loading }),
   
   setError: (error) => set({ error }),
   
+  // Async actions
   fetchAlertas: async () => {
-    const { setLoading, setError, setAlertas, filter } = get()
+    const { setLoading, setError, setAlertas } = get()
     setLoading(true)
     setError(null)
     try {
-      const data = await alertasService.getAll(filter)
+      const data = await alertasService.getAll()
       setAlertas(data)
       return data
     } catch (error) {
@@ -213,18 +216,22 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
 
   // Batch operations
   batchUpdateAlertas: (updates) => set((state) => {
+    const alertas = [...state.alertas]
+    const alertasActivas = [...state.alertasActivas]
+    
     updates.forEach(({ id, data }) => {
-      const index = state.alertas.findIndex(a => a.id === id)
+      const index = alertas.findIndex(a => a.id === id)
       if (index !== -1) {
-        state.alertas[index] = { ...state.alertas[index], ...data }
+        alertas[index] = { ...alertas[index], ...data }
       }
       
-      const activeIndex = state.alertasActivas.findIndex(a => a.id === id)
+      const activeIndex = alertasActivas.findIndex(a => a.id === id)
       if (activeIndex !== -1) {
-        state.alertasActivas[activeIndex] = { ...state.alertasActivas[activeIndex], ...data }
+        alertasActivas[activeIndex] = { ...alertasActivas[activeIndex], ...data }
       }
     })
-    state.lastUpdate = Date.now()
+    
+    return { ...state, alertas, alertasActivas, lastUpdate: Date.now() }
   }),
 
   batchAtenderAlertas: async (ids) => {
@@ -245,177 +252,53 @@ export const createAlertasSlice: StateCreator<AlertasStore> = (set, get) => ({
   },
 
   // Reset store
-  reset: () => set((state) => {
-    state.alertas = []
-    state.alertasActivas = []
-    state.alertasExtendidas = new Map()
-    state.loading = false
-    state.error = null
-    state.lastUpdate = null
-    state.filter = { search: '' }
+  reset: () => set({
+    alertas: [],
+    alertasActivas: [],
+    alertasExtendidas: new Map(),
+    loading: false,
+    error: null,
+    lastUpdate: null,
+    filter: { search: '' }
   }),
 
   // Extended alert management
   fetchAlertaExtendida: async (id: string): Promise<AlertaExtendida | null> => {
-    const { alertasExtendidas, alertas } = get()
+    const { alertasExtendidas } = get()
+    
     // Check cache first
     if (alertasExtendidas.has(id)) {
       return alertasExtendidas.get(id)!
     }
     
-    // Find base alert
-    const baseAlerta = alertas.find(a => a.id === id)
-    if (!baseAlerta) return null
-    // Create extended alert with mock data for now
-    // Current user fetch removed - not currently used
-    const extendedAlerta: AlertaExtendida = {
-      ...baseAlerta,
-      comentarios: [],
-      historial: [
-        {
-          id: `hist-${Date.now()}`,
-          alertaId: id,
-          tipo: 'creada',
-          timestamp: baseAlerta.timestamp,
-          detalles: { mensaje: 'Alerta creada' }
-        }
-      ],
-      tiempoRespuesta: undefined,
-      tiempoResolucion: undefined
-    }
-    // Cache it
-    set((state) => {
-      const newMap = new Map(state.alertasExtendidas)
-      newMap.set(id, extendedAlerta)
-      return { alertasExtendidas: newMap }
-    })
-    return extendedAlerta
-  },
-
-  asignarAlerta: async (alertaId: string, usuarioId: string, notas?: string) => {
-    const { updateAlertaExtendida } = get()
     try {
-      // Get users
-      const [usuario, currentUser] = await Promise.all([
-        usuariosService.getById(usuarioId),
-        usuariosService.getCurrentUser()
-      ])
-      if (!usuario) throw new Error('Usuario no encontrado')
-      const alertaExtendida = await get().fetchAlertaExtendida(alertaId)
-      if (!alertaExtendida) throw new Error('Alerta no encontrada')
-      const asignacion: AsignacionAlerta = {
-        id: `asig-${Date.now()}`,
-        alertaId,
-        usuarioAsignadoId: usuarioId,
-        usuarioAsignado: usuario,
-        asignadoPorId: currentUser.id,
-        asignadoPor: currentUser,
-        timestamp: Math.floor(Date.now() / 1000),
-        notas
+      // Get basic alert data and extend it
+      const alerta = await alertasService.getById(id)
+      const extendedData: AlertaExtendida = {
+        ...alerta,
+        // Add extended properties with default values
+        historial: [],
+        precinto: null,
+        ubicacionHistorica: [],
+        comentarios: [],
+        asignaciones: [],
+        verificaciones: []
       }
-      const historialEntry: HistorialAlerta = {
-        id: `hist-${Date.now()}`,
-        alertaId,
-        tipo: 'asignada',
-        usuarioId: currentUser.id,
-        usuario: currentUser,
-        timestamp: Math.floor(Date.now() / 1000),
-        detalles: { asignadoA: usuario.nombre, notas }
-      }
-      updateAlertaExtendida(alertaId, {
-        asignacion,
-        historial: [...alertaExtendida.historial, historialEntry],
-        tiempoRespuesta: alertaExtendida.tiempoRespuesta || (Math.floor(Date.now() / 1000) - alertaExtendida.timestamp)
+      
+      set((state) => {
+        const newMap = new Map(state.alertasExtendidas)
+        newMap.set(id, extendedData)
+        return { ...state, alertasExtendidas: newMap }
       })
-      // Update base alert
-      get().updateAlerta(alertaId, { atendida: true })
+      return extendedData
     } catch (error) {
-      console.error('Error asignando alerta:', error)
-      throw error
+      console.error('Error fetching extended alert:', error)
+      return null
     }
   },
 
-  comentarAlerta: async (alertaId: string, mensaje: string) => {
-    const { updateAlertaExtendida } = get()
-    try {
-      const currentUser = await usuariosService.getCurrentUser()
-      const alertaExtendida = await get().fetchAlertaExtendida(alertaId)
-      if (!alertaExtendida) throw new Error('Alerta no encontrada')
-      const comentario: ComentarioAlerta = {
-        id: `com-${Date.now()}`,
-        alertaId,
-        usuarioId: currentUser.id,
-        usuario: currentUser,
-        mensaje,
-        timestamp: Math.floor(Date.now() / 1000),
-        tipo: 'comentario'
-      }
-      const historialEntry: HistorialAlerta = {
-        id: `hist-${Date.now()}`,
-        alertaId,
-        tipo: 'comentario',
-        usuarioId: currentUser.id,
-        usuario: currentUser,
-        timestamp: Math.floor(Date.now() / 1000),
-        detalles: { mensaje }
-      }
-      updateAlertaExtendida(alertaId, {
-        comentarios: [...alertaExtendida.comentarios, comentario],
-        historial: [...alertaExtendida.historial, historialEntry]
-      })
-    } catch (error) {
-      console.error('Error agregando comentario:', error)
-      throw error
-    }
-  },
-
-  resolverAlerta: async (alertaId: string, tipo: string, descripcion: string, acciones?: string[]) => {
-    const { updateAlertaExtendida, setAlertasActivas, alertasActivas } = get()
-    try {
-      const currentUser = await usuariosService.getCurrentUser()
-      const alertaExtendida = await get().fetchAlertaExtendida(alertaId)
-      if (!alertaExtendida) throw new Error('Alerta no encontrada')
-      const resolucion: ResolucionAlerta = {
-        id: `res-${Date.now()}`,
-        alertaId,
-        resueltoPorId: currentUser.id,
-        resueltoPor: currentUser,
-        timestamp: Math.floor(Date.now() / 1000),
-        tipoResolucion: tipo as "resuelta" | "falsa_alarma" | "duplicada" | "sin_accion",
-        descripcion,
-        accionesTomadas: acciones
-      }
-      const historialEntry: HistorialAlerta = {
-        id: `hist-${Date.now()}`,
-        alertaId,
-        tipo: 'resuelta',
-        usuarioId: currentUser.id,
-        usuario: currentUser,
-        timestamp: Math.floor(Date.now() / 1000),
-        detalles: { tipoResolucion: tipo, descripcion, acciones }
-      }
-      updateAlertaExtendida(alertaId, {
-        resolucion,
-        historial: [...alertaExtendida.historial, historialEntry],
-        tiempoResolucion: Math.floor(Date.now() / 1000) - alertaExtendida.timestamp
-      })
-      // Update base alert and remove from active
-      get().updateAlerta(alertaId, { atendida: true })
-      setAlertasActivas(alertasActivas.filter(a => a.id !== alertaId))
-    } catch (error) {
-      console.error('Error resolviendo alerta:', error)
-      throw error
-    }
-  },
-
-  updateAlertaExtendida: (id: string, data: Partial<AlertaExtendida>) => {
-    set((state) => {
-      const newMap = new Map(state.alertasExtendidas)
-      const current = newMap.get(id)
-      if (current) {
-        newMap.set(id, { ...current, ...data })
-      }
-      return { alertasExtendidas: newMap }
-    })
-  },
+  clearAlertaExtendidaCache: () => set((state) => ({
+    ...state,
+    alertasExtendidas: new Map()
+  }))
 })

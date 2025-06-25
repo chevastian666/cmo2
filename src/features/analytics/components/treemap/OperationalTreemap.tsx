@@ -33,7 +33,7 @@ export const OperationalTreemap: React.FC = () => {
   ], [])
 
   const [viewMode, setViewMode] = useState<'overview' | 'efficiency' | 'risk'>('overview')
-  const _operationalData = useMemo((): TreemapData => {
+  const operationalData = useMemo((): TreemapData => {
     if (viewMode === 'overview') {
       // General operational overview
       const precintosNode: TreemapNode = {
@@ -157,7 +157,7 @@ export const OperationalTreemap: React.FC = () => {
         }
       })
       const children: TreemapNode[] = Array.from(riskMap.entries())
-        .sort((_a, b) => b[1] - a[1])
+        .sort((a, b) => b[1] - a[1])
         .slice(0, 20)
         .map(([route, riskScore]) => ({
           name: route,
@@ -265,7 +265,7 @@ export const OperationalTreemap: React.FC = () => {
         </CardHeader>
         <CardContent>
           <InteractiveTreemap
-            data={_operationalData}
+            data={operationalData}
             width={900}
             height={600}
             title={
@@ -278,9 +278,9 @@ export const OperationalTreemap: React.FC = () => {
               viewMode === 'efficiency' ? 'Eficiencia por ruta basada en completitud' :
               'Rutas con mayor incidencia de alertas'
             }
-            showBreadcrumb={_true}
-            showTooltip={_true}
-            animated={_true}
+            showBreadcrumb={true}
+            showTooltip={true}
+            animated={true}
             maxZoom={viewMode === 'risk' ? 50 : 100}
           />
         </CardContent>

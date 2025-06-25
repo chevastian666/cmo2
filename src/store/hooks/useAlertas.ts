@@ -54,6 +54,9 @@ export const useAlerta = (id: string) => {
     found: !!alerta,
   }
 }
+// Export useAlertasStore for compatibility
+export { useAlertasStore } from '../store'
+
 export const useAlertaExtendida = (id: string) => {
   const store = useAlertasStore()
   const [alertaExtendida, setAlertaExtendida] = useState<AlertaExtendida | null>(null)

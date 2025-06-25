@@ -4,8 +4,51 @@
  * By Cheva
  */
 
-import type { 
-  SankeyData, FlowData, LogisticsFlow, PrecintoFlow, AlertFlow} from '../types/sankey.types'
+// Type definitions
+interface SankeyNode {
+  id: string;
+  name: string;
+  value: number;
+}
+
+interface SankeyLink {
+  source: string;
+  target: string;
+  value: number;
+  color?: string;
+  metadata?: any;
+}
+
+interface SankeyData {
+  nodes: SankeyNode[];
+  links: SankeyLink[];
+}
+
+interface LogisticsFlow {
+  origin: string;
+  destination: string;
+  transitCount: number;
+  totalVolume?: number;
+  avgTime?: number;
+  successRate?: number;
+}
+
+interface PrecintoFlow {
+  stage: string;
+  count: number;
+  nextStage?: string;
+  dropoffCount?: number;
+}
+
+interface AlertFlow {
+  source: string;
+  alertType: string;
+  severity: string;
+  count: number;
+  resolution?: string;
+}
+
+// FlowData type removed - not used
 /**
  * Transform logistics flow data into Sankey format
  */
@@ -77,7 +120,7 @@ export function transformAlertFlow(alerts: AlertFlow[]): SankeyData {
     sourceNodes.set(alert.source, (sourceNodes.get(alert.source) || 0) + alert.count)
     // Count by type
     const typeKey = `${alert.alertType}_${alert.severity}`
-    typeNodes.set(_typeKey, (typeNodes.get(_typeKey) || 0) + alert.count)
+    typeNodes.set(typeKey, (typeNodes.get(typeKey) || 0) + alert.count)
     // Count by resolution if exists
     if (alert.resolution) {
       resolutionNodes.set(alert.resolution, (resolutionNodes.get(alert.resolution) || 0) + alert.count)
@@ -219,14 +262,14 @@ function formatAlertType(type: string): string {
   ).join(' ')
 }
 
-function getSeverityColor(severity: 'low' | 'medium' | 'high' | 'critical'): string {
-  const colors = {
+function getSeverityColor(severity: string): string {
+  const colors: Record<string, string> = {
     low: '#10b981',    // Green
     medium: '#f59e0b', // Yellow
     high: '#f97316',   // Orange
     critical: '#ef4444' // Red
   }
-  return colors[severity]
+  return colors[severity] || '#6b7280'
 }
 
 function getColorByLevel(level: number): string {
@@ -259,7 +302,7 @@ function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): st
 /**
  * Aggregate flow data by grouping similar paths
  */
-export function aggregateFlows(flows: FlowData[], threshold = 0): SankeyData {
+export function aggregateFlows(flows: any[], threshold = 0): SankeyData {
   const aggregated = new Map<string, number>()
   const nodes = new Set<string>()
   flows.forEach(flow => {

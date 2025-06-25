@@ -5,6 +5,7 @@
  */
 
 import React, { useCallback, useRef, useMemo, memo } from 'react'
+import { VariableSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { cn} from '@/utils/utils'
@@ -25,10 +26,21 @@ interface VirtualizedListProps<T> {
   height?: number | string
 }
 
-// Memoized row component to prevent unnecessary re-renders
-const Row = memo(({ data: _data, index, style }: unknown) => {
+// Row component interface
+interface RowProps {
+  data: {
+    items: any[]
+    renderItem: (item: any, index: number, style: React.CSSProperties) => React.ReactNode
+  }
+  index: number
+  style: React.CSSProperties
+}
 
+// Memoized row component to prevent unnecessary re-renders
+const Row = memo(({ data, index, style }: RowProps) => {
+  const { items, renderItem } = data
   const item = items[index]
+  
   if (!item) {
     return (
       <div style={style} className="flex items-center justify-center">
@@ -85,12 +97,12 @@ export function VirtualizedList<T>({
       return (<InfiniteLoader
           isItemLoaded={_isItemLoaded}
           itemCount={_itemCount}
-          loadMoreItems={_loadMore}
+          loadMoreItems={loadMore || (() => Promise.resolve())}
           threshold={_threshold}
         >
-          {(_onItemsRendered, ref ) => (<List
-              ref={(_list) => {
-                ref(_list)
+          {({ onItemsRendered, ref }) => (<List
+              ref={(list) => {
+                ref(list)
                 // @ts-expect-error - Complex type inference
                 listRef.current = list
               }}
@@ -103,9 +115,10 @@ export function VirtualizedList<T>({
               overscanCount={_overscan}
               estimatedItemSize={_estimatedItemSize}
               initialScrollOffset={_initialScrollOffset}
+              onItemsRendered={onItemsRendered}
               className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
             >
-              {_Row}
+              {Row}
             </List>
           )}
         </InfiniteLoader>
@@ -114,7 +127,7 @@ export function VirtualizedList<T>({
 
     return (
       <List
-        ref={_listRef}
+        ref={listRef}
         height={_height}
         width={_width}
         itemCount={_itemCount}
@@ -126,7 +139,7 @@ export function VirtualizedList<T>({
         initialScrollOffset={_initialScrollOffset}
         className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
       >
-        {_Row}
+        {Row}
       </List>
     )
   }, [_estimatedItemSize, _getItemSize, _handleScroll, _initialScrollOffset, _isItemLoaded, _itemCount, _itemData, hasNextPage, loadMore, _overscan, _threshold])

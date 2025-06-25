@@ -4,7 +4,7 @@ import type { TransitoPendiente} from '../../../types/monitoring'
 import type { Column} from '../../../components/DataTable/DataTable'
 import { cn} from '../../../utils/utils'
 import { Clock, MessageSquare} from 'lucide-react'
-import { _THRESHOLDS as THRESHOLDS} from '../../../constants'
+import { THRESHOLDS } from '../../../constants'
 import { DataTable} from '../../../components/DataTable'
 interface TransitosPendientesTableProps {
   transitos: TransitoPendiente[]

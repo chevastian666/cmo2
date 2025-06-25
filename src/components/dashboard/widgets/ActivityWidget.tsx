@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Truck, Shield, AlertCircle} from 'lucide-react'
+import { Truck, Shield, AlertCircle, Package} from 'lucide-react'
 import { cn} from '../../../utils/utils'
 import { motion} from 'framer-motion'
 interface Activity {

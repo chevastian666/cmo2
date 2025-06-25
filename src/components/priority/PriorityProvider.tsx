@@ -17,6 +17,14 @@ interface PriorityProviderProps {
   enableMetrics?: boolean
 }
 
+export const usePriority = () => {
+  const context = useContext(PriorityContext)
+  if (!context) {
+    throw new Error('usePriority must be used within PriorityProvider')
+  }
+  return context
+}
+
 export const PriorityProvider: React.FC<PriorityProviderProps> = ({ 
   children, config: _config, enableMetrics = true 
 }) => {

@@ -1,10 +1,22 @@
-import type { StateCreator} from 'zustand'
-import type { TransitosStore} from '../types'
+/**
+ * Transitos Slice - Enhanced with best practices
+ * By Cheva
+ */
+
+import type { StateCreator } from 'zustand'
+import type { TransitosState, TransitosActions, TransitosComputedProperties, TransitosStore } from '../types'
 import type { Transito } from '../../features/transitos/types'
-import { transitosService} from '../../services'
-import { generateMockTransito} from '../../utils/mockData'
-import { notificationService} from '../../services/shared/notification.service'
-export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => ({
+import type { TransitoPendiente } from '../../types/monitoring'
+import { transitosService } from '../../services/transitos.service'
+import { notificationService } from '../../services/shared/notification.service'
+import { generateMockTransito } from '../../utils/mockData'
+
+export const createTransitosSlice: StateCreator<
+  TransitosStore,
+  [],
+  [],
+  TransitosState & TransitosActions & TransitosComputedProperties
+> = (set, get) => ({
   // State
   transitos: [],
   transitosPendientes: [],
@@ -20,43 +32,37 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
     fechaDesde: undefined,
     fechaHasta: undefined
   },
-  
-  // Computed getters
+
+  // Computed
   get filteredTransitos() {
     const { transitos, filters } = get()
     return transitos.filter(transito => {
-      const matchesSearch = !filters.search || 
-        transito.dua.toLowerCase().includes(filters.search.toLowerCase()) ||
-        transito.empresa?.toLowerCase().includes(filters.search.toLowerCase())
-      const matchesEstado = !filters.estado || transito.estado === filters.estado
-      const matchesOrigen = !filters.origen || transito.origen === filters.origen
-      const matchesDestino = !filters.destino || transito.destino === filters.destino
-      return matchesSearch && matchesEstado && matchesOrigen && matchesDestino
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase()
+        const matchesSearch = 
+          transito.dua.toLowerCase().includes(searchLower) ||
+          transito.chofer.toLowerCase().includes(searchLower) ||
+          transito.matricula.toLowerCase().includes(searchLower) ||
+          transito.origen.toLowerCase().includes(searchLower) ||
+          transito.destino.toLowerCase().includes(searchLower)
+        if (!matchesSearch) return false
+      }
+      if (filters.estado && transito.estado !== filters.estado) return false
+      if (filters.origen && transito.origen !== filters.origen) return false
+      if (filters.destino && transito.destino !== filters.destino) return false
+      return true
     })
   },
-  
+
   get transitosStats() {
-    const { transitos } = get()
+    const transitos = get().filteredTransitos
     return {
       total: transitos.length,
       enCurso: transitos.filter(t => t.estado === 'EN_TRANSITO').length,
       completados: transitos.filter(t => t.estado === 'COMPLETADO').length,
       conAlertas: transitos.filter(t => t.estado === 'ALERTA').length,
-      demorados: transitos.filter(t => t.estado === 'EN_TRANSITO' && t.tiempoRestante && t.tiempoRestante < 0).length
+      demorados: transitos.filter(t => t.tiempoRestante && t.tiempoRestante < 0).length
     }
-  },
-  
-  // Legacy computed getters
-  get transitosEnCurso() {
-    return get().transitos.filter(t => t.estado === 'EN_TRANSITO')
-  },
-  
-  get transitosCompletados() {
-    return get().transitos.filter(t => t.estado === 'COMPLETADO')
-  },
-  
-  get transitosConAlertas() {
-    return get().transitos.filter(t => t.estado === 'ALERTA')
   },
 
   // Actions
@@ -66,7 +72,25 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
   
   updateTransito: (id, data) => set((state) => ({
     transitos: state.transitos.map(t => t.id === id ? { ...t, ...data } : t),
-    transitosPendientes: state.transitosPendientes.map(t => t.id === id ? { ...t, ...data } : t),
+    transitosPendientes: state.transitosPendientes.map(t => {
+      if (t.id === id) {
+        // Only update fields that exist in TransitoPendiente
+        const validUpdate: Partial<TransitoPendiente> = {}
+        if ('dua' in data) validUpdate.dua = data.dua
+        if ('origen' in data) validUpdate.origen = data.origen
+        if ('destino' in data) validUpdate.destino = data.destino
+        if ('matricula' in data) validUpdate.matricula = data.matricula
+        if ('chofer' in data) validUpdate.chofer = data.chofer
+        // Map Transito estado to TransitoPendiente estado if provided
+        if ('estado' in data) {
+          if (data.estado === 'PENDIENTE') validUpdate.estado = 'pendiente'
+          else if (data.estado === 'EN_TRANSITO') validUpdate.estado = 'en_proceso'
+          else if (data.estado === 'COMPLETADO') validUpdate.estado = 'precintado'
+        }
+        return { ...t, ...validUpdate }
+      }
+      return t
+    }),
   })),
   
   removeTransito: (id) => set((state) => ({
@@ -94,6 +118,20 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
     }
   }),
   
+  // Legacy computed properties
+  get transitosEnCurso() {
+    return get().transitos.filter(t => t.estado === 'EN_TRANSITO')
+  },
+  
+  get transitosCompletados() {
+    return get().transitos.filter(t => t.estado === 'COMPLETADO')
+  },
+  
+  get transitosConAlertas() {
+    return get().transitos.filter(t => t.estado === 'ALERTA' || t.estado === 'con_alerta')
+  },
+  
+  // Async actions
   fetchTransitos: async () => {
     const { setLoading, setError, setTransitos } = get()
     setLoading(true)
@@ -108,8 +146,8 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
         precinto: '',
         viaje: p.numeroViaje,
         mov: p.mov,
-        estado: p.estado === 'pendiente' ? 'PENDIENTE' : 
-                p.estado === 'en_proceso' ? 'EN_TRANSITO' : 'COMPLETADO',
+        estado: p.estado === 'pendiente' ? 'PENDIENTE' as const : 
+                p.estado === 'en_proceso' ? 'EN_TRANSITO' as const : 'COMPLETADO' as const,
         fechaSalida: new Date().toISOString(),
         encargado: p.despachante,
         origen: p.origen,
@@ -133,7 +171,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
           precinto: `P${i}`,
           viaje: pending.numeroViaje,
           mov: pending.mov,
-          estado: i < 8 ? 'EN_TRANSITO' : i < 14 ? 'COMPLETADO' : 'PENDIENTE',
+          estado: i < 8 ? 'EN_TRANSITO' as const : i < 14 ? 'COMPLETADO' as const : 'PENDIENTE' as const,
           fechaSalida: new Date().toISOString(),
           encargado: pending.despachante,
           origen: pending.origen,
@@ -147,7 +185,7 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
         }
       })
       setTransitos(mockData)
-      console.warn('Using mock data for transitos:', error)
+      setError(error instanceof Error ? error.message : 'Error fetching transitos')
       return mockData
     } finally {
       setLoading(false)
@@ -214,7 +252,20 @@ export const createTransitosSlice: StateCreator<TransitosStore> = (set, get) => 
       
       const pendingIndex = transitosPendientes.findIndex(t => t.id === id)
       if (pendingIndex !== -1) {
-        transitosPendientes[pendingIndex] = { ...transitosPendientes[pendingIndex], ...data }
+        // Only update fields that exist in TransitoPendiente
+        const validUpdate: Partial<TransitoPendiente> = {}
+        if ('dua' in data) validUpdate.dua = data.dua
+        if ('origen' in data) validUpdate.origen = data.origen
+        if ('destino' in data) validUpdate.destino = data.destino
+        if ('matricula' in data) validUpdate.matricula = data.matricula
+        if ('chofer' in data) validUpdate.chofer = data.chofer
+        // Map Transito estado to TransitoPendiente estado if provided
+        if ('estado' in data) {
+          if (data.estado === 'PENDIENTE') validUpdate.estado = 'pendiente'
+          else if (data.estado === 'EN_TRANSITO') validUpdate.estado = 'en_proceso'
+          else if (data.estado === 'COMPLETADO') validUpdate.estado = 'precintado'
+        }
+        transitosPendientes[pendingIndex] = { ...transitosPendientes[pendingIndex], ...validUpdate }
       }
     })
     

@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+} from '@tanstack/react-table'
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
 } from '@tanstack/react-table'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
@@ -30,7 +32,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTableV2<TData, TValue>({
-  columns, data, searchKey, searchPlaceholder: _searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
+  columns, data, searchKey, searchPlaceholder = 'Buscar...', showColumnVisibility = true, showPagination = true, pageSize = 10, }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -48,7 +50,6 @@ export function DataTableV2<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: 'fuzzy',
     state: {
       sorting,
       columnFilters,
@@ -70,9 +71,9 @@ export function DataTableV2<TData, TValue>({
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
-              placeholder={s_earchPlaceholder}
+              placeholder={searchPlaceholder}
               value={globalFilter ?? ''}
-              onChange={(_event) => setGlobalFilter(event.target.value)}
+              onChange={(event) => setGlobalFilter(event.target.value)}
               className="pl-9 bg-gray-800 border-gray-700"
             />
           </div>
@@ -80,10 +81,10 @@ export function DataTableV2<TData, TValue>({
           {/* Column Filters */}
           {searchKey && (
             <Input
-              placeholder={`Filtrar por ${s_earchKey}...`}
-              value={(table.getColumn(s_earchKey)?.getFilterValue() as string) ?? ''}
-              onChange={(_event) =>
-                table.getColumn(s_earchKey)?.setFilterValue(event.target.value)
+              placeholder={`Filtrar por ${searchKey}...`}
+              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+              onChange={(event) =>
+                table.getColumn(searchKey)?.setFilterValue(event.target.value)
               }
               className="max-w-sm bg-gray-800 border-gray-700"
             />
@@ -101,14 +102,14 @@ export function DataTableV2<TData, TValue>({
             <DropdownMenuContent align="end" className="w-48">
               {table
                 .getAllColumns()
-                .filter((_column) => column.getCanHide())
-                .map((_column) => {
+                .filter((column) => column.getCanHide())
+                .map((column) => {
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(_value) =>
+                      onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
                       }
                     >
@@ -125,8 +126,8 @@ export function DataTableV2<TData, TValue>({
       <div className="rounded-md border border-gray-700">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((_headerGroup) => (<TableRow key={headerGroup.id} className="border-gray-700">
-                {headerGroup.headers.map((_header) => {
+            {table.getHeaderGroups().map((headerGroup) => (<TableRow key={headerGroup.id} className="border-gray-700">
+                {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id} className="text-gray-300">
                       {header.isPlaceholder
@@ -143,13 +144,13 @@ export function DataTableV2<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((_row) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   className="border-gray-700 hover:bg-gray-800/50"
                 >
-                  {row.getVisibleCells().map((_cell) => (
+                  {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,

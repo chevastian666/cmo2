@@ -4,7 +4,7 @@ import {AlertCircle, CheckCircle, XCircle, Clock, MapPin, Eye, MessageSquare} fr
 import { format} from 'date-fns'
 import { Button} from '@/components/ui/button'
 import { cn} from '@/lib/utils'
-import type { Alerta} from '../types'
+import type { Alerta} from '@/types'
 import { AnimatedBadge} from '@/components/animations/AnimatedComponents'
 import { transitions} from '@/components/animations/AnimationPresets'
 interface AlertsTableAnimatedProps {
@@ -44,7 +44,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
     }
   }
   const getStatusBadge = (alerta: Alerta) => {
-    if (alerta.verificada) {
+    if ('verificada' in alerta && alerta.verificada) {
       return <AnimatedBadge variant="success">Verificada</AnimatedBadge>
     }
     if (alerta.atendida) {
@@ -210,7 +210,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                     </motion.div>
                   )}
                   
-                  {onVerify && alerta.atendida && !alerta.verificada && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  {onVerify && alerta.atendida && !('verificada' in alerta && alerta.verificada) && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         size="sm"
                         variant="outline"
@@ -331,7 +331,7 @@ export const AlertsTableAnimated: React.FC<AlertsTableAnimatedProps> = ({
                   </motion.div>
                 )}
                 
-                {onVerify && alerta.atendida && !alerta.verificada && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                {onVerify && alerta.atendida && !('verificada' in alerta && alerta.verificada) && (<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
                       variant="outline"

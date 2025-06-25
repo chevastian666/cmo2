@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { precintosService } from '../../../services/precintos.service'
-import { _QUERY_KEYS as QUERY_KEYS } from '../../../config'
+import { QUERY_KEYS } from '../../../config'
 import type { PrecintoFilters } from '../../../types'
 export const usePrecintos = (filters?: PrecintoFilters) => {
   return useQuery({

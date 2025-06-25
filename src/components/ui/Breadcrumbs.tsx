@@ -51,25 +51,27 @@ const routeConfig: Record<string, { label: string; parent?: string }> = {
 }
 const generateBreadcrumbsFromPath = (pathname: string): BreadcrumbItem[] => {
   const items: BreadcrumbItem[] = []
-  const segments = pathname.split('/').filter(_Boolean)
+  const segments = pathname.split('/').filter(Boolean)
   // Build breadcrumbs from route config
   let currentPath = ''
-  segments.forEach((s_egment, index) => {
-    currentPath += `/${s_egment}`
+  segments.forEach((segment, index) => {
+    currentPath += `/${segment}`
     // Check if we have a config for this exact path
 
-    if (__config) {
+    const config = routeConfig[currentPath]
+    if (config) {
       items.push({
         label: config.label,
         href: index === segments.length - 1 ? undefined : currentPath
       })
     } else {
       // Check for dynamic routes (with :param)
-      const _dynamicKey = Object.keys(_routeConfig).find(key => {
+      const dynamicKey = Object.keys(routeConfig).find(key => {
         const regex = new RegExp('^' + key.replace(/:[^/]+/g, '[^/]+') + '$')
-        return regex.test(_currentPath)
+        return regex.test(currentPath)
       })
-      if (_dynamicKey) {
+      if (dynamicKey) {
+        const config = routeConfig[dynamicKey]
 
         items.push({
           label: config.label,
@@ -175,7 +177,7 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
   return generateBreadcrumbsFromPath(location.pathname)
 }
 // Animated breadcrumb variant
-export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (_props) => {
+export const AnimatedBreadcrumb: React.FC<BreadcrumbProps> = (props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}

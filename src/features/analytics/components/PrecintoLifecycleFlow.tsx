@@ -24,13 +24,13 @@ export const PrecintoLifecycleFlow: React.FC<PrecintoLifecycleFlowProps> = ({ da
     const stages: PrecintoFlow[] = [
       {
         stage: 'created',
-        count: precintos.filter(p => p.estado === 'creado').length || 100,
+        count: precintos.filter(p => p.estado === 'CNP').length || 100,
         nextStage: 'activated',
         dropoffCount: 5
       },
       {
         stage: 'activated',
-        count: precintos.filter(p => p.estado === 'activo').length || 95,
+        count: precintos.filter(p => p.estado === 'SAL').length || 95,
         nextStage: 'in_transit',
         dropoffCount: 3
       },

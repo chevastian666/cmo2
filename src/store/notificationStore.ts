@@ -15,21 +15,35 @@ export interface Notification {
   }>
 }
 
+// This is a simplified version for the store
+export interface SimpleNotificationGroup {
+  type: string
+  count: number
+  notifications: Notification[]
+}
+
 interface NotificationStore {
   notifications: Notification[]
   unreadCount: number
+  groups: SimpleNotificationGroup[]
   addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
   removeNotification: (id: string) => void
   clearAll: () => void
+  acknowledgeNotification: (id: string) => void
+  snoozeNotification: (id: string, duration: number) => void
+  dismissNotification: (id: string) => void
+  getNotificationsByFilter: (filter: any) => Notification[]
+  getGroupedNotifications: () => any[]
 }
 
 export const useNotificationStore = create<NotificationStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       notifications: [],
       unreadCount: 0,
+      groups: [],
       
       addNotification: (notification) =>
         set((state) => {
@@ -71,7 +85,66 @@ export const useNotificationStore = create<NotificationStore>()(
         set(() => ({
           notifications: [],
           unreadCount: 0,
+          groups: [],
         })),
+      
+      acknowledgeNotification: (id) =>
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n
+          ),
+          unreadCount: state.notifications.filter((n) => !n.read && n.id !== id).length,
+        })),
+      
+      snoozeNotification: (id, _duration) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+          unreadCount: state.notifications.filter((n) => !n.read && n.id !== id).length,
+        })),
+      
+      dismissNotification: (id) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+          unreadCount: state.notifications.filter((n) => !n.read && n.id !== id).length,
+        })),
+      
+      getNotificationsByFilter: (filter) => {
+        const state = get()
+        if (!filter || Object.keys(filter).length === 0) {
+          return state.notifications
+        }
+        return state.notifications.filter((n) => {
+          if (filter.type && n.type !== filter.type) return false
+          if (filter.read !== undefined && n.read !== filter.read) return false
+          return true
+        })
+      },
+      
+      getGroupedNotifications: () => {
+        const state = get()
+        const grouped = state.notifications.reduce((acc, notification) => {
+          const type = notification.type
+          if (!acc[type]) {
+            acc[type] = {
+              id: type,
+              label: type.charAt(0).toUpperCase() + type.slice(1),
+              type,
+              priority: 'normal' as any,
+              count: 0,
+              latestTimestamp: new Date(),
+              notifications: [],
+              collapsed: false
+            }
+          }
+          acc[type].count++
+          acc[type].notifications.push(notification)
+          if (notification.timestamp > acc[type].latestTimestamp) {
+            acc[type].latestTimestamp = notification.timestamp
+          }
+          return acc
+        }, {} as Record<string, any>)
+        return Object.values(grouped)
+      },
     }),
     {
       name: 'notification-store',

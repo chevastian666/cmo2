@@ -1,21 +1,21 @@
-export const _ESTADO_PRECINTO = {
+export const ESTADO_PRECINTO = {
   SAL: 'SAL',
   LLE: 'LLE',
   FMF: 'FMF',
   CFM: 'CFM',
   CNP: 'CNP'
 } as const
-export const _TIPO_PRECINTO = {
+export const TIPO_PRECINTO = {
   RFID: 'RFID',
   GPS: 'GPS',
   HYBRID: 'HYBRID'
 } as const
-export const _ESTADO_ESLINGA = {
+export const ESTADO_ESLINGA = {
   CERRADA: 'cerrada',
   ABIERTA: 'abierta',
   VIOLADA: 'violada'
 } as const
-export const _TIPO_ALERTA = {
+export const TIPO_ALERTA = {
   VIOLACION: 'violacion',
   BATERIA_BAJA: 'bateria_baja',
   FUERA_DE_RUTA: 'fuera_de_ruta',
@@ -23,13 +23,13 @@ export const _TIPO_ALERTA = {
   TEMPERATURA: 'temperatura',
   INTRUSION: 'intrusion'
 } as const
-export const _SEVERIDAD_ALERTA = {
+export const SEVERIDAD_ALERTA = {
   BAJA: 'baja',
   MEDIA: 'media',
   ALTA: 'alta',
   CRITICA: 'critica'
 } as const
-export const _UBICACIONES_URUGUAY = {
+export const UBICACIONES_URUGUAY = {
   ORIGEN: [
     'ZONA FRANCA MONTEVIDEO',
     'MONTECON S.A',
@@ -75,8 +75,8 @@ export const _UBICACIONES_URUGUAY = {
     'ASOCIACION RURAL DEL URUGUAY'
   ]
 }
-export const _TIPO_CARGA = ['Contenedor', 'Enlonada']
-export const _THRESHOLDS = {
+export const TIPO_CARGA = ['Contenedor', 'Enlonada']
+export const THRESHOLDS = {
   BATERIA_BAJA: 20,
   BATERIA_MEDIA: 50,
   TIEMPO_PENDIENTE_VERDE: 1800, // 30 minutos

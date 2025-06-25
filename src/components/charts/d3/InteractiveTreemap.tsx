@@ -8,7 +8,7 @@ import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as d3 from 'd3'
 import type { TreemapNode, ChartConfig } from './types'
 import { DEFAULT_CHART_CONFIG } from './types'
-import { formatters, scales, animations, tooltip} from './utils'
+import { formatters, scales, animations, tooltip } from './utils'
 
 // D3 Hierarchy node with treemap layout properties
 interface D3TreemapNode extends d3.HierarchyRectangularNode<TreemapNode> {
@@ -62,7 +62,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .size([innerWidth, innerHeight])
       .padding(2)
       .round(true)
-    treemap(root)
+    treemap(root as d3.HierarchyRectangularNode<TreemapNode>)
     // Create color scale
     const colorScale = scales.createColorScale(
       [...new Set(root.leaves().map(d => d.data.category || 'default'))],
@@ -75,12 +75,11 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     const tooltipDiv = tooltip.create(containerRef.current!)
     // Create cells
     const cell = g.selectAll('.cell')
-      .data(root.leaves())
+      .data(root.leaves() as D3TreemapNode[])
       .enter().append('g')
       .attr('class', 'cell')
-      .attr('transform', d => {
-        const node = d as D3TreemapNode
-        return `translate(${node.x0},${node.y0})`
+      .attr('transform', (d: D3TreemapNode) => {
+        return `translate(${d.x0},${d.y0})`
       })
       .style('cursor', enableDrillDown ? 'pointer' : 'default')
     // Add cell rectangles
@@ -94,14 +93,8 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
     // Animate rectangles
     rects.transition()
       .duration(config.animations.duration)
-      .attr('width', d => {
-        const node = d as D3TreemapNode
-        return Math.max(0, node.x1 - node.x0)
-      })
-      .attr('height', d => {
-        const node = d as D3TreemapNode
-        return Math.max(0, node.y1 - node.y0)
-      })
+      .attr('width', (d: D3TreemapNode) => Math.max(0, d.x1 - d.x0))
+      .attr('height', (d: D3TreemapNode) => Math.max(0, d.y1 - d.y0))
     // Add cell labels
     const labels = cell.append('text')
       .attr('x', 4)
@@ -112,10 +105,9 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('pointer-events', 'none')
       .style('user-select', 'none')
       .style('opacity', 0)
-      .text(d => {
-        const node = d as D3TreemapNode
-        const width = node.x1 - node.x0
-        const height = node.y1 - node.y0
+      .text((d: D3TreemapNode) => {
+        const width = d.x1 - d.x0
+        const height = d.y1 - d.y0
         if (width < 50 || height < 20) return ''
         const maxLength = Math.floor(width / 8)
         return d.data.name.length > maxLength 
@@ -131,26 +123,19 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('pointer-events', 'none')
       .style('user-select', 'none')
       .style('opacity', 0)
-      .text(d => {
-        const node = d as D3TreemapNode
-        const width = node.x1 - node.x0
-        const height = node.y1 - node.y0
+      .text((d: D3TreemapNode) => {
+        const width = d.x1 - d.x0
+        const height = d.y1 - d.y0
         if (width < 60 || height < 35) return ''
         return formatters.number(d.value || 0)
       })
     // Animate labels
-    animations.fadeIn(labels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 200)
-    animations.fadeIn(valueLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 400)
+    animations.fadeIn(labels as any, config.animations.duration + 200)
+    animations.fadeIn(valueLabels as any, config.animations.duration + 400)
     // Add percentage labels for larger cells
     const percentageLabels = cell.append('text')
-      .attr('x', d => {
-        const node = d as D3TreemapNode
-        return (node.x1 - node.x0) / 2
-      })
-      .attr('y', d => {
-        const node = d as D3TreemapNode
-        return (node.y1 - node.y0) / 2
-      })
+      .attr('x', (d: D3TreemapNode) => (d.x1 - d.x0) / 2)
+      .attr('y', (d: D3TreemapNode) => (d.y1 - d.y0) / 2)
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .style('fill', '#FFFFFF')
@@ -159,18 +144,17 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('pointer-events', 'none')
       .style('user-select', 'none')
       .style('opacity', 0)
-      .text(d => {
-        const node = d as D3TreemapNode
-        const width = node.x1 - node.x0
-        const height = node.y1 - node.y0
+      .text((d: D3TreemapNode) => {
+        const width = d.x1 - d.x0
+        const height = d.y1 - d.y0
         if (width < 80 || height < 50) return ''
         const percentage = ((d.value || 0) / (root.value || 1)) * 100
         return `${percentage.toFixed(1)}%`
       })
-    animations.fadeIn(percentageLabels as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 600)
+    animations.fadeIn(percentageLabels as any, config.animations.duration + 600)
     // Add interactions
     cell
-      .on('mouseenter', function(event, d) {
+      .on('mouseenter', function(event, d: D3TreemapNode) {
         d3.select(this).select('rect')
           .transition()
           .duration(200)
@@ -200,7 +184,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
           .style('filter', 'brightness(1)')
         tooltip.hide(tooltipDiv)
       })
-      .on('click', (_event, d) => {
+      .on('click', (_event, d: D3TreemapNode) => {
         onNodeClick?.(d.data)
         if (enableDrillDown && d.data.children && d.data.children.length > 0) {
           setCurrentRoot(d.data)
@@ -217,7 +201,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .attr('class', 'breadcrumb-item')
       .attr('transform', (_d, i) => `translate(${i * 120}, 0)`)
       .style('cursor', 'pointer')
-      .on('click', (_, d) => {
+      .on('click', (_event, d) => {
         const index = breadcrumbs.indexOf(d)
         setCurrentRoot(d)
         setBreadcrumbs(breadcrumbs.slice(0, index + 1))
@@ -304,7 +288,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('font-size', '14px')
       .style('font-weight', '600')
       .text(d => d.value)
-    animations.fadeIn(stats as unknown as d3.Selection<HTMLElement | SVGElement, unknown, null, undefined>, config.animations.duration + 800)
+    animations.fadeIn(stats as any, config.animations.duration + 800)
   }, [currentRoot, dimensions, config, breadcrumbs, enableDrillDown, onNodeClick])
     useEffect(() => {
     drawTreemap()

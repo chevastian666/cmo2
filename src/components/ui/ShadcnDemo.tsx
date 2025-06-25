@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './dialog'
 import { AlertCircle, Check, X, ArrowRight, User, Table } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle} from './Card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './card'
 import { Alert, AlertDescription, AlertTitle} from './alert'
 import { FormularioCamioneroV2} from '../../features/camioneros/components/FormularioCamioneroV2'
 import { PrecintosTableV2} from '../../features/precintos/components/PrecintosTableV2'
@@ -25,11 +25,12 @@ import { NetworkChartV2} from '../../features/dashboard/components/NetworkChartV
 // Mock data for demos
 const mockAlerta = {
   id: '1',
-  tipo: 'temperatura',
-  severidad: 'critica',
+  tipo: 'BBJ' as const, // Changed to valid tipo
+  severidad: 'critica' as const,
+  precintoId: 'P001', // Added missing property
   codigoPrecinto: 'BT20240001',
   mensaje: 'Temperatura fuera de rango',
-  timestamp: new Date(),
+  timestamp: Date.now(), // Changed to number
   ubicacion: { lat: -34.9011, lng: -56.1645 },
   atendida: false
 }

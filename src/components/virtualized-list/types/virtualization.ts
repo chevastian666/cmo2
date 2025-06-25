@@ -1,3 +1,17 @@
+import type { Alerta as Alert } from '@/types/monitoring'
+
+export interface AlertFilters {
+  search?: string
+  tipo?: string[]
+  severidad?: string[]
+  atendida?: boolean
+}
+
+export interface GroupingOptions {
+  groupBy?: 'tipo' | 'severidad' | 'fecha' | 'precinto'
+  collapsedGroups?: Set<string>
+}
+
 export interface VirtualizedAlertListProps {
   alerts: Alert[]
   itemHeight: number | ((index: number) => number)

@@ -54,26 +54,26 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
       setIsValidating(false)
     }
   }
-  const _handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
-    const _newValue = _e.target.value
-    setLocalValue(_newValue)
-    onChange?.(_e)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    setLocalValue(newValue)
+    onChange?.(e)
     // Debounced validation
     if (validationFn) {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current)
       }
 
-      if (_newValue) {
+      if (newValue) {
         debounceTimerRef.current = setTimeout(() => {
-          handleValidation(_newValue)
+          handleValidation(newValue)
         }, debounceMs)
       } else {
         setIsValid(null)
       }
     }
   }
-  const _handleClear = () => {
+  const handleClear = () => {
     setLocalValue('')
     setIsValid(null)
     onClear?.()
@@ -111,14 +111,14 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
 
     return null
   }
-  const _inputType = type === 'password' && showPassword ? 'text' : type
+  const inputType = type === 'password' && showPassword ? 'text' : type
   return (<div className="relative">
       <div className="relative">
         <Input
           {...props}
-          type={_inputType}
+          type={inputType}
           value={localValue}
-          onChange={_handleChange}
+          onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={cn(
@@ -149,7 +149,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.15 }}
                 type="button"
-                onClick={_handleClear}
+                onClick={handleClear}
                 className="p-1 hover:bg-gray-700 rounded transition-colors"
               >
                 <X className="h-3 w-3 text-gray-400" />
@@ -217,13 +217,13 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   )
 }
 // Preset validation functions
-export const emailValidation = (_email: string): boolean => {
+export const emailValidation = (email: string): boolean => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return regex.test(_email)
+  return regex.test(email)
 }
-export const urlValidation = (_url: string): boolean => {
+export const urlValidation = (url: string): boolean => {
   try {
-    new URL(_url)
+    new URL(url)
     return true
   } catch {
     return false
@@ -231,5 +231,5 @@ export const urlValidation = (_url: string): boolean => {
 }
 export const phoneValidation = (phone: string): boolean => {
   const regex = /^[\d\s\-+()]+$/
-  return regex.test(_phone) && phone.replace(/\D/g, '').length >= 10
+  return regex.test(phone) && phone.replace(/\D/g, '').length >= 10
 }

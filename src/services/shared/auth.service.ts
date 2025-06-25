@@ -5,7 +5,7 @@
 
 import { sharedApiService} from './sharedApi.service'
 import { sharedStateService} from './sharedState.service'
-import { _SHARED_CONFIG as SHARED_CONFIG} from '../../config/shared.config'
+import { SHARED_CONFIG } from '../../config/shared.config'
 import { jwtService} from '../jwt.service'
 import type { Usuario} from '../../types'
 import type { LoginResponse} from '../../types/jwt'

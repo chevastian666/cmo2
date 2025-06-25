@@ -5,7 +5,7 @@
  */
 
 import type { TreemapData, TreemapNode } from '../types'
-import type { Precinto, Transito, Alerta } from '@/types'
+import type { Precinto, TransitoPendiente, Alerta } from '@/types'
 /**
  * Transform precintos by company and status
  */
@@ -25,7 +25,7 @@ export const transformPrecintosByCompany = (
 
   const companiesMap = new Map<string, Map<string, number>>()
   precintos.forEach(precinto => {
-    const company = precinto.empresa || 'Sin Empresa'
+    const company = (precinto as any).empresa || 'Sin Empresa'
     const status = precinto.estado
     if (!companiesMap.has(company)) {
       companiesMap.set(company, new Map())
@@ -57,7 +57,7 @@ export const transformPrecintosByCompany = (
  * Transform transits by route and status
  */
 export const transformTransitsByRoute = (
-  transitos: Transito[]
+  transitos: TransitoPendiente[]
 ): TreemapData => {
   if (!transitos || transitos.length === 0) {
     return {
@@ -73,7 +73,7 @@ export const transformTransitsByRoute = (
   const routesMap = new Map<string, Map<string, number>>()
   transitos.forEach(transito => {
     const route = `${transito.origen} → ${transito.destino}`
-    const status = transito.estado
+    const status = (transito as any).estado || 'pendiente'
     if (!routesMap.has(route)) {
       routesMap.set(route, new Map())
     }
@@ -120,7 +120,7 @@ export const transformAlertsBySeverity = (
   const severityMap = new Map<string, Map<string, number>>()
   alertas.forEach(alerta => {
     const severity = alerta.tipo
-    const status = alerta.estado || 'activa'
+    const status = (alerta as any).estado || 'activa'
     if (!severityMap.has(severity)) {
       severityMap.set(severity, new Map())
     }
@@ -158,7 +158,7 @@ export const transformByTimePeriod = (
 ): TreemapData => {
   const timeMap = new Map<string, Map<string, number>>()
   data.forEach(item => {
-    const date = new Date(item[dateField])
+    const date = new Date((item as any)[dateField])
     let period = ''
     switch (_groupBy) {
       case 'day': {
@@ -176,7 +176,7 @@ export const transformByTimePeriod = (
         break
     }
 
-    const type = item.tipo || item.estado || 'otros'
+    const type = (item as any).tipo || (item as any).estado || 'otros'
     if (!timeMap.has(period)) {
       timeMap.set(period, new Map())
     }
@@ -212,7 +212,7 @@ export const createHierarchy = (
   data.forEach(item => {
     let currentLevel = root
     levels.forEach((level, index) => {
-      const value = item[level] || 'Sin Definir'
+      const value = (item as any)[level] || 'Sin Definir'
       let child = currentLevel.children?.find(c => c.name === value)
       if (!child) {
         child = {

@@ -59,7 +59,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
     <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
-          key={_i}
+          key={i}
           variant="text"
           width={i === lines - 1 ? '80%' : '100%'}
         />

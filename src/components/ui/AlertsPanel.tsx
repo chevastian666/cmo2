@@ -42,7 +42,7 @@ interface AlertGroup {
 }
 
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({
-  alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title: _title = 'Alertas Activas', emptyMessage: _emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
+  alerts, className, maxHeight = '400px', onAlertClick, onAlertAcknowledge, showHeader = true, title = 'Alertas Activas', emptyMessage = 'No hay alertas activas', variant = 'default', groupByPriority = true, enableSound = false, enableVisualPulse = false
 }) => {
   const [newAlertIds, setNewAlertIds] = useState<Set<string>>(new Set())
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
@@ -175,7 +175,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     }
     setCollapsedGroups(newCollapsed)
   }
-  const _renderAlert = (alert: Alert) => {
+  const renderAlert = (alert: Alert) => {
     const isNew = newAlertIds.has(alert.id)
     return (
       <div
@@ -274,7 +274,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
         <div className="px-4 py-3 border-b border-gray-700">
           <h3 className="text-lg font-semibold text-gray-100 flex items-center justify-between">
             <span className="flex items-center gap-2">
-              {_title}
+              {title}
               {alerts.some(a => a.severity === 'critical') && (
                 <span className="flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-red-400 opacity-75"></span>
@@ -297,12 +297,12 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       >
         {alerts.length === 0 ? (
           <EmptyState
-            message={_emptyMessage}
+            message={emptyMessage}
             icon="alert"
             className="py-8"
           />
         ) : groupByPriority && groupedAlerts ? (<div className="divide-y divide-gray-700">
-            {groupedAlerts.map((_group) => (<div key={group.severity} className="p-2">
+            {groupedAlerts.map((group) => (<div key={group.severity} className="p-2">
                 <button
                   onClick={() => toggleGroup(group.severity)}
                   className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
@@ -322,7 +322,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
                 
                 {!collapsedGroups.has(group.severity) && (
                   <div className="mt-2 space-y-1">
-                    {group.alerts.map(_renderAlert)}
+                    {group.alerts.map(renderAlert)}
                   </div>
                 )}
               </div>
@@ -333,7 +333,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
             'divide-y divide-gray-700',
             variant === 'compact' ? 'space-y-0' : 'space-y-1 p-2'
           )}>
-            {alerts.map(_renderAlert)}
+            {alerts.map(renderAlert)}
           </div>
         )}
       </div>

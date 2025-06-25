@@ -62,7 +62,7 @@ export const NotificationFilters: React.FC<NotificationFiltersProps> = ({
   )
   const toggleArrayFilter = <T extends string>(filterKey: 'types' | 'priorities' | 'statuses', value: T) => {
     const currentArray = (filter[filterKey] as T[]) || []
-    const newArray = currentArray.includes(_value)
+    const newArray = currentArray.includes(value)
       ? currentArray.filter(item => item !== value)
       : [...currentArray, value]
     onFilterChange({

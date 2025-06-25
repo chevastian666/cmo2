@@ -1,5 +1,5 @@
 // Shared configuration for both CMO and Encargados panels
-export const _SHARED_CONFIG = {
+export const SHARED_CONFIG = {
   // API Configuration
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
   WS_BASE_URL: import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:3000',
@@ -130,23 +130,23 @@ export const _SHARED_CONFIG = {
   }
 }
 // Helper to get authenticated headers
-export const _getAuthHeaders = (): HeadersInit => {
-  const _token = localStorage.getItem(_SHARED_CONFIG.AUTH_TOKEN_KEY)
+export const getAuthHeaders = (): HeadersInit => {
+  const token = localStorage.getItem(SHARED_CONFIG.AUTH_TOKEN_KEY)
   return {
     'Content-Type': 'application/json',
-    ...(_token && { 'Authorization': `Bearer ${_token}` })
+    ...(token && { 'Authorization': `Bearer ${token}` })
   }
 }
 // Helper to check if user has role
-export const _hasRole = (userRole: string, requiredRoles: string[]): boolean => {
+export const hasRole = (userRole: string, requiredRoles: string[]): boolean => {
   return requiredRoles.includes(userRole)
 }
 // Helper to format API endpoint
-export const _formatApiEndpoint = (endpoint: string): string => {
+export const formatApiEndpoint = (endpoint: string): string => {
   if (!endpoint) {
     console.error('formatApiEndpoint called with undefined endpoint')
-    return _SHARED_CONFIG.API_BASE_URL
+    return SHARED_CONFIG.API_BASE_URL
   }
-  const _baseUrl = _SHARED_CONFIG.API_BASE_URL
-  return endpoint.startsWith('/') ? `${_baseUrl}${endpoint}` : `${_baseUrl}/${endpoint}`
+  const baseUrl = SHARED_CONFIG.API_BASE_URL
+  return endpoint.startsWith('/') ? `${baseUrl}${endpoint}` : `${baseUrl}/${endpoint}`
 }

@@ -160,7 +160,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
       <div className={cn('flex items-center justify-center', className)} style={{ height: containerHeight }}>
         <EmptyState
           title="Error al cargar alertas"
-          description={error.message}
+          message={error.message}
           action={{
             label: 'Reintentar',
             onClick: () => {}

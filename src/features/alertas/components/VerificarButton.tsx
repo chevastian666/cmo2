@@ -108,7 +108,7 @@ export const VerificarButton: React.FC<VerificarButtonProps> = ({
   // Default variant
   return (
     <motion.button
-      onClick={_onClick}
+      onClick={onClick}
       disabled={disabled}
       className={cn(
         "group relative flex items-center gap-2 rounded-lg font-medium",

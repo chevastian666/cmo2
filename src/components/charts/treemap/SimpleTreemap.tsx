@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import { TreemapProps} from './types'
+import type { TreemapProps } from './types'
 export const SimpleTreemap: React.FC<TreemapProps> = ({
   data, width = 800, height = 600, className = ''
 }) => {

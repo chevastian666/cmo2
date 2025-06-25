@@ -4,6 +4,7 @@
  */
 
 import React from 'react'
+import { MapPin } from 'lucide-react'
 import { Navigation, Activity} from 'lucide-react'
 interface MapWidgetProps {
   showControls?: boolean

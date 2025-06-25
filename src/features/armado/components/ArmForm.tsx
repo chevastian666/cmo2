@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Truck, User, Building, MapPin, FileText, Phone, Hash, Package } from 'lucide-react'
 import { cn} from '../../../utils/utils'
-import { _ORIGENES_DESTINOS as ORIGENES_DESTINOS } from '../../../constants/locations'
+import { ORIGENES_DESTINOS } from '../../../constants/locations'
 // Empresas con RUT
 const EMPRESAS = [
   { nombre: 'Transportes del Sur S.A.', rut: '211234567890' },
@@ -354,7 +354,7 @@ export const ArmForm: React.FC<ArmFormProps> = ({ data, onChange, disabled = fal
             <textarea
               value={data.observaciones || ''}
               onChange={handleInputChange('observaciones')}
-              disabled={_disabled}
+              disabled={disabled}
               placeholder="Observaciones adicionales..."
               rows={3}
               className={cn(

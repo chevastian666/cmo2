@@ -51,10 +51,10 @@ export const DashboardSkeleton: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <CardSkeleton showDescription={_false} />
-        <CardSkeleton showDescription={_false} />
-        <CardSkeleton showDescription={_false} />
-        <CardSkeleton showDescription={_false} />
+        <CardSkeleton showDescription={false} />
+        <CardSkeleton showDescription={false} />
+        <CardSkeleton showDescription={false} />
+        <CardSkeleton showDescription={false} />
       </div>
 
       {/* Charts Section */}

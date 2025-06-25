@@ -7,9 +7,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { Responsive, WidthProvider} from 'react-grid-layout'
 import type { Layout, Layouts} from 'react-grid-layout'
-import { Lock, Unlock, Save, RotateCcw} from 'lucide-react'
+import { Lock, Unlock, Save, RotateCcw, Settings} from 'lucide-react'
 import { cn} from '../../utils/utils'
 import { motion, AnimatePresence} from 'framer-motion'
+import { useDashboardStore } from '@/store/dashboardStore'
 // CSS de react-grid-layout
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
@@ -36,7 +37,10 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   widgets, renderWidget, className = '', onLayoutChange
 }) => {
 
-  const [isDragging, setIsDragging] = useState(_false)
+  const [isDragging, setIsDragging] = useState(false)
+  
+  // Get state from store
+  const { layouts, layoutVersion, editMode, setLayouts, setEditMode, resetLayouts } = useDashboardStore()
   // Reset layouts if version is outdated
 
     useEffect(() => {
@@ -50,7 +54,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       // Layout personalizado para priorizar precintos activos y pendientes
       // Layout personalizado para widgets
       
-      return widgets.map((_widget) => {
+      return widgets.map((widget) => {
         let x = 0, y = 0, w = 4, h = 4
         // Posicionamiento específico según el widget - Layout optimizado
         if (widget.id === 'kpi-precintos') {
@@ -93,19 +97,19 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
         
         // Ajustar para diferentes tamaños de pantalla
         if (cols === 10) { // md
-          w = Math.min(_w, 5)
-          x = Math.min(_x, 5)
+          w = Math.min(w, 5)
+          x = Math.min(x, 5)
         } else if (cols === 6) { // sm
-          w = Math.min(_w, 6)
+          w = Math.min(w, 6)
           x = x % 6
         } else if (cols === 4) { // xs
           w = 4
           x = 0
-          y = widgets.indexOf(_widget) * 4
+          y = widgets.indexOf(widget) * 4
         } else if (cols === 2) { // xxs
           w = 2
           x = 0
-          y = widgets.indexOf(_widget) * 3
+          y = widgets.indexOf(widget) * 3
         }
         
         return {
@@ -130,8 +134,8 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       xxs: generateLayout(2)
     }
   }, [widgets])
-  const _currentLayouts = layouts || defaultLayouts
-  const handleLayoutChange = useCallback((layout: Layout[], layouts: Layouts) => {
+  const currentLayouts = layouts || defaultLayouts
+  const handleLayoutChange = useCallback((_layout: Layout[], layouts: Layouts) => {
     setLayouts(layouts)
     onLayoutChange?.(layouts)
   }, [onLayoutChange])
@@ -144,7 +148,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
     const notification = document.createElement('div')
     notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50'
     notification.textContent = 'Dashboard guardado'
-    document.body.appendChild(_notification)
+    document.body.appendChild(notification)
     setTimeout(() => notification.remove(), 2000)
   }
   return (
@@ -173,7 +177,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={s_aveLayouts}
+              onClick={_saveLayouts}
               className="p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               title="Guardar diseño"
             >
@@ -185,7 +189,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={_resetLayouts}
+              onClick={resetLayouts}
               className="p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               title="Restablecer diseño"
             >
@@ -201,22 +205,22 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
           'layout',
           isDragging && 'cursor-grabbing'
         )}
-        layouts={_currentLayouts}
+        layouts={currentLayouts}
         onLayoutChange={handleLayoutChange}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         rowHeight={70}
         margin={[12, 12]}
         containerPadding={[0, 0]}
-        isDraggable={_editMode}
-        isResizable={_editMode}
-        onDragStart={() => setIsDragging(_true)}
-        onDragStop={() => setIsDragging(_false)}
-        onResizeStart={() => setIsDragging(_true)}
-        onResizeStop={() => setIsDragging(_false)}
+        isDraggable={editMode}
+        isResizable={editMode}
+        onDragStart={() => setIsDragging(true)}
+        onDragStop={() => setIsDragging(false)}
+        onResizeStart={() => setIsDragging(true)}
+        onResizeStop={() => setIsDragging(false)}
         draggableHandle=".widget-drag-handle"
       >
-        {widgets.map((_widget) => (
+        {widgets.map((widget) => (
           <div
             key={widget.id}
             className={cn(
@@ -251,7 +255,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
                   transition={{ duration: 0.2 }}
                   className="h-full w-full flex-1"
                 >
-                  {renderWidget(_widget)}
+                  {renderWidget(widget)}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -300,4 +304,3 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   )
 }
 export default DashboardGrid
-export type { WidgetConfig }

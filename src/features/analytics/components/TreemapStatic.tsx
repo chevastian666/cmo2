@@ -8,8 +8,14 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 const TreemapStatic: React.FC = () => {
   // Mock data for testing
+  const data = [
+    { name: 'Activos', value: 150, color: '#10b981' },
+    { name: 'En Tránsito', value: 85, color: '#3b82f6' },
+    { name: 'Alertas', value: 25, color: '#ef4444' },
+    { name: 'Inactivos', value: 40, color: '#6b7280' }
+  ]
 
-  const total = _data.reduce((s_um, item) => sum + item.value, 0)
+  const total = data.reduce((sum, item) => sum + item.value, 0)
   return (
     <div className="p-6 space-y-6">
       <div>

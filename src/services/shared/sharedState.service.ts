@@ -1,6 +1,6 @@
 import { sharedWebSocketService } from './sharedWebSocket.service'
 import { sharedApiService } from './sharedApi.service'
-import { _SHARED_CONFIG as SHARED_CONFIG } from '../../config/shared.config'
+import { SHARED_CONFIG } from '../../config/shared.config'
 import type {
   Precinto, TransitoPendiente, Alerta, Usuario
 } from '../../types'

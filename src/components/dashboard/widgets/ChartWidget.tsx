@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts'
+import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts'
 import { useDashboardStore} from '../../../store/dashboardStore'
 import { D3VisualizationWidget} from '../../charts/d3/D3VisualizationWidget'
 interface ChartWidgetProps {
@@ -19,7 +19,7 @@ interface ChartWidgetProps {
 export const ChartWidget: React.FC<ChartWidgetProps> = ({
   widgetId, type = 'line', data: defaultData, dataKey = 'value', xAxisKey = 'name', colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444']
 }) => {
-  const _widgetSettings = useDashboardStore(state => state.widgetSettings[widgetId])
+  const widgetSettings = useDashboardStore(state => state.widgetSettings[widgetId])
   // Datos de ejemplo si no se proporcionan
   const chartData = defaultData || [
     { name: 'Lun', value: 400, value2: 240 },
@@ -36,25 +36,25 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
     { name: 'Completados', value: 300 },
     { name: 'Alertas', value: 200 }
   ]
-  const chartType = widgetSettings?.chartType || type
+  const chartType = (widgetSettings as any)?.chartType || type
   const renderChart = () => {
     // Handle D3 visualizations
     if (chartType.startsWith('d3-')) {
       const d3Type = chartType.replace('d3-', '') as 'line' | 'heatmap' | 'network' | 'treemap'
       return (
         <D3VisualizationWidget
-          type={_d3Type}
-          data={_null} // Use generated data
+          type={d3Type}
+          data={chartData as any} // Use generated data
           config={{ colors }}
           title={`D3.js ${d3Type.charAt(0).toUpperCase() + d3Type.slice(1)} Chart`}
         />
       )
     }
     
-    switch (_chartType) {
+    switch (chartType) {
       case 'line':
         return (
-          <LineChart data={_chartData}>
+          <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis dataKey={xAxisKey} stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
@@ -169,7 +169,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         renderChart()
       ) : (
         <ResponsiveContainer width="100%" height="100%">
-          {renderChart()}
+          {renderChart() as React.ReactElement}
         </ResponsiveContainer>
       )}
     </div>

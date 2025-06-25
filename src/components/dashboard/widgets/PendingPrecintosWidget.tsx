@@ -12,12 +12,12 @@ import { AnimatedBadge} from '../../animations/AnimatedComponents'
 export const PendingPrecintosWidget: React.FC = () => {
   const precintos = usePrecintosStore(state => state.precintos)
   // Calcular pendientes basado en el estado
-  // Estado 0 = Disponible, Estado 1 = En Tránsito, Estado 4 = Finalizado
+  // SAL = Salida, LLE = Llegada, FMF = Fin Movimiento Físico
   const pendientesPrecintar = precintos.filter(p => 
-    p.estado === 0 // Disponibles para precintar
+    p.estado === 'SAL' // Disponibles para precintar
   ).length
   const pendientesDesprecintar = precintos.filter(p => 
-    p.estado === 4 // Finalizados pendientes de desprecintar
+    p.estado === 'FMF' // Finalizados pendientes de desprecintar
   ).length
   const totalPendientes = pendientesPrecintar + pendientesDesprecintar
   return (
@@ -35,7 +35,7 @@ export const PendingPrecintosWidget: React.FC = () => {
           </div>
           {totalPendientes > 0 && (
             <AnimatedBadge variant="warning" pulse>
-              {_totalPendientes}
+              {totalPendientes}
             </AnimatedBadge>
           )}
         </div>
@@ -79,7 +79,7 @@ export const PendingPrecintosWidget: React.FC = () => {
                 'text-2xl font-bold',
                 pendientesPrecintar > 0 ? 'text-yellow-400' : 'text-gray-500'
               )}>
-                {_pendientesPrecintar}
+                {pendientesPrecintar}
               </p>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const PendingPrecintosWidget: React.FC = () => {
                 'text-2xl font-bold',
                 pendientesDesprecintar > 0 ? 'text-orange-400' : 'text-gray-500'
               )}>
-                {_pendientesDesprecintar}
+                {pendientesDesprecintar}
               </p>
             </div>
           </div>

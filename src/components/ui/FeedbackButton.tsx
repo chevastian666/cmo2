@@ -4,7 +4,8 @@
  * By Cheva
  */
 import React, { useState } from 'react'
-import { Button, ButtonProps} from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import type { ButtonProps } from '@/components/ui/button'
 import {Loader2, Check, X} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'

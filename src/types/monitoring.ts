@@ -95,12 +95,25 @@ export interface Alerta {
   codigoPrecinto: string
   mensaje: string
   timestamp: number
+  fecha?: number // Legacy property, use timestamp instead
   ubicacion?: {
     lat: number
     lng: number
   }
   severidad: 'baja' | 'media' | 'alta' | 'critica'
   atendida: boolean
+  // Extended properties for UI display
+  descripcion?: string
+  verificada?: boolean
+  verificadoPor?: string
+  fechaVerificacion?: number
+  comentarios?: Array<{
+    id: string
+    mensaje: string
+    usuario: string
+    timestamp: number
+  }>
+  asignadoA?: string
 }
 
 export const TIPOS_ALERTA = {

@@ -8,7 +8,7 @@ import { AlertTriangle, Shield, TrendingUp, Users, CheckCircle, History, Bell, B
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
-import { Badge} from '@/components/ui/badge'
+import { Badge, type BadgeVariant} from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { useAlertasStore} from '@/store/store'
 import { cn} from '@/utils/utils'
@@ -63,7 +63,7 @@ const matchesSearch = (alerta: Alerta, searchTerm: string): boolean => {
   const search = searchTerm.toLowerCase()
   return (
     alerta.precintoId.toLowerCase().includes(search) ||
-    alerta.descripcion.toLowerCase().includes(search) ||
+    alerta.mensaje.toLowerCase().includes(search) ||
     alerta.tipo.toLowerCase().includes(search)
   )
 }
@@ -174,7 +174,7 @@ const AlertRow = React.memo<{
       
       <td className="px-6 py-4 whitespace-nowrap">
         <Badge 
-          variant={severidadInfo.color as "default" | "secondary" | "destructive" | "danger" | "warning" | "success"}
+          variant={severidadInfo.color as BadgeVariant}
           className="flex items-center gap-1"
         >
           {severidadInfo.icon}
@@ -193,7 +193,7 @@ const AlertRow = React.memo<{
       
       <td className="px-6 py-4">
         <div className="text-sm text-gray-300 max-w-xs truncate">
-          {alerta.descripcion}
+          {alerta.mensaje}
         </div>
       </td>
       
@@ -231,13 +231,12 @@ const AlertRow = React.memo<{
       </td>
     </tr>
   )
-}, (_prevProps, nextProps) => {
+}, (prevProps, nextProps) => {
   // Custom comparison for better performance
   return (
     prevProps.alerta.id === nextProps.alerta.id &&
     prevProps.alerta.atendida === nextProps.alerta.atendida &&
-    prevProps.alerta.asignadoA === nextProps.alerta.asignadoA &&
-    prevProps.index === nextProps.index
+    prevProps.alerta.asignadoA === nextProps.alerta.asignadoA
   )
 })
 const AlertasPageV2: React.FC = () => {
@@ -362,8 +361,8 @@ const AlertasPageV2: React.FC = () => {
     const sortedPage = filtered
       .sort((a, b) => {
         // Cache date values to avoid repeated parsing
-        const dateA = new Date(a.fecha).getTime()
-        const dateB = new Date(b.fecha).getTime()
+        const dateA = a.timestamp
+        const dateB = b.timestamp
         return dateB - dateA
       })
       .slice(start, end)
@@ -546,12 +545,11 @@ const AlertasPageV2: React.FC = () => {
                           </div>
                         </td>
                       </tr>
-                    ) : (filteredAlertas.map((alerta, index) => (
+                    ) : (filteredAlertas.map((alerta, _index) => (
                         <AlertRow
                           key={alerta.id}
                           alerta={alerta}
                           onVerificar={handleVerificarAlerta}
-                          index={index}
                         />
                       ))
                     )}

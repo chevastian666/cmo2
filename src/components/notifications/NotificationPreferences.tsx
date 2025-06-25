@@ -82,7 +82,7 @@ const priorities: { key: NotificationPriority; label: string; color: string }[] 
   { key: 'high', label: 'Alta', color: 'text-yellow-400' },
   { key: 'critical', label: 'Crítica', color: 'text-red-400' }
 ]
-export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
+export const NotificationPreferencesComponent: React.FC<NotificationPreferencesProps> = ({
   preferences, onSave, onTest, className = ''
 }) => {
   const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences)
@@ -184,6 +184,18 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
               }
             ])
           )
+        },
+        'sms': {
+          enabled: false,
+          types: Object.fromEntries(
+            notificationTypes.map(type => [
+              type.key,
+              {
+                enabled: false,
+                priority: [] as NotificationPriority[]
+              }
+            ])
+          )
         }
       },
       grouping: {
@@ -197,8 +209,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         enabled: true,
         volume: 0.7,
         customSounds: []
+      },
+      autoActions: {
+        autoAcknowledgeAfter: undefined,
+        autoEscalateAfter: undefined,
+        autoEscalateTo: undefined
       }
-    } as NotificationPreferences
+    } as unknown as NotificationPreferences
     setLocalPreferences(defaultPrefs)
   }
   return (
@@ -311,7 +328,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <Icon className="w-5 h-5 text-blue-400" />
+                      {React.createElement(Icon, { className: "w-5 h-5 text-blue-400" })}
                       <div>
                         <h3 className="font-medium text-white">{label}</h3>
                         <p className="text-sm text-gray-400">{description}</p>
@@ -440,7 +457,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                       >
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-2">
-                            <Icon className="w-4 h-4 text-gray-400" />
+                            {React.createElement(Icon, { className: "w-4 h-4 text-gray-400" })}
                             <span className="text-sm text-white">{label}</span>
                           </div>
                           

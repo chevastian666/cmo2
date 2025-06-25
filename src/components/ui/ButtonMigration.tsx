@@ -2,6 +2,8 @@
 import { forwardRef} from 'react'
 import { Button as ShadcnButton} from './button'
 import { cn} from '@/lib/utils'
+import type { ButtonProps as ShadcnButtonProps } from './button'
+
 export interface ButtonMigrationProps extends ShadcnButtonProps {
   // Additional props to help with migration
   fullWidth?: boolean
@@ -91,7 +93,7 @@ export const ButtonMigration = forwardRef<HTMLButtonElement, ButtonMigrationProp
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             </span>
-            {_children}
+            {children}
           </>
         ) : (
           children
@@ -138,7 +140,7 @@ export const migrateButtonClass = (className: string): { variant?: string; size?
     !cls.startsWith('focus:') &&
     !cls.startsWith('transition')
   ).join(' ')
-  if (_preservedClasses) {
+  if (preservedClasses) {
     result.className = preservedClasses
   }
 

@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { cn} from '../../utils/utils'
-import { Card} from './Card'
+import { Card} from './card'
 import {MapHeader, TruckIcon, TruckIconDetailed, RouteLine, AnimatedRouteLine} from './map'
 import type { MapFilters} from './map/MapHeader'
 export interface MapMarker {

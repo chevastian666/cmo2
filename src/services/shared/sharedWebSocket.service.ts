@@ -1,4 +1,4 @@
-import { _SHARED_CONFIG as SHARED_CONFIG } from '../../config/shared.config'
+import { SHARED_CONFIG } from '../../config/shared.config'
 import { jwtService } from '../jwt.service'
 
 type EventCallback = (data: unknown) => void

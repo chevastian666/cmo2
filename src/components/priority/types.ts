@@ -17,6 +17,7 @@ export interface PriorityTask {
   callback: () => void
   timestamp: number
   cancelled?: boolean
+  schedulerTask?: any // React Scheduler task handle
 }
 
 export interface PriorityContextValue {

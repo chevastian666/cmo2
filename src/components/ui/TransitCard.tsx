@@ -1,10 +1,10 @@
  
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { cn} from '../../utils/utils'
-import { Card} from './Card'
+import { Card} from './card'
 import { StatusBadge} from './StatusBadge'
 import { InfoRow} from './InfoRow'
-import { User, Package, History, TruckIcon, Link2, AlertTriangle} from 'lucide-react'
+import { User, Package, History, TruckIcon, Link2, AlertTriangle, Clock } from 'lucide-react'
 export interface TransitInfo {
   id: string
   origin: string
@@ -111,7 +111,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
         onClick && 'hover:border-blue-500',
         className
       )}
-      onClick={() => onClick?.(_transit)}
+      onClick={() => onClick?.(transit)}
       variant="elevated"
     >
       {/* Header */}
@@ -147,7 +147,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
               <span className="text-sm font-medium text-gray-300">ETA</span>
             </div>
             <div className="text-right">
-              <p className="text-lg font-semibold text-white">{_timeRemaining}</p>
+              <p className="text-lg font-semibold text-white">{timeRemaining}</p>
               <p className="text-xs text-gray-400">{formatDate(transit.estimatedArrival)}</p>
             </div>
           </div>
@@ -270,7 +270,7 @@ export const TransitCard: React.FC<TransitCardProps> = ({
           {transit.vehicle?.plate && (
             <button 
               className="text-sm text-gray-400 hover:text-gray-300 flex items-center gap-1"
-              onClick={(_e) => {
+              onClick={(e) => {
                 e.stopPropagation()
                 onViewHistory?.(transit.vehicle!.plate)
               }}

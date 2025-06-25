@@ -51,7 +51,7 @@ export const AlertsWidget: React.FC = () => {
 
   return (<div className="h-full flex flex-col">
       <div className="flex-1 space-y-2 overflow-auto">
-        {recentAlerts.map((_alerta, index) => (
+        {recentAlerts.map((alerta, index) => (
           <motion.div
             key={alerta.id}
             initial={{ opacity: 0, x: -20 }}
@@ -77,9 +77,9 @@ export const AlertsWidget: React.FC = () => {
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs text-gray-500">
-                    {getRelativeTime(new Date(alerta.fecha))}
+                    {getRelativeTime(new Date(alerta.timestamp))}
                   </span>
-                  {alerta.severidad === 'CRITICA' && (
+                  {alerta.severidad === 'critica' && (
                     <AnimatedBadge variant="danger" pulse>
                       Crítica
                     </AnimatedBadge>

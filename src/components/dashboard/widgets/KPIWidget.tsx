@@ -78,7 +78,7 @@ export const KPIWidget: React.FC<KPIWidgetProps> = ({
           trendColors[trend]
         )}>
           {trendIcons[trend]}
-          <span>{change > 0 ? '+' : ''}{_change}%</span>
+          <span>{change > 0 ? '+' : ''}{change}%</span>
         </div>
       )}
     </div>

@@ -9,6 +9,7 @@ import type { RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi } from 'vitest'
+import type { Precinto } from '@/types/monitoring'
 
 // Create a custom render that includes providers
 const createTestQueryClient = () =>
@@ -83,15 +84,30 @@ export const mockAuth = {
 }
 
 // Mock precinto factory
-export const createMockPrecinto = (overrides = {}) => ({
+export const createMockPrecinto = (overrides: Partial<Precinto> = {}): Precinto => ({
   id: '1',
   codigo: 'PRE-001',
-  empresa: 'Test Company',
-  estado: 'activo',
-  descripcion: 'Test precinto',
-  fecha_creacion: new Date().toISOString(),
-  ubicacion_actual: { lat: -34.603722, lng: -58.381592 },
+  tipo: 'standard',
+  estado: 'SAL' as const,
+  fechaUltimaLectura: Date.now(),
   bateria: 100,
+  gps: {
+    estado: 'activo',
+    precision: 10,
+    satelites: 8,
+    activo: true,
+    señal: 90
+  },
+  eslinga: {
+    estado: 'cerrada' as const,
+    contador: 0,
+    ultimoCambio: Date.now()
+  },
+  ubicacionActual: { 
+    lat: -34.603722, 
+    lng: -58.381592,
+    direccion: 'Test Address'
+  },
   temperatura: 20,
   ...overrides
 })

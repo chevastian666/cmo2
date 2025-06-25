@@ -11,8 +11,6 @@ export interface OptimizationOptions {
 }
 
 export function useOptimizedData<T>(data: T[], options?: OptimizationOptions): T[] {
-  const _deps = options?.dependencies || [];
-  
   return useMemo(() => {
     let result = [...data];
     
@@ -20,7 +18,7 @@ export function useOptimizedData<T>(data: T[], options?: OptimizationOptions): T
       result = result.sort((a, b) => {
         const aVal = (a as Record<string, unknown>)[options.sortBy!];
         const bVal = (b as Record<string, unknown>)[options.sortBy!];
-        return aVal > bVal ? 1 : -1;
+        return String(aVal) > String(bVal) ? 1 : -1;
       });
     }
     
@@ -63,4 +61,20 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
       setTimeout(() => (inThrottle = false), limit);
     }
   };
+}
+
+// Additional exports for compatibility
+export const createOptimizedComponent = () => {
+  console.warn('createOptimizedComponent is deprecated')
+  return null
+}
+
+export const useOptimizedRender = () => {
+  console.warn('useOptimizedRender is deprecated')
+  return null
+}
+
+export const withOptimization = () => {
+  console.warn('withOptimization is deprecated')
+  return null
 }

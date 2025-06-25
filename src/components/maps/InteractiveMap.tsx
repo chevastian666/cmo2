@@ -345,11 +345,11 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                         <p>Tipo: {selectedMarker.type}</p>
                         <p>Lat: {selectedMarker.position.lat.toFixed(6)}</p>
                         <p>Lng: {selectedMarker.position.lng.toFixed(6)}</p>
-                        {selectedMarker.data && (
+                        {selectedMarker.data ? (
                           <div className="mt-2 pt-2 border-t border-gray-700">
                             <pre className="text-xs">{JSON.stringify(selectedMarker.data, null, 2)}</pre>
                           </div>
-                        )}
+                        ) : null}
                       </div>
                     </AnimatedDiv>
                   )}

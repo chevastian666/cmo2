@@ -19,7 +19,6 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
   
   const {
     notifications,
-    groups,
     unreadCount,
     markAsRead,
     markAllAsRead,
@@ -29,9 +28,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
     getNotificationsByFilter,
     getGroupedNotifications
   } = useNotificationStore();
+  
+  const groups = groupByType ? getGroupedNotifications() : [];
 
   const filteredNotifications = groupByType 
-    ? getGroupedNotifications(filter)
+    ? getGroupedNotifications()
     : getNotificationsByFilter(filter);
 
   // Auto-close after marking all as read
@@ -111,8 +112,6 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
 
                 <QuickActions 
                   onAction={handleQuickAction}
-                  groupByType={groupByType}
-                  hasNotifications={notifications.length > 0}
                 />
               </div>
 
@@ -120,7 +119,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
               <div className="p-4 border-b border-gray-700">
                 <NotificationFilters 
                   filter={filter}
-                  onChange={handleFilterChange}
+                  onFilterChange={handleFilterChange}
                 />
               </div>
 
@@ -139,22 +138,30 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                         <NotificationGroupItem
                           key={group.id}
                           group={group}
-                          onAcknowledge={acknowledgeNotification}
-                          onSnooze={snoozeNotification}
-                          onDismiss={dismissNotification}
-                          onMarkAsRead={markAsRead}
+                          selectedNotifications={new Set()}
+                          onSelect={() => {}}
+                          onAction={(id, action) => {
+                            if (action === 'acknowledge') acknowledgeNotification(id)
+                            else if (action === 'snooze') snoozeNotification(id, 30)
+                            else if (action === 'dismiss') dismissNotification(id)
+                            else if (action === 'read') markAsRead(id)
+                          }}
                         />
                       ))
                     ) : (
                       // Individual view
-                      filteredNotifications.map(notification => (
+                      (filteredNotifications as any[]).map(notification => (
                         <NotificationItem
                           key={notification.id}
                           notification={notification}
-                          onAcknowledge={acknowledgeNotification}
-                          onSnooze={snoozeNotification}
-                          onDismiss={dismissNotification}
-                          onMarkAsRead={markAsRead}
+                          isSelected={false}
+                          onSelect={() => {}}
+                          onAction={(action) => {
+                            if (action === 'acknowledge') acknowledgeNotification(notification.id)
+                            else if (action === 'snooze') snoozeNotification(notification.id, 30)
+                            else if (action === 'dismiss') dismissNotification(notification.id)
+                            else if (action === 'read') markAsRead(notification.id)
+                          }}
                         />
                       ))
                     )}

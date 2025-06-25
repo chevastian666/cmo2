@@ -61,7 +61,7 @@ export const CompositionExample: React.FC = () => {
             <h2 className="text-xl font-semibold text-white">Panel de Monitoreo</h2>
             <BadgeGroup>
               <StatusBadge variant="success" pulse>Activo</StatusBadge>
-              <Badge variant="blue">v2.0</Badge>
+              <Badge variant="primary">v2.0</Badge>
             </BadgeGroup>
           </div>
         </CardHeader>
@@ -188,7 +188,7 @@ export const CompositionExample: React.FC = () => {
             <EmptyState
               icon="package"
               title="Sin precintos"
-              description="No hay precintos activos"
+              message="No hay precintos activos"
               size="sm"
             />
           </CardContent>
@@ -199,7 +199,7 @@ export const CompositionExample: React.FC = () => {
             <EmptyState
               icon="truck"
               title="Sin tránsitos"
-              description="No hay tránsitos en proceso"
+              message="No hay tránsitos en proceso"
               action={{
                 label: 'Crear tránsito',
                 onClick: () => console.log('Create transit')
@@ -214,7 +214,7 @@ export const CompositionExample: React.FC = () => {
             <EmptyState
               icon="alert"
               title="Sin alertas"
-              description="Todo funcionando correctamente"
+              message="Todo funcionando correctamente"
               size="sm"
             />
           </CardContent>
@@ -252,11 +252,11 @@ export const CompositionExample: React.FC = () => {
             <div>
               <p className="text-sm text-gray-400 mb-2">Regular Badges</p>
               <BadgeGroup>
-                <Badge variant="gray">Default</Badge>
-                <Badge variant="red">Critical</Badge>
-                <Badge variant="yellow">Warning</Badge>
-                <Badge variant="green">Active</Badge>
-                <Badge variant="blue">Info</Badge>
+                <Badge variant="default">Default</Badge>
+                <Badge variant="danger">Critical</Badge>
+                <Badge variant="warning">Warning</Badge>
+                <Badge variant="success">Active</Badge>
+                <Badge variant="info">Info</Badge>
                 <Badge variant="indigo">Special</Badge>
                 <Badge variant="purple">Premium</Badge>
                 <Badge variant="pink">New</Badge>

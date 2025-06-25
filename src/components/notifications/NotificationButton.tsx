@@ -22,14 +22,14 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [_groups, setGroups] = useState<NotificationGroup[]>([])
   const [stats, setStats] = useState<NotificationStats | undefined>()
-  const [filter, setFilter] = useState<NotificationFilter>({})
-  const loadStats = React.useCallback(() => {
-    const currentStats = notificationService.getStats()
+  const [filter] = useState<NotificationFilter>({})
+  const loadStats = React.useCallback(async () => {
+    const currentStats = await notificationService.getStats()
     setStats(currentStats)
   }, [])
-  const loadNotifications = React.useCallback(() => {
-    const filtered = notificationService.getNotifications(filter)
-    const grouped = notificationService.getGroupedNotifications(filter)
+  const loadNotifications = React.useCallback(async () => {
+    const filtered = await notificationService.getNotifications(filter)
+    const grouped = await notificationService.getGroupedNotifications()
     setNotifications(filtered)
     setGroups(grouped)
   }, [filter])
@@ -57,23 +57,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
     useEffect(() => {
     loadNotifications()
   }, [filter, loadNotifications])
-  const _handleNotificationAction = async (notificationId: string, action: string, payload?: unknown) => {
-    try {
-      await notificationService.handleNotificationAction(notificationId, action, payload)
-    } catch (error) {
-      console.error('Failed to handle notification action:', error)
-    }
-  }
-  const _handleBulkAction = async (notificationIds: string[], action: string) => {
-    try {
-      await notificationService.handleBulkAction(notificationIds, action)
-    } catch (error) {
-      console.error('Failed to handle bulk action:', error)
-    }
-  }
-  const _handleFilterChange = (newFilter: NotificationFilter) => {
-    setFilter(newFilter)
-  }
+  // Removed unused handlers - they were causing TS6133 errors
   const unreadCount = stats?.unread || 0
   const hasNotifications = notifications.length > 0
   return (<>
@@ -109,7 +93,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
         </AnimatePresence>
 
         {/* Pulse animation for critical notifications */}
-        {stats?.critical > 0 && (
+        {stats && stats.critical && stats.critical > 0 && (
           <motion.div
             className="absolute inset-0 rounded-lg bg-red-500 opacity-20"
             animate={{ scale: [1, 1.2, 1] }}
@@ -120,16 +104,7 @@ export const NotificationButton: React.FC<NotificationButtonProps> = ({
 
       {/* Notification Center */}
       <AnimatePresence>
-        {isOpen && (<NotificationCenter
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            notifications={notifications}
-            groups={_groups}
-            stats={stats}
-            onNotificationAction={_handleNotificationAction}
-            onBulkAction={_handleBulkAction}
-            onFilterChange={_handleFilterChange}
-          />
+        {isOpen && (<NotificationCenter className="notification-center" />
         )}
       </AnimatePresence>
     </>

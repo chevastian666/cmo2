@@ -1,7 +1,5 @@
 import React, { useTransition, useState, memo, useDeferredValue } from 'react'
-import { Search, RefreshCw} from 'lucide-react'
-import { PriorityBoundary} from '../priority/withPriority'
-import { DashboardSkeleton} from './DashboardSkeleton'
+import { Search, RefreshCw, Package} from 'lucide-react'
 interface Precinto {
   id: string
   code: string
@@ -100,7 +98,7 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
     })
   }
   return (
-    <PriorityBoundary priority="medium" fallback={<DashboardSkeleton />}>
+    <>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -170,6 +168,6 @@ export const PrecintsGrid: React.FC<PrecintsGridProps> = ({ precintos }) => {
           </div>
         )}
       </div>
-    </PriorityBoundary>
+    </>
   )
 }

@@ -136,9 +136,9 @@ export const dataProcessing = {
     )
   },
   
-  createHierarchy: <T extends Record<string, unknown>>(data: T[], parentKey: string, valueKey: string) => {
+  createHierarchy: <T extends Record<string, unknown>>(data: T[], _parentKey: string, valueKey: string) => {
     return d3.hierarchy(data)
-      .sum(d => d[valueKey] as number)
+      .sum((d: any) => d[valueKey] as number)
       .sort((a, b) => (b.value || 0) - (a.value || 0))
   }
 }

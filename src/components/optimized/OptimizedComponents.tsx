@@ -45,7 +45,7 @@ export const OptimizedTableRow = memo<OptimizedTableRowProps>(({
         >
           {column.render
             ? column.render(data[column.key], data)
-            : data[column.key]
+            : String(data[column.key] ?? '')
           }
         </td>
       ))}
@@ -197,7 +197,7 @@ export const OptimizedGridCell = memo<OptimizedGridCellProps>(({
       case 'boolean':
         return value ? '✓' : '✗'
       default:
-        return value
+        return String(value ?? '')
     }
   }, [value, type, format, render])
   return (

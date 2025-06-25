@@ -31,7 +31,7 @@ interface ArmConfirmationModalProps {
 }
 
 export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
-  isOpen, onClose, onConfirm: _onConfirm, precinto, transito
+  isOpen, onClose, onConfirm, precinto, transito
 }) => {
   if (!precinto) return null
   const hasWarnings = precinto.bateria < 20 || 
@@ -196,13 +196,13 @@ export const ArmConfirmationModal: React.FC<ArmConfirmationModalProps> = ({
           </p>
           <Button
             variant="secondary"
-            onClick={_onClose}
+            onClick={onClose}
           >
             Cancelar
           </Button>
           <Button
             variant={hasWarnings ? "destructive" : "default"}
-            onClick={_onConfirm}
+            onClick={onConfirm}
           >
             <CheckCircle className="mr-2 h-4 w-4" />
             Confirmar Armado

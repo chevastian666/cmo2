@@ -66,18 +66,18 @@ export const TransitWidget: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">
-                    {transito.codigo}
+                    {transito.dua}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {transito.conductor}
+                    {transito.chofer}
                   </p>
                 </div>
               </div>
               
-              {transito.alertas && transito.alertas > 0 && (
+              {transito.alertas && transito.alertas.length > 0 && (
                 <div className="flex items-center gap-1 text-yellow-400">
                   <AlertTriangle className="h-3 w-3" />
-                  <span className="text-xs">{transito.alertas}</span>
+                  <span className="text-xs">{transito.alertas.length}</span>
                 </div>
               )}
             </div>
@@ -97,7 +97,7 @@ export const TransitWidget: React.FC = () => {
                 <span className="text-gray-400">
                   {calcularProgreso(
                     new Date(transito.fechaInicio),
-                    new Date(transito.fechaEstimada)
+                    new Date(transito.eta || transito.fechaLlegada || Date.now())
                   )}%
                 </span>
               </div>
@@ -107,7 +107,7 @@ export const TransitWidget: React.FC = () => {
                   animate={{ 
                     width: `${calcularProgreso(
                       new Date(transito.fechaInicio),
-                      new Date(transito.fechaEstimada)
+                      new Date(transito.eta || transito.fechaLlegada || Date.now())
                     )}%` 
                   }}
                   transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
@@ -120,7 +120,7 @@ export const TransitWidget: React.FC = () => {
             <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
               <Clock className="h-3 w-3" />
               <span>
-                Llegada estimada: {new Date(transito.fechaEstimada).toLocaleTimeString()}
+                Llegada estimada: {new Date(transito.eta || transito.fechaLlegada || Date.now()).toLocaleTimeString()}
               </span>
             </div>
           </motion.div>

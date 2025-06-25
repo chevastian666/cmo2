@@ -8,7 +8,7 @@ import { AlertTriangle, CheckCircle, Clock, MapPin, Shield, Battery, Radio, Ther
 import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog'
 import { Button} from '@/components/ui/button'
 import { Textarea} from '@/components/ui/textarea'
-import { Badge} from '@/components/ui/badge'
+import { Badge, type BadgeVariant} from '@/components/ui/badge'
 import { Alert, AlertDescription} from '@/components/ui/alert'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Label} from '@/components/ui/label'
@@ -167,18 +167,18 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
         return <AlertTriangle className={iconClass} />
     }
   }
-  const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
+  const getSeveridadVariant = (severidad: string): BadgeVariant => {
     switch (severidad) {
       case 'critica':
-        return 'destructive'
+        return 'danger'
       case 'alta':
-        return 'destructive'
+        return 'warning'
       case 'media':
-        return 'default'
+        return 'info'
       case 'baja':
         return 'secondary'
       default:
-        return 'outline'
+        return 'default'
     }
   }
   const getSeveridadColor = (severidad: string) => {
@@ -274,7 +274,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
               
               <div>
                 <p className="text-xs text-gray-400 mb-1">Descripción</p>
-                <p className="text-sm text-white">{alerta.descripcion}</p>
+                <p className="text-sm text-white">{alerta.mensaje}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -311,7 +311,7 @@ export const VerificarAlertaModalV2: React.FC<VerificarAlertaModalProps> = ({
               <div className="flex items-center gap-4 text-sm text-gray-300">
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4 text-gray-500" />
-                  <span>{alerta.timestamp ? formatTimeAgo(alerta.timestamp) : formatTimeAgo(alerta.fecha)}</span>
+                  <span>{formatTimeAgo(alerta.timestamp)}</span>
                 </div>
                 {alerta.ubicacion && (
                   <div className="flex items-center gap-1">

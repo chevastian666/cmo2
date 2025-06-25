@@ -15,6 +15,9 @@ import { tokenClasses} from '../../styles/useDesignTokens'
 interface AnimatedDivProps {
   children: React.ReactNode
   className?: string
+  initial?: any
+  animate?: any
+  exit?: any
   // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 
@@ -111,11 +114,14 @@ interface AnimatedButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   onClick?: () => void
   disabled?: boolean
+  size?: string
+  whileHover?: any
+  whileTap?: any
 }
 
 // Botón animado
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ 
-  children, className = "", variant = 'primary', onClick, disabled = false
+  children, className = "", variant = 'primary', onClick, disabled = false, size, whileHover, whileTap
 }) => {
   const variantClasses = {
     primary: tokenClasses.components.button.primary,
@@ -123,14 +129,15 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     danger: tokenClasses.components.button.danger,
     ghost: tokenClasses.components.button.ghost
   }
-  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${className}`
+  const sizeClasses = size === 'sm' ? 'p-1' : ''
+  const baseClasses = `${tokenClasses.components.button.base} ${variantClasses[variant]} ${sizeClasses} ${className}`
   return (
     <motion.button
       className={baseClasses}
       variants={hoverScaleVariants}
       initial="initial"
-      whileHover={!disabled ? "hover" : undefined}
-      whileTap={!disabled ? "tap" : undefined}
+      whileHover={whileHover || (!disabled ? "hover" : undefined)}
+      whileTap={whileTap || (!disabled ? "tap" : undefined)}
       onClick={onClick}
       disabled={disabled}
     >
@@ -343,14 +350,16 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
 // ANIMATED DIV - CONTENEDOR GENÉRICO
 // ==========================================
 
-interface AnimatedDivProps {
+interface AnimatedDivPropsExtended {
   children: React.ReactNode
   className?: string
   delay?: number
+  initial?: any
+  animate?: any
   // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 
-export const AnimatedDiv: React.FC<AnimatedDivProps> = ({ 
+export const AnimatedDiv: React.FC<AnimatedDivPropsExtended> = ({ 
   children, className = "", delay = 0, ...props
 }) => {
   return (

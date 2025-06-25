@@ -13,10 +13,10 @@ export const PrecintoStatusWidget: React.FC = () => {
   // Estadísticas de precintos
   const stats = {
     total: precintos.length,
-    activos: precintos.filter(p => p.estado === 'ACTIVO').length,
-    enTransito: precintos.filter(p => p.estado === 'EN_TRANSITO').length,
-    inactivos: precintos.filter(p => p.estado === 'INACTIVO').length,
-    conAlertas: precintos.filter(p => p.alertas && p.alertas.length > 0).length,
+    activos: precintos.filter(p => p.estado === 'SAL' || p.estado === 'LLE').length,
+    enTransito: precintos.filter(p => p.estado === 'SAL').length,
+    inactivos: precintos.filter(p => p.estado === 'FMF' || p.estado === 'CFM' || p.estado === 'CNP').length,
+    conAlertas: precintos.filter(p => (p as any).alertas && (p as any).alertas.length > 0).length,
     bateriaBaja: precintos.filter(p => p.bateria && p.bateria < 20).length
   }
   const statusItems = [
@@ -52,14 +52,14 @@ export const PrecintoStatusWidget: React.FC = () => {
   // Precintos críticos (con alertas o batería baja)
   const precintoCriticos = precintos
     .filter(p => 
-      (p.alertas && p.alertas.length > 0) || 
+      ((p as any).alertas && (p as any).alertas.length > 0) || 
       (p.bateria && p.bateria < 20)
     )
     .slice(0, 3)
   return (<div className="h-full flex flex-col">
       {/* Estadísticas Grid */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        {statusItems.map((_item, index) => (
+        {statusItems.map((item, index) => (
           <motion.div
             key={item.label}
             initial={{ opacity: 0, y: 10 }}
@@ -88,7 +88,7 @@ export const PrecintoStatusWidget: React.FC = () => {
       {precintoCriticos.length > 0 && (<>
           <div className="text-xs text-gray-400 mb-2">Requieren atención:</div>
           <div className="flex-1 space-y-2 overflow-auto">
-            {precintoCriticos.map((_precinto, index) => (
+            {precintoCriticos.map((precinto, index) => (
               <motion.div
                 key={precinto.id}
                 initial={{ opacity: 0, x: -10 }}
@@ -108,16 +108,16 @@ export const PrecintoStatusWidget: React.FC = () => {
                           {precinto.bateria}%
                         </span>
                       )}
-                      {precinto.alertas && precinto.alertas.length > 0 && (
+                      {(precinto as any).alertas && (precinto as any).alertas.length > 0 && (
                         <span className="text-xs text-yellow-400">
-                          {precinto.alertas.length} alertas
+                          {(precinto as any).alertas.length} alertas
                         </span>
                       )}
                     </div>
                   </div>
                   <Shield className={cn(
                     'h-4 w-4',
-                    precinto.estado === 'ACTIVO' ? 'text-green-400' : 'text-gray-500'
+                    precinto.estado === 'SAL' ? 'text-green-400' : 'text-gray-500'
                   )} />
                 </div>
               </motion.div>

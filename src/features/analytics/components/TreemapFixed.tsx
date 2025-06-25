@@ -7,7 +7,7 @@
 import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
-import { Package, Truck, AlertTriangle } from 'lucide-react'
+import { Package, Truck, AlertTriangle, TrendingUp } from 'lucide-react'
 const TreemapFixed: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview')
   // Datos de ejemplo para visualización

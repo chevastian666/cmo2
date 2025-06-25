@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import {Activity, Bell, Menu, User, LogOut, Settings, ChevronDown} from 'lucide-react'
 import { Link, useLocation} from 'react-router-dom'
 import { cn} from '../../../utils/utils'
-import { _APP_CONFIG } from '../../../config'
+import { APP_CONFIG } from '../../../config'
 import { ConnectionStatus} from './ConnectionStatus'
 import { RealtimeNotifications} from './RealtimeNotifications'
 import { AlarmSummary} from './AlarmSummary'
@@ -55,7 +55,7 @@ export const LayoutOptimized: React.FC<LayoutProps> = ({ children }) => {
                 {/* App title */}
                 <div className="flex items-center ml-4 lg:ml-0">
                   <Activity className="h-7 w-7 text-blue-500" />
-                  <h1 className="ml-2 text-xl font-semibold">{_APP_CONFIG.APP_NAME}</h1>
+                  <h1 className="ml-2 text-xl font-semibold">{APP_CONFIG.APP_NAME}</h1>
                 </div>
               </div>
               

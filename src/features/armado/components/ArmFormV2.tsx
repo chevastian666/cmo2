@@ -3,13 +3,13 @@ import { useForm} from 'react-hook-form'
 import { zodResolver} from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Truck, User, Phone, Hash, Package} from 'lucide-react'
-import { _ORIGENES_DESTINOS as ORIGENES_DESTINOS } from '../../../constants/locations'
+import { ORIGENES_DESTINOS } from '../../../constants/locations'
 // shadcn/ui components
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Textarea} from '@/components/ui/textarea'
 import { Checkbox} from '@/components/ui/checkbox'
-import {_Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card'
 // Empresas con RUT
@@ -26,7 +26,7 @@ const EMPRESAS = [
   { nombre: 'Express Cargo S.R.L.', rut: '210123456789' }
 ]
 // Form validation schema
-const _formSchema = z.object({
+const formSchema = z.object({
   matricula: z.string().min(1, 'La matrícula es requerida'),
   nombreConductor: z.string().min(1, 'El nombre del conductor es requerido'),
   telefonoConductor: z.string().min(1, 'El teléfono es requerido'),
@@ -43,7 +43,7 @@ const _formSchema = z.object({
   precintoId: z.string().min(1, 'El ID del precinto es requerido'),
   observaciones: z.string().optional(),
 })
-type FormData = z.infer<typeof _formSchema>
+type FormData = z.infer<typeof formSchema>
 interface ArmFormV2Props {
   data: Partial<FormData>
   onChange: (field: string, value: unknown) => void
@@ -56,7 +56,7 @@ export const ArmFormV2: React.FC<ArmFormV2Props> = ({
   data, onChange, disabled = false, precintoId, onSubmit 
 }) => {
   const form = useForm<FormData>({
-    resolver: zodResolver(_formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       matricula: data.matricula || '',
       nombreConductor: data.nombreConductor || '',

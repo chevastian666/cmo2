@@ -19,7 +19,7 @@ export interface LoggerConfig {
     prevState?: string
     action?: string
     nextState?: string
-    _error?: string
+    error?: string
   }
 }
 
@@ -28,13 +28,13 @@ const defaultColors = {
   prevState: '#9CA3AF',
   action: '#3B82F6',
   nextState: '#10B981',
-  _error: '#EF4444'
+  error: '#EF4444'
 }
 type Logger = <
   T,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = []
->(f: StateCreator<T, Mps, Mcs>, _options?: LoggerConfig) => StateCreator<T, Mps, Mcs>
+>(f: StateCreator<T, Mps, Mcs>, options?: LoggerConfig) => StateCreator<T, Mps, Mcs>
 type LoggerImpl = <T>(f: StateCreator<T, [], []>, options?: LoggerConfig) => StateCreator<T, [], []>
 const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
 

@@ -12,9 +12,10 @@ import { ResponderAlertaModal} from './ResponderAlertaModal'
 import { notificationService} from '../../../services/shared/notification.service'
 // shadcn/ui components
 import { Button} from '@/components/ui/button'
-import { Badge} from '@/components/ui/badge'
+import { Badge, type BadgeVariant} from '@/components/ui/badge'
 export const AlertsTableV2: React.FC = () => {
-  const { alertas, loading, error, actions } = useAlertasStore()
+  const store = useAlertasStore()
+  const { alertas, loading, error } = store
   const [selectedAlertaId, setSelectedAlertaId] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAlertaForResponse, setSelectedAlertaForResponse] = useState<Alerta | null>(null)
@@ -35,7 +36,7 @@ export const AlertsTableV2: React.FC = () => {
   }
   const handleResponderAlerta = async (alertaId: string, _motivoId: number, _motivoDescripcion: string, _observaciones?: string) => {
     try {
-      await actions.atenderAlerta(alertaId)
+      await store.atenderAlerta(alertaId)
       notificationService.success('Alerta respondida correctamente')
       // Alert response handled successfully
     } catch {
@@ -86,15 +87,16 @@ export const AlertsTableV2: React.FC = () => {
         return 'text-gray-400 bg-gray-900/20'
     }
   }
-  const getSeveridadVariant = (severidad: string): "default" | "destructive" | "outline" | "secondary" => {
+  const getSeveridadVariant = (severidad: string): BadgeVariant => {
     switch (severidad) {
       case 'critica':
+        return 'danger'
       case 'alta':
-        return 'destructive'
+        return 'warning'
       case 'media':
-        return 'secondary'
+        return 'info'
       case 'baja':
-        return 'outline'
+        return 'secondary'
       default:
         return 'default'
     }
@@ -262,7 +264,7 @@ export const AlertsTableV2: React.FC = () => {
       URL.revokeObjectURL(url)
     }
   }
-  const {data: selectedAlerta} =  useAlertaExtendida(selectedAlertaId)
+  const {alerta: selectedAlerta} =  useAlertaExtendida(selectedAlertaId || '')
   return (<>
       <DataTable
         data={alertas}
@@ -307,7 +309,7 @@ export const AlertsTableV2: React.FC = () => {
             setIsResponseModalOpen(false)
             setSelectedAlertaForResponse(null)
           }}
-          onResponder={handleResponderAlerta}
+          onRespond={handleResponderAlerta}
         />
       )}
     </>

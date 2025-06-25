@@ -14,7 +14,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  title, message: _message, icon = 'default', action, className, size = 'md'
+  title, message, icon = 'default', action, className, size = 'md'
 }) => {
   const sizeStyles = {
     sm: {
@@ -38,7 +38,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   }
   const styles = sizeStyles[size]
   const getIcon = () => {
-    if (React.isValidElement(_icon)) {
+    if (React.isValidElement(icon)) {
       return icon
     }
 
@@ -88,12 +88,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       
       {title && (
         <h3 className={cn('font-semibold text-gray-100 mb-2', styles.title)}>
-          {_title}
+          {title}
         </h3>
       )}
       
       <p className={cn('text-gray-400 max-w-md', styles.message)}>
-        {_message}
+        {message}
       </p>
       
       {action && (

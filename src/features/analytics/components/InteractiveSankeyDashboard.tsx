@@ -238,7 +238,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
                   <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>
-              <PrecintoLifecycleFlow dateRange={_dateRange} />
+              <PrecintoLifecycleFlow dateRange={dateRange} />
             </TabsContent>
 
             <TabsContent value="alerts" className="space-y-4">
@@ -266,7 +266,7 @@ const InteractiveSankeyDashboard: React.FC = () => {
                   <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>
-              <AlertFlowAnalysis dateRange={_dateRange} />
+              <AlertFlowAnalysis dateRange={dateRange} />
             </TabsContent>
 
             <TabsContent value="custom" className="space-y-4">
@@ -313,8 +313,8 @@ const InteractiveSankeyDashboard: React.FC = () => {
           </DialogHeader>
           <div className="mt-4">
             {fullscreenChart === 'logistics' && <LogisticsFlowChart />}
-            {fullscreenChart === 'lifecycle' && <PrecintoLifecycleFlow dateRange={_dateRange} />}
-            {fullscreenChart === 'alerts' && <AlertFlowAnalysis dateRange={_dateRange} />}
+            {fullscreenChart === 'lifecycle' && <PrecintoLifecycleFlow dateRange={dateRange} />}
+            {fullscreenChart === 'alerts' && <AlertFlowAnalysis dateRange={dateRange} />}
             {fullscreenChart === 'custom' && <CustomFlowBuilder />}
           </div>
         </DialogContent>

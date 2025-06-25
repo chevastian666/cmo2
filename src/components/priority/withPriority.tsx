@@ -3,10 +3,11 @@ import { PriorityProvider, usePriority } from './PriorityProvider';
 
 export function withPriority<P extends object>(Component: React.ComponentType<P>) {
   return (props: P) => {
-    const { priority, isActive, schedulePriorityUpdate, cancelUpdate } = usePriority();
+    const { schedulePriorityUpdate, cancelUpdate, getCurrentPriority, isPending } = usePriority();
     const [isPriorityActive, setIsPriorityActive] = useState(false);
 
     useEffect(() => {
+      const isActive = isPending();
       if (isActive) {
         setIsPriorityActive(true);
         const timer = setTimeout(() => {
@@ -17,11 +18,11 @@ export function withPriority<P extends object>(Component: React.ComponentType<P>
           clearTimeout(timer);
         };
       }
-    }, [isActive]);
+    }, [isPending]);
 
     const enhancedProps = {
       ...props,
-      priority,
+      priority: getCurrentPriority(),
       isPriorityActive,
       schedulePriorityUpdate,
       cancelUpdate
