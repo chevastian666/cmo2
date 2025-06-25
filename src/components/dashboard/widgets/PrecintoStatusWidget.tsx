@@ -16,7 +16,10 @@ export const PrecintoStatusWidget: React.FC = () => {
     activos: precintos.filter(p => p.estado === 'SAL' || p.estado === 'LLE').length,
     enTransito: precintos.filter(p => p.estado === 'SAL').length,
     inactivos: precintos.filter(p => p.estado === 'FMF' || p.estado === 'CFM' || p.estado === 'CNP').length,
-    conAlertas: precintos.filter(p => (p as any).alertas && (p as any).alertas.length > 0).length,
+    conAlertas: precintos.filter(p => {
+      const pWithAlertas = p as typeof p & { alertas?: unknown[] }
+      return pWithAlertas.alertas && Array.isArray(pWithAlertas.alertas) && pWithAlertas.alertas.length > 0
+    }).length,
     bateriaBaja: precintos.filter(p => p.bateria && p.bateria < 20).length
   }
   const statusItems = [
@@ -51,10 +54,11 @@ export const PrecintoStatusWidget: React.FC = () => {
   ]
   // Precintos críticos (con alertas o batería baja)
   const precintoCriticos = precintos
-    .filter(p => 
-      ((p as any).alertas && (p as any).alertas.length > 0) || 
-      (p.bateria && p.bateria < 20)
-    )
+    .filter(p => {
+      const pWithAlertas = p as typeof p & { alertas?: unknown[] }
+      return (pWithAlertas.alertas && Array.isArray(pWithAlertas.alertas) && pWithAlertas.alertas.length > 0) || 
+        (p.bateria && p.bateria < 20)
+    })
     .slice(0, 3)
   return (<div className="h-full flex flex-col">
       {/* Estadísticas Grid */}
@@ -108,11 +112,14 @@ export const PrecintoStatusWidget: React.FC = () => {
                           {precinto.bateria}%
                         </span>
                       )}
-                      {(precinto as any).alertas && (precinto as any).alertas.length > 0 && (
-                        <span className="text-xs text-yellow-400">
-                          {(precinto as any).alertas.length} alertas
-                        </span>
-                      )}
+                      {(() => {
+                        const pWithAlertas = precinto as typeof precinto & { alertas?: unknown[] }
+                        return pWithAlertas.alertas && Array.isArray(pWithAlertas.alertas) && pWithAlertas.alertas.length > 0 && (
+                          <span className="text-xs text-yellow-400">
+                            {pWithAlertas.alertas.length} alertas
+                          </span>
+                        )
+                      })()}
                     </div>
                   </div>
                   <Shield className={cn(

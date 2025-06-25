@@ -55,10 +55,18 @@ export const PerformanceMonitor: React.FC<{ show?: boolean }> = ({ show = true }
 
   useEffect(() => {
     const _measureMemory = () => {
-      if ('memory' in performance && (performance as any).memory) {
-        const memory = (performance as any).memory
-        const usedMB = Math.round(memory.usedJSHeapSize / 1048576)
-        setStats(prev => ({ ...prev, memoryUsage: usedMB }))
+      if ('memory' in performance) {
+        const performanceWithMemory = performance as Performance & {
+          memory?: {
+            usedJSHeapSize: number;
+            totalJSHeapSize: number;
+            jsHeapSizeLimit: number;
+          }
+        }
+        if (performanceWithMemory.memory) {
+          const usedMB = Math.round(performanceWithMemory.memory.usedJSHeapSize / 1048576)
+          setStats(prev => ({ ...prev, memoryUsage: usedMB }))
+        }
       }
     }
     const _interval = setInterval(_measureMemory, 2000)

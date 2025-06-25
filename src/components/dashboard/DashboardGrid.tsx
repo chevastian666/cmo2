@@ -47,7 +47,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
     if (layoutVersion < CURRENT_LAYOUT_VERSION) {
       resetLayouts()
     }
-  }, [])
+  }, [layoutVersion, resetLayouts])
   // Generar layouts por defecto si no existen
   const defaultLayouts = useMemo(() => {
     const generateLayout = (cols: number): Layout[] => {
@@ -133,12 +133,12 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       xs: generateLayout(4),
       xxs: generateLayout(2)
     }
-  }, [widgets])
+  }, [widgets, editMode])
   const currentLayouts = layouts || defaultLayouts
   const handleLayoutChange = useCallback((_layout: Layout[], layouts: Layouts) => {
     setLayouts(layouts)
     onLayoutChange?.(layouts)
-  }, [onLayoutChange])
+  }, [onLayoutChange, setLayouts])
   const toggleEditMode = () => {
     setEditMode(!editMode)
   }

@@ -36,7 +36,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
     { name: 'Completados', value: 300 },
     { name: 'Alertas', value: 200 }
   ]
-  const chartType = (widgetSettings as any)?.chartType || type
+  const chartType = (widgetSettings as { chartType?: string })?.chartType || type
   const renderChart = () => {
     // Handle D3 visualizations
     if (chartType.startsWith('d3-')) {
@@ -44,7 +44,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       return (
         <D3VisualizationWidget
           type={d3Type}
-          data={chartData as any} // Use generated data
+          data={chartData} // Use generated data
           config={{ colors }}
           title={`D3.js ${d3Type.charAt(0).toUpperCase() + d3Type.slice(1)} Chart`}
         />

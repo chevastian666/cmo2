@@ -15,9 +15,9 @@ import { tokenClasses} from '../../styles/useDesignTokens'
 interface AnimatedDivProps {
   children: React.ReactNode
   className?: string
-  initial?: any
-  animate?: any
-  exit?: any
+  initial?: string | Record<string, unknown>
+  animate?: string | Record<string, unknown>
+  exit?: string | Record<string, unknown>
   // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 
@@ -115,8 +115,8 @@ interface AnimatedButtonProps {
   onClick?: () => void
   disabled?: boolean
   size?: string
-  whileHover?: any
-  whileTap?: any
+  whileHover?: string | Record<string, unknown>
+  whileTap?: string | Record<string, unknown>
 }
 
 // Botón animado
@@ -354,8 +354,8 @@ interface AnimatedDivPropsExtended {
   children: React.ReactNode
   className?: string
   delay?: number
-  initial?: any
-  animate?: any
+  initial?: string | Record<string, unknown>
+  animate?: string | Record<string, unknown>
   // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
 }
 

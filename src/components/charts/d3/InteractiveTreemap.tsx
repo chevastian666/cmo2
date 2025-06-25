@@ -130,8 +130,8 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         return formatters.number(d.value || 0)
       })
     // Animate labels
-    animations.fadeIn(labels as any, config.animations.duration + 200)
-    animations.fadeIn(valueLabels as any, config.animations.duration + 400)
+    animations.fadeIn(labels as d3.Selection<SVGTextElement, D3TreemapNode, SVGGElement, unknown>, config.animations.duration + 200)
+    animations.fadeIn(valueLabels as d3.Selection<SVGTextElement, D3TreemapNode, SVGGElement, unknown>, config.animations.duration + 400)
     // Add percentage labels for larger cells
     const percentageLabels = cell.append('text')
       .attr('x', (d: D3TreemapNode) => (d.x1 - d.x0) / 2)
@@ -151,7 +151,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         const percentage = ((d.value || 0) / (root.value || 1)) * 100
         return `${percentage.toFixed(1)}%`
       })
-    animations.fadeIn(percentageLabels as any, config.animations.duration + 600)
+    animations.fadeIn(percentageLabels as d3.Selection<SVGTextElement, D3TreemapNode, SVGGElement, unknown>, config.animations.duration + 600)
     // Add interactions
     cell
       .on('mouseenter', function(event, d: D3TreemapNode) {
@@ -288,7 +288,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
       .style('font-size', '14px')
       .style('font-weight', '600')
       .text(d => d.value)
-    animations.fadeIn(stats as any, config.animations.duration + 800)
+    animations.fadeIn(stats as d3.Selection<SVGGElement, unknown, SVGGElement, unknown>, config.animations.duration + 800)
   }, [currentRoot, dimensions, config, breadcrumbs, enableDrillDown, onNodeClick])
     useEffect(() => {
     drawTreemap()

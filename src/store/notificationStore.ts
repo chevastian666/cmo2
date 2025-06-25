@@ -34,8 +34,8 @@ interface NotificationStore {
   acknowledgeNotification: (id: string) => void
   snoozeNotification: (id: string, duration: number) => void
   dismissNotification: (id: string) => void
-  getNotificationsByFilter: (filter: any) => Notification[]
-  getGroupedNotifications: () => any[]
+  getNotificationsByFilter: (filter: { type?: string; read?: boolean }) => Notification[]
+  getGroupedNotifications: () => SimpleNotificationGroup[]
 }
 
 export const useNotificationStore = create<NotificationStore>()(
@@ -129,7 +129,7 @@ export const useNotificationStore = create<NotificationStore>()(
               id: type,
               label: type.charAt(0).toUpperCase() + type.slice(1),
               type,
-              priority: 'normal' as any,
+              priority: 'normal',
               count: 0,
               latestTimestamp: new Date(),
               notifications: [],
@@ -142,7 +142,7 @@ export const useNotificationStore = create<NotificationStore>()(
             acc[type].latestTimestamp = notification.timestamp
           }
           return acc
-        }, {} as Record<string, any>)
+        }, {} as Record<string, SimpleNotificationGroup & { id: string; label: string; priority: string; latestTimestamp: Date; collapsed: boolean }>)
         return Object.values(grouped)
       },
     }),

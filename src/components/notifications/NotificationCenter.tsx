@@ -150,7 +150,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       ))
                     ) : (
                       // Individual view
-                      (filteredNotifications as any[]).map(notification => (
+                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map(notification => (
                         <NotificationItem
                           key={notification.id}
                           notification={notification}

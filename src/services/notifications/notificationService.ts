@@ -6,7 +6,7 @@
 import type { NotificationStats } from '@/types/notifications'
 
 export class NotificationService {
-  private listeners: Map<string, Set<(...args: any[]) => void>> = new Map()
+  private listeners: Map<string, Set<(...args: unknown[]) => void>> = new Map()
   private soundEnabled: boolean = true
   
   constructor() {}
@@ -15,7 +15,7 @@ export class NotificationService {
     return Promise.resolve()
   }
   
-  async getNotifications(_filter?: any) {
+  async getNotifications(_filter?: unknown) {
     return []
   }
   
@@ -49,7 +49,7 @@ export class NotificationService {
     return this.soundEnabled
   }
   
-  on(event: string, callback: (...args: any[]) => void) {
+  on(event: string, callback: (...args: unknown[]) => void) {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set())
     }
@@ -61,7 +61,7 @@ export class NotificationService {
     }
   }
   
-  private emit(event: string, _data?: any) {
+  private emit(event: string, _data?: unknown) {
     this.listeners.get(event)?.forEach(callback => callback(_data))
   }
 }

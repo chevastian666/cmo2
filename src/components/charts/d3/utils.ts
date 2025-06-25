@@ -29,14 +29,21 @@ export const scales = {
       .range(colors || d3.schemeCategory10)
 }
 export const animations = {
-  fadeIn: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, duration = 750) => 
+  fadeIn: <TElement extends SVGElement | HTMLElement = SVGElement | HTMLElement>(
+    selection: d3.Selection<TElement, unknown, HTMLElement | null, unknown>, 
+    duration = 750
+  ) => 
     selection
       .style('opacity', 0)
       .transition()
       .duration(duration)
       .style('opacity', 1),
   
-  slideIn: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, direction: 'left' | 'right' | 'up' | 'down', duration = 750) => {
+  slideIn: <TElement extends SVGElement | HTMLElement = SVGElement | HTMLElement>(
+    selection: d3.Selection<TElement, unknown, HTMLElement | null, unknown>, 
+    direction: 'left' | 'right' | 'up' | 'down', 
+    duration = 750
+  ) => {
     const transforms = {
       left: 'translateX(-100%)',
       right: 'translateX(100%)',
@@ -62,8 +69,10 @@ export const animations = {
       })
 }
 export const interactions = {
-  addHover: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, onMouseEnter: (event: MouseEvent, d: unknown) => void,
-    onMouseLeave: (event: MouseEvent, d: unknown) => void
+  addHover: <TElement extends SVGElement | HTMLElement = SVGElement | HTMLElement, TDatum = unknown>(
+    selection: d3.Selection<TElement, TDatum, HTMLElement | null, unknown>, 
+    onMouseEnter: (event: MouseEvent, d: TDatum) => void,
+    onMouseLeave: (event: MouseEvent, d: TDatum) => void
   ) => {
     return selection
       .on('mouseenter', onMouseEnter)
@@ -71,7 +80,9 @@ export const interactions = {
       .style('cursor', 'pointer')
   },
   
-  addClick: (selection: d3.Selection<SVGElement | HTMLElement, unknown, null, undefined>, onClick: (event: MouseEvent, d: unknown) => void
+  addClick: <TElement extends SVGElement | HTMLElement = SVGElement | HTMLElement, TDatum = unknown>(
+    selection: d3.Selection<TElement, TDatum, HTMLElement | null, unknown>, 
+    onClick: (event: MouseEvent, d: TDatum) => void
   ) => {
     return selection.on('click', onClick)
   }
@@ -94,7 +105,12 @@ export const tooltip = {
       .style('backdrop-filter', 'blur(8px)')
   },
   
-  show: (tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>, content: string, x: number, y: number) => {
+  show: (
+    tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement | null, unknown>, 
+    content: string, 
+    x: number, 
+    y: number
+  ) => {
     return tooltip
       .style('visibility', 'visible')
       .html(content)
@@ -102,7 +118,7 @@ export const tooltip = {
       .style('top', `${y - 10}px`)
   },
   
-  hide: (tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>) => {
+  hide: (tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement | null, unknown>) => {
     return tooltip.style('visibility', 'hidden')
   }
 }
@@ -115,7 +131,10 @@ export const responsive = {
     }
   },
   
-  createResponsiveSVG: (container: d3.Selection<HTMLElement, unknown, null, undefined>, aspectRatio = 2) => {
+  createResponsiveSVG: (
+    container: d3.Selection<HTMLElement, unknown, HTMLElement | null, unknown>, 
+    aspectRatio = 2
+  ) => {
     return container
       .append('svg')
       .attr('width', '100%')
@@ -138,7 +157,12 @@ export const dataProcessing = {
   
   createHierarchy: <T extends Record<string, unknown>>(data: T[], _parentKey: string, valueKey: string) => {
     return d3.hierarchy(data)
-      .sum((d: any) => d[valueKey] as number)
+      .sum((d: unknown) => {
+        if (typeof d === 'object' && d !== null && valueKey in d) {
+          return (d as Record<string, unknown>)[valueKey] as number
+        }
+        return 0
+      })
       .sort((a, b) => (b.value || 0) - (a.value || 0))
   }
 }

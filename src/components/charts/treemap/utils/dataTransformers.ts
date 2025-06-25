@@ -25,7 +25,7 @@ export const transformPrecintosByCompany = (
 
   const companiesMap = new Map<string, Map<string, number>>()
   precintos.forEach(precinto => {
-    const company = (precinto as any).empresa || 'Sin Empresa'
+    const company = 'empresa' in precinto && typeof precinto.empresa === 'string' ? precinto.empresa : 'Sin Empresa'
     const status = precinto.estado
     if (!companiesMap.has(company)) {
       companiesMap.set(company, new Map())
@@ -73,7 +73,7 @@ export const transformTransitsByRoute = (
   const routesMap = new Map<string, Map<string, number>>()
   transitos.forEach(transito => {
     const route = `${transito.origen} → ${transito.destino}`
-    const status = (transito as any).estado || 'pendiente'
+    const status = 'estado' in transito && typeof transito.estado === 'string' ? transito.estado : 'pendiente'
     if (!routesMap.has(route)) {
       routesMap.set(route, new Map())
     }
@@ -120,7 +120,7 @@ export const transformAlertsBySeverity = (
   const severityMap = new Map<string, Map<string, number>>()
   alertas.forEach(alerta => {
     const severity = alerta.tipo
-    const status = (alerta as any).estado || 'activa'
+    const status = 'estado' in alerta && typeof alerta.estado === 'string' ? alerta.estado : 'activa'
     if (!severityMap.has(severity)) {
       severityMap.set(severity, new Map())
     }
@@ -158,7 +158,7 @@ export const transformByTimePeriod = (
 ): TreemapData => {
   const timeMap = new Map<string, Map<string, number>>()
   data.forEach(item => {
-    const date = new Date((item as any)[dateField])
+    const date = new Date((item as Record<string, unknown>)[dateField] as string | number | Date)
     let period = ''
     switch (_groupBy) {
       case 'day': {
@@ -176,7 +176,8 @@ export const transformByTimePeriod = (
         break
     }
 
-    const type = (item as any).tipo || (item as any).estado || 'otros'
+    const record = item as Record<string, unknown>
+    const type = (typeof record.tipo === 'string' ? record.tipo : typeof record.estado === 'string' ? record.estado : 'otros')
     if (!timeMap.has(period)) {
       timeMap.set(period, new Map())
     }
@@ -212,7 +213,7 @@ export const createHierarchy = (
   data.forEach(item => {
     let currentLevel = root
     levels.forEach((level, index) => {
-      const value = (item as any)[level] || 'Sin Definir'
+      const value = String((item as Record<string, unknown>)[level] || 'Sin Definir')
       let child = currentLevel.children?.find(c => c.name === value)
       if (!child) {
         child = {

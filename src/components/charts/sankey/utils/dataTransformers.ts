@@ -16,7 +16,7 @@ interface SankeyLink {
   target: string;
   value: number;
   color?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 interface SankeyData {
@@ -302,7 +302,13 @@ function getTimeKey(date: Date, interval: 'hour' | 'day' | 'week' | 'month'): st
 /**
  * Aggregate flow data by grouping similar paths
  */
-export function aggregateFlows(flows: any[], threshold = 0): SankeyData {
+interface Flow {
+  from: string;
+  to: string;
+  value: number;
+}
+
+export function aggregateFlows(flows: Flow[], threshold = 0): SankeyData {
   const aggregated = new Map<string, number>()
   const nodes = new Set<string>()
   flows.forEach(flow => {

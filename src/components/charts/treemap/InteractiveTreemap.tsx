@@ -72,7 +72,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
       .paddingInner(2)
       .paddingOuter(4)
       .round(true)
-    treemapLayout(root as any)
+    treemapLayout(root as d3.HierarchyRectangularNode<TreemapNode>)
     // Create main SVG groups
     const svg = d3.select(svgRef.current)
     const defs = svg.append('defs')
@@ -172,7 +172,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
         svg.transition()
           .duration(750)
           .call(
-            zoom.transform as any,
+            zoom.transform,
             d3.zoomIdentity
               .translate(translate[0], translate[1])
               .scale(scale)
@@ -227,7 +227,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
     svg.on('click', function() {
       svg.transition()
         .duration(750)
-        .call(zoom.transform as any, d3.zoomIdentity)
+        .call(zoom.transform, d3.zoomIdentity)
       setBreadcrumb(['Root'])
     })
     setCurrentRoot(root)
@@ -290,7 +290,7 @@ export const InteractiveTreemap: React.FC<TreemapProps> = ({
               if (svgRef.current) {
                 const svg = d3.select(svgRef.current)
                 const zoom = d3.zoom<SVGSVGElement, unknown>()
-                svg.call(zoom.transform as any, d3.zoomIdentity)
+                svg.call(zoom.transform, d3.zoomIdentity)
                 setBreadcrumb(['Root'])
               }
             }}

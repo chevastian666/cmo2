@@ -27,17 +27,17 @@ interface VirtualizedListProps<T> {
 }
 
 // Row component interface
-interface RowProps {
+interface RowProps<T> {
   data: {
-    items: any[]
-    renderItem: (item: any, index: number, style: React.CSSProperties) => React.ReactNode
+    items: T[]
+    renderItem: (item: T, index: number, style: React.CSSProperties) => React.ReactNode
   }
   index: number
   style: React.CSSProperties
 }
 
 // Memoized row component to prevent unnecessary re-renders
-const Row = memo(({ data, index, style }: RowProps) => {
+const Row = memo(<T,>({ data, index, style }: RowProps<T>) => {
   const { items, renderItem } = data
   const item = items[index]
   

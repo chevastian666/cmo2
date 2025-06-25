@@ -41,7 +41,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     // Create treemap layout
     d3.treemap<TreemapNode>()
       .size([width, height])
-      .padding(2)(root as any)
+      .padding(2)(root as d3.HierarchyRectangularNode<TreemapNode>)
     // Create color scale
     const color = d3.scaleOrdinal<string>(d3.schemeCategory10)
     // Create cells
