@@ -112,7 +112,7 @@ export function VirtualizedList<T>({
               width={_width}
               itemCount={_itemCount}
               itemSize={_getItemSize}
-              itemData={_itemData}
+              itemData={_itemData as { items: unknown[]; renderItem: (item: unknown, index: number, style: React.CSSProperties) => React.ReactNode }}
               onScroll={_handleScroll}
               overscanCount={_overscan}
               estimatedItemSize={_estimatedItemSize}
@@ -120,7 +120,7 @@ export function VirtualizedList<T>({
               onItemsRendered={onItemsRendered}
               className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
             >
-              {Row}
+              {Row as React.ComponentType<{ data: typeof _itemData; index: number; style: React.CSSProperties }>}
             </List>
           )}
         </InfiniteLoader>
@@ -134,7 +134,7 @@ export function VirtualizedList<T>({
         width={_width}
         itemCount={_itemCount}
         itemSize={_getItemSize}
-        itemData={_itemData}
+        itemData={_itemData as { items: unknown[]; renderItem: (item: unknown, index: number, style: React.CSSProperties) => React.ReactNode }}
         onScroll={_handleScroll}
         overscanCount={_overscan}
         estimatedItemSize={_estimatedItemSize}

@@ -1,55 +1,48 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react'
-interface Props {
+import React from 'react'
+import type { ErrorInfo, ReactNode } from 'react'
+
+interface ErrorBoundaryState {
+  hasError: boolean
+  error: Error | null
+}
+
+interface ErrorBoundaryProps {
   children: ReactNode
   componentName?: string
 }
 
-interface State {
-  hasError: boolean
-  error: Error | null
-  errorInfo: ErrorInfo | null
-}
-
-export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-    error: null,
-    errorInfo: null
-  }
-  public static getDerivedStateFromError(error: Error): State {
-    console.error('ErrorBoundary: Error caught:', error)
-    return { hasError: true, error, errorInfo: null }
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props)
+    this.state = { hasError: false, error: null }
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary: Error details:', {
-      componentName: this.props.componentName,
-      error: error,
-      errorInfo: errorInfo
-    })
-    this.setState({ errorInfo })
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error }
   }
 
-  public render() {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error(`Error in ${this.props.componentName || 'Component'}:`, error, errorInfo)
+  }
+
+  render() {
     if (this.state.hasError) {
       return (
-        <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg">
-          <h2 className="text-red-400 font-bold mb-2">
-            Error en {this.props.componentName || 'Component'}
-          </h2>
-          <p className="text-red-300 mb-2">
-            {this.state.error?.message || 'Un error inesperado ha ocurrido'}
-          </p>
-          {this.state.errorInfo && (
-            <details className="mt-2">
-              <summary className="cursor-pointer text-red-400 hover:text-red-300">
-                Ver detalles del error
-              </summary>
-              <pre className="mt-2 text-xs text-gray-400 overflow-auto">
-                {this.state.errorInfo.componentStack}
-              </pre>
-            </details>
-          )}
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+          <div className="bg-gray-800 p-8 rounded-lg max-w-lg">
+            <h2 className="text-2xl font-bold text-red-500 mb-4">
+              Error en {this.props.componentName || 'el componente'}
+            </h2>
+            <p className="text-gray-300 mb-4">
+              {this.state.error?.message || 'Ha ocurrido un error inesperado'}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Recargar página
+            </button>
+          </div>
         </div>
       )
     }
@@ -57,3 +50,6 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children
   }
 }
+
+export default ErrorBoundary
+export { ErrorBoundary }

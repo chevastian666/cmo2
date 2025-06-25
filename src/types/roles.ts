@@ -11,6 +11,8 @@ export type Section =
   | 'zonas-descanso'
   | 'roles'
   | 'configuracion'
+  | 'reportes'
+  | 'usuarios'
 export type Permission = 'view' | 'create' | 'edit' | 'delete'
 export interface RolePermissions {
   [key: string]: Permission[]
@@ -47,7 +49,9 @@ export const SECTION_LABELS: Record<Section, string> = {
   depositos: 'Depósitos',
   'zonas-descanso': 'Zonas de Descanso',
   roles: 'Gestión de Roles',
-  configuracion: 'Configuración'
+  configuracion: 'Configuración',
+  reportes: 'Reportes',
+  usuarios: 'Usuarios'
 }
 export const ROLE_LABELS: Record<Role, string> = {
   God: 'Administrador Total',

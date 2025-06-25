@@ -29,8 +29,8 @@ export const scales = {
       .range(colors || d3.schemeCategory10)
 }
 export const animations = {
-  fadeIn: <TElement extends SVGElement | HTMLElement = SVGElement | HTMLElement>(
-    selection: d3.Selection<TElement, unknown, HTMLElement | null, unknown>, 
+  fadeIn: <TElement extends Element, TDatum, TParent extends Element | null, TPDatum>(
+    selection: d3.Selection<TElement, TDatum, TParent, TPDatum>, 
     duration = 750
   ) => 
     selection

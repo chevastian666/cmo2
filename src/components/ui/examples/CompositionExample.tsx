@@ -1,5 +1,4 @@
 import React from 'react'
-import { Card } from '@/components/ui/card'
 import { Card, CardHeader, CardContent, Tabs, StatusBadge, Badge, BadgeGroup, InfoRow, InfoGrid, AlertsPanel, TransitCard, EmptyState, LoadingState, MapModule} from '../index'
 import { Truck, AlertTriangle, Activity, MapPin} from 'lucide-react'
 /**

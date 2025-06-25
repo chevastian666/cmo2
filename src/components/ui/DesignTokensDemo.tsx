@@ -37,7 +37,7 @@ export const DesignTokensDemo: React.FC = () => {
               <div key={color} className="text-center">
                 <div 
                   className="w-full h-16 rounded-md mb-2"
-                  style={{ backgroundColor: designTokens.colors[color as keyof typeof designTokens.colors][500] }}
+                  style={{ backgroundColor: (designTokens.colors[color as keyof typeof designTokens.colors] as Record<string, string>)?.[500] || '#3b82f6' }}
                 />
                 <p className="text-sm text-gray-300 capitalize">{color}</p>
               </div>

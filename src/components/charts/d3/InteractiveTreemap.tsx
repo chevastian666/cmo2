@@ -130,8 +130,8 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         return formatters.number(d.value || 0)
       })
     // Animate labels
-    animations.fadeIn(labels as d3.Selection<SVGTextElement, unknown, HTMLElement | null, unknown>, config.animations.duration + 200)
-    animations.fadeIn(valueLabels as d3.Selection<SVGTextElement, unknown, HTMLElement | null, unknown>, config.animations.duration + 400)
+    animations.fadeIn(labels, config.animations.duration + 200)
+    animations.fadeIn(valueLabels, config.animations.duration + 400)
     // Add percentage labels for larger cells
     const percentageLabels = cell.append('text')
       .attr('x', (d) => (d.x1 - d.x0) / 2)
@@ -151,7 +151,7 @@ export const InteractiveTreemap: React.FC<InteractiveTreemapProps> = ({
         const percentage = ((d.value || 0) / (root.value || 1)) * 100
         return `${percentage.toFixed(1)}%`
       })
-    animations.fadeIn(percentageLabels as d3.Selection<SVGTextElement, unknown, HTMLElement | null, unknown>, config.animations.duration + 600)
+    animations.fadeIn(percentageLabels, config.animations.duration + 600)
     // Add interactions
     cell
       .on('mouseenter', function(event, d) {

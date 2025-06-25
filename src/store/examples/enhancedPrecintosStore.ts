@@ -4,8 +4,9 @@
  */
 
 import { createStore} from '../createStore'
-import { executeAsyncAction, LoadingState} from '../middleware/errorHandling'
-import { Precinto} from '../../types/precinto'
+import { executeAsyncAction} from '../middleware/errorHandling'
+import type { LoadingState} from '../middleware/errorHandling'
+import type { Precinto} from '../../types/precinto'
 import { precintosService} from '../../services/precintos.service'
 interface PrecintosState {
   // Datos

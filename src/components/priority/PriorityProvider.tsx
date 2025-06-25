@@ -106,7 +106,7 @@ export const PriorityProvider: React.FC<PriorityProviderProps> = ({
     if (task && !task.cancelled) {
       task.cancelled = true
       if (task.schedulerTask) {
-        unstable_cancelCallback(task.schedulerTask)
+        unstable_cancelCallback(task.schedulerTask as Parameters<typeof unstable_cancelCallback>[0])
       }
       tasksRef.current.delete(taskId)
       // Update pending count

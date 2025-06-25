@@ -6,7 +6,7 @@ import { NotificationItem } from './NotificationItem';
 import { NotificationFilters } from './NotificationFilters';
 import { NotificationGroupItem } from './NotificationGroupItem';
 import { QuickActions } from './QuickActions';
-import type { NotificationFilter } from '@/types/notifications';
+import type { NotificationFilter, Notification as ComplexNotification, NotificationGroup, NotificationPriority, NotificationStatus } from '@/types/notifications';
 
 
 
@@ -31,9 +31,51 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
     getGroupedNotifications
   } = useNotificationStore();
   
-  const filteredNotifications = groupByType 
-    ? getGroupedNotifications()
-    : getNotificationsByFilter({ type: filter.types?.[0], read: filter.unreadOnly ? false : undefined });
+  // Type adapter functions
+  const mapSimpleTypeToComplex = (type: string): ComplexNotification['type'] => {
+    const typeMap: Record<string, ComplexNotification['type']> = {
+      'info': 'system',
+      'success': 'system',
+      'warning': 'alert',
+      'error': 'alert'
+    };
+    return typeMap[type] || 'system';
+  };
+
+  const mapSimplePriorityToComplex = (type: string): NotificationPriority => {
+    const priorityMap: Record<string, NotificationPriority> = {
+      'error': 'critical',
+      'warning': 'high',
+      'info': 'normal',
+      'success': 'normal'
+    };
+    return priorityMap[type] || 'normal';
+  };
+
+  const mapSimpleNotificationToComplex = (notification: ReturnType<typeof useNotificationStore.getState>['notifications'][0]): ComplexNotification => {
+    return {
+      id: notification.id,
+      title: notification.title,
+      message: notification.message,
+      type: mapSimpleTypeToComplex(notification.type),
+      priority: mapSimplePriorityToComplex(notification.type),
+      status: (notification.read ? 'read' : 'unread') as NotificationStatus,
+      timestamp: notification.timestamp,
+      actions: notification.actions?.map((a) => ({
+        id: `${notification.id}-${a.label}`,
+        label: a.label,
+        type: 'custom' as const,
+        payload: { action: a.action }
+      })) || [],
+      metadata: {
+        source: notification.source || 'system',
+        sourceId: notification.id
+      }
+    };
+  };
+
+  const groupedNotifications = getGroupedNotifications();
+  const individualNotifications = getNotificationsByFilter({ type: filter.types?.[0], read: filter.unreadOnly ? false : undefined });
 
   // Auto-close after marking all as read
   useEffect(() => {
@@ -53,7 +95,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
         markAllAsRead();
         break;
       case 'clearAll':
-        notifications.forEach(n => dismissNotification(n.id));
+        notifications.forEach((n) => dismissNotification(n.id));
         break;
       case 'toggleGroup':
         setGroupByType(!groupByType);
@@ -125,7 +167,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
 
               {/* Notifications List */}
               <div className="flex-1 overflow-y-auto">
-                {filteredNotifications.length === 0 ? (
+                {(groupByType ? groupedNotifications.length : individualNotifications.length) === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-500">
                     <Bell className="h-12 w-12 mb-4 opacity-50" />
                     <p>No hay notificaciones</p>
@@ -134,19 +176,22 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                   <div className="p-4 space-y-4">
                     {groupByType ? (
                       // Grouped view
-                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((group) => {
-                        const groupData = {
-                          ...group,
-                          id: group.id || group.type,
-                          label: group.label || group.type,
-                          priority: group.priority || 'normal',
-                          latestTimestamp: group.latestTimestamp || new Date(),
-                          collapsed: group.collapsed || false
-                        }
+                      groupedNotifications.map((group) => {
+                        // Convert simple group to complex NotificationGroup
+                        const complexGroup: NotificationGroup = {
+                          id: group.type,
+                          label: group.type.charAt(0).toUpperCase() + group.type.slice(1),
+                          type: mapSimpleTypeToComplex(group.type),
+                          priority: mapSimplePriorityToComplex(group.type),
+                          count: group.count,
+                          latestTimestamp: group.notifications[0]?.timestamp || new Date(),
+                          notifications: group.notifications.map(mapSimpleNotificationToComplex),
+                          collapsed: false
+                        };
                         return (
                           <NotificationGroupItem
-                            key={groupData.id}
-                            group={groupData}
+                            key={complexGroup.id}
+                            group={complexGroup}
                             selectedNotifications={new Set()}
                             onSelect={() => {}}
                             onAction={(id, action) => {
@@ -160,17 +205,12 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       })
                     ) : (
                       // Individual view
-                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((notification) => {
-                        const notificationData = {
-                          ...notification,
-                          priority: notification.priority || 'normal',
-                          status: notification.status || 'unread',
-                          metadata: notification.metadata || {}
-                        }
+                      individualNotifications.map((notification) => {
+                        const complexNotification = mapSimpleNotificationToComplex(notification);
                         return (
                           <NotificationItem
                             key={notification.id}
-                            notification={notificationData}
+                            notification={complexNotification}
                             isSelected={false}
                             onSelect={() => {}}
                             onAction={(action) => {

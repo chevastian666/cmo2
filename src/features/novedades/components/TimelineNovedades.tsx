@@ -1,6 +1,6 @@
 import React from 'react'
 import { MapPin} from 'lucide-react'
-import { EmptyState, LoadingState} from '../../../components/ui'
+import type { EmptyState, LoadingState} from '../../../components/ui'
 import { NovedadCard} from './NovedadCard'
 import { cn} from '../../../utils/utils'
 import type { Novedad} from '../types'

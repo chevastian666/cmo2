@@ -39,7 +39,9 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
     depositos: ['view', 'create', 'edit', 'delete'],
     'zonas-descanso': ['view', 'create', 'edit', 'delete'],
     roles: ['view', 'create', 'edit', 'delete'],
-    configuracion: ['view', 'create', 'edit', 'delete']
+    configuracion: ['view', 'create', 'edit', 'delete'],
+    reportes: ['view', 'create', 'edit', 'delete'],
+    usuarios: ['view', 'create', 'edit', 'delete']
   },
   Gerente: {
     dashboard: ['view'],
@@ -52,7 +54,9 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
     depositos: ['view', 'edit'],
     'zonas-descanso': ['view'],
     roles: [],
-    configuracion: ['view']
+    configuracion: ['view'],
+    reportes: ['view'],
+    usuarios: ['view', 'edit']
   },
   Supervisor: {
     dashboard: ['view'],
@@ -65,7 +69,9 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
     depositos: ['view'],
     'zonas-descanso': ['view'],
     roles: [],
-    configuracion: []
+    configuracion: [],
+    reportes: ['view'],
+    usuarios: []
   },
   CMO: {
     dashboard: ['view'],
@@ -78,7 +84,9 @@ const defaultPermissions: Record<Role, Record<Section, Permission[]>> = {
     depositos: ['view'],
     'zonas-descanso': ['view'],
     roles: [],
-    configuracion: []
+    configuracion: [],
+    reportes: [],
+    usuarios: []
   }
 }
 export const useRolesStore = create<RolesStore>()(devtools(

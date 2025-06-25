@@ -2,7 +2,7 @@ import React from 'react'
 import { Package, AlertTriangle, CheckCircle, MapPin, Truck, User} from 'lucide-react'
 import { cn} from '@/lib/utils'
 import { Button} from '@/components/ui/button'
-import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
+import type { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog'
 import type { Precinto} from '../../../types'

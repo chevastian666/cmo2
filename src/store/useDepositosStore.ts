@@ -25,13 +25,11 @@ const mockDepositos: Deposito[] = [
     empresa: 'RILCOMAR S.A.',
     capacidad: 75,
     transitosActivos: 0,
-    transitosActivos: 12,
     estado: 'activo',
     telefono: '2345 6789',
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 45
   },
   {
     id: '1923',
@@ -51,7 +49,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 23
   },
   {
     id: '1909',
@@ -71,7 +68,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 67
   },
   {
     id: '1937',
@@ -91,7 +87,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 34
   },
   {
     id: '1907',
@@ -111,7 +106,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 41
   },
   {
     id: '1925',
@@ -131,7 +125,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 25
   },
   {
     id: '1931',
@@ -151,7 +144,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 19
   },
   {
     id: '1913',
@@ -171,7 +163,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    transitosActivos: 38
   },
   {
     id: '1382',
@@ -191,7 +182,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Paysandu',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 15
   },
   {
     id: '1916',
@@ -211,7 +201,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 48
   },
   {
     id: '2091',
@@ -231,7 +220,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ruta 8 Km 17.5',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 42
   },
   {
     id: '5081',
@@ -251,7 +239,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Rivera',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 12
   },
   {
     id: '2089',
@@ -271,7 +258,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 76
   },
   {
     id: '4084',
@@ -291,7 +277,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Rio Branco, Cerro Largo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 8
   },
   {
     id: '2589',
@@ -310,7 +295,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Punta Pereira, Colonia',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 22
+    transitosActivos: 0,
   },
   {
     id: '7071',
@@ -329,7 +314,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Colonia',
     horaApertura: '08:00',
     horaCierre: '17:00',
-    transitosActivos: 18
+    transitosActivos: 0,
   },
   {
     id: '6097',
@@ -348,7 +333,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Tacuarembo',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 11
+    transitosActivos: 0,
   },
   {
     id: '6081',
@@ -367,7 +352,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 28
+    transitosActivos: 0,
   },
   {
     id: '1281',
@@ -386,7 +371,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente Salto Grande',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 24
+    transitosActivos: 0,
   },
   {
     id: '900',
@@ -406,7 +391,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 95
   },
   {
     id: '3090',
@@ -425,7 +409,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Chuy, Rocha',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 16
+    transitosActivos: 0,
   },
   {
     id: '1701',
@@ -444,7 +428,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Florida',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 20
+    transitosActivos: 0,
   },
   {
     id: '5082',
@@ -464,7 +448,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Control Integrado Rivera',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 32
   },
   {
     id: '1694',
@@ -483,7 +466,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 43
+    transitosActivos: 0,
   },
   {
     id: '1641',
@@ -503,7 +486,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 54
   },
   {
     id: '1926',
@@ -522,7 +504,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 36
+    transitosActivos: 0,
   },
   {
     id: '1644',
@@ -542,7 +524,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 125
   },
   {
     id: '1647',
@@ -562,7 +543,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ruta 1 Km 20, Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 89
   },
   {
     id: '1853',
@@ -581,7 +561,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 29
+    transitosActivos: 0,
   },
   {
     id: '1680',
@@ -600,7 +580,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 37
+    transitosActivos: 0,
   },
   {
     id: '1703',
@@ -619,7 +599,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Libertad, San José',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 17
+    transitosActivos: 0,
   },
   {
     id: '1181',
@@ -638,7 +618,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente Internacional, Bella Unión',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 21
+    transitosActivos: 0,
   },
   {
     id: '7093',
@@ -657,7 +637,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 35
+    transitosActivos: 0,
   },
   {
     id: '7072',
@@ -676,7 +656,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Nueva Helvecia',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 14
+    transitosActivos: 0,
   },
   {
     id: '1626',
@@ -695,6 +675,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '2094',
@@ -713,6 +694,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Parque de las Ciencias, Canelones',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1662',
@@ -731,7 +713,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 31
+    transitosActivos: 0,
   },
   {
     id: '901',
@@ -750,6 +732,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '2088',
@@ -768,7 +751,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 46
+    transitosActivos: 0,
   },
   {
     id: '1922',
@@ -787,6 +770,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1902',
@@ -805,6 +789,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1720',
@@ -823,7 +808,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
-    transitosActivos: 33
+    transitosActivos: 0,
   },
   {
     id: '1083',
@@ -842,7 +827,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Artigas',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 13
+    transitosActivos: 0,
   },
   {
     id: '1601',
@@ -861,7 +846,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 39
+    transitosActivos: 0,
   },
   {
     id: '9084',
@@ -880,7 +865,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Acegua, Cerro Largo',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 10
+    transitosActivos: 0,
   },
   {
     id: '3081',
@@ -899,6 +884,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Control Operativo Chuy',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '4081',
@@ -917,7 +903,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Control Integrado Rio Branco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 30
+    transitosActivos: 0,
   },
   {
     id: '6090',
@@ -936,7 +922,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Fray Bentos, Rio Negro',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 52
+    transitosActivos: 0,
   },
   {
     id: '1655',
@@ -955,7 +941,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 44
+    transitosActivos: 0,
   },
   {
     id: '1661',
@@ -974,6 +960,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1668',
@@ -993,7 +980,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 118
   },
   {
     id: '1678',
@@ -1013,7 +999,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 84
   },
   {
     id: '1683',
@@ -1032,6 +1017,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1685',
@@ -1050,6 +1036,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1704',
@@ -1068,6 +1055,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1904',
@@ -1086,6 +1074,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1941',
@@ -1104,6 +1093,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto de Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '1951',
@@ -1122,6 +1112,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Punta Sayago',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1183',
@@ -1140,6 +1131,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Bella Unión, Artigas',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1381',
@@ -1158,7 +1150,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente Gral. Artigas, Paysandú',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 26
+    transitosActivos: 0,
   },
   {
     id: '1461',
@@ -1177,6 +1169,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Nueva Palmira, Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1471',
@@ -1195,7 +1188,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Nueva Palmira',
     horaApertura: '07:00',
     horaCierre: '19:00',
-    transitosActivos: 27
+    transitosActivos: 0,
   },
   {
     id: '1512',
@@ -1214,7 +1207,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 47
+    transitosActivos: 0,
   },
   {
     id: '1605',
@@ -1233,6 +1226,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Terminal Buquebus, Puerto de Montevideo',
     horaApertura: '05:00',
     horaCierre: '23:00',
+    transitosActivos: 0,
   },
   {
     id: '1607',
@@ -1251,6 +1245,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1617',
@@ -1269,6 +1264,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1630',
@@ -1287,6 +1283,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1631',
@@ -1305,7 +1302,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 40
+    transitosActivos: 0,
   },
   {
     id: '1669',
@@ -1325,7 +1322,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 122
   },
   {
     id: '1693',
@@ -1345,7 +1341,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 88
   },
   {
     id: '1708',
@@ -1364,6 +1359,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1719',
@@ -1382,6 +1378,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1808',
@@ -1400,6 +1397,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1801',
@@ -1418,6 +1416,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1813',
@@ -1436,6 +1435,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1842',
@@ -1454,6 +1454,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1854',
@@ -1472,6 +1473,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1892',
@@ -1490,6 +1492,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1901',
@@ -1508,6 +1511,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aguada Park, Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1905',
@@ -1526,6 +1530,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'WTC Free Zone, Montevideo',
     horaApertura: '08:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1914',
@@ -1544,6 +1549,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1918',
@@ -1562,7 +1568,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Cerro, Montevideo',
     horaApertura: '05:00',
     horaCierre: '21:00',
-    transitosActivos: 50
+    transitosActivos: 0,
   },
   {
     id: '1928',
@@ -1581,6 +1587,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1929',
@@ -1599,6 +1606,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1933',
@@ -1617,6 +1625,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1936',
@@ -1635,6 +1644,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1971',
@@ -1653,6 +1663,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1972',
@@ -1671,6 +1682,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1973',
@@ -1689,6 +1701,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '2092',
@@ -1708,7 +1721,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Franca Carrasco',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 68
   },
   {
     id: '6061',
@@ -1727,6 +1739,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '6065',
@@ -1745,7 +1758,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'M\'Bopicuá, Rio Negro',
     horaApertura: '06:00',
     horaCierre: '22:00',
-    transitosActivos: 57
+    transitosActivos: 0,
   },
   {
     id: '6082',
@@ -1764,6 +1777,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Fray Bentos, Rio Negro',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '6098',
@@ -1782,6 +1796,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puente San Martin, Fray Bentos',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '7062',
@@ -1800,6 +1815,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '7087',
@@ -1818,6 +1834,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '8081',
@@ -1836,6 +1853,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto Laguna del Sauce, Maldonado',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '8094',
@@ -1854,6 +1872,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Aeropuerto Punta del Este',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '9081',
@@ -1872,6 +1891,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Control Integrado Aceguá',
     horaApertura: '00:00',
     horaCierre: '23:59',
+    transitosActivos: 0,
   },
   {
     id: '1361',
@@ -1890,6 +1910,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Paysandú',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1650',
@@ -1909,7 +1930,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Recinto Portuario Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 180
   },
   {
     id: '1651',
@@ -1929,7 +1949,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo - Graneles',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 65
   },
   {
     id: '1652',
@@ -1948,6 +1967,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1716',
@@ -1966,6 +1986,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1915',
@@ -1984,6 +2005,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1822',
@@ -2002,6 +2024,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Teja, Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1943',
@@ -2020,6 +2043,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'TCU - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1942',
@@ -2038,6 +2062,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ciudad Vieja, Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1924',
@@ -2056,6 +2081,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Parque Industrial Ruta 5',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1945',
@@ -2074,6 +2100,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'La Tablada',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '3000',
@@ -2092,6 +2119,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Pando - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '6092',
@@ -2110,6 +2138,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Predio Expoactiva, Soriano',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1470',
@@ -2129,7 +2158,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Predio Expoactiva, Soriano',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 6
   },
   {
     id: '1940',
@@ -2148,6 +2176,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1906',
@@ -2166,7 +2195,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Expo Melilla',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 5
+    transitosActivos: 0,
   },
   {
     id: '1465',
@@ -2186,7 +2215,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Terminal Granelera, Nueva Palmira',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 78
   },
   {
     id: '1832',
@@ -2205,6 +2233,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1675',
@@ -2223,6 +2252,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Este',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1947',
@@ -2241,6 +2271,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1635',
@@ -2259,6 +2290,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1673',
@@ -2277,6 +2309,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1894',
@@ -2296,7 +2329,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Expo Prado',
     horaApertura: '08:00',
     horaCierre: '18:00',
-    transitosActivos: 3
   },
   {
     id: '1722',
@@ -2315,6 +2347,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1723',
@@ -2333,6 +2366,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1949',
@@ -2351,6 +2385,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Ruta 101 - Zona Franca Carrasco',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1676',
@@ -2370,7 +2405,6 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '00:00',
     horaCierre: '23:59',
-    transitosActivos: 128
   },
   {
     id: '8096',
@@ -2389,6 +2423,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'WTC Punta del Este',
     horaApertura: '08:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '6072',
@@ -2407,6 +2442,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Fray Bentos',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1679',
@@ -2425,6 +2461,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   },
   {
     id: '1946',
@@ -2443,6 +2480,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1828',
@@ -2461,6 +2499,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1283',
@@ -2479,6 +2518,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Salto',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1974',
@@ -2497,6 +2537,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1691',
@@ -2515,6 +2556,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '07:00',
     horaCierre: '19:00',
+    transitosActivos: 0,
   },
   {
     id: '1975',
@@ -2533,6 +2575,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Zona Este',
     horaApertura: '08:00',
     horaCierre: '18:00',
+    transitosActivos: 0,
   },
   {
     id: '1687',
@@ -2551,6 +2594,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Juan Lacaze, Colonia',
     horaApertura: '06:00',
     horaCierre: '20:00',
+    transitosActivos: 0,
   },
   {
     id: '1646',
@@ -2569,6 +2613,7 @@ const mockDepositos: Deposito[] = [
     direccion: 'Puerto de Montevideo',
     horaApertura: '06:00',
     horaCierre: '22:00',
+    transitosActivos: 0,
   }
 ]
 export const useDepositosStore = create<DepositosState>((set) => ({
@@ -2585,7 +2630,6 @@ export const useDepositosStore = create<DepositosState>((set) => ({
       ...deposito,
       id: Date.now().toString(),
       transitosActivos: 0,
-      transitosActivos: 0
     }
     set((state) => ({
       depositos: [...state.depositos, newDeposito]

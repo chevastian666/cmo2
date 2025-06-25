@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui
 import { Button} from '@/components/ui/button'
 import { Textarea} from '@/components/ui/textarea'
 import { Badge, type BadgeVariant} from '@/components/ui/badge'
-import { Alert, AlertDescription} from '@/components/ui/alert'
+import type { Alert, AlertDescription} from '@/components/ui/alert'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { Label} from '@/components/ui/label'
 import { cn} from '@/utils/utils'
