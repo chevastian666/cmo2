@@ -15,10 +15,9 @@ import { tokenClasses} from '../../styles/useDesignTokens'
 interface AnimatedDivProps {
   children: React.ReactNode
   className?: string
-  initial?: string | Record<string, unknown>
-  animate?: string | Record<string, unknown>
-  exit?: string | Record<string, unknown>
-  // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
+  initial?: string
+  animate?: string
+  exit?: string
 }
 
 // Div con fade animation
@@ -115,8 +114,8 @@ interface AnimatedButtonProps {
   onClick?: () => void
   disabled?: boolean
   size?: string
-  whileHover?: string | Record<string, unknown>
-  whileTap?: string | Record<string, unknown>
+  whileHover?: string
+  whileTap?: string
 }
 
 // Botón animado
@@ -354,9 +353,8 @@ interface AnimatedDivPropsExtended {
   children: React.ReactNode
   className?: string
   delay?: number
-  initial?: string | Record<string, unknown>
-  animate?: string | Record<string, unknown>
-  // [key: string]: unknown; // Allow all motion props - Removed due to duplicate index signature
+  initial?: string
+  animate?: string
 }
 
 export const AnimatedDiv: React.FC<AnimatedDivPropsExtended> = ({ 
@@ -368,7 +366,6 @@ export const AnimatedDiv: React.FC<AnimatedDivPropsExtended> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
       className={className}
-      {...props}
     >
       {children}
     </motion.div>

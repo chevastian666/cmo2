@@ -41,7 +41,7 @@ export interface ResolucionAlerta {
   accionesTomadas?: string[]
 }
 
-export interface AlertaExtendida extends Alerta {
+export interface AlertaExtendida extends Omit<Alerta, 'comentarios'> {
   asignacion?: AsignacionAlerta
   comentarios: ComentarioAlerta[]
   resolucion?: ResolucionAlerta

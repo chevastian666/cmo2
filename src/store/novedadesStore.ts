@@ -167,9 +167,9 @@ export const useNovedadesStore = create<NovedadesState>((set, get) => ({
         id: Date.now().toString(),
         fecha: data.fecha || new Date(),
         fechaCreacion: new Date(),
-        puntoOperacion: data.puntoOperacion,
-        tipoNovedad: data.tipoNovedad,
-        descripcion: data.descripcion,
+        puntoOperacion: data.puntoOperacion || '',
+        tipoNovedad: data.tipoNovedad || 'aviso',
+        descripcion: data.descripcion || '',
         estado: 'activa',
         creadoPor: {
           id: '1',

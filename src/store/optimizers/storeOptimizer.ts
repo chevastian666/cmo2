@@ -3,7 +3,7 @@
  * Uses shallow comparison and update batching
  */
 
-import { StoreApi} from 'zustand'
+import type { StoreApi } from 'zustand'
 interface OptimizationConfig {
   enableDeepComparison?: boolean
   batchUpdates?: boolean
@@ -112,10 +112,10 @@ export class StoreOptimizer<T extends object> {
       const keysB = Object.keys(b)
       if (keysA.length !== keysB.length) return false
       if (this.config.enableDeepComparison) {
-        return keysA.every(key => this.areEqual(a[key], b[key]))
+        return keysA.every(key => this.areEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]))
       } else {
         // Shallow comparison for objects
-        return keysA.every(key => a[key] === b[key])
+        return keysA.every(key => (a as Record<string, unknown>)[key] === (b as Record<string, unknown>)[key])
       }
     }
 
@@ -147,7 +147,7 @@ export class StoreOptimizer<T extends object> {
     if (this.pendingUpdates.size === 0) return
     const updates: Partial<T> = {}
     for (const [key, value] of this.pendingUpdates.entries()) {
-      updates[key] = value
+      updates[key] = value as T[keyof T]
     }
 
     this.store.setState(updates as T)

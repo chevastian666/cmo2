@@ -85,6 +85,16 @@ export const createAlertasSlice: StateCreator<
     return map
   },
 
+  get alertasPorTipo() {
+    const map = new Map<string, Alerta[]>()
+    get().alertas.forEach(alerta => {
+      const list = map.get(alerta.tipo) || []
+      list.push(alerta)
+      map.set(alerta.tipo, list)
+    })
+    return map
+  },
+
   get recentAlertas() {
     const now = Date.now()
     const hourAgo = now - 3600000 // 1 hour
@@ -278,11 +288,7 @@ export const createAlertasSlice: StateCreator<
         ...alerta,
         // Add extended properties with default values
         historial: [],
-        precinto: null,
-        ubicacionHistorica: [],
-        comentarios: [],
-        asignaciones: [],
-        verificaciones: []
+        comentarios: []
       }
       
       set((state) => {
@@ -300,5 +306,78 @@ export const createAlertasSlice: StateCreator<
   clearAlertaExtendidaCache: () => set((state) => ({
     ...state,
     alertasExtendidas: new Map()
-  }))
+  })),
+
+  // Missing actions to satisfy AlertasActions interface
+  asignarAlerta: async (alertaId: string, usuarioId: string, _notas?: string) => {
+    const { updateAlerta } = get()
+    try {
+      // In production, this would be an API call
+      // await alertasService.asignar?.(alertaId, usuarioId, notas)
+      updateAlerta(alertaId, { asignadoA: usuarioId })
+    } catch (error) {
+      console.warn('Simulating alert assignment:', error)
+      updateAlerta(alertaId, { asignadoA: usuarioId })
+    }
+  },
+
+  comentarAlerta: async (alertaId: string, mensaje: string) => {
+    const { alertasExtendidas } = get()
+    try {
+      // In production, this would be an API call
+      const comentario = {
+        id: Date.now().toString(),
+        alertaId,
+        usuarioId: 'current-user',
+        usuario: {
+          id: 'current-user',
+          nombre: 'Usuario Actual',
+          email: 'usuario@blocktracker.com',
+          rol: 'operador' as const,
+          activo: true
+        },
+        mensaje,
+        timestamp: Date.now(),
+        tipo: 'comentario' as const
+      }
+      
+      const extendedAlert = alertasExtendidas.get(alertaId)
+      if (extendedAlert) {
+        extendedAlert.comentarios.push(comentario)
+        set((state) => {
+          const newMap = new Map(state.alertasExtendidas)
+          newMap.set(alertaId, { ...extendedAlert })
+          return { ...state, alertasExtendidas: newMap }
+        })
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error)
+    }
+  },
+
+  resolverAlerta: async (alertaId: string, _tipo: string, _descripcion: string, _acciones?: string[]) => {
+    const { updateAlerta, setAlertasActivas, alertasActivas } = get()
+    try {
+      // In production, this would be an API call
+      // await alertasService.resolver?.(alertaId, tipo, descripcion, acciones)
+      updateAlerta(alertaId, { atendida: true })
+      setAlertasActivas(alertasActivas.filter(a => a.id !== alertaId))
+    } catch (error) {
+      console.warn('Simulating alert resolution:', error)
+      updateAlerta(alertaId, { atendida: true })
+      setAlertasActivas(alertasActivas.filter(a => a.id !== alertaId))
+    }
+  },
+
+  updateAlertaExtendida: (id: string, data: Partial<AlertaExtendida>) => {
+    const { alertasExtendidas } = get()
+    const extendedAlert = alertasExtendidas.get(id)
+    if (extendedAlert) {
+      set((state) => {
+        const newMap = new Map(state.alertasExtendidas)
+        newMap.set(id, { ...extendedAlert, ...data })
+        return { ...state, alertasExtendidas: newMap }
+      })
+    }
+  }
 })

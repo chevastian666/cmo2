@@ -76,7 +76,7 @@ const loggerImpl: LoggerImpl = (f, options = {}) => (set, get, store) => {
       set(...args)
       log()
     } catch (error) {
-      console.group(`%c${name} | ERROR`, `color: ${mergedColors._error}; font-weight: bold;`)
+      console.group(`%c${name} | ERROR`, `color: ${mergedColors.error}; font-weight: bold;`)
       console.error('Error in action:', action)
       console.error(error)
       console.groupEnd()

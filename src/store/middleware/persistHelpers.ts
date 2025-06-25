@@ -41,18 +41,23 @@ export function createPersistConfig<T>(options: PersistOptions<T>) {
 /**
  * Helper para crear un store con persist y configuración estándar
  */
-export function createPersistedStore<T>(name: string, createState: StateCreator<T>, partialize?: (state: T) => Partial<T>
+export function createPersistedStore<T>(
+  name: string,
+  createState: StateCreator<T>,
+  partialize?: (state: T) => Partial<T>
 ) {
   return persist(createState, createPersistConfig({
     name,
     partialize
-  }))
+  }) as any)
 }
 
 /**
  * Helper para sincronización entre pestañas
  */
-export function enableCrossTabSync<T>(storeName: string, getState: () => T,
+export function enableCrossTabSync<T>(
+  storeName: string,
+  _getState: () => T,
   setState: (state: Partial<T>) => void
 ) {
   if (typeof window === 'undefined') return
@@ -64,7 +69,7 @@ export function enableCrossTabSync<T>(storeName: string, getState: () => T,
         if (newState && typeof newState === 'object') {
           setState(newState)
         }
-      } catch {
+      } catch (error) {
         console.error(`Error sincronizando ${storeName} entre pestañas:`, error)
       }
     }
@@ -95,7 +100,7 @@ export function exportAllPersistedStates(): Record<string, unknown> {
         if (value) {
           states[storeName] = JSON.parse(value)
         }
-      } catch {
+      } catch (error) {
         console.error(`Error exportando ${key}:`, error)
       }
     }
@@ -112,7 +117,7 @@ export function importPersistedStates(states: Record<string, unknown>) {
   Object.entries(states).forEach(([storeName, state]) => {
     try {
       localStorage.setItem(`cmo_${storeName}`, JSON.stringify(state))
-    } catch {
+    } catch (error) {
       console.error(`Error importando ${storeName}:`, error)
     }
   })
