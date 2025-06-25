@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Intelligent prefetch strategies based on scroll patterns
  */

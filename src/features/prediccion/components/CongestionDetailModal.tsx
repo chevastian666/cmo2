@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Card } from '@/components/ui/card'
 import {X, TrendingUp, Truck, Clock, MapPin, User, AlertTriangle} from 'lucide-react'

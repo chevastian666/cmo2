@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import {Package, AlertCircle, Loader} from 'lucide-react'
 import { useNavigate, useLocation} from 'react-router-dom'

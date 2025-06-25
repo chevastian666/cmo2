@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Optimized Updates Hook
  * Debounce and throttle for frequent updates

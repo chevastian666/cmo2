@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Interactive Treemap Visualization
  * D3.js implementation for transaction type distribution

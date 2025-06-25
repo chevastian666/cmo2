@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Shield, ChevronDown, ChevronUp} from 'lucide-react'
 import { cn} from '../../../utils/utils'

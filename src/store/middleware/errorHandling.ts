@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Sistema estandarizado de manejo de errores para Zustand
  * By Cheva

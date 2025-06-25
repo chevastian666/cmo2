@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Precinto Lifecycle Flow Component
  * Visualizes the lifecycle stages of precintos

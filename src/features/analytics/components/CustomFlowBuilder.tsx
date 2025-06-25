@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Custom Flow Builder Component
  * Allows users to create custom Sankey diagrams

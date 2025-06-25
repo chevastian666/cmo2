@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ProximoArribo, AlertaTV, TransitoCritico, ConfiguracionTV} from '../types'
 import { transitosService} from '../../transitos/services/transitos.service'
 import { alertasService} from '../../../services/alertas.service'

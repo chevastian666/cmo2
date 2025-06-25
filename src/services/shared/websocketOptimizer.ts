@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * WebSocket Optimizer - Batches and throttles WebSocket updates
  * Prevents excessive re-renders and improves performance

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Enhanced Auth Service with JWT Implementation
  * By Cheva

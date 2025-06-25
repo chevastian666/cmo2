@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * JWT Service - Token Management
  * By Cheva

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Alertas Treemap Component
  * Hierarchical visualization of alerts by severity and status

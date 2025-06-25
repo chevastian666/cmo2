@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
 
 interface UseDeferredDataOptions {

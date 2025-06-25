@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useMemo, useCallback, memo } from 'react'
 import { Link2, Battery, MapPin, AlertTriangle, Network, Eye} from 'lucide-react'
 import { Link} from 'react-router-dom'

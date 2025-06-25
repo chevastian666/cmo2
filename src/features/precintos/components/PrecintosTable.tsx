@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { formatTime24h} from '../../../utils/formatters'
 import type { Precinto} from '../../../types/monitoring'

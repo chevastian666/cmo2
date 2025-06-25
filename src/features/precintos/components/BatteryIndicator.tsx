@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Battery, BatteryLow} from 'lucide-react'
 import { cn} from '../../../utils/utils'

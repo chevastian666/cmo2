@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Map Visualization for Torre de Control
  * Alternative visualization without Google Maps

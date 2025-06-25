@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useCallback, useRef, useEffect } from 'react'
 import type { Alert} from '../types/alerts'
 interface UseInfiniteLoadingProps {

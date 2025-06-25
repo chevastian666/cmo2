@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { AlertCircle, AlertTriangle, Shield, Battery, MapPin, Thermometer, Radio, Package} from 'lucide-react'
 import { formatDateTime} from '../../../utils/formatters'

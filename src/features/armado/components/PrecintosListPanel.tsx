@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import {Package, RefreshCw, Search, Battery, Clock, AlertTriangle} from 'lucide-react'
 import { cn} from '../../../utils/utils'

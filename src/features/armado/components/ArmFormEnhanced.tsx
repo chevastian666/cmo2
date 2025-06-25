@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from 'react'
 import { Truck, User, Building, MapPin, FileText, Phone, Package, Globe, Home, Container} from 'lucide-react'
 import { cn} from '../../../utils/utils'

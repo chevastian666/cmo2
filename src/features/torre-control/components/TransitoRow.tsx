@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Truck, CheckCircle, AlertTriangle, XCircle, Clock, User, MapPin, ChevronRight, AlertCircle} from 'lucide-react'
 import { cn} from '../../../utils/utils'

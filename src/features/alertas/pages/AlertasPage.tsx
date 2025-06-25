@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { AlertTriangle, Shield, TrendingUp, CheckCircle, History} from 'lucide-react'
 import { AlertsTable} from '../components/AlertsTable'

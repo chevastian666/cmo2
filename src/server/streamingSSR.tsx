@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Streaming SSR with React 18 for optimized initial load
  */

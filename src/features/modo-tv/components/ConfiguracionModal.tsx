@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import {X, Monitor, Volume2, Layout, MapPin} from 'lucide-react'
 import { cn} from '../../../utils/utils'

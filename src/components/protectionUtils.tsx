@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Protection utilities for React components
  * By Cheva

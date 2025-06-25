@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Dashboard Principal del Sistema CMO
  * By Cheva

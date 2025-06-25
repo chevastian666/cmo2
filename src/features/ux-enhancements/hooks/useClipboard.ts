@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useCallback, useEffect, useState } from 'react'
 import { detectClipboardContent, generateSmartPaste} from '../utils/clipboardDetector'
 import type { ClipboardEntry} from '../types'

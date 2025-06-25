@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { X, Truck, User, MapPin, Clock, Package, AlertTriangle, Battery, Navigation, Calendar, Activity, Shield, Route, Gauge, MessageSquare, FileText, Hash, Camera, Maximize2, Download, Play, Pause, Building, Phone} from 'lucide-react'

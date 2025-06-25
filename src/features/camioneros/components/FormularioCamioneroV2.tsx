@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { User, Phone, Flag, AlertCircle} from 'lucide-react'
 import { useForm} from 'react-hook-form'

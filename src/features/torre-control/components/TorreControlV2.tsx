@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Torre de Control V2 - Sistema de Monitoreo en Tiempo Real
  * Incluye: shadcn/ui, Framer Motion, Dashboard Interactivo, Zustand mejorado

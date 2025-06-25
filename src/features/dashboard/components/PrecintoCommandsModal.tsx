@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Modal de Comandos para Precintos
  * By Cheva

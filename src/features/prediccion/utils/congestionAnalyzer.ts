@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { TransitoTorreControl} from '../../torre-control/types'
 import type { CongestionAnalysis, CamionProyectado, ProyeccionPorHora, ConfiguracionPrediccion} from '../types'
 import { CONFIGURACION_DEFAULT} from '../types'

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Página de Alertas - Versión Optimizada para mejor rendimiento
  * By Cheva

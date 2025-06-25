@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { designTokens} from '../../styles/design-tokens'
 import { tokenClasses, combineTokenClasses, getStateClasses} from '../../styles/useDesignTokens'

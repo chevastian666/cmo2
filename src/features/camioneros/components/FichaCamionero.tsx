@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { ArrowLeft, User, Phone, Flag, Truck, Activity, Route, Download, FileText} from 'lucide-react'

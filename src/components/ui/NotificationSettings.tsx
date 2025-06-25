@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { notificationService } from '@/services/shared/notification.service'
 import { Switch } from './switch'

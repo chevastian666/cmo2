@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {useRef, useState, useCallback, useEffect, useMemo} from 'react'
 import { calculateVisibleRange, calculateTotalHeight, calculateScrollVelocity, calculatePrefetchRange} from '../utils/scrollCalculations'
 import { ScrollPredictor} from '../utils/prefetchStrategies'

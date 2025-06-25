@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * D3 Visualizations Demo Page
  * Showcase of all interactive D3.js charts

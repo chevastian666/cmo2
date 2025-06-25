@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Web Worker Hook
  * Easy integration with Web Workers using Comlink

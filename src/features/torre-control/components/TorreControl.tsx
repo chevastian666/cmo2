@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Torre de Control - Sistema de Monitoreo en Tiempo Real
  * By Cheva

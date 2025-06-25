@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Ejemplo de store mejorado usando todas las nuevas características
  * By Cheva

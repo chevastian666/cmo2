@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { TransitoPendiente} from '../types/monitoring'
 import { unifiedAPIService} from './api/unified.service'
 import { trokorService} from './api/trokor.service'

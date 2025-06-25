@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Transitos Treemap Component
  * Hierarchical visualization of transits by route and status

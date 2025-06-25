@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { sharedApiService} from '../../../services/shared/sharedApi.service'
 interface TransitInfo {
   track: string

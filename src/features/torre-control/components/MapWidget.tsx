@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Map Widget for Torre de Control
  * By Cheva

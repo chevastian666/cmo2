@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { Users, Plus, Activity, Building2, MapPin, Search, EyeOff, Key, Settings} from 'lucide-react'
 export const SubPanelesPage: React.FC = () => {

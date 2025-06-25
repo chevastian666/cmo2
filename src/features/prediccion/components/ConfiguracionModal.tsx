@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { X, Save, RotateCcw, Plus, Trash2 } from 'lucide-react'
 import { 

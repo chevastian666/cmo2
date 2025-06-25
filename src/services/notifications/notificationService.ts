@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Notification Service (Minimal Version)  
  * By Cheva

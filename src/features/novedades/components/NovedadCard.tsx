@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Clock, User, MapPin, MoreVertical, Check, Eye, Edit2, MessageSquare, Paperclip, Calendar } from 'lucide-react'

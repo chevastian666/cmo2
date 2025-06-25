@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Página de Precintos - Versión 2.0 con nuevas implementaciones
  * Incluye: shadcn/ui, Framer Motion, Zustand mejorado

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { create} from 'zustand'
 import type { Documento, EstadisticasDocumentacion, LogAuditoria} from '../features/documentacion/types'
 // Mock data para desarrollo

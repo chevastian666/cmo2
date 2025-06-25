@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { Fragment, memo, useMemo } from 'react'
 import {ChevronUp, ChevronDown, Unlock, Eye, Edit2, Truck} from 'lucide-react'
 import { cn} from '../../../utils/utils'

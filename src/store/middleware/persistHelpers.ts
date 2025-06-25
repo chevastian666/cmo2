@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Helpers para configuración común de persist middleware
  * By Cheva

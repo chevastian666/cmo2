@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type TipoNovedad = 'evento' | 'reclamo' | 'tarea' | 'pendiente' | 'aviso' | 'alerta' | 'incidente' | 'cambio_turno' | 'mantenimiento'
 export type EstadoNovedad = 'activa' | 'resuelta' | 'seguimiento'
 export interface Novedad {

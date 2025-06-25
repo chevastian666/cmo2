@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Webhooks Service
  * Configurable webhooks for external integrations

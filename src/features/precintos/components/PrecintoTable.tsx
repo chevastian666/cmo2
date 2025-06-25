@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, Fragment } from 'react'
 import { ChevronUp, ChevronDown, MapPin, Eye, Send, History, Unlink, XCircle } from 'lucide-react'
 import { cn} from '@/lib/utils'

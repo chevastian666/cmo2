@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { SHARED_CONFIG, formatApiEndpoint } from '../../config/shared.config'
 import { jwtService} from '../jwt.service'
 import type { 

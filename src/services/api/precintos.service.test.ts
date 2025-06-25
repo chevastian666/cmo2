@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Precintos Service Tests
  * By Cheva

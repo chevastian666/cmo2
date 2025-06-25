@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useMemo } from 'react'
 import {X, Clock, User, Shield, Filter, FileText} from 'lucide-react'
 import { cn} from '../../../utils/utils'

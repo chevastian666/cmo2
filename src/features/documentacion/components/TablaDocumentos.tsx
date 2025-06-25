@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { FileText, Download, Eye, Trash2, Star, Lock, MoreVertical, CheckSquare, Mail, Gavel, File, Archive, ChevronUp, ChevronDown } from 'lucide-react'
 import { Badge} from '@/components/ui/badge'

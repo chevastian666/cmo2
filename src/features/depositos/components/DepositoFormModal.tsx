@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import {X, Save, Building2} from 'lucide-react'
 import { DEPOSITO_TIPOS, DEPOSITO_ZONAS} from '../types'

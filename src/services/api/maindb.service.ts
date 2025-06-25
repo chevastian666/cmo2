@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Main Database API Service (_trokor)
  * By Cheva

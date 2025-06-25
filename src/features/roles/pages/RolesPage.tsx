@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { Shield, Save, History, Eye, Users, AlertTriangle } from 'lucide-react'
 import { useMediaQuery} from '../../../hooks/useMediaQuery'

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Virtualized List Component
  * High-performance list rendering for millions of items

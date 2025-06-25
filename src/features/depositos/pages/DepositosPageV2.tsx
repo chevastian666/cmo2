@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Depósitos Page V2 - Gestión de depósitos aduaneros
  * Incluye: shadcn/ui, Framer Motion, Animaciones, Zustand mejorado
@@ -54,7 +53,7 @@ export const DepositosPageV2: React.FC = () => {
       const matchesPadre = !filters.padre || deposito.padre === filters.padre
       return matchesSearch && matchesTipo && matchesZona && matchesPadre
     })
-  }, [filters, searchTerm])
+  }, [depositos, filters, searchTerm])
   const activeFiltersCount = Object.values(filters).filter(v => v !== '').length
   const stats = useMemo(() => {
     const totalTransitos = depositos.reduce((acc, d) => acc + d.transitosActivos, 0)

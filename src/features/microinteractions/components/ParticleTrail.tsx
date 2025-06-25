@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useCallback } from 'react'
 import { cn } from '../../../utils/utils'
 interface Particle {

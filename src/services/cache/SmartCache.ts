@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Smart Cache System
  * Intelligent caching with selective invalidation and TTL

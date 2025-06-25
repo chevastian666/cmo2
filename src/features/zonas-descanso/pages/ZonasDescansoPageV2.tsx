@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Zonas de Descanso Page V2 - Información de áreas autorizadas para camioneros
  * Incluye: shadcn/ui, Framer Motion, Animaciones, Zustand mejorado

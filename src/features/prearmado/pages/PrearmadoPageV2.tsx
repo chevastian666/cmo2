@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Prearmado Page V2 - Búsqueda y preconfiguración de tránsitos
  * Incluye: shadcn/ui, Framer Motion, Animaciones, Zustand mejorado

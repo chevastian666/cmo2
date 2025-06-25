@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate} from 'react-router-dom'
 import { Package, CheckCircle, AlertCircle, Clock, MapPin, User, Phone, Calendar, ExternalLink, Copy, Download, Loader, XCircle, RefreshCw} from 'lucide-react'

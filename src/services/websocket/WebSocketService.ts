@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { 
   WebSocketMessage, WebSocketEventHandlers, PrecintoUpdateData, TransitoUpdateData, AlertaUpdateData, SistemaUpdateData, ConnectionData} from './types'
 export class WebSocketService {

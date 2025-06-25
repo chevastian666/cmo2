@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useMemo } from 'react'
 import {MapPin} from 'lucide-react'
 import { zonasDescansoData} from '../data/zonasDescansoData'

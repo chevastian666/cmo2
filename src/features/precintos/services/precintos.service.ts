@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { sharedApiService} from '../../../services/shared/sharedApi.service'
 import { PrecintoStatus} from '../types'
 import type { Precinto, PrecintoFilters} from '../types'

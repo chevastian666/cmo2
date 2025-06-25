@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Fixed Treemap Dashboard
  * Working version with proper imports

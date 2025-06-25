@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Direct Treemap Component
  * Direct import without lazy loading

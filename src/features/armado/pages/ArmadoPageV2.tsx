@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Página de Armado V2 - Sistema de Precintado con formulario único
  * Incluye: shadcn/ui, Framer Motion, Zustand mejorado, Design Tokens

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Alert Flow Analysis Component
  * Visualizes alert flows from source to resolution

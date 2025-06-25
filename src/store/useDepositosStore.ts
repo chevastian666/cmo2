@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { create} from 'zustand'
 import type { Deposito} from '../features/depositos/types'
 interface DepositosState {

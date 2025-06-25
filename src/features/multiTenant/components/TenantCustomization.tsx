@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tenant Customization Component
  * Allows tenants to customize their instance

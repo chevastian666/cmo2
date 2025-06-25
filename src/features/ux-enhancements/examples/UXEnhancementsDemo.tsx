@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { RadialMenu} from '../components/RadialMenu/RadialMenu'
 import { SmartClipboard} from '../components/SmartClipboard/SmartClipboard'

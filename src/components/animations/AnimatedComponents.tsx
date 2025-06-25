@@ -110,8 +110,8 @@ interface AnimatedButtonProps {
   onClick?: () => void
   disabled?: boolean
   size?: string
-  whileHover?: any
-  whileTap?: any
+  whileHover?: { scale?: number; y?: number } | string
+  whileTap?: { scale?: number } | string
 }
 
 // Botón animado

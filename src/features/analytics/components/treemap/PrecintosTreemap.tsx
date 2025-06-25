@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Precintos Treemap Component
  * Hierarchical visualization of precintos by company and status

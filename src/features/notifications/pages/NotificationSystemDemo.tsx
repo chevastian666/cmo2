@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Notification System Demo Page
  * Comprehensive demonstration of all notification features

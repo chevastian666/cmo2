@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Libro de Novedades Page V2 - Sistema de registro y seguimiento de novedades
  * Incluye: shadcn/ui, Framer Motion, Animaciones, Zustand mejorado

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { transitosService } from '../../../services/transitos.service'
 import { QUERY_KEYS } from '../../../config'

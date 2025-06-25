@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useMemo, useCallback, useState, useRef } from 'react'
 import type { Alert, AlertFilters } from '../types/alerts'
 

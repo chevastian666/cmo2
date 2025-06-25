@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { memo, useCallback, useEffect, useRef } from 'react'
 import { useInfiniteLoading, useAlertSubscription } from './hooks/useInfiniteLoading'
 import { useVirtualization } from './hooks/useVirtualization'

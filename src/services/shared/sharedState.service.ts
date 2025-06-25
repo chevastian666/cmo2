@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { sharedWebSocketService } from './sharedWebSocket.service'
 import { sharedApiService } from './sharedApi.service'
 import { SHARED_CONFIG } from '../../config/shared.config'

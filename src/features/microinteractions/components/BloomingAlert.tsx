@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { cn} from '../../../utils/utils'
 import '../animations/bloom.css'

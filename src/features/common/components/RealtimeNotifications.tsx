@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState, useCallback } from 'react'
 import { X, AlertCircle, AlertTriangle, Shield, CheckCircle } from 'lucide-react'

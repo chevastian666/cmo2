@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Sound Service for Notifications
  * Handles audio playback and sound management

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Factory para crear stores con todas las mejores prácticas
  * By Cheva

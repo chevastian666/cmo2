@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Logistics Flow Chart Component
  * Visualizes transit flows between origins and destinations

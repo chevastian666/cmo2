@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import { X, User, Phone, Flag, AlertCircle } from 'lucide-react'
 import { useUserInfo } from '../../../hooks/useAuth'

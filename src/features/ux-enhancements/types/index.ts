@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Types and interfaces for UX Enhancement Features
  */

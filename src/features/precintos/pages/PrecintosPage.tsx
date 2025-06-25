@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useCallback } from 'react'
 import {Download, RefreshCw, Plus, XCircle} from 'lucide-react'
 import { PrecintoTable} from '../components/PrecintoTable'

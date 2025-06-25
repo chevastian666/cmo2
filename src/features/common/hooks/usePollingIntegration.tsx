@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useCallback, useEffect } from 'react'
 import { usePolling, useAutoReconnect } from '../../../hooks/usePolling'
 import type { MapMarker, MapRoute } from '../../../components/ui/MapModule'

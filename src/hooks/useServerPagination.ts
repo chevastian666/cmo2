@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Server-side Pagination Hook
  * Efficient data fetching with caching and prefetching

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Centro de Monitoreo de Tránsitos - Versión Optimizada
  * Panel principal para funcionarios del CMO

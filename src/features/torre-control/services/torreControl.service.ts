@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Torre de Control Service
  * By Cheva

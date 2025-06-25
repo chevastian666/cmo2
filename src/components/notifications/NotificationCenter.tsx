@@ -134,8 +134,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                   <div className="p-4 space-y-4">
                     {groupByType ? (
                       // Grouped view
-                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((group: any) => {
-                        const groupData: any = {
+                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((group) => {
+                        const groupData = {
                           ...group,
                           id: group.id || group.type,
                           label: group.label || group.type,
@@ -160,8 +160,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = () => {
                       })
                     ) : (
                       // Individual view
-                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((notification: any) => {
-                        const notificationData: any = {
+                      (Array.isArray(filteredNotifications) ? filteredNotifications : []).map((notification) => {
+                        const notificationData = {
                           ...notification,
                           priority: notification.priority || 'normal',
                           status: notification.status || 'unread',

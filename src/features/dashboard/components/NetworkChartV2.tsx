@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Area, AreaChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, } from 'recharts'
 import { format} from 'date-fns'

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Usage Overview Component
  * Shows tenant resource usage and limits

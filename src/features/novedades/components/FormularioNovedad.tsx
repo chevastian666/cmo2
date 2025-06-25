@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import {Calendar, MapPin, FileText, Upload, X, Save, Paperclip} from 'lucide-react'

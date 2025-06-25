@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from 'react'
 import { authService} from '../services/shared/auth.service'
 import type { Usuario} from '../types'

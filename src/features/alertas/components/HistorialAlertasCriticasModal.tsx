@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Modal de Historial de Alertas Críticas
  * By Cheva

@@ -1,4 +1,3 @@
-// @ts-nocheck
 export { CentroDocumentacion } from './components/CentroDocumentacion'
 export { SubirDocumentoModal } from './components/SubirDocumentoModal'
 export { FiltrosDocumentosComponent as FiltrosDocumentos } from './components/FiltrosDocumentos'

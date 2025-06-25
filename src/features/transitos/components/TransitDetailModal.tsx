@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { X, Truck, User, Building, MapPin, Clock, AlertTriangle, Phone} from 'lucide-react'
 import { TransitStatus} from './TransitStatus'

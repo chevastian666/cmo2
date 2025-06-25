@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Performance Demo Page
  * Demonstrates handling millions of records efficiently

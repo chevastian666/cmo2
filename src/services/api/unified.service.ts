@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Unified API Service - Combines MainDB and AuxDB
  * By Cheva

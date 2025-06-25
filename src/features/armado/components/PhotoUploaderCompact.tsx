@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useRef } from 'react'
 import { Camera, Upload, X} from 'lucide-react'
 import { cn} from '../../../utils/utils'

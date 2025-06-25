@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react'
 import { Card } from '@/components/ui/card'
 import {X, MapPin, Battery, Thermometer, Activity, Package, AlertTriangle} from 'lucide-react'

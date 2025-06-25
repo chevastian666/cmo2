@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Servicio principal para la API de Trokor
  * By Cheva

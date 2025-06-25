@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Operational Treemap Component
  * Multi-dimensional operational view of the CMO system
