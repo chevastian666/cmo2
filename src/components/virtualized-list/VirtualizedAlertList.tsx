@@ -7,6 +7,7 @@ import { LoadingIndicator } from './components/LoadingIndicator'
 import { EmptyState } from './components/EmptyState'
 import { cn } from '../../utils/utils'
 import type { Alert } from './types/alerts'
+import type { Alerta } from '@/types/monitoring'
 import type { VirtualizedAlertListProps } from './types/virtualization'
 
 export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
@@ -20,15 +21,30 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
   filters: initialFilters, 
   className
 }) => {
-  const _containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   
   // Infinite loading
   const { items: loadedAlerts, hasMore, isLoading } = useInfiniteLoading({
-    loadMore: onLoadMore || (async () => ({ alerts: initialAlerts || [], hasMore: false }))
+    loadMore: onLoadMore || (async () => ({ 
+      alerts: (initialAlerts || []).map(alert => ({
+        id: alert.id,
+        timestamp: new Date(alert.timestamp),
+        severity: alert.severidad === 'critica' ? 'critical' : alert.severidad === 'alta' ? 'high' : alert.severidad === 'media' ? 'medium' : 'low',
+        precintoId: alert.precintoId,
+        location: {
+          lat: alert.ubicacion?.lat || 0,
+          lng: alert.ubicacion?.lng || 0,
+          address: ''
+        },
+        message: alert.mensaje,
+        status: alert.atendida ? 'resolved' : 'active'
+      } as Alert)), 
+      hasMore: false 
+    }))
   })
   
   // Use loaded alerts or initial alerts
-  const alerts = onLoadMore ? loadedAlerts : (initialAlerts || [])
+  const alerts = onLoadMore ? (loadedAlerts as unknown as Alerta[]) : (initialAlerts || [])
   
   // Filtering
   const {
@@ -40,7 +56,7 @@ export const VirtualizedAlertList: React.FC<VirtualizedAlertListProps> = ({
     isFiltering,
     highlightedIndices
   } = useAlertFiltering({
-    alerts,
+    alerts: alerts as unknown as Alert[],
     initialFilters,
     debounceMs: 100
   })

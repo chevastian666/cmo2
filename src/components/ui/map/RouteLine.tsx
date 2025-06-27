@@ -157,7 +157,7 @@ export const AnimatedRouteLine: React.FC<RouteLineProps & {
   pulseEffect?: boolean
   flowSpeed?: number
 }> = ({
-  points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2, ..._props
+  points, color = '#3b82f6', width = 3, opacity = 0.8, className, glowEffect = true, pulseEffect = true, flowSpeed = 2
 }) => {
   if (points.length < 2) return null
   const _pathData = points.reduce((path, point, index) => {

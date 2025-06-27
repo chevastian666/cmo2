@@ -10,7 +10,7 @@ import {Loader2, Check, X} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
 import { toast} from '@/hooks/use-toast'
-export interface FeedbackButtonProps extends ButtonProps {
+export interface FeedbackButtonProps extends Omit<ButtonProps, 'onError'> {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
   loadingText?: string
   successText?: string

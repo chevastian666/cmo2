@@ -51,7 +51,7 @@ export function createPersistedStore<T>(
     partialize
   })
   // Type assertion needed due to zustand's complex persist typing
-  return persist(createState, config as Parameters<typeof persist<T>>[1])
+  return persist(createState, config as PersistOptions<T, T>)
 }
 
 /**

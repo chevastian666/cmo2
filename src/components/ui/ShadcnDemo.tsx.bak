@@ -23,36 +23,36 @@ import { Skeleton} from './skeleton'
 import { CardSkeleton, ListItemSkeleton, FormSkeleton} from './CardSkeleton'
 import { BreadcrumbNav} from './BreadcrumbNav'
 import { NetworkChartV2} from '../../features/dashboard/components/NetworkChartV2'
-// Mock data for demos - not used after component cleanup
-// const mockAlerta = {
-//   id: '1',
-//   tipo: 'BBJ' as const,
-//   severidad: 'critica' as const,
-//   precintoId: 'P001',
-//   codigoPrecinto: 'BT20240001',
-//   mensaje: 'Temperatura fuera de rango',
-//   timestamp: Date.now(),
-//   ubicacion: { lat: -34.9011, lng: -56.1645 },
-//   atendida: false
-// }
-// const mockTransito = {
-//   id: '1',
-//   precinto: 'BT20240001',
-//   estado: 'EN_RUTA',
-//   origen: 'Montevideo',
-//   destino: 'Rivera',
-//   fechaSalida: new Date(),
-//   eta: new Date(Date.now() + 5 * 60 * 60 * 1000),
-//   empresa: 'Transportes Uruguay',
-//   dua: '123456'
-// }
+// Mock data for demos
+const mockAlerta = {
+  id: '1',
+  tipo: 'BBJ' as const, // Changed to valid tipo
+  severidad: 'critica' as const,
+  precintoId: 'P001', // Added missing property
+  codigoPrecinto: 'BT20240001',
+  mensaje: 'Temperatura fuera de rango',
+  timestamp: Date.now(), // Changed to number
+  ubicacion: { lat: -34.9011, lng: -56.1645 },
+  atendida: false
+}
+const mockTransito = {
+  id: '1',
+  precinto: 'BT20240001',
+  estado: 'EN_RUTA',
+  origen: 'Montevideo',
+  destino: 'Rivera',
+  fechaSalida: new Date(),
+  eta: new Date(Date.now() + 5 * 60 * 60 * 1000),
+  empresa: 'Transportes Uruguay',
+  dua: '123456'
+}
 export default function ShadcnDemo() {
   const [open, setOpen] = React.useState(false)
-  const [_formOpen, setFormOpen] = React.useState(false)
+  const [formOpen, setFormOpen] = React.useState(false)
   const [tableOpen, setTableOpen] = React.useState(false)
   const [loadingDemo, setLoadingDemo] = React.useState(false)
-  const [_verificarOpen, setVerificarOpen] = React.useState(false)
-  const [_editTransitoOpen, setEditTransitoOpen] = React.useState(false)
+  const [verificarOpen, setVerificarOpen] = React.useState(false)
+  const [editTransitoOpen, setEditTransitoOpen] = React.useState(false)
   return (<>
     <div className="space-y-8 p-8">
       <h1 className="text-2xl font-bold mb-8">shadcn/ui Components Demo</h1>
@@ -275,6 +275,7 @@ export default function ShadcnDemo() {
             </Button>
           </CardContent>
         </Card>
+        <FormularioCamioneroV2 isOpen={formOpen} onClose={() => setFormOpen(false)} />
       </section>
 
       {/* Popover Example */}
@@ -372,6 +373,7 @@ export default function ShadcnDemo() {
                   <DialogTitle>Gestión de Precintos</DialogTitle>
                 </DialogHeader>
                 <div className="mt-4">
+                  <PrecintosTableV2 />
                 </div>
               </DialogContent>
             </Dialog>
@@ -448,6 +450,7 @@ export default function ShadcnDemo() {
                         <DialogHeader>
                           <DialogTitle>Loading Data...</DialogTitle>
                         </DialogHeader>
+                        <PrecintosTableV2 loading={true} />
                       </DialogContent>
                     </Dialog>
                   )}
@@ -473,7 +476,7 @@ export default function ShadcnDemo() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
-                    <h4 className="font-medium">Precintos Table (Removed)</h4>
+                    <h4 className="font-medium">PrecintosTableV2</h4>
                     <p className="text-sm text-muted-foreground">
                       Data table con ordenamiento, filtrado, paginación y popovers
                     </p>
@@ -486,7 +489,7 @@ export default function ShadcnDemo() {
 
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
-                    <h4 className="font-medium">Driver Form (Removed)</h4>
+                    <h4 className="font-medium">FormularioCamioneroV2</h4>
                     <p className="text-sm text-muted-foreground">
                       Complete form with react-hook-form, Zod validation, and shadcn/ui
                     </p>
@@ -551,7 +554,7 @@ export default function ShadcnDemo() {
 
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
-                    <h4 className="font-medium">Verify Alert Modal (Removed)</h4>
+                    <h4 className="font-medium">VerificarAlertaModalV2</h4>
                     <p className="text-sm text-muted-foreground">
                       Alert verification modal with status badges and actions
                     </p>
@@ -564,7 +567,7 @@ export default function ShadcnDemo() {
 
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
-                    <h4 className="font-medium">Edit Transit Modal (Removed)</h4>
+                    <h4 className="font-medium">EditTransitoModalV2</h4>
                     <p className="text-sm text-muted-foreground">
                       Edit transit modal with form validation
                     </p>
@@ -644,8 +647,10 @@ export default function ShadcnDemo() {
       </section>
     </div>
 
-    {/* Modal Instances - Components removed during cleanup */}
-    {/* <VerificarAlertaModalV2
+    {/* Modal Instances */}
+    <FormularioCamioneroV2 isOpen={formOpen} onClose={() => setFormOpen(false)} />
+    
+    <VerificarAlertaModalV2
       alerta={mockAlerta}
       isOpen={verificarOpen}
       onClose={() => setVerificarOpen(false)}
@@ -654,12 +659,13 @@ export default function ShadcnDemo() {
         await new Promise(resolve => setTimeout(resolve, 1000))
       }}
     />
+    
     <EditTransitoModalV2
       transito={mockTransito}
       isOpen={editTransitoOpen}
       onClose={() => setEditTransitoOpen(false)}
       onSuccess={() => console.log('Transito editado')}
-    /> */}
+    />
     </>
   )
 }

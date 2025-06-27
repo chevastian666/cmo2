@@ -112,7 +112,7 @@ export function VirtualizedList<T>({
               width={_width}
               itemCount={_itemCount}
               itemSize={_getItemSize}
-              itemData={_itemData as { items: unknown[]; renderItem: (item: unknown, index: number, style: React.CSSProperties) => React.ReactNode }}
+              itemData={_itemData as { items: T[]; renderItem: (item: T, index: number, style: React.CSSProperties) => React.ReactNode }}
               onScroll={_handleScroll}
               overscanCount={_overscan}
               estimatedItemSize={_estimatedItemSize}

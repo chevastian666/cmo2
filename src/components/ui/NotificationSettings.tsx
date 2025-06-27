@@ -1,12 +1,12 @@
 import React from 'react'
-import { notificationService } from '@/services/shared/notification.service'
 import { Switch } from './switch'
 import { Label } from './label'
 
 export const NotificationSettings: React.FC = () => {
-  const soundEnabled = notificationService.isSoundEnabled()
+  const [soundEnabled, setSoundEnabled] = React.useState(false)
 
   const handleSoundToggle = (checked: boolean) => {
+    setSoundEnabled(checked)
     // TODO: Implement setSoundEnabled in notificationService
     console.log('Sound toggle:', checked)
   }

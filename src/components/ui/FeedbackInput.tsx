@@ -5,11 +5,11 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Input, InputProps} from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
 import { Check, X, Loader2, Search, Eye, EyeOff} from 'lucide-react'
 import { motion, AnimatePresence} from 'framer-motion'
 import { cn} from '@/lib/utils'
-export interface FeedbackInputProps extends Omit<InputProps, 'type'> {
+export interface FeedbackInputProps extends Omit<React.ComponentProps<"input">, 'type'> {
   type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url'
   validationFn?: (value: string) => boolean | Promise<boolean>
   validationMessage?: string
@@ -30,7 +30,7 @@ export const FeedbackInput: React.FC<FeedbackInputProps> = ({
   const [isValid, setIsValid] = useState<boolean | null>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const debounceTimerRef = useRef<NodeJS.Timeout>()
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
   useEffect(() => {
     if (value !== undefined) {
       setLocalValue(value as string)
