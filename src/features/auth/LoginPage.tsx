@@ -3,7 +3,7 @@ import { Shield, Loader, AlertCircle} from 'lucide-react'
 import { Button} from '@/components/ui/button'
 import { Input} from '@/components/ui/input'
 import { Label} from '@/components/ui/label'
-import type { Alert, AlertDescription} from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useAuth } from '@/hooks/useAuth'
 export const LoginPage: React.FC = () => {
   const { login, isLoading } = useAuth()
